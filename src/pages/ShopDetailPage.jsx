@@ -187,44 +187,7 @@ export default function ShopDetailPage() {
             {/* ▼ サイト＆キャスト＆スケジュールリンク (洗練版・3ボタン) ▼ */}
             {(shop.website_url || shop?.raw_data?.website) && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
-                <a 
-                  href={shop.website_url || shop.raw_data.website} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg"
-                >
-                  <span className="text-xl opacity-60 group-hover:opacity-100 transition">🌍</span>
-                  <div className="text-left flex-1">
-                    <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Official</div>
-                    <div className="text-xs font-bold text-slate-200 tracking-wide group-hover:text-blue-400 transition">公式サイト</div>
-                  </div>
-                </a>
-                
-                <a 
-                  href={(cloudShop?.raw_data?.cast_url || shop?.raw_data?.cast_url) || ((cloudShop?.website_url || shop?.website_url || shop?.raw_data?.website || '').replace(/\/?$/, '') + '/cast/')}
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg"
-                >
-                  <span className="text-xl opacity-60 group-hover:opacity-100 transition">👯‍♀️</span>
-                  <div className="text-left flex-1">
-                    <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Cast</div>
-                    <div className="text-xs font-bold text-slate-200 tracking-wide group-hover:text-pink-400 transition">キャスト</div>
-                  </div>
-                </a>
-
-                <a 
-                  href={(cloudShop?.raw_data?.schedule_url || shop?.raw_data?.schedule_url) || ((cloudShop?.website_url || shop?.website_url || shop?.raw_data?.website || '').replace(/\/?$/, '') + '/schedule/')}
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg"
-                >
-                  <span className="text-xl opacity-60 group-hover:opacity-100 transition">📅</span>
-                  <div className="text-left flex-1">
-                    <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Schedule</div>
-                    <div className="text-xs font-bold text-slate-200 tracking-wide group-hover:text-green-400 transition">出勤情報</div>
-                  </div>
-                </a>
+                <a href={cloudShop?.raw_data?.schedule_url || shop?.raw_data?.schedule_url || (shop?.website_url || shop?.raw_data?.website || '').replace(/\/?$/, '') + '/schedule/'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg"><span className="text-xl opacity-60 group-hover:opacity-100 transition">📅</span><div className="text-left flex-1"><div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Schedule</div><div className="text-xs font-bold text-slate-200 tracking-wide group-hover:text-green-400 transition">出勤情報</div></div></a>
               </div>
             )}
 <div className="bg-slate-900/50 rounded-3xl p-6 md:p-8 border border-white/5 relative overflow-hidden">
