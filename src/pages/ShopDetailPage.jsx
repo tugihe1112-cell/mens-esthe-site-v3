@@ -201,7 +201,7 @@ export default function ShopDetailPage() {
                 </a>
                 
                 <a 
-                  href={(shop.website_url || shop.raw_data.website).replace(/\/?$/, '') + '/cast/'} 
+                  href={shop?.raw_data?.cast_url || (shop.website_url || shop.raw_data.website).replace(/\/?$/, '') + '/cast/'} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg"
@@ -214,7 +214,7 @@ export default function ShopDetailPage() {
                 </a>
 
                 <a 
-                  href={(shop.website_url || shop.raw_data.website).replace(/\/?$/, '') + '/cast/'} 
+                  href={shop?.raw_data?.cast_url || (shop.website_url || shop.raw_data.website).replace(/\/?$/, '') + '/cast/'} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg"
