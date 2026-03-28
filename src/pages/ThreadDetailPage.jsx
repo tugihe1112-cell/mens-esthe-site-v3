@@ -10,49 +10,60 @@ import SeoHead from '../components/SeoHead.jsx';
 export default function ThreadDetailPage() {
   const { shopId, threadId } = useParams();
   const navigate = useNavigate();
+  const { shopById, therapistById, reviews } = useShopData();
+  const { favTherapists, toggleFavTherapist } = useAppContext();
+  const { addToHistory } = useRecentlyViewed();
 
-  const [fetchedShop, setFetchedShop] = React.useState(null);
-  const [fetchedTherapist, setFetchedTherapist] = React.useState(null);
+  const [cloudShop, setCloudShop] = React.useState(null);
+  const [cloudTherapist, setCloudTherapist] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(true); // 🔥これがないと即エラーになる
 
   React.useEffect(() => {
-    const fetchCloudData = async () => {
+    let isMounted = true;
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
         const url = import.meta.env.VITE_SUPABASE_URL;
         const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
         if (!url || !key) return;
         const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
-        
+
+        // 1. ショップ取得
         const shopRes = await fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers });
         const shopData = await shopRes.json();
-        if (shopData && shopData.length > 0) setFetchedShop(shopData[0]);
+        if (shopData && shopData.length > 0 && isMounted) setCloudShop(shopData[0]);
 
-        const tRes = await fetch(`${url}/rest/v1/therapists?id=eq.${threadId}&select=*`, { headers });
-        const tData = await tRes.json();
-        if (tData && tData.length > 0) setFetchedTherapist(tData[0]);
-      } catch(e) { console.error(e); }
+        // 2. セラピスト取得 (IDで検索)
+        let tRes = await fetch(`${url}/rest/v1/therapists?id=eq.${threadId}&select=*`, { headers });
+        let tData = await tRes.json();
+
+        // 3. IDで見つからなければ、名前（URLの最後の部分）で検索
+        if (!tData || tData.length === 0) {
+          const extractedName = threadId.includes('_') ? threadId.split('_').pop() : threadId;
+          tRes = await fetch(`${url}/rest/v1/therapists?shop_id=eq.${shopId}&name=eq.${encodeURIComponent(extractedName)}&select=*`, { headers });
+          tData = await tRes.json();
+        }
+
+        if (tData && tData.length > 0 && isMounted) {
+          setCloudTherapist(tData[0]);
+        }
+      } catch(e) {
+        console.error(e);
+      } finally {
+        if (isMounted) setIsLoading(false); // データ取得完了
+      }
     };
-    if (shopId && threadId) fetchCloudData();
+    if (shopId && threadId) fetchData();
+    return () => { isMounted = false; };
   }, [shopId, threadId]);
 
-const { shopById, therapistById, reviews } = useShopData();
-  const { favTherapists, toggleFavTherapist } = useAppContext();
-  const { addToHistory } = useRecentlyViewed();
+  const shop = cloudShop || (shopById ? shopById[shopId] : null);
+  let therapist = cloudTherapist || (therapistById ? therapistById[threadId] : null);
 
-  // 1. 変数を安全に取得（Loading中でもエラーにならないようにする）
-  // ☁️ クラウドから直接データ取得（迷子防止）
-  const [cloudShop, setCloudShop] = React.useState(null);
-  const [cloudTherapist, setCloudTherapist] = React.useState(null);
-  React.useEffect(() => {
-    if (!shopId || !threadId) return;
-    const url = import.meta.env.VITE_SUPABASE_URL;
-    const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
-    const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
-    fetch(`${url}/rest/v1/shops?id=eq.${shopId}`, {headers}).then(r=>r.json()).then(d=>d[0]&&setCloudShop(d[0]));
-    fetch(`${url}/rest/v1/therapists?id=eq.${threadId}`, {headers}).then(r=>r.json()).then(d=>d[0]&&setCloudTherapist(d[0]));
-  }, [shopId, threadId]);
-
-  const shop = fetchedShop || cloudShop || (shopById ? shopById[shopId] : null);
-  let therapist = fetchedTherapist || cloudTherapist || (therapistById ? therapistById[threadId] : null);
+  // 🔥 データが到着するまでは「読み込み中」画面を出してエラーを阻止する
+  if (isLoading) {
+    return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">データを読み込み中...</div>;
+  }
 
   // 🔥 AI自動生成対応：公式リストにいなくても、クチコミがあれば「仮想プロフィール」を自動で作る！
   if (!therapist && reviews) {
