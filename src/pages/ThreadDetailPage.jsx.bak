@@ -60,6 +60,11 @@ export default function ThreadDetailPage() {
   const shop = cloudShop || (shopById ? shopById[shopId] : null);
   let therapist = cloudTherapist || (therapistById ? therapistById[threadId] : null);
 
+  // 🔥 データが到着するまでは「読み込み中」画面を出してエラーを阻止する
+  if (isLoading) {
+    return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">データを読み込み中...</div>;
+  }
+
   // 🔥 AI自動生成対応：公式リストにいなくても、クチコミがあれば「仮想プロフィール」を自動で作る！
   if (!therapist && reviews) {
     const hasReviews = reviews.some(r => r.therapistId === threadId || r.threadId === threadId || r.therapist_id === threadId);
@@ -141,13 +146,6 @@ export default function ThreadDetailPage() {
   const handlePostReview = () => {
     navigate(`/shops/${shopId}/threads/${threadId}/review`);
   };
-
-
-
-  // 🔥 データが到着するまでは「読み込み中」画面を出してエラーを阻止する
-  if (isLoading) {
-    return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">データを読み込み中...</div>;
-  }
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">

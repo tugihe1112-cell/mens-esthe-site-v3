@@ -13,7 +13,7 @@ import { useShopData } from '../contexts/DataContext.jsx';
 
 // --- Step Components ---
 
-const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId }) => {
+const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId, paramShopId }) => {
   const { register, setValue, watch } = useFormContext();
   const selectedTherapistId = watch('therapistId');
 
@@ -29,7 +29,9 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
         <div className="relative">
           <select 
             {...register('shopId')}
-            value={selectedShopId || ''} // 制御されたコンポーネントにする
+            value={selectedShopId || ''}
+            disabled={!!paramShopId} // URLからIDが来ている場合は操作不可にする
+            style={paramShopId ? { opacity: 1, backgroundColor: 'rgba(0,0,0,0.5)', cursor: 'not-allowed' } : {}} // 制御されたコンポーネントにする
             onChange={(e) => {
               const newId = e.target.value;
               setValue('shopId', newId);
@@ -236,9 +238,48 @@ export default function PostReviewPage() {
   }, [paramShopId, paramThreadId, shops, methods]);
 
   // Shop Data Logic
-  const shopTherapists = useMemo(() => {
-    return selectedShopId ? getTherapistsByShopId(selectedShopId) : [];
-  }, [selectedShopId, getTherapistsByShopId]);
+  const [shopTherapists, setShopTherapists] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchTherapists = async () => {
+      if (!selectedShopId) {
+        if (isMounted) setShopTherapists([]);
+        return;
+      }
+
+      // 1. まず手元の共有データ（Context）を探す
+      const targetShop = shops.find(s => String(s.id) === String(selectedShopId));
+      if (targetShop && targetShop.therapists && targetShop.therapists.length > 0) {
+        if (isMounted) setShopTherapists(targetShop.therapists);
+        return;
+      }
+      const ctxTherapists = getTherapistsByShopId ? getTherapistsByShopId(selectedShopId) : [];
+      if (ctxTherapists && ctxTherapists.length > 0) {
+        if (isMounted) setShopTherapists(ctxTherapists);
+        return;
+      }
+
+      // 2. 手元に無ければ、CASTタブと同じようにSupabaseから直接取得する！
+      try {
+        const url = import.meta.env.VITE_SUPABASE_URL;
+        const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        if (!url || !key) return;
+        
+        const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
+        const res = await fetch(`${url}/rest/v1/therapists?shop_id=eq.${selectedShopId}&select=*`, { headers });
+        const data = await res.json();
+        
+        if (data && data.length > 0 && isMounted) {
+          setShopTherapists(data);
+        }
+      } catch (e) {
+        console.error("セラピスト取得エラー:", e);
+      }
+    };
+    fetchTherapists();
+    return () => { isMounted = false; };
+  }, [selectedShopId, shops, getTherapistsByShopId]);
 
   const validateStep = async () => {
     let isValid = false;
@@ -309,7 +350,8 @@ export default function PostReviewPage() {
                     shops={shops} 
                     shopTherapists={shopTherapists} 
                     selectedShopId={selectedShopId} 
-                    setSelectedShopId={setSelectedShopId} 
+                    setSelectedShopId={setSelectedShopId}
+                    paramShopId={paramShopId} 
                   />
                 )}
                 {currentStep === 2 && <Step2_Rating />}
