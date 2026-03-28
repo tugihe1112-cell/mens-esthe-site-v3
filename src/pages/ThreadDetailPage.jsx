@@ -11,7 +11,30 @@ export default function ThreadDetailPage() {
   const { shopId, threadId } = useParams();
   const navigate = useNavigate();
 
-  const { shopById, therapistById, reviews } = useShopData();
+  const [fetchedShop, setFetchedShop] = React.useState(null);
+  const [fetchedTherapist, setFetchedTherapist] = React.useState(null);
+
+  React.useEffect(() => {
+    const fetchCloudData = async () => {
+      try {
+        const url = import.meta.env.VITE_SUPABASE_URL;
+        const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        if (!url || !key) return;
+        const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
+        
+        const shopRes = await fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers });
+        const shopData = await shopRes.json();
+        if (shopData && shopData.length > 0) setFetchedShop(shopData[0]);
+
+        const tRes = await fetch(`${url}/rest/v1/therapists?id=eq.${threadId}&select=*`, { headers });
+        const tData = await tRes.json();
+        if (tData && tData.length > 0) setFetchedTherapist(tData[0]);
+      } catch(e) { console.error(e); }
+    };
+    if (shopId && threadId) fetchCloudData();
+  }, [shopId, threadId]);
+
+const { shopById, therapistById, reviews } = useShopData();
   const { favTherapists, toggleFavTherapist } = useAppContext();
   const { addToHistory } = useRecentlyViewed();
 
@@ -28,8 +51,8 @@ export default function ThreadDetailPage() {
     fetch(`${url}/rest/v1/therapists?id=eq.${threadId}`, {headers}).then(r=>r.json()).then(d=>d[0]&&setCloudTherapist(d[0]));
   }, [shopId, threadId]);
 
-  const shop = cloudShop || (shopById ? shopById[shopId] : null);
-  let therapist = cloudTherapist || (therapistById ? therapistById[threadId] : null);
+  const shop = fetchedShop || cloudShop || (shopById ? shopById[shopId] : null);
+  let therapist = fetchedTherapist || cloudTherapist || (therapistById ? therapistById[threadId] : null);
 
   // 🔥 AI自動生成対応：公式リストにいなくても、クチコミがあれば「仮想プロフィール」を自動で作る！
   if (!therapist && reviews) {
