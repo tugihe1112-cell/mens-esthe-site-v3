@@ -1,0 +1,45 @@
+{
+  "id": "tokyo_adachi_kitasenju_macherie",
+  "name": "マシェリ",
+  "url": "https://macherie.jp/",
+  "area": "北千住",
+  "price": "12,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "体験レポートあり",
+    "カード支払いOK"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "12,000"
+    },
+    {
+      "minutes": 100,
+      "price": "16,000"
+    },
+    {
+      "minutes": 120,
+      "price": "20,000"
+    },
+    {
+      "minutes": 150,
+      "price": "24,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "足立区",
+  "brandId": "macherie",
+  "threads": [],
+  "therapists": [
+    "macherie_長澤 ゆり",
+    "macherie_森田 あい",
+    "macherie_松嶋 めい",
+    "macherie_竹内 みか",
+    "macherie_深田 さき",
+    "macherie_石田 ひとみ",
+    "macherie_広末 りな",
+    "macherie_綾瀬 まゆ"
+  ]
+}

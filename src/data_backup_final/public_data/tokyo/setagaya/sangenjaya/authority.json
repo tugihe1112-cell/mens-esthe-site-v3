@@ -1,0 +1,21 @@
+{
+  "id": "tokyo_setagaya_sangenjaya_authority",
+  "name": "AUTHORITY (オーソリティ)",
+  "prefecture": "東京都",
+  "city": "世田谷区",
+  "area": "三軒茶屋",
+  "address": "東京都世田谷区三軒茶屋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "10:00～翌6:00",
+  "isPremium": false,
+  "tags": [],
+  "websiteUrl": "https://www.me-authority.com/",
+  "nearestStation": "三軒茶屋駅",
+  "description": "三軒茶屋・池尻大橋の日本人リラクゼーション。 / 料金システム: 60分15,000円→12,000円 / 80分20,000円→16,000円 / 100分25,000円→20,000円 / サンクスキャンペーン(全コース1,000円OFF対応)",
+  "threads": [],
+  "brandId": "authority",
+  "therapists": []
+}

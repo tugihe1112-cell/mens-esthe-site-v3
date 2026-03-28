@@ -1,0 +1,245 @@
+{
+  "id": "tokyo_chiyoda_akihabara_hiran_next",
+  "name": "Hiran Next (平安NEXT)",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "秋葉原",
+  "address": "東京都千代田区神田佐久間町エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 4.5,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://akihabara-hiran.com/",
+  "nearestStation": "秋葉原駅",
+  "description": "秋葉原の極上リラクゼーション。 / 若くて可愛いセラピストが多数在籍する人気店。",
+  "tags": [
+    "秋葉原エリア",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "高リピート率"
+  ],
+  "brandId": "hiran_next",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "hiran_next_佐藤もか",
+      "name": "佐藤もか",
+      "age": "20歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_村上るる",
+      "name": "村上るる",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_中田えみ",
+      "name": "中田えみ",
+      "age": "21歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_上原なつき",
+      "name": "上原なつき",
+      "age": "21歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_新井さな",
+      "name": "新井さな",
+      "age": "24歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_月野りあ",
+      "name": "月野りあ",
+      "age": "24歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_栗原しおり",
+      "name": "栗原しおり",
+      "age": "24歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_瀬川きほ",
+      "name": "瀬川きほ",
+      "age": "22歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_松田えりか",
+      "name": "松田えりか",
+      "age": "21歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_柳まいか",
+      "name": "柳まいか",
+      "age": "19歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_渚るな",
+      "name": "渚るな",
+      "age": "26歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_宮内もも",
+      "name": "宮内もも",
+      "age": "19歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_永井あみ",
+      "name": "永井あみ",
+      "age": "25歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_宮田かぐら",
+      "name": "宮田かぐら",
+      "age": "24歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_高橋ことり",
+      "name": "高橋ことり",
+      "age": "23歳",
+      "height": "147cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_佐々木みゆ",
+      "name": "佐々木みゆ",
+      "age": "20歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_大谷ゆき",
+      "name": "大谷ゆき",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_木村あい",
+      "name": "木村あい",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_桜井あやな",
+      "name": "桜井あやな",
+      "age": "19歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_川村のぞみ",
+      "name": "川村のぞみ",
+      "age": "23歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_羽鳥あすか",
+      "name": "羽鳥あすか",
+      "age": "23歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_小川ちとせ",
+      "name": "小川ちとせ",
+      "age": "24歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_工藤らん",
+      "name": "工藤らん",
+      "age": "21歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_神谷あおい",
+      "name": "神谷あおい",
+      "age": "23歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_山崎みほ",
+      "name": "山崎みほ",
+      "age": "24歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_椎名りさ",
+      "name": "椎名りさ",
+      "age": "21歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_荒木のあ",
+      "name": "荒木のあ",
+      "age": "19歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_秋山あいか",
+      "name": "秋山あいか",
+      "age": "18歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_藤原まゆ",
+      "name": "藤原まゆ",
+      "age": "23歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_姫野おんぷ",
+      "name": "姫野おんぷ",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "hiran_next_坂下みお",
+      "name": "坂下みお",
+      "age": "25歳",
+      "height": "158cm",
+      "bust": null
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "id": "tokyo_tachikawa_morganite",
+  "name": "MORGANITE (モルガナイト)",
+  "prefecture": "東京都",
+  "city": "立川市",
+  "area": "立川市",
+  "address": "東京都立川市エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://a-morganite.com/",
+  "nearestStation": "立川駅",
+  "description": "立川のメンズエステ。 / 料金システム(割引後): 70分16,000円 / 90分18,000円 / 120分23,000円",
+  "brandId": "morganite",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "morganite_佐伯もも",
+      "name": "佐伯もも",
+      "age": 22,
+      "height": 165,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "morganite_月野りさ",
+      "name": "月野りさ",
+      "age": 23,
+      "height": 153,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "morganite_水嶋わかな",
+      "name": "水嶋わかな",
+      "age": 21,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "morganite_美山もか",
+      "name": "美山もか",
+      "age": 22,
+      "height": 154,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "morganite_結城えれな",
+      "name": "結城えれな",
+      "age": 22,
+      "height": 152,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "morganite_双葉みさと",
+      "name": "双葉みさと",
+      "age": 29,
+      "height": 163,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "morganite_椎名くるみ",
+      "name": "椎名くるみ",
+      "age": 26,
+      "height": 170,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "morganite_楠すず",
+      "name": "楠すず",
+      "age": 21,
+      "height": 163,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "morganite_春咲みさ",
+      "name": "春咲みさ",
+      "age": 22,
+      "height": 148,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "morganite_夏乃サナ",
+      "name": "夏乃サナ",
+      "age": 20,
+      "height": 159,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "morganite_乙葉ゆな",
+      "name": "乙葉ゆな",
+      "age": 28,
+      "height": 153,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "morganite_花園ゆりね",
+      "name": "花園ゆりね",
+      "age": 22,
+      "height": 153,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "morganite_浜辺りお",
+      "name": "浜辺りお",
+      "age": 27,
+      "height": 159,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "morganite_姫宮のん",
+      "name": "姫宮のん",
+      "age": 25,
+      "height": 162,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "morganite_葵はるか",
+      "name": "葵はるか",
+      "age": 22,
+      "height": 153,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "morganite_白咲るな",
+      "name": "白咲るな",
+      "age": 28,
+      "height": 162,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "morganite_百瀬ありな",
+      "name": "百瀬ありな",
+      "age": 23,
+      "height": 161,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "morganite_夜空あお",
+      "name": "夜空あお",
+      "age": 23,
+      "height": 153,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "morganite_源みう",
+      "name": "源みう",
+      "age": 28,
+      "height": 154,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "morganite_本城ゆか",
+      "name": "本城ゆか",
+      "age": 22,
+      "height": 161,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "morganite_水城じゅり",
+      "name": "水城じゅり",
+      "age": 25,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "morganite_咲間ゆの",
+      "name": "咲間ゆの",
+      "age": 22,
+      "height": 154,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "morganite_麻倉そら",
+      "name": "麻倉そら",
+      "age": 22,
+      "height": 152,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "morganite_遊木まこと",
+      "name": "遊木まこと",
+      "age": 26,
+      "height": 161,
+      "bust": "(D)",
+      "tags": null
+    }
+  ]
+}

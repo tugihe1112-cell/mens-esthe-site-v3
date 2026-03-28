@@ -1,0 +1,25 @@
+{
+  "id": "tokyo_setagaya_shimokitazawa_eren",
+  "name": "EREN (エレン)",
+  "prefecture": "東京都",
+  "city": "世田谷区",
+  "area": "下北沢",
+  "address": "東京都世田谷区・渋谷区エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分14,000円～",
+  "hours": "営業中",
+  "isPremium": false,
+  "tags": [
+    "出張可",
+    "カード払いOK",
+    "QR決済OK"
+  ],
+  "websiteUrl": "http://www.eren.tokyo/",
+  "nearestStation": "下北沢駅・経堂駅・代々木駅",
+  "description": "70分14,000円 / 90分18,000円→16,000円(Open割引) / 120分24,000円→22,000円(Open割引) / 150分30,000円→28,000円(Open割引) / 180分36,000円→34,000円(Open割引)",
+  "threads": [],
+  "brandId": "eren",
+  "therapists": []
+}

@@ -1,0 +1,1469 @@
+{
+  "id": "tokyo_shinjuku_takadanobaba_chat_noir",
+  "name": "Chat noir (シャノワール)",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "region": "広域エリア",
+  "address": "東京都新宿区・豊島区 (各線駅近)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～翌6:00",
+  "isPremium": true,
+  "color": "from-gray-800 to-black",
+  "tags": [
+    "カード決済可",
+    "QR決済可",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://chatnoir-group.com/",
+  "threads": [],
+  "area": "高田馬場",
+  "brandId": "chat_noir",
+  "therapists": [
+    {
+      "id": "chat_noir_四ノ宮詩乃",
+      "name": "四ノ宮詩乃",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "BLACK",
+        "殿堂入り",
+        "27歳",
+        "T156",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_有村さん",
+      "name": "有村さん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "BLACK",
+        "殿堂入り",
+        "20歳",
+        "T153",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_一咲かなみ",
+      "name": "一咲かなみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "BLACK",
+        "癒しの伝道師",
+        "25歳",
+        "T155",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_きんむぎ",
+      "name": "きんむぎ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "BLACK",
+        "スレンダー",
+        "28歳",
+        "T157",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_有栖のの",
+      "name": "有栖のの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "BLACK",
+        "萌え系",
+        "22歳",
+        "T158",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_音羽ゆら",
+      "name": "音羽ゆら",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "BLACK",
+        "究極のアイドル",
+        "22歳",
+        "T157",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_伊織らえ",
+      "name": "伊織らえ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "BLACK",
+        "圧倒的色気",
+        "24歳",
+        "T160",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_楓みらん",
+      "name": "楓みらん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "DIAMOND",
+        "奇跡",
+        "28歳",
+        "T154",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_都築ひとみ",
+      "name": "都築ひとみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "DIAMOND",
+        "モデル系",
+        "26歳",
+        "T170",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_白夜くるみ",
+      "name": "白夜くるみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "DIAMOND",
+        "キレカワ",
+        "24歳",
+        "T155",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_上白石かずは",
+      "name": "上白石かずは",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "DIAMOND",
+        "恋人施術",
+        "20歳",
+        "T151",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_藤咲ゆな",
+      "name": "藤咲ゆな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "DIAMOND",
+        "爆乳クイーン",
+        "26歳",
+        "T158",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_桜瀬みゆき",
+      "name": "桜瀬みゆき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "DIAMOND",
+        "癒しの女神",
+        "25歳",
+        "T160",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_百瀬あかね",
+      "name": "百瀬あかね",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "DIAMOND",
+        "エース爆誕",
+        "24歳",
+        "T160",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_尾澤みさと",
+      "name": "尾澤みさと",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "パーフェクト",
+        "26歳",
+        "T157",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_ソヨン",
+      "name": "ソヨン",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "韓国アイドル",
+        "21歳",
+        "T166",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_夏目らん",
+      "name": "夏目らん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "ロリカワ",
+        "20歳",
+        "T153",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_上戸さな",
+      "name": "上戸さな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "伝説的美ボディー",
+        "20歳",
+        "T160",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_篠月なこ",
+      "name": "篠月なこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "魅惑の清楚",
+        "21歳",
+        "T158",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_神城れみか",
+      "name": "神城れみか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "ドS女神",
+        "22歳",
+        "T168",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_水野こころ",
+      "name": "水野こころ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "百花繚乱",
+        "24歳",
+        "T150",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_愛瀬ひめの",
+      "name": "愛瀬ひめの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "現役JD",
+        "20歳",
+        "T160",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_茉宮あみ",
+      "name": "茉宮あみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "Mカップ",
+        "29歳",
+        "T153",
+        "Mカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_桃叶まりな",
+      "name": "桃叶まりな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "電撃移籍",
+        "24歳",
+        "T156",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_双葉なぎさ",
+      "name": "双葉なぎさ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "ロリ系",
+        "22歳",
+        "T155",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_雫あいな",
+      "name": "雫あいな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "愛嬌MAX",
+        "23歳",
+        "T157",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_白羽うみ",
+      "name": "白羽うみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "キレ可愛",
+        "23歳",
+        "T155",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_美月みかな",
+      "name": "美月みかな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "前店人気No.1",
+        "22歳",
+        "T149",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_性母るりあ",
+      "name": "性母るりあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "ドS女王",
+        "20歳",
+        "T162",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_琴吹じゅな",
+      "name": "琴吹じゅな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "ギャル魂",
+        "21歳",
+        "T155",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_流川あんな",
+      "name": "流川あんな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "名古屋の至宝",
+        "22歳",
+        "T158",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_手嶋あい",
+      "name": "手嶋あい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "PLATINUM",
+        "Iカップ",
+        "26歳",
+        "T163",
+        "Iカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_初音ねおん",
+      "name": "初音ねおん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "新人",
+        "21歳",
+        "T168",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_いちごちゃん",
+      "name": "いちごちゃん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "新人",
+        "20歳",
+        "T160",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_桃白",
+      "name": "桃白",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "新人",
+        "22歳",
+        "T153",
+        "Kカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_くもり",
+      "name": "くもり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "新人",
+        "25歳",
+        "T153",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_神童あい",
+      "name": "神童あい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "新人",
+        "24歳",
+        "T158",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_ねね",
+      "name": "ねね",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "新人",
+        "26歳",
+        "T164",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_日南こと",
+      "name": "日南こと",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "新人",
+        "23歳",
+        "T164",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_みく",
+      "name": "みく",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "新人",
+        "20歳",
+        "T157",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_白愛せりな",
+      "name": "白愛せりな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "新人",
+        "24歳",
+        "T146",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_門松心音",
+      "name": "門松心音",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "美的オーラ",
+        "25歳",
+        "T156",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_めろちゃん",
+      "name": "めろちゃん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "堕天使",
+        "20歳",
+        "T162",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_夜神るい",
+      "name": "夜神るい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "可憐な天使",
+        "20歳",
+        "T155",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_かのん",
+      "name": "かのん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "優しさ",
+        "26歳",
+        "T164",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_夢見月なゆ",
+      "name": "夢見月なゆ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "小悪魔ギャル",
+        "20歳",
+        "T156",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_りま",
+      "name": "りま",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "圧巻Gカップ",
+        "24歳",
+        "T171",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_藤牧しゅな",
+      "name": "藤牧しゅな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "天使系",
+        "24歳",
+        "T165",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_りあん",
+      "name": "りあん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "魔術師",
+        "26歳",
+        "T169",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_月咲まなつ",
+      "name": "月咲まなつ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "超濃厚",
+        "23歳",
+        "T164",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_もか",
+      "name": "もか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "妹系",
+        "20歳",
+        "T152",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_日向みら",
+      "name": "日向みら",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "清楚アイドル",
+        "19歳",
+        "T158",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_湖東まき",
+      "name": "湖東まき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "あざと可愛い",
+        "20歳",
+        "T152",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_七海ちか",
+      "name": "七海ちか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "黒髪",
+        "21歳",
+        "T160",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_美南ひな",
+      "name": "美南ひな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "禁断",
+        "19歳",
+        "T170",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_えめ",
+      "name": "えめ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "奇跡の美貌",
+        "21歳",
+        "T155",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_美玲ろい",
+      "name": "美玲ろい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "癒し姫",
+        "20歳",
+        "T150",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_雪音しろ",
+      "name": "雪音しろ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "綺麗系",
+        "27歳",
+        "T165",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_藤原ゆい",
+      "name": "藤原ゆい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "キレ可愛",
+        "21歳",
+        "T161",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_星空せいら",
+      "name": "星空せいら",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "透明感",
+        "20歳",
+        "T157",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_菊池める",
+      "name": "菊池める",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "密やか快感",
+        "25歳",
+        "T164",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_蒼葉りょうか",
+      "name": "蒼葉りょうか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "Iカップ",
+        "28歳",
+        "T160",
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_兎田にあ",
+      "name": "兎田にあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "小悪魔",
+        "22歳",
+        "T161",
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_山口まほ",
+      "name": "山口まほ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "甘く濃密",
+        "22歳",
+        "T161",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_MINAMI",
+      "name": "MINAMI",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "S級美女",
+        "23歳",
+        "T155",
+        "Iカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_加賀美ほむら",
+      "name": "加賀美ほむら",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "SSSSSSS級",
+        "25歳",
+        "T162",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_優花うさ",
+      "name": "優花うさ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "ギャップ",
+        "20歳",
+        "T163",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_羽月にゃにゃ",
+      "name": "羽月にゃにゃ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "ギャップ天使",
+        "21歳",
+        "T160",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_九十九りりあ",
+      "name": "九十九りりあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "プレミアム施術",
+        "27歳",
+        "T162",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_右京なの",
+      "name": "右京なの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "人懐っこさ",
+        "21歳",
+        "T157",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_御影ゆず",
+      "name": "御影ゆず",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "SSSSSS級",
+        "26歳",
+        "T160",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_華渕えれの",
+      "name": "華渕えれの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "妖精",
+        "18歳",
+        "T162",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_このみ",
+      "name": "このみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "インフルエンサー",
+        "19歳",
+        "T156",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_竹之内みお",
+      "name": "竹之内みお",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "包容力",
+        "22歳",
+        "T160",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_星乃ゆり",
+      "name": "星乃ゆり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "長身スレンダー",
+        "23歳",
+        "T171",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_桜華めい",
+      "name": "桜華めい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "女神級",
+        "22歳",
+        "T163",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_えま",
+      "name": "えま",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "美乳＆爆乳",
+        "26歳",
+        "T163",
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_天音りせ",
+      "name": "天音りせ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "神ルックス",
+        "23歳",
+        "T164",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_ROSE",
+      "name": "ROSE",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "神の領域",
+        "26歳",
+        "T155",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_月足なぎ",
+      "name": "月足なぎ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "神プロポーション",
+        "23歳",
+        "T163",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_若葉ののか",
+      "name": "若葉ののか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "神バスト",
+        "24歳",
+        "T153",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_白宮まふゆ",
+      "name": "白宮まふゆ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "美白スレンダー",
+        "21歳",
+        "T162",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_涼風あいら",
+      "name": "涼風あいら",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "清楚系",
+        "21歳",
+        "T156",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_鳳城みりあ",
+      "name": "鳳城みりあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "美人オーラ",
+        "21歳",
+        "T160",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_美波ももほ",
+      "name": "美波ももほ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "SSSSS級",
+        "25歳",
+        "T158",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_猫田ミア",
+      "name": "猫田ミア",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "天真爛漫",
+        "21歳",
+        "T160",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_御坂みこ",
+      "name": "御坂みこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "業界一の美貌",
+        "23歳",
+        "T158",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_櫻羽うい",
+      "name": "櫻羽うい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "色白スレンダー",
+        "23歳",
+        "T157",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_楠ここあ",
+      "name": "楠ここあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "純粋無垢",
+        "20歳",
+        "T164",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_結城アスナ",
+      "name": "結城アスナ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "Iカップ",
+        "20歳",
+        "T158",
+        "Iカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_柚木あやな",
+      "name": "柚木あやな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "悶絶必死",
+        "22歳",
+        "T162",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_ラリサえみ",
+      "name": "ラリサえみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "魅惑",
+        "24歳",
+        "T158",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_瑠璃",
+      "name": "瑠璃",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "女神の微笑み",
+        "24歳",
+        "T157",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_水嶋えれん",
+      "name": "水嶋えれん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "スーパーモデル級",
+        "20歳",
+        "T167",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_七瀬あき",
+      "name": "七瀬あき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "小動物",
+        "23歳",
+        "T150",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_胡桃まりあ",
+      "name": "胡桃まりあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "柔肌",
+        "21歳",
+        "T153",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_鶴嶋せい",
+      "name": "鶴嶋せい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "トキメキ",
+        "20歳",
+        "T150",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_なゆき",
+      "name": "なゆき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "Hカップ",
+        "28歳",
+        "T155",
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_川栄りお",
+      "name": "川栄りお",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "アイドル級",
+        "21歳",
+        "T157",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_貴咲みおな",
+      "name": "貴咲みおな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "ピュア度最強",
+        "24歳",
+        "T155",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_北川れいこ",
+      "name": "北川れいこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "指先の魔術師",
+        "28歳",
+        "T161",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_冴木はてな",
+      "name": "冴木はてな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "癒しの天使",
+        "21歳",
+        "T163",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "chat_noir_松岡ゆらら",
+      "name": "松岡ゆらら",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "GOLD",
+        "天然Gカップ",
+        "21歳",
+        "T154",
+        "Gカップ"
+      ]
+    }
+  ]
+}

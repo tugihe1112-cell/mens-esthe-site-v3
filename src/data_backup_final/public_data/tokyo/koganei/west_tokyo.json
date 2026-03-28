@@ -1,0 +1,292 @@
+{
+  "id": "tokyo_koganei_west_tokyo",
+  "name": "WEST TOKYO (旧結有)",
+  "prefecture": "東京都",
+  "city": "小金井市",
+  "area": "小金井",
+  "address": "東京都小金井市・国分寺市エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "複数エリア展開"
+  ],
+  "websiteUrl": "https://esthe-westtokyo.com/",
+  "nearestStation": "武蔵小金井駅 / 国分寺駅",
+  "description": "武蔵小金井・国分寺のメンズエステ。旧店名「結有」。料金システム: 60分12,000円 / 90分16,000円 / 120分20,000円",
+  "brandId": "west_tokyo",
+  "therapists": [
+    {
+      "id": "west_tokyo_1",
+      "name": "ゆづき",
+      "age": 24,
+      "height": 155,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_2",
+      "name": "ゆめ",
+      "age": 24,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_3",
+      "name": "あやか",
+      "age": 20,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "若手"
+      ]
+    },
+    {
+      "id": "west_tokyo_4",
+      "name": "さら",
+      "age": 24,
+      "height": 162,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_5",
+      "name": "みおん",
+      "age": 23,
+      "height": 156,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_6",
+      "name": "あみ",
+      "age": 23,
+      "height": 161,
+      "bust": "(G)",
+      "tags": [
+        "巨乳"
+      ]
+    },
+    {
+      "id": "west_tokyo_7",
+      "name": "りおな",
+      "age": 26,
+      "height": 158,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_8",
+      "name": "ゆう",
+      "age": 24,
+      "height": 156,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_9",
+      "name": "のぞみ",
+      "age": 24,
+      "height": 168,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_10",
+      "name": "める",
+      "age": 22,
+      "height": 155,
+      "bust": "(G)",
+      "tags": [
+        "若手",
+        "巨乳"
+      ]
+    },
+    {
+      "id": "west_tokyo_11",
+      "name": "あこ",
+      "age": 28,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_12",
+      "name": "いぶ",
+      "age": 24,
+      "height": 156,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_13",
+      "name": "りん",
+      "age": 29,
+      "height": 160,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_14",
+      "name": "あんず",
+      "age": 30,
+      "height": 154,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_15",
+      "name": "みな",
+      "age": 23,
+      "height": 160,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_16",
+      "name": "れみ",
+      "age": 25,
+      "height": 145,
+      "bust": "(B)",
+      "tags": [
+        "小柄"
+      ]
+    },
+    {
+      "id": "west_tokyo_17",
+      "name": "うゆ",
+      "age": 19,
+      "height": 160,
+      "bust": "(C)",
+      "tags": [
+        "若手"
+      ]
+    },
+    {
+      "id": "west_tokyo_18",
+      "name": "かすみ",
+      "age": 22,
+      "height": 167,
+      "bust": "(F)",
+      "tags": [
+        "若手"
+      ]
+    },
+    {
+      "id": "west_tokyo_19",
+      "name": "あい",
+      "age": 23,
+      "height": 161,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_20",
+      "name": "すい",
+      "age": 20,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "若手"
+      ]
+    },
+    {
+      "id": "west_tokyo_21",
+      "name": "つむぎ",
+      "age": 26,
+      "height": 161,
+      "bust": "(B)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_22",
+      "name": "さくら",
+      "age": 29,
+      "height": 158,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_23",
+      "name": "せりな",
+      "age": 22,
+      "height": 166,
+      "bust": "(J)",
+      "tags": [
+        "若手",
+        "巨乳"
+      ]
+    },
+    {
+      "id": "west_tokyo_24",
+      "name": "ちはる",
+      "age": 23,
+      "height": 155,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_25",
+      "name": "るる",
+      "age": 20,
+      "height": 157,
+      "bust": "(E)",
+      "tags": [
+        "若手"
+      ]
+    },
+    {
+      "id": "west_tokyo_26",
+      "name": "まりな",
+      "age": 27,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_27",
+      "name": "ねね",
+      "age": 20,
+      "height": 157,
+      "bust": "(E)",
+      "tags": [
+        "若手"
+      ]
+    },
+    {
+      "id": "west_tokyo_28",
+      "name": "のあ",
+      "age": 21,
+      "height": 151,
+      "bust": "(D)",
+      "tags": [
+        "若手",
+        "小柄"
+      ]
+    },
+    {
+      "id": "west_tokyo_29",
+      "name": "あんな",
+      "age": 27,
+      "height": 159,
+      "bust": "(B)",
+      "tags": []
+    },
+    {
+      "id": "west_tokyo_30",
+      "name": "らん",
+      "age": 22,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "若手"
+      ]
+    }
+  ]
+}

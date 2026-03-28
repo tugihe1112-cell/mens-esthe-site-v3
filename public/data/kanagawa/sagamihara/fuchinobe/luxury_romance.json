@@ -1,0 +1,24 @@
+{
+  "id": 1048,
+  "name": "Luxury Romance GROUP (ラグジュアリーロマンスグループ)",
+  "prefecture": "神奈川県",
+  "city": "相模原",
+  "area": "淵野辺",
+  "address": "東京都府中市・神奈川県相模原市エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 13,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://luxury-romance.net/",
+  "nearestStation": "分倍河原駅 / 相模原駅 / 府中駅 / 淵野辺駅",
+  "description": "分倍河原・相模原・府中・淵野辺で展開するメンズエステ。たっぷりホットオイルとリンパドレナージュを盛り込んだオリジナルコース。 / 料金システム: 60分13,000円 / 75分14,000円 / 90分16,000円 / 105分18,000円 / 120分20,000円",
+  "therapists": [],
+  "brandId": "luxury_romance"
+}

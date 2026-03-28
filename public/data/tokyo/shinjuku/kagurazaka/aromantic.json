@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_shinjuku_kagurazaka_aromantic",
+  "name": "AROMAntic (アロマンティック)",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "神楽坂",
+  "address": "東京都新宿区神楽坂エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分19,000円～",
+  "hours": "12:00～翌6:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://www.aromantic.tokyo/",
+  "nearestStation": "神楽坂駅",
+  "description": "神楽坂の日本人リラクゼーション。 / 料金システム: 90分19,000円〜 / 120分25,000円〜",
+  "threads": [],
+  "brandId": "aromantic",
+  "therapists": []
+}

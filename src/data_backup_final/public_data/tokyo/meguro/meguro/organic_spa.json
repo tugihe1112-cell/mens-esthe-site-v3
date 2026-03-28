@@ -1,0 +1,505 @@
+{
+  "id": "tokyo_meguro_meguro_organic_spa",
+  "name": "Organic SPA (オーガニックスパ)",
+  "prefecture": "東京都",
+  "city": "目黒区",
+  "region": "関東エリア",
+  "address": "東京都目黒区恵比寿 (最寄: 恵比寿駅, 目黒駅, 中目黒駅, 五反田駅)",
+  "image": "/images/shops/organic_spa.jpg",
+  "rating": 4.7,
+  "reviewCount": 0,
+  "price": "90分 15,000円～",
+  "hours": "11:00～27:00",
+  "isPremium": true,
+  "color": "from-gray-400 to-slate-600",
+  "tags": [
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://organicspa.jp/",
+  "threads": [],
+  "area": "目黒",
+  "brandId": "organic_spa",
+  "therapists": [
+    {
+      "id": "organic_spa_初音こはる",
+      "name": "初音こはる",
+      "age": 26,
+      "height": 148,
+      "bust": "(C)",
+      "tags": [
+        "26歳",
+        "T148",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "organic_spa_桐谷れみ",
+      "name": "桐谷れみ",
+      "age": 26,
+      "height": 158,
+      "bust": "(D)",
+      "tags": [
+        "26歳",
+        "T158",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_浜辺ゆうみ",
+      "name": "浜辺ゆうみ",
+      "age": 30,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "30歳",
+        "T160",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_柊けい",
+      "name": "柊けい",
+      "age": 25,
+      "height": 158,
+      "bust": "(D)",
+      "tags": [
+        "25歳",
+        "T158",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_成瀬ももか",
+      "name": "成瀬ももか",
+      "age": 25,
+      "height": 157,
+      "bust": "(C)",
+      "tags": [
+        "25歳",
+        "T157",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "organic_spa_矢吹るか",
+      "name": "矢吹るか",
+      "age": 26,
+      "height": 163,
+      "bust": "(E)",
+      "tags": [
+        "26歳",
+        "T163",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_須川かえで",
+      "name": "須川かえで",
+      "age": 27,
+      "height": 154,
+      "bust": "(D)",
+      "tags": [
+        "27歳",
+        "T154",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_道端せいら",
+      "name": "道端せいら",
+      "age": 25,
+      "height": 162,
+      "bust": "(E)",
+      "tags": [
+        "25歳",
+        "T162",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_千歳りく",
+      "name": "千歳りく",
+      "age": 28,
+      "height": 159,
+      "bust": "(D)",
+      "tags": [
+        "28歳",
+        "T159",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_天音ゆりな",
+      "name": "天音ゆりな",
+      "age": 28,
+      "height": 148,
+      "bust": "(C)",
+      "tags": [
+        "28歳",
+        "T148",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "organic_spa_桜井さら",
+      "name": "桜井さら",
+      "age": 28,
+      "height": 153,
+      "bust": "(D)",
+      "tags": [
+        "28歳",
+        "T153",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_白石ひな",
+      "name": "白石ひな",
+      "age": 26,
+      "height": 161,
+      "bust": "(E)",
+      "tags": [
+        "26歳",
+        "T161",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_蒼井のん",
+      "name": "蒼井のん",
+      "age": 21,
+      "height": 164,
+      "bust": "(C)",
+      "tags": [
+        "21歳",
+        "T164",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "organic_spa_佐々木もえか",
+      "name": "佐々木もえか",
+      "age": 27,
+      "height": 158,
+      "bust": "(E)",
+      "tags": [
+        "27歳",
+        "T158",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_杉浦あみ",
+      "name": "杉浦あみ",
+      "age": 26,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "26歳",
+        "T155",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_北川あかり",
+      "name": "北川あかり",
+      "age": 32,
+      "height": 159,
+      "bust": "(E)",
+      "tags": [
+        "32歳",
+        "T159",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_榎本あおい",
+      "name": "榎本あおい",
+      "age": 28,
+      "height": 159,
+      "bust": "(D)",
+      "tags": [
+        "28歳",
+        "T159",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_濱崎こころ",
+      "name": "濱崎こころ",
+      "age": 27,
+      "height": 154,
+      "bust": "(C)",
+      "tags": [
+        "27歳",
+        "T154",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "organic_spa_篠塚りょう",
+      "name": "篠塚りょう",
+      "age": 34,
+      "height": 164,
+      "bust": "(E)",
+      "tags": [
+        "34歳",
+        "T164",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_赤西ゆり",
+      "name": "赤西ゆり",
+      "age": 36,
+      "height": 161,
+      "bust": "(D)",
+      "tags": [
+        "36歳",
+        "T161",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_綾瀬なち",
+      "name": "綾瀬なち",
+      "age": 26,
+      "height": 162,
+      "bust": "(F)",
+      "tags": [
+        "26歳",
+        "T162",
+        "B90(F)"
+      ]
+    },
+    {
+      "id": "organic_spa_南しほ",
+      "name": "南しほ",
+      "age": 27,
+      "height": 158,
+      "bust": "(E)",
+      "tags": [
+        "27歳",
+        "T158",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_水越きき",
+      "name": "水越きき",
+      "age": 25,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "25歳",
+        "T160",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_影山もも",
+      "name": "影山もも",
+      "age": 24,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "24歳",
+        "T160",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_比嘉きらら",
+      "name": "比嘉きらら",
+      "age": 24,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "24歳",
+        "T160",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_米倉ひかり",
+      "name": "米倉ひかり",
+      "age": 26,
+      "height": 158,
+      "bust": "(D)",
+      "tags": [
+        "26歳",
+        "T158",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_城井さな",
+      "name": "城井さな",
+      "age": 28,
+      "height": 156,
+      "bust": "(C)",
+      "tags": [
+        "28歳",
+        "T156",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "organic_spa_麻美みか",
+      "name": "麻美みか",
+      "age": 31,
+      "height": 155,
+      "bust": "(E)",
+      "tags": [
+        "31歳",
+        "T155",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_涼川そら",
+      "name": "涼川そら",
+      "age": 25,
+      "height": 161,
+      "bust": "(D)",
+      "tags": [
+        "25歳",
+        "T161",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_小花ゆずき",
+      "name": "小花ゆずき",
+      "age": 27,
+      "height": 156,
+      "bust": "(C)",
+      "tags": [
+        "27歳",
+        "T156",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "organic_spa_芹沢りか",
+      "name": "芹沢りか",
+      "age": 26,
+      "height": 161,
+      "bust": "(E)",
+      "tags": [
+        "26歳",
+        "T161",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_沢尻ゆい",
+      "name": "沢尻ゆい",
+      "age": 32,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "32歳",
+        "T155",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_間宮すず",
+      "name": "間宮すず",
+      "age": 26,
+      "height": 161,
+      "bust": "(E)",
+      "tags": [
+        "26歳",
+        "T161",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_青山はるひ",
+      "name": "青山はるひ",
+      "age": 23,
+      "height": 162,
+      "bust": "(E)",
+      "tags": [
+        "23歳",
+        "T162",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_色葉れむ",
+      "name": "色葉れむ",
+      "age": 24,
+      "height": 162,
+      "bust": "(D)",
+      "tags": [
+        "24歳",
+        "T162",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_白鳥みお",
+      "name": "白鳥みお",
+      "age": 28,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "28歳",
+        "T160",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_宇佐美なのは",
+      "name": "宇佐美なのは",
+      "age": 31,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "31歳",
+        "T160",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "organic_spa_日野りあ",
+      "name": "日野りあ",
+      "age": 22,
+      "height": 159,
+      "bust": "(C)",
+      "tags": [
+        "22歳",
+        "T159",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "organic_spa_水沢かんな",
+      "name": "水沢かんな",
+      "age": 27,
+      "height": 161,
+      "bust": "(D)",
+      "tags": [
+        "27歳",
+        "T161",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "organic_spa_三上れな",
+      "name": "三上れな",
+      "age": 25,
+      "height": 162,
+      "bust": "(E)",
+      "tags": [
+        "25歳",
+        "T162",
+        "B87(E)"
+      ]
+    }
+  ]
+}

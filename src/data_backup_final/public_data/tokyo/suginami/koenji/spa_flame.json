@@ -1,0 +1,428 @@
+{
+  "id": "tokyo_suginami_koenji_spa_flame",
+  "name": "スパフレイム (Spa Flame)",
+  "prefecture": "東京都",
+  "city": "杉並区",
+  "area": "高円寺",
+  "address": "東京都杉並区高円寺南（詳細は予約時）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "高円寺",
+    "熟女",
+    "日本人",
+    "個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://spa-flame.com/",
+  "nearestStation": "高円寺駅",
+  "description": "高円寺エリアの日本人熟女エステ。 / 料金システム: 90分12,000円 / 120分16,000円 / 150分20,000円 / 延長30分5,000円",
+  "brandId": "spa_flame",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "spa_flame_くみ (新人)",
+      "name": "くみ (新人)",
+      "age": 46,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_とわ (新人)",
+      "name": "とわ (新人)",
+      "age": 48,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ふたば (新人)",
+      "name": "ふたば (新人)",
+      "age": 44,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_るりか (新人)",
+      "name": "るりか (新人)",
+      "age": 45,
+      "height": 162,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_セイラ (新人)",
+      "name": "セイラ (新人)",
+      "age": 39,
+      "height": 167,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_さき (新人)",
+      "name": "さき (新人)",
+      "age": 48,
+      "height": 153,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_優（ゆう） (新人)",
+      "name": "優（ゆう） (新人)",
+      "age": 55,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_れいか (新人)",
+      "name": "れいか (新人)",
+      "age": 40,
+      "height": 155,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ひめか (新人)",
+      "name": "ひめか (新人)",
+      "age": 48,
+      "height": 164,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_あいの (新人)",
+      "name": "あいの (新人)",
+      "age": 41,
+      "height": 165,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ありす",
+      "name": "ありす",
+      "age": 40,
+      "height": 168,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ゆりな",
+      "name": "ゆりな",
+      "age": 40,
+      "height": 159,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ゆあ",
+      "name": "ゆあ",
+      "age": 43,
+      "height": 159,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_もえ",
+      "name": "もえ",
+      "age": 52,
+      "height": 154,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_まい",
+      "name": "まい",
+      "age": 42,
+      "height": 152,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_芽依（めい）",
+      "name": "芽依（めい）",
+      "age": 42,
+      "height": 155,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_りお",
+      "name": "りお",
+      "age": 43,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_音羽（おとは）",
+      "name": "音羽（おとは）",
+      "age": 49,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ミイ",
+      "name": "ミイ",
+      "age": 50,
+      "height": 170,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_リリー",
+      "name": "リリー",
+      "age": 47,
+      "height": 162,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_みゆめ",
+      "name": "みゆめ",
+      "age": 45,
+      "height": 167,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ひな",
+      "name": "ひな",
+      "age": 36,
+      "height": 154,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_まや",
+      "name": "まや",
+      "age": 47,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_はな",
+      "name": "はな",
+      "age": 48,
+      "height": 150,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ゆたか",
+      "name": "ゆたか",
+      "age": 40,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_みお",
+      "name": "みお",
+      "age": 38,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ねね",
+      "name": "ねね",
+      "age": 45,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_あんな",
+      "name": "あんな",
+      "age": 50,
+      "height": 140,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_静香(しずか)",
+      "name": "静香(しずか)",
+      "age": 51,
+      "height": 153,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_夏菜子（かなこ）",
+      "name": "夏菜子（かなこ）",
+      "age": 41,
+      "height": 163,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_みゆき",
+      "name": "みゆき",
+      "age": 41,
+      "height": 156,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_恵麻(えま)",
+      "name": "恵麻(えま)",
+      "age": 43,
+      "height": 153,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_桃香(ももか)",
+      "name": "桃香(ももか)",
+      "age": 48,
+      "height": 163,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_るり",
+      "name": "るり",
+      "age": 48,
+      "height": 152,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_凛（りん）",
+      "name": "凛（りん）",
+      "age": 40,
+      "height": 164,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_はるか",
+      "name": "はるか",
+      "age": 43,
+      "height": 157,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_みおり",
+      "name": "みおり",
+      "age": 40,
+      "height": 159,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_よしの",
+      "name": "よしの",
+      "age": 48,
+      "height": 165,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_なな",
+      "name": "なな",
+      "age": 44,
+      "height": 157,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_めぐ",
+      "name": "めぐ",
+      "age": 45,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_きょうこ",
+      "name": "きょうこ",
+      "age": 45,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_りえ",
+      "name": "りえ",
+      "age": 45,
+      "height": 161,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_まりあ",
+      "name": "まりあ",
+      "age": 53,
+      "height": 156,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_ほのか",
+      "name": "ほのか",
+      "age": 47,
+      "height": 156,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_えみり",
+      "name": "えみり",
+      "age": 46,
+      "height": 163,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_みき",
+      "name": "みき",
+      "age": 47,
+      "height": 157,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_みか",
+      "name": "みか",
+      "age": 50,
+      "height": 157,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_あや",
+      "name": "あや",
+      "age": 48,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_はるな",
+      "name": "はるな",
+      "age": 48,
+      "height": 154,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "spa_flame_小鳥（ことり）",
+      "name": "小鳥（ことり）",
+      "age": 44,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "tokyo_chuo_ginza_rondo",
+  "name": "ロンド 旧下弦の月 (銀座店)",
+  "prefecture": "東京都",
+  "city": "中央区",
+  "area": "銀座",
+  "address": "東京都中央区銀座エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分17,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://ginza-kiwami.com/",
+  "description": "門前仲町・九段下・銀座の日本人リラクゼーション。 / 料金システム: 80分17,000円〜 / 100分21,000円〜",
+  "tags": [
+    "複数エリア展開",
+    "日本人",
+    "一般ルーム",
+    "深夜営業"
+  ],
+  "brandId": "rondo",
+  "threads": [],
+  "therapists": []
+}

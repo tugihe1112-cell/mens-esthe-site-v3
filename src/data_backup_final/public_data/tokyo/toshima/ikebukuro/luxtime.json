@@ -1,0 +1,1166 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://luxtime.jp/",
+  "description": "都内7エリア（秋葉原/神田/銀座/新橋/五反田/池袋/錦糸町）で展開する人気店。圧倒的な在籍数と質の高いサービス。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "高リピート率"
+  ],
+  "brandId": "luxtime",
+  "threads": [],
+  "id": "tokyo_toshima_ikebukuro_luxtime",
+  "name": "Luxtime (池袋店)",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都豊島区池袋エリア",
+  "therapists": [
+    {
+      "id": "luxtime_宗田あおは",
+      "name": "宗田あおは",
+      "age": 28,
+      "height": 160,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "luxtime_速水せな",
+      "name": "速水せな",
+      "age": 27,
+      "height": 158,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_蓮水ふうり",
+      "name": "蓮水ふうり",
+      "age": 23,
+      "height": 163,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_柚原もえ",
+      "name": "柚原もえ",
+      "age": 23,
+      "height": 153,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_有栖のあ",
+      "name": "有栖のあ",
+      "age": 24,
+      "height": 148,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_深見れおな",
+      "name": "深見れおな",
+      "age": 24,
+      "height": 168,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "luxtime_木南ちか",
+      "name": "木南ちか",
+      "age": 19,
+      "height": 160,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "luxtime_水本れみ",
+      "name": "水本れみ",
+      "age": 24,
+      "height": 158,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_秋元めいみ",
+      "name": "秋元めいみ",
+      "age": 22,
+      "height": 157,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_岸ののか",
+      "name": "岸ののか",
+      "age": 25,
+      "height": 165,
+      "bust": "(B)",
+      "tags": [
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "luxtime_瞳みらい",
+      "name": "瞳みらい",
+      "age": 23,
+      "height": 156,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_山本なな",
+      "name": "山本なな",
+      "age": 26,
+      "height": 160,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_村瀬とあ",
+      "name": "村瀬とあ",
+      "age": 23,
+      "height": 153,
+      "bust": "(B)",
+      "tags": [
+        "Bカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "luxtime_浅井りこ",
+      "name": "浅井りこ",
+      "age": 26,
+      "height": 160,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "luxtime_星野ななこ",
+      "name": "星野ななこ",
+      "age": 27,
+      "height": 149,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_杉浦ゆい",
+      "name": "杉浦ゆい",
+      "age": 27,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_森井ふゆ",
+      "name": "森井ふゆ",
+      "age": 26,
+      "height": 155,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_鈴川こはる",
+      "name": "鈴川こはる",
+      "age": 21,
+      "height": 153,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_花井なぎ",
+      "name": "花井なぎ",
+      "age": 26,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_三浦ことね",
+      "name": "三浦ことね",
+      "age": 21,
+      "height": 156,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "luxtime_中川りつ",
+      "name": "中川りつ",
+      "age": 20,
+      "height": 155,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_海野そら",
+      "name": "海野そら",
+      "age": 28,
+      "height": 159,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "luxtime_桐谷みのり",
+      "name": "桐谷みのり",
+      "age": 26,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "美人"
+      ]
+    },
+    {
+      "id": "luxtime_望月みく",
+      "name": "望月みく",
+      "age": 24,
+      "height": 156,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_瀬戸口みお",
+      "name": "瀬戸口みお",
+      "age": 22,
+      "height": 153,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_上原れい",
+      "name": "上原れい",
+      "age": 23,
+      "height": 153,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_星奈ゆうな",
+      "name": "星奈ゆうな",
+      "age": 20,
+      "height": 156,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_最上あやの",
+      "name": "最上あやの",
+      "age": 22,
+      "height": 162,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_天乃りお",
+      "name": "天乃りお",
+      "age": 21,
+      "height": 153,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_葛城えれな",
+      "name": "葛城えれな",
+      "age": 19,
+      "height": 151,
+      "bust": "(B)",
+      "tags": [
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "luxtime_雪見かずは",
+      "name": "雪見かずは",
+      "age": 26,
+      "height": 155,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_常田まどか",
+      "name": "常田まどか",
+      "age": 21,
+      "height": 168,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_真田めぐみ",
+      "name": "真田めぐみ",
+      "age": 21,
+      "height": 161,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_倉本かほ",
+      "name": "倉本かほ",
+      "age": 21,
+      "height": 151,
+      "bust": "(B)",
+      "tags": [
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "luxtime_崎園まみ",
+      "name": "崎園まみ",
+      "age": 21,
+      "height": 151,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_姫野ちふゆ",
+      "name": "姫野ちふゆ",
+      "age": 18,
+      "height": 157,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_森宮みずき",
+      "name": "森宮みずき",
+      "age": 22,
+      "height": 155,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_由井つきか",
+      "name": "由井つきか",
+      "age": 21,
+      "height": 165,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_月見いおり",
+      "name": "月見いおり",
+      "age": 22,
+      "height": 156,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_釘宮ゆうか",
+      "name": "釘宮ゆうか",
+      "age": 24,
+      "height": 148,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_天道しずく",
+      "name": "天道しずく",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_早瀬ほのか",
+      "name": "早瀬ほのか",
+      "age": 26,
+      "height": 156,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_冬月みさと",
+      "name": "冬月みさと",
+      "age": 25,
+      "height": 165,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_小森いろは",
+      "name": "小森いろは",
+      "age": 20,
+      "height": 164,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_春奈おぼろ",
+      "name": "春奈おぼろ",
+      "age": 21,
+      "height": 163,
+      "bust": "(B)",
+      "tags": [
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "luxtime_伊吹れむ",
+      "name": "伊吹れむ",
+      "age": 23,
+      "height": 170,
+      "bust": "(B)",
+      "tags": [
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "luxtime_神楽ふうか",
+      "name": "神楽ふうか",
+      "age": 26,
+      "height": 170,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_宮坂らん",
+      "name": "宮坂らん",
+      "age": 28,
+      "height": 157,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_竹内ななお",
+      "name": "竹内ななお",
+      "age": 28,
+      "height": 163,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_白浜りの",
+      "name": "白浜りの",
+      "age": 20,
+      "height": 165,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "luxtime_成宮りん",
+      "name": "成宮りん",
+      "age": 20,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_七星うた",
+      "name": "七星うた",
+      "age": 22,
+      "height": 155,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "luxtime_秋葉さくら",
+      "name": "秋葉さくら",
+      "age": 27,
+      "height": 164,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_一条せりな",
+      "name": "一条せりな",
+      "age": 22,
+      "height": 150,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_高瀬あいり",
+      "name": "高瀬あいり",
+      "age": 22,
+      "height": 163,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_安藤れな",
+      "name": "安藤れな",
+      "age": 28,
+      "height": 164,
+      "bust": "(B)",
+      "tags": [
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "luxtime_水澤まりな",
+      "name": "水澤まりな",
+      "age": 28,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_真白ことは",
+      "name": "真白ことは",
+      "age": 23,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_秋山せりか",
+      "name": "秋山せりか",
+      "age": 25,
+      "height": 155,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_桃井にこ",
+      "name": "桃井にこ",
+      "age": 20,
+      "height": 170,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_遠山ひめ",
+      "name": "遠山ひめ",
+      "age": 23,
+      "height": 155,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_犬神あずき",
+      "name": "犬神あずき",
+      "age": 25,
+      "height": 148,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_加賀美えれん",
+      "name": "加賀美えれん",
+      "age": 25,
+      "height": 165,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_池田レイナ",
+      "name": "池田レイナ",
+      "age": 24,
+      "height": 153,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_増田ねね",
+      "name": "増田ねね",
+      "age": 23,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_雪乃みう",
+      "name": "雪乃みう",
+      "age": 24,
+      "height": 156,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "おすすめ"
+      ]
+    },
+    {
+      "id": "luxtime_佐々木えま",
+      "name": "佐々木えま",
+      "age": 24,
+      "height": 164,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "luxtime_椿谷ちふゆ",
+      "name": "椿谷ちふゆ",
+      "age": 19,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "luxtime_雪村すず",
+      "name": "雪村すず",
+      "age": 25,
+      "height": 167,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "luxtime_姫村さち",
+      "name": "姫村さち",
+      "age": 24,
+      "height": 162,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "美人"
+      ]
+    },
+    {
+      "id": "luxtime_夏川まお",
+      "name": "夏川まお",
+      "age": 21,
+      "height": 155,
+      "bust": "(B)",
+      "tags": [
+        "Bカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "luxtime_白坂ゆいな",
+      "name": "白坂ゆいな",
+      "age": 24,
+      "height": 149,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "luxtime_夜空みづき",
+      "name": "夜空みづき",
+      "age": 24,
+      "height": 147,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "luxtime_白波みおん",
+      "name": "白波みおん",
+      "age": 20,
+      "height": 164,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "モデル"
+      ]
+    },
+    {
+      "id": "luxtime_一ノ瀬あかり",
+      "name": "一ノ瀬あかり",
+      "age": 19,
+      "height": 150,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "luxtime_百田そよか",
+      "name": "百田そよか",
+      "age": 25,
+      "height": 162,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "美人"
+      ]
+    },
+    {
+      "id": "luxtime_鈴木まきな",
+      "name": "鈴木まきな",
+      "age": 26,
+      "height": 158,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "luxtime_星川あい",
+      "name": "星川あい",
+      "age": 26,
+      "height": 169,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "luxtime_小野寺かやの",
+      "name": "小野寺かやの",
+      "age": 20,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "清楚"
+      ]
+    },
+    {
+      "id": "luxtime_工藤ねる",
+      "name": "工藤ねる",
+      "age": 22,
+      "height": 150,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "luxtime_松雪るい",
+      "name": "松雪るい",
+      "age": 27,
+      "height": 153,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "美人"
+      ]
+    },
+    {
+      "id": "luxtime_美澄かなで",
+      "name": "美澄かなで",
+      "age": 28,
+      "height": 158,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "luxtime_水川まりん",
+      "name": "水川まりん",
+      "age": 26,
+      "height": 160,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "スレンダー"
+      ]
+    },
+    {
+      "id": "luxtime_夜神かんな",
+      "name": "夜神かんな",
+      "age": 27,
+      "height": 160,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ",
+        "巨乳"
+      ]
+    },
+    {
+      "id": "luxtime_美咲かのん",
+      "name": "美咲かのん",
+      "age": 28,
+      "height": 153,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "luxtime_佐野ほまれ",
+      "name": "佐野ほまれ",
+      "age": 21,
+      "height": 158,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "美脚"
+      ]
+    },
+    {
+      "id": "luxtime_坂本らら",
+      "name": "坂本らら",
+      "age": 20,
+      "height": 164,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "luxtime_海堂ちなつ",
+      "name": "海堂ちなつ",
+      "age": 24,
+      "height": 165,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "モデル"
+      ]
+    },
+    {
+      "id": "luxtime_白兎ゆらの",
+      "name": "白兎ゆらの",
+      "age": 20,
+      "height": 153,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "luxtime_雨宮るみ",
+      "name": "雨宮るみ",
+      "age": 22,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "清楚"
+      ]
+    },
+    {
+      "id": "luxtime_新妻りり",
+      "name": "新妻りり",
+      "age": 28,
+      "height": 155,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "luxtime_向坂みな",
+      "name": "向坂みな",
+      "age": 21,
+      "height": 162,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_村上みゆ",
+      "name": "村上みゆ",
+      "age": 27,
+      "height": 162,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_水原きこ",
+      "name": "水原きこ",
+      "age": 25,
+      "height": 161,
+      "bust": "(B)",
+      "tags": [
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "luxtime_関川ちえ",
+      "name": "関川ちえ",
+      "age": 27,
+      "height": 168,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_青沼めい",
+      "name": "青沼めい",
+      "age": 24,
+      "height": 170,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_黒川ののは",
+      "name": "黒川ののは",
+      "age": 21,
+      "height": 158,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_遠山かなえ",
+      "name": "遠山かなえ",
+      "age": 26,
+      "height": 162,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "luxtime_花村いちか",
+      "name": "花村いちか",
+      "age": 20,
+      "height": 160,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_唐沢みわ",
+      "name": "唐沢みわ",
+      "age": 26,
+      "height": 156,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "luxtime_天使める",
+      "name": "天使める",
+      "age": 22,
+      "height": 158,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_沢城もも",
+      "name": "沢城もも",
+      "age": 23,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_黒崎ゆあ",
+      "name": "黒崎ゆあ",
+      "age": 24,
+      "height": 150,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_宇佐美ゆきの",
+      "name": "宇佐美ゆきの",
+      "age": 19,
+      "height": 156,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_佐久間ゆり",
+      "name": "佐久間ゆり",
+      "age": 28,
+      "height": 155,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_平野さき",
+      "name": "平野さき",
+      "age": 28,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_宮本つむぎ",
+      "name": "宮本つむぎ",
+      "age": 20,
+      "height": 164,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_桜井あやみ",
+      "name": "桜井あやみ",
+      "age": 19,
+      "height": 152,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "luxtime_由良のの",
+      "name": "由良のの",
+      "age": 25,
+      "height": 150,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "luxtime_花咲ひまり",
+      "name": "花咲ひまり",
+      "age": 26,
+      "height": 155,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "luxtime_美谷はる",
+      "name": "美谷はる",
+      "age": 26,
+      "height": 166,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    }
+  ]
+}

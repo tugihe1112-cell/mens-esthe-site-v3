@@ -1,0 +1,428 @@
+{
+  "name": "Assouplir (アスプリー秋葉原店)",
+  "prefecture": "東京都",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 4.5,
+  "reviewCount": 0,
+  "price": "60分13,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://assouplir-tokyo.com/",
+  "description": "秋葉原・浅草橋の実力派日本人リラクゼーション。 / 熟練のセラピストが多数在籍しています。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "熟女",
+    "ベテラン"
+  ],
+  "brandId": "assouplir",
+  "threads": [],
+  "id": "tokyo_chiyoda_akihabara_assouplir",
+  "area": "秋葉原",
+  "city": "千代田区",
+  "nearestStation": "秋葉原駅",
+  "address": "東京都千代田区秋葉原エリア",
+  "therapists": [
+    {
+      "id": "assouplir_上原るみ",
+      "name": "上原るみ",
+      "age": "39歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_咲真あみ",
+      "name": "咲真あみ",
+      "age": "47歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_神楽あや",
+      "name": "神楽あや",
+      "age": "37歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_大嶋ゆう",
+      "name": "大嶋ゆう",
+      "age": "49歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_岬ようこ",
+      "name": "岬ようこ",
+      "age": "43歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_森崎とうこ",
+      "name": "森崎とうこ",
+      "age": "38歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_白石りな",
+      "name": "白石りな",
+      "age": "35歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_松井まりこ",
+      "name": "松井まりこ",
+      "age": "40歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_新堂もも",
+      "name": "新堂もも",
+      "age": "33歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_田中さとみ",
+      "name": "田中さとみ",
+      "age": "38歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_瀬名あいこ",
+      "name": "瀬名あいこ",
+      "age": "45歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_三浦あき",
+      "name": "三浦あき",
+      "age": "37歳",
+      "height": "159cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "assouplir_小林ななこ",
+      "name": "小林ななこ",
+      "age": "47歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_柳瀬いおり",
+      "name": "柳瀬いおり",
+      "age": "45歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_永浜みゆ",
+      "name": "永浜みゆ",
+      "age": "42歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_松村ことみ",
+      "name": "松村ことみ",
+      "age": "35歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_葵まゆ",
+      "name": "葵まゆ",
+      "age": "32歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_星野みつき",
+      "name": "星野みつき",
+      "age": "39歳",
+      "height": "156cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "assouplir_鈴木すみれ",
+      "name": "鈴木すみれ",
+      "age": "45歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_棚橋みどり",
+      "name": "棚橋みどり",
+      "age": "46歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_宇野じゅりな",
+      "name": "宇野じゅりな",
+      "age": "37歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_要ふゆみ",
+      "name": "要ふゆみ",
+      "age": "46歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_綾瀬みな",
+      "name": "綾瀬みな",
+      "age": "39歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_東條つばさ",
+      "name": "東條つばさ",
+      "age": "40歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_一ノ瀬なな",
+      "name": "一ノ瀬なな",
+      "age": "36歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_水城はるか",
+      "name": "水城はるか",
+      "age": "46歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_浅井めぐみ",
+      "name": "浅井めぐみ",
+      "age": "43歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_仲田りん",
+      "name": "仲田りん",
+      "age": "40歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_石原みかん",
+      "name": "石原みかん",
+      "age": "39歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_百瀬きょうこ",
+      "name": "百瀬きょうこ",
+      "age": "41歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_水嶋かすみ",
+      "name": "水嶋かすみ",
+      "age": "48歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_佐藤いちか",
+      "name": "佐藤いちか",
+      "age": "33歳",
+      "height": "145cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_篠原るい",
+      "name": "篠原るい",
+      "age": "47歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_片桐みほこ",
+      "name": "片桐みほこ",
+      "age": "46歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_豊田ゆい",
+      "name": "豊田ゆい",
+      "age": "45歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_小野みお",
+      "name": "小野みお",
+      "age": "39歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_日比さくら",
+      "name": "日比さくら",
+      "age": "41歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_橘まい",
+      "name": "橘まい",
+      "age": "43歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_深田あい",
+      "name": "深田あい",
+      "age": "45歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_白鳥みほ",
+      "name": "白鳥みほ",
+      "age": "48歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_田宮あゆ",
+      "name": "田宮あゆ",
+      "age": "42歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_桐島とわこ",
+      "name": "桐島とわこ",
+      "age": "49歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_岡田さき",
+      "name": "岡田さき",
+      "age": "43歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_早坂ちか",
+      "name": "早坂ちか",
+      "age": "37歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_荒木はるな",
+      "name": "荒木はるな",
+      "age": "41歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_吉川ゆかり",
+      "name": "吉川ゆかり",
+      "age": "50歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_青山ゆう",
+      "name": "青山ゆう",
+      "age": "40歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_木村けい",
+      "name": "木村けい",
+      "age": "38歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_市川すず",
+      "name": "市川すず",
+      "age": "35歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_今井まみ",
+      "name": "今井まみ",
+      "age": "48歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_櫻井はる",
+      "name": "櫻井はる",
+      "age": "48歳",
+      "height": "160cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "assouplir_西尾みさ",
+      "name": "西尾みさ",
+      "age": "45歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_岩永えみ",
+      "name": "岩永えみ",
+      "age": "31歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_香澄りこ",
+      "name": "香澄りこ",
+      "age": "39歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_葉月れな",
+      "name": "葉月れな",
+      "age": "37歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_朝倉りら",
+      "name": "朝倉りら",
+      "age": "42歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "assouplir_南りょう",
+      "name": "南りょう",
+      "age": "40歳",
+      "height": "157cm",
+      "bust": null
+    }
+  ]
+}

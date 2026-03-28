@@ -1,0 +1,729 @@
+{
+  "name": "The Salon (ザ・サロン秋葉原店)",
+  "prefecture": "東京都",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分15,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": true,
+  "websiteUrl": "https://the-salon.jp/",
+  "description": "洗練された完全個室と厳選されたセラピスト。秋葉原・新橋・赤坂で展開する高級メンズエステ。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "高級店",
+    "Premium"
+  ],
+  "brandId": "the_salon",
+  "threads": [],
+  "id": "tokyo_chiyoda_akihabara_the_salon",
+  "area": "秋葉原",
+  "city": "千代田区",
+  "nearestStation": "秋葉原駅",
+  "address": "東京都千代田区秋葉原エリア",
+  "therapists": [
+    {
+      "id": "the_salon_ぴの",
+      "name": "ぴの",
+      "age": "23歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みあ",
+      "name": "みあ",
+      "age": "22歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ありす",
+      "name": "ありす",
+      "age": "23歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ひなた",
+      "name": "ひなた",
+      "age": "24歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ねる",
+      "name": "ねる",
+      "age": "21歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_もえか",
+      "name": "もえか",
+      "age": "23歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_かえで",
+      "name": "かえで",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_さや",
+      "name": "さや",
+      "age": "24歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みき",
+      "name": "みき",
+      "age": "22歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_まゆ",
+      "name": "まゆ",
+      "age": "24歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_えり",
+      "name": "えり",
+      "age": "26歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_るか",
+      "name": "るか",
+      "age": "20歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_しの",
+      "name": "しの",
+      "age": "21歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆめ",
+      "name": "ゆめ",
+      "age": "22歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆな",
+      "name": "ゆな",
+      "age": "20歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_はるか",
+      "name": "はるか",
+      "age": "20歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_はな",
+      "name": "はな",
+      "age": "21歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_とうか",
+      "name": "とうか",
+      "age": "20歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_あいり",
+      "name": "あいり",
+      "age": "20歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆずは",
+      "name": "ゆずは",
+      "age": "23歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆみ",
+      "name": "ゆみ",
+      "age": "23歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ほの",
+      "name": "ほの",
+      "age": "21歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ふゆか",
+      "name": "ふゆか",
+      "age": "22歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_かな",
+      "name": "かな",
+      "age": "23歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ましろ",
+      "name": "ましろ",
+      "age": "26歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_りん",
+      "name": "りん",
+      "age": "22歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_りか",
+      "name": "りか",
+      "age": "22歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_くるみ",
+      "name": "くるみ",
+      "age": "20歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_せりな",
+      "name": "せりな",
+      "age": "22歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_もも",
+      "name": "もも",
+      "age": "20歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_らん",
+      "name": "らん",
+      "age": "19歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_そら",
+      "name": "そら",
+      "age": "21歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_める",
+      "name": "める",
+      "age": "22歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_あおい",
+      "name": "あおい",
+      "age": "22歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ももな",
+      "name": "ももな",
+      "age": "25歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆあ",
+      "name": "ゆあ",
+      "age": "25歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆい",
+      "name": "ゆい",
+      "age": "19歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_りおん",
+      "name": "りおん",
+      "age": "23歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_えりな",
+      "name": "えりな",
+      "age": "24歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_まりん",
+      "name": "まりん",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_なほ",
+      "name": "なほ",
+      "age": "22歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みほ",
+      "name": "みほ",
+      "age": "23歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みこ",
+      "name": "みこ",
+      "age": "18歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆり",
+      "name": "ゆり",
+      "age": "18歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みお",
+      "name": "みお",
+      "age": "24歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_かすみ",
+      "name": "かすみ",
+      "age": "25歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_まき",
+      "name": "まき",
+      "age": "23歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_さんご",
+      "name": "さんご",
+      "age": "22歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆう",
+      "name": "ゆう",
+      "age": "22歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆか",
+      "name": "ゆか",
+      "age": "20歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_きら",
+      "name": "きら",
+      "age": "18歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆうな",
+      "name": "ゆうな",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_あき",
+      "name": "あき",
+      "age": "22歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みく",
+      "name": "みく",
+      "age": "24歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_わかな",
+      "name": "わかな",
+      "age": "19歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_あやな",
+      "name": "あやな",
+      "age": "26歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆき",
+      "name": "ゆき",
+      "age": "22歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_このみ",
+      "name": "このみ",
+      "age": "20歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_いちか",
+      "name": "いちか",
+      "age": "18歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_あいの",
+      "name": "あいの",
+      "age": "22歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_るな",
+      "name": "るな",
+      "age": "22歳",
+      "height": "171cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_まい",
+      "name": "まい",
+      "age": "24歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みかさ",
+      "name": "みかさ",
+      "age": "20歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_さよ",
+      "name": "さよ",
+      "age": "24歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_しろ",
+      "name": "しろ",
+      "age": "22歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みずき",
+      "name": "みずき",
+      "age": "23歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_りあ",
+      "name": "りあ",
+      "age": "23歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_おと",
+      "name": "おと",
+      "age": "20歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_なのは",
+      "name": "なのは",
+      "age": "22歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_いのり",
+      "name": "いのり",
+      "age": "27歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_のの",
+      "name": "のの",
+      "age": "19歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ここ",
+      "name": "ここ",
+      "age": "18歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_もえ",
+      "name": "もえ",
+      "age": "18歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_なな",
+      "name": "なな",
+      "age": "20歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ほのか",
+      "name": "ほのか",
+      "age": "23歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みるく",
+      "name": "みるく",
+      "age": "22歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みる",
+      "name": "みる",
+      "age": "21歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_りんご",
+      "name": "りんご",
+      "age": "21歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_れい",
+      "name": "れい",
+      "age": "19歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_なみ",
+      "name": "なみ",
+      "age": "20歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_あい",
+      "name": "あい",
+      "age": "24歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_りおな",
+      "name": "りおな",
+      "age": "20歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_もな",
+      "name": "もな",
+      "age": "22歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みおり",
+      "name": "みおり",
+      "age": "23歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_るい",
+      "name": "るい",
+      "age": "22歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_みらい",
+      "name": "みらい",
+      "age": "24歳",
+      "height": "147cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ゆうか",
+      "name": "ゆうか",
+      "age": "23歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_かのん",
+      "name": "かのん",
+      "age": "22歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_れな",
+      "name": "れな",
+      "age": "21歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_しゅり",
+      "name": "しゅり",
+      "age": "21歳",
+      "height": "175cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_あずさ",
+      "name": "あずさ",
+      "age": "22歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_うみ",
+      "name": "うみ",
+      "age": "22歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_しゅな",
+      "name": "しゅな",
+      "age": "25歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_すみれ",
+      "name": "すみれ",
+      "age": "23歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_かりん",
+      "name": "かりん",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_ちょこ",
+      "name": "ちょこ",
+      "age": "22歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_あのん",
+      "name": "あのん",
+      "age": "19歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_あいか",
+      "name": "あいか",
+      "age": "21歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_めあり",
+      "name": "めあり",
+      "age": "23歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "the_salon_こはる",
+      "name": "こはる",
+      "age": "20歳",
+      "height": "154cm",
+      "bust": null
+    }
+  ]
+}

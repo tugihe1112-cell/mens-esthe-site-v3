@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_ota_kamata_gokujou",
+  "name": "GOKUJOU 極嬢",
+  "prefecture": "東京都",
+  "city": "大田区",
+  "area": "蒲田",
+  "address": "東京都大田区蒲田エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分13,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://gokujou-es.com/",
+  "nearestStation": "蒲田駅",
+  "description": "大井町・大森・蒲田の日本人リラクゼーション(旧ゴクラク)。 / 料金システム: 60分13,000円 / 90分17,000円 / 120分22,000円",
+  "threads": [],
+  "brandId": "gokujou",
+  "therapists": []
+}

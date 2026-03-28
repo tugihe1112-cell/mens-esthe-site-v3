@@ -1,0 +1,33 @@
+{
+  "id": "tokyo_meguro_meguro_everything",
+  "name": "Everything (エブリシング)",
+  "prefecture": "東京都",
+  "city": "目黒区",
+  "area": "目黒",
+  "address": "東京都目黒区 (最寄: 目黒駅)",
+  "image": "/images/shops/everything.jpg",
+  "rating": 4.5,
+  "reviewCount": 0,
+  "price": "90分 13,000円～",
+  "hours": "12:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業",
+    "店舗型"
+  ],
+  "websiteUrl": "http://www.every-thing.jp",
+  "nearestStation": "目黒駅",
+  "description": "目黒駅近くの完全個室・店舗型メンズエステ。",
+  "brandId": "everything",
+  "threads": [],
+  "therapists": [
+    "everything_水沢ゆき",
+    "everything_関口みなみ",
+    "everything_榎本さやか",
+    "everything_福山かな",
+    "everything_宮沢すみれ",
+    "everything_朝倉みほ"
+  ]
+}

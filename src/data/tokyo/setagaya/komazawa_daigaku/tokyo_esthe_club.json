@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_setagaya_komazawa_daigaku_tokyo_esthe_club",
+  "name": "東京えすてクラブ",
+  "prefecture": "東京都",
+  "city": "世田谷区",
+  "area": "駒沢大学",
+  "address": "東京都世田谷区駒沢大学エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分17,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://www.esthe-club.tokyo/",
+  "nearestStation": "駒沢大学駅",
+  "description": "駒沢大学・桜新町・学芸大学の日本人リラクゼーション。 / オープン割引開催中: 90分19,000円→17,000円 / 120分24,000円→22,000円 / 150分29,000円→27,000円 / 180分34,000円→32,000円 / 延長30分6,000円 / カード支払いOK",
+  "threads": [],
+  "brandId": "tokyo_esthe_club",
+  "therapists": []
+}

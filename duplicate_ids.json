@@ -1,0 +1,385 @@
+[
+  {
+    "id": 0,
+    "count": 16,
+    "shops": [
+      "サウダージ",
+      "Candy Spa (キャンディスパ)",
+      "メンズエステ恵比寿",
+      "DAHLIA (ダリア)",
+      "ムーブプラス",
+      "天界のスパ 中目黒",
+      "Vicca+plus. (ヴィッカプラス)",
+      "大人のやすらぎSPA",
+      "BELLA SPA (ベラスパ)",
+      "大人の隠れ家",
+      "MoMo Spa (モモスパ)",
+      "AQUA (アクア) 中目黒",
+      "ポセイドン",
+      "AromaLys (アロマリース)",
+      "AROMA EMERALD (アロマエメラルド)",
+      "Love it (ラヴィット)"
+    ]
+  },
+  {
+    "id": 430,
+    "count": 5,
+    "shops": [
+      "AromaCharm (アロマチャーム)",
+      "AromaCharm (アロマチャーム)",
+      "AromaCharm (アロマチャーム)",
+      "AromaCharm (アロマチャーム)",
+      "AromaCharm (アロマチャーム)"
+    ]
+  },
+  {
+    "id": 501,
+    "count": 2,
+    "shops": [
+      "Belle É (ベルエ)",
+      "SPA Real (スパレアル)"
+    ]
+  },
+  {
+    "id": 1002,
+    "count": 2,
+    "shops": [
+      "おとな女子",
+      "メンズエステ Lynx 横浜関内店"
+    ]
+  },
+  {
+    "id": 5001,
+    "count": 3,
+    "shops": [
+      "LINDA SPA (リンダスパ)",
+      "LINDA SPA (リンダスパ)",
+      "LINDA SPA (リンダスパ)"
+    ]
+  },
+  {
+    "id": 5002,
+    "count": 4,
+    "shops": [
+      "大人の隠れ家",
+      "大人の隠れ家",
+      "LINDA SPA (中目黒店)",
+      "大人の隠れ家"
+    ]
+  },
+  {
+    "id": 5003,
+    "count": 4,
+    "shops": [
+      "メンエスグループ",
+      "メンエスグループ",
+      "メンエスグループ",
+      "LINDA SPA (恵比寿店)"
+    ]
+  },
+  {
+    "id": 5004,
+    "count": 2,
+    "shops": [
+      "DAHLIA (ダリア)",
+      "LINDA SPA (目黒店)"
+    ]
+  },
+  {
+    "id": 5005,
+    "count": 2,
+    "shops": [
+      "LINDA SPA (三軒茶屋店)",
+      "Esthe Spa (エステスパ)"
+    ]
+  },
+  {
+    "id": 5008,
+    "count": 2,
+    "shops": [
+      "体育の時間",
+      "体育の時間"
+    ]
+  },
+  {
+    "id": 5010,
+    "count": 4,
+    "shops": [
+      "Organic SPA (オーガニックスパ)",
+      "Organic SPA (オーガニックスパ)",
+      "Organic SPA (オーガニックスパ)",
+      "Organic SPA (オーガニックスパ)"
+    ]
+  },
+  {
+    "id": 5013,
+    "count": 2,
+    "shops": [
+      "女教師の秘め事",
+      "女教師の秘め事"
+    ]
+  },
+  {
+    "id": 5014,
+    "count": 3,
+    "shops": [
+      "東京メンズエステ 目黒 池袋",
+      "東京メンズエステ 目黒 池袋",
+      "東京メンズエステ 目黒 池袋"
+    ]
+  },
+  {
+    "id": 6001,
+    "count": 2,
+    "shops": [
+      "Chocolate (新大久保ルーム)",
+      "PLATINUM TOKYO 西新宿店"
+    ]
+  },
+  {
+    "id": 6002,
+    "count": 2,
+    "shops": [
+      "PLATINUM TOKYO 大久保店",
+      "Chocolate (代々木ルーム)"
+    ]
+  },
+  {
+    "id": 6003,
+    "count": 2,
+    "shops": [
+      "Chocolate (新宿ルーム)",
+      "PLATINUM TOKYO 東新宿店"
+    ]
+  },
+  {
+    "id": 7001,
+    "count": 2,
+    "shops": [
+      "ONE ROOM (ワンルーム) 東新宿店",
+      "Aroma Levante (代々木ルーム)"
+    ]
+  },
+  {
+    "id": 7002,
+    "count": 2,
+    "shops": [
+      "Aroma Levante (新宿ルーム)",
+      "ONE ROOM (ワンルーム) 大久保店"
+    ]
+  },
+  {
+    "id": 8001,
+    "count": 2,
+    "shops": [
+      "D-SPA (ディースパ)",
+      "Eren (エレン)"
+    ]
+  },
+  {
+    "id": 9001,
+    "count": 2,
+    "shops": [
+      "Aroma charmant (アロマシャルマント) 荻窪店",
+      "Poonys (プーニーズ)"
+    ]
+  },
+  {
+    "id": 11002,
+    "count": 2,
+    "shops": [
+      "Kamino Esthe (渋谷店)",
+      "Kamino Esthe (渋谷店)"
+    ]
+  },
+  {
+    "id": 12001,
+    "count": 2,
+    "shops": [
+      "MITSUBACHI (ミツバチ) 新宿三丁目店",
+      "UraSanEsu (ウラサネス)"
+    ]
+  },
+  {
+    "id": 12002,
+    "count": 2,
+    "shops": [
+      "UraSanEsu (下北沢店)",
+      "MITSUBACHI (ミツバチ) 新宿御苑店"
+    ]
+  },
+  {
+    "id": 13001,
+    "count": 2,
+    "shops": [
+      "Aroma Modeste (アロマモデスト) 練馬店",
+      "Sugar Spa (シュガースパ)"
+    ]
+  },
+  {
+    "id": 15001,
+    "count": 2,
+    "shops": [
+      "Sweet Mist (スイートミスト) 新橋店",
+      "温故知新 (旧ユアタイム)"
+    ]
+  },
+  {
+    "id": 16001,
+    "count": 2,
+    "shops": [
+      "Dejavu TOKYO (デジャヴ東京) 西麻布店",
+      "NATURAL (新大久保店)"
+    ]
+  },
+  {
+    "id": 16002,
+    "count": 2,
+    "shops": [
+      "Dejavu TOKYO (デジャヴ東京) 麻布十番店",
+      "NATURAL (池袋店)"
+    ]
+  },
+  {
+    "id": 16003,
+    "count": 2,
+    "shops": [
+      "NATURAL (六本木店)",
+      "Dejavu TOKYO (デジャヴ東京) 銀座店"
+    ]
+  },
+  {
+    "id": 16004,
+    "count": 2,
+    "shops": [
+      "Dejavu TOKYO (デジャヴ東京) 東新宿店",
+      "NATURAL (代々木店)"
+    ]
+  },
+  {
+    "id": 16005,
+    "count": 4,
+    "shops": [
+      "Dejavu TOKYO (デジャヴ東京) 三軒茶屋店",
+      "Laulima (ラウリマ)",
+      "NATURAL (神楽坂店)",
+      "Laulima (ラウリマ)"
+    ]
+  },
+  {
+    "id": 16006,
+    "count": 5,
+    "shops": [
+      "Dejavu TOKYO (デジャヴ東京) 赤羽橋店",
+      "NATURAL (新宿御苑店)",
+      "Natural Organic Spa (ナチュラルオーガニックスパ)",
+      "Natural Organic Spa (ナチュラルオーガニックスパ)",
+      "Natural Organic Spa (ナチュラルオーガニックスパ)"
+    ]
+  },
+  {
+    "id": 16007,
+    "count": 3,
+    "shops": [
+      "ANNA (アンナ)",
+      "ANNA (アンナ)",
+      "ANNA (アンナ)"
+    ]
+  },
+  {
+    "id": 16010,
+    "count": 3,
+    "shops": [
+      "Aroma LaLuna (アロマラルーナ)",
+      "Aroma LaLuna (アロマラルーナ)",
+      "Aroma LaLuna (アロマラルーナ)"
+    ]
+  },
+  {
+    "id": 16011,
+    "count": 4,
+    "shops": [
+      "天界のスパ (中目黒店)",
+      "天界のスパ (中目黒店)",
+      "天界のスパ (中目黒店)",
+      "天界のスパ (武蔵小杉店)"
+    ]
+  },
+  {
+    "id": 16012,
+    "count": 8,
+    "shops": [
+      "ELTERAS TOKYO (エルテラス)",
+      "ELTERAS TOKYO (エルテラス)",
+      "ELTERAS TOKYO (エルテラス)",
+      "ELTERAS TOKYO (エルテラス)",
+      "ELTERAS TOKYO (エルテラス)",
+      "ELTERAS TOKYO (エルテラス)",
+      "ELTERAS TOKYO (エルテラス)",
+      "ELTERAS TOKYO (エルテラス)"
+    ]
+  },
+  {
+    "id": 16013,
+    "count": 7,
+    "shops": [
+      "神のエステ (Kami no Esthe)",
+      "神のエステ (Kami no Esthe)",
+      "神のエステ (Kami no Esthe)",
+      "神のエステ (Kami no Esthe)",
+      "神のエステ (Kami no Esthe)",
+      "神のエステ (Kami no Esthe)",
+      "神のエステ (Kami no Esthe)"
+    ]
+  },
+  {
+    "id": 16016,
+    "count": 5,
+    "shops": [
+      "FioreSpa (フィオーレスパ)",
+      "FioreSpa (フィオーレスパ)",
+      "FioreSpa (フィオーレスパ)",
+      "FioreSpa (フィオーレスパ)",
+      "FioreSpa (フィオーレスパ)"
+    ]
+  },
+  {
+    "id": 16017,
+    "count": 5,
+    "shops": [
+      "Chat noir (シャノワール)",
+      "Chat noir (シャノワール)",
+      "Chat noir (シャノワール)",
+      "Chat noir (シャノワール)",
+      "Chat noir (シャノワール)"
+    ]
+  },
+  {
+    "id": 16018,
+    "count": 5,
+    "shops": [
+      "トキョプラ (旧T+Plus)",
+      "トキョプラ (旧T+Plus)",
+      "トキョプラ (旧T+Plus)",
+      "トキョプラ (旧T+Plus)",
+      "トキョプラ (旧T+Plus)"
+    ]
+  },
+  {
+    "id": 16020,
+    "count": 3,
+    "shops": [
+      "Limited Spa (リミテッドスパ)",
+      "Limited Spa (リミテッドスパ)",
+      "Limited Spa (リミテッドスパ)"
+    ]
+  },
+  {
+    "id": 17001,
+    "count": 2,
+    "shops": [
+      "ATLANTIS (アトランティス)",
+      "LugarTOKYO (代々木店)"
+    ]
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_shinagawa_gotanda_the_half",
+  "name": "THE HALF（ザ・ハーフ）",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "五反田",
+  "address": "東京都品川区・港区・目黒区エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分18,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "カード払いOK",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://the-half.com/",
+  "nearestStation": "五反田駅、新橋駅、麻布十番駅、恵比寿駅",
+  "description": "五反田、中目黒、恵比寿、麻布十番、新橋、銀座、六本木、西麻布エリアで展開",
+  "threads": [],
+  "brandId": "the_half",
+  "therapists": []
+}

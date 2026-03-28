@@ -1,0 +1,150 @@
+[
+  {
+    "shopName": "ターミナル確認用店舗",
+    "prefecture": "東京都",
+    "city": "テスト区",
+    "therapistName": "テスト花子",
+    "rating": 5,
+    "content": "これが保存されれば成功です",
+    "tags": [
+      "テスト"
+    ],
+    "course": "60分1万円",
+    "detailedRatings": {
+      "cleanliness": 5,
+      "appearance": 5,
+      "style": 5,
+      "service": 5,
+      "skill": 5,
+      "intensity": 5
+    },
+    "id": 1768758266792,
+    "status": "approved",
+    "timestamp": "2026/1/19 2:44:26"
+  },
+  {
+    "shopName": "じぶhb",
+    "prefecture": "北海道",
+    "city": "世田谷区宮殿",
+    "therapistName": "jんj",
+    "course": "二百八十三にはい：k",
+    "content": "黄hヴィプレッツェ手を引くb伊プtgfプレッツェいうy",
+    "tags": [
+      "・lk：おjkl"
+    ],
+    "rating": 5,
+    "detailedRatings": {
+      "cleanliness": 3,
+      "appearance": 3,
+      "style": 3,
+      "service": 3,
+      "skill": 3,
+      "intensity": 3
+    },
+    "userId": 1,
+    "userName": "test",
+    "id": 1768817848378,
+    "status": "approved",
+    "timestamp": "2026/1/19 19:17:28"
+  },
+  {
+    "shopName": "じぶhb",
+    "prefecture": "青森県",
+    "city": "世田谷区宮殿",
+    "therapistName": "r",
+    "course": "二百八十三にはい：k",
+    "content": "wreq",
+    "tags": [
+      "rgv"
+    ],
+    "rating": 4,
+    "detailedRatings": {
+      "cleanliness": 3,
+      "appearance": 3,
+      "style": 3,
+      "service": 3,
+      "skill": 3,
+      "intensity": 3
+    },
+    "userId": 1,
+    "userName": "test",
+    "id": 1768848788049,
+    "status": "approved",
+    "timestamp": "2026/1/20 3:53:08"
+  },
+  {
+    "shopName": "じぶhb",
+    "prefecture": "青森県",
+    "city": "s",
+    "therapistName": "jんj",
+    "course": "thaerth",
+    "content": "arethaehtaethaeg",
+    "tags": [
+      "aetrgh"
+    ],
+    "rating": 4,
+    "detailedRatings": {
+      "cleanliness": 3,
+      "appearance": 3,
+      "style": 3,
+      "service": 3,
+      "skill": 3,
+      "intensity": 3
+    },
+    "userId": 1,
+    "userName": "test",
+    "id": 1768898352231,
+    "status": "approved",
+    "timestamp": "2026/1/20 17:39:12"
+  },
+  {
+    "shopName": "じぶhb",
+    "prefecture": "青森県",
+    "city": "世田谷区宮殿",
+    "therapistName": "r",
+    "course": "二百八十三にはい：k",
+    "content": "ojbpiubpiubpibipibihpb  i",
+    "tags": [
+      "・lk：おjkl"
+    ],
+    "rating": 3,
+    "detailedRatings": {
+      "cleanliness": 3,
+      "appearance": 3,
+      "style": 3,
+      "service": 3,
+      "skill": 3,
+      "intensity": 3
+    },
+    "userId": 1,
+    "userName": "test",
+    "id": 1768980621096,
+    "status": "approved",
+    "timestamp": "2026/1/21 16:30:21"
+  },
+  {
+    "shopName": "アロマパラダイス",
+    "prefecture": "東京都",
+    "city": "池袋",
+    "therapistName": "山田花子",
+    "course": "90分 １４０００",
+    "price": "１４０００",
+    "rating": 3,
+    "detailedRatings": {
+      "looks": 3,
+      "style": 3,
+      "intimacy": 3,
+      "service": 3,
+      "massage": 3
+    },
+    "content": "【① 予約時の対応】\nあああああああああああああああああああああああああああ\n\n【② お店の場所・アクセス】\nあああああああああああああああああああああああああああ\n\n【③ ルームの雰囲気】\nあああああああああああああああああああああああああああ\n\n【④ セラピストの第一印象】\nあああああああああああああああああああああああああああ\n\n【⑤ 施術の流れ・内容】\nあああああああああああああああああああああああああああ\n\n【⑥ 終了後の感想】\nあああああああああああああああああああああああああああ\n\n",
+    "tags": [
+      "スレンダー"
+    ],
+    "userId": 1,
+    "userName": "test",
+    "id": 1769100954313,
+    "status": "approved",
+    "timestamp": "2026/1/23 1:55:54"
+  }
+]

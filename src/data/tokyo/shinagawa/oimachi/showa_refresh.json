@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_shinagawa_oimachi_showa_refresh",
+  "name": "昭和リフレッシュ館",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "大井町",
+  "address": "東京都品川区大井町エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分11,000円～",
+  "hours": "12:00～翌4:00",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム",
+    "熟女"
+  ],
+  "websiteUrl": "https://showa-refresh.com/",
+  "nearestStation": "大井町駅",
+  "description": "大井町の日本人リラクゼーション。 / 料金システム: 60分11,000円 / 90分14,000円 / 120分18,000円",
+  "threads": [],
+  "brandId": "showa_refresh",
+  "therapists": []
+}

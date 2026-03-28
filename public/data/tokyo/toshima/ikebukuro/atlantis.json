@@ -1,0 +1,69 @@
+{
+  "id": "tokyo_toshima_ikebukuro_atlantis",
+  "name": "ATLANTIS (アトランティス)",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "tags": [
+    "初回特典あり",
+    "深夜営業",
+    "自宅出張可",
+    "ビジネスホテル派遣OK"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "60分",
+        "price": "16,000円"
+      },
+      {
+        "time": "90分",
+        "price": "21,000円"
+      },
+      {
+        "time": "120分",
+        "price": "26,000円"
+      },
+      {
+        "time": "150分",
+        "price": "31,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 10分",
+        "price": "2,000円"
+      },
+      {
+        "name": "指名料",
+        "price": "1,000円"
+      }
+    ]
+  },
+  "url": "https://www.atlantis.tokyo/",
+  "threads": [],
+  "brandId": "atlantis",
+  "therapists": [
+    "atlantis_ティナ",
+    "atlantis_レイカ",
+    "atlantis_スズ",
+    "atlantis_ルカ",
+    "atlantis_アミ",
+    "atlantis_ユイ",
+    "atlantis_ハナ",
+    "atlantis_ヒカリ",
+    "atlantis_モモ",
+    "atlantis_ミリア",
+    "atlantis_サナ",
+    "atlantis_ララ",
+    "atlantis_ココロ",
+    "atlantis_ハヅキ",
+    "atlantis_ルイ",
+    "atlantis_ユリ",
+    "atlantis_カリナ",
+    "atlantis_ヒナノ",
+    "atlantis_カレン",
+    "atlantis_ニコ",
+    "atlantis_マフユ"
+  ]
+}

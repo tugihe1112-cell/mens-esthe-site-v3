@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_shibuya_ebisu_aromalys",
+  "name": "AromaLys (アロマリース)",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "area": "恵比寿",
+  "address": "東京都渋谷区恵比寿エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分22,000円～",
+  "hours": "11:30～23:30",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "カード払いOK",
+    "初回特典あり",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://mens-esute.jp/",
+  "nearestStation": "恵比寿駅",
+  "description": "恵比寿・五反田の日本人リラクゼーション。 / 料金システム: 90分22,000円〜 / 初回割引あり",
+  "threads": [],
+  "brandId": "aromalys",
+  "therapists": []
+}

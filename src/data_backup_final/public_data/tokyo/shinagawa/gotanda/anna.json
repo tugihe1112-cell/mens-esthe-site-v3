@@ -1,0 +1,1072 @@
+{
+  "id": "tokyo_shinagawa_gotanda_anna",
+  "name": "ANNA (アンナ)",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "region": "広域エリア",
+  "address": "東京都品川区・新宿区・渋谷区 (最寄: 五反田・新宿三丁目・代々木)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分 17,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "color": "from-purple-500 to-pink-500",
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://www.esthe-anna.net/",
+  "threads": [],
+  "area": "五反田",
+  "brandId": "anna",
+  "therapists": [
+    {
+      "id": "anna_町田るな",
+      "name": "町田るな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "モデル系",
+        "グラビア系",
+        "清楚系",
+        "超デビュー割"
+      ]
+    },
+    {
+      "id": "anna_森かすみ",
+      "name": "森かすみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "高リピート",
+        "セクシー",
+        "モデル系",
+        "清楚系",
+        "超デビュー割"
+      ]
+    },
+    {
+      "id": "anna_加藤りこ",
+      "name": "加藤りこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "エステ経験豊富",
+        "清楚系",
+        "お姉さん",
+        "超デビュー割"
+      ]
+    },
+    {
+      "id": "anna_本田まい",
+      "name": "本田まい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "グラビア系",
+        "清楚系",
+        "超デビュー割",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_天塚ひより",
+      "name": "天塚ひより",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "グラビア系",
+        "アイドル系",
+        "超デビュー割",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_松嶋さゆり",
+      "name": "松嶋さゆり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "高リピート",
+        "モデル系",
+        "清楚系",
+        "超デビュー割"
+      ]
+    },
+    {
+      "id": "anna_永瀬ふうか",
+      "name": "永瀬ふうか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "セクシー",
+        "モデル系",
+        "お姉さん",
+        "超デビュー割"
+      ]
+    },
+    {
+      "id": "anna_長浜ねる",
+      "name": "長浜ねる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "グラビア系",
+        "アイドル系",
+        "清楚系",
+        "超デビュー割"
+      ]
+    },
+    {
+      "id": "anna_柊こころ",
+      "name": "柊こころ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳",
+        "エステ経験豊富",
+        "セクシー",
+        "グラビア系",
+        "超デビュー割"
+      ]
+    },
+    {
+      "id": "anna_初音りょう",
+      "name": "初音りょう",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "セクシー",
+        "モデル系",
+        "お姉さん",
+        "超デビュー割"
+      ]
+    },
+    {
+      "id": "anna_若葉みつき",
+      "name": "若葉みつき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "セクシー",
+        "アイドル系",
+        "清楚系",
+        "新人さん応援割",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_水川おとは",
+      "name": "水川おとは",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "エステ経験豊富",
+        "モデル系",
+        "清楚系",
+        "新人さん応援割"
+      ]
+    },
+    {
+      "id": "anna_雪平りの",
+      "name": "雪平りの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "セクシー",
+        "モデル系",
+        "清楚系",
+        "新人さん応援割",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_工藤はづき",
+      "name": "工藤はづき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "エステ経験豊富",
+        "モデル系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_黒崎リカ",
+      "name": "黒崎リカ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳",
+        "エステ経験豊富",
+        "高リピート",
+        "セクシー",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_衛藤ちはる",
+      "name": "衛藤ちはる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "高リピート",
+        "セクシー",
+        "グラビア系",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_星宮いちか",
+      "name": "星宮いちか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳",
+        "グラビア系",
+        "清楚系",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_菊池らん",
+      "name": "菊池らん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "セクシー",
+        "モデル系",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_吉永なみ",
+      "name": "吉永なみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳",
+        "エステ経験豊富",
+        "高リピート",
+        "セクシー",
+        "グラビア系"
+      ]
+    },
+    {
+      "id": "anna_碧しろな",
+      "name": "碧しろな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "高リピート",
+        "セクシー",
+        "グラビア系",
+        "アイドル系",
+        "BLACK"
+      ]
+    },
+    {
+      "id": "anna_椎名りん",
+      "name": "椎名りん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "エステ経験豊富",
+        "高リピート",
+        "セクシー",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_伊藤みな",
+      "name": "伊藤みな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "エステ経験豊富",
+        "セクシー",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_桜ももか",
+      "name": "桜ももか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "エステ経験豊富",
+        "セクシー",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_白鳥絵美留",
+      "name": "白鳥絵美留",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳",
+        "エステ経験豊富",
+        "セクシー",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_及川かれん",
+      "name": "及川かれん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "エステ経験豊富",
+        "セクシー",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_永倉はつね",
+      "name": "永倉はつね",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "高リピート",
+        "グラビア系",
+        "アイドル系",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_河瀬なつき",
+      "name": "河瀬なつき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "高リピート",
+        "清楚系",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_水原あおい",
+      "name": "水原あおい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "高リピート",
+        "セクシー",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_佐々木まゆ",
+      "name": "佐々木まゆ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "エステ経験豊富",
+        "高リピート",
+        "モデル系",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_鷲見えりな",
+      "name": "鷲見えりな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "エステ経験豊富",
+        "高リピート",
+        "セクシー",
+        "グラビア系",
+        "BLACK"
+      ]
+    },
+    {
+      "id": "anna_市原ひびき",
+      "name": "市原ひびき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "高リピート",
+        "清楚系",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_春川なお",
+      "name": "春川なお",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "エステ経験豊富",
+        "セクシー",
+        "モデル系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_成瀬ゆめ",
+      "name": "成瀬ゆめ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "エステ経験豊富",
+        "セクシー",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_七瀬すず",
+      "name": "七瀬すず",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳",
+        "セクシー",
+        "グラビア系",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_新みなも",
+      "name": "新みなも",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "エステ経験豊富",
+        "高リピート",
+        "セクシー",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_照橋さとみ",
+      "name": "照橋さとみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "エステ経験豊富",
+        "高リピート",
+        "セクシー",
+        "グラビア系"
+      ]
+    },
+    {
+      "id": "anna_綾瀬さら",
+      "name": "綾瀬さら",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳",
+        "高リピート",
+        "セクシー",
+        "グラビア系",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_鈴森ひなの",
+      "name": "鈴森ひなの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "高リピート",
+        "モデル系",
+        "グラビア系",
+        "清楚系",
+        "BLACK"
+      ]
+    },
+    {
+      "id": "anna_上原まりん",
+      "name": "上原まりん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "エステ経験豊富",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_水トあんり",
+      "name": "水トあんり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "高リピート",
+        "セクシー",
+        "グラビア系",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_相澤えま",
+      "name": "相澤えま",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "エステ経験豊富",
+        "グラビア系",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_星乃せな",
+      "name": "星乃せな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "高リピート",
+        "アイドル系",
+        "清楚系",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_日向あんず",
+      "name": "日向あんず",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "エステ経験豊富",
+        "高リピート",
+        "セクシー",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_鈴木まりこ",
+      "name": "鈴木まりこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳",
+        "エステ経験豊富",
+        "セクシー",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_越智なぎさ",
+      "name": "越智なぎさ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "高リピート",
+        "セクシー",
+        "モデル系",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_新垣ゆり",
+      "name": "新垣ゆり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "高リピート",
+        "セクシー",
+        "清楚系",
+        "お姉さん",
+        "割引き適用外",
+        "BLACK"
+      ]
+    },
+    {
+      "id": "anna_一花りく",
+      "name": "一花りく",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "エステ経験豊富",
+        "セクシー",
+        "グラビア系"
+      ]
+    },
+    {
+      "id": "anna_園田すう",
+      "name": "園田すう",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "セクシー",
+        "清楚系",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_三上るな",
+      "name": "三上るな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "高リピート",
+        "セクシー",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_西園寺りお",
+      "name": "西園寺りお",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "セクシー",
+        "モデル系",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_小鳥遊はる",
+      "name": "小鳥遊はる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "モデル系",
+        "アイドル系",
+        "清楚系",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_坂下めい",
+      "name": "坂下めい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "エステ経験豊富",
+        "セクシー",
+        "グラビア系",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_朝倉みちる",
+      "name": "朝倉みちる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "セクシー",
+        "モデル系",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_芽森ひなた",
+      "name": "芽森ひなた",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "エステ経験豊富",
+        "グラビア系",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_東あくあ",
+      "name": "東あくあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "セクシー",
+        "アイドル系",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_蛯原もも",
+      "name": "蛯原もも",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "エステ経験豊富",
+        "セクシー",
+        "モデル系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_美咲れな",
+      "name": "美咲れな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "エステ経験豊富",
+        "セクシー",
+        "モデル系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_白石まいか",
+      "name": "白石まいか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "モデル系",
+        "清楚系",
+        "お姉さん",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_南ましろ",
+      "name": "南ましろ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "エステ経験豊富",
+        "高リピート",
+        "セクシー",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_三宅みずき",
+      "name": "三宅みずき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "エステ経験豊富",
+        "モデル系",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_小澤良子",
+      "name": "小澤良子",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳",
+        "モデル系",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_一ノ瀬みく",
+      "name": "一ノ瀬みく",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "モデル系",
+        "アイドル系"
+      ]
+    },
+    {
+      "id": "anna_桃瀬アイ",
+      "name": "桃瀬アイ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "エステ経験豊富",
+        "グラビア系",
+        "アイドル系"
+      ]
+    },
+    {
+      "id": "anna_桜木ゆりあ",
+      "name": "桜木ゆりあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "モデル系",
+        "アイドル系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_流川あきな",
+      "name": "流川あきな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "エステ経験豊富",
+        "モデル系",
+        "アイドル系"
+      ]
+    },
+    {
+      "id": "anna_小夏まいか",
+      "name": "小夏まいか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "エステ経験豊富",
+        "グラビア系",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_胡桃るな",
+      "name": "胡桃るな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳",
+        "モデル系",
+        "アイドル系",
+        "清楚系",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "anna_山本じゅり",
+      "name": "山本じゅり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳",
+        "グラビア系",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_乃木りこ",
+      "name": "乃木りこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "モデル系",
+        "アイドル系",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_阿部みゆ",
+      "name": "阿部みゆ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳",
+        "エステ経験豊富",
+        "清楚系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_戸田りえ",
+      "name": "戸田りえ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "モデル系",
+        "アイドル系",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_滝本みれい",
+      "name": "滝本みれい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "モデル系",
+        "アイドル系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_神崎せな",
+      "name": "神崎せな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "モデル系",
+        "アイドル系",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "anna_吉川あさみ",
+      "name": "吉川あさみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "31歳",
+        "エステ経験豊富",
+        "グラビア系",
+        "お姉さん"
+      ]
+    },
+    {
+      "id": "anna_宇佐美るい",
+      "name": "宇佐美るい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "セクシー",
+        "アイドル系",
+        "清楚系",
+        "超デビュー割"
+      ]
+    }
+  ]
+}

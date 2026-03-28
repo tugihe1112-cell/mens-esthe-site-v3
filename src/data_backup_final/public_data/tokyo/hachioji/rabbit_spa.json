@@ -1,0 +1,502 @@
+{
+  "id": "tokyo_hachioji_rabbit_spa",
+  "name": "ラビットスパ (Rabbit Spa) 立川店",
+  "prefecture": "東京都",
+  "city": "八王子市",
+  "area": "八王子市",
+  "address": "東京都立川市・八王子市エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分 16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "立川・八王子"
+  ],
+  "websiteUrl": "https://rabbitspa-tachikawa.com/",
+  "nearestStation": "立川駅 / 八王子駅",
+  "description": "立川・八王子のメンズエステ。エリア屈指の美女在籍数。",
+  "brandId": "rabbit_spa",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "rabbit_spa_いちか",
+      "name": "いちか",
+      "age": 23,
+      "height": 156,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_のの",
+      "name": "のの",
+      "age": 22,
+      "height": 157,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_いちご",
+      "name": "いちご",
+      "age": 21,
+      "height": 157,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_なみ",
+      "name": "なみ",
+      "age": 26,
+      "height": 154,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_かおり",
+      "name": "かおり",
+      "age": 24,
+      "height": 150,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_みずき",
+      "name": "みずき",
+      "age": 26,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_あきな",
+      "name": "あきな",
+      "age": 21,
+      "height": 154,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_さき",
+      "name": "さき",
+      "age": 25,
+      "height": 166,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_ゆえ",
+      "name": "ゆえ",
+      "age": 24,
+      "height": 163,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_えみい",
+      "name": "えみい",
+      "age": 19,
+      "height": 154,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_つむぎ",
+      "name": "つむぎ",
+      "age": 22,
+      "height": 162,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_たまき",
+      "name": "たまき",
+      "age": 22,
+      "height": 151,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_いおな",
+      "name": "いおな",
+      "age": 25,
+      "height": 163,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_しほ",
+      "name": "しほ",
+      "age": 19,
+      "height": 155,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_ゆりあ",
+      "name": "ゆりあ",
+      "age": 19,
+      "height": 161,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_すみれ",
+      "name": "すみれ",
+      "age": 22,
+      "height": 151,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_えれな",
+      "name": "えれな",
+      "age": 23,
+      "height": 165,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_きい",
+      "name": "きい",
+      "age": 20,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_ひなた",
+      "name": "ひなた",
+      "age": 22,
+      "height": 162,
+      "bust": "(H)"
+    },
+    {
+      "id": "rabbit_spa_らら",
+      "name": "らら",
+      "age": 21,
+      "height": 152,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_あすか",
+      "name": "あすか",
+      "age": 24,
+      "height": 170,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_みさ",
+      "name": "みさ",
+      "age": 23,
+      "height": 152,
+      "bust": "(B)"
+    },
+    {
+      "id": "rabbit_spa_ゆず",
+      "name": "ゆず",
+      "age": 22,
+      "height": 155,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_ねね",
+      "name": "ねね",
+      "age": 20,
+      "height": 160,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_れいか",
+      "name": "れいか",
+      "age": 24,
+      "height": 152,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_みゆ",
+      "name": "みゆ",
+      "age": 18,
+      "height": 148,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_ふぶき",
+      "name": "ふぶき",
+      "age": 24,
+      "height": 160,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_ゆり",
+      "name": "ゆり",
+      "age": 24,
+      "height": 157,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_ももか",
+      "name": "ももか",
+      "age": 19,
+      "height": 157,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_もも",
+      "name": "もも",
+      "age": 20,
+      "height": 150,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_ゆうあ",
+      "name": "ゆうあ",
+      "age": 21,
+      "height": 168,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_えみり",
+      "name": "えみり",
+      "age": 22,
+      "height": 150,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_すず",
+      "name": "すず",
+      "age": 21,
+      "height": 152,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_ひかり",
+      "name": "ひかり",
+      "age": 23,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_れな",
+      "name": "れな",
+      "age": 18,
+      "height": 153,
+      "bust": "(B)"
+    },
+    {
+      "id": "rabbit_spa_うみ",
+      "name": "うみ",
+      "age": 24,
+      "height": 155,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_うさぎ",
+      "name": "うさぎ",
+      "age": 22,
+      "height": 162,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_みく",
+      "name": "みく",
+      "age": 22,
+      "height": 160,
+      "bust": "(H)"
+    },
+    {
+      "id": "rabbit_spa_まな",
+      "name": "まな",
+      "age": 20,
+      "height": 156,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_るな",
+      "name": "るな",
+      "age": 22,
+      "height": 159,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_りあ",
+      "name": "りあ",
+      "age": 22,
+      "height": 157,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_ゆな",
+      "name": "ゆな",
+      "age": 21,
+      "height": 155,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_はな",
+      "name": "はな",
+      "age": 23,
+      "height": 163,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_れい",
+      "name": "れい",
+      "age": 24,
+      "height": 150,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_うな",
+      "name": "うな",
+      "age": 22,
+      "height": 152,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_まみな",
+      "name": "まみな",
+      "age": 26,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_あい",
+      "name": "あい",
+      "age": 18,
+      "height": 157,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_ふじの",
+      "name": "ふじの",
+      "age": 24,
+      "height": 162,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_りお",
+      "name": "りお",
+      "age": 21,
+      "height": 158,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_さな",
+      "name": "さな",
+      "age": 20,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_あいり",
+      "name": "あいり",
+      "age": 27,
+      "height": 154,
+      "bust": "(I)"
+    },
+    {
+      "id": "rabbit_spa_ゆん",
+      "name": "ゆん",
+      "age": 19,
+      "height": 154,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_てん",
+      "name": "てん",
+      "age": 19,
+      "height": 165,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_あまね",
+      "name": "あまね",
+      "age": 23,
+      "height": 160,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_れの",
+      "name": "れの",
+      "age": 19,
+      "height": 154,
+      "bust": "(J)"
+    },
+    {
+      "id": "rabbit_spa_つばき",
+      "name": "つばき",
+      "age": 24,
+      "height": 165,
+      "bust": "(K)"
+    },
+    {
+      "id": "rabbit_spa_れいな",
+      "name": "れいな",
+      "age": 22,
+      "height": 150,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_りん",
+      "name": "りん",
+      "age": 19,
+      "height": 160,
+      "bust": "(H)"
+    },
+    {
+      "id": "rabbit_spa_さゆ",
+      "name": "さゆ",
+      "age": 26,
+      "height": 149,
+      "bust": "(C)"
+    },
+    {
+      "id": "rabbit_spa_るる",
+      "name": "るる",
+      "age": 18,
+      "height": 148,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_かのん",
+      "name": "かのん",
+      "age": 19,
+      "height": 167,
+      "bust": "(D)"
+    },
+    {
+      "id": "rabbit_spa_ひびき",
+      "name": "ひびき",
+      "age": 25,
+      "height": 160,
+      "bust": "(B)"
+    },
+    {
+      "id": "rabbit_spa_あやか",
+      "name": "あやか",
+      "age": 18,
+      "height": 151,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_まいか",
+      "name": "まいか",
+      "age": 25,
+      "height": 151,
+      "bust": "(G)"
+    },
+    {
+      "id": "rabbit_spa_めい",
+      "name": "めい",
+      "age": 19,
+      "height": 152,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_あかり",
+      "name": "あかり",
+      "age": 23,
+      "height": 163,
+      "bust": "(F)"
+    },
+    {
+      "id": "rabbit_spa_ひめか",
+      "name": "ひめか",
+      "age": 22,
+      "height": 162,
+      "bust": "(E)"
+    },
+    {
+      "id": "rabbit_spa_きなこ",
+      "name": "きなこ",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)"
+    }
+  ]
+}

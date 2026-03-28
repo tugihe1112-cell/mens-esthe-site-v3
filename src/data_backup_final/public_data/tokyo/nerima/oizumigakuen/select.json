@@ -1,0 +1,193 @@
+{
+  "id": "tokyo_nerima_oizumigakuen_select",
+  "name": "セレクト (SELECT)",
+  "prefecture": "東京都",
+  "city": "練馬区",
+  "area": "大泉学園",
+  "address": "東京都練馬区大泉学園（詳細は予約時）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 13,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "大泉学園",
+    "熟女"
+  ],
+  "websiteUrl": "https://esthe-select.com/",
+  "nearestStation": "大泉学園駅",
+  "description": "大泉学園エリアの熟女エステ。 / 料金システム: 60分13,000円 / 90分13,000円 / 120分17,000円 / 延長30分6,000円",
+  "brandId": "select",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "select_ゆずき",
+      "name": "ゆずき",
+      "age": 40,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "select_ほしの",
+      "name": "ほしの",
+      "age": 42,
+      "height": 160,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "select_ななせ",
+      "name": "ななせ",
+      "age": 42,
+      "height": 164,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "select_あおかわ",
+      "name": "あおかわ",
+      "age": 45,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "select_しらいし",
+      "name": "しらいし",
+      "age": 43,
+      "height": 159,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "select_なつかわ",
+      "name": "なつかわ",
+      "age": 41,
+      "height": 165,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "select_すずな",
+      "name": "すずな",
+      "age": 42,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "select_ささき",
+      "name": "ささき",
+      "age": 42,
+      "height": 150,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "select_みなみ",
+      "name": "みなみ",
+      "age": 35,
+      "height": 162,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "select_たがわ",
+      "name": "たがわ",
+      "age": 40,
+      "height": 160,
+      "bust": "(I)",
+      "tags": null
+    },
+    {
+      "id": "select_かさい",
+      "name": "かさい",
+      "age": 44,
+      "height": 163,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "select_つが",
+      "name": "つが",
+      "age": 41,
+      "height": 159,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "select_たけなか",
+      "name": "たけなか",
+      "age": 38,
+      "height": 168,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "select_とうか",
+      "name": "とうか",
+      "age": 41,
+      "height": 165,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "select_あきもと",
+      "name": "あきもと",
+      "age": 39,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "select_あらき",
+      "name": "あらき",
+      "age": 35,
+      "height": 156,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "select_たきざわ",
+      "name": "たきざわ",
+      "age": 40,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "select_きさらぎ",
+      "name": "きさらぎ",
+      "age": 45,
+      "height": 165,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "select_めぐろ",
+      "name": "めぐろ",
+      "age": 39,
+      "height": 162,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "select_ましろ",
+      "name": "ましろ",
+      "age": 30,
+      "height": 157,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "select_やまざき",
+      "name": "やまざき",
+      "age": 40,
+      "height": 155,
+      "bust": "(C)",
+      "tags": null
+    }
+  ]
+}

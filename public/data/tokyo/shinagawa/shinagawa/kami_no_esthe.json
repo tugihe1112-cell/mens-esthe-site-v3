@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_shinagawa_shinagawa_kami_no_esthe",
+  "name": "神のエステ",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "品川",
+  "address": "東京都品川区品川エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://www.kami-sg.com/",
+  "nearestStation": "品川駅",
+  "description": "五反田・品川の日本人リラクゼーション。 / 料金システム: 80分16,000円 / 100分20,000円 / 120分24,000円",
+  "threads": [],
+  "brandId": "kami_no_esthe",
+  "therapists": []
+}

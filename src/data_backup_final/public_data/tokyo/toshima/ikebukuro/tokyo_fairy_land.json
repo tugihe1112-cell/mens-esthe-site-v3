@@ -1,0 +1,653 @@
+{
+  "id": 60298,
+  "name": "Tokyo Fairy Land (東京フェアリーランド)",
+  "prefecture": "東京都",
+  "city": "池袋",
+  "region": "池袋エリア",
+  "address": "東京都豊島区 (池袋駅・高田馬場駅・新宿駅)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "color": "from-pink-400 to-rose-400",
+  "tags": [
+    "カード決済可",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://tokyo-fairy-land.men-este.com/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_りな",
+      "name": "りな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人",
+        "26歳",
+        "155cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_いおり",
+      "name": "いおり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人",
+        "25歳",
+        "156cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_しほ",
+      "name": "しほ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人",
+        "24歳",
+        "160cm",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "unknown_みく",
+      "name": "みく",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人",
+        "23歳",
+        "153cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_せり",
+      "name": "せり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "160cm",
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "unknown_もも",
+      "name": "もも",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "155cm",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "unknown_はづき",
+      "name": "はづき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "158cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_れな",
+      "name": "れな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "155cm",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "unknown_ありさ",
+      "name": "ありさ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "162cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_あの",
+      "name": "あの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "162cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_まお",
+      "name": "まお",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "154cm",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "unknown_つむぎ",
+      "name": "つむぎ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "159cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_ひかる",
+      "name": "ひかる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "158cm",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "unknown_もな",
+      "name": "もな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "158cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_にな",
+      "name": "にな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "160cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_みほ",
+      "name": "みほ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "152cm",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "unknown_まこ",
+      "name": "まこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "165cm",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "unknown_まい",
+      "name": "まい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "160cm",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "unknown_めぐ",
+      "name": "めぐ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "160cm",
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "unknown_とあ",
+      "name": "とあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "155cm",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "unknown_みあ",
+      "name": "みあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "164cm",
+        "Bカップ"
+      ]
+    },
+    {
+      "id": "unknown_ももな",
+      "name": "ももな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "160cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_福井かの",
+      "name": "福井かの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "159cm",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "unknown_りりな",
+      "name": "りりな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "155cm",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "unknown_あい",
+      "name": "あい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "157cm",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "unknown_なる",
+      "name": "なる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "152cm",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "unknown_まりん",
+      "name": "まりん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "156cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_こはる",
+      "name": "こはる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "164cm",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "unknown_ゆい",
+      "name": "ゆい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "155cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_のあ",
+      "name": "のあ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "160cm",
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "unknown_ねね",
+      "name": "ねね",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "160cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_みみ",
+      "name": "みみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "155cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_かなめ",
+      "name": "かなめ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "150cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_みつり",
+      "name": "みつり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "156cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_りん",
+      "name": "りん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "155cm",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "unknown_かれん",
+      "name": "かれん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "161cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_池田りさ",
+      "name": "池田りさ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人",
+        "20歳",
+        "160cm",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "unknown_ゆん",
+      "name": "ゆん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "156cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_あや",
+      "name": "あや",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "165cm",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "unknown_みう",
+      "name": "みう",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "157cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_ゆか",
+      "name": "ゆか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "152cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_みれい",
+      "name": "みれい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "163cm",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "unknown_みこ",
+      "name": "みこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "19歳",
+        "156cm",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "unknown_みなみ",
+      "name": "みなみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "160cm",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "unknown_める",
+      "name": "める",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "165cm",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "unknown_ゆず",
+      "name": "ゆず",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "157cm",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "unknown_ゆりな",
+      "name": "ゆりな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "156cm",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "unknown_宮間さき",
+      "name": "宮間さき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "31歳",
+        "164cm",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "unknown_りおな",
+      "name": "りおな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "152cm",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "unknown_あやみ",
+      "name": "あやみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "154cm",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "unknown_真白あむ",
+      "name": "真白あむ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "特別指名",
+        "22歳"
+      ]
+    },
+    {
+      "id": "unknown_神楽ひまり",
+      "name": "神楽ひまり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "149cm",
+        "Fカップ"
+      ]
+    }
+  ],
+  "area": "池袋"
+}

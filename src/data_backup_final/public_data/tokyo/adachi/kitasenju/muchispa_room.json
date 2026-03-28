@@ -1,0 +1,66 @@
+{
+  "id": "tokyo_adachi_kitasenju_muchispa_room",
+  "name": "むちすぱルーム 北千住",
+  "url": "https://muchispa.com/",
+  "area": "北千住",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK",
+    "個室あり",
+    "深夜営業"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "足立区",
+  "brandId": "muchispa_room",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "muchispa_room_長谷川 みか",
+      "name": "長谷川 みか",
+      "age": 35,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "muchispa_room_佐々木 あい",
+      "name": "佐々木 あい",
+      "age": 42,
+      "height": 155,
+      "bust": "(F)"
+    },
+    {
+      "id": "muchispa_room_田中 ゆり",
+      "name": "田中 ゆり",
+      "age": 38,
+      "height": 165,
+      "bust": "(C)"
+    },
+    {
+      "id": "muchispa_room_中村 さき",
+      "name": "中村 さき",
+      "age": 41,
+      "height": 158,
+      "bust": "(D)"
+    }
+  ]
+}

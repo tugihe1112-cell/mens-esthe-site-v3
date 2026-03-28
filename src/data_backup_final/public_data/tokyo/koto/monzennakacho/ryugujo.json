@@ -1,0 +1,29 @@
+{
+  "id": "tokyo_koto_monzennakacho_ryugujo",
+  "name": "竜宮城 旧百万石 (門前仲町店)",
+  "prefecture": "東京都",
+  "city": "江東区",
+  "area": "門前仲町",
+  "nearestStation": "門前仲町駅",
+  "address": "東京都江東区門前仲町エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://esthe-ryugujo.com/",
+  "description": "人形町・門前仲町・銀座・沼津・蒲田のリラクゼーション。大人のための隠れ家サロン。",
+  "tags": [
+    "カード支払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム",
+    "熟女",
+    "複数エリア展開"
+  ],
+  "brandId": "ryugujo",
+  "threads": [],
+  "therapists": []
+}

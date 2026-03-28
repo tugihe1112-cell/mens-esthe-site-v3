@@ -1,0 +1,25 @@
+{
+  "id": "tokyo_arakawa_nippori_aroma_blossom",
+  "name": "Aroma Blossom (日暮里店)",
+  "url": "https://aroma-blossom.com/",
+  "area": "日暮里",
+  "price": "18,000円〜",
+  "interview": false,
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "courses": [
+    {
+      "minutes": 90,
+      "price": "18,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "荒川区",
+  "brandId": "aroma_blossom",
+  "threads": [],
+  "therapists": []
+}

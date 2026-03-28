@@ -1,0 +1,78 @@
+{
+  "id": "tokyo_toshima_ikebukuro_salon_blanca",
+  "name": "SALON BLANCA (サロンブランカ) 池袋店",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "深夜営業"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "75分",
+        "price": "15,000円"
+      },
+      {
+        "time": "90分",
+        "price": "18,000円"
+      },
+      {
+        "time": "105分",
+        "price": "21,000円"
+      },
+      {
+        "time": "120分",
+        "price": "22,000円"
+      },
+      {
+        "time": "150分",
+        "price": "28,000円"
+      },
+      {
+        "time": "180分",
+        "price": "34,000円"
+      }
+    ],
+    "special": []
+  },
+  "url": "https://salon-blanca.jp/",
+  "threads": [],
+  "brandId": "salon_blanca",
+  "therapists": [
+    {
+      "id": "salon_blanca_松岡りえ",
+      "name": "松岡りえ",
+      "age": 23,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "salon_blanca_酒井えりな",
+      "name": "酒井えりな",
+      "age": 26,
+      "height": 153,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "salon_blanca_夏目すず",
+      "name": "夏目すず",
+      "age": 27,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "salon_blanca_鈴川ありさ",
+      "name": "鈴川ありさ",
+      "age": 28,
+      "height": 159,
+      "bust": null,
+      "tags": []
+    }
+  ]
+}

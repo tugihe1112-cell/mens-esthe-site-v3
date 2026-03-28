@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_shinjuku_higashishinjuku_limited_spa",
+  "name": "Limited Spa (リミテッドスパ)",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "東新宿",
+  "address": "東京都新宿区東新宿エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://limited-spa.com/",
+  "nearestStation": "東新宿駅",
+  "description": "西船橋・船橋・柏・錦糸町・東新宿・大久保・久喜の日本人リラクゼーション。 / 料金システム: 60分12,000円〜",
+  "threads": [],
+  "brandId": "limited_spa",
+  "therapists": []
+}

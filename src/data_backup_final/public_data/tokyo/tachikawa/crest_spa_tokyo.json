@@ -1,0 +1,332 @@
+{
+  "id": "tokyo_tachikawa_crest_spa_tokyo",
+  "name": "CREST SPA TOKYO (クレストスパ)",
+  "prefecture": "東京都",
+  "city": "立川市",
+  "area": "立川市",
+  "address": "東京都立川・赤羽・荻窪エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 19,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://crestspa-tokyo.com/",
+  "nearestStation": "立川駅 / 赤羽駅 / 荻窪駅",
+  "description": "立川・赤羽・荻窪に展開するメンズエステ。 / 料金システム: 90分19,000円 / 120分23,000円 / 150分28,000円 / 180分35,000円",
+  "brandId": "crest_spa_tokyo",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "crest_spa_tokyo_ゆう",
+      "name": "ゆう",
+      "age": 24,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_あいね",
+      "name": "あいね",
+      "age": 21,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_みつき",
+      "name": "みつき",
+      "age": 20,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_なの",
+      "name": "なの",
+      "age": 26,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_まりか",
+      "name": "まりか",
+      "age": 22,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_ゆい",
+      "name": "ゆい",
+      "age": 25,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_すみれ",
+      "name": "すみれ",
+      "age": 25,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_あいり",
+      "name": "あいり",
+      "age": 22,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_すず",
+      "name": "すず",
+      "age": 24,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_るる",
+      "name": "るる",
+      "age": 26,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_ののか",
+      "name": "ののか",
+      "age": 22,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_みれい",
+      "name": "みれい",
+      "age": 24,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_るな",
+      "name": "るな",
+      "age": 23,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_えれな",
+      "name": "えれな",
+      "age": 21,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_りん",
+      "name": "りん",
+      "age": 26,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_すい",
+      "name": "すい",
+      "age": 25,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_るみ",
+      "name": "るみ",
+      "age": 22,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_しずく",
+      "name": "しずく",
+      "age": 21,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_まゆ",
+      "name": "まゆ",
+      "age": 18,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_ひなこ",
+      "name": "ひなこ",
+      "age": 24,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_みおん",
+      "name": "みおん",
+      "age": 20,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_みりあ",
+      "name": "みりあ",
+      "age": 20,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_みり",
+      "name": "みり",
+      "age": 21,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_のあ",
+      "name": "のあ",
+      "age": 21,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_りな",
+      "name": "りな",
+      "age": 23,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_あきは",
+      "name": "あきは",
+      "age": 27,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_かれん",
+      "name": "かれん",
+      "age": 23,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_みゆり",
+      "name": "みゆり",
+      "age": 23,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_もな",
+      "name": "もな",
+      "age": 24,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_みおり",
+      "name": "みおり",
+      "age": 22,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_ありさ",
+      "name": "ありさ",
+      "age": 25,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_ゆき",
+      "name": "ゆき",
+      "age": 24,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_るい",
+      "name": "るい",
+      "age": 20,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_ひな",
+      "name": "ひな",
+      "age": 23,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_みなみ",
+      "name": "みなみ",
+      "age": 25,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_もなみ",
+      "name": "もなみ",
+      "age": 26,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_よしの",
+      "name": "よしの",
+      "age": 23,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_ちか",
+      "name": "ちか",
+      "age": 22,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_ゆめ",
+      "name": "ゆめ",
+      "age": 23,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_みほ",
+      "name": "みほ",
+      "age": 26,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_あず",
+      "name": "あず",
+      "age": 27,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_なつき",
+      "name": "なつき",
+      "age": 22,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_えり",
+      "name": "えり",
+      "age": 20,
+      "height": 0,
+      "bust": 0
+    },
+    {
+      "id": "crest_spa_tokyo_ゆかな",
+      "name": "ゆかな",
+      "age": 25,
+      "height": 0,
+      "bust": 0
+    }
+  ]
+}

@@ -1,0 +1,624 @@
+{
+  "id": "tokyo_meguro_meguro_otona_kakurega",
+  "name": "大人の隠れ家",
+  "prefecture": "東京都",
+  "city": "目黒区",
+  "region": "関東エリア",
+  "address": "東京都 (最寄: 渋谷駅, 恵比寿駅)",
+  "image": "/images/shops/otona_kakurega.jpg",
+  "rating": 4.6,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～LAST",
+  "isPremium": false,
+  "color": "from-purple-400 to-indigo-600",
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://otonakakurega.com",
+  "threads": [],
+  "area": "目黒",
+  "brandId": "otona_kakurega",
+  "therapists": [
+    {
+      "id": "otona_kakurega_藤井ひまり",
+      "name": "藤井ひまり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "otona_kakurega_萌乃さき",
+      "name": "萌乃さき",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_一条いちか",
+      "name": "一条いちか",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_月ノありさ",
+      "name": "月ノありさ",
+      "age": 34,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "34歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_甘音あむ",
+      "name": "甘音あむ",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_最上ののか",
+      "name": "最上ののか",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_早乙女みく",
+      "name": "早乙女みく",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_吉高ちなみ",
+      "name": "吉高ちなみ",
+      "age": 28,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_栗原なみ",
+      "name": "栗原なみ",
+      "age": 21,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_春菜ゆき",
+      "name": "春菜ゆき",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_星波うい",
+      "name": "星波うい",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_一宮みこ",
+      "name": "一宮みこ",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_谷本のどか",
+      "name": "谷本のどか",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_松村いおり",
+      "name": "松村いおり",
+      "age": 21,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_橘ひなた",
+      "name": "橘ひなた",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_神埼さく",
+      "name": "神埼さく",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_黒川りの",
+      "name": "黒川りの",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_高倉せいら",
+      "name": "高倉せいら",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_小嶋あかり",
+      "name": "小嶋あかり",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_芹沢ももえ",
+      "name": "芹沢ももえ",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_蒼井なこ",
+      "name": "蒼井なこ",
+      "age": 21,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_佐久間みお",
+      "name": "佐久間みお",
+      "age": 28,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_美波なな",
+      "name": "美波なな",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_真中らら",
+      "name": "真中らら",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_響のあ",
+      "name": "響のあ",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_生田りっか",
+      "name": "生田りっか",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_宮原かすみ",
+      "name": "宮原かすみ",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_長谷川なお",
+      "name": "長谷川なお",
+      "age": 30,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_椿あやの",
+      "name": "椿あやの",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_神楽あんな",
+      "name": "神楽あんな",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_蕾なの",
+      "name": "蕾なの",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_雪乃るる",
+      "name": "雪乃るる",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_天木うみ",
+      "name": "天木うみ",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_広瀬ゆめ",
+      "name": "広瀬ゆめ",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_花澤るい",
+      "name": "花澤るい",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_石川ほのか",
+      "name": "石川ほのか",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_華宮れん",
+      "name": "華宮れん",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_綾瀬ねね",
+      "name": "綾瀬ねね",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_望月かなで",
+      "name": "望月かなで",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_羽衣きら",
+      "name": "羽衣きら",
+      "age": 21,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_伊織さえ",
+      "name": "伊織さえ",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_佐伯かぐら",
+      "name": "佐伯かぐら",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_すめらぎ まゆ",
+      "name": "すめらぎ まゆ",
+      "age": 30,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_有賀みつり",
+      "name": "有賀みつり",
+      "age": 32,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_坂井ゆり",
+      "name": "坂井ゆり",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_白石ゆら",
+      "name": "白石ゆら",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_佐藤きなつ",
+      "name": "佐藤きなつ",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_渡辺みずき",
+      "name": "渡辺みずき",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_川澄せな",
+      "name": "川澄せな",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_花森ななせ",
+      "name": "花森ななせ",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_中本みゆ",
+      "name": "中本みゆ",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_神木じゅり",
+      "name": "神木じゅり",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_水月かおり",
+      "name": "水月かおり",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_結月あやめ",
+      "name": "結月あやめ",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_朝丘れい",
+      "name": "朝丘れい",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_櫻井ゆいな",
+      "name": "櫻井ゆいな",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_富永真紀",
+      "name": "富永真紀",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_水沢ゆな",
+      "name": "水沢ゆな",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_瀬戸レモン",
+      "name": "瀬戸レモン",
+      "age": 32,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳"
+      ]
+    },
+    {
+      "id": "otona_kakurega_牧原れいな",
+      "name": "牧原れいな",
+      "age": 28,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳"
+      ]
+    }
+  ]
+}

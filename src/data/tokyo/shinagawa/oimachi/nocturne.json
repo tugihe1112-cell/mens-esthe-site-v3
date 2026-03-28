@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_shinagawa_oimachi_nocturne",
+  "name": "ノクターンスパ (Nocturne Spa)",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "大井町",
+  "address": "東京都品川区大井町エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分22,500円～",
+  "hours": "11:00～翌3:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://nocturne-spa.com/",
+  "nearestStation": "大井町駅",
+  "description": "大井町・大森・蒲田の日本人リラクゼーション。 / 料金システム: 90分22,500円 / 120分27,500円 / 150分32,500円 / 180分37,500円",
+  "threads": [],
+  "brandId": "nocturne",
+  "therapists": []
+}

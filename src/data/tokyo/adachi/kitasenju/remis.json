@@ -1,0 +1,73 @@
+{
+  "id": "tokyo_adachi_kitasenju_remis",
+  "name": "ランス (REMIS) 旧ニルス",
+  "url": "https://remis-esthe.com/",
+  "area": "北千住",
+  "price": "16,000円〜",
+  "interview": false,
+  "courses": [
+    {
+      "minutes": 60,
+      "price": "16,000"
+    },
+    {
+      "minutes": 70,
+      "price": "18,000"
+    },
+    {
+      "minutes": 90,
+      "price": "18,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "足立区",
+  "brandId": "remis",
+  "threads": [],
+  "therapists": [
+    "remis_如月 なな",
+    "remis_花園 あやか",
+    "remis_桃瀬 ひめの",
+    "remis_天道 さんご",
+    "remis_初音 ありな",
+    "remis_雨取 ちか",
+    "remis_石原 まいか",
+    "remis_日向 りの",
+    "remis_椿 ひかり",
+    "remis_源 ゆいな",
+    "remis_桜宮 ひめな",
+    "remis_葉月 まふゆ",
+    "remis_山野 めい",
+    "remis_水瀬 りおん",
+    "remis_一ノ瀬 なぎ",
+    "remis_白金 ゆうり",
+    "remis_桜花 しおり",
+    "remis_滝沢 さき",
+    "remis_津代 あいか",
+    "remis_流川 かれん",
+    "remis_愛川 なつみ",
+    "remis_白雪 ひめか",
+    "remis_有沙 りこ",
+    "remis_瀬尾 ゆづき",
+    "remis_君島 みやび",
+    "remis_天宮 しずく",
+    "remis_藤和 えり",
+    "remis_月島 もえ",
+    "remis_四ノ宮 れな",
+    "remis_岸川 あい",
+    "remis_伊波 ゆうな",
+    "remis_沢田 まみ",
+    "remis_五月女 なつか",
+    "remis_東堂 みさ",
+    "remis_藤咲 のあ",
+    "remis_小鳥遊 まりな",
+    "remis_愛月 るな",
+    "remis_成瀬 ここあ",
+    "remis_春先 こはる",
+    "remis_白石 あんな",
+    "remis_香月 あみ"
+  ]
+}

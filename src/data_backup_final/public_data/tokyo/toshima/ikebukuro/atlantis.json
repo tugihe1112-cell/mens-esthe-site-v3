@@ -1,0 +1,216 @@
+{
+  "id": "tokyo_toshima_ikebukuro_atlantis",
+  "name": "ATLANTIS (アトランティス)",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "tags": [
+    "初回特典あり",
+    "深夜営業",
+    "自宅出張可",
+    "ビジネスホテル派遣OK"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "60分",
+        "price": "16,000円"
+      },
+      {
+        "time": "90分",
+        "price": "21,000円"
+      },
+      {
+        "time": "120分",
+        "price": "26,000円"
+      },
+      {
+        "time": "150分",
+        "price": "31,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 10分",
+        "price": "2,000円"
+      },
+      {
+        "name": "指名料",
+        "price": "1,000円"
+      }
+    ]
+  },
+  "url": "https://www.atlantis.tokyo/",
+  "threads": [],
+  "brandId": "atlantis",
+  "therapists": [
+    {
+      "id": "atlantis_ティナ",
+      "name": "ティナ",
+      "age": 24,
+      "height": 148,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_レイカ",
+      "name": "レイカ",
+      "age": 20,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_スズ",
+      "name": "スズ",
+      "age": 24,
+      "height": 146,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ルカ",
+      "name": "ルカ",
+      "age": 26,
+      "height": 170,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_アミ",
+      "name": "アミ",
+      "age": 21,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ユイ",
+      "name": "ユイ",
+      "age": 22,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ハナ",
+      "name": "ハナ",
+      "age": 24,
+      "height": 165,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ヒカリ",
+      "name": "ヒカリ",
+      "age": 29,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_モモ",
+      "name": "モモ",
+      "age": 25,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ミリア",
+      "name": "ミリア",
+      "age": 23,
+      "height": 167,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_サナ",
+      "name": "サナ",
+      "age": 24,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ララ",
+      "name": "ララ",
+      "age": 18,
+      "height": 179,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ココロ",
+      "name": "ココロ",
+      "age": 24,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ハヅキ",
+      "name": "ハヅキ",
+      "age": 22,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ルイ",
+      "name": "ルイ",
+      "age": 25,
+      "height": 165,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ユリ",
+      "name": "ユリ",
+      "age": 24,
+      "height": 145,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_カリナ",
+      "name": "カリナ",
+      "age": 21,
+      "height": 170,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ヒナノ",
+      "name": "ヒナノ",
+      "age": 21,
+      "height": 150,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_カレン",
+      "name": "カレン",
+      "age": 24,
+      "height": 156,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_ニコ",
+      "name": "ニコ",
+      "age": 20,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "atlantis_マフユ",
+      "name": "マフユ",
+      "age": 24,
+      "height": 163,
+      "bust": null,
+      "tags": []
+    }
+  ]
+}

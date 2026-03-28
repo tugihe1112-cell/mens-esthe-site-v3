@@ -1,0 +1,167 @@
+{
+  "id": "tokyo_fuchu_luxury_romance",
+  "name": "Luxury Romance GROUP (ラグジュアリーロマンスグループ)",
+  "prefecture": "東京都",
+  "city": "府中市",
+  "area": "府中",
+  "address": "東京都府中市・神奈川県相模原市エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 13,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業",
+    "複数エリア展開"
+  ],
+  "websiteUrl": "https://luxury-romance.net/",
+  "nearestStation": "分倍河原駅 / 相模原駅 / 府中駅 / 淵野辺駅",
+  "description": "分倍河原・相模原・府中・淵野辺で展開するメンズエステ。たっぷりホットオイルとリンパドレナージュを盛り込んだオリジナルコース。 / 料金システム: 60分13,000円 / 75分14,000円 / 90分16,000円 / 105分18,000円 / 120分20,000円",
+  "brandId": "luxury_romance",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "luxury_romance_星乃 りこ",
+      "name": "星乃 りこ",
+      "age": 27,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_成瀬 ましろ",
+      "name": "成瀬 ましろ",
+      "age": 23,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_三浦 いつき",
+      "name": "三浦 いつき",
+      "age": 28,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_水川 さな",
+      "name": "水川 さな",
+      "age": 20,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_藤本 みお",
+      "name": "藤本 みお",
+      "age": 21,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_豊田もか",
+      "name": "豊田もか",
+      "age": 24,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_滝川 のぞみ",
+      "name": "滝川 のぞみ",
+      "age": 28,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_笹塚 あいり",
+      "name": "笹塚 あいり",
+      "age": 28,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_愛町 ゆる",
+      "name": "愛町 ゆる",
+      "age": 27,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_大村 さき",
+      "name": "大村 さき",
+      "age": 34,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_早坂 えみり",
+      "name": "早坂 えみり",
+      "age": 33,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_一ノ瀬 心羽",
+      "name": "一ノ瀬 心羽",
+      "age": 29,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_天使 ももか",
+      "name": "天使 ももか",
+      "age": 28,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_香咲 ゆい",
+      "name": "香咲 ゆい",
+      "age": 24,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_藤沢 みな",
+      "name": "藤沢 みな",
+      "age": 25,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_白鳥 りん",
+      "name": "白鳥 りん",
+      "age": 20,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_三日月 るな",
+      "name": "三日月 るな",
+      "age": 22,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_朝比奈 ゆいか",
+      "name": "朝比奈 ゆいか",
+      "age": 27,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_橋本 みく",
+      "name": "橋本 みく",
+      "age": 26,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "luxury_romance_愛沢 ことね",
+      "name": "愛沢 ことね",
+      "age": 23,
+      "height": null,
+      "bust": null
+    }
+  ]
+}

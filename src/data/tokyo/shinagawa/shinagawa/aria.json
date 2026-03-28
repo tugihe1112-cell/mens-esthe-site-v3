@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_shinagawa_shinagawa_aria",
+  "name": "ARIA (アリア)",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "品川",
+  "address": "東京都品川区品川エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分17,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://aria-azabu.com/",
+  "nearestStation": "品川駅",
+  "description": "麻布十番・品川の日本人リラクゼーション。 / 料金システム: 90分17,000円〜",
+  "threads": [],
+  "brandId": "aria",
+  "therapists": []
+}

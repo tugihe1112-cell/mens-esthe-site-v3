@@ -1,0 +1,418 @@
+{
+  "id": "tokyo_meguro_meguro_taiiku_jikan",
+  "name": "体育の時間",
+  "prefecture": "東京都",
+  "city": "目黒区",
+  "region": "関東エリア",
+  "address": "東京都目黒区 (最寄: 目黒駅, 五反田駅)",
+  "image": "/images/shops/taiiku_jikan.jpg",
+  "rating": 4.4,
+  "reviewCount": 0,
+  "price": "100分 18,000円～",
+  "hours": "12:00～翌3:00",
+  "isPremium": false,
+  "color": "from-violet-400 to-purple-600",
+  "tags": [],
+  "websiteUrl": "https://petime2024.com/",
+  "threads": [],
+  "area": "目黒",
+  "brandId": "taiiku_jikan",
+  "therapists": [
+    {
+      "id": "taiiku_jikan_白石未央",
+      "name": "白石未央",
+      "age": 21,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "21歳",
+        "T160",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_東雲桃菜",
+      "name": "東雲桃菜",
+      "age": 24,
+      "height": 158,
+      "bust": "(G)",
+      "tags": [
+        "24歳",
+        "T158",
+        "B92(G)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_楠木楓",
+      "name": "楠木楓",
+      "age": 23,
+      "height": 162,
+      "bust": "(C)",
+      "tags": [
+        "23歳",
+        "T162",
+        "B83(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_星野綺羅々",
+      "name": "星野綺羅々",
+      "age": 22,
+      "height": 160,
+      "bust": "(F)",
+      "tags": [
+        "22歳",
+        "T160",
+        "B88(F)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_一ノ瀬沙羅",
+      "name": "一ノ瀬沙羅",
+      "age": 23,
+      "height": 165,
+      "bust": "(C)",
+      "tags": [
+        "23歳",
+        "T165",
+        "B83(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_浜辺夏穂",
+      "name": "浜辺夏穂",
+      "age": 22,
+      "height": 158,
+      "bust": "(D)",
+      "tags": [
+        "22歳",
+        "T158",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_小鳥遊舞香",
+      "name": "小鳥遊舞香",
+      "age": 22,
+      "height": 160,
+      "bust": "(C)",
+      "tags": [
+        "22歳",
+        "T160",
+        "B83(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_根本莉亜",
+      "name": "根本莉亜",
+      "age": 25,
+      "height": 156,
+      "bust": "(G)",
+      "tags": [
+        "25歳",
+        "T156",
+        "B92(G)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_桜井星那",
+      "name": "桜井星那",
+      "age": 23,
+      "height": 156,
+      "bust": "(D)",
+      "tags": [
+        "23歳",
+        "T156",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_小峰英里",
+      "name": "小峰英里",
+      "age": 27,
+      "height": 155,
+      "bust": "(E)",
+      "tags": [
+        "27歳",
+        "T155",
+        "B85(E)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_小坂真帆",
+      "name": "小坂真帆",
+      "age": 19,
+      "height": 164,
+      "bust": "(C)",
+      "tags": [
+        "19歳",
+        "T164",
+        "B83(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_高槻有来",
+      "name": "高槻有来",
+      "age": 28,
+      "height": 160,
+      "bust": "(F)",
+      "tags": [
+        "28歳",
+        "T160",
+        "B88(F)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_倉持梨恵",
+      "name": "倉持梨恵",
+      "age": 28,
+      "height": 163,
+      "bust": "(G)",
+      "tags": [
+        "28歳",
+        "T163",
+        "B92(G)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_月野鈴",
+      "name": "月野鈴",
+      "age": 22,
+      "height": 158,
+      "bust": "(C)",
+      "tags": [
+        "22歳",
+        "T158",
+        "B83(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_松島瑠璃",
+      "name": "松島瑠璃",
+      "age": 25,
+      "height": 159,
+      "bust": "(D)",
+      "tags": [
+        "25歳",
+        "T159",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_西宮七瀬",
+      "name": "西宮七瀬",
+      "age": 24,
+      "height": 155,
+      "bust": "(C)",
+      "tags": [
+        "24歳",
+        "T155",
+        "B83(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_橘一花",
+      "name": "橘一花",
+      "age": 20,
+      "height": 156,
+      "bust": "(D)",
+      "tags": [
+        "20歳",
+        "T156",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_矢沢光",
+      "name": "矢沢光",
+      "age": 21,
+      "height": 156,
+      "bust": "(E)",
+      "tags": [
+        "21歳",
+        "T156",
+        "B85(E)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_渡辺美桜",
+      "name": "渡辺美桜",
+      "age": 27,
+      "height": 169,
+      "bust": "(D)",
+      "tags": [
+        "27歳",
+        "T169",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_江野愛莉",
+      "name": "江野愛莉",
+      "age": 26,
+      "height": 150,
+      "bust": "(F)",
+      "tags": [
+        "26歳",
+        "T150",
+        "B88(F)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_藤井奈由",
+      "name": "藤井奈由",
+      "age": 20,
+      "height": 163,
+      "bust": "(E)",
+      "tags": [
+        "20歳",
+        "T163",
+        "B85(E)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_朝倉葵",
+      "name": "朝倉葵",
+      "age": 20,
+      "height": 148,
+      "bust": "(C)",
+      "tags": [
+        "20歳",
+        "T148",
+        "B83(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_七瀬愛菜",
+      "name": "七瀬愛菜",
+      "age": 23,
+      "height": 161,
+      "bust": "(F)",
+      "tags": [
+        "23歳",
+        "T161",
+        "B88(F)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_如月恋",
+      "name": "如月恋",
+      "age": 21,
+      "height": 168,
+      "bust": "(C)",
+      "tags": [
+        "21歳",
+        "T168",
+        "B83(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_雪里茉白",
+      "name": "雪里茉白",
+      "age": 21,
+      "height": 162,
+      "bust": "(F)",
+      "tags": [
+        "21歳",
+        "T162",
+        "B88(F)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_綾瀬風花",
+      "name": "綾瀬風花",
+      "age": 20,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "20歳",
+        "T155",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_柊木果奈",
+      "name": "柊木果奈",
+      "age": 26,
+      "height": 158,
+      "bust": "(C)",
+      "tags": [
+        "26歳",
+        "T158",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_宮本亜美",
+      "name": "宮本亜美",
+      "age": 22,
+      "height": 150,
+      "bust": "(C)",
+      "tags": [
+        "22歳",
+        "T150",
+        "B84(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_橋本瑞希",
+      "name": "橋本瑞希",
+      "age": 21,
+      "height": 163,
+      "bust": "(C)",
+      "tags": [
+        "21歳",
+        "T163",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_白雪姫乃",
+      "name": "白雪姫乃",
+      "age": 21,
+      "height": 158,
+      "bust": "(C)",
+      "tags": [
+        "21歳",
+        "T158",
+        "B84(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_榎並可憐",
+      "name": "榎並可憐",
+      "age": 22,
+      "height": 156,
+      "bust": "(C)",
+      "tags": [
+        "22歳",
+        "T156",
+        "B85(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_宇佐美瑠々",
+      "name": "宇佐美瑠々",
+      "age": 20,
+      "height": 158,
+      "bust": "(C)",
+      "tags": [
+        "20歳",
+        "T158",
+        "B84(C)"
+      ]
+    },
+    {
+      "id": "taiiku_jikan_如月雪愛",
+      "name": "如月雪愛",
+      "age": 19,
+      "height": 162,
+      "bust": "(C)",
+      "tags": [
+        "19歳",
+        "T162",
+        "B85(C)"
+      ]
+    }
+  ]
+}

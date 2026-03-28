@@ -1,0 +1,93 @@
+{
+  "id": "tokyo_adachi_kitasenju_macherie",
+  "name": "マシェリ",
+  "url": "https://macherie.jp/",
+  "area": "北千住",
+  "price": "12,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "体験レポートあり",
+    "カード支払いOK"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "12,000"
+    },
+    {
+      "minutes": 100,
+      "price": "16,000"
+    },
+    {
+      "minutes": 120,
+      "price": "20,000"
+    },
+    {
+      "minutes": 150,
+      "price": "24,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "足立区",
+  "brandId": "macherie",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "macherie_長澤 ゆり",
+      "name": "長澤 ゆり",
+      "age": 42,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "macherie_森田 あい",
+      "name": "森田 あい",
+      "age": 35,
+      "height": 155,
+      "bust": "(C)"
+    },
+    {
+      "id": "macherie_松嶋 めい",
+      "name": "松嶋 めい",
+      "age": 48,
+      "height": 165,
+      "bust": "(F)"
+    },
+    {
+      "id": "macherie_竹内 みか",
+      "name": "竹内 みか",
+      "age": 41,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "macherie_深田 さき",
+      "name": "深田 さき",
+      "age": 46,
+      "height": 162,
+      "bust": "(G)"
+    },
+    {
+      "id": "macherie_石田 ひとみ",
+      "name": "石田 ひとみ",
+      "age": 39,
+      "height": 157,
+      "bust": "(C)"
+    },
+    {
+      "id": "macherie_広末 りな",
+      "name": "広末 りな",
+      "age": 45,
+      "height": 161,
+      "bust": "(E)"
+    },
+    {
+      "id": "macherie_綾瀬 まゆ",
+      "name": "綾瀬 まゆ",
+      "age": 38,
+      "height": 160,
+      "bust": "(D)"
+    }
+  ]
+}

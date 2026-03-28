@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mens Esthe.Map | 静寂と癒やしのプレミアムサロン予約</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* * Color Palette (Strict Adherence)
+         */
+        :root {
+            --bg-main: #FAF8F5;       /* オフホワイト */
+            --text-main: #1A1A2E;     /* 深いネイビー */
+            --accent-blue: #2C3E6B;   /* ダークブルー（信頼） */
+            --accent-gold: #C9A96E;   /* ゴールド（高級） */
+            --text-sub: #6B7280;      /* グレー */
+            --card-bg: #FFFFFF;       /* 白 */
+            --border-light: #E5E1DB;  /* 薄い境界線 */
+        }
+
+        /* Reset & Base */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .serif { font-family: 'Cormorant Garamond', serif; }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* --- 1. Navigation (Modified) --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background-color: rgba(250, 248, 245, 0.7); /* 少し透過 */
+            backdrop-filter: blur(12px); /* すりガラス効果 */
+            z-index: 1000;
+            border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: 0.02em;
+        }
+        .logo span { color: var(--accent-gold); }
+
+        nav ul {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--accent-blue); /* リンク色をダークブルーに */
+            letter-spacing: 0.05em;
+        }
+        nav a:hover { color: var(--accent-gold); }
+
+        /* アウトラインボタンスタイルへ変更 */
+        .btn-reserve {
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            background: transparent;
+        }
+        .btn-reserve:hover {
+            background-color: var(--accent-gold);
+            color: white;
+            box-shadow: 0 4px 12px rgba(201, 169, 110, 0.3);
+        }
+
+        /* --- 2. Hero Section (Revived & Enhanced) --- */
+        .hero {
+            height: 100vh; /* 全画面 */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-color: var(--bg-main);
+            /* 薄いゴールドのグラデーションオーバーレイ */
+            background: linear-gradient(160deg, rgba(201,169,110,0.06) 0%, transparent 50%);
+        }
+
+        /* 装飾的な細い枠 */
+        .hero-frame {
+            width: 90%;
+            max-width: 600px;
+            padding: 4rem 2rem;
+            border: 1px solid rgba(201, 169, 110, 0.3); /* ゴールド opacity 0.3 */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* 四隅の装飾（オプション：高級感を出すため枠の角を強調） */
+        .hero-frame::before, .hero-frame::after {
+            content: ''; position: absolute; width: 10px; height: 10px;
+            border: 1px solid var(--accent-gold);
+            transition: all 0.5s ease;
+        }
+        .hero-frame::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .hero-frame::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 300; /* Light */
+            color: var(--text-main);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p.sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            font-style: italic;
+            margin-bottom: 3.5rem;
+        }
+
+        /* 検索バー（枠内に配置） */
+        .search-container {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            background: #fff;
+            border: 1px solid var(--border-light);
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            transition: all 0.3s;
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--accent-gold);
+            box-shadow: 0 4px 25px rgba(201, 169, 110, 0.15);
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 1rem;
+            color: var(--text-main);
+            font-family: 'Noto Sans JP', sans-serif;
+            background: transparent;
+        }
+        .search-bar input::placeholder { color: #a0aec0; }
+
+        .search-btn {
+            background: none;
+            border: none;
+            color: var(--accent-gold);
+            cursor: pointer;
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-btn svg { width: 24px; height: 24px; stroke-width: 2; }
+
+
+        /* --- 3. Category Icons (Added) --- */
+        .categories {
+            padding: 4rem 5%;
+            background-color: var(--bg-main);
+        }
+        
+        .cat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between; /* 均等配置 */
+            align-items: flex-start;
+        }
+
+        .cat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            group;
+        }
+
+        .cat-icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 4px 15px rgba(44, 62, 107, 0.2);
+            transition: transform 0.3s ease, background-color 0.3s;
+        }
+
+        .cat-item:hover .cat-icon-circle {
+            transform: translateY(-5px);
+            background-color: #233257;
+        }
+
+        .cat-icon-circle svg {
+            width: 28px;
+            height: 28px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
+        .cat-text {
+            font-size: 14px;
+            color: var(--text-main);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+
+        /* --- 4. Featured Salons (Enhanced) --- */
+        .featured {
+            padding: 4rem 5% 8rem;
+            background-color: var(--bg-main);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        /* 装飾ライン付き Staff Pick */
+        .section-sub {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            color: var(--accent-gold);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+        .section-sub::before, .section-sub::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 1px;
+            background-color: var(--accent-gold);
+            opacity: 0.6;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 400;
+            color: var(--text-main);
+        }
+
+
+        /* --- 5. Salon Cards (Restructured) --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+        /* 上半分: 画像プレースホルダー */
+        .card-img-area {
+            height: 200px;
+            width: 100%;
+            /* 青系グラデーション */
+            background: linear-gradient(135deg, #2C3E6B 0%, #3A5A8A 100%);
+            position: relative;
+        }
+
+        /* ランキングバッジ (右上) */
+        .rank-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: rgba(201, 169, 110, 0.95); /* ゴールド半透明 */
+            color: white;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* 下半分: 情報エリア */
+        .card-content {
+            padding: 24px;
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600; /* SemiBold */
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 0.8rem;
+            line-height: 1.2;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-size: 12px;
+            border-radius: 14px;
+            padding: 3px 12px;
+            display: inline-block;
+            font-weight: 400;
+        }
+
+        .card-rating-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .stars {
+            color: var(--accent-gold);
+            font-size: 14px;
+        }
+
+        .rating-score {
+            font-weight: bold;
+            color: var(--text-main);
+            font-size: 14px;
+        }
+
+        .rating-count {
+            color: var(--text-sub);
+            font-size: 13px;
+        }
+
+        .card-footer {
+            text-align: right;
+            border-top: 1px solid rgba(0,0,0,0.03);
+            padding-top: 1rem;
+        }
+
+        .view-details {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .view-details::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--accent-gold);
+            transition: width 0.3s;
+        }
+
+        .card:hover .view-details::after {
+            width: 100%;
+        }
+
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--text-main); /* ネイビー */
+            color: white;
+            padding: 4rem 5%;
+            text-align: center;
+        }
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+            letter-spacing: 0.05em;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+            font-size: 0.85rem;
+            color: #a0aec0;
+        }
+        .copyright {
+            font-size: 0.75rem;
+            color: #718096;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            nav ul { display: none; } /* モバイルメニューは省略 */
+            
+            .hero-frame { width: 95%; padding: 3rem 1.5rem; }
+            .hero h1 { font-size: 2.2rem; } /* 指示通り縮小 */
+            .hero p.sub { font-size: 1.4rem; margin-bottom: 2rem; }
+            
+            /* カテゴリアイコン 2x2 */
+            .cat-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+                justify-items: center;
+            }
+            
+            /* カード 1列 */
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .section-header h2 { font-size: 2.2rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Mens Esthe<span>.Map</span></div>
+        <nav>
+            <ul>
+                <li><a href="#">Ranking</a></li>
+                <li><a href="#">New Arrivals</a></li>
+                <li><a href="#">Area Search</a></li>
+                <li><a href="#" class="btn-reserve">サロンを探す</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-frame">
+            <h1>信じられる、静かな時間</h1>
+            <p class="sub">Discover your calm</p>
+            
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" placeholder="エリア・店名・特徴で検索...">
+                    <button class="search-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="categories">
+        <div class="cat-container">
+            <div class="cat-item">
+                <div class="cat-icon-circle">
+                    <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="cat-text">ランキング</span>
+            </div>
+            <div class="cat-item">
+                <div class="cat-icon-circle">
+                    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="cat-text">新着店舗</span>
+            </div>
+            <div class="cat-item">
+                <div class="cat-icon-circle">
+                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <span class="cat-text">現在地</span>
+            </div>
+            <div class="cat-item">
+                <div class="cat-icon-circle">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="cat-text">閲覧履歴</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured">
+        <div class="section-header">
+            <div class="section-sub">Staff Pick</div>
+            <h2>注目のサロン</h2>
+        </div>
+
+        <div class="card-grid">
+            <article class="card">
+                <div class="card-img-area">
+                    <div class="rank-badge">#1</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">LINDA SPA Tokyo</div>
+                    <div class="card-tags">
+                        <span class="tag">六本木</span>
+                        <span class="tag">完全個室</span>
+                    </div>
+                    <div class="card-rating-row">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-score">4.9</span>
+                        <span class="rating-count">(口コミ 128件)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="view-details">View Details →</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img-area">
+                    <div class="rank-badge">#2</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Aroma More</div>
+                    <div class="card-tags">
+                        <span class="tag">恵比寿</span>
+                        <span class="tag">アロマ</span>
+                    </div>
+                    <div class="card-rating-row">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-score">4.7</span>
+                        <span class="rating-count">(口コミ 85件)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="view-details">View Details →</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img-area">
+                    <div class="rank-badge">#3</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Tenkai no Spa</div>
+                    <div class="card-tags">
+                        <span class="tag">銀座</span>
+                        <span class="tag">ラグジュアリー</span>
+                    </div>
+                    <div class="card-rating-row">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-score">4.8</span>
+                        <span class="rating-count">(口コミ 203件)</span>
+                    </div>
+                    <div class="card-footer">
+                        <span class="view-details">View Details →</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">Mens Esthe.Map</div>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact</a>
+        </div>
+        <p class="copyright">© 2026 Mens Esthe.Map All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_tachikawa_tachikawa_gladol-spa",
+  "name": "ぐらどるスパ",
+  "prefecture": "東京都",
+  "city": "立川市",
+  "area": "立川",
+  "address": "東京都立川市（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 13,000円～",
+  "hours": "12:00～5:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK"
+  ],
+  "websiteUrl": "https://www.gladol-spa.tokyo/",
+  "nearestStation": "立川駅、国分寺駅",
+  "description": "60分11,000円/90分13,000円/120分17,000円/150分22,000円 延長30分5,000円 オプション:ホットアイマスク4,000円/極液2,000円",
+  "threads": [],
+  "brandId": "gladol-spa",
+  "therapists": []
+}

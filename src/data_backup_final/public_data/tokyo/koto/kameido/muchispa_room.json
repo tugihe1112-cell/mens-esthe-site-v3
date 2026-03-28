@@ -1,0 +1,285 @@
+{
+  "id": "tokyo_koto_kameido_muchispa_room",
+  "name": "むちすぱルーム 亀戸",
+  "prefecture": "東京都",
+  "city": "江東区",
+  "area": "亀戸",
+  "address": "東京都江東区亀戸エリア",
+  "nearestStation": "亀戸駅",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 14,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK",
+    "個室あり",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://muchispa.com/",
+  "description": "亀戸の熟女メンズエステ。料金システム: 70分14,000円 / 100分19,000円 / 120分23,000円 / 150分28,000円",
+  "brandId": "muchispa_room",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "muchispa_room_るい",
+      "name": "るい",
+      "age": 29,
+      "bust": "(J)",
+      "tags": [
+        "新人",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_みのり",
+      "name": "みのり",
+      "age": 27,
+      "bust": "(G)",
+      "tags": [
+        "新人",
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_ひまり",
+      "name": "ひまり",
+      "age": 25,
+      "bust": "(I)",
+      "tags": [
+        "新人",
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_あやか",
+      "name": "あやか",
+      "age": 26,
+      "bust": "(F)",
+      "tags": [
+        "新人",
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_えり",
+      "name": "えり",
+      "age": 26,
+      "bust": "(F)",
+      "tags": [
+        "新人",
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_のあ",
+      "name": "のあ",
+      "age": 25,
+      "bust": "(H)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "muchispa_room_はづき",
+      "name": "はづき",
+      "age": 26,
+      "bust": "(G)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_うみ",
+      "name": "うみ",
+      "age": 24,
+      "bust": "(H)",
+      "tags": [
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_みるく",
+      "name": "みるく",
+      "age": 28,
+      "bust": "(H)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_あやね",
+      "name": "あやね",
+      "age": 28,
+      "bust": "(F)",
+      "tags": [
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_くるみ",
+      "name": "くるみ",
+      "age": 26,
+      "bust": "(I)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_みつき",
+      "name": "みつき",
+      "age": 27,
+      "bust": "(G)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_りん",
+      "name": "りん",
+      "age": 28,
+      "bust": "(H)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_かれん",
+      "name": "かれん",
+      "age": 26,
+      "bust": "(K)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_かすみ",
+      "name": "かすみ",
+      "age": 26,
+      "bust": "(G)",
+      "tags": [
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_まりあ",
+      "name": "まりあ",
+      "age": 31,
+      "bust": "(J)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_みや",
+      "name": "みや",
+      "age": 24,
+      "bust": "(H)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_ゆあ",
+      "name": "ゆあ",
+      "age": 23,
+      "bust": "(F)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_もえ",
+      "name": "もえ",
+      "age": 30,
+      "bust": "(F)",
+      "tags": [
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_りょう",
+      "name": "りょう",
+      "age": 26,
+      "bust": "(J)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_えみ",
+      "name": "えみ",
+      "age": 34,
+      "bust": "(H)",
+      "tags": [
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_すず",
+      "name": "すず",
+      "age": 26,
+      "bust": "(F)",
+      "tags": [
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_ゆかり",
+      "name": "ゆかり",
+      "age": 28,
+      "bust": "(G)",
+      "tags": [
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_ねね",
+      "name": "ねね",
+      "age": 20,
+      "bust": "(F)",
+      "tags": [
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_なな",
+      "name": "なな",
+      "age": 25,
+      "bust": "(J)",
+      "tags": [
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_ここな",
+      "name": "ここな",
+      "age": 24,
+      "bust": "(F)",
+      "tags": [
+        "清楚系"
+      ]
+    },
+    {
+      "id": "muchispa_room_しほ",
+      "name": "しほ",
+      "age": 24,
+      "bust": "(G)",
+      "tags": [
+        "新人",
+        "色っぽい"
+      ]
+    },
+    {
+      "id": "muchispa_room_まゆ",
+      "name": "まゆ",
+      "age": 26,
+      "bust": "(F)",
+      "tags": [
+        "清楚系"
+      ]
+    }
+  ]
+}

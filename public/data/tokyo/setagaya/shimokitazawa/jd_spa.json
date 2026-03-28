@@ -1,0 +1,21 @@
+{
+  "id": "tokyo_setagaya_shimokitazawa_jd_spa",
+  "name": "JDスパ (女子大生エステ) 下北沢",
+  "prefecture": "東京都",
+  "city": "世田谷区",
+  "area": "下北沢",
+  "address": "東京都世田谷区・渋谷区エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分14,000円～",
+  "hours": "営業中",
+  "isPremium": false,
+  "tags": [],
+  "websiteUrl": "https://www.jd-spa.com/",
+  "nearestStation": "下北沢駅・渋谷駅・恵比寿駅",
+  "description": "入会手数料2,000円→無料 / 70分14,000円(2,000円OFF) / 90分18,000円(2,000円OFF) / 110分22,000円(2,000円OFF) / 指名料一律1,000円",
+  "threads": [],
+  "brandId": "jd_spa",
+  "therapists": []
+}

@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_setagaya_chitose_karasuyama_winning_heaven",
+  "name": "WINNING HEAVEN (ウイニングヘブン)",
+  "prefecture": "東京都",
+  "city": "世田谷区",
+  "area": "千歳烏山",
+  "address": "東京都世田谷区千歳烏山エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分17,000円～",
+  "hours": "12:00～翌2:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://www.winning-heaven.com/",
+  "nearestStation": "千歳烏山駅",
+  "description": "世田谷エリアの日本人リラクゼーション。 / オープン割引開催中: 90分19,000円→17,000円 / 120分24,000円→22,000円 / 150分29,000円→27,000円 / 180分34,000円→32,000円",
+  "threads": [],
+  "brandId": "winning_heaven",
+  "therapists": []
+}

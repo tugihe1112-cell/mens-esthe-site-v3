@@ -1,0 +1,513 @@
+{
+  "id": "tokyo_shibuya_ebisu_liora",
+  "name": "リオラ (旧マリラ)",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "area": "恵比寿",
+  "address": "東京都・神奈川県・静岡県 各エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 15,000円～",
+  "hours": "12:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://liora2024.com/",
+  "nearestStation": "恵比寿駅/横浜駅/三島駅",
+  "description": "恵比寿・横浜・三島のメンズエステ。70分15,000円から。",
+  "brandId": "liora",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "liora_井上なお",
+      "name": "井上なお",
+      "age": 21,
+      "height": 156,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_柏木あみ",
+      "name": "柏木あみ",
+      "age": 24,
+      "height": 155,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_橘 かえで",
+      "name": "橘 かえで",
+      "age": 22,
+      "height": 152,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_綾瀬ひな",
+      "name": "綾瀬ひな",
+      "age": 19,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_水川あおい",
+      "name": "水川あおい",
+      "age": 18,
+      "height": 158,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "liora_森田みのり",
+      "name": "森田みのり",
+      "age": 21,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_姫野りん",
+      "name": "姫野りん",
+      "age": 21,
+      "height": 154,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_桐谷のん",
+      "name": "桐谷のん",
+      "age": 21,
+      "height": 160,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "liora_百瀬ほの",
+      "name": "百瀬ほの",
+      "age": 20,
+      "height": 151,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_四宮 あいり",
+      "name": "四宮 あいり",
+      "age": 22,
+      "height": 153,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_天塚ゆい",
+      "name": "天塚ゆい",
+      "age": 20,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_日比野るか",
+      "name": "日比野るか",
+      "age": 20,
+      "height": 160,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_白石のあ",
+      "name": "白石のあ",
+      "age": 20,
+      "height": 152,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_神谷はるか",
+      "name": "神谷はるか",
+      "age": 23,
+      "height": 160,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "liora_月瀬 るり",
+      "name": "月瀬 るり",
+      "age": 20,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_朝倉まお",
+      "name": "朝倉まお",
+      "age": 19,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_星野ゆりな",
+      "name": "星野ゆりな",
+      "age": 21,
+      "height": 164,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_朝陽みお",
+      "name": "朝陽みお",
+      "age": 19,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_神田りさ",
+      "name": "神田りさ",
+      "age": 20,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_三葉ももな",
+      "name": "三葉ももな",
+      "age": 23,
+      "height": 148,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_桜井みゆ",
+      "name": "桜井みゆ",
+      "age": 18,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_月宮ゆあ",
+      "name": "月宮ゆあ",
+      "age": 21,
+      "height": 149,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_真白かのん",
+      "name": "真白かのん",
+      "age": 20,
+      "height": 150,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_須藤なつき",
+      "name": "須藤なつき",
+      "age": 23,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_篠﨑れい",
+      "name": "篠﨑れい",
+      "age": 19,
+      "height": 158,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "liora_早乙女みく",
+      "name": "早乙女みく",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_東条りな",
+      "name": "東条りな",
+      "age": 18,
+      "height": 160,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "liora_黒川さや",
+      "name": "黒川さや",
+      "age": 24,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_夕陽みつき",
+      "name": "夕陽みつき",
+      "age": 18,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_佐々木らん",
+      "name": "佐々木らん",
+      "age": 25,
+      "height": 158,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_花園りあん",
+      "name": "花園りあん",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_七海ゆら",
+      "name": "七海ゆら",
+      "age": 19,
+      "height": 155,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_黒崎りさ",
+      "name": "黒崎りさ",
+      "age": 21,
+      "height": 158,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "liora_神楽あゆな",
+      "name": "神楽あゆな",
+      "age": 24,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_七瀬ゆずは",
+      "name": "七瀬ゆずは",
+      "age": 19,
+      "height": 166,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_朝比奈みゆ",
+      "name": "朝比奈みゆ",
+      "age": 19,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_青葉ことね",
+      "name": "青葉ことね",
+      "age": 18,
+      "height": 158,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "liora_東雲はく",
+      "name": "東雲はく",
+      "age": 21,
+      "height": 158,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "liora_愛川ななみ",
+      "name": "愛川ななみ",
+      "age": 24,
+      "height": 161,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_渚あすか",
+      "name": "渚あすか",
+      "age": 21,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_石井さくら",
+      "name": "石井さくら",
+      "age": 19,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_成海うみ",
+      "name": "成海うみ",
+      "age": 23,
+      "height": 155,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_吉川ひかり",
+      "name": "吉川ひかり",
+      "age": 21,
+      "height": 167,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_皐月あむ",
+      "name": "皐月あむ",
+      "age": 19,
+      "height": 168,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_一ノ瀬ゆの",
+      "name": "一ノ瀬ゆの",
+      "age": 20,
+      "height": 155,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_小野寺 りほ",
+      "name": "小野寺 りほ",
+      "age": 20,
+      "height": 153,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_綾波しゅり",
+      "name": "綾波しゅり",
+      "age": 18,
+      "height": 158,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_如月 うるは",
+      "name": "如月 うるは",
+      "age": 20,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_藤崎まな",
+      "name": "藤崎まな",
+      "age": 20,
+      "height": 162,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_柊こはく",
+      "name": "柊こはく",
+      "age": 25,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_天宮れな",
+      "name": "天宮れな",
+      "age": 25,
+      "height": 170,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "liora_滝沢あかり",
+      "name": "滝沢あかり",
+      "age": 20,
+      "height": 160,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "liora_愛沢しづき",
+      "name": "愛沢しづき",
+      "age": 20,
+      "height": 158,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_水野 かや",
+      "name": "水野 かや",
+      "age": 19,
+      "height": 158,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "liora_白咲じゅり",
+      "name": "白咲じゅり",
+      "age": 20,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_月島まな",
+      "name": "月島まな",
+      "age": 21,
+      "height": 158,
+      "bust": "(A)",
+      "tags": null
+    },
+    {
+      "id": "liora_望月あい",
+      "name": "望月あい",
+      "age": 25,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "liora_音羽さな",
+      "name": "音羽さな",
+      "age": 20,
+      "height": 164,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_葵えま",
+      "name": "葵えま",
+      "age": 24,
+      "height": 166,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_藤咲さち",
+      "name": "藤咲さち",
+      "age": 26,
+      "height": 168,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "liora_黒崎はる",
+      "name": "黒崎はる",
+      "age": 23,
+      "height": 164,
+      "bust": "(D)",
+      "tags": null
+    }
+  ]
+}

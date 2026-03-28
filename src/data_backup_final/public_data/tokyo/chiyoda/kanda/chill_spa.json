@@ -1,0 +1,168 @@
+{
+  "id": "tokyo_chiyoda_kanda_chill_spa",
+  "name": "Chill Spa (ちるスパ)",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "神田",
+  "address": "東京都千代田区内神田3-2-10",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分14,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://chill-spa.com",
+  "nearestStation": "神田駅",
+  "description": "神田の日本人リラクゼーション。 / 料金システム: 70分14,000円〜 / 100分18,000円〜",
+  "brandId": "chill_spa",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "chill_spa_あやか",
+      "name": "あやか",
+      "age": "21歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_うみ",
+      "name": "うみ",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_えり",
+      "name": "えり",
+      "age": "18歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_かえで",
+      "name": "かえで",
+      "age": "24歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_さき",
+      "name": "さき",
+      "age": "20歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_さな",
+      "name": "さな",
+      "age": "21歳",
+      "height": "174cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_じゅん",
+      "name": "じゅん",
+      "age": "22歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_すい",
+      "name": "すい",
+      "age": "24歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_てん",
+      "name": "てん",
+      "age": "22歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_ねね",
+      "name": "ねね",
+      "age": "23歳",
+      "height": "147cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_のあ",
+      "name": "のあ",
+      "age": "21歳",
+      "height": "147cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_ひなの",
+      "name": "ひなの",
+      "age": "23歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_まゆ",
+      "name": "まゆ",
+      "age": "25歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_みな",
+      "name": "みな",
+      "age": "23歳",
+      "height": "171cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_もも",
+      "name": "もも",
+      "age": "21歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_らな",
+      "name": "らな",
+      "age": "20歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_るな",
+      "name": "るな",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_かすみ",
+      "name": "かすみ",
+      "age": "20歳",
+      "height": "153cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "chill_spa_さくら",
+      "name": "さくら",
+      "age": "20歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "chill_spa_ひまり",
+      "name": "ひまり",
+      "age": "21歳",
+      "height": "157cm",
+      "bust": "カップ"
+    }
+  ]
+}

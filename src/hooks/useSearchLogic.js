@@ -1,8 +1,8 @@
 // src/hooks/useSearchLogic.js (新規作成)
-
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext.tsx';
+import { matchesPrefecture, matchesPrefectureAndCity } from '../utils/shopFilters';
 
 // 配列から重複を除外するヘルパー
 const uniq = (arr) => [...new Set(arr)];
@@ -18,16 +18,26 @@ export const useSearchLogic = () => {
   const threadId = searchParams.get('thread') || '';
 
   // 2. 各セレクトボックスの「選択肢」を動的に生成 (仕様書 20)
-  const prefectures = useMemo(() => uniq(shops.map(s => s.prefecture)), [shops]);
+  const prefectures = useMemo(() => {
+    // prefectureが配列の場合も文字列の場合も対応
+    const allPrefs = shops.flatMap(s => 
+      Array.isArray(s.prefecture) ? s.prefecture : [s.prefecture]
+    );
+    return uniq(allPrefs);
+  }, [shops]);
 
   const cities = useMemo(() => {
     if (!pref) return [];
-    return uniq(shops.filter(s => s.prefecture === pref).map(s => s.city));
+    return uniq(
+      shops
+        .filter(s => matchesPrefecture(s, pref))
+        .map(s => s.city)
+    );
   }, [pref, shops]);
 
   const shopOptions = useMemo(() => {
     if (!pref || !city) return [];
-    return shops.filter(s => s.prefecture === pref && s.city === city);
+    return shops.filter(s => matchesPrefectureAndCity(s, pref, city));
   }, [pref, city, shops]);
 
   const threadOptions = useMemo(() => {

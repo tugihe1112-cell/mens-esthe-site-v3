@@ -1,0 +1,546 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分17,000円～",
+  "hours": "10:00～22:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "日本人",
+    "一般ルーム",
+    "熟女"
+  ],
+  "websiteUrl": "https://www.otonaspa-tokyo.com/",
+  "nearestStation": "東銀座駅",
+  "description": "恵比寿・銀座の完全個室リラクゼーションサロン。大人のための上質な癒やしを提供。",
+  "brandId": "otonaspa",
+  "threads": [],
+  "id": "tokyo_chuo_ginza_otonaspa",
+  "name": "大人のやすらぎSPA (銀座店)",
+  "prefecture": "東京都",
+  "city": "中央区",
+  "area": "銀座",
+  "address": "東京都中央区銀座エリア",
+  "therapists": [
+    {
+      "id": "otonaspa_中条まどか",
+      "name": "中条まどか",
+      "age": "34歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_川原なるみ",
+      "name": "川原なるみ",
+      "age": "43歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_天野さゆり",
+      "name": "天野さゆり",
+      "age": "44歳",
+      "height": "173cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_真島るこ",
+      "name": "真島るこ",
+      "age": "44歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_木内ねね",
+      "name": "木内ねね",
+      "age": "43歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_阿乃あんな",
+      "name": "阿乃あんな",
+      "age": "31歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_本多ことの",
+      "name": "本多ことの",
+      "age": "37歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_福岡はるな",
+      "name": "福岡はるな",
+      "age": "32歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_岡本しほ",
+      "name": "岡本しほ",
+      "age": "45歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_村瀬すず",
+      "name": "村瀬すず",
+      "age": "48歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_安藤めぐ",
+      "name": "安藤めぐ",
+      "age": "37歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_沢ななお",
+      "name": "沢ななお",
+      "age": "46歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_綾瀬めい",
+      "name": "綾瀬めい",
+      "age": "37歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_花岡せな",
+      "name": "花岡せな",
+      "age": "45歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_水野すみれ",
+      "name": "水野すみれ",
+      "age": "35歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_森ひなつ",
+      "name": "森ひなつ",
+      "age": "36歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_山咲はな",
+      "name": "山咲はな",
+      "age": "38歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_葉山みさき",
+      "name": "葉山みさき",
+      "age": "31歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_浜辺ゆい",
+      "name": "浜辺ゆい",
+      "age": "32歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_橘あんり",
+      "name": "橘あんり",
+      "age": "37歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_田村りさ",
+      "name": "田村りさ",
+      "age": "38歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_堀口あやの",
+      "name": "堀口あやの",
+      "age": "34歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_七海なな",
+      "name": "七海なな",
+      "age": "46歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_川田あみ",
+      "name": "川田あみ",
+      "age": "38歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_内田まい",
+      "name": "内田まい",
+      "age": "39歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_小島ひとみ",
+      "name": "小島ひとみ",
+      "age": "40歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_松永きょうか",
+      "name": "松永きょうか",
+      "age": "36歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_大島あかり",
+      "name": "大島あかり",
+      "age": "33歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_本上あき",
+      "name": "本上あき",
+      "age": "42歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_神崎あいの",
+      "name": "神崎あいの",
+      "age": "39歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_木下れん",
+      "name": "木下れん",
+      "age": "47歳",
+      "height": "175cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_七瀬ゆず",
+      "name": "七瀬ゆず",
+      "age": "32歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_中川りょうこ",
+      "name": "中川りょうこ",
+      "age": "41歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_木村りん",
+      "name": "木村りん",
+      "age": "45歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_冴木いずみ",
+      "name": "冴木いずみ",
+      "age": "40歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_辻あゆみ",
+      "name": "辻あゆみ",
+      "age": "42歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_小泉まなみ",
+      "name": "小泉まなみ",
+      "age": "37歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_工藤あい",
+      "name": "工藤あい",
+      "age": "44歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_湯月ひかる",
+      "name": "湯月ひかる",
+      "age": "45歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_白石れみ",
+      "name": "白石れみ",
+      "age": "42歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_織田あやか",
+      "name": "織田あやか",
+      "age": "37歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_奥山ひびき",
+      "name": "奥山ひびき",
+      "age": "43歳",
+      "height": "175cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_若宮みゆ",
+      "name": "若宮みゆ",
+      "age": "42歳",
+      "height": "147cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_小川みゆき",
+      "name": "小川みゆき",
+      "age": "40歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_熊沢あめ",
+      "name": "熊沢あめ",
+      "age": "33歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_伊藤るみ",
+      "name": "伊藤るみ",
+      "age": "40歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_水川えりか",
+      "name": "水川えりか",
+      "age": "42歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_清宮まりな",
+      "name": "清宮まりな",
+      "age": "40歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_持田あやみ",
+      "name": "持田あやみ",
+      "age": "32歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_大和なつめ",
+      "name": "大和なつめ",
+      "age": "45歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_倉田るか",
+      "name": "倉田るか",
+      "age": "44歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_及川りか",
+      "name": "及川りか",
+      "age": "45歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_真木あおい",
+      "name": "真木あおい",
+      "age": "41歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_深沢まみ",
+      "name": "深沢まみ",
+      "age": "42歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_三上あこ",
+      "name": "三上あこ",
+      "age": "37歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_沢口りょうか",
+      "name": "沢口りょうか",
+      "age": "45歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_橋本なお",
+      "name": "橋本なお",
+      "age": "42歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_華山さくら",
+      "name": "華山さくら",
+      "age": "35歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_吉岡みき",
+      "name": "吉岡みき",
+      "age": "42歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_椿りこ",
+      "name": "椿りこ",
+      "age": "37歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_原あずさ",
+      "name": "原あずさ",
+      "age": "39歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_藤原みほ",
+      "name": "藤原みほ",
+      "age": "38歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_相川なつき",
+      "name": "相川なつき",
+      "age": "37歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_森永あゆ",
+      "name": "森永あゆ",
+      "age": "45歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_桜木みなみ",
+      "name": "桜木みなみ",
+      "age": "38歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_五十嵐かずみ",
+      "name": "五十嵐かずみ",
+      "age": "46歳",
+      "height": "160.3cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_瀬戸かおる",
+      "name": "瀬戸かおる",
+      "age": "42歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_市川カリナ",
+      "name": "市川カリナ",
+      "age": "36歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_森高つばき",
+      "name": "森高つばき",
+      "age": "44歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_黒木ゆう",
+      "name": "黒木ゆう",
+      "age": "42歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_羽生いるみ",
+      "name": "羽生いるみ",
+      "age": "38歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_北川のぞみ",
+      "name": "北川のぞみ",
+      "age": "36歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_平松ゆりか",
+      "name": "平松ゆりか",
+      "age": "35歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "otonaspa_浅倉ななみ",
+      "name": "浅倉ななみ",
+      "age": "46歳",
+      "height": "174cm",
+      "bust": null
+    }
+  ]
+}

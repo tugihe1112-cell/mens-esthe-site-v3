@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_setagaya_sangenjaya_sancha_bijin",
+  "name": "三茶美人",
+  "prefecture": "東京都",
+  "city": "世田谷区",
+  "area": "三軒茶屋",
+  "address": "東京都世田谷区三軒茶屋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分14,000円～",
+  "hours": "10:00～翌6:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://aroma-bijin.com/",
+  "nearestStation": "三軒茶屋駅",
+  "description": "三軒茶屋の日本人リラクゼーション。 / サンクスキャンペーン(全コース1,000円OFF): 70分14,000円 / 90分18,000円 / 120分23,000円 / 150分28,000円 / 180分33,000円",
+  "threads": [],
+  "brandId": "sancha_bijin",
+  "therapists": []
+}

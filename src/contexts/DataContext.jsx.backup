@@ -1,0 +1,121 @@
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+
+const ShopContext = createContext();
+
+export const DataProvider = ({ children }) => {
+  const [shops, setShops] = useState([]);
+  const [therapists, setTherapists] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [version, setVersion] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [shopsRes, therapistsRes, reviewsRes, versionRes] = await Promise.all([
+          fetch('/data/all_shops.json'),
+          fetch('/data/therapists.json'),
+          fetch('/data/reviews.json').catch(() => ({ json: () => [] })),
+          fetch('/data/version.json').catch(() => ({ json: () => null }))
+        ]);
+
+        const rawShops = await shopsRes.json();
+        const therapistsData = await therapistsRes.json();
+        const reviewsData = await reviewsRes.json();
+        const versionData = await versionRes.json();
+
+        // ★重複IDの強制排除ロジック (Duplicates Killer)
+        const uniqueShopsMap = new Map();
+        rawShops.forEach(shop => {
+          if (!shop.id) return;
+          // まだ登録されていないIDなら登録（最初に見つかったものを正とする）
+          if (!uniqueShopsMap.has(shop.id)) {
+            uniqueShopsMap.set(shop.id, shop);
+          }
+        });
+        const uniqueShops = Array.from(uniqueShopsMap.values());
+
+        // クチコミの集計処理
+        const enrichedShops = uniqueShops.map(shop => {
+          const shopReviews = reviewsData.filter(r => r.shop_id === shop.id || r.group_id === shop.group_id);
+          const totalScore = shopReviews.reduce((sum, r) => sum + Number(r.rating || 0), 0);
+          const count = shopReviews.length;
+          
+          return {
+            ...shop,
+            reviews: shopReviews.sort((a, b) => new Date(b.date) - new Date(a.date)),
+            rating: count > 0 ? Math.round((totalScore / count) * 10) / 10 : 0,
+            reviewCount: count
+          };
+        });
+
+        setShops(enrichedShops);
+        setTherapists(therapistsData);
+        setReviews(reviewsData);
+        setVersion(versionData?.updatedAt);
+        setLoading(false);
+
+      } catch (error) {
+        console.error("❌ Data fetch failed:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // 高速検索用インデックス
+  const shopById = useMemo(() => {
+    return shops.reduce((acc, shop) => {
+      acc[shop.id] = shop;
+      return acc;
+    }, {});
+  }, [shops]);
+
+  const therapistById = useMemo(() => {
+    return therapists.reduce((acc, t) => {
+      acc[t.id] = t;
+      if (t.shop_id && shopById[t.shop_id]) {
+        t.shop_name = shopById[t.shop_id].name;
+      }
+      return acc;
+    }, {});
+  }, [therapists, shopById]);
+
+  // 最強のセラピスト検索関数
+  const getTherapistsByShopId = (shopId) => {
+    if (!shopId || !therapists.length) return [];
+    const shop = shopById[shopId];
+    if (!shop) return [];
+    
+    // 旧仕様: 店舗が名簿を持っている
+    if (shop.therapists && Array.isArray(shop.therapists) && shop.therapists.length > 0) {
+      return shop.therapists.map(id => therapistById[id]).filter(Boolean);
+    }
+
+    // 新仕様: セラピストが所属を知っている
+    return therapists.filter(t => {
+      if (shop.group_id && t.group_id === shop.group_id) return true;
+      return t.shop_id === shop.id;
+    });
+  };
+
+  return (
+    <ShopContext.Provider value={{ 
+      shops, 
+      therapists, 
+      reviews,
+      loading, 
+      shopById,      
+      therapistById, 
+      getTherapistsByShopId,
+      version 
+    }}>
+      {children}
+    </ShopContext.Provider>
+  );
+};
+
+export const useShopData = () => {
+  return useContext(ShopContext);
+};

@@ -1,0 +1,42 @@
+{
+  "id": "tokyo_sumida_ryougoku_otonaspa_kutsurogi",
+  "name": "大人スパ くつろぎ 両国",
+  "url": "https://otonaspa.pwchp.com/",
+  "area": "両国",
+  "price": "12,000円〜",
+  "interview": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "courses": [
+    {
+      "minutes": 60,
+      "price": "12,000"
+    },
+    {
+      "minutes": 90,
+      "price": "14,000"
+    },
+    {
+      "minutes": 120,
+      "price": "18,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "墨田区",
+  "brandId": "otonaspa_kutsurogi",
+  "threads": [],
+  "therapists": [
+    "otonaspa_kutsurogi_藤咲(ふじさき)",
+    "otonaspa_kutsurogi_愛原(あいはら)",
+    "otonaspa_kutsurogi_橋本（はしもと）",
+    "otonaspa_kutsurogi_菊池(きくち)",
+    "otonaspa_kutsurogi_出口(でぐち)",
+    "otonaspa_kutsurogi_結城(ゆうき)",
+    "otonaspa_kutsurogi_雪野(ゆきの)",
+    "otonaspa_kutsurogi_北原(きたはら)",
+    "otonaspa_kutsurogi_壇（だん）",
+    "otonaspa_kutsurogi_並木(なみき)",
+    "otonaspa_kutsurogi_野原(のはら)"
+  ]
+}

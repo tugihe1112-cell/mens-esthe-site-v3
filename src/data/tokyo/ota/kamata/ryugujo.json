@@ -1,0 +1,28 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム",
+    "熟女"
+  ],
+  "websiteUrl": "https://esthe-ryugujo.com/",
+  "description": "人形町・門前仲町・銀座・沼津・蒲田のリラクゼーション。大人のための隠れ家サロン。",
+  "brandId": "ryugujo",
+  "threads": [],
+  "id": "tokyo_ota_kamata_ryugujo",
+  "name": "竜宮城 旧百万石 (蒲田店)",
+  "prefecture": "東京都",
+  "city": "大田区",
+  "area": "蒲田",
+  "nearestStation": "蒲田駅",
+  "address": "東京都大田区蒲田エリア",
+  "therapists": []
+}

@@ -1,0 +1,36 @@
+{
+  "id": 60319,
+  "name": "Poonys (プーニーズ)",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都渋谷区千駄ヶ谷5-16-16 フラワーマンション (最寄: 代々木駅東口 徒歩5分)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 15,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "color": "from-pink-500 to-rose-400",
+  "tags": [
+    "日本人",
+    "ルーム",
+    "マシュマロ",
+    "ぽっちゃり"
+  ],
+  "websiteUrl": "https://www.poonys.tokyo/",
+  "note": "系列店：ビコーズ (旧リオン)",
+  "threads": [],
+  "therapists": [
+    "unknown_みく",
+    "unknown_なな",
+    "unknown_エマ",
+    "unknown_らん",
+    "unknown_りん",
+    "unknown_せいな",
+    "unknown_芙美(FUMI)",
+    "unknown_よしの",
+    "unknown_かすみ"
+  ],
+  "area": "代々木・原宿"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "tokyo_shibuya_yoyogi_harajuku_a5spa",
+  "name": "A5 SPA (エーゴスパ)",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "area": "代々木・原宿",
+  "address": "東京都渋谷区代々木・原宿エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://www.a5spa.com/",
+  "nearestStation": "原宿駅",
+  "description": "渋谷・五反田・代々木・新宿の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分20,000円",
+  "threads": [],
+  "brandId": "a5spa",
+  "therapists": []
+}

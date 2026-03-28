@@ -1,0 +1,84 @@
+{
+  "id": "tokyo_shinjuku_shinjuku_first",
+  "name": "First (ファースト) 新宿店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "新宿",
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "出張可能"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "60分",
+        "price": "13,000円"
+      },
+      {
+        "time": "90分",
+        "price": "19,000円"
+      },
+      {
+        "time": "120分",
+        "price": "25,000円"
+      },
+      {
+        "time": "150分",
+        "price": "31,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 20分",
+        "price": "6,000円"
+      },
+      {
+        "name": "ネット(写真)指名料",
+        "price": "1,000円"
+      }
+    ]
+  },
+  "url": "https://esthe-first.com/",
+  "threads": [],
+  "brandId": "first",
+  "therapists": [
+    "first_辻せりな",
+    "first_北川みな",
+    "first_藤崎さや",
+    "first_白石れい",
+    "first_白川あい",
+    "first_高瀬かえで",
+    "first_結城めい",
+    "first_黒田みゆ",
+    "first_真白かりん",
+    "first_水沢かすみ",
+    "first_川口あこ",
+    "first_山中みく",
+    "first_中野さな",
+    "first_椿ゆきの",
+    "first_星野みき",
+    "first_綾瀬せいら",
+    "first_中村りりあ",
+    "first_宮崎りり",
+    "first_北川すず",
+    "first_水瀬みおん",
+    "first_小森ゆあ",
+    "first_水野みき",
+    "first_風間つばき",
+    "first_森すみか",
+    "first_白井ゆき",
+    "first_織田もも",
+    "first_木村さき",
+    "first_真野ゆな",
+    "first_森田りこ",
+    "first_白咲なな",
+    "first_佐藤ふうか",
+    "first_白石なお",
+    "first_上原ゆあ",
+    "first_福美れい",
+    "first_彩川みゆき",
+    "first_大槻かな"
+  ]
+}

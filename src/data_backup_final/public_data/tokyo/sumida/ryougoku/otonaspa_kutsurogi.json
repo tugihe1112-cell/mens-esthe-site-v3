@@ -1,0 +1,119 @@
+{
+  "id": "tokyo_sumida_ryougoku_otonaspa_kutsurogi",
+  "name": "大人スパ くつろぎ 両国",
+  "url": "https://otonaspa.pwchp.com/",
+  "area": "両国",
+  "price": "12,000円〜",
+  "interview": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "courses": [
+    {
+      "minutes": 60,
+      "price": "12,000"
+    },
+    {
+      "minutes": 90,
+      "price": "14,000"
+    },
+    {
+      "minutes": 120,
+      "price": "18,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "墨田区",
+  "brandId": "otonaspa_kutsurogi",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "otonaspa_kutsurogi_藤咲(ふじさき)",
+      "name": "藤咲(ふじさき)",
+      "age": 33,
+      "height": 162,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_愛原(あいはら)",
+      "name": "愛原(あいはら)",
+      "age": 32,
+      "height": 156,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_橋本（はしもと）",
+      "name": "橋本（はしもと）",
+      "age": 28,
+      "height": 152,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_菊池(きくち)",
+      "name": "菊池(きくち)",
+      "age": 32,
+      "height": 160,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_出口(でぐち)",
+      "name": "出口(でぐち)",
+      "age": 23,
+      "height": 165,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_結城(ゆうき)",
+      "name": "結城(ゆうき)",
+      "age": 29,
+      "height": 152,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_雪野(ゆきの)",
+      "name": "雪野(ゆきの)",
+      "age": 27,
+      "height": 159,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_北原(きたはら)",
+      "name": "北原(きたはら)",
+      "age": 27,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_壇（だん）",
+      "name": "壇（だん）",
+      "age": 35,
+      "height": 155,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_並木(なみき)",
+      "name": "並木(なみき)",
+      "age": 35,
+      "height": 160,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "otonaspa_kutsurogi_野原(のはら)",
+      "name": "野原(のはら)",
+      "age": 28,
+      "height": 158,
+      "bust": "(F)",
+      "tags": []
+    }
+  ]
+}

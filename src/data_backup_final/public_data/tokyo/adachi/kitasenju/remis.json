@@ -1,0 +1,319 @@
+{
+  "id": "tokyo_adachi_kitasenju_remis",
+  "name": "ランス (REMIS) 旧ニルス",
+  "url": "https://remis-esthe.com/",
+  "area": "北千住",
+  "price": "16,000円〜",
+  "interview": false,
+  "courses": [
+    {
+      "minutes": 60,
+      "price": "16,000"
+    },
+    {
+      "minutes": 70,
+      "price": "18,000"
+    },
+    {
+      "minutes": 90,
+      "price": "18,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "足立区",
+  "brandId": "remis",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "remis_如月 なな",
+      "name": "如月 なな",
+      "age": 24,
+      "height": 150,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_花園 あやか",
+      "name": "花園 あやか",
+      "age": 22,
+      "height": 157,
+      "bust": "(F)"
+    },
+    {
+      "id": "remis_桃瀬 ひめの",
+      "name": "桃瀬 ひめの",
+      "age": 21,
+      "height": 158,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_天道 さんご",
+      "name": "天道 さんご",
+      "age": 23,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_初音 ありな",
+      "name": "初音 ありな",
+      "age": 22,
+      "height": 149,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_雨取 ちか",
+      "name": "雨取 ちか",
+      "age": 25,
+      "height": 162,
+      "bust": "(F)"
+    },
+    {
+      "id": "remis_石原 まいか",
+      "name": "石原 まいか",
+      "age": 22,
+      "height": 155,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_日向 りの",
+      "name": "日向 りの",
+      "age": 23,
+      "height": 162,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_椿 ひかり",
+      "name": "椿 ひかり",
+      "age": 22,
+      "height": 160,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_源 ゆいな",
+      "name": "源 ゆいな",
+      "age": 22,
+      "height": 160,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_桜宮 ひめな",
+      "name": "桜宮 ひめな",
+      "age": 20,
+      "height": 151,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_葉月 まふゆ",
+      "name": "葉月 まふゆ",
+      "age": 23,
+      "height": 163,
+      "bust": "(F)"
+    },
+    {
+      "id": "remis_山野 めい",
+      "name": "山野 めい",
+      "age": 18,
+      "height": 170,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_水瀬 りおん",
+      "name": "水瀬 りおん",
+      "age": 22,
+      "height": 164,
+      "bust": "(H)"
+    },
+    {
+      "id": "remis_一ノ瀬 なぎ",
+      "name": "一ノ瀬 なぎ",
+      "age": 23,
+      "height": 160,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_白金 ゆうり",
+      "name": "白金 ゆうり",
+      "age": 20,
+      "height": 154,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_桜花 しおり",
+      "name": "桜花 しおり",
+      "age": 20,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_滝沢 さき",
+      "name": "滝沢 さき",
+      "age": 27,
+      "height": 153,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_津代 あいか",
+      "name": "津代 あいか",
+      "age": 22,
+      "height": 161,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_流川 かれん",
+      "name": "流川 かれん",
+      "age": 20,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_愛川 なつみ",
+      "name": "愛川 なつみ",
+      "age": 21,
+      "height": 161,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_白雪 ひめか",
+      "name": "白雪 ひめか",
+      "age": 25,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_有沙 りこ",
+      "name": "有沙 りこ",
+      "age": 21,
+      "height": 156,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_瀬尾 ゆづき",
+      "name": "瀬尾 ゆづき",
+      "age": 21,
+      "height": 154,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_君島 みやび",
+      "name": "君島 みやび",
+      "age": 26,
+      "height": 164,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_天宮 しずく",
+      "name": "天宮 しずく",
+      "age": 22,
+      "height": 147,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_藤和 えり",
+      "name": "藤和 えり",
+      "age": 23,
+      "height": 157,
+      "bust": "(F)"
+    },
+    {
+      "id": "remis_月島 もえ",
+      "name": "月島 もえ",
+      "age": 20,
+      "height": 150,
+      "bust": "(G)"
+    },
+    {
+      "id": "remis_四ノ宮 れな",
+      "name": "四ノ宮 れな",
+      "age": 23,
+      "height": 156,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_岸川 あい",
+      "name": "岸川 あい",
+      "age": 24,
+      "height": 152,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_伊波 ゆうな",
+      "name": "伊波 ゆうな",
+      "age": 22,
+      "height": 167,
+      "bust": "(D)"
+    },
+    {
+      "id": "remis_沢田 まみ",
+      "name": "沢田 まみ",
+      "age": 20,
+      "height": 158,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_五月女 なつか",
+      "name": "五月女 なつか",
+      "age": 20,
+      "height": 160,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_東堂 みさ",
+      "name": "東堂 みさ",
+      "age": 22,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_藤咲 のあ",
+      "name": "藤咲 のあ",
+      "age": 21,
+      "height": 156,
+      "bust": "(F)"
+    },
+    {
+      "id": "remis_小鳥遊 まりな",
+      "name": "小鳥遊 まりな",
+      "age": 21,
+      "height": 155,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_愛月 るな",
+      "name": "愛月 るな",
+      "age": 23,
+      "height": 150,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_成瀬 ここあ",
+      "name": "成瀬 ここあ",
+      "age": 19,
+      "height": 168,
+      "bust": "(C)"
+    },
+    {
+      "id": "remis_春先 こはる",
+      "name": "春先 こはる",
+      "age": 25,
+      "height": 165,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_白石 あんな",
+      "name": "白石 あんな",
+      "age": 20,
+      "height": 165,
+      "bust": "(E)"
+    },
+    {
+      "id": "remis_香月 あみ",
+      "name": "香月 あみ",
+      "age": 20,
+      "height": 166,
+      "bust": "(D)"
+    }
+  ]
+}

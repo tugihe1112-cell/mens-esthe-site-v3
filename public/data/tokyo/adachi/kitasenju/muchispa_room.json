@@ -1,0 +1,42 @@
+{
+  "id": "tokyo_adachi_kitasenju_muchispa_room",
+  "name": "むちすぱルーム 北千住",
+  "url": "https://muchispa.com/",
+  "area": "北千住",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK",
+    "個室あり",
+    "深夜営業"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "足立区",
+  "brandId": "muchispa_room",
+  "threads": [],
+  "therapists": [
+    "muchispa_room_長谷川 みか",
+    "muchispa_room_佐々木 あい",
+    "muchispa_room_田中 ゆり",
+    "muchispa_room_中村 さき"
+  ]
+}

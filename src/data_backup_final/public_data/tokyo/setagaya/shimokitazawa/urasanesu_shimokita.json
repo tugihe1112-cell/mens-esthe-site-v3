@@ -1,0 +1,240 @@
+{
+  "id": 60202,
+  "name": "UraSanEsu (下北沢店)",
+  "prefecture": "東京都",
+  "city": "下北沢",
+  "region": "関東エリア",
+  "address": "東京都世田谷区 (最寄: 下北沢駅)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "11:00～29:00",
+  "isPremium": false,
+  "color": "from-teal-400 to-emerald-500",
+  "tags": [
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://shimoesu.com/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_三浦みさと",
+      "name": "三浦みさと",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "T163",
+        "B(D)"
+      ]
+    },
+    {
+      "id": "unknown_有村にちか",
+      "name": "有村にちか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳",
+        "T153",
+        "B(E)"
+      ]
+    },
+    {
+      "id": "unknown_七瀬つむぎ",
+      "name": "七瀬つむぎ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T157",
+        "B83(C)",
+        "W56",
+        "H84"
+      ]
+    },
+    {
+      "id": "unknown_市川あかり",
+      "name": "市川あかり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳",
+        "T160",
+        "B(C)"
+      ]
+    },
+    {
+      "id": "unknown_望月りな",
+      "name": "望月りな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T147",
+        "B85(D)",
+        "W56",
+        "H83"
+      ]
+    },
+    {
+      "id": "unknown_伊藤なこ",
+      "name": "伊藤なこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳",
+        "T163",
+        "B84(D)",
+        "W60",
+        "H85"
+      ]
+    },
+    {
+      "id": "unknown_川村もか",
+      "name": "川村もか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T153",
+        "B82(E)",
+        "W55",
+        "H85"
+      ]
+    },
+    {
+      "id": "unknown_桜木ゆり",
+      "name": "桜木ゆり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "T157",
+        "B87(E)",
+        "W58",
+        "H88"
+      ]
+    },
+    {
+      "id": "unknown_柚木みお",
+      "name": "柚木みお",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T155",
+        "B84(D)",
+        "W61",
+        "H82"
+      ]
+    },
+    {
+      "id": "unknown_工藤ゆうか",
+      "name": "工藤ゆうか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "37歳",
+        "T155",
+        "B84(C)",
+        "W58",
+        "H88"
+      ]
+    },
+    {
+      "id": "unknown_瀬戸あいこ",
+      "name": "瀬戸あいこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳",
+        "T155",
+        "B83(D)",
+        "W58",
+        "H80"
+      ]
+    },
+    {
+      "id": "unknown_楓ゆい",
+      "name": "楓ゆい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "T166",
+        "B98(G)",
+        "W69",
+        "H90"
+      ]
+    },
+    {
+      "id": "unknown_斎藤ひかる",
+      "name": "斎藤ひかる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳",
+        "T155",
+        "B87(E)",
+        "W60",
+        "H87"
+      ]
+    },
+    {
+      "id": "unknown_朝比奈ゆう",
+      "name": "朝比奈ゆう",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "T165",
+        "B80(D)",
+        "W60",
+        "H85"
+      ]
+    },
+    {
+      "id": "unknown_清水りりか",
+      "name": "清水りりか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T158",
+        "B(D)"
+      ]
+    },
+    {
+      "id": "unknown_泉ねね",
+      "name": "泉ねね",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T153",
+        "B84(D)",
+        "W60",
+        "H86"
+      ]
+    }
+  ],
+  "area": "下北沢"
+}

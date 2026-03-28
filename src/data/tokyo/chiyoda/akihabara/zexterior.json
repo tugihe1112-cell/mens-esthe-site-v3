@@ -1,0 +1,82 @@
+{
+  "id": "tokyo_chiyoda_akihabara_zexterior",
+  "name": "Zexterior (旧アンビエンス) 秋葉原店",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "秋葉原",
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "90分",
+        "price": "19,000円"
+      },
+      {
+        "time": "120分",
+        "price": "24,000円"
+      },
+      {
+        "time": "150分",
+        "price": "29,000円"
+      }
+    ],
+    "special": []
+  },
+  "url": "https://zexterior-aroma.com/",
+  "threads": [],
+  "brandId": "zexterior",
+  "therapists": [
+    "zexterior_瑞樹 なつ",
+    "zexterior_皐月 杏奈",
+    "zexterior_一条 カレン",
+    "zexterior_稲森 莉子",
+    "zexterior_青山 桜",
+    "zexterior_月詠 茉都香",
+    "zexterior_天海 亜來",
+    "zexterior_水瀬 うらら",
+    "zexterior_咲良 ゆり",
+    "zexterior_輝夜 純連",
+    "zexterior_冬篠宮 佳子",
+    "zexterior_宮野 桃",
+    "zexterior_冴島 きょうか",
+    "zexterior_村岡 美咲",
+    "zexterior_桃川 理亜",
+    "zexterior_夏目 沙也加",
+    "zexterior_早川 ゆき",
+    "zexterior_田中 ゆら",
+    "zexterior_神野 沙也加",
+    "zexterior_柏木 ひより",
+    "zexterior_渚 弥生",
+    "zexterior_千秋 世奈",
+    "zexterior_似鳥 芹香",
+    "zexterior_姫乃 澪",
+    "zexterior_峰山 結衣",
+    "zexterior_早乙女 夜狐",
+    "zexterior_香山 里香",
+    "zexterior_神薙 雫",
+    "zexterior_東条 百華",
+    "zexterior_河合 千鶴",
+    "zexterior_桜井 梨花",
+    "zexterior_楪 れい",
+    "zexterior_山崎 由芽",
+    "zexterior_星崎 菜衣",
+    "zexterior_波多野 莉奈",
+    "zexterior_橘 花奈",
+    "zexterior_七瀬 凛々",
+    "zexterior_希南 飛鳥",
+    "zexterior_杉原 成美",
+    "zexterior_天使 姫華",
+    "zexterior_坂井 都",
+    "zexterior_ひろか",
+    "zexterior_皇名 飛鳥",
+    "zexterior_二宮 萌沙",
+    "zexterior_美沙希 和香",
+    "zexterior_久宝 由奈",
+    "zexterior_桃瀬 にこる",
+    "zexterior_蒼井 瑠菜"
+  ]
+}

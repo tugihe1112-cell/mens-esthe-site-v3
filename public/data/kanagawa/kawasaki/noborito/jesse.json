@@ -1,0 +1,623 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 14,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://ms-jesse.com/",
+  "description": "登戸・溝の口・武蔵小杉・調布・二子玉川で展開するメンズエステ。質の高いセラピストが多数在籍。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業"
+  ],
+  "brandId": "jesse",
+  "threads": [
+    {
+      "id": "jesse_1",
+      "therapistName": "あいり",
+      "name": "あいり",
+      "age": "23歳",
+      "height": "158cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_2",
+      "therapistName": "天使りん",
+      "name": "天使りん",
+      "age": "22歳",
+      "height": "152cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_3",
+      "therapistName": "ほのか",
+      "name": "ほのか",
+      "age": "21歳",
+      "height": "158cm",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "jesse_4",
+      "therapistName": "らむ",
+      "name": "らむ",
+      "age": "26歳",
+      "height": "159cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_5",
+      "therapistName": "なな",
+      "name": "なな",
+      "age": "24歳",
+      "height": "150cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_6",
+      "therapistName": "めぐ",
+      "name": "めぐ",
+      "age": "25歳",
+      "height": "154cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_7",
+      "therapistName": "ここ",
+      "name": "ここ",
+      "age": "22歳",
+      "height": "156cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_8",
+      "therapistName": "しずく",
+      "name": "しずく",
+      "age": "21歳",
+      "height": "157cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_9",
+      "therapistName": "くるみ",
+      "name": "くるみ",
+      "age": "20歳",
+      "height": "158cm",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "jesse_10",
+      "therapistName": "みこと",
+      "name": "みこと",
+      "age": "24歳",
+      "height": "155cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_11",
+      "therapistName": "のあ",
+      "name": "のあ",
+      "age": "22歳",
+      "height": "156cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_12",
+      "therapistName": "はるか",
+      "name": "はるか",
+      "age": "24歳",
+      "height": "162cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_13",
+      "therapistName": "まなか",
+      "name": "まなか",
+      "age": "26歳",
+      "height": "154cm",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "jesse_14",
+      "therapistName": "いろは",
+      "name": "いろは",
+      "age": "19歳",
+      "height": "156cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_15",
+      "therapistName": "るか",
+      "name": "るか",
+      "age": "21歳",
+      "height": "160cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_16",
+      "therapistName": "ゆい",
+      "name": "ゆい",
+      "age": "25歳",
+      "height": "160cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_17",
+      "therapistName": "すい",
+      "name": "すい",
+      "age": "21歳",
+      "height": "158cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_18",
+      "therapistName": "ゆずは",
+      "name": "ゆずは",
+      "age": "24歳",
+      "height": "168cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_19",
+      "therapistName": "ねね",
+      "name": "ねね",
+      "age": "24歳",
+      "height": "153cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_20",
+      "therapistName": "りほ",
+      "name": "りほ",
+      "age": "24歳",
+      "height": "158cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_21",
+      "therapistName": "りさ",
+      "name": "りさ",
+      "age": "24歳",
+      "height": "157cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_22",
+      "therapistName": "おとは",
+      "name": "おとは",
+      "age": "24歳",
+      "height": "164cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_23",
+      "therapistName": "ひかり",
+      "name": "ひかり",
+      "age": "23歳",
+      "height": "157cm",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "jesse_24",
+      "therapistName": "こいと",
+      "name": "こいと",
+      "age": "22歳",
+      "height": "155cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_25",
+      "therapistName": "ふみか",
+      "name": "ふみか",
+      "age": "25歳",
+      "height": "156cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_26",
+      "therapistName": "りお",
+      "name": "りお",
+      "age": "22歳",
+      "height": "162cm",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "jesse_27",
+      "therapistName": "かれん",
+      "name": "かれん",
+      "age": "25歳",
+      "height": "172cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_28",
+      "therapistName": "ゆな",
+      "name": "ゆな",
+      "age": "20歳",
+      "height": "159cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_29",
+      "therapistName": "ゆわ",
+      "name": "ゆわ",
+      "age": "21歳",
+      "height": "160cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_30",
+      "therapistName": "きょう",
+      "name": "きょう",
+      "age": "25歳",
+      "height": "158cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_31",
+      "therapistName": "まいか",
+      "name": "まいか",
+      "age": "26歳",
+      "height": "160cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_32",
+      "therapistName": "すず",
+      "name": "すず",
+      "age": "21歳",
+      "height": "159cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_33",
+      "therapistName": "ふうか",
+      "name": "ふうか",
+      "age": "24歳",
+      "height": "155cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_34",
+      "therapistName": "きい",
+      "name": "きい",
+      "age": "23歳",
+      "height": "150cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_35",
+      "therapistName": "ななお",
+      "name": "ななお",
+      "age": "25歳",
+      "height": "160cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_36",
+      "therapistName": "あい",
+      "name": "あい",
+      "age": "22歳",
+      "height": "158cm",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "jesse_37",
+      "therapistName": "いちご",
+      "name": "いちご",
+      "age": "24歳",
+      "height": "153cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_38",
+      "therapistName": "あず",
+      "name": "あず",
+      "age": "23歳",
+      "height": "160cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_39",
+      "therapistName": "めい",
+      "name": "めい",
+      "age": "24歳",
+      "height": "156cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_40",
+      "therapistName": "ひな",
+      "name": "ひな",
+      "age": "25歳",
+      "height": "160cm",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "jesse_41",
+      "therapistName": "しお",
+      "name": "しお",
+      "age": "23歳",
+      "height": "166cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_42",
+      "therapistName": "あすな",
+      "name": "あすな",
+      "age": "26歳",
+      "height": "162cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_43",
+      "therapistName": "ゆり",
+      "name": "ゆり",
+      "age": "19歳",
+      "height": "157cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_44",
+      "therapistName": "さや",
+      "name": "さや",
+      "age": "25歳",
+      "height": "158cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_45",
+      "therapistName": "むく",
+      "name": "むく",
+      "height": "158cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_46",
+      "therapistName": "なずな",
+      "name": "なずな",
+      "height": "158cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_47",
+      "therapistName": "うゆ",
+      "name": "うゆ",
+      "age": "23歳",
+      "height": "164cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_48",
+      "therapistName": "えれな",
+      "name": "えれな",
+      "age": "20歳",
+      "height": "158cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_49",
+      "therapistName": "みか",
+      "name": "みか",
+      "age": "22歳",
+      "height": "158cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_50",
+      "therapistName": "さな",
+      "name": "さな",
+      "age": "25歳",
+      "height": "160cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_51",
+      "therapistName": "しおり",
+      "name": "しおり",
+      "age": "24歳",
+      "height": "159cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_52",
+      "therapistName": "みお",
+      "name": "みお",
+      "age": "25歳",
+      "height": "158cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_53",
+      "therapistName": "ゆうり",
+      "name": "ゆうり",
+      "age": "22歳",
+      "height": "160cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_54",
+      "therapistName": "すずか",
+      "name": "すずか",
+      "age": "26歳",
+      "height": "163cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_55",
+      "therapistName": "りりか",
+      "name": "りりか",
+      "age": "22歳",
+      "height": "162cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_56",
+      "therapistName": "ちひろ",
+      "name": "ちひろ",
+      "age": "27歳",
+      "height": "159cm",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "jesse_57",
+      "therapistName": "もも",
+      "name": "もも",
+      "age": "22歳",
+      "height": "157cm",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "jesse_58",
+      "therapistName": "るな",
+      "name": "るな",
+      "age": "19歳",
+      "height": "159cm",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "jesse_59",
+      "therapistName": "まなみ",
+      "name": "まなみ",
+      "age": "24歳",
+      "height": "154cm",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "jesse_60",
+      "therapistName": "姫宮あみ",
+      "name": "姫宮あみ",
+      "age": "26歳",
+      "height": "155cm",
+      "tags": [
+        "Iカップ"
+      ]
+    }
+  ],
+  "id": "kanagawa_kawasaki_noborito_jesse",
+  "name": "Jesse (ジェシー 登戸店)",
+  "prefecture": "神奈川県",
+  "city": "川崎市",
+  "area": "登戸",
+  "nearestStation": "登戸駅",
+  "address": "神奈川県川崎市エリア"
+}

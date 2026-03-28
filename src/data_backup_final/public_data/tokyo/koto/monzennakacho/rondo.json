@@ -1,0 +1,557 @@
+{
+  "id": "tokyo_koto_monzennakacho_rondo",
+  "name": "ロンド 旧下弦の月 (門前仲町店)",
+  "prefecture": "東京都",
+  "city": "江東区",
+  "area": "門前仲町",
+  "address": "東京都江東区門前仲町エリア",
+  "nearestStation": "門前仲町駅",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分17,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://ginza-kiwami.com/",
+  "description": "門前仲町・九段下・銀座の日本人リラクゼーション。 / 料金システム: 80分17,000円〜 / 100分21,000円〜",
+  "tags": [
+    "複数エリア展開",
+    "日本人",
+    "一般ルーム",
+    "深夜営業"
+  ],
+  "brandId": "rondo",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "rondo_柊",
+      "name": "柊",
+      "age": 41,
+      "height": 163,
+      "bust": "(E)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "rondo_瞳",
+      "name": "瞳",
+      "age": 38,
+      "height": 161,
+      "bust": "(E)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "rondo_雪",
+      "name": "雪",
+      "age": 40,
+      "height": 162,
+      "bust": "(E)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "rondo_絃",
+      "name": "絃",
+      "age": 44,
+      "height": 157,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_愛",
+      "name": "愛",
+      "age": 32,
+      "height": 165,
+      "bust": "(E)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "rondo_尚",
+      "name": "尚",
+      "age": 42,
+      "height": 161,
+      "bust": "(G)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "rondo_雅",
+      "name": "雅",
+      "age": 35,
+      "height": 161,
+      "bust": "(G)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "rondo_和",
+      "name": "和",
+      "age": 45,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "rondo_紗",
+      "name": "紗",
+      "age": 34,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "rondo_密",
+      "name": "密",
+      "age": 42,
+      "height": 163,
+      "bust": "(E)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "rondo_汐",
+      "name": "汐",
+      "age": 26,
+      "height": 160,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "rondo_虹",
+      "name": "虹",
+      "age": 39,
+      "height": 158,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "rondo_絆",
+      "name": "絆",
+      "age": 26,
+      "height": 159,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "rondo_翼",
+      "name": "翼",
+      "age": 38,
+      "height": 151,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_仲",
+      "name": "仲",
+      "age": 39,
+      "height": 163,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "rondo_廉",
+      "name": "廉",
+      "age": 40,
+      "height": 162,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "rondo_寧",
+      "name": "寧",
+      "age": 35,
+      "height": 159,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_雫",
+      "name": "雫",
+      "age": 33,
+      "height": 171,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_咲",
+      "name": "咲",
+      "age": 38,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_円",
+      "name": "円",
+      "age": 38,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_聡",
+      "name": "聡",
+      "age": 32,
+      "height": 152,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "rondo_南",
+      "name": "南",
+      "age": 31,
+      "height": 171,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_渚",
+      "name": "渚",
+      "age": 35,
+      "height": 156,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_潤",
+      "name": "潤",
+      "age": 44,
+      "height": 158,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "rondo_檀",
+      "name": "檀",
+      "age": 38,
+      "height": 169,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "rondo_怜",
+      "name": "怜",
+      "age": 31,
+      "height": 156,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_湊",
+      "name": "湊",
+      "age": 36,
+      "height": 156,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_聖",
+      "name": "聖",
+      "age": 40,
+      "height": 161,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "rondo_暖",
+      "name": "暖",
+      "age": 41,
+      "height": 151,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_秋",
+      "name": "秋",
+      "age": 42,
+      "height": 150,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_蛍",
+      "name": "蛍",
+      "age": 37,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_月",
+      "name": "月",
+      "age": 42,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_翠",
+      "name": "翠",
+      "age": 26,
+      "height": null,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "rondo_遥",
+      "name": "遥",
+      "age": 29,
+      "height": null,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_舞",
+      "name": "舞",
+      "age": 36,
+      "height": 155,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_音",
+      "name": "音",
+      "age": 38,
+      "height": 164,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_菫",
+      "name": "菫",
+      "age": 36,
+      "height": 160,
+      "bust": "(H)",
+      "tags": []
+    },
+    {
+      "id": "rondo_樹",
+      "name": "樹",
+      "age": 37,
+      "height": null,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "rondo_睦",
+      "name": "睦",
+      "age": 38,
+      "height": 156,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_希",
+      "name": "希",
+      "age": 36,
+      "height": null,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_椿",
+      "name": "椿",
+      "age": 38,
+      "height": 152,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "rondo_七",
+      "name": "七",
+      "age": 42,
+      "height": 165,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_巴",
+      "name": "巴",
+      "age": 48,
+      "height": 158,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_夢",
+      "name": "夢",
+      "age": 35,
+      "height": 165,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_律",
+      "name": "律",
+      "age": 43,
+      "height": 158,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_璃",
+      "name": "璃",
+      "age": 38,
+      "height": 169,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_光",
+      "name": "光",
+      "age": 35,
+      "height": 170,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_茜",
+      "name": "茜",
+      "age": 40,
+      "height": 159,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "rondo_紅",
+      "name": "紅",
+      "age": 44,
+      "height": null,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_あお",
+      "name": "あお",
+      "age": 29,
+      "height": 165,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "rondo_霞",
+      "name": "霞",
+      "age": 39,
+      "height": 159,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_夏",
+      "name": "夏",
+      "age": 28,
+      "height": 160,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_華",
+      "name": "華",
+      "age": 39,
+      "height": 155,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "rondo_蘭",
+      "name": "蘭",
+      "age": 44,
+      "height": 157,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_そう",
+      "name": "そう",
+      "age": 37,
+      "height": 152,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_琴",
+      "name": "琴",
+      "age": 43,
+      "height": 168,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "rondo_恵",
+      "name": "恵",
+      "age": 37,
+      "height": 164,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "rondo_歩",
+      "name": "歩",
+      "age": 37,
+      "height": 168,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_叶",
+      "name": "叶",
+      "age": 35,
+      "height": 158,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "rondo_杏",
+      "name": "杏",
+      "age": 38,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "rondo_綾",
+      "name": "綾",
+      "age": 38,
+      "height": 165,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "rondo_香",
+      "name": "香",
+      "age": 39,
+      "height": 162,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "rondo_凛",
+      "name": "凛",
+      "age": 36,
+      "height": 155,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "rondo_心",
+      "name": "心",
+      "age": 50,
+      "height": 166,
+      "bust": "(D)",
+      "tags": []
+    }
+  ]
+}

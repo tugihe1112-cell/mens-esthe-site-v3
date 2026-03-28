@@ -1,0 +1,812 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 4.5,
+  "reviewCount": 0,
+  "price": "90分20,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://aroma-maison.com/",
+  "description": "秋葉原・銀座・新橋に展開する日本人リラクゼーション。全店舗共通でセラピストが出勤します。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "カード払いOK"
+  ],
+  "brandId": "aroma_maison",
+  "threads": [],
+  "id": "tokyo_chuo_ginza_aroma_maison",
+  "name": "Aroma Maison (アロマメゾン 銀座店)",
+  "prefecture": "東京都",
+  "city": "中央区",
+  "area": "銀座",
+  "nearestStation": "銀座駅",
+  "address": "東京都中央区銀座エリア",
+  "therapists": [
+    {
+      "id": "aroma_maison_西城まな",
+      "name": "西城まな",
+      "age": "26歳",
+      "height": "167cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_白川みお",
+      "name": "白川みお",
+      "age": "27歳",
+      "height": "159cm",
+      "bust": "(Iカップ)"
+    },
+    {
+      "id": "aroma_maison_高見きょうこ",
+      "name": "高見きょうこ",
+      "age": "28歳",
+      "height": "168cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "aroma_maison_星月かすみ",
+      "name": "星月かすみ",
+      "age": "25歳",
+      "height": "151cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_紅葉りお",
+      "name": "紅葉りお",
+      "age": "29歳",
+      "height": "162cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "aroma_maison_椿いおり",
+      "name": "椿いおり",
+      "age": "26歳",
+      "height": "162cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_朝倉さやか",
+      "name": "朝倉さやか",
+      "age": "30歳",
+      "height": "169cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_堤あいり",
+      "name": "堤あいり",
+      "age": "28歳",
+      "height": "158cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_成瀬かりな",
+      "name": "成瀬かりな",
+      "age": "26歳",
+      "height": "168cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_緑川なつめ",
+      "name": "緑川なつめ",
+      "age": "27歳",
+      "height": "152cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_木村ゆめ",
+      "name": "木村ゆめ",
+      "age": "26歳",
+      "height": "162cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_香月ゆうか",
+      "name": "香月ゆうか",
+      "age": "23歳",
+      "height": "157cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_二階堂唯",
+      "name": "二階堂唯",
+      "age": "29歳",
+      "height": "167cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_神楽ゆら",
+      "name": "神楽ゆら",
+      "age": "23歳",
+      "height": "158cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_松嶋しおん",
+      "name": "松嶋しおん",
+      "age": "28歳",
+      "height": "163cm",
+      "bust": "(Hカップ)"
+    },
+    {
+      "id": "aroma_maison_園山なな",
+      "name": "園山なな",
+      "age": "29歳",
+      "height": "168cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_和泉しおん",
+      "name": "和泉しおん",
+      "age": "24歳",
+      "height": "163cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_琵琶りさ",
+      "name": "琵琶りさ",
+      "age": "25歳",
+      "height": "152cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "aroma_maison_栗原かのん",
+      "name": "栗原かのん",
+      "age": "26歳",
+      "height": "158cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_小原えみ",
+      "name": "小原えみ",
+      "age": "27歳",
+      "height": "156cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_近藤あみん",
+      "name": "近藤あみん",
+      "age": "25歳",
+      "height": "158cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_星咲れいか",
+      "name": "星咲れいか",
+      "age": "28歳",
+      "height": "160cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_萩原みくる",
+      "name": "萩原みくる",
+      "age": "28歳",
+      "height": "150cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_立華はな",
+      "name": "立華はな",
+      "age": "28歳",
+      "height": "168cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_市川ななせ",
+      "name": "市川ななせ",
+      "age": "24歳",
+      "height": "170cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "aroma_maison_佐野エリナ",
+      "name": "佐野エリナ",
+      "age": "27歳",
+      "height": "168cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_八坂さくら",
+      "name": "八坂さくら",
+      "age": "27歳",
+      "height": "158cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_谷あいり",
+      "name": "谷あいり",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_花形みずほ",
+      "name": "花形みずほ",
+      "age": "26歳",
+      "height": "158cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_日向りこ",
+      "name": "日向りこ",
+      "age": "25歳",
+      "height": "155cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "aroma_maison_巴みう",
+      "name": "巴みう",
+      "age": "26歳",
+      "height": "162cm",
+      "bust": "(Hカップ)"
+    },
+    {
+      "id": "aroma_maison_松若つばさ",
+      "name": "松若つばさ",
+      "age": "26歳",
+      "height": "154cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_雨宮さくら",
+      "name": "雨宮さくら",
+      "age": "23歳",
+      "height": "155cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_香椎りり",
+      "name": "香椎りり",
+      "age": "26歳",
+      "height": "163cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_吉瀬れいな",
+      "name": "吉瀬れいな",
+      "age": "32歳",
+      "height": "163cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_高槻カオリ",
+      "name": "高槻カオリ",
+      "age": "30歳",
+      "height": "163cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_上条ゆりあ",
+      "name": "上条ゆりあ",
+      "age": "29歳",
+      "height": "168cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_城咲ゆめ",
+      "name": "城咲ゆめ",
+      "age": "27歳",
+      "height": "168cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_天音りな",
+      "name": "天音りな",
+      "age": "25歳",
+      "height": "165cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_二宮ほたる",
+      "name": "二宮ほたる",
+      "age": "30歳",
+      "height": "164cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_桑澤ゆいな",
+      "name": "桑澤ゆいな",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": "(Hカップ)"
+    },
+    {
+      "id": "aroma_maison_葉加瀬りこ",
+      "name": "葉加瀬りこ",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_湊もも",
+      "name": "湊もも",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_宮沢ゆめ",
+      "name": "宮沢ゆめ",
+      "age": "28歳",
+      "height": "161cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_美原あゆな",
+      "name": "美原あゆな",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_神谷ゆき",
+      "name": "神谷ゆき",
+      "age": "23歳",
+      "height": "160cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_鈴原りり",
+      "name": "鈴原りり",
+      "age": "22歳",
+      "height": "162cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_睦月りり",
+      "name": "睦月りり",
+      "age": "29歳",
+      "height": "166cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_三雲あきな",
+      "name": "三雲あきな",
+      "age": "27歳",
+      "height": "160cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_北川まこ",
+      "name": "北川まこ",
+      "age": "28歳",
+      "height": "162cm",
+      "bust": "(Hカップ)"
+    },
+    {
+      "id": "aroma_maison_水無月ゆな",
+      "name": "水無月ゆな",
+      "age": "26歳",
+      "height": "168cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_鈴木こころ",
+      "name": "鈴木こころ",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": "(Iカップ)"
+    },
+    {
+      "id": "aroma_maison_真野みつき",
+      "name": "真野みつき",
+      "age": "31歳",
+      "height": "157cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_片桐あや",
+      "name": "片桐あや",
+      "age": "27歳",
+      "height": "166cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_永井すみれ",
+      "name": "永井すみれ",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_愛乃かのん",
+      "name": "愛乃かのん",
+      "age": "27歳",
+      "height": "150cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_真木れいか",
+      "name": "真木れいか",
+      "age": "26歳",
+      "height": "158cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_美浜りお",
+      "name": "美浜りお",
+      "age": "29歳",
+      "height": "162cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_皇いちか",
+      "name": "皇いちか",
+      "age": "26歳",
+      "height": "156cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_一条みさき",
+      "name": "一条みさき",
+      "age": "26歳",
+      "height": "163cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_桜坂ひめな",
+      "name": "桜坂ひめな",
+      "age": "22歳",
+      "height": "155cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_川合るな",
+      "name": "川合るな",
+      "age": "26歳",
+      "height": "157cm",
+      "bust": "(Hカップ)"
+    },
+    {
+      "id": "aroma_maison_東山れい",
+      "name": "東山れい",
+      "age": "23歳",
+      "height": "161cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_松浦あかり",
+      "name": "松浦あかり",
+      "age": "25歳",
+      "height": "162cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_河野みれい",
+      "name": "河野みれい",
+      "age": "24歳",
+      "height": "161cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_藤宮ゆり",
+      "name": "藤宮ゆり",
+      "age": "25歳",
+      "height": "169cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_紺野さや",
+      "name": "紺野さや",
+      "age": "26歳",
+      "height": "157cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_徳永えり",
+      "name": "徳永えり",
+      "age": "30歳",
+      "height": "163cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_愛内あい",
+      "name": "愛内あい",
+      "age": "31歳",
+      "height": "155cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_黒沢ゆり",
+      "name": "黒沢ゆり",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_水島さゆり",
+      "name": "水島さゆり",
+      "age": "26歳",
+      "height": "154cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_沢尻えれな",
+      "name": "沢尻えれな",
+      "age": "25歳",
+      "height": "158cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_美園かなで",
+      "name": "美園かなで",
+      "age": "26歳",
+      "height": "156cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_佐田まりこ",
+      "name": "佐田まりこ",
+      "age": "30歳",
+      "height": "154cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_大崎みつり",
+      "name": "大崎みつり",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": "(Hカップ)"
+    },
+    {
+      "id": "aroma_maison_夏川あかり",
+      "name": "夏川あかり",
+      "age": "28歳",
+      "height": "166cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_綾瀬にいな",
+      "name": "綾瀬にいな",
+      "age": "26歳",
+      "height": "162cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_美咲ゆい",
+      "name": "美咲ゆい",
+      "age": "26歳",
+      "height": "156cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_要いおり",
+      "name": "要いおり",
+      "age": "24歳",
+      "height": "154cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_夢原えり",
+      "name": "夢原えり",
+      "age": "26歳",
+      "height": "158cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_霜月めあ",
+      "name": "霜月めあ",
+      "age": "25歳",
+      "height": "168cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "aroma_maison_桜井りな",
+      "name": "桜井りな",
+      "age": "28歳",
+      "height": "156cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_赤堀いとは",
+      "name": "赤堀いとは",
+      "age": "24歳",
+      "height": "168cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_並木なみ",
+      "name": "並木なみ",
+      "age": "27歳",
+      "height": "162cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_花岡すみれ",
+      "name": "花岡すみれ",
+      "age": "28歳",
+      "height": "162cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_大久保あの",
+      "name": "大久保あの",
+      "age": "27歳",
+      "height": "155cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_藤原ちか",
+      "name": "藤原ちか",
+      "age": "23歳",
+      "height": "155cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_弓木ゆい",
+      "name": "弓木ゆい",
+      "age": "23歳",
+      "height": "158cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_目黒あみ",
+      "name": "目黒あみ",
+      "age": "25歳",
+      "height": "161cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "aroma_maison_川崎れに",
+      "name": "川崎れに",
+      "age": "27歳",
+      "height": "170cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_宇野りら",
+      "name": "宇野りら",
+      "age": "22歳",
+      "height": "160cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_江口はな",
+      "name": "江口はな",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_美都みお",
+      "name": "美都みお",
+      "age": "26歳",
+      "height": "164cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_乃木あきほ",
+      "name": "乃木あきほ",
+      "age": "27歳",
+      "height": "167cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_風間いちか",
+      "name": "風間いちか",
+      "age": "32歳",
+      "height": "163cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_月城さな",
+      "name": "月城さな",
+      "age": "26歳",
+      "height": "158cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_赤羽りん",
+      "name": "赤羽りん",
+      "age": "26歳",
+      "height": "158cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_金子さおり",
+      "name": "金子さおり",
+      "age": "31歳",
+      "height": "163cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_松田まき",
+      "name": "松田まき",
+      "age": "28歳",
+      "height": "151cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_福沢あゆ",
+      "name": "福沢あゆ",
+      "age": "32歳",
+      "height": "162cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_美鈴ひとみ",
+      "name": "美鈴ひとみ",
+      "age": "30歳",
+      "height": "153cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_高島ねあ",
+      "name": "高島ねあ",
+      "age": "28歳",
+      "height": "157cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_今井ありさ",
+      "name": "今井ありさ",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "aroma_maison_愛咲えなこ",
+      "name": "愛咲えなこ",
+      "age": "24歳",
+      "height": "164cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_四月一日あきら",
+      "name": "四月一日あきら",
+      "age": "27歳",
+      "height": "150cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_愛依香りん",
+      "name": "愛依香りん",
+      "age": "28歳",
+      "height": "161cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "aroma_maison_樋口つかさ",
+      "name": "樋口つかさ",
+      "age": "28歳",
+      "height": "156cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "aroma_maison_河村みお",
+      "name": "河村みお",
+      "age": "25歳",
+      "height": "164cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "aroma_maison_佐藤りこ",
+      "name": "佐藤りこ",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "aroma_maison_長澤あさみ",
+      "name": "長澤あさみ",
+      "age": "31歳",
+      "height": "167cm",
+      "bust": "(Hカップ)"
+    },
+    {
+      "id": "aroma_maison_峰藤さくら",
+      "name": "峰藤さくら",
+      "age": "27歳",
+      "height": "155cm",
+      "bust": "(Hカップ)"
+    },
+    {
+      "id": "aroma_maison_広末まなみ",
+      "name": "広末まなみ",
+      "age": "28歳",
+      "height": "160cm",
+      "bust": "(Gカップ)"
+    }
+  ]
+}

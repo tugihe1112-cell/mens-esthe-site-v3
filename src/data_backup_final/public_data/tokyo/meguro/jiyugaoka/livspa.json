@@ -1,0 +1,255 @@
+{
+  "id": "tokyo_meguro_jiyugaoka_livspa",
+  "name": "LIVSPA (リブスパ)",
+  "prefecture": "東京都",
+  "city": "目黒区",
+  "area": "自由が丘",
+  "address": "東京都大田区・目黒区／神奈川県川崎市",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://livspa.net/",
+  "nearestStation": "蒲田駅/川崎駅/自由が丘駅",
+  "description": "蒲田・川崎・自由が丘のメンズエステ。90分18,000円から。",
+  "brandId": "livspa",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "livspa_深澤まき",
+      "name": "深澤まき",
+      "age": 24,
+      "height": 158,
+      "bust": "(H)",
+      "tags": []
+    },
+    {
+      "id": "livspa_水瀬もも",
+      "name": "水瀬もも",
+      "age": 23,
+      "height": 162,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "livspa_みかげなぎ",
+      "name": "みかげなぎ",
+      "age": 26,
+      "height": 168,
+      "bust": "(D)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "livspa_ゆいかことは",
+      "name": "ゆいかことは",
+      "age": 24,
+      "height": 158,
+      "bust": "(C)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "livspa_いちのせあいり",
+      "name": "いちのせあいり",
+      "age": 21,
+      "height": 155,
+      "bust": "(F)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "livspa_かすみがおかさくら",
+      "name": "かすみがおかさくら",
+      "age": 23,
+      "height": 153,
+      "bust": "(E)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "livspa_あやせみあ",
+      "name": "あやせみあ",
+      "age": 23,
+      "height": 161,
+      "bust": "(E)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "livspa_かんだえりか",
+      "name": "かんだえりか",
+      "age": 22,
+      "height": 163,
+      "bust": "(E)",
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "livspa_天野かのん",
+      "name": "天野かのん",
+      "age": 20,
+      "height": 157,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "livspa_高橋まりな",
+      "name": "高橋まりな",
+      "age": 22,
+      "height": 153,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "livspa_工藤かなみ",
+      "name": "工藤かなみ",
+      "age": 25,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "livspa_月永らん",
+      "name": "月永らん",
+      "age": 22,
+      "height": 156,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "livspa_桃井あかり",
+      "name": "桃井あかり",
+      "age": 22,
+      "height": 157,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "livspa_成瀬ゆあ",
+      "name": "成瀬ゆあ",
+      "age": 21,
+      "height": 168,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "livspa_渚みお",
+      "name": "渚みお",
+      "age": 23,
+      "height": 160,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "livspa_柚月すずな",
+      "name": "柚月すずな",
+      "age": 23,
+      "height": 157,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "livspa_双葉なな",
+      "name": "双葉なな",
+      "age": 23,
+      "height": 153,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "livspa_空条りん",
+      "name": "空条りん",
+      "age": 28,
+      "height": 155,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "livspa_赤西めい",
+      "name": "赤西めい",
+      "age": 24,
+      "height": 164,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "livspa_小野たまき",
+      "name": "小野たまき",
+      "age": 27,
+      "height": 170,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "livspa_櫻井みづき",
+      "name": "櫻井みづき",
+      "age": 24,
+      "height": 158,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "livspa_長峰らむ",
+      "name": "長峰らむ",
+      "age": 24,
+      "height": 151,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "livspa_上村れな",
+      "name": "上村れな",
+      "age": 23,
+      "height": 156,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "livspa_栗山あみ",
+      "name": "栗山あみ",
+      "age": 22,
+      "height": 152,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "livspa_萌木なの",
+      "name": "萌木なの",
+      "age": 22,
+      "height": 160,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "livspa_癒川にな",
+      "name": "癒川にな",
+      "age": 25,
+      "height": 150,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "livspa_藤田りこ",
+      "name": "藤田りこ",
+      "age": 25,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "新人"
+      ]
+    }
+  ]
+}

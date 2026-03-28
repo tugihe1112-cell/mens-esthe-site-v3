@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_minato_azabujuban_roppongi_mens",
+  "name": "六本木メンズエステ",
+  "prefecture": "東京都",
+  "city": "港区",
+  "area": "麻布十番",
+  "address": "東京都港区麻布十番エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "75分19,000円～",
+  "hours": "9:00～5:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://www.roppongi-menseste.com/",
+  "nearestStation": "麻布十番駅",
+  "description": "六本木・麻布十番の日本人リラクゼーション。 / 料金システム: 75分19,000円 / 120分25,000円 / 150分30,000円 / 180分37,000円",
+  "threads": [],
+  "brandId": "roppongi_mens",
+  "therapists": []
+}

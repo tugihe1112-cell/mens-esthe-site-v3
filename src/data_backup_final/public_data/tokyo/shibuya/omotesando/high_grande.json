@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_shibuya_omotesando_high_grande",
+  "name": "HIGH GRANDE (ハイグランデ)",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "area": "表参道",
+  "address": "東京都渋谷区表参道エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://high-grande.jp/",
+  "nearestStation": "表参道駅",
+  "description": "表参道・日本橋の日本人リラクゼーション。 / 料金システム: 70分16,000円〜",
+  "threads": [],
+  "brandId": "high_grande",
+  "therapists": []
+}

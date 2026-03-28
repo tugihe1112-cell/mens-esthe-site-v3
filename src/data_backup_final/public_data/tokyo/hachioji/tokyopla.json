@@ -1,0 +1,523 @@
+{
+  "id": "tokyo_hachioji_tokyopla",
+  "name": "トキョプラ 旧T+Plus (ティープラス) 新宿",
+  "prefecture": "東京都",
+  "city": "八王子市",
+  "area": "八王子市",
+  "address": "東京都新宿・立川・八王子エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "複数エリア展開"
+  ],
+  "websiteUrl": "https://tokyopla.com/",
+  "nearestStation": "新宿御苑前駅 / 新宿三丁目駅 / 立川駅 / 八王子駅",
+  "description": "新宿・立川・八王子のメンズエステ。旧T+Plus。エリア最大級の在籍数と美女レベル。",
+  "brandId": "tokyopla",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "tokyopla_神野みさき",
+      "name": "神野みさき",
+      "age": 26,
+      "height": 155,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_早坂みゆ",
+      "name": "早坂みゆ",
+      "age": 18,
+      "height": 162,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_須藤ねね",
+      "name": "須藤ねね",
+      "age": 23,
+      "height": 150,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_小鳥遊もね",
+      "name": "小鳥遊もね",
+      "age": 27,
+      "height": 153,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_菜々美なみ",
+      "name": "菜々美なみ",
+      "age": 20,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_小日向ちい",
+      "name": "小日向ちい",
+      "age": 24,
+      "height": 155,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_星乃りあん",
+      "name": "星乃りあん",
+      "age": 21,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_黒咲みれい",
+      "name": "黒咲みれい",
+      "age": 24,
+      "height": 165,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_武藤りの",
+      "name": "武藤りの",
+      "age": 26,
+      "height": 168,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_速見ゆいか",
+      "name": "速見ゆいか",
+      "age": 23,
+      "height": 152,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_水無月あむ",
+      "name": "水無月あむ",
+      "age": 20,
+      "height": 163,
+      "bust": "(K)"
+    },
+    {
+      "id": "tokyopla_氷室いろは",
+      "name": "氷室いろは",
+      "age": 26,
+      "height": 165,
+      "bust": "(H)"
+    },
+    {
+      "id": "tokyopla_愛沢ここね",
+      "name": "愛沢ここね",
+      "age": 23,
+      "height": 151,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_夢野ひまり",
+      "name": "夢野ひまり",
+      "age": 24,
+      "height": 154,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_五十嵐えりか",
+      "name": "五十嵐えりか",
+      "age": 28,
+      "height": 155,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_一色ゆう",
+      "name": "一色ゆう",
+      "age": 27,
+      "height": 162,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_有栖りこ",
+      "name": "有栖りこ",
+      "age": 22,
+      "height": 162,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_桃木もな",
+      "name": "桃木もな",
+      "age": 25,
+      "height": 168,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_七沢かりん",
+      "name": "七沢かりん",
+      "age": 23,
+      "height": 151,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_佐野まや",
+      "name": "佐野まや",
+      "age": 24,
+      "height": 154,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_白野すず",
+      "name": "白野すず",
+      "age": 20,
+      "height": 153,
+      "bust": "(C)"
+    },
+    {
+      "id": "tokyopla_姫宮ののみ",
+      "name": "姫宮ののみ",
+      "age": 22,
+      "height": 150,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_姫川かれん",
+      "name": "姫川かれん",
+      "age": 25,
+      "height": 150,
+      "bust": "(H)"
+    },
+    {
+      "id": "tokyopla_水入まき",
+      "name": "水入まき",
+      "age": 27,
+      "height": 164,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_七森さつき",
+      "name": "七森さつき",
+      "age": 24,
+      "height": 151,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_朝日きき",
+      "name": "朝日きき",
+      "age": 22,
+      "height": 154,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_田中れみ",
+      "name": "田中れみ",
+      "age": 27,
+      "height": 163,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_愛須める",
+      "name": "愛須める",
+      "age": 20,
+      "height": 152,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_池田あいな",
+      "name": "池田あいな",
+      "age": 25,
+      "height": 156,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_森あかり",
+      "name": "森あかり",
+      "age": 25,
+      "height": 160,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_長濱ももか",
+      "name": "長濱ももか",
+      "age": 26,
+      "height": 172,
+      "bust": "(C)"
+    },
+    {
+      "id": "tokyopla_野々宮つかさ",
+      "name": "野々宮つかさ",
+      "age": 29,
+      "height": 165,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_宮下くりす",
+      "name": "宮下くりす",
+      "age": 21,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_佐々木りんか",
+      "name": "佐々木りんか",
+      "age": 24,
+      "height": 161,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_宮川つばさ",
+      "name": "宮川つばさ",
+      "age": 25,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_千森かごめ",
+      "name": "千森かごめ",
+      "age": 22,
+      "height": 162,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_可愛川あい",
+      "name": "可愛川あい",
+      "age": 24,
+      "height": 155,
+      "bust": "(I)"
+    },
+    {
+      "id": "tokyopla_河北ゆきな",
+      "name": "河北ゆきな",
+      "age": 20,
+      "height": 157,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_栗原かな",
+      "name": "栗原かな",
+      "age": 27,
+      "height": 160,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_天野にいな",
+      "name": "天野にいな",
+      "age": 24,
+      "height": 157,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_渚みおり",
+      "name": "渚みおり",
+      "age": 28,
+      "height": 162,
+      "bust": "(H)"
+    },
+    {
+      "id": "tokyopla_香椎ありす",
+      "name": "香椎ありす",
+      "age": 21,
+      "height": 164,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_飯島ののあ",
+      "name": "飯島ののあ",
+      "age": 21,
+      "height": 160,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_有坂みく",
+      "name": "有坂みく",
+      "age": 24,
+      "height": 160,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_京本あや",
+      "name": "京本あや",
+      "age": 26,
+      "height": 169,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_姫乃つぐみ",
+      "name": "姫乃つぐみ",
+      "age": 25,
+      "height": 164,
+      "bust": "(C)"
+    },
+    {
+      "id": "tokyopla_桜井ひより",
+      "name": "桜井ひより",
+      "age": 28,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_柚木らな",
+      "name": "柚木らな",
+      "age": 27,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_愛内りな",
+      "name": "愛内りな",
+      "age": 24,
+      "height": 148,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_神谷はるか",
+      "name": "神谷はるか",
+      "age": 21,
+      "height": 158,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_野尻さき",
+      "name": "野尻さき",
+      "age": 26,
+      "height": 162,
+      "bust": "(C)"
+    },
+    {
+      "id": "tokyopla_羽乃れむ",
+      "name": "羽乃れむ",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_月城いと",
+      "name": "月城いと",
+      "age": 21,
+      "height": 155,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_滝沢あみ",
+      "name": "滝沢あみ",
+      "age": 29,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_愛菜みり",
+      "name": "愛菜みり",
+      "age": 24,
+      "height": 158,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_三柴わかな",
+      "name": "三柴わかな",
+      "age": 20,
+      "height": 155,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_真白あず",
+      "name": "真白あず",
+      "age": 26,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_桃園ももえ",
+      "name": "桃園ももえ",
+      "age": 29,
+      "height": 163,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_水瀬せな",
+      "name": "水瀬せな",
+      "age": 22,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_宮内ゆい",
+      "name": "宮内ゆい",
+      "age": 25,
+      "height": 159,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_奈月しおり",
+      "name": "奈月しおり",
+      "age": 26,
+      "height": 162,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_三浦ひまり",
+      "name": "三浦ひまり",
+      "age": 25,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "tokyopla_水野のあ",
+      "name": "水野のあ",
+      "age": 21,
+      "height": 151,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_雪音かんな",
+      "name": "雪音かんな",
+      "age": 20,
+      "height": 152,
+      "bust": "(C)"
+    },
+    {
+      "id": "tokyopla_月宮りあ",
+      "name": "月宮りあ",
+      "age": 24,
+      "height": 162,
+      "bust": "(C)"
+    },
+    {
+      "id": "tokyopla_及川ゆりな",
+      "name": "及川ゆりな",
+      "age": 28,
+      "height": 168,
+      "bust": "(G)"
+    },
+    {
+      "id": "tokyopla_香坂あいり",
+      "name": "香坂あいり",
+      "age": 24,
+      "height": 151,
+      "bust": "(F)"
+    },
+    {
+      "id": "tokyopla_翠月まう",
+      "name": "翠月まう",
+      "age": 22,
+      "height": 153,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_八乙女さくら",
+      "name": "八乙女さくら",
+      "age": 23,
+      "height": 162,
+      "bust": "(D)"
+    },
+    {
+      "id": "tokyopla_峰りりな",
+      "name": "峰りりな",
+      "age": 28,
+      "height": null,
+      "bust": "(H)"
+    },
+    {
+      "id": "tokyopla_山口みほ",
+      "name": "山口みほ",
+      "age": 23,
+      "height": 160,
+      "bust": "(F)"
+    }
+  ]
+}

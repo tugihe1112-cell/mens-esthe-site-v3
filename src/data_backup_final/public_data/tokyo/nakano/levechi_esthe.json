@@ -1,0 +1,25 @@
+{
+  "id": "tokyo_nakano_levechi_esthe",
+  "name": "超レベチなエステ24",
+  "prefecture": "東京都",
+  "city": "中野区",
+  "area": "中野区",
+  "address": "東京都中野区中野エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "24時間営業",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "24時間営業"
+  ],
+  "websiteUrl": "https://tokyo242424.com/",
+  "nearestStation": "中野駅",
+  "description": "成田・中野・東金・初台の日本人リラクゼーション。 / 料金システム: Short60分12,000円 / Standard90分18,000円 / Premium120分24,000円 / Long150分30,000円 / 延長20分5,000円",
+  "threads": [],
+  "brandId": "levechi_esthe",
+  "therapists": []
+}

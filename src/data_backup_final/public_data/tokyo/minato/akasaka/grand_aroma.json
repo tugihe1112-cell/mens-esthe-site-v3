@@ -1,0 +1,541 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分19,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://grandaromatokyo.com/",
+  "description": "赤坂・銀座・六本木に展開する日本人リラクゼーション。圧倒的なルックスと技術。",
+  "tags": [
+    "複数エリア展開",
+    "カード支払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人"
+  ],
+  "brandId": "grand_aroma",
+  "threads": [],
+  "id": "tokyo_minato_akasaka_grand_aroma",
+  "name": "グランドアロマ東京 (赤坂店)",
+  "prefecture": "東京都",
+  "city": "港区",
+  "area": "赤坂",
+  "nearestStation": "赤坂駅",
+  "address": "東京都港区赤坂エリア",
+  "therapists": [
+    {
+      "id": "grand_aroma_鹿野ほまれ",
+      "name": "鹿野ほまれ",
+      "age": 27,
+      "height": 163,
+      "bust": "(E)",
+      "tags": [
+        "新人",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_飯塚ゆうき",
+      "name": "飯塚ゆうき",
+      "age": 24,
+      "height": 170,
+      "bust": "(C)",
+      "tags": [
+        "新人",
+        "Cカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "grand_aroma_西野みな",
+      "name": "西野みな",
+      "age": 22,
+      "height": 151,
+      "bust": "(D)",
+      "tags": [
+        "新人",
+        "若手",
+        "Dカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "grand_aroma_今井ありさ",
+      "name": "今井ありさ",
+      "age": 20,
+      "height": 156,
+      "bust": "(E)",
+      "tags": [
+        "新人",
+        "若手",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_高崎れみ",
+      "name": "高崎れみ",
+      "age": 25,
+      "height": 164,
+      "bust": "(H)",
+      "tags": [
+        "新人",
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_瀬戸しゅり",
+      "name": "瀬戸しゅり",
+      "age": 27,
+      "height": 164,
+      "bust": "(H)",
+      "tags": [
+        "新人",
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_半田ゆず",
+      "name": "半田ゆず",
+      "age": 27,
+      "height": 164,
+      "bust": "(E)",
+      "tags": [
+        "新人",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_七海りんか",
+      "name": "七海りんか",
+      "age": 25,
+      "height": 157,
+      "bust": "(C)",
+      "tags": [
+        "新人",
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_朝宮れい",
+      "name": "朝宮れい",
+      "age": 26,
+      "height": 162,
+      "bust": "(D)",
+      "tags": [
+        "新人",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_北山いおり",
+      "name": "北山いおり",
+      "age": 28,
+      "height": 157,
+      "bust": "(E)",
+      "tags": [
+        "新人",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_片桐なな",
+      "name": "片桐なな",
+      "age": 20,
+      "height": 160,
+      "bust": "(F)",
+      "tags": [
+        "新人",
+        "若手",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_山岸まみ",
+      "name": "山岸まみ",
+      "age": 24,
+      "height": 166,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_西宮しおり",
+      "name": "西宮しおり",
+      "age": 24,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_渋谷かのん",
+      "name": "渋谷かのん",
+      "age": 23,
+      "height": 158,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_三日月さら",
+      "name": "三日月さら",
+      "age": 26,
+      "height": 158,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_大城さとみ",
+      "name": "大城さとみ",
+      "age": 26,
+      "height": 171,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "grand_aroma_黒崎あんな",
+      "name": "黒崎あんな",
+      "age": 26,
+      "height": 157,
+      "bust": "(I)",
+      "tags": [
+        "Iカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_河北はな",
+      "name": "河北はな",
+      "age": 22,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "若手",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_桐生まりあ",
+      "name": "桐生まりあ",
+      "age": 28,
+      "height": 171,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "grand_aroma_本田さつき",
+      "name": "本田さつき",
+      "age": 27,
+      "height": 155,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_神楽みこと",
+      "name": "神楽みこと",
+      "age": 23,
+      "height": 165,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_池尻まゆか",
+      "name": "池尻まゆか",
+      "age": 25,
+      "height": 159,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_東雲いちか",
+      "name": "東雲いちか",
+      "age": 21,
+      "height": 168,
+      "bust": "(G)",
+      "tags": [
+        "若手",
+        "Gカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "grand_aroma_青空つばき",
+      "name": "青空つばき",
+      "age": 26,
+      "height": 171,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "grand_aroma_愛白みつ",
+      "name": "愛白みつ",
+      "age": 29,
+      "height": 160,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_蒼井せりな",
+      "name": "蒼井せりな",
+      "age": 24,
+      "height": 157,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_内海みか",
+      "name": "内海みか",
+      "age": 26,
+      "height": 172,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "grand_aroma_川崎みれい",
+      "name": "川崎みれい",
+      "age": 22,
+      "height": 156,
+      "bust": "(G)",
+      "tags": [
+        "若手",
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_阿部ゆうか",
+      "name": "阿部ゆうか",
+      "age": 29,
+      "height": 165,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_神田にの",
+      "name": "神田にの",
+      "age": 23,
+      "height": 159,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_佐々木ゆい",
+      "name": "佐々木ゆい",
+      "age": 27,
+      "height": 165,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_桃瀬りこ",
+      "name": "桃瀬りこ",
+      "age": 21,
+      "height": 163,
+      "bust": "(E)",
+      "tags": [
+        "若手",
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_篠原なおみ",
+      "name": "篠原なおみ",
+      "age": 27,
+      "height": 160,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_清水るか",
+      "name": "清水るか",
+      "age": 21,
+      "height": 160,
+      "bust": "(D)",
+      "tags": [
+        "若手",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_高橋りり",
+      "name": "高橋りり",
+      "age": 20,
+      "height": 164,
+      "bust": "(H)",
+      "tags": [
+        "若手",
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_橋本あんず",
+      "name": "橋本あんず",
+      "age": 22,
+      "height": 170,
+      "bust": "(D)",
+      "tags": [
+        "若手",
+        "Dカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "grand_aroma_松井あや",
+      "name": "松井あや",
+      "age": 26,
+      "height": 168,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "grand_aroma_藤沢ほのか",
+      "name": "藤沢ほのか",
+      "age": 23,
+      "height": 164,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_上原らん",
+      "name": "上原らん",
+      "age": 28,
+      "height": 169,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "grand_aroma_水無瀬こと",
+      "name": "水無瀬こと",
+      "age": 26,
+      "height": 165,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_佐藤みお",
+      "name": "佐藤みお",
+      "age": 24,
+      "height": 155,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_上島さきね",
+      "name": "上島さきね",
+      "age": 28,
+      "height": 165,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_舞浜えりさ",
+      "name": "舞浜えりさ",
+      "age": 27,
+      "height": 165,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_立花かおり",
+      "name": "立花かおり",
+      "age": 27,
+      "height": 158,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_古沢さや",
+      "name": "古沢さや",
+      "age": 20,
+      "height": 155,
+      "bust": "(F)",
+      "tags": [
+        "若手",
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_本郷めい",
+      "name": "本郷めい",
+      "age": 24,
+      "height": 157,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_赤澤れい",
+      "name": "赤澤れい",
+      "age": 26,
+      "height": 166,
+      "bust": "(D)",
+      "tags": [
+        "新人",
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "grand_aroma_綾瀬はる",
+      "name": "綾瀬はる",
+      "age": 27,
+      "height": 162,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    }
+  ]
+}

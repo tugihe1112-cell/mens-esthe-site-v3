@@ -1,0 +1,101 @@
+{
+  "id": "tokyo_taito_ueno_ueno_luxury",
+  "name": "Ueno Luxury (上野ラグジュアリー)",
+  "url": "https://ueno-luxury.com/",
+  "area": "上野",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK",
+    "個室あり"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "台東区",
+  "brandId": "ueno_luxury",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "ueno_luxury_新垣 あい",
+      "name": "新垣 あい",
+      "age": 42,
+      "height": 158,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "ueno_luxury_桜庭 あい",
+      "name": "桜庭 あい",
+      "age": 44,
+      "height": 160,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "ueno_luxury_本多 ちか",
+      "name": "本多 ちか",
+      "age": 48,
+      "height": 161,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "ueno_luxury_森田 ゆう",
+      "name": "森田 ゆう",
+      "age": 46,
+      "height": 155,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "ueno_luxury_夏目 りな",
+      "name": "夏目 りな",
+      "age": 41,
+      "height": 165,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "ueno_luxury_堀北 ゆき",
+      "name": "堀北 ゆき",
+      "age": 39,
+      "height": 160,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "ueno_luxury_宮崎 さき",
+      "name": "宮崎 さき",
+      "age": 45,
+      "height": 162,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "ueno_luxury_相武 みな",
+      "name": "相武 みな",
+      "age": 38,
+      "height": 157,
+      "bust": "(D)",
+      "tags": []
+    }
+  ]
+}

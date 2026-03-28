@@ -1,0 +1,158 @@
+{
+  "id": "tokyo_shinjuku_shinjuku_sanchome_aroma_glamour",
+  "name": "AROMA GLAMOUR 新宿三丁目店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "新宿三丁目",
+  "tags": [],
+  "system": {
+    "standard": [
+      {
+        "time": "100分",
+        "price": "25,000円"
+      }
+    ],
+    "special": []
+  },
+  "url": "https://aromaglamour.com/",
+  "threads": [],
+  "brandId": "aroma_glamour",
+  "therapists": [
+    {
+      "id": "aroma_glamour_まつり",
+      "name": "まつり",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_体験入店07",
+      "name": "体験入店07",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_うるり",
+      "name": "うるり",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_あみ",
+      "name": "あみ",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_なぎさ",
+      "name": "なぎさ",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_なな",
+      "name": "なな",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_れいか",
+      "name": "れいか",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_りあな",
+      "name": "りあな",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_いろは",
+      "name": "いろは",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_すみれ",
+      "name": "すみれ",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_あいる",
+      "name": "あいる",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_ちこ",
+      "name": "ちこ",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_ゆま",
+      "name": "ゆま",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_るな",
+      "name": "るな",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_えん",
+      "name": "えん",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_さくら",
+      "name": "さくら",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "aroma_glamour_ほの",
+      "name": "ほの",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    }
+  ]
+}

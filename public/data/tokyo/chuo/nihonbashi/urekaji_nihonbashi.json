@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_chuo_nihonbashi_urekaji_nihonbashi",
+  "name": "熟れた果実",
+  "prefecture": "東京都",
+  "city": "中央区",
+  "area": "日本橋",
+  "address": "東京都内各エリア（日本橋・銀座・新宿・立川）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分10,000円～",
+  "hours": "営業時間要確認",
+  "isPremium": false,
+  "tags": [
+    "熟女"
+  ],
+  "websiteUrl": "https://spa-urekaji.com/",
+  "nearestStation": "日本橋駅、新宿三丁目駅、銀座駅、立川駅",
+  "description": "60分10,000円 / 70分11,000円 / 90分13,000円 / 120分17,000円 / 150分21,000円 / 延長30分6,000円",
+  "threads": [],
+  "brandId": "urekaji_nihonbashi",
+  "therapists": []
+}

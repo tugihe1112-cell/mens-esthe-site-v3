@@ -1,0 +1,600 @@
+{
+  "id": "tokyo_shinjuku_higashishinjuku_platinum_tokyo",
+  "name": "PLATINUM TOKYO 東新宿店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "東新宿",
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "出張可能"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "75分",
+        "price": "15,000円"
+      },
+      {
+        "time": "90分",
+        "price": "18,000円"
+      },
+      {
+        "time": "120分",
+        "price": "23,000円"
+      },
+      {
+        "time": "150分",
+        "price": "28,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 15分",
+        "price": "4,000円"
+      },
+      {
+        "name": "本指名・ネット指名",
+        "price": "1,000円"
+      }
+    ]
+  },
+  "url": "https://esthe-platinum.tokyo/",
+  "threads": [],
+  "brandId": "platinum_tokyo",
+  "therapists": [
+    {
+      "id": "platinum_tokyo_鳳城あおい",
+      "name": "鳳城あおい",
+      "age": 24,
+      "height": 170,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_最上ゆい",
+      "name": "最上ゆい",
+      "age": 20,
+      "height": 168,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_美月ゆら",
+      "name": "美月ゆら",
+      "age": 25,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_雨宮るね",
+      "name": "雨宮るね",
+      "age": 20,
+      "height": 161,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_佐藤あん",
+      "name": "佐藤あん",
+      "age": 26,
+      "height": 167,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_宝月るな",
+      "name": "宝月るな",
+      "age": 20,
+      "height": 170,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_松岡はね",
+      "name": "松岡はね",
+      "age": 20,
+      "height": 159,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_仲間あすか",
+      "name": "仲間あすか",
+      "age": 38,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_古谷みつき",
+      "name": "古谷みつき",
+      "age": 26,
+      "height": 153,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_芹沢あん",
+      "name": "芹沢あん",
+      "age": 21,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_鈴本あいり",
+      "name": "鈴本あいり",
+      "age": 28,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_花咲よる",
+      "name": "花咲よる",
+      "age": 22,
+      "height": 171,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_市川かれん",
+      "name": "市川かれん",
+      "age": 23,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_冬月ゆうり",
+      "name": "冬月ゆうり",
+      "age": 27,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_蓮見さら",
+      "name": "蓮見さら",
+      "age": 26,
+      "height": 163,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_朝日奈まほ",
+      "name": "朝日奈まほ",
+      "age": 28,
+      "height": 165,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_藤咲しおり",
+      "name": "藤咲しおり",
+      "age": 22,
+      "height": 167,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_日向のん",
+      "name": "日向のん",
+      "age": 22,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_琴石みれい",
+      "name": "琴石みれい",
+      "age": 24,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_桃瀬もも",
+      "name": "桃瀬もも",
+      "age": 20,
+      "height": 152,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_星宮そら",
+      "name": "星宮そら",
+      "age": 24,
+      "height": 150,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_白星せな",
+      "name": "白星せな",
+      "age": 24,
+      "height": 170,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_白川あいさ",
+      "name": "白川あいさ",
+      "age": 24,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_佐倉にじ",
+      "name": "佐倉にじ",
+      "age": 24,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_月森かなめ",
+      "name": "月森かなめ",
+      "age": 26,
+      "height": 151,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_伊藤れな",
+      "name": "伊藤れな",
+      "age": 25,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_桜ゆりの",
+      "name": "桜ゆりの",
+      "age": 26,
+      "height": 163,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_澄田りん",
+      "name": "澄田りん",
+      "age": 24,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_渚あみ",
+      "name": "渚あみ",
+      "age": 23,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_七瀬みな",
+      "name": "七瀬みな",
+      "age": 27,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_月乃うた",
+      "name": "月乃うた",
+      "age": 24,
+      "height": 154,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_天音ゆきの",
+      "name": "天音ゆきの",
+      "age": 27,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_工藤まな",
+      "name": "工藤まな",
+      "age": 21,
+      "height": 156,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_東雲めぐる",
+      "name": "東雲めぐる",
+      "age": 22,
+      "height": 163,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_月見里ひより",
+      "name": "月見里ひより",
+      "age": 21,
+      "height": 156,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_小鳥遊きき",
+      "name": "小鳥遊きき",
+      "age": 22,
+      "height": 159,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_一ノ瀬さな",
+      "name": "一ノ瀬さな",
+      "age": 24,
+      "height": 163,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_柊みくる",
+      "name": "柊みくる",
+      "age": 21,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_橘のあ",
+      "name": "橘のあ",
+      "age": 21,
+      "height": 152,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_村上すず",
+      "name": "村上すず",
+      "age": 20,
+      "height": 150,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_夏目えみ",
+      "name": "夏目えみ",
+      "age": 28,
+      "height": 170,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_一葉ゆず",
+      "name": "一葉ゆず",
+      "age": 23,
+      "height": 159,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_井上もも",
+      "name": "井上もも",
+      "age": 22,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_橋本れいな",
+      "name": "橋本れいな",
+      "age": 26,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_及川みこと",
+      "name": "及川みこと",
+      "age": 21,
+      "height": 163,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_夢咲のの",
+      "name": "夢咲のの",
+      "age": 20,
+      "height": 159,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_雫のどか",
+      "name": "雫のどか",
+      "age": 26,
+      "height": 164,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_東條みほ",
+      "name": "東條みほ",
+      "age": 27,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_聚楽いちか",
+      "name": "聚楽いちか",
+      "age": 26,
+      "height": 150,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_橘みる",
+      "name": "橘みる",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_天月ことみ",
+      "name": "天月ことみ",
+      "age": 27,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_織野ゆな",
+      "name": "織野ゆな",
+      "age": 28,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_岩田りさ",
+      "name": "岩田りさ",
+      "age": 22,
+      "height": 161,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_望月みれい",
+      "name": "望月みれい",
+      "age": 24,
+      "height": 168,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_神宮寺なみ",
+      "name": "神宮寺なみ",
+      "age": 23,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_鈴野ねね",
+      "name": "鈴野ねね",
+      "age": 23,
+      "height": 150,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_甘宮める",
+      "name": "甘宮める",
+      "age": 20,
+      "height": 153,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_立花るい",
+      "name": "立花るい",
+      "age": 23,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_桜庭りさ",
+      "name": "桜庭りさ",
+      "age": 21,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_七海ひかる",
+      "name": "七海ひかる",
+      "age": 24,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_長月さくら",
+      "name": "長月さくら",
+      "age": 22,
+      "height": 150,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_三森りか",
+      "name": "三森りか",
+      "age": 20,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_末永りせ",
+      "name": "末永りせ",
+      "age": 20,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_篠原かな",
+      "name": "篠原かな",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_唯月りか",
+      "name": "唯月りか",
+      "age": 24,
+      "height": 163,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_初音ゆう",
+      "name": "初音ゆう",
+      "age": 26,
+      "height": 154,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_桜井くるみ",
+      "name": "桜井くるみ",
+      "age": 25,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_小室まほ",
+      "name": "小室まほ",
+      "age": 21,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "platinum_tokyo_明菜もも",
+      "name": "明菜もも",
+      "age": 22,
+      "height": 161,
+      "bust": null,
+      "tags": []
+    }
+  ]
+}

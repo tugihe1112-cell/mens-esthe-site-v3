@@ -1,0 +1,36 @@
+{
+  "id": 60318,
+  "name": "極楽エステ",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都新宿区新宿",
+  "image": "/images/shops/gokuraku_esthe.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "要確認",
+  "isPremium": false,
+  "color": "from-red-900 to-orange-900",
+  "tags": [],
+  "websiteUrl": "https://gokuraku-esthe.com/",
+  "threads": [],
+  "therapists": [
+    "unknown_あおい",
+    "unknown_こころ",
+    "unknown_ほの",
+    "unknown_もも",
+    "unknown_さとみ",
+    "unknown_さな",
+    "unknown_るな",
+    "unknown_こはる",
+    "unknown_うい",
+    "unknown_あすか",
+    "unknown_せいら",
+    "unknown_しゅうか"
+  ],
+  "area": [
+    "代々木・原宿",
+    "原宿"
+  ]
+}

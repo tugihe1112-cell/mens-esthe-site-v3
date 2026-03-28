@@ -1,0 +1,56 @@
+{
+  "id": "tokyo_shibuya_yoyogi_harajuku_grand_gaia",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "region": "関東エリア",
+  "address": "東京都渋谷区",
+  "name": "グランドガイア (Grand Gaia)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 15,000円～",
+  "hours": "12:00～LAST",
+  "isPremium": true,
+  "color": "from-cyan-400 to-blue-500",
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://grandgaia.jp/",
+  "description": "【旧ガイア】代々木・新宿・高田馬場エリアの実力派店がリニューアルオープン。厳選された美女のみ在籍、圧倒的コスパ！ディープリンパ無料！",
+  "system": {
+    "standard": [
+      {
+        "time": "60分",
+        "price": "15,000円"
+      },
+      {
+        "time": "70分",
+        "price": "17,000円"
+      },
+      {
+        "time": "90分",
+        "price": "19,000円"
+      },
+      {
+        "time": "120分",
+        "price": "24,000円"
+      },
+      {
+        "time": "150分",
+        "price": "29,000円"
+      },
+      {
+        "time": "180分",
+        "price": "34,000円"
+      }
+    ],
+    "special": []
+  },
+  "threads": [],
+  "area": "代々木・原宿",
+  "brandId": "grand_gaia",
+  "therapists": []
+}

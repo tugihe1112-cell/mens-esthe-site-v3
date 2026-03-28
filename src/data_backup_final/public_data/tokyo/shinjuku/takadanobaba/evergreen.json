@@ -1,0 +1,24 @@
+{
+  "id": "tokyo_shinjuku_takadanobaba_evergreen",
+  "name": "everGreen",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "高田馬場",
+  "address": "東京都新宿区（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 14,000円～",
+  "hours": "12:00～24:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室"
+  ],
+  "websiteUrl": "http://ever-green.tokyo/",
+  "nearestStation": "高田馬場駅",
+  "description": "グリーン・コース: 90分15,000円/120分18,000円/150分22,000円 ブルー・コース: 100分18,000円/110分19,000円/120分20,000円 オプション: 泡ホイップ・クレンジング 20分5,000円/30分6,000円",
+  "threads": [],
+  "brandId": "evergreen",
+  "therapists": []
+}

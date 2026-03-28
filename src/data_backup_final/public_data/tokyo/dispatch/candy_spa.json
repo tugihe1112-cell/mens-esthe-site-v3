@@ -1,0 +1,754 @@
+{
+  "id": "tokyo_dispatch_candy_spa",
+  "name": "Candy Spa (キャンディスパ)",
+  "prefecture": "東京都",
+  "city": "23区出張",
+  "area": "23wards",
+  "address": "東京都23区内出張",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "23区出張",
+    "派遣型",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://candy-s-candy.men-es.jp/",
+  "nearestStation": "23区内出張",
+  "description": "23区出張のメンズエステ。 / 料金システム: 60分16,000円 / 90分20,000円 / 120分25,000円 / 150分30,000円 / 180分35,000円",
+  "brandId": "candy_spa",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "candy_spa_服部 ひより",
+      "name": "服部 ひより",
+      "age": 28,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_望月 りお",
+      "name": "望月 りお",
+      "age": 29,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_篠宮 メイサ",
+      "name": "篠宮 メイサ",
+      "age": 28,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_七瀬 あいか",
+      "name": "七瀬 あいか",
+      "age": 25,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_桃瀬 乃々香",
+      "name": "桃瀬 乃々香",
+      "age": 30,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_早見 結奈",
+      "name": "早見 結奈",
+      "age": 28,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_月瀬 莉々菜",
+      "name": "月瀬 莉々菜",
+      "age": 24,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_水雪 なつの",
+      "name": "水雪 なつの",
+      "age": 29,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_佐久間 春",
+      "name": "佐久間 春",
+      "age": 26,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_神崎 れいな",
+      "name": "神崎 れいな",
+      "age": 28,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_音葉 みなみ",
+      "name": "音葉 みなみ",
+      "age": 27,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_白石 みらい",
+      "name": "白石 みらい",
+      "age": 27,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_三国 りか",
+      "name": "三国 りか",
+      "age": 20,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_星野 あかり",
+      "name": "星野 あかり",
+      "age": 27,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_成澤 玲奈",
+      "name": "成澤 玲奈",
+      "age": 29,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_桃瀬 なるみ",
+      "name": "桃瀬 なるみ",
+      "age": 33,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_森 ゆき",
+      "name": "森 ゆき",
+      "age": 35,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_月野 さくら",
+      "name": "月野 さくら",
+      "age": 27,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_神崎 美穂",
+      "name": "神崎 美穂",
+      "age": 26,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_黒川 晴香",
+      "name": "黒川 晴香",
+      "age": 37,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_要 月",
+      "name": "要 月",
+      "age": 28,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_千秋 藍",
+      "name": "千秋 藍",
+      "age": 27,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_椿原 ほのか",
+      "name": "椿原 ほのか",
+      "age": 22,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_椿 ゆう",
+      "name": "椿 ゆう",
+      "age": 36,
+      "height": null,
+      "bust": "(G)"
+    },
+    {
+      "id": "candy_spa_橘 美桜",
+      "name": "橘 美桜",
+      "age": 34,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_海 アリス",
+      "name": "海 アリス",
+      "age": 30,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_蝶 まみ",
+      "name": "蝶 まみ",
+      "age": 26,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_嬉野 あまね",
+      "name": "嬉野 あまね",
+      "age": 30,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_星宮 千鶴",
+      "name": "星宮 千鶴",
+      "age": 23,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_並木 はな",
+      "name": "並木 はな",
+      "age": 26,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_綾瀬 春奈",
+      "name": "綾瀬 春奈",
+      "age": 29,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_市乃 あんこ",
+      "name": "市乃 あんこ",
+      "age": 27,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_優希 りおな",
+      "name": "優希 りおな",
+      "age": 28,
+      "height": null,
+      "bust": "(H)"
+    },
+    {
+      "id": "candy_spa_佐倉 せいら",
+      "name": "佐倉 せいら",
+      "age": 27,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_丸井 咲",
+      "name": "丸井 咲",
+      "age": 28,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_美咲 ひなた",
+      "name": "美咲 ひなた",
+      "age": 24,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_水城 碧",
+      "name": "水城 碧",
+      "age": 28,
+      "height": null,
+      "bust": "(H)"
+    },
+    {
+      "id": "candy_spa_天使ひめか",
+      "name": "天使ひめか",
+      "age": 28,
+      "height": null,
+      "bust": "(G)"
+    },
+    {
+      "id": "candy_spa_北里 せいは",
+      "name": "北里 せいは",
+      "age": 23,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_轟 さりな",
+      "name": "轟 さりな",
+      "age": 22,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_鮎川 優香",
+      "name": "鮎川 優香",
+      "age": 29,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_天野 りん",
+      "name": "天野 りん",
+      "age": 28,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_花宮 りお",
+      "name": "花宮 りお",
+      "age": 28,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_宮脇 さり",
+      "name": "宮脇 さり",
+      "age": 26,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_月詠 一樺",
+      "name": "月詠 一樺",
+      "age": 28,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_東堂 凛花",
+      "name": "東堂 凛花",
+      "age": 25,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_天宮 光菜",
+      "name": "天宮 光菜",
+      "age": 28,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_篠原 美空",
+      "name": "篠原 美空",
+      "age": 24,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_一ノ瀬 まりん",
+      "name": "一ノ瀬 まりん",
+      "age": 24,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_桜庭 みゆ",
+      "name": "桜庭 みゆ",
+      "age": 23,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_早乙女 凛",
+      "name": "早乙女 凛",
+      "age": 26,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_橘 紗耶",
+      "name": "橘 紗耶",
+      "age": 25,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_白間 のあ",
+      "name": "白間 のあ",
+      "age": 24,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_高尾 みなみ",
+      "name": "高尾 みなみ",
+      "age": 25,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_五十嵐 かすみ",
+      "name": "五十嵐 かすみ",
+      "age": 26,
+      "height": null,
+      "bust": "(H)"
+    },
+    {
+      "id": "candy_spa_溝端 じゅんな",
+      "name": "溝端 じゅんな",
+      "age": 26,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_天音 花凛",
+      "name": "天音 花凛",
+      "age": 27,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_宮嶋 ひろみ",
+      "name": "宮嶋 ひろみ",
+      "age": 25,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_吉瀬 みのり",
+      "name": "吉瀬 みのり",
+      "age": 26,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_望月 ゆり",
+      "name": "望月 ゆり",
+      "age": 27,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_荒井さら",
+      "name": "荒井さら",
+      "age": 26,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_菊川 みれい",
+      "name": "菊川 みれい",
+      "age": 27,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_卯月 りか",
+      "name": "卯月 りか",
+      "age": 26,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_成瀬 あみ",
+      "name": "成瀬 あみ",
+      "age": 28,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_乙葉 かずは",
+      "name": "乙葉 かずは",
+      "age": 22,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_一ノ瀬 奈々",
+      "name": "一ノ瀬 奈々",
+      "age": 25,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_神谷 れいか",
+      "name": "神谷 れいか",
+      "age": 28,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_河崎 舞奈",
+      "name": "河崎 舞奈",
+      "age": 26,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_有沢 りこ",
+      "name": "有沢 りこ",
+      "age": 34,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_桔梗 みなみ",
+      "name": "桔梗 みなみ",
+      "age": 25,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_高橋 るな",
+      "name": "高橋 るな",
+      "age": 26,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_天野 みつき",
+      "name": "天野 みつき",
+      "age": 34,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_葉月 りり",
+      "name": "葉月 りり",
+      "age": 31,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_灰原 えみり",
+      "name": "灰原 えみり",
+      "age": 34,
+      "height": null,
+      "bust": "(H)"
+    },
+    {
+      "id": "candy_spa_三吉 けい",
+      "name": "三吉 けい",
+      "age": 28,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_水川 結愛",
+      "name": "水川 結愛",
+      "age": 28,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_東堂 あやの",
+      "name": "東堂 あやの",
+      "age": 33,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_水月ましろ",
+      "name": "水月ましろ",
+      "age": 33,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_七瀬 めい",
+      "name": "七瀬 めい",
+      "age": 26,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_花井 愛菜",
+      "name": "花井 愛菜",
+      "age": 25,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_桜 ののか",
+      "name": "桜 ののか",
+      "age": 26,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_詠兎きき",
+      "name": "詠兎きき",
+      "age": 28,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_立花 あおい",
+      "name": "立花 あおい",
+      "age": 34,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_一色 結菜",
+      "name": "一色 結菜",
+      "age": 35,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_菊池真里亜",
+      "name": "菊池真里亜",
+      "age": 27,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_伊月 蘭",
+      "name": "伊月 蘭",
+      "age": 27,
+      "height": null,
+      "bust": "(C)"
+    },
+    {
+      "id": "candy_spa_吉川 ゆき",
+      "name": "吉川 ゆき",
+      "age": 32,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_加茂琴子",
+      "name": "加茂琴子",
+      "age": 34,
+      "height": null,
+      "bust": "(H)"
+    },
+    {
+      "id": "candy_spa_小川ゆい",
+      "name": "小川ゆい",
+      "age": 28,
+      "height": null,
+      "bust": "(H)"
+    },
+    {
+      "id": "candy_spa_長谷川 れん",
+      "name": "長谷川 れん",
+      "age": 32,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_雪白 りおん",
+      "name": "雪白 りおん",
+      "age": 26,
+      "height": null,
+      "bust": "(G)"
+    },
+    {
+      "id": "candy_spa_一条 えま",
+      "name": "一条 えま",
+      "age": 29,
+      "height": null,
+      "bust": "(G)"
+    },
+    {
+      "id": "candy_spa_最上 えりか",
+      "name": "最上 えりか",
+      "age": 30,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_三井 ゆう",
+      "name": "三井 ゆう",
+      "age": 26,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_桜井 ひより",
+      "name": "桜井 ひより",
+      "age": 24,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_市川 奏",
+      "name": "市川 奏",
+      "age": 25,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_神崎 みなみ",
+      "name": "神崎 みなみ",
+      "age": 28,
+      "height": null,
+      "bust": "(F)"
+    },
+    {
+      "id": "candy_spa_五十嵐 まき",
+      "name": "五十嵐 まき",
+      "age": 28,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_原 みのり",
+      "name": "原 みのり",
+      "age": 27,
+      "height": null,
+      "bust": "(E)"
+    },
+    {
+      "id": "candy_spa_和泉 紗夜",
+      "name": "和泉 紗夜",
+      "age": 28,
+      "height": null,
+      "bust": "(G)"
+    },
+    {
+      "id": "candy_spa_百華 める",
+      "name": "百華 める",
+      "age": 24,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_田中 もも",
+      "name": "田中 もも",
+      "age": 32,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_美山 ゆり",
+      "name": "美山 ゆり",
+      "age": 34,
+      "height": null,
+      "bust": "(D)"
+    },
+    {
+      "id": "candy_spa_丘月花枝",
+      "name": "丘月花枝",
+      "age": 32,
+      "height": null,
+      "bust": "(F)"
+    }
+  ]
+}

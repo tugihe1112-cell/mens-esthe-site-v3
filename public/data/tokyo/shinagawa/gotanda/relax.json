@@ -1,0 +1,24 @@
+{
+  "id": "tokyo_shinagawa_gotanda_relax",
+  "name": "RELAX (リラックス)",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "五反田",
+  "address": "東京都品川区五反田エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分9,000円～",
+  "hours": "12:00～翌1:00",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://www.e-kimoti.net/",
+  "nearestStation": "五反田駅",
+  "description": "五反田の日本人リラクゼーション。 / 料金システム: 60分9,000円 / 90分13,000円 / 120分17,000円 / 150分23,000円 / 180分27,000円",
+  "threads": [],
+  "brandId": "relax",
+  "therapists": []
+}

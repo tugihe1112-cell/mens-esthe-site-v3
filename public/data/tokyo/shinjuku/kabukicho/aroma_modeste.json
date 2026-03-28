@@ -1,0 +1,117 @@
+{
+  "id": "tokyo_shinjuku_kabukicho_aroma_modeste",
+  "name": "Aroma Modeste (アロマモデスト) 歌舞伎町店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "歌舞伎町",
+  "tags": [
+    "カード支払いOK",
+    "English OK",
+    "脱毛可能"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "90分",
+        "price": "12,000円"
+      },
+      {
+        "time": "120分",
+        "price": "16,000円"
+      },
+      {
+        "time": "150分",
+        "price": "20,000円"
+      },
+      {
+        "time": "180分",
+        "price": "24,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 30分",
+        "price": "5,000円"
+      }
+    ]
+  },
+  "url": "https://aroma-modeste.com/",
+  "threads": [],
+  "brandId": "aroma_modeste",
+  "therapists": [
+    "aroma_modeste_本田 しょうこ",
+    "aroma_modeste_佐伯 みほ",
+    "aroma_modeste_愛沢 さら",
+    "aroma_modeste_花咲 なごみ",
+    "aroma_modeste_花村 りおん",
+    "aroma_modeste_卯月 あいか",
+    "aroma_modeste_深澤 りか",
+    "aroma_modeste_西ノ谷 かんな",
+    "aroma_modeste_内永 えり",
+    "aroma_modeste_山下 みすず",
+    "aroma_modeste_花山 あおい",
+    "aroma_modeste_高城 かなめ",
+    "aroma_modeste_木南 わこ",
+    "aroma_modeste_氷室 こゆき",
+    "aroma_modeste_富永 みこ",
+    "aroma_modeste_常田 ゆうな",
+    "aroma_modeste_杉咲 みあ",
+    "aroma_modeste_桃井 ゆるる",
+    "aroma_modeste_霜月 はる",
+    "aroma_modeste_月森 しずか",
+    "aroma_modeste_幸村 ゆず",
+    "aroma_modeste_宮園 れいな",
+    "aroma_modeste_日翠 ちぇる",
+    "aroma_modeste_月野 むぎ",
+    "aroma_modeste_朝比奈 こころ",
+    "aroma_modeste_日向 えま",
+    "aroma_modeste_水篠 はのん",
+    "aroma_modeste_星宮 こつめ",
+    "aroma_modeste_如月 つむぎ",
+    "aroma_modeste_綾瀬 みな",
+    "aroma_modeste_桐森 みゆな",
+    "aroma_modeste_神楽 あお",
+    "aroma_modeste_望月 ふたば",
+    "aroma_modeste_渡辺 みき",
+    "aroma_modeste_希崎 ひまり",
+    "aroma_modeste_桜木 るい",
+    "aroma_modeste_朝倉 かな",
+    "aroma_modeste_乃木 こはる",
+    "aroma_modeste_大原 ゆい",
+    "aroma_modeste_小宮 みくる",
+    "aroma_modeste_黒木 りん",
+    "aroma_modeste_優木 ひとみ",
+    "aroma_modeste_早乙女 ゆの",
+    "aroma_modeste_青木 らん",
+    "aroma_modeste_永野 ゆめ",
+    "aroma_modeste_嗣永 ひより",
+    "aroma_modeste_武 れん",
+    "aroma_modeste_桜宮 もも",
+    "aroma_modeste_小嶋 ゆり",
+    "aroma_modeste_小町 このか",
+    "aroma_modeste_乙葉 なな",
+    "aroma_modeste_桜井 つばさ",
+    "aroma_modeste_瀬名 くるみ",
+    "aroma_modeste_茉白 れな",
+    "aroma_modeste_石森 ゆき",
+    "aroma_modeste_香川 れい",
+    "aroma_modeste_野中 めぐ",
+    "aroma_modeste_杉野 はな",
+    "aroma_modeste_桐谷 まな",
+    "aroma_modeste_成田 みう",
+    "aroma_modeste_藤咲 ひなの",
+    "aroma_modeste_七海 るか",
+    "aroma_modeste_広瀬 ほのか",
+    "aroma_modeste_月乃 りつ",
+    "aroma_modeste_水樹 あいな",
+    "aroma_modeste_篠田 りお",
+    "aroma_modeste_姫野 さくら",
+    "aroma_modeste_小野 ちはる",
+    "aroma_modeste_井上 ちひろ",
+    "aroma_modeste_滝沢 しおり",
+    "aroma_modeste_宇野 まりん",
+    "aroma_modeste_玉井 ふみか",
+    "aroma_modeste_月島 ゆら",
+    "aroma_modeste_清水 まき"
+  ]
+}

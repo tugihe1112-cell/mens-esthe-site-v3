@@ -1,0 +1,645 @@
+{
+  "id": "tokyo_nerima_nerima_xenispa",
+  "name": "ゼニスパ",
+  "prefecture": "東京都",
+  "city": "練馬区",
+  "area": "練馬",
+  "address": "東京都板橋区・練馬区エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "大山",
+    "成増",
+    "練馬",
+    "Gカップ以上",
+    "アイドル級",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://xenispa.com/",
+  "nearestStation": "大山駅",
+  "description": "大山・成増・練馬エリアの極上エステ。 / 料金システム: 90分12,000円 / 120分16,000円 / 150分20,000円",
+  "brandId": "xenispa",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "xenispa_天使 のあ",
+      "name": "天使 のあ",
+      "age": 22,
+      "height": 153,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_渚 みかん",
+      "name": "渚 みかん",
+      "age": 23,
+      "height": 152,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_桜井 ちこ",
+      "name": "桜井 ちこ",
+      "age": 20,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_朝日奈 みお",
+      "name": "朝日奈 みお",
+      "age": 24,
+      "height": 154,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_美園 めぐり",
+      "name": "美園 めぐり",
+      "age": 23,
+      "height": 165,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_春野 りこ",
+      "name": "春野 りこ",
+      "age": 22,
+      "height": 157,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_如月 まゆ",
+      "name": "如月 まゆ",
+      "age": 23,
+      "height": 156,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_芹沢 みみ",
+      "name": "芹沢 みみ",
+      "age": 21,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_星野 こころ",
+      "name": "星野 こころ",
+      "age": 22,
+      "height": 149,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_堀田 ちい",
+      "name": "堀田 ちい",
+      "age": 23,
+      "height": 153,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_飛鳥 もえ",
+      "name": "飛鳥 もえ",
+      "age": 24,
+      "height": 159,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_清羽 みれい",
+      "name": "清羽 みれい",
+      "age": 24,
+      "height": 155,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_津野 せれな",
+      "name": "津野 せれな",
+      "age": 19,
+      "height": 148,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_夢野 あかり",
+      "name": "夢野 あかり",
+      "age": 24,
+      "height": 155,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_雪那 まこ",
+      "name": "雪那 まこ",
+      "age": 19,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_舞浜 おと",
+      "name": "舞浜 おと",
+      "age": 20,
+      "height": 154,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_神月 よはね",
+      "name": "神月 よはね",
+      "age": 24,
+      "height": 156,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_胡桃 ゆあ",
+      "name": "胡桃 ゆあ",
+      "age": 22,
+      "height": 158,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_咲月 すみれ",
+      "name": "咲月 すみれ",
+      "age": 25,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_白石 みなみ",
+      "name": "白石 みなみ",
+      "age": 25,
+      "height": 152,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_白咲 まい",
+      "name": "白咲 まい",
+      "age": 19,
+      "height": 163,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_神楽 なの",
+      "name": "神楽 なの",
+      "age": 20,
+      "height": 165,
+      "bust": "(J)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_乃中 みき",
+      "name": "乃中 みき",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_松村 すず",
+      "name": "松村 すず",
+      "age": 23,
+      "height": 146,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_波多野 ゆみ",
+      "name": "波多野 ゆみ",
+      "age": 24,
+      "height": 169,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_藍染 はづき",
+      "name": "藍染 はづき",
+      "age": 23,
+      "height": 155,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_乃木坂 ことは",
+      "name": "乃木坂 ことは",
+      "age": 22,
+      "height": 155,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_小鳥遊 みくる",
+      "name": "小鳥遊 みくる",
+      "age": 20,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_綾瀬 らん",
+      "name": "綾瀬 らん",
+      "age": 24,
+      "height": 164,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_恋音 あんり",
+      "name": "恋音 あんり",
+      "age": 22,
+      "height": 161,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_森川 みずき",
+      "name": "森川 みずき",
+      "age": 25,
+      "height": 150,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_桜庭 ねいろ",
+      "name": "桜庭 ねいろ",
+      "age": 19,
+      "height": 156,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_神崎 ゆな",
+      "name": "神崎 ゆな",
+      "age": 19,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_浮雲 らむね",
+      "name": "浮雲 らむね",
+      "age": 20,
+      "height": 148,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_永瀬 りの",
+      "name": "永瀬 りの",
+      "age": 23,
+      "height": 153,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_伊吹 えり",
+      "name": "伊吹 えり",
+      "age": 25,
+      "height": 162,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_水瀬 ゆとり",
+      "name": "水瀬 ゆとり",
+      "age": 22,
+      "height": 171,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_白濱 りい",
+      "name": "白濱 りい",
+      "age": 24,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_柊 みらい",
+      "name": "柊 みらい",
+      "age": 24,
+      "height": 157,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_涼音 りず",
+      "name": "涼音 りず",
+      "age": 24,
+      "height": 165,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_白城 うる",
+      "name": "白城 うる",
+      "age": 20,
+      "height": 163,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_白雪 なる",
+      "name": "白雪 なる",
+      "age": 20,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_橘 せいな",
+      "name": "橘 せいな",
+      "age": 20,
+      "height": 161,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_世名城 あん",
+      "name": "世名城 あん",
+      "age": 22,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_宇佐美 れいか",
+      "name": "宇佐美 れいか",
+      "age": 25,
+      "height": 162,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_結月 るい",
+      "name": "結月 るい",
+      "age": 25,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_小坂 ゆり",
+      "name": "小坂 ゆり",
+      "age": 23,
+      "height": 162,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_月城 とあ",
+      "name": "月城 とあ",
+      "age": 20,
+      "height": 163,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_佐藤 みゆ",
+      "name": "佐藤 みゆ",
+      "age": 23,
+      "height": 156,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_有沢 めい",
+      "name": "有沢 めい",
+      "age": 25,
+      "height": 154,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_瀬名 ののか",
+      "name": "瀬名 ののか",
+      "age": 23,
+      "height": 154,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_天音 りあ",
+      "name": "天音 りあ",
+      "age": 24,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_南雲 ゆうか",
+      "name": "南雲 ゆうか",
+      "age": 24,
+      "height": 157,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_桃園 まふゆ",
+      "name": "桃園 まふゆ",
+      "age": 20,
+      "height": 159,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_青葉 えま",
+      "name": "青葉 えま",
+      "age": 25,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_一ノ瀬 もも",
+      "name": "一ノ瀬 もも",
+      "age": 19,
+      "height": 150,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_巫女 いちご",
+      "name": "巫女 いちご",
+      "age": 21,
+      "height": 145,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_小野 あおい",
+      "name": "小野 あおい",
+      "age": 23,
+      "height": 162,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_楓 ゆらの",
+      "name": "楓 ゆらの",
+      "age": 25,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_南 じゅか",
+      "name": "南 じゅか",
+      "age": 22,
+      "height": 148,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_守屋 れな",
+      "name": "守屋 れな",
+      "age": 23,
+      "height": 154,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_乙葉 さき",
+      "name": "乙葉 さき",
+      "age": 23,
+      "height": 157,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_春音 あいら",
+      "name": "春音 あいら",
+      "age": 21,
+      "height": 151,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_有栖 ひな",
+      "name": "有栖 ひな",
+      "age": 23,
+      "height": 164,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_藤咲 りな",
+      "name": "藤咲 りな",
+      "age": 25,
+      "height": 160,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_皇 ゆず",
+      "name": "皇 ゆず",
+      "age": 19,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_宮臣 ふうか",
+      "name": "宮臣 ふうか",
+      "age": 20,
+      "height": 150,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_寿 ひびき",
+      "name": "寿 ひびき",
+      "age": 18,
+      "height": 155,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_夢魅 ゆりか",
+      "name": "夢魅 ゆりか",
+      "age": 18,
+      "height": 155,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_夜桜 ゆゆ",
+      "name": "夜桜 ゆゆ",
+      "age": 20,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_恋羽 まな",
+      "name": "恋羽 まな",
+      "age": 22,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_成宮 さや",
+      "name": "成宮 さや",
+      "age": 25,
+      "height": 160,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_西園寺 ゆめ",
+      "name": "西園寺 ゆめ",
+      "age": 20,
+      "height": 158,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_海野 まりん",
+      "name": "海野 まりん",
+      "age": 22,
+      "height": 162,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_西野 ひまり",
+      "name": "西野 ひまり",
+      "age": 22,
+      "height": 153,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_七瀬 みやび",
+      "name": "七瀬 みやび",
+      "age": 23,
+      "height": 157,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "xenispa_朝倉 あや",
+      "name": "朝倉 あや",
+      "age": 24,
+      "height": 162,
+      "bust": "(E)",
+      "tags": null
+    }
+  ]
+}

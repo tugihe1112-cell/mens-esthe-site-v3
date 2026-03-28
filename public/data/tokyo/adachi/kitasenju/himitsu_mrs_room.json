@@ -1,0 +1,36 @@
+{
+  "id": "tokyo_adachi_kitasenju_himitsu_mrs_room",
+  "name": "秘密のミセスルーム 北千住",
+  "url": "https://mrs-room.com/",
+  "area": "北千住",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK",
+    "個室あり"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "足立区",
+  "brandId": "himitsu_mrs_room",
+  "threads": [],
+  "therapists": []
+}

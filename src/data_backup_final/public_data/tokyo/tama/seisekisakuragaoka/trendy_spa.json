@@ -1,0 +1,226 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "75分 14,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://www.trendy-spa.com/",
+  "description": "聖蹟桜ヶ丘・調布・多摩センターのメンズエステ。エリア最大級の在籍数。",
+  "tags": [
+    "複数エリア展開",
+    "カード支払いOK",
+    "深夜営業"
+  ],
+  "brandId": "trendy_spa",
+  "threads": [],
+  "id": "tokyo_tama_seisekisakuragaoka_trendy_spa",
+  "name": "TRENDY SPA (聖蹟桜ヶ丘店)",
+  "prefecture": "東京都",
+  "city": "多摩市",
+  "area": "聖蹟桜ヶ丘",
+  "nearestStation": "聖蹟桜ヶ丘駅",
+  "address": "東京都多摩市エリア",
+  "therapists": [
+    {
+      "id": "trendy_spa_真宮 ひかる",
+      "name": "真宮 ひかる",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_黒崎 みさ",
+      "name": "黒崎 みさ",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_観月 さな",
+      "name": "観月 さな",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_橘 ゆうき",
+      "name": "橘 ゆうき",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_日向 みさと",
+      "name": "日向 みさと",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_一条 里美",
+      "name": "一条 里美",
+      "age": 31,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_竹内 麗子",
+      "name": "竹内 麗子",
+      "age": 30,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_白鳥 ひな",
+      "name": "白鳥 ひな",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_一ノ瀬 なな",
+      "name": "一ノ瀬 なな",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_七瀬 千尋",
+      "name": "七瀬 千尋",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_村越 りん",
+      "name": "村越 りん",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_楠 はるか",
+      "name": "楠 はるか",
+      "age": 30,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_大城 みく",
+      "name": "大城 みく",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_佐伯 かんな",
+      "name": "佐伯 かんな",
+      "age": 31,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_若葉 さち",
+      "name": "若葉 さち",
+      "age": 32,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_高梨 涼子",
+      "name": "高梨 涼子",
+      "age": 35,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_深沢 めい",
+      "name": "深沢 めい",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_たま たまみ",
+      "name": "たま たまみ",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_水野 ことは",
+      "name": "水野 ことは",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_及川 るる",
+      "name": "及川 るる",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_嶋田 みほ",
+      "name": "嶋田 みほ",
+      "age": 37,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_椿 れな",
+      "name": "椿 れな",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_宮森 みか",
+      "name": "宮森 みか",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_中原 すず",
+      "name": "中原 すず",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "trendy_spa_望月 れい",
+      "name": "望月 れい",
+      "age": 28,
+      "height": null,
+      "bust": null,
+      "tags": []
+    }
+  ]
+}

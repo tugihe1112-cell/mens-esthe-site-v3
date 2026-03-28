@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_chuo_nihonbashi_berryz_spa",
+  "name": "Berryz Spa (ベリーズスパ)",
+  "prefecture": "東京都",
+  "city": "中央区",
+  "area": "日本橋",
+  "address": "東京都中央区日本橋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分20,000円～",
+  "hours": "11:30～LAST",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "http://berryzspa.net/",
+  "nearestStation": "東日本橋駅",
+  "description": "日本橋の日本人リラクゼーション。 / 料金システム: 60分20,000円〜 / 120分25,000円〜",
+  "threads": [],
+  "brandId": "berryz_spa",
+  "therapists": []
+}

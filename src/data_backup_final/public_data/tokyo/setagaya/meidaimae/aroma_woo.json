@@ -1,0 +1,25 @@
+{
+  "id": "tokyo_setagaya_meidaimae_aroma_woo",
+  "name": "Aroma Woo (アロマウー)",
+  "prefecture": "東京都",
+  "city": "世田谷区",
+  "area": "明大前",
+  "address": "東京都世田谷区明大前エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "13:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://aroma-woo.com/",
+  "nearestStation": "明大前駅",
+  "description": "明大前の日本人リラクゼーション。 / サンクスキャンペーン: 60分15,000円→12,000円 / 90分19,000円→18,000円 / 120分24,000円→23,000円 / お試しコース(背面のみ): 60分10,000円",
+  "threads": [],
+  "brandId": "aroma_woo",
+  "therapists": []
+}

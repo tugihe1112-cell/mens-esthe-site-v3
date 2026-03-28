@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_toshima_ikebukuro_aroma_resort",
+  "name": "アロマリゾート (旧昭和倶楽部)",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都豊島区池袋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分14,000円～",
+  "hours": "営業中",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK"
+  ],
+  "websiteUrl": "https://aromaresort.tokyo/",
+  "nearestStation": "池袋駅",
+  "description": "アロマリゾートコース（18～27歳）: 70分14,000円 / 90分16,000円 / 120分22,000円 / 150分28,000円 / 大人リゾートコース（28～47歳）: 70分12,000円 / 90分14,000円 / 120分20,000円 / 150分26,000円",
+  "threads": [],
+  "brandId": "aroma_resort",
+  "therapists": []
+}

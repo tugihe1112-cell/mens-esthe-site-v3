@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_shinjuku_takadanobaba_felix",
+  "name": "felix（フェリックス）",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "高田馬場",
+  "address": "東京都新宿区高田馬場（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "100分 18,000円～",
+  "hours": "11:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "Foreigner OK",
+    "深夜営業",
+    "初回特典あり"
+  ],
+  "websiteUrl": "https://www.felix-tokyo.com/",
+  "phone": "080-7161-0953",
+  "nearestStation": "高田馬場駅",
+  "description": "100分18,000円～140分26,000円 外国人対応可能、深夜営業で幅広いニーズに対応",
+  "threads": [],
+  "brandId": "felix",
+  "therapists": []
+}

@@ -1,0 +1,65 @@
+{
+  "id": "muchispa_minamiurawa",
+  "name": "むちすぱルーム 南浦和",
+  "url": "https://muchispa.com/",
+  "area": "南浦和",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK",
+    "個室あり",
+    "深夜営業"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "埼玉県",
+  "city": "南浦和",
+  "brandId": "muchispa_room",
+  "therapists": [
+    {
+      "name": "長谷川 みか",
+      "age": 35,
+      "height": 160,
+      "cup": "E",
+      "tags": []
+    },
+    {
+      "name": "佐々木 あい",
+      "age": 42,
+      "height": 155,
+      "cup": "F",
+      "tags": []
+    },
+    {
+      "name": "田中 ゆり",
+      "age": 38,
+      "height": 165,
+      "cup": "C",
+      "tags": []
+    },
+    {
+      "name": "中村 さき",
+      "age": 41,
+      "height": 158,
+      "cup": "D",
+      "tags": []
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "id": "tokyo_shinjuku_okubo_oneroom",
+  "name": "ONE ROOM (ワンルーム) 大久保店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "大久保",
+  "tags": [
+    "完全個室",
+    "深夜営業"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "60分",
+        "price": "13,000円"
+      },
+      {
+        "time": "90分",
+        "price": "19,000円"
+      },
+      {
+        "time": "120分",
+        "price": "25,000円"
+      },
+      {
+        "time": "150分",
+        "price": "31,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 20分",
+        "price": "6,000円"
+      },
+      {
+        "name": "ネット(写真)指名料",
+        "price": "1,000円"
+      }
+    ]
+  },
+  "url": "https://www.oneroom-shinjyuku.com",
+  "threads": [],
+  "brandId": "oneroom",
+  "therapists": [
+    "oneroom_早乙女",
+    "oneroom_横知 みく",
+    "oneroom_浅香 めい",
+    "oneroom_北条 姫奈",
+    "oneroom_葵",
+    "oneroom_村瀬 なぎ",
+    "oneroom_椿 れむ",
+    "oneroom_月瀬 美優",
+    "oneroom_原口 れいか",
+    "oneroom_音嶋 りり",
+    "oneroom_藤 かえで",
+    "oneroom_双葉",
+    "oneroom_宮中 るな",
+    "oneroom_源 しずか",
+    "oneroom_保科",
+    "oneroom_佐々木",
+    "oneroom_深瀬 まいか",
+    "oneroom_白鳥 わかな",
+    "oneroom_紫季 しき",
+    "oneroom_瀬古",
+    "oneroom_甘音 かれん",
+    "oneroom_咲良 愛梨",
+    "oneroom_吉田 ひな",
+    "oneroom_弓木 みゆ",
+    "oneroom_相田 さおり",
+    "oneroom_愛宮",
+    "oneroom_天海",
+    "oneroom_牧野",
+    "oneroom_有坂 りお",
+    "oneroom_有栖 ゆあ",
+    "oneroom_西山",
+    "oneroom_工藤 まな",
+    "oneroom_秋山 ゆう",
+    "oneroom_黒田 のあ",
+    "oneroom_松坂 かほ",
+    "oneroom_望月 みさき",
+    "oneroom_岩本",
+    "oneroom_三上",
+    "oneroom_花村 ネネ",
+    "oneroom_谷",
+    "oneroom_水城 にじ"
+  ]
+}

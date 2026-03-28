@@ -1,0 +1,32 @@
+// src/data/locations.js
+
+export const groupedLocations = [
+  {
+    region: "北海道・東北",
+    prefectures: ["北海道", "宮城県"]
+  },
+  {
+    region: "関東",
+    prefectures: ["埼玉県", "千葉県", "東京都", "神奈川県"]
+  },
+  {
+    region: "中部・北陸",
+    prefectures: ["福井県", "愛知県", "静岡県"]
+  },
+  {
+    region: "関西",
+    prefectures: ["滋賀県", "京都府", "大阪府", "兵庫県"]
+  },
+  {
+    region: "九州",
+    prefectures: ["福岡県"]
+  }
+];
+
+export const REGIONS = {
+  "北海道・東北": ["北海道", "宮城県"],
+  "関東": ["埼玉県", "千葉県", "東京都", "神奈川県"],
+  "中部・北陸": ["福井県", "愛知県", "静岡県"],
+  "関西": ["滋賀県", "京都府", "大阪府", "兵庫県"],
+  "九州": ["福岡県"]
+};

@@ -1,0 +1,432 @@
+{
+  "id": "tokyo_meguro_toritsudaigaku_tokyo_mensesthe",
+  "name": "東京メンズエステ 目黒 池袋",
+  "prefecture": "東京都",
+  "city": "目黒区",
+  "region": "関東エリア",
+  "address": "東京都目黒区",
+  "image": "/images/shops/tokyo_mensesthe.jpg",
+  "rating": 4.6,
+  "reviewCount": 0,
+  "price": "90分 14,000円～",
+  "hours": "11:00～翌4:00",
+  "isPremium": false,
+  "color": "from-emerald-400 to-teal-600",
+  "tags": [],
+  "websiteUrl": "https://tokyo-mensesthe.site/",
+  "threads": [],
+  "area": "都立大学",
+  "brandId": "tokyo_mensesthe",
+  "therapists": [
+    {
+      "id": "tokyo_mensesthe_まりな",
+      "name": "まりな",
+      "age": 25,
+      "height": 162,
+      "bust": "(E)",
+      "tags": [
+        "25歳",
+        "T162",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_さとみ",
+      "name": "さとみ",
+      "age": 24,
+      "height": 159,
+      "bust": "(D)",
+      "tags": [
+        "24歳",
+        "T159",
+        "B86(D)"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_ゆうこ",
+      "name": "ゆうこ",
+      "age": 26,
+      "height": 163,
+      "bust": "(F)",
+      "tags": [
+        "26歳",
+        "T163",
+        "B90(F)"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_まき",
+      "name": "まき",
+      "age": 23,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "23歳",
+        "T160",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_あい",
+      "name": "あい",
+      "age": 27,
+      "height": 165,
+      "bust": "(F)",
+      "tags": [
+        "27歳",
+        "T165",
+        "B89(F)"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_佐藤あや",
+      "name": "佐藤あや",
+      "age": 32,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_新垣めい",
+      "name": "新垣めい",
+      "age": 32,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_伊藤さや",
+      "name": "伊藤さや",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_綾瀬せな",
+      "name": "綾瀬せな",
+      "age": 28,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_本田まりな",
+      "name": "本田まりな",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_広瀬あいり",
+      "name": "広瀬あいり",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_椎名さくら",
+      "name": "椎名さくら",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_倉科あみ",
+      "name": "倉科あみ",
+      "age": 30,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_朝比奈ゆずり",
+      "name": "朝比奈ゆずり",
+      "age": 33,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "33歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_岡ゆかり",
+      "name": "岡ゆかり",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_園崎しおん",
+      "name": "園崎しおん",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_秋山つき",
+      "name": "秋山つき",
+      "age": 35,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "35歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_白川らん",
+      "name": "白川らん",
+      "age": 30,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_白鳥はなえ",
+      "name": "白鳥はなえ",
+      "age": 33,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "33歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_水野まりさ",
+      "name": "水野まりさ",
+      "age": 35,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "35歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_木村みゆう",
+      "name": "木村みゆう",
+      "age": 32,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_花山さき",
+      "name": "花山さき",
+      "age": 32,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_春日野うらら",
+      "name": "春日野うらら",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_望月りさ",
+      "name": "望月りさ",
+      "age": 36,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "36歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_佐倉ゆり",
+      "name": "佐倉ゆり",
+      "age": 47,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "47歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_白金ゆき",
+      "name": "白金ゆき",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_朝倉みほ",
+      "name": "朝倉みほ",
+      "age": 35,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "35歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_水樹りか",
+      "name": "水樹りか",
+      "age": 37,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "37歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_有村かなえ",
+      "name": "有村かなえ",
+      "age": 33,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "33歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_二葉つばさ",
+      "name": "二葉つばさ",
+      "age": 39,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "39歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_山咲すみれ",
+      "name": "山咲すみれ",
+      "age": 34,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "34歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_瀬戸ゆうか",
+      "name": "瀬戸ゆうか",
+      "age": 42,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "42歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_川崎まゆ",
+      "name": "川崎まゆ",
+      "age": 43,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "43歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_水戸まどか",
+      "name": "水戸まどか",
+      "age": 41,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "41歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_美咲こころ",
+      "name": "美咲こころ",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_白石あんじゅ",
+      "name": "白石あんじゅ",
+      "age": 40,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "40歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_吉川りんか",
+      "name": "吉川りんか",
+      "age": 40,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "40歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_アンジェリーナ フジモト",
+      "name": "アンジェリーナ フジモト",
+      "age": 36,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "36歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_坂井のあ",
+      "name": "坂井のあ",
+      "age": 36,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "36歳"
+      ]
+    },
+    {
+      "id": "tokyo_mensesthe_柴咲みか",
+      "name": "柴咲みか",
+      "age": 32,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "32歳"
+      ]
+    }
+  ]
+}

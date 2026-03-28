@@ -1,0 +1,969 @@
+{
+  "id": 77479,
+  "name": "Ho・O・Zu・Ki・SPA (ホオズキスパ)",
+  "prefecture": "神奈川県",
+  "city": "川崎",
+  "area": "武蔵小杉",
+  "address": "神奈川県川崎市中原区武蔵小杉エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分15,000円～",
+  "hours": "10:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム",
+    "熟女"
+  ],
+  "websiteUrl": "http://hoozuki-spa.net",
+  "nearestStation": "武蔵小杉駅",
+  "description": "武蔵小杉・代々木・原宿・蒲田・大森・大井町の日本人リラクゼーション。 / 料金システム: 90分15,000円〜",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "77479-sawa-aiko",
+      "name": "佐和亜伊子",
+      "age": 46,
+      "height": 170,
+      "bust": 87,
+      "cup": "D",
+      "waist": 60,
+      "hip": 86
+    },
+    {
+      "id": "77479-mochida-chikako",
+      "name": "持田千香子",
+      "age": 45,
+      "height": 165,
+      "bust": 86,
+      "cup": "D",
+      "waist": 60,
+      "hip": 88
+    },
+    {
+      "id": "77479-kobayashi-emiri",
+      "name": "小林えみり",
+      "age": 33,
+      "height": 150,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 93
+    },
+    {
+      "id": "77479-akiba-non",
+      "name": "秋葉のん",
+      "age": 37,
+      "height": 158,
+      "bust": 84,
+      "cup": "D",
+      "waist": 59,
+      "hip": 90
+    },
+    {
+      "id": "77479-matsuzaka-sakura",
+      "name": "松坂さくら",
+      "age": 38,
+      "height": 156,
+      "bust": 83,
+      "cup": "C",
+      "waist": 58,
+      "hip": 85
+    },
+    {
+      "id": "77479-jinno-sakurako",
+      "name": "神野桜子",
+      "age": 46,
+      "height": 156,
+      "bust": 85,
+      "cup": "D",
+      "waist": 60,
+      "hip": 90
+    },
+    {
+      "id": "77479-ukita-yua",
+      "name": "浮田ゆあ",
+      "age": 38,
+      "height": 158,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 90
+    },
+    {
+      "id": "77479-mikami-tsumugi",
+      "name": "三上つむぎ",
+      "age": 37,
+      "height": 153,
+      "bust": 90,
+      "cup": "F",
+      "waist": 59,
+      "hip": 86
+    },
+    {
+      "id": "77479-nanatsuno-mako",
+      "name": "七都野まこ",
+      "age": 40,
+      "height": 164,
+      "bust": 86,
+      "cup": "D",
+      "waist": 60,
+      "hip": 87
+    },
+    {
+      "id": "77479-nakamura-maika",
+      "name": "中村舞香",
+      "age": 33,
+      "height": 157,
+      "bust": 93,
+      "cup": "E",
+      "waist": 60,
+      "hip": 95
+    },
+    {
+      "id": "77479-matsushita-mio",
+      "name": "松下みお",
+      "age": 37,
+      "height": 162,
+      "bust": 88,
+      "cup": "F",
+      "waist": 59,
+      "hip": 90
+    },
+    {
+      "id": "77479-nemoto-michiru",
+      "name": "根本みちる",
+      "age": 44,
+      "height": 158,
+      "bust": 86,
+      "cup": "E",
+      "waist": 60,
+      "hip": 88
+    },
+    {
+      "id": "77479-tsunematsu-yuri",
+      "name": "つねまつ ゆり",
+      "age": 39,
+      "height": 150,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 84
+    },
+    {
+      "id": "77479-sumino-kei",
+      "name": "澄乃慧",
+      "age": 45,
+      "height": 150,
+      "bust": 84,
+      "cup": "C",
+      "waist": 58,
+      "hip": 86
+    },
+    {
+      "id": "77479-jinguji-tomo",
+      "name": "神宮寺とも",
+      "age": 40,
+      "height": 155,
+      "bust": 93,
+      "cup": "F",
+      "waist": 60,
+      "hip": 97
+    },
+    {
+      "id": "77479-yamamoto-yuri",
+      "name": "山本友里",
+      "age": 41,
+      "height": 153,
+      "bust": 84,
+      "cup": "C",
+      "waist": 59,
+      "hip": 83
+    },
+    {
+      "id": "77479-shitara-miki",
+      "name": "設楽みき",
+      "age": 34,
+      "height": 158,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 90
+    },
+    {
+      "id": "77479-shiraishi-minami",
+      "name": "白石みなみ",
+      "age": 43,
+      "height": 164,
+      "bust": 86,
+      "cup": "C",
+      "waist": 60,
+      "hip": 90
+    },
+    {
+      "id": "77479-matsui-nami",
+      "name": "松井奈美",
+      "age": 39,
+      "height": 162,
+      "bust": 86,
+      "cup": "D",
+      "waist": 60,
+      "hip": 90
+    },
+    {
+      "id": "77479-sakura-madoka",
+      "name": "佐倉まどか",
+      "age": 44,
+      "height": 151,
+      "bust": 84,
+      "cup": "C",
+      "waist": 60,
+      "hip": 88
+    },
+    {
+      "id": "77479-haraguchi-runa",
+      "name": "原口るな",
+      "age": 36,
+      "height": 159,
+      "bust": 92,
+      "cup": "F",
+      "waist": 59,
+      "hip": 91
+    },
+    {
+      "id": "77479-miyazaki-rino",
+      "name": "宮崎りの",
+      "age": 34,
+      "height": 163,
+      "bust": 86,
+      "cup": "D",
+      "waist": 60,
+      "hip": 90
+    },
+    {
+      "id": "77479-morishita-iori",
+      "name": "森下いおり",
+      "age": 42,
+      "height": 154,
+      "bust": 86,
+      "cup": "D",
+      "waist": 60,
+      "hip": 88
+    },
+    {
+      "id": "77479-kitagawa-erika",
+      "name": "北川エリカ",
+      "age": 42,
+      "height": 150,
+      "bust": 84,
+      "cup": "C",
+      "waist": 58,
+      "hip": 84
+    },
+    {
+      "id": "77479-tsubaki-karen",
+      "name": "椿かれん",
+      "age": 37,
+      "height": 157,
+      "bust": 92,
+      "cup": "F",
+      "waist": 59,
+      "hip": 85
+    },
+    {
+      "id": "77479-takayama-megu",
+      "name": "高山めぐ",
+      "age": 41,
+      "height": 158,
+      "bust": 85,
+      "cup": "D",
+      "waist": 60,
+      "hip": 84
+    },
+    {
+      "id": "77479-hashimoto-kaede",
+      "name": "橋本かえで",
+      "age": 33,
+      "height": 165,
+      "bust": 84,
+      "cup": "C",
+      "waist": 56,
+      "hip": 86
+    },
+    {
+      "id": "77479-fukuda-aino",
+      "name": "福田あいの",
+      "age": 37,
+      "height": 150,
+      "bust": 84,
+      "cup": "C",
+      "waist": 59,
+      "hip": 84
+    },
+    {
+      "id": "77479-momo-misaki",
+      "name": "百みさき",
+      "age": 42,
+      "height": 160,
+      "bust": 88,
+      "cup": "D",
+      "waist": 60,
+      "hip": 95
+    },
+    {
+      "id": "77479-sakurai-hinako",
+      "name": "桜井ひなこ",
+      "age": 39,
+      "height": 158,
+      "bust": 92,
+      "cup": "G",
+      "waist": 59,
+      "hip": 88
+    },
+    {
+      "id": "77479-kondo-natsu",
+      "name": "近藤なつ",
+      "age": 45,
+      "height": 163,
+      "bust": 96,
+      "cup": "F",
+      "waist": 61,
+      "hip": 95
+    },
+    {
+      "id": "77479-yonekura-akine",
+      "name": "米倉あきね",
+      "age": 40,
+      "height": 160,
+      "bust": 88,
+      "cup": "F",
+      "waist": 60,
+      "hip": 85
+    },
+    {
+      "id": "77479-shimizu-hinano",
+      "name": "清水ひなの",
+      "age": 39,
+      "height": 164,
+      "bust": 84,
+      "cup": "C",
+      "waist": 59,
+      "hip": 95
+    },
+    {
+      "id": "77479-tsuruhara-moa",
+      "name": "鶴原もあ",
+      "age": 44,
+      "height": 159,
+      "bust": 85,
+      "cup": "C",
+      "waist": 59,
+      "hip": 86
+    },
+    {
+      "id": "77479-nanasawa-megumi",
+      "name": "七沢めぐみ",
+      "age": 39,
+      "height": 153,
+      "bust": 85,
+      "cup": "C",
+      "waist": 59,
+      "hip": 84
+    },
+    {
+      "id": "77479-takiguchi-maiko",
+      "name": "滝口まいこ",
+      "age": 41,
+      "height": 162,
+      "bust": 88,
+      "cup": "C",
+      "waist": 60,
+      "hip": 95
+    },
+    {
+      "id": "77479-saito-ran",
+      "name": "斎藤らん",
+      "age": 42,
+      "height": 153,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 85
+    },
+    {
+      "id": "77479-aoi-misa",
+      "name": "蒼井みさ",
+      "age": 39,
+      "height": 162,
+      "bust": 86,
+      "cup": "E",
+      "waist": 59,
+      "hip": 85
+    },
+    {
+      "id": "77479-suga-karin",
+      "name": "須賀かりん",
+      "age": 36,
+      "height": 157,
+      "bust": 92,
+      "cup": "F",
+      "waist": 61,
+      "hip": 95
+    },
+    {
+      "id": "77479-kuzukawa-arisa",
+      "name": "葛川ありさ",
+      "age": 41,
+      "height": 159,
+      "bust": 88,
+      "cup": "D",
+      "waist": 59,
+      "hip": 90
+    },
+    {
+      "id": "77479-aina-matsuri",
+      "name": "愛菜まつり",
+      "age": 41,
+      "height": 155,
+      "bust": 85,
+      "cup": "D",
+      "waist": 59,
+      "hip": 92
+    },
+    {
+      "id": "77479-yuzuki-miyu",
+      "name": "柚木みゆ",
+      "age": 39,
+      "height": 159,
+      "bust": 85,
+      "cup": "C",
+      "waist": 58,
+      "hip": 85
+    },
+    {
+      "id": "77479-ueda-kurumi",
+      "name": "上田くる美",
+      "age": 41,
+      "height": 164,
+      "bust": 87,
+      "cup": "D",
+      "waist": 60,
+      "hip": 89
+    },
+    {
+      "id": "77479-ichinomiya-rei",
+      "name": "一宮れい",
+      "age": 35,
+      "height": 170,
+      "bust": 85,
+      "cup": "C",
+      "waist": 60,
+      "hip": 90
+    },
+    {
+      "id": "77479-nanase-koko",
+      "name": "七瀬ここ",
+      "age": 41,
+      "height": 152,
+      "bust": 98,
+      "cup": "F",
+      "waist": 60,
+      "hip": 88
+    },
+    {
+      "id": "77479-minami-ayano",
+      "name": "美波あやの",
+      "age": 39,
+      "height": 153,
+      "bust": 84,
+      "cup": "C",
+      "waist": 58,
+      "hip": 85
+    },
+    {
+      "id": "77479-shibata-emi",
+      "name": "柴田えみ",
+      "age": 41,
+      "height": 150,
+      "bust": 90,
+      "cup": "F",
+      "waist": 60,
+      "hip": 95
+    },
+    {
+      "id": "77479-nishino-mai",
+      "name": "西野まい",
+      "age": 43,
+      "height": 157,
+      "bust": 87,
+      "cup": "E",
+      "waist": 58,
+      "hip": 84
+    },
+    {
+      "id": "77479-hazuki-rina",
+      "name": "葉月りな",
+      "age": 44,
+      "height": 169,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 85
+    },
+    {
+      "id": "77479-sato-riko",
+      "name": "佐藤梨子",
+      "age": 38,
+      "height": 155,
+      "bust": 85,
+      "cup": "C",
+      "waist": 60,
+      "hip": 86
+    },
+    {
+      "id": "77479-matsuyama-kako",
+      "name": "松山かこ",
+      "age": 43,
+      "height": 155,
+      "bust": 85,
+      "cup": "C",
+      "waist": 59,
+      "hip": 86
+    },
+    {
+      "id": "77479-minami-yuka",
+      "name": "南ゆうか",
+      "age": 40,
+      "height": 165,
+      "bust": 87,
+      "cup": "D",
+      "waist": 60,
+      "hip": 89
+    },
+    {
+      "id": "77479-tominaga-shion",
+      "name": "富永しおん",
+      "age": 35,
+      "height": 163,
+      "bust": 86,
+      "cup": "D",
+      "waist": 61,
+      "hip": 90
+    },
+    {
+      "id": "77479-hiramatsu-kanae",
+      "name": "平松かなえ",
+      "age": 41,
+      "height": 154,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 90
+    },
+    {
+      "id": "77479-asahi-yuna",
+      "name": "朝日ゆな",
+      "age": 40,
+      "height": 164,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 85
+    },
+    {
+      "id": "77479-morikoshi-aki",
+      "name": "森越あき",
+      "age": 40,
+      "height": 163,
+      "bust": 86,
+      "cup": "D",
+      "waist": 60,
+      "hip": 87
+    },
+    {
+      "id": "77479-arimura-tsugumi",
+      "name": "有村つぐみ",
+      "age": 38,
+      "height": 153,
+      "bust": 85,
+      "cup": "D",
+      "waist": 60,
+      "hip": 88
+    },
+    {
+      "id": "77479-shiina-sora",
+      "name": "椎名そら",
+      "age": 40,
+      "height": 152,
+      "bust": 84,
+      "cup": "C",
+      "waist": 59,
+      "hip": 85
+    },
+    {
+      "id": "77479-satake-nanami",
+      "name": "佐竹七海",
+      "age": 41,
+      "height": 162,
+      "bust": 93,
+      "cup": "G",
+      "waist": 60,
+      "hip": 90
+    },
+    {
+      "id": "77479-kirishima-akina",
+      "name": "桐島あきな",
+      "age": 40,
+      "height": 162,
+      "bust": 88,
+      "cup": "E",
+      "waist": 60,
+      "hip": 91
+    },
+    {
+      "id": "77479-kuramoto-yumi",
+      "name": "倉本ゆみ",
+      "age": 32,
+      "height": 164,
+      "bust": 84,
+      "cup": "C",
+      "waist": 59,
+      "hip": 86
+    },
+    {
+      "id": "77479-ochiai-rin",
+      "name": "落合凛",
+      "age": 46,
+      "height": 159,
+      "bust": 85,
+      "cup": "D",
+      "waist": 60,
+      "hip": 88
+    },
+    {
+      "id": "77479-ogura-erena",
+      "name": "小倉えれな",
+      "age": 39,
+      "height": 166,
+      "bust": 84,
+      "cup": "D",
+      "waist": 60,
+      "hip": 82
+    },
+    {
+      "id": "77479-akimoto-anri",
+      "name": "秋元アンリ",
+      "age": 38,
+      "height": 161,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 83
+    },
+    {
+      "id": "77479-okuzono-midori",
+      "name": "奥園翠",
+      "age": 33,
+      "height": 155,
+      "bust": 84,
+      "cup": "C",
+      "waist": 58,
+      "hip": 84
+    },
+    {
+      "id": "77479-inamori-mizuki",
+      "name": "稲森みずき",
+      "age": 34,
+      "height": 152,
+      "bust": 87,
+      "cup": "D",
+      "waist": 60,
+      "hip": 87
+    },
+    {
+      "id": "77479-kokubo-taemi",
+      "name": "小久保妙美",
+      "age": 41,
+      "height": 153,
+      "bust": 88,
+      "cup": "F",
+      "waist": 60,
+      "hip": 90
+    },
+    {
+      "id": "77479-sasaki-kumi",
+      "name": "佐々木くみ",
+      "age": 34,
+      "height": 156,
+      "bust": 90,
+      "cup": "H",
+      "waist": 59,
+      "hip": 89
+    },
+    {
+      "id": "77479-aoyama-miki",
+      "name": "青山みき",
+      "age": 44,
+      "height": 168,
+      "bust": 90,
+      "cup": "D",
+      "waist": 60,
+      "hip": 92
+    },
+    {
+      "id": "77479-amamiya-hikari",
+      "name": "雨宮光里",
+      "age": 40,
+      "height": 155,
+      "bust": 88,
+      "cup": "D",
+      "waist": 60,
+      "hip": 86
+    },
+    {
+      "id": "77479-nakai-mika",
+      "name": "中井みか",
+      "age": 35,
+      "height": 150,
+      "bust": 86,
+      "cup": "F",
+      "waist": 60,
+      "hip": 83
+    },
+    {
+      "id": "77479-aizawa-sumomo",
+      "name": "逢沢すもも",
+      "age": 45,
+      "height": 147,
+      "bust": 88,
+      "cup": "F",
+      "waist": 56,
+      "hip": 88
+    },
+    {
+      "id": "77479-kuroki-mamori",
+      "name": "黒木まもり",
+      "age": 38,
+      "height": 151,
+      "bust": 85,
+      "cup": "C",
+      "waist": 60,
+      "hip": 84
+    },
+    {
+      "id": "77479-shimazaki-fuka",
+      "name": "島崎ふうか",
+      "age": 39,
+      "height": 157,
+      "bust": 84,
+      "cup": "C",
+      "waist": 59,
+      "hip": 84
+    },
+    {
+      "id": "77479-nakamori-mirei",
+      "name": "中森みれい",
+      "age": 47,
+      "height": 168,
+      "bust": 84,
+      "cup": "D",
+      "waist": 63,
+      "hip": 87
+    },
+    {
+      "id": "77479-kamiya-miho",
+      "name": "神谷みほ",
+      "age": 45,
+      "height": 156,
+      "bust": 86,
+      "cup": "D",
+      "waist": 58,
+      "hip": 86
+    },
+    {
+      "id": "77479-horie-shizuku",
+      "name": "堀江しずく",
+      "age": 40,
+      "height": 162,
+      "bust": 86,
+      "cup": "C",
+      "waist": 58,
+      "hip": 90
+    },
+    {
+      "id": "77479-wagatsuma-yuka",
+      "name": "我妻ゆか",
+      "age": 32,
+      "height": 166,
+      "bust": 86,
+      "cup": "D",
+      "waist": 59,
+      "hip": 86
+    },
+    {
+      "id": "77479-yamane-mami",
+      "name": "山根まみ",
+      "age": 38,
+      "height": 150,
+      "bust": 89,
+      "cup": "F",
+      "waist": 61,
+      "hip": 87
+    },
+    {
+      "id": "77479-fujigasaki-reika",
+      "name": "藤ヶ崎礼華",
+      "age": 43,
+      "height": 162,
+      "bust": 90,
+      "cup": "F",
+      "waist": 62,
+      "hip": 89
+    },
+    {
+      "id": "77479-yokoyama-yuko",
+      "name": "横山ゆうこ",
+      "age": 39,
+      "height": 153,
+      "bust": 88,
+      "cup": "E",
+      "waist": 60,
+      "hip": 86
+    },
+    {
+      "id": "77479-nomiya-maki",
+      "name": "野宮まき",
+      "age": 39,
+      "height": 165,
+      "bust": 85,
+      "cup": "C",
+      "waist": 59,
+      "hip": 83
+    },
+    {
+      "id": "77479-hanazawa-misaki",
+      "name": "花澤美咲",
+      "age": 42,
+      "height": 151,
+      "bust": 90,
+      "cup": "E",
+      "waist": 63,
+      "hip": 92
+    },
+    {
+      "id": "77479-komiya-rei",
+      "name": "小宮れい",
+      "age": 43,
+      "height": 160,
+      "bust": 84,
+      "cup": "C",
+      "waist": 60,
+      "hip": 90
+    },
+    {
+      "id": "77479-ayase-yo",
+      "name": "綾瀬よう",
+      "age": 40,
+      "height": 157,
+      "bust": 86,
+      "cup": "D",
+      "waist": 60,
+      "hip": 91
+    },
+    {
+      "id": "77479-nishina-aya",
+      "name": "仁科綾",
+      "age": 39,
+      "height": 158,
+      "bust": 84,
+      "cup": "C",
+      "waist": 59,
+      "hip": 88
+    },
+    {
+      "id": "77479-tsuji-hana",
+      "name": "辻はな",
+      "age": 39,
+      "height": 156,
+      "bust": 85,
+      "cup": "C",
+      "waist": 59,
+      "hip": 85
+    },
+    {
+      "id": "77479-ichinose-sakura",
+      "name": "一ノ瀬桜",
+      "age": 41,
+      "height": 151,
+      "bust": 85,
+      "cup": "D",
+      "waist": 60,
+      "hip": 85
+    },
+    {
+      "id": "77479-inoue-nana",
+      "name": "井上なな",
+      "age": 37,
+      "height": 168,
+      "bust": 86,
+      "cup": "C",
+      "waist": 61,
+      "hip": 90
+    },
+    {
+      "id": "77479-asakura-sayuki",
+      "name": "浅倉さゆき",
+      "age": 37,
+      "height": 157,
+      "bust": 85,
+      "cup": "F",
+      "waist": 59,
+      "hip": 88
+    },
+    {
+      "id": "77479-kinoshita-honoka",
+      "name": "木下ほのか",
+      "age": 33,
+      "height": 150,
+      "bust": 84,
+      "cup": "C",
+      "waist": 58,
+      "hip": 85
+    },
+    {
+      "id": "77479-manabe-shiho",
+      "name": "真鍋しほ",
+      "age": 46,
+      "height": 158,
+      "bust": 84,
+      "cup": "C",
+      "waist": 58,
+      "hip": 86
+    },
+    {
+      "id": "77479-kimura-nana",
+      "name": "木村なな",
+      "age": 36,
+      "height": 168,
+      "bust": 85,
+      "cup": "C",
+      "waist": 58,
+      "hip": 86
+    },
+    {
+      "id": "77479-kawanabe-mina",
+      "name": "川辺みな",
+      "age": 39,
+      "height": 160,
+      "bust": 84,
+      "cup": "C",
+      "waist": 56,
+      "hip": 84
+    }
+  ],
+  "brandId": "hoozuki"
+}

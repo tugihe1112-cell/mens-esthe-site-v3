@@ -1,0 +1,28 @@
+{
+  "id": "tokyo_minato_shinbashi_lumespa",
+  "name": "ルメスパ 旧Aroma Spec (アロマスペック)",
+  "prefecture": "東京都",
+  "city": "港区",
+  "area": "新橋",
+  "address": "東京都港区新橋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分14,000円～",
+  "hours": "24時間営業",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "24時間営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://aroma-spec.net/",
+  "nearestStation": "新橋駅",
+  "description": "新橋の24時間営業リラクゼーション。 / 料金システム: 60分14,000円〜 / 80分18,000円〜",
+  "threads": [],
+  "brandId": "lumespa",
+  "therapists": []
+}

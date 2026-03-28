@@ -1,0 +1,48 @@
+{
+  "id": "tokyo_shinjuku_higashishinjuku_tokyo_mensesthe",
+  "name": "東京メンズエステ 東新宿ルーム",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "region": "関東エリア",
+  "address": "東京都新宿区",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～翌4:00",
+  "isPremium": true,
+  "color": "from-pink-500 to-rose-600",
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://tokyo-menes.com/",
+  "system": {
+    "standard": [
+      {
+        "time": "90分",
+        "price": "18,000円"
+      },
+      {
+        "time": "120分",
+        "price": "23,000円"
+      },
+      {
+        "time": "150分",
+        "price": "28,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長30分",
+        "price": "6,000円"
+      }
+    ]
+  },
+  "threads": [],
+  "area": "東新宿",
+  "brandId": "tokyo_mensesthe",
+  "therapists": []
+}

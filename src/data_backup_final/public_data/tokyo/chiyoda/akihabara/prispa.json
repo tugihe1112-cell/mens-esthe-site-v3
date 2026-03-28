@@ -1,0 +1,574 @@
+{
+  "id": "tokyo_chiyoda_akihabara_prispa",
+  "name": "Prispa (プリスパ)",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "秋葉原",
+  "address": "東京都千代田区神田佐久間町エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 4.5,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://prispa.jp/",
+  "nearestStation": "秋葉原駅",
+  "description": "秋葉原の人気店。圧倒的な在籍数と、清楚で可愛らしいセラピストが多数在籍。",
+  "tags": [
+    "秋葉原",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "大量在籍"
+  ],
+  "brandId": "prispa",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "prispa_坂口レイ",
+      "name": "坂口レイ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_成瀬ひな",
+      "name": "成瀬ひな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_最上ありす",
+      "name": "最上ありす",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_沢田エミ",
+      "name": "沢田エミ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_蒼井まい",
+      "name": "蒼井まい",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_藤田こより",
+      "name": "藤田こより",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_双葉あかり",
+      "name": "双葉あかり",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_佐藤みなみ",
+      "name": "佐藤みなみ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_桃井レン",
+      "name": "桃井レン",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_吉川まな",
+      "name": "吉川まな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_麻倉よう",
+      "name": "麻倉よう",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_月城はる",
+      "name": "月城はる",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_胡桃こはる",
+      "name": "胡桃こはる",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_工藤あざみ",
+      "name": "工藤あざみ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_滝沢まりな",
+      "name": "滝沢まりな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_新井ひかり",
+      "name": "新井ひかり",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_日向りこ",
+      "name": "日向りこ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_京本あんな",
+      "name": "京本あんな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_水沢えな",
+      "name": "水沢えな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_逢坂ゆず",
+      "name": "逢坂ゆず",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_神崎るな",
+      "name": "神崎るな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_宮沢ゆいか",
+      "name": "宮沢ゆいか",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_雪本りお",
+      "name": "雪本りお",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_如月えみり",
+      "name": "如月えみり",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_白咲ゆりか",
+      "name": "白咲ゆりか",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_小湊あかね",
+      "name": "小湊あかね",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_白雪かのん",
+      "name": "白雪かのん",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_花沢さきの",
+      "name": "花沢さきの",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_佐伯ゆら",
+      "name": "佐伯ゆら",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_空星みあ",
+      "name": "空星みあ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_黒崎らん",
+      "name": "黒崎らん",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_龍天寺のあ",
+      "name": "龍天寺のあ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_水野すず",
+      "name": "水野すず",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_春乃あん",
+      "name": "春乃あん",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_白石あすか",
+      "name": "白石あすか",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_杉咲ゆの",
+      "name": "杉咲ゆの",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_宮下りの",
+      "name": "宮下りの",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_持田めぐ",
+      "name": "持田めぐ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_木村さき",
+      "name": "木村さき",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_織宮さくら",
+      "name": "織宮さくら",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_望月ほのか",
+      "name": "望月ほのか",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_三浦うみ",
+      "name": "三浦うみ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_星れいか",
+      "name": "星れいか",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_渚しおん",
+      "name": "渚しおん",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_間宮りょう",
+      "name": "間宮りょう",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_西條なみ",
+      "name": "西條なみ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_成海ゆずは",
+      "name": "成海ゆずは",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_山下なお",
+      "name": "山下なお",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_香澄かりん",
+      "name": "香澄かりん",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_九条いおり",
+      "name": "九条いおり",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_笹木まろん",
+      "name": "笹木まろん",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_佐倉ひなの",
+      "name": "佐倉ひなの",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_坂本めぐみ",
+      "name": "坂本めぐみ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_長谷川エマ",
+      "name": "長谷川エマ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_本田ねね",
+      "name": "本田ねね",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_星野みゆ",
+      "name": "星野みゆ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_夏目にな",
+      "name": "夏目にな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_天海こころ",
+      "name": "天海こころ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_咲山るき",
+      "name": "咲山るき",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_水瀬もえ",
+      "name": "水瀬もえ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_未空ゆうひ",
+      "name": "未空ゆうひ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_天音れいら",
+      "name": "天音れいら",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_中村まき",
+      "name": "中村まき",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_小鳥遊めめ",
+      "name": "小鳥遊めめ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_石原なな",
+      "name": "石原なな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_雪下るり",
+      "name": "雪下るり",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_愛沢せな",
+      "name": "愛沢せな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_白金はな",
+      "name": "白金はな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_白鳥あめ",
+      "name": "白鳥あめ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_有松みう",
+      "name": "有松みう",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_橘つばさ",
+      "name": "橘つばさ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_天使ななせ",
+      "name": "天使ななせ",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_御影みな",
+      "name": "御影みな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_椎名もも",
+      "name": "椎名もも",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_早川ひづる",
+      "name": "早川ひづる",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_平井りな",
+      "name": "平井りな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_宮城ゆうな",
+      "name": "宮城ゆうな",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "prispa_真鍋まどか",
+      "name": "真鍋まどか",
+      "age": "20代",
+      "height": "-",
+      "bust": null
+    }
+  ]
+}

@@ -1,0 +1,376 @@
+{
+  "id": "tokyo_chiyoda_jimbocho_queens_collection",
+  "name": "QUEEN'S COLLECTION 神保町ルーム",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "神保町",
+  "region": "関東エリア",
+  "address": "東京都千代田区神田神保町",
+  "nearestStation": "神保町駅",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～翌10:00",
+  "isPremium": true,
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "高偏差値",
+    "女子大生多数"
+  ],
+  "websiteUrl": "https://queens-collection-esthe.com/",
+  "description": "全てにディープリンパが含まれます。厳選されたハイレベルなセラピストが多数在籍。",
+  "brandId": "queens_collection",
+  "system": {
+    "standard": [
+      {
+        "time": "90分",
+        "price": "18,000円"
+      },
+      {
+        "time": "120分",
+        "price": "23,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長30分",
+        "price": "7,000円"
+      }
+    ]
+  },
+  "threads": [],
+  "therapists": [
+    {
+      "id": "queens_collection_千歳みづき",
+      "name": "千歳みづき",
+      "age": "25歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_立教かすみ",
+      "name": "立教かすみ",
+      "age": "22歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_めろん♡NH♡",
+      "name": "めろん♡NH♡",
+      "age": "29歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_白百合響",
+      "name": "白百合響",
+      "age": "26歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_早稲田真衣",
+      "name": "早稲田真衣",
+      "age": "24歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_本女にこ",
+      "name": "本女にこ",
+      "age": "22歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_桜美林はな",
+      "name": "桜美林はな",
+      "age": "20歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_灘かりん",
+      "name": "灘かりん",
+      "age": "24歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_光華まほ",
+      "name": "光華まほ",
+      "age": "27歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_京月みやび",
+      "name": "京月みやび",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_敬愛まろん",
+      "name": "敬愛まろん",
+      "age": "24歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_南山める",
+      "name": "南山める",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_明治舞華",
+      "name": "明治舞華",
+      "age": "24歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_一宮渚",
+      "name": "一宮渚",
+      "age": "27歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_相模れん",
+      "name": "相模れん",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_跡見らら",
+      "name": "跡見らら",
+      "age": "26歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_横国みか",
+      "name": "横国みか",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_尚美めぐ",
+      "name": "尚美めぐ",
+      "age": "28歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_清泉あゆみ",
+      "name": "清泉あゆみ",
+      "age": "28歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_学習院つばき",
+      "name": "学習院つばき",
+      "age": "30歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_法政まゆ",
+      "name": "法政まゆ",
+      "age": "25歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_上越ひまわり",
+      "name": "上越ひまわり",
+      "age": "25歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_慶應くれあ",
+      "name": "慶應くれあ",
+      "age": "22歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_星城うみ",
+      "name": "星城うみ",
+      "age": "23歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_杏林芽郁",
+      "name": "杏林芽郁",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_月見桃菜",
+      "name": "月見桃菜",
+      "age": "25歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_上智れいか",
+      "name": "上智れいか",
+      "age": "24歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_桃山みかん",
+      "name": "桃山みかん",
+      "age": "21歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_初音カレン",
+      "name": "初音カレン",
+      "age": "26歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_目黒りお",
+      "name": "目黒りお",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_常葉音羽",
+      "name": "常葉音羽",
+      "age": "29歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_天使みゆ",
+      "name": "天使みゆ",
+      "age": "26歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_学習院えれん",
+      "name": "学習院えれん",
+      "age": "24歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_共立りな",
+      "name": "共立りな",
+      "age": "28歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_立教いおり",
+      "name": "立教いおり",
+      "age": "20歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_桜花つばめ",
+      "name": "桜花つばめ",
+      "age": "27歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_酪農みるく",
+      "name": "酪農みるく",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_イエール閻魔",
+      "name": "イエール閻魔",
+      "age": "22歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_信州りんご",
+      "name": "信州りんご",
+      "age": "23歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_青山あいら",
+      "name": "青山あいら",
+      "age": "22歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_お茶の水るい",
+      "name": "お茶の水るい",
+      "age": "22歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_高知なぎ",
+      "name": "高知なぎ",
+      "age": "26歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_フェリスあん",
+      "name": "フェリスあん",
+      "age": "22歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_桐朋あまね",
+      "name": "桐朋あまね",
+      "age": "22歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_三田れい",
+      "name": "三田れい",
+      "age": "24歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_明治なみ",
+      "name": "明治なみ",
+      "age": "20歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "queens_collection_神戸あやな",
+      "name": "神戸あやな",
+      "age": "24歳",
+      "height": "165cm",
+      "bust": null
+    }
+  ]
+}

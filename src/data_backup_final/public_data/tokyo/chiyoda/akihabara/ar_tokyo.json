@@ -1,0 +1,778 @@
+{
+  "id": "tokyo_chiyoda_akihabara_ar_tokyo",
+  "name": "ar Tokyo (アールトウキョウ秋葉原)",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "秋葉原",
+  "address": "東京都千代田区秋葉原エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 4.5,
+  "reviewCount": 0,
+  "price": "90分12,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://www.ms-ar.tokyo/",
+  "nearestStation": "秋葉原駅",
+  "description": "秋葉原の日本人リラクゼーション。 / 料金システム: 90分12,000円〜 / 120分16,000円〜",
+  "threads": [],
+  "brandId": "ar_tokyo",
+  "therapists": [
+    {
+      "id": "ar_tokyo_佐藤りか",
+      "name": "佐藤りか",
+      "age": "35歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_葉月めぐみ",
+      "name": "葉月めぐみ",
+      "age": "32歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_並木じゅん",
+      "name": "並木じゅん",
+      "age": "45歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_神田ほのか",
+      "name": "神田ほのか",
+      "age": "45歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_早乙女のあ",
+      "name": "早乙女のあ",
+      "age": "40歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_伊藤らん",
+      "name": "伊藤らん",
+      "age": "42歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_桜川みな",
+      "name": "桜川みな",
+      "age": "32歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_山口れな",
+      "name": "山口れな",
+      "age": "35歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_本田りんか",
+      "name": "本田りんか",
+      "age": "34歳",
+      "height": "174cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_永峰ゆず",
+      "name": "永峰ゆず",
+      "age": "36歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_七瀬さき",
+      "name": "七瀬さき",
+      "age": "30歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_椎名さえ",
+      "name": "椎名さえ",
+      "age": "41歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_小久保のりか",
+      "name": "小久保のりか",
+      "age": "46歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_宇佐美ゆりあ",
+      "name": "宇佐美ゆりあ",
+      "age": "39歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_白石あやの",
+      "name": "白石あやの",
+      "age": "34歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_高塚わかな",
+      "name": "高塚わかな",
+      "age": "40歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_涼風さらさ",
+      "name": "涼風さらさ",
+      "age": "39歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_武田みおり",
+      "name": "武田みおり",
+      "age": "44歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_ケリー",
+      "name": "ケリー",
+      "age": "40歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_冬月りゆき",
+      "name": "冬月りゆき",
+      "age": "36歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_大川ゆあ",
+      "name": "大川ゆあ",
+      "age": "39歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_成宮いつき",
+      "name": "成宮いつき",
+      "age": "35歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_飛田みれい",
+      "name": "飛田みれい",
+      "age": "34歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_森しずく",
+      "name": "森しずく",
+      "age": "34歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_泉じゅんこ",
+      "name": "泉じゅんこ",
+      "age": "40歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_橋本しおり",
+      "name": "橋本しおり",
+      "age": "36歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_一ノ瀬かれん",
+      "name": "一ノ瀬かれん",
+      "age": "34歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_神崎れん",
+      "name": "神崎れん",
+      "age": "44歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_矢部とあ",
+      "name": "矢部とあ",
+      "age": "44歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_水戸こはる",
+      "name": "水戸こはる",
+      "age": "30歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_乙葉かな",
+      "name": "乙葉かな",
+      "age": "30歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_平高はるき",
+      "name": "平高はるき",
+      "age": "33歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_三浦あおい",
+      "name": "三浦あおい",
+      "age": "40歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_柊じゅり",
+      "name": "柊じゅり",
+      "age": "32歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_羽生くるみ",
+      "name": "羽生くるみ",
+      "age": "43歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_黒羽ゆり",
+      "name": "黒羽ゆり",
+      "age": "35歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_田丸まなみ",
+      "name": "田丸まなみ",
+      "age": "34歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_若葉なお",
+      "name": "若葉なお",
+      "age": "35歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_木下ゆま",
+      "name": "木下ゆま",
+      "age": "35歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_平山ひかる",
+      "name": "平山ひかる",
+      "age": "42歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_落合れい",
+      "name": "落合れい",
+      "age": "44歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_倉本けい",
+      "name": "倉本けい",
+      "age": "40歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_広瀬あまね",
+      "name": "広瀬あまね",
+      "age": "52歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_早見しおり",
+      "name": "早見しおり",
+      "age": "30歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_浅間あやみ",
+      "name": "浅間あやみ",
+      "age": "30歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_藤咲りあ",
+      "name": "藤咲りあ",
+      "age": "34歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_木村まな",
+      "name": "木村まな",
+      "age": "34歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_高見澤りな",
+      "name": "高見澤りな",
+      "age": "49歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_土屋みさと",
+      "name": "土屋みさと",
+      "age": "31歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_榎本いおり",
+      "name": "榎本いおり",
+      "age": "43歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_魚谷りょう",
+      "name": "魚谷りょう",
+      "age": "39歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_菅野すずか",
+      "name": "菅野すずか",
+      "age": "39歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_三嶋さくら",
+      "name": "三嶋さくら",
+      "age": "30歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_百瀬れおな",
+      "name": "百瀬れおな",
+      "age": "32歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_松浦ちさと",
+      "name": "松浦ちさと",
+      "age": "50歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_田口ありさ",
+      "name": "田口ありさ",
+      "age": "36歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_遠藤ちひろ",
+      "name": "遠藤ちひろ",
+      "age": "40歳",
+      "height": "173cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_清水なつき",
+      "name": "清水なつき",
+      "age": "35歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_浜田ゆみ",
+      "name": "浜田ゆみ",
+      "age": "30歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_高嶺めい",
+      "name": "高嶺めい",
+      "age": "36歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_徳増ちえ",
+      "name": "徳増ちえ",
+      "age": "38歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_湯浅さりな",
+      "name": "湯浅さりな",
+      "age": "31歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_浅谷ひな",
+      "name": "浅谷ひな",
+      "age": "32歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_三田まり",
+      "name": "三田まり",
+      "age": "44歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_石原なみこ",
+      "name": "石原なみこ",
+      "age": "44歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_星川りの",
+      "name": "星川りの",
+      "age": "30歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_小川あき",
+      "name": "小川あき",
+      "age": "39歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_高橋なぎさ",
+      "name": "高橋なぎさ",
+      "age": "31歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_内山やよい",
+      "name": "内山やよい",
+      "age": "43歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_松瀬みほ",
+      "name": "松瀬みほ",
+      "age": "45歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_橘みらい",
+      "name": "橘みらい",
+      "age": "30歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_河合ちあき",
+      "name": "河合ちあき",
+      "age": "46歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_黒田かおる",
+      "name": "黒田かおる",
+      "age": "44歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_野山らら",
+      "name": "野山らら",
+      "age": "47歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_瀬川ふみか",
+      "name": "瀬川ふみか",
+      "age": "37歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_時田もな",
+      "name": "時田もな",
+      "age": "33歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_餅田ささ",
+      "name": "餅田ささ",
+      "age": "31歳",
+      "height": "146cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_笠原ちか",
+      "name": "笠原ちか",
+      "age": "42歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_水谷みゆ",
+      "name": "水谷みゆ",
+      "age": "48歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_朝比奈えま",
+      "name": "朝比奈えま",
+      "age": "41歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_藤堂あさみ",
+      "name": "藤堂あさみ",
+      "age": "46歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_新田まひろ",
+      "name": "新田まひろ",
+      "age": "30歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_末永りな",
+      "name": "末永りな",
+      "age": "30歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_天音ゆい",
+      "name": "天音ゆい",
+      "age": "36歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_君島しのぶ",
+      "name": "君島しのぶ",
+      "age": "38歳",
+      "height": "149cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_安室えりか",
+      "name": "安室えりか",
+      "age": "37歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_芹野りさ",
+      "name": "芹野りさ",
+      "age": "35歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_小野寺みどり",
+      "name": "小野寺みどり",
+      "age": "45歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_岩崎ともみ",
+      "name": "岩崎ともみ",
+      "age": "42歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_朝霧さく",
+      "name": "朝霧さく",
+      "age": "45歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_鎌倉せいな",
+      "name": "鎌倉せいな",
+      "age": "30歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_結城らく",
+      "name": "結城らく",
+      "age": "40歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_高嶋さとみ",
+      "name": "高嶋さとみ",
+      "age": "39歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_朝日いろは",
+      "name": "朝日いろは",
+      "age": "37歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_村瀬まさみ",
+      "name": "村瀬まさみ",
+      "age": "42歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_松本よしの",
+      "name": "松本よしの",
+      "age": "38歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_八代ゆな",
+      "name": "八代ゆな",
+      "age": "39歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_風間りつ",
+      "name": "風間りつ",
+      "age": "41歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_観月かほ",
+      "name": "観月かほ",
+      "age": "41歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_上条なな",
+      "name": "上条なな",
+      "age": "42歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_綾瀬ひより",
+      "name": "綾瀬ひより",
+      "age": "30歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_如月みお",
+      "name": "如月みお",
+      "age": "35歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_西条るな",
+      "name": "西条るな",
+      "age": "47歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_関野りお",
+      "name": "関野りお",
+      "age": "38歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_小池ありさ",
+      "name": "小池ありさ",
+      "age": "32歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_若狭まほ",
+      "name": "若狭まほ",
+      "age": "34歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "ar_tokyo_堀内なつめ",
+      "name": "堀内なつめ",
+      "age": "38歳",
+      "height": "158cm",
+      "bust": null
+    }
+  ]
+}

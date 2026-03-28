@@ -1,0 +1,228 @@
+{
+  "id": "tokyo_dispatch_because",
+  "name": "ビコーズ (旧リオン)",
+  "prefecture": "東京都",
+  "city": "23区出張",
+  "area": "23wards",
+  "address": "東京都23区内出張",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 14,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "23区出張",
+    "カード支払いOK"
+  ],
+  "websiteUrl": "http://www.ms-because.tokyo/",
+  "nearestStation": "23区内出張",
+  "description": "23区出張のメンズエステ。旧店名リオン。 / 料金システム(OPEN割): 70分14,000円 / 90分16,000円 / 120分22,000円 / 150分28,000円",
+  "brandId": "because",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "because_広瀬りお",
+      "name": "広瀬りお",
+      "age": 27,
+      "height": 158,
+      "bust": 80
+    },
+    {
+      "id": "because_西野ゆずは",
+      "name": "西野ゆずは",
+      "age": 19,
+      "height": 148,
+      "bust": 87
+    },
+    {
+      "id": "because_宮本あいり",
+      "name": "宮本あいり",
+      "age": 21,
+      "height": 157,
+      "bust": 85
+    },
+    {
+      "id": "because_北川りな",
+      "name": "北川りな",
+      "age": 23,
+      "height": 160,
+      "bust": 88
+    },
+    {
+      "id": "because_新田かずは",
+      "name": "新田かずは",
+      "age": 24,
+      "height": 162,
+      "bust": 83
+    },
+    {
+      "id": "because_峰こころ",
+      "name": "峰こころ",
+      "age": 22,
+      "height": 163,
+      "bust": 88
+    },
+    {
+      "id": "because_星奈もみじ",
+      "name": "星奈もみじ",
+      "age": 25,
+      "height": 160,
+      "bust": 83
+    },
+    {
+      "id": "because_藤田きょうか",
+      "name": "藤田きょうか",
+      "age": 24,
+      "height": 153,
+      "bust": 84
+    },
+    {
+      "id": "because_西山ゆな",
+      "name": "西山ゆな",
+      "age": 23,
+      "height": 156,
+      "bust": 78
+    },
+    {
+      "id": "because_片瀬みき",
+      "name": "片瀬みき",
+      "age": 29,
+      "height": 162,
+      "bust": 81
+    },
+    {
+      "id": "because_林ゆり",
+      "name": "林ゆり",
+      "age": 24,
+      "height": 163,
+      "bust": 88
+    },
+    {
+      "id": "because_水瀬うい",
+      "name": "水瀬うい",
+      "age": 23,
+      "height": 162,
+      "bust": 85
+    },
+    {
+      "id": "because_朝比奈めい",
+      "name": "朝比奈めい",
+      "age": 20,
+      "height": 165,
+      "bust": 88
+    },
+    {
+      "id": "because_月島おと",
+      "name": "月島おと",
+      "age": 23,
+      "height": 161,
+      "bust": 81
+    },
+    {
+      "id": "because_森あや",
+      "name": "森あや",
+      "age": 20,
+      "height": 151,
+      "bust": 88
+    },
+    {
+      "id": "because_葉山こはる",
+      "name": "葉山こはる",
+      "age": 18,
+      "height": 158,
+      "bust": 88
+    },
+    {
+      "id": "because_今井あおい",
+      "name": "今井あおい",
+      "age": 25,
+      "height": 160,
+      "bust": 87
+    },
+    {
+      "id": "because_本橋ひなた",
+      "name": "本橋ひなた",
+      "age": 23,
+      "height": 157,
+      "bust": 87
+    },
+    {
+      "id": "because_水川ふみ",
+      "name": "水川ふみ",
+      "age": 24,
+      "height": 165,
+      "bust": 87
+    },
+    {
+      "id": "because_今村みさ",
+      "name": "今村みさ",
+      "age": 18,
+      "height": 150,
+      "bust": 85
+    },
+    {
+      "id": "because_竹内さえ",
+      "name": "竹内さえ",
+      "age": 20,
+      "height": 158,
+      "bust": 87
+    },
+    {
+      "id": "because_花咲みんと",
+      "name": "花咲みんと",
+      "age": 26,
+      "height": 160,
+      "bust": 87
+    },
+    {
+      "id": "because_蒼井のぞみ",
+      "name": "蒼井のぞみ",
+      "age": 28,
+      "height": 153,
+      "bust": 85
+    },
+    {
+      "id": "because_白井かなで",
+      "name": "白井かなで",
+      "age": 24,
+      "height": 152,
+      "bust": 88
+    },
+    {
+      "id": "because_橘あさみ",
+      "name": "橘あさみ",
+      "age": 29,
+      "height": 155,
+      "bust": 87
+    },
+    {
+      "id": "because_一ノ瀬ひな",
+      "name": "一ノ瀬ひな",
+      "age": 20,
+      "height": 144,
+      "bust": 81
+    },
+    {
+      "id": "because_平塚ゆり",
+      "name": "平塚ゆり",
+      "age": 24,
+      "height": 163,
+      "bust": 86
+    },
+    {
+      "id": "because_桜井ゆうり",
+      "name": "桜井ゆうり",
+      "age": 22,
+      "height": 159,
+      "bust": 88
+    },
+    {
+      "id": "because_白井ほのか",
+      "name": "白井ほのか",
+      "age": 25,
+      "height": 150,
+      "bust": 85
+    }
+  ]
+}

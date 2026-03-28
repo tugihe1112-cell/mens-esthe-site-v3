@@ -1,0 +1,24 @@
+{
+  "id": "tokyo_toshima_ikebukuro_muchimuchi_onesan",
+  "name": "むちむちお姉さん",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都内各エリア（池袋・秋葉原・赤羽・大井町・五反田・立川）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分18,000円～",
+  "hours": "営業中",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://muchi2onesan.com/",
+  "nearestStation": "池袋駅、秋葉原駅、赤羽駅、大井町駅、五反田駅、立川駅",
+  "description": "通常コース: 90分18,000円 / 120分24,000円 / 150分30,000円 / 70分18,000円(仰向けのみ) / 30分延長6,000円 / マットコース: 100分24,000円 / 130分30,000円 / 160分36,000円 / 指名料1,000円 / 本指名料2,000円",
+  "threads": [],
+  "brandId": "muchimuchi_onesan",
+  "therapists": []
+}

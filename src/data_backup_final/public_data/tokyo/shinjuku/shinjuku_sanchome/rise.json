@@ -1,0 +1,39 @@
+{
+  "id": "tokyo_shinjuku_shinjuku_sanchome_rise",
+  "name": "Rise～リゼ～ 新宿三丁目店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "region": "関東エリア",
+  "address": "東京都新宿区",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 16,000円～",
+  "hours": "12:00～LAST",
+  "isPremium": true,
+  "color": "from-cyan-500 to-blue-600",
+  "tags": [],
+  "websiteUrl": "http://rise-aroma.com/",
+  "system": {
+    "standard": [
+      {
+        "time": "90分",
+        "price": "16,000円"
+      },
+      {
+        "time": "120分",
+        "price": "21,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長30分",
+        "price": "6,000円"
+      }
+    ]
+  },
+  "threads": [],
+  "area": "新宿三丁目",
+  "brandId": "rise",
+  "therapists": []
+}

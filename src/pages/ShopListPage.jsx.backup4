@@ -1,0 +1,469 @@
+import React, { useState, useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { allShops } from "../data/index";
+import RatingDisplay from "../components/ui/RatingDisplay";
+import Sidebar from "../components/Sidebar";
+import { matchesPrefecture } from "../utils/shopFilters";
+import { groupedLocations, WARDS, WARD_GROUPS, LOCATION_DATA } from "../data/locations";
+
+export default function ShopListPage() {
+  const shops = useMemo(() => Object.values(allShops), []);
+  
+  const [searchParams] = useSearchParams();
+  const initialSearch = searchParams.get('search') || '';
+  const initialTag = searchParams.get('tag') || '';
+  
+  const [searchKeyword, setSearchKeyword] = useState(initialSearch);
+  const [selectedPrefecture, setSelectedPrefecture] = useState("all");
+  const [selectedWard, setSelectedWard] = useState("all");
+  const [selectedCity, setSelectedCity] = useState("all");
+  const [selectedPrice, setSelectedPrice] = useState("all");
+  const [minRating, setMinRating] = useState(0);
+  const [sortBy, setSortBy] = useState("rating");
+  const [selectedTags, setSelectedTags] = useState(initialTag ? [initialTag] : []);
+  const [showFilters, setShowFilters] = useState(false);
+
+  // 1. 都道府県リスト (データが存在するもののみ)
+  const prefectures = useMemo(() => {
+    const allPrefs = shops.flatMap(s => 
+      Array.isArray(s.prefecture) ? s.prefecture : [s.prefecture]
+    ).filter(Boolean);
+    return Array.from(new Set(allPrefs));
+  }, [shops]);
+
+  // ■ 現在選択中の都道府県に、実際に存在する「区・市」のセットを作成
+  const activeCitiesInPref = useMemo(() => {
+    if (selectedPrefecture === "all") return new Set();
+    const cities = new Set();
+    shops.forEach(s => {
+      if (matchesPrefecture(s, selectedPrefecture) && s.city) {
+        cities.add(s.city);
+      }
+    });
+    return cities;
+  }, [selectedPrefecture, shops]);
+
+  // ヘルパー: その区・市を表示すべきか判定
+  const shouldShowWard = (wardName) => {
+    // 1. 店舗データのcityと完全一致するか
+    if (activeCitiesInPref.has(wardName)) return true;
+    // 2. 店舗データのcityに含まれているか (例: 店舗データが"渋谷区・目黒区"の場合、"渋谷区"も表示許可)
+    for (const activeCity of activeCitiesInPref) {
+      if (activeCity.includes(wardName)) return true;
+    }
+    return false;
+  };
+
+  // 2. 区・市町村リスト (グループ対応 & 実データ存在チェック)
+  const renderWardOptions = () => {
+    if (selectedPrefecture === "all") {
+      return <option value="all">都道府県を選択...</option>;
+    }
+
+    // グループ定義がある場合 (東京、大阪など)
+    if (WARD_GROUPS[selectedPrefecture]) {
+      const groups = WARD_GROUPS[selectedPrefecture];
+      const usedWards = new Set(); // 既に表示した区を記録
+
+      const groupOptions = groups.map(group => {
+        // グループ内の区のうち、実際にお店があるものだけを抽出
+        const visibleWardsInGroup = group.wards.filter(ward => shouldShowWard(ward));
+        
+        // 有効な区が1つもなければ、そのグループ見出しごと非表示にする
+        if (visibleWardsInGroup.length === 0) return null;
+
+        return (
+          <optgroup key={group.label} label={group.label}>
+            {visibleWardsInGroup.map(ward => {
+              usedWards.add(ward);
+              return <option key={ward} value={ward}>{ward}</option>;
+            })}
+          </optgroup>
+        );
+      });
+
+      // グループに含まれなかった残りの区 (かつお店があるもの)
+      const allWards = WARDS[selectedPrefecture] || [];
+      const remainingWards = allWards.filter(w => !usedWards.has(w) && shouldShowWard(w));
+
+      return (
+        <>
+          <option value="all">区 (指定なし)</option>
+          {groupOptions}
+          {remainingWards.length > 0 && (
+            <optgroup label="その他">
+              {remainingWards.map(ward => (
+                <option key={ward} value={ward}>{ward}</option>
+              ))}
+            </optgroup>
+          )}
+        </>
+      );
+    }
+
+    // グループ定義がない場合 (単純リスト表示、かつお店があるものだけ)
+    const simpleWards = WARDS[selectedPrefecture] || [];
+    const visibleSimpleWards = simpleWards.filter(w => shouldShowWard(w) && !w.includes("・"));
+    
+    return (
+      <>
+        <option value="all">区 (指定なし)</option>
+        {visibleSimpleWards.map(ward => (
+          <option key={ward} value={ward}>{ward}</option>
+        ))}
+      </>
+    );
+  };
+
+  // 3. 詳細エリアリスト (店舗があるものだけ)
+  const availableCities = useMemo(() => {
+    if (selectedWard === "all" || !LOCATION_DATA[selectedWard]) {
+      return [];
+    }
+    // 定義されている詳細エリアのうち、実際に店舗データ(area)に存在するものだけを抽出
+    const definedAreas = LOCATION_DATA[selectedWard];
+    const activeAreas = new Set();
+    
+    shops.forEach(s => {
+      const isCityMatch = Array.isArray(s.city) ? s.city.includes(selectedWard) : s.city === selectedWard;
+      if (matchesPrefecture(s, selectedPrefecture) && isCityMatch && s.area) {
+        if (Array.isArray(s.area)) {
+          s.area.forEach(a => activeAreas.add(a));
+        } else {
+          activeAreas.add(s.area);
+        }
+      }
+    });
+
+    return definedAreas.filter(area => activeAreas.has(area));
+  }, [selectedWard, selectedPrefecture, shops]);
+
+  const handlePrefectureChange = (e) => {
+    setSelectedPrefecture(e.target.value);
+    setSelectedWard("all");
+    setSelectedCity("all");
+  };
+
+  const handleWardChange = (e) => {
+    setSelectedWard(e.target.value);
+    setSelectedCity("all");
+  };
+
+  const availableTags = useMemo(() => {
+    const allTags = shops?.flatMap(shop => shop.tags || []) || [];
+    return [...new Set(allTags)].sort();
+  }, [shops]);
+
+  const priceRanges = [
+    { value: "all", label: "すべて" },
+    { value: "10000", label: "10,000円以下" },
+    { value: "15000", label: "15,000円以下" },
+    { value: "20000", label: "20,000円以下" },
+    { value: "20001", label: "20,000円以上" },
+  ];
+
+  const handleTagToggle = (tag) => {
+    setSelectedTags(prev => 
+      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const filteredShops = useMemo(() => {
+    let result = shops || [];
+
+    if (searchKeyword) {
+      const keyword = searchKeyword.toLowerCase();
+      result = result.filter(
+        (shop) =>
+          (shop.name && shop.name.toLowerCase().includes(keyword)) ||
+          (shop.city && shop.city.toLowerCase().includes(keyword)) ||
+          (shop.prefecture && shop.prefecture.toLowerCase().includes(keyword)) ||
+          (shop.area && (Array.isArray(shop.area) ? shop.area.some(a => a?.toLowerCase().includes(keyword)) : shop.area.toLowerCase().includes(keyword)))
+      );
+    }
+
+    if (selectedPrefecture !== "all") {
+      result = result.filter((shop) => matchesPrefecture(shop, selectedPrefecture));
+    }
+
+    // 区・市町村フィルター (部分一致で柔軟にヒットさせる)
+    if (selectedWard !== "all") {
+       result = result.filter((shop) => shop.city && shop.city.includes(selectedWard));
+    }
+
+    if (selectedCity !== "all") {
+      result = result.filter((shop) => shop.area === selectedCity || shop.city === selectedCity);
+    }
+
+    if (selectedTags.length > 0) {
+      result = result.filter(shop => 
+        selectedTags.some(tag => shop.tags?.includes(tag))
+      );
+    }
+
+    if (selectedPrice !== "all") {
+      result = result.filter((shop) => {
+        let priceStr = shop.price || "";
+        if (!priceStr && shop.system?.standard?.length > 0) {
+           priceStr = shop.system.standard[0].price;
+        }
+        const price = parseInt(priceStr.replace(/[^0-9]/g, ""));
+        const maxPrice = parseInt(selectedPrice);
+        if (isNaN(price)) return false;
+        if (selectedPrice === "20001") return price >= 20000;
+        return price <= maxPrice;
+      });
+    }
+
+    if (minRating > 0) {
+      result = result.filter((shop) => (shop.rating || 0) >= minRating);
+    }
+
+    result = [...result].sort((a, b) => {
+      if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
+      if (sortBy === "reviews") return (b.reviewCount || 0) - (a.reviewCount || 0);
+      if (sortBy === "therapists") {
+         const countA = (a.threads && a.threads.length) || 0;
+         const countB = (b.threads && b.threads.length) || 0;
+         return countB - countA;
+      }
+      if (sortBy === "price-asc" || sortBy === "price-desc") {
+        let priceStrA = a.price || (a.system?.standard?.[0]?.price) || "";
+        let priceStrB = b.price || (b.system?.standard?.[0]?.price) || "";
+        const priceA = parseInt(priceStrA.replace(/[^0-9]/g, "")) || 0;
+        const priceB = parseInt(priceStrB.replace(/[^0-9]/g, "")) || 0;
+        if (sortBy === "price-asc") return priceA - priceB;
+        if (sortBy === "price-desc") return priceB - priceA;
+      }
+      return 0;
+    });
+
+    return result;
+  }, [shops, searchKeyword, selectedPrefecture, selectedWard, selectedCity, selectedPrice, minRating, sortBy, selectedTags]);
+
+  const resetFilters = () => {
+    setSearchKeyword("");
+    setSelectedPrefecture("all");
+    setSelectedWard("all");
+    setSelectedCity("all");
+    setSelectedPrice("all");
+    setMinRating(0);
+    setSortBy("rating");
+    setSelectedTags([]);
+  };
+
+  const activeFilterCount = 
+    (selectedPrefecture !== "all" ? 1 : 0) +
+    (selectedWard !== "all" ? 1 : 0) +
+    (selectedCity !== "all" ? 1 : 0) +
+    (selectedPrice !== "all" ? 1 : 0) +
+    (minRating > 0 ? 1 : 0) +
+    selectedTags.length;
+
+  return (
+    <div className="max-w-7xl mx-auto p-4 md:p-6">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex-1 min-w-0">
+          <div className="mb-6">
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">店舗一覧</h1>
+            <p className="text-gray-400 text-sm md:text-base">全{shops?.length || 0}店舗から検索</p>
+          </div>
+
+          <div className="bg-slate-800 rounded-lg p-3 md:p-4 mb-6 border border-slate-700">
+            <div className="flex flex-col sm:flex-row gap-3 mb-4">
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                  placeholder="店舗名・エリアで検索..."
+                  className="w-full px-4 py-3 pl-12 pr-12 rounded-lg bg-slate-900 border border-slate-700 text-white placeholder-gray-500 focus:border-pink-500 focus:outline-none text-sm md:text-base"
+                />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                {searchKeyword && (
+                  <button onClick={() => setSearchKeyword('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="px-4 md:px-6 py-3 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold transition flex items-center justify-center gap-2 text-sm md:text-base whitespace-nowrap"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                フィルター
+                {activeFilterCount > 0 && (
+                  <span className="bg-pink-600 text-white text-xs px-2 py-0.5 rounded-full">{activeFilterCount}</span>
+                )}
+              </button>
+            </div>
+
+            {showFilters && (
+              <div className="border-t border-slate-700 pt-4 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                  {/* 1. 都道府県フィルター */}
+                  <select
+                    value={selectedPrefecture}
+                    onChange={handlePrefectureChange}
+                    className="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm"
+                  >
+                    <option value="all">都道府県</option>
+                    {prefectures.map(p => <option key={p} value={p}>{p}</option>)}
+                      </optgroup>
+                  {/* 2. 区・市町村フィルター (グループ表示 & 実データのみ) */}
+                  <select
+                    value={selectedWard}
+                    onChange={handleWardChange}
+                    disabled={selectedPrefecture === "all"}
+                    className={`px-4 py-2 rounded-lg border border-slate-700 text-white text-sm ${
+                      selectedPrefecture === "all" ? "bg-slate-800 text-gray-500" : "bg-slate-900"
+                    }`}
+                  >
+                    {renderWardOptions()}
+                  </select>
+
+                  {/* 3. 詳細エリアフィルター (実データのみ) */}
+                  <select
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    disabled={selectedWard === "all" || availableCities.length === 0}
+                    className={`px-4 py-2 rounded-lg border border-slate-700 text-white text-sm ${
+                      selectedWard === "all" || availableCities.length === 0
+                        ? "bg-slate-800 text-gray-500 cursor-not-allowed"
+                        : "bg-slate-900"
+                    }`}
+                  >
+                    <option value="all">
+                      {selectedWard === "all" ? "区を選択..." : "詳細エリア (指定なし)"}
+                    </option>
+                    {availableCities.map((city) => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={selectedPrice}
+                    onChange={(e) => setSelectedPrice(e.target.value)}
+                    className="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm"
+                  >
+                    {priceRanges.map((range) => (
+                      <option key={range.value} value={range.value}>{range.label}</option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={minRating}
+                    onChange={(e) => setMinRating(Number(e.target.value))}
+                    className="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm"
+                  >
+                    <option value="0">評価指定なし</option>
+                    <option value="4.5">⭐ 4.5以上</option>
+                    <option value="4.0">⭐ 4.0以上</option>
+                    <option value="3.5">⭐ 3.5以上</option>
+                  </select>
+
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="px-4 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white text-sm col-span-1 sm:col-span-2 lg:col-span-5"
+                  >
+                    <option value="rating">評価順</option>
+                    <option value="reviews">口コミ数順</option>
+                    <option value="therapists">セラピスト数順</option>
+                    <option value="price-asc">料金が安い順</option>
+                    <option value="price-desc">料金が高い順</option>
+                  </select>
+                </div>
+
+                {activeFilterCount > 0 && (
+                  <button onClick={resetFilters} className="w-full px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium transition">
+                    フィルターをリセット
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-gray-400 text-xs md:text-sm">{filteredShops.length}件の店舗が見つかりました</p>
+          </div>
+
+          {filteredShops.length === 0 ? (
+            <div className="bg-slate-800 rounded-lg p-8 md:p-12 text-center border border-slate-700">
+              <div className="text-4xl md:text-6xl mb-4">🔍</div>
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2">該当する店舗が見つかりません</h3>
+              <p className="text-gray-400 text-sm md:text-base mb-6">検索条件を変更してみてください</p>
+              <button onClick={resetFilters} className="px-6 py-3 rounded-lg bg-pink-600 hover:bg-pink-700 text-white font-bold transition text-sm md:text-base">
+                フィルターをリセット
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {filteredShops.map((shop) => (
+                <Link
+                  key={shop.id}
+                  to={`/shops/${shop.id}`}
+                  className="bg-slate-800 rounded-lg overflow-hidden border border-slate-700 hover:border-pink-500 transition group"
+                >
+                  <div className="relative h-40 md:h-48 overflow-hidden">
+                    <img
+                      src={shop.image || "/images/shops/no_image.jpg"}
+                      alt={shop.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+                      onError={(e) => { e.currentTarget.src = "/images/shops/no_image.jpg"; }}
+                    />
+                    <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-black/70 text-white text-xs font-bold">
+                      {shop.threads?.length || 0}人在籍
+                    </div>
+                  </div>
+
+                  <div className="p-4 md:p-5">
+                    <h3 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-pink-400 transition line-clamp-1">{shop.name}</h3>
+                    <div className="mb-3">
+                      <RatingDisplay rating={Number(shop.rating || 0)} reviewCount={Number(shop.reviewCount || 0)} size="medium" />
+                    </div>
+                    <div className="space-y-2 text-xs md:text-sm">
+                      <div className="flex items-center gap-2 text-gray-300">
+                        <span className="text-gray-400">📍</span>
+                        <span className="line-clamp-1">{`${shop.prefecture} ${shop.city} ${shop.area || ""}`}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-300">
+                        <span className="text-gray-400">💰</span>
+                        <span>{shop.price || (shop.system?.standard?.[0]?.price ? `${shop.system.standard[0].price}〜` : "料金不明")}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-300">
+                         <span className="text-gray-400">🕐</span>
+                         <span className="line-clamp-1">{shop.hours || "営業時間は詳細をご確認ください"}</span>
+                      </div>
+                    </div>
+                    {shop.tags && shop.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-3">
+                        {shop.tags.slice(0, 3).map((tag, idx) => (
+                          <span key={idx} className="px-2 py-1 text-xs rounded bg-slate-700 text-gray-300">{tag}</span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="mt-4 pt-4 border-t border-slate-700">
+                      <span className="text-pink-400 text-sm md:text-base font-bold group-hover:text-pink-300 transition">詳細を見る →</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="hidden lg:block w-80 flex-shrink-0">
+          <Sidebar />
+        </div>
+      </div>
+    </div>
+  );
+}

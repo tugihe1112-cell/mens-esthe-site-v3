@@ -1,0 +1,205 @@
+shop_id,shop_name,group_id
+chiba_funabashi_limited_spa,Limited Spa (リミテッドスパ),g_5acd33d2
+chiba_funabashi_limited_spa,Limited Spa (リミテッドスパ),g_5acd33d2
+chiba_kashiwa_limited_spa,Limited Spa (リミテッドスパ),g_41b7750c
+chiba_narita_levechi_esthe,超レベチなエステ24,g_e8df0f81
+chiba_togane_levechi_esthe,超レベチなエステ24,g_bbd8d634
+kanagawa_atsugi_doigt_de_fee,doigt de fee (ドゥワドフェ),g_25129e2c
+kanagawa_kawasaki_doigt_de_fee,doigt de fee (ドゥワドフェ),g_a3bb9abe
+kanagawa_kawasaki_doigt_de_fee,doigt de fee (ドゥワドフェ),g_a3bb9abe
+kanagawa_kawasaki_doigt_de_fee,doigt de fee (ドゥワドフェ),g_a3bb9abe
+kanagawa_kawasaki_doigt_de_fee,doigt de fee (ドゥワドフェ),g_a3bb9abe
+kanagawa_kawasaki_hoozuki,Ho・O・Zu・Ki・SPA (ホオズキスパ),g_4255890e
+kanagawa_kawasaki_doigt_de_fee,doigt de fee (ドゥワドフェ),g_a3bb9abe
+kanagawa_sagamihara_luxury_romance,Luxury Romance GROUP (ラグジュアリーロマンスグループ),g_ab8241a9
+kanagawa_sagamihara_luxury_romance,Luxury Romance GROUP (ラグジュアリーロマンスグループ),g_ab8241a9
+osaka_higobashi_kansya,感謝 旧愛燦燦,g_b2cc6e9f
+osaka_kitahama_kansya,感謝 旧愛燦燦,g_8a01c154
+osaka_kyobashi_kireina_salon,綺麗なサロン,g_d0467529
+osaka_minamimorimachi_kansya,感謝 旧愛燦燦,g_9e69ed2a
+osaka_nagahoribashi_kireina_salon,綺麗なサロン,g_cf49e8df
+osaka_sakaisujihonmachi_kansya,感謝 旧愛燦燦,g_b3ab3f8c
+osaka_sakaisujihonmachi_kireina_salon,綺麗なサロン,g_a5739cd2
+saitama_kuki_limited_spa,Limited Spa (リミテッドスパ),g_c4a9cd04
+saitama_omiya_platinum_tokyo,PLATINUM TOKYO 大宮店,g_98557e2e
+tokyo_adachi_kitasenju_himitsu_mrs_room,秘密のミセスルーム 北千住,g_c3114e65
+tokyo_adachi_kitasenju_ranpu_kitasenju,らんぷ 北千住,g_88360c20
+tokyo_arakawa_nippori_aroma_blossom,Aroma Blossom (日暮里店),g_b5dc3621
+tokyo_chiyoda_kudanshita_rondo,ロンド 旧下弦の月 (九段下店),g_bc2b9830
+tokyo_chuo_ginza_aromamore,AROMA more (アロマモア),g_ea315407
+tokyo_chuo_ginza_grand_aroma,グランドアロマ東京 (銀座店),g_f573685f
+tokyo_chuo_ginza_rondo,ロンド 旧下弦の月 (銀座店),g_d098b72d
+tokyo_chuo_nihonbashi_berryz_spa,Berryz Spa (ベリーズスパ),g_ba35eed3
+tokyo_chuo_nihonbashi_high_grande,HIGH GRANDE (ハイグランデ),g_f4a56880
+tokyo_chuo_nihonbashi_urekaji_nihonbashi,熟れた果実,g_23218e7f
+tokyo_dispatch_candy_spa,Candy Spa (キャンディスパ),g_2bc31430
+tokyo_hachioji_rabbit_spa,ラビットスパ (Rabbit Spa) 立川店,g_91e602b6
+tokyo_hachioji_tokyopla,トキョプラ 旧T+Plus (ティープラス) 新宿,g_bd7d96b5
+tokyo_kita_crest_spa_tokyo,CREST SPA TOKYO (クレストスパ),g_8c8ebab0
+tokyo_kita_yorimichi,よりみち (Yorimichi) (旧いごこち),g_59589260
+tokyo_koto_monzennakacho_ryugujo,竜宮城 旧百万石 (門前仲町店),g_9a619215
+tokyo_meguro_gakugei_daigaku_tokyo_esthe_club,東京えすてクラブ,g_e1aa40ff
+tokyo_meguro_jiyugaoka_doigt_de_fee,doigt de fee (ドゥワドフェ),g_f878b07c
+tokyo_meguro_jiyugaoka_mens_esthe_group,メンエスグループ,g_909d4d26
+tokyo_meguro_meguro_dahlia,DAHLIA (ダリア),g_e7f1b3e9
+tokyo_meguro_meguro_grace,GRACE (グレース),g_9af13334
+tokyo_meguro_meguro_mens_esthe_group,メンエスグループ,g_b70a7342
+tokyo_meguro_nakameguro_aqua,AQUA (アクア),g_9139a23b
+tokyo_meguro_aroma_blossom,Aroma Blossom (アロマブロッサム),g_ab51f386
+tokyo_meguro_nakameguro_grace,GRACE (グレース),g_b3fcc816
+tokyo_minato_akasaka_emerald,AROMA EMERALD (アロマエメラルド),g_98c697bd
+tokyo_minato_akasaka_kami_no_esthe,神のエステ 赤坂店,g_04c8e81f
+tokyo_minato_azabujuban_aria,ARIA (アリア),g_8b9b87a5
+tokyo_minato_azabujuban_carinna,Carinna (カリナ),g_c5c8e523
+tokyo_minato_azabujuban_edel,EDEL AZABU (エデル麻布),g_b3c59989
+tokyo_minato_azabujuban_emerald,AROMA EMERALD (アロマエメラルド),g_51143fea
+tokyo_minato_azabujuban_roppongi_mens,六本木メンズエステ,g_e5872815
+tokyo_minato_azabujuban_saudade,サウダージ (旧リセット),g_c1cd30fc
+tokyo_minato_azabujuban_the_esthe,THE ESTHE AZABU (ザ・エステアザブ),g_9de21584
+tokyo_minato_azabujuban_the_premium_spa,THE PREMIUM SPA (ザ・プレミアムスパ),g_91718771
+tokyo_minato_hamamatsucho_jean_robin,JEAN ROBIN (ジャンロビン),g_9dfd36be
+tokyo_minato_roppongi_aromamore,AROMA more (アロマモア),g_8c0ce468
+tokyo_minato_roppongi_roppongi_mens,六本木メンズエステ,g_8aeff4d1
+tokyo_minato_roppongi_the_premium_spa,THE PREMIUM SPA (ザ・プレミアムスパ),g_75a4640a
+tokyo_minato_shinbashi_lumespa,ルメスパ 旧Aroma Spec (アロマスペック),g_fc3cfd09
+tokyo_minato_shinbashi_relax_tokyo,relax tokyo (リラックス東京),g_839529ca
+tokyo_minato_shinbashi_tiger_gate,TIGER GATE (タイガーゲート),g_b48840c2
+tokyo_minato_tamachi_dahlia,DAHLIA (ダリア),g_1793001a
+tokyo_minato_tamachi_edel,EDEL AZABU (エデル麻布),g_242dec79
+tokyo_minato_tamachi_jean_robin,JEAN ROBIN (ジャンロビン),g_cb60ce2c
+tokyo_minato_toranomon_tiger_gate,TIGER GATE (タイガーゲート),g_8743e4d1
+tokyo_musashino_kichijoji_aroma_charmant,Aroma charmant (アロマシャルマント),g_3dfc1948
+tokyo_musashino_kichijoji_yorimichi,よりみち (Yorimichi) (旧いごこち),g_10319e2f
+tokyo_nakano_golden,ゴールデン（GOLDEN） 旧ガーデン,g_59da4b3a
+tokyo_nakano_levechi_esthe,超レベチなエステ24,g_6bb135f2
+tokyo_nakano_tokyo_mensesthe,東京メンズエステ 中野ルーム,g_3a6b0cc9
+tokyo_nerima_nerima_aroma_modeste,Aroma Modeste (アロマモデスト),g_5391d227
+tokyo_nerima_nerima_mens_esthe_group,メンエスグループ,g_118759a1
+tokyo_ota_kamata_anjuaile,Anjuaile (アンジュエール),g_762f9856
+tokyo_ota_kamata_gokujou,GOKUJOU 極嬢,g_664250bb
+tokyo_ota_kamata_hoozuki,Ho・O・Zu・Ki・SPA (ホオズキスパ),g_e22b06fb
+tokyo_ota_kamata_koakuma_spa_tokyo,小悪魔スパトウキョウ 蒲田ルーム,g_f4ed1255
+tokyo_ota_kamata_nocturne,ノクターンスパ (Nocturne Spa),g_972c27e8
+tokyo_ota_kamata_ryugujo,竜宮城 旧百万石 (蒲田店),g_9c2963fd
+tokyo_ota_omori_gokujou,GOKUJOU 極嬢,g_80b52827
+tokyo_ota_omori_hoozuki,Ho・O・Zu・Ki・SPA (ホオズキスパ),g_604f66dc
+tokyo_ota_omori_nocturne,ノクターンスパ (Nocturne Spa),g_b3850825
+tokyo_ota_omori_rhea,RHEA SPA (レアスパ),g_a678fe5e
+tokyo_setagaya_chitose_karasuyama_reve_spa,REVE SPA (レーヴスパ),g_61d339af
+tokyo_setagaya_chitose_karasuyama_winning_heaven,WINNING HEAVEN (ウイニングヘブン),g_7bd1840c
+tokyo_setagaya_futakotamagawa_mens_esthe_group,メンエスグループ,g_96e73110
+tokyo_setagaya_komazawa_daigaku_tokyo_esthe_club,東京えすてクラブ,g_323dbc2c
+tokyo_setagaya_kyodo_winning_heaven,WINNING HEAVEN (ウイニングヘブン),g_8e83b438
+tokyo_setagaya_meidaimae_annex,明大前ANNEX (アネックス),g_dae00536
+tokyo_setagaya_meidaimae_aroma_woo,Aroma Woo (アロマウー),g_53c64b7c
+tokyo_setagaya_meidaimae_belle_lily,ベルリリー (Belle Lily),g_1de53c78
+tokyo_setagaya_meidaimae_queens_collection,QUEEN'S COLLECTION 明大前ルーム,g_d836bd8b
+tokyo_setagaya_meidaimae_reve_spa,REVE SPA (レーヴスパ),g_fb9bb55c
+tokyo_setagaya_sangenjaya_authority,AUTHORITY (オーソリティ),g_d2c4304b
+tokyo_setagaya_sangenjaya_bqins,B-QINS (ビークインズ),g_365c6b05
+tokyo_setagaya_sangenjaya_nanashi_spa,名無しスパ (旧ラリマスパ),g_213aeeb5
+tokyo_setagaya_sangenjaya_sancha_bijin,三茶美人,g_d53035f0
+tokyo_setagaya_shimokitazawa_belle_lily,ベルリリー (Belle Lily),g_51aeaf0a
+tokyo_setagaya_shimokitazawa_eren,EREN (エレン),g_e6513700
+tokyo_setagaya_shimokitazawa_jd_spa,JDスパ (女子大生エステ) 下北沢,g_f0506a65
+tokyo_setagaya_soshigaya_okura_winning_heaven,WINNING HEAVEN (ウイニングヘブン),g_0697f7e8
+tokyo_shibuya_aqua_nakameguro,AQUA (アクア) 中目黒,g_0efce680
+tokyo_shibuya_aroma_emerald,AROMA EMERALD (アロマエメラルド),g_3cb81801
+tokyo_shibuya_ebisu_aromalys,AromaLys (アロマリース),g_df76401c
+tokyo_shibuya_bella_spa,BELLA SPA (ベラスパ),g_3d041411
+tokyo_shibuya_ebisu_carinna,Carinna (カリナ),g_f81a95ab
+tokyo_shibuya_ebisu_dahlia,DAHLIA (ダリア),g_36829a4b
+tokyo_shibuya_ebisu_emerald,AROMA EMERALD (アロマエメラルド),g_14c1f0da
+tokyo_shibuya_ebisu_esthe_king,エステの王様,g_dcc31df7
+tokyo_shibuya_kamipannoesthe,神のエステ,g_8357f347
+tokyo_shibuya_loveit,Love it (ラヴィット),g_39bea28c
+tokyo_shibuya_ebisu_mens_este_ebisu,メンズエステ恵比寿,g_dfcafc0b
+tokyo_shibuya_momospa,MoMo Spa (モモスパ),g_6541b442
+tokyo_shibuya_move_plus,ムーブプラス,g_bd4b78ad
+tokyo_shibuya_poseidon,ポセイドン,g_885faaf3
+tokyo_shibuya_ebisu_saudade,サウダージ (旧リセット),g_03df812e
+tokyo_shibuya_tennesu,天界のスパ 中目黒,g_a5e9353a
+tokyo_shibuya_viccaplus,Vicca+plus. (ヴィッカプラス),g_7c3eda08
+tokyo_shibuya_hatagaya_hataesu,HaTaEsu (ハタエス),g_41cd9267
+tokyo_shibuya_omotesando_high_grande,HIGH GRANDE (ハイグランデ),g_5faff3b0
+tokyo_shibuya_sasazuka_queens_collection,QUEEN'S COLLECTION 笹塚ルーム,g_6523140d
+tokyo_shibuya_sasazuka_saudade,サウダージ (旧リセット),g_9eb80dca
+tokyo_shibuya_shibuya_a5spa,A5 SPA (エーゴスパ),g_ff39aadb
+tokyo_shibuya_shibuya_aroma_tiamo,AROMA TIAMO (アロマティアーモ) 渋谷店,g_866437c3
+tokyo_shibuya_shibuya_belle_lily,ベルリリー (Belle Lily),g_05df6e11
+tokyo_shibuya_shibuya_rise,Rise～リゼ～ 渋谷店,g_fc2e83e3
+tokyo_shibuya_yoyogi_harajuku_a5spa,A5 SPA (エーゴスパ),g_d34647c2
+tokyo_shibuya_yoyogi_harajuku_grand_gaia,グランドガイア (Grand Gaia),g_f9155f20
+tokyo_shibuya_yoyogi_harajuku_hoozuki,Ho・O・Zu・Ki・SPA (ホオズキスパ),g_348c0c62
+tokyo_shinagawa_gotanda_a5spa,A5 SPA (エーゴスパ),g_fd06f3ae
+tokyo_shinagawa_gotanda_aroma_abc,Aroma ABC (アロマABC),g_69bc9b77
+tokyo_shinagawa_gotanda_aromalys,AromaLys (アロマリース),g_1e981fdb
+tokyo_shinagawa_gotanda_dahlia,DAHLIA (ダリア),g_a022f48a
+tokyo_shinagawa_gotanda_esthe_king,エステの王様,g_b7becf01
+tokyo_shinagawa_gotanda_kami_no_esthe,神のエステ,g_47d859a1
+tokyo_shinagawa_gotanda_kanoneko,カノネコ (旧もしも彼女が黒猫だったら),g_c9c38b2b
+tokyo_shinagawa_gotanda_koakuma_spa_tokyo,小悪魔スパトウキョウ 五反田ルーム,g_b99b426e
+tokyo_shinagawa_gotanda_rains_rapt,Rains Rapt (レインズラプト),g_06da1400
+tokyo_shinagawa_gotanda_relax,RELAX (リラックス),g_b6a53946
+tokyo_shinagawa_gotanda_rhea,RHEA SPA (レアスパ),g_3567c93a
+tokyo_shinagawa_gotanda_the_half,THE HALF（ザ・ハーフ）,g_97d85992
+tokyo_shinagawa_gotanda_yuru_spa,ゆるスパ五反田店,g_c75d50cf
+tokyo_shinagawa_oimachi_gokujou,GOKUJOU 極嬢,g_be2332eb
+tokyo_shinagawa_oimachi_nocturne,ノクターンスパ (Nocturne Spa),g_a3f99842
+tokyo_shinagawa_oimachi_rhea,RHEA SPA (レアスパ),g_aa1416ef
+tokyo_shinagawa_oimachi_showa_refresh,昭和リフレッシュ館,g_2bf3e61b
+tokyo_shinagawa_shinagawa_aria,ARIA (アリア),g_7cf126be
+tokyo_shinagawa_shinagawa_esthe_king,エステの王様,g_e2d35eb0
+tokyo_shinagawa_shinagawa_kanoneko,カノネコ (旧もしも彼女が黒猫だったら),g_37aed232
+tokyo_shinagawa_shinagawa_nocturne,ノクターンスパ (Nocturne Spa),g_4ffb7abe
+tokyo_shinagawa_shinagawa_rhea,RHEA SPA (レアスパ),g_e8cacaf6
+tokyo_shinjuku_higashishinjuku_gyokurou,玉楼,g_7760a389
+tokyo_shinjuku_higashishinjuku_koakuma_spa_tokyo,小悪魔スパトウキョウ 東新宿ルーム,g_f7230409
+tokyo_shinjuku_higashishinjuku_limited_spa,Limited Spa (リミテッドスパ),g_bf6f44d8
+tokyo_shinjuku_higashishinjuku_tokyo_mensesthe,東京メンズエステ 東新宿ルーム,g_b342bc5f
+tokyo_shinjuku_ichigaya_be_majo,be-majo (ビマージョ) 市ヶ谷,g_0e107207
+tokyo_shinjuku_kabukicho_aromamore,AROMA more (アロマモア),g_ee6e303c
+tokyo_shinjuku_kagurazaka_aromantic,AROMAntic (アロマンティック),g_9dfeef5b
+tokyo_shinjuku_nishishinjuku_koakuma_spa_tokyo,小悪魔スパトウキョウ 西新宿ルーム,g_1ff4064b
+tokyo_shinjuku_nishishinjuku_tokyo_mensesthe,東京メンズエステ 西新宿ルーム,g_2c1f7278
+tokyo_shinjuku_nishishinjuku_yunispa,Yuni Spa (ユニスパ),g_e95a75e6
+tokyo_shinjuku_okubo_clarice-dao,クラリスDAO,g_9c198768
+tokyo_shinjuku_okubo_limited_spa,Limited Spa (リミテッドスパ),g_31e386c0
+tokyo_shinjuku_okubo_rise,Rise～リゼ～ 大久保店,g_41809504
+tokyo_shinjuku_shinjuku_a5spa,A5 SPA (エーゴスパ),g_05cfb616
+tokyo_shinjuku_shinjuku_queens_collection,QUEEN'S COLLECTION 新宿ルーム,g_8aa8e0bb
+tokyo_shinjuku_shinjuku_gyoen_rise,Rise～リゼ～ 新宿御苑店,g_c031ba03
+tokyo_shinjuku_shinjuku_gyoen_tokyopla,トキョプラ 旧T+Plus (ティープラス) 新宿,g_85440e18
+tokyo_shinjuku_shinjuku_sanchome_aroma_tiamo,AROMA TIAMO (アロマティアーモ) 新宿三丁目店,g_50fb8634
+tokyo_shinjuku_shinjuku_sanchome_queens_collection,QUEEN'S COLLECTION 新宿三丁目ルーム,g_21a53359
+tokyo_shinjuku_shinjuku_sanchome_rise,Rise～リゼ～ 新宿三丁目店,g_e2465c0a
+tokyo_shinjuku_shinjuku_sanchome_tokyo_mensesthe,東京メンズエステ 新宿三丁目ルーム,g_cbf749e8
+tokyo_shinjuku_shinjuku_sanchome_tokyopla,トキョプラ 旧T+Plus (ティープラス) 新宿,g_760bd4af
+tokyo_shinjuku_takadanobaba_aroma-mrs,AROMA MRS,g_10e1e0dc
+tokyo_shinjuku_takadanobaba_cozy,Cozy（コーズィー）,g_edb228b8
+tokyo_shinjuku_takadanobaba_evergreen,everGreen,g_882d453e
+tokyo_shinjuku_takadanobaba_felix,felix（フェリックス）,g_cef81379
+tokyo_shinjuku_takadanobaba_grand-chariot,GRAND CHARIOT,g_33371a1f
+tokyo_shinjuku_takadanobaba_rs-spa,R.sスパ,g_ba2df18d
+tokyo_shinjuku_yotsuya_e_komachi,E小町 (いいこまち),g_c3ced35e
+tokyo_suginami_ogikubo_a-laise,a laise,g_ce54717b
+tokyo_suginami_ogikubo_crest_spa_tokyo,CREST SPA TOKYO (クレストスパ),g_c15147e2
+tokyo_suginami_ogikubo_mens_esthe_jj,メンズエステJJ,g_3144cae5
+tokyo_tachikawa_tachikawa_gladol-spa,ぐらどるスパ,g_19acb644
+tokyo_taito_ueno_tokyo-luxury,東京ラグジュアリー（旧ビジョスパ）,g_9458e109
+tokyo_toshima_ikebukuro_anemone,Anemone (アネモネ),g_9fa324d5
+tokyo_toshima_ikebukuro_aroma_resort,アロマリゾート (旧昭和倶楽部),g_91b39012
+tokyo_toshima_ikebukuro_aroma_tiamo,AROMA TIAMO (アロマティアーモ) 池袋店,g_0832e93e
+tokyo_toshima_ikebukuro_b_sera_kiwami,美・セラ極～KIWAMI～,g_e5abf02d
+tokyo_toshima_ikebukuro_cachette,カシェット (旧紳士のエステ),g_1a5120b4
+tokyo_toshima_ikebukuro_eternal,Eternal (エターナル) 池袋,g_01d451ec
+tokyo_toshima_ikebukuro_le_reve_ck,ルレーヴ (Le Reve CK),g_ab3b3e21
+tokyo_toshima_ikebukuro_mens_pastime_ikebukuro,メンズパスタイム（旧アルパカの想い）,g_498e98c2
+tokyo_toshima_ikebukuro_muchimuchi_onesan,むちむちお姉さん,g_2156f369
+tokyo_toshima_ikebukuro_otonatic,OTONA TIC (オトナチック),g_69839d66
+tokyo_toshima_ikebukuro_otonazyoshi,おとな女子,g_f0343cdb
+tokyo_toshima_ikebukuro_tokyo-fairy-land,東京フェアリーランド,g_6d7cbff7
+tokyo_toshima_ikebukuro_tokyo_mensesthe,東京メンズエステ 池袋ルーム,g_93701125
+tokyo_toshima_otsuka_amaryllis,アマリリス,g_389dad6c
+tokyo_toshima_otsuka_otsuka_mg,大塚メンズエステMG,g_50d99c98
+tokyo_toshima_sugamo_ulrare_sugamo,ウルレア巣鴨（旧リベア）,g_ebfb3e37

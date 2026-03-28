@@ -1,0 +1,270 @@
+{
+  "id": 60306,
+  "name": "温故知新 (旧ユアタイム)",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都渋谷区 (最寄: 代々木駅)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 16,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "color": "from-red-500 to-orange-500",
+  "tags": [
+    "初回特典あり",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://on-ko-chi-shin.com/",
+  "note": "旧店名: ユアタイム",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_笠谷",
+      "name": "笠谷",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "34歳",
+        "いいとこ取りの実力派！！",
+        "スタイル抜群",
+        "テクニシャン",
+        "可愛い系",
+        "明るい",
+        "癒し系",
+        "聞き上手",
+        "NEW FACE"
+      ]
+    },
+    {
+      "id": "unknown_相沢",
+      "name": "相沢",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "37歳",
+        "Sキャラ",
+        "イタズラ好き",
+        "スタイル抜群",
+        "テクニシャン",
+        "可愛い系",
+        "美人系",
+        "NEW FACE"
+      ]
+    },
+    {
+      "id": "unknown_椎名",
+      "name": "椎名",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "34歳",
+        "鼻歌がMajiでKoiする5秒前に変わる日",
+        "スタイル抜群",
+        "テクニシャン",
+        "可愛い系",
+        "愛嬌抜群",
+        "明るい",
+        "癒し系",
+        "NEW FACE"
+      ]
+    },
+    {
+      "id": "unknown_乃木",
+      "name": "乃木",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "38歳",
+        "清楚なお姉様のドキドキ接客",
+        "お姉さん",
+        "テクニシャン",
+        "可愛い系",
+        "清楚",
+        "癒し系",
+        "聞き上手",
+        "NEW FACE"
+      ]
+    },
+    {
+      "id": "unknown_赤松",
+      "name": "赤松",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "37歳",
+        "超テクニシャン⁉︎モデル系美女",
+        "スタイル抜群",
+        "テクニシャン",
+        "明るい",
+        "清楚",
+        "癒し系",
+        "聞き上手",
+        "NEW FACE"
+      ]
+    },
+    {
+      "id": "unknown_甘井",
+      "name": "甘井",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "30歳",
+        "スタイル抜群",
+        "可愛い系",
+        "愛嬌抜群",
+        "明るい",
+        "癒し系",
+        "美人系"
+      ]
+    },
+    {
+      "id": "unknown_橘",
+      "name": "橘",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "42歳",
+        "まるで有閑マダム",
+        "お姉さん",
+        "スタイル抜群",
+        "テクニシャン",
+        "清楚",
+        "癒し系",
+        "聞き上手"
+      ]
+    },
+    {
+      "id": "unknown_佐野",
+      "name": "佐野",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "38歳",
+        "笑顔が素敵なグラマー美人",
+        "お姉さん",
+        "スタイル抜群",
+        "可愛い系",
+        "愛嬌抜群",
+        "明るい",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "unknown_花井",
+      "name": "花井",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "42歳",
+        "リピート率NO1",
+        "お姉さん",
+        "スレンダー",
+        "明るい",
+        "清楚",
+        "癒し系",
+        "聞き上手"
+      ]
+    },
+    {
+      "id": "unknown_白石",
+      "name": "白石",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "35歳",
+        "女性施術可",
+        "超絶美BODY",
+        "お姉さん",
+        "スタイル抜群",
+        "テクニシャン",
+        "愛嬌抜群",
+        "明るい",
+        "聞き上手"
+      ]
+    },
+    {
+      "id": "unknown_香坂",
+      "name": "香坂",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "37歳",
+        "超おじさまキラー",
+        "お姉さん",
+        "可愛い系",
+        "愛嬌抜群",
+        "明るい",
+        "癒し系",
+        "聞き上手"
+      ]
+    },
+    {
+      "id": "unknown_綾瀬",
+      "name": "綾瀬",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "45歳",
+        "お客様ファーストの大和撫子",
+        "お姉さん",
+        "スレンダー",
+        "テクニシャン",
+        "清楚",
+        "癒し系",
+        "聞き上手"
+      ]
+    },
+    {
+      "id": "unknown_長谷川",
+      "name": "長谷川",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "40歳",
+        "プレミアム出勤",
+        "お姉さん",
+        "スタイル抜群",
+        "スレンダー",
+        "可愛い系",
+        "清楚",
+        "聞き上手"
+      ]
+    },
+    {
+      "id": "unknown_春日",
+      "name": "春日",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "44歳",
+        "ダイナマイトボディ",
+        "お姉さん",
+        "テクニシャン",
+        "明るい",
+        "清楚",
+        "癒し系",
+        "聞き上手"
+      ]
+    }
+  ],
+  "area": [
+    "代々木・原宿",
+    "原宿"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "tokyo_taito_ueno_ultimate_spa_ueno",
+  "name": "ULTIMATE SPA (アルティメットスパ) 上野",
+  "url": "https://ultimate-spa.jp/",
+  "area": "上野",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "体験レポートあり",
+    "個室あり"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "台東区",
+  "brandId": "ultimate_spa_ueno",
+  "threads": [],
+  "therapists": [
+    "ultimate_spa_ueno_神代 りな",
+    "ultimate_spa_ueno_佐野 あやか",
+    "ultimate_spa_ueno_相沢 ひとみ",
+    "ultimate_spa_ueno_松嶋 めい",
+    "ultimate_spa_ueno_永井 ちか",
+    "ultimate_spa_ueno_美波 ゆり",
+    "ultimate_spa_ueno_星野 あい",
+    "ultimate_spa_ueno_桜木 なな"
+  ]
+}

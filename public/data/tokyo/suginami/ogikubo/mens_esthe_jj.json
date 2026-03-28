@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_suginami_ogikubo_mens_esthe_jj",
+  "name": "メンズエステJJ",
+  "prefecture": "東京都",
+  "city": "杉並区",
+  "area": "荻窪",
+  "address": "東京都杉並区（詳細は予約時）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分 15,000円～",
+  "hours": "12:00～22:00",
+  "isPremium": false,
+  "tags": [
+    "熟女",
+    "西荻窪",
+    "日本人",
+    "個室",
+    "初回特典あり"
+  ],
+  "websiteUrl": "http://www.spa-jj.tokyo/",
+  "nearestStation": "西荻窪駅",
+  "description": "荻窪・西荻窪・中野エリアの日本人一般ルーム。 / 料金システム: 80分15,000円 / 100分17,000円 / 120分19,000円",
+  "threads": [],
+  "brandId": "mens_esthe_jj",
+  "therapists": []
+}

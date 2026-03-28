@@ -1,0 +1,21 @@
+{
+  "id": "tokyo_shinagawa_gotanda_yuru_spa",
+  "name": "ゆるスパ五反田店",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "五反田",
+  "address": "東京都品川区五反田エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分13,000円～",
+  "hours": "営業中",
+  "isPremium": false,
+  "tags": [],
+  "websiteUrl": "https://yuru-spa.com/gotanda/",
+  "nearestStation": "五反田駅",
+  "description": "70分13,000円 / 90分15,000円 / 120分20,000円 / 150分26,000円 / 180分33,500円 / 240分48,500円",
+  "threads": [],
+  "brandId": "yuru_spa",
+  "therapists": []
+}

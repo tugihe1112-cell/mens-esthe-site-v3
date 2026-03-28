@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_nakano_golden",
+  "name": "ゴールデン（GOLDEN） 旧ガーデン",
+  "prefecture": "東京都",
+  "city": "中野区",
+  "area": "中野区",
+  "address": "東京都中野区中野エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分10,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "新規限定あり"
+  ],
+  "websiteUrl": "https://golden0508.com/",
+  "nearestStation": "中野駅",
+  "description": "中野の日本人リラクゼーション。60分10,000円～。新規限定コースあり。",
+  "threads": [],
+  "brandId": "golden",
+  "therapists": []
+}

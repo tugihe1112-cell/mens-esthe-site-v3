@@ -1,0 +1,300 @@
+{
+  "id": "tokyo_minato_tamachi_dahlia",
+  "name": "DAHLIA (ダリア)",
+  "prefecture": "東京都",
+  "city": "港区",
+  "area": "田町",
+  "address": "東京都港区田町エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "100分20,000円～",
+  "hours": "12:00～翌1:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://gotandadahlia.com/",
+  "nearestStation": "田町駅",
+  "description": "五反田・目黒・恵比寿・大井町・田町の日本人リラクゼーション。",
+  "brandId": "dahlia",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "dahlia_水上せりな",
+      "name": "水上せりな",
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "dahlia_高城さら",
+      "name": "高城さら",
+      "age": 44,
+      "height": 169,
+      "bust": "(D)"
+    },
+    {
+      "id": "dahlia_月島れい",
+      "name": "月島れい",
+      "age": 43,
+      "height": 164,
+      "bust": "(H)"
+    },
+    {
+      "id": "dahlia_荒川もな",
+      "name": "荒川もな",
+      "age": 41,
+      "height": 158,
+      "bust": "(G)"
+    },
+    {
+      "id": "dahlia_芹澤りお",
+      "name": "芹澤りお",
+      "age": 36,
+      "height": 163,
+      "bust": "(D)"
+    },
+    {
+      "id": "dahlia_本宮ありす",
+      "name": "本宮ありす",
+      "age": 36,
+      "height": 159,
+      "bust": "(D)"
+    },
+    {
+      "id": "dahlia_斉藤はづき",
+      "name": "斉藤はづき",
+      "age": 33,
+      "height": 163,
+      "bust": "(E)"
+    },
+    {
+      "id": "dahlia_和泉さわ",
+      "name": "和泉さわ",
+      "age": 39,
+      "height": 158,
+      "bust": "86(E)"
+    },
+    {
+      "id": "dahlia_天海しほ",
+      "name": "天海しほ",
+      "age": 32,
+      "height": 161,
+      "bust": "(D)"
+    },
+    {
+      "id": "dahlia_生田なお",
+      "name": "生田なお",
+      "age": 30,
+      "height": 157,
+      "bust": "(F)"
+    },
+    {
+      "id": "dahlia_日向ひな",
+      "name": "日向ひな",
+      "age": 22,
+      "height": 0,
+      "bust": "(H)"
+    },
+    {
+      "id": "dahlia_松本いおり",
+      "name": "松本いおり",
+      "age": 39,
+      "height": 158,
+      "bust": "(A)"
+    },
+    {
+      "id": "dahlia_橘るか",
+      "name": "橘るか",
+      "age": 25,
+      "height": 160,
+      "bust": "(C)"
+    },
+    {
+      "id": "dahlia_小西りか",
+      "name": "小西りか",
+      "age": 30,
+      "height": 168,
+      "bust": "88(D)"
+    },
+    {
+      "id": "dahlia_森しずく",
+      "name": "森しずく",
+      "age": 33,
+      "height": 166,
+      "bust": "(G)"
+    },
+    {
+      "id": "dahlia_東城れみ",
+      "name": "東城れみ",
+      "age": 27,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "dahlia_穂村かえで",
+      "name": "穂村かえで",
+      "age": 33,
+      "height": 167,
+      "bust": "87(C)"
+    },
+    {
+      "id": "dahlia_渡也みさ",
+      "name": "渡也みさ",
+      "age": 38,
+      "height": 170,
+      "bust": "85(B)"
+    },
+    {
+      "id": "dahlia_桜井もも",
+      "name": "桜井もも",
+      "age": 39,
+      "height": 167,
+      "bust": "90(E)"
+    },
+    {
+      "id": "dahlia_岩下らん",
+      "name": "岩下らん",
+      "age": 39,
+      "height": 156,
+      "bust": "(E)"
+    },
+    {
+      "id": "dahlia_成瀬ゆか",
+      "name": "成瀬ゆか",
+      "age": 26,
+      "height": 161,
+      "bust": "(D)"
+    },
+    {
+      "id": "dahlia_中条ゆりあ",
+      "name": "中条ゆりあ",
+      "age": 30,
+      "height": 159,
+      "bust": "92(E)"
+    },
+    {
+      "id": "dahlia_清水まこ",
+      "name": "清水まこ",
+      "age": 44,
+      "height": 159,
+      "bust": "(D)"
+    },
+    {
+      "id": "dahlia_一条のあ",
+      "name": "一条のあ",
+      "age": 26,
+      "height": 156,
+      "bust": "(E)"
+    },
+    {
+      "id": "dahlia_北山けい",
+      "name": "北山けい",
+      "age": 39,
+      "height": 163,
+      "bust": "(K)"
+    },
+    {
+      "id": "dahlia_工藤かの",
+      "name": "工藤かの",
+      "age": 45,
+      "height": 167,
+      "bust": "(C)"
+    },
+    {
+      "id": "dahlia_大倉れん",
+      "name": "大倉れん",
+      "age": 32,
+      "height": 164,
+      "bust": "(G)"
+    },
+    {
+      "id": "dahlia_中井まり",
+      "name": "中井まり",
+      "age": 37,
+      "height": 163,
+      "bust": "(J)"
+    },
+    {
+      "id": "dahlia_佐藤るな",
+      "name": "佐藤るな",
+      "age": 35,
+      "height": 163,
+      "bust": "(D)"
+    },
+    {
+      "id": "dahlia_松倉めぐ",
+      "name": "松倉めぐ",
+      "age": 23,
+      "height": 150,
+      "bust": "(F)"
+    },
+    {
+      "id": "dahlia_鈴宮　はるか",
+      "name": "鈴宮　はるか",
+      "age": 43,
+      "height": 166,
+      "bust": "(D)"
+    },
+    {
+      "id": "dahlia_柏木あきな",
+      "name": "柏木あきな",
+      "age": 42,
+      "height": 155,
+      "bust": "(C)"
+    },
+    {
+      "id": "dahlia_緒方しおり",
+      "name": "緒方しおり",
+      "age": 33,
+      "height": 153,
+      "bust": "(C)"
+    },
+    {
+      "id": "dahlia_吉瀬あやめ",
+      "name": "吉瀬あやめ",
+      "age": 35,
+      "height": 156,
+      "bust": "(C)"
+    },
+    {
+      "id": "dahlia_綾波つばさ",
+      "name": "綾波つばさ",
+      "age": 39,
+      "height": 148,
+      "bust": "89(E)"
+    },
+    {
+      "id": "dahlia_大槻ゆあ",
+      "name": "大槻ゆあ",
+      "age": 29,
+      "height": 155,
+      "bust": "(C)"
+    },
+    {
+      "id": "dahlia_松原すみれ",
+      "name": "松原すみれ",
+      "age": 32,
+      "height": 166,
+      "bust": "(E)"
+    },
+    {
+      "id": "dahlia_吉田さき",
+      "name": "吉田さき",
+      "age": 23,
+      "height": 167,
+      "bust": "(D)"
+    },
+    {
+      "id": "dahlia_相川さなみ",
+      "name": "相川さなみ",
+      "age": 43,
+      "height": 0,
+      "bust": "(D)"
+    }
+  ]
+}

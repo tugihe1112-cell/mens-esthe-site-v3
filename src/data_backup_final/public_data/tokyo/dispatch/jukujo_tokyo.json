@@ -1,0 +1,209 @@
+{
+  "id": "tokyo_dispatch_jukujo_tokyo",
+  "name": "熟女東京",
+  "prefecture": "東京都",
+  "city": "23区出張",
+  "area": "23wards",
+  "address": "東京都23区内（サロン・出張）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 11,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "23区出張",
+    "派遣型",
+    "熟女",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://tokyo-jukujo.jp/",
+  "nearestStation": "23区内",
+  "description": "23区内の熟女メンズエステ。サロン・出張対応。大人の魅力あふれるセラピストが癒やします。 / 料金システム: 60分11,000円(サロン限定) / 90分14,000円 / 120分18,000円 / 150分22,000円 / 180分26,000円 (出張は+1,000円)",
+  "brandId": "jukujo_tokyo",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "jukujo_tokyo_弓月 あいり",
+      "name": "弓月 あいり",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_結城ももか",
+      "name": "結城ももか",
+      "age": 39,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_内田まいか",
+      "name": "内田まいか",
+      "age": 41,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_月野桜",
+      "name": "月野桜",
+      "age": 48,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_橘愛",
+      "name": "橘愛",
+      "age": 48,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_杉本 きょう",
+      "name": "杉本 きょう",
+      "age": 43,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_塩野 せりか",
+      "name": "塩野 せりか",
+      "age": 40,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_千田 ゆき",
+      "name": "千田 ゆき",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_佐々木 恵",
+      "name": "佐々木 恵",
+      "age": 48,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_早乙女ゆな",
+      "name": "早乙女ゆな",
+      "age": 45,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_岡田美美(みみ）",
+      "name": "岡田美美(みみ）",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_小倉べに",
+      "name": "小倉べに",
+      "age": 45,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_夏 夕子",
+      "name": "夏 夕子",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_中村 モアナ",
+      "name": "中村 モアナ",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_水野しおり",
+      "name": "水野しおり",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_南せな",
+      "name": "南せな",
+      "age": 46,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_幸田 さち",
+      "name": "幸田 さち",
+      "age": 45,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_泉和花",
+      "name": "泉和花",
+      "age": 49,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_一条 かれん",
+      "name": "一条 かれん",
+      "age": 46,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_星 きらり",
+      "name": "星 きらり",
+      "age": 45,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_瞳 るか",
+      "name": "瞳 るか",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_春うらら",
+      "name": "春うらら",
+      "age": 47,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_深田えみり",
+      "name": "深田えみり",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_青木 広美",
+      "name": "青木 広美",
+      "age": 51,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_雨宮ゆみ",
+      "name": "雨宮ゆみ",
+      "age": 45,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "jukujo_tokyo_秋吉 美鈴",
+      "name": "秋吉 美鈴",
+      "age": 48,
+      "height": null,
+      "bust": null
+    }
+  ]
+}

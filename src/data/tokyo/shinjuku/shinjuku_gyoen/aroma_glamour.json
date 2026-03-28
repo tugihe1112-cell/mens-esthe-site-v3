@@ -1,0 +1,39 @@
+{
+  "id": "tokyo_shinjuku_shinjuku_gyoen_aroma_glamour",
+  "name": "AROMA GLAMOUR 新宿御苑店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "新宿御苑",
+  "tags": [],
+  "system": {
+    "standard": [
+      {
+        "time": "100分",
+        "price": "25,000円"
+      }
+    ],
+    "special": []
+  },
+  "url": "https://aromaglamour.com/",
+  "threads": [],
+  "brandId": "aroma_glamour",
+  "therapists": [
+    "aroma_glamour_まつり",
+    "aroma_glamour_体験入店07",
+    "aroma_glamour_うるり",
+    "aroma_glamour_あみ",
+    "aroma_glamour_なぎさ",
+    "aroma_glamour_なな",
+    "aroma_glamour_れいか",
+    "aroma_glamour_りあな",
+    "aroma_glamour_いろは",
+    "aroma_glamour_すみれ",
+    "aroma_glamour_あいる",
+    "aroma_glamour_ちこ",
+    "aroma_glamour_ゆま",
+    "aroma_glamour_るな",
+    "aroma_glamour_えん",
+    "aroma_glamour_さくら",
+    "aroma_glamour_ほの"
+  ]
+}

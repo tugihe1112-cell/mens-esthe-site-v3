@@ -1,0 +1,295 @@
+{
+  "id": 60216,
+  "name": "わたしのおうち",
+  "prefecture": "東京都",
+  "city": "祐天寺",
+  "region": "関東エリア",
+  "address": "東京都目黒区 (最寄: 祐天寺駅)",
+  "image": "/images/shops/watashi_ouchi.jpg",
+  "rating": 4.6,
+  "reviewCount": 0,
+  "price": "90分 19,000円～",
+  "hours": "10:00～LAST",
+  "isPremium": false,
+  "color": "from-sky-400 to-blue-600",
+  "tags": [],
+  "websiteUrl": "https://ouchi-esute.com/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_椿ひまり",
+      "name": "椿ひまり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "unknown_河井えり",
+      "name": "河井えり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "1位"
+      ]
+    },
+    {
+      "id": "unknown_中町まつり",
+      "name": "中町まつり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "2位"
+      ]
+    },
+    {
+      "id": "unknown_一葉うた",
+      "name": "一葉うた",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "3位"
+      ]
+    },
+    {
+      "id": "unknown_夢野こころ",
+      "name": "夢野こころ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "4位"
+      ]
+    },
+    {
+      "id": "unknown_天野もか",
+      "name": "天野もか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_みつ",
+      "name": "みつ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "レジェンド"
+      ]
+    },
+    {
+      "id": "unknown_さよ",
+      "name": "さよ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_綺咲かのん",
+      "name": "綺咲かのん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "プレミア"
+      ]
+    },
+    {
+      "id": "unknown_白星さわ",
+      "name": "白星さわ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "スペシャル"
+      ]
+    },
+    {
+      "id": "unknown_花奏舞香",
+      "name": "花奏舞香",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "スペシャル"
+      ]
+    },
+    {
+      "id": "unknown_みさ",
+      "name": "みさ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "電話番"
+      ]
+    },
+    {
+      "id": "unknown_富良野まこ",
+      "name": "富良野まこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人",
+        "プレミア"
+      ]
+    },
+    {
+      "id": "unknown_楓じゅん",
+      "name": "楓じゅん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_水咲りこる",
+      "name": "水咲りこる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "プレミア"
+      ]
+    },
+    {
+      "id": "unknown_叶りん",
+      "name": "叶りん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "unknown_まい",
+      "name": "まい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人",
+        "レジェンド"
+      ]
+    },
+    {
+      "id": "unknown_妖艶ジェシカ",
+      "name": "妖艶ジェシカ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "unknown_夏川みちる",
+      "name": "夏川みちる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "unknown_三上える",
+      "name": "三上える",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "unknown_山城ゆい",
+      "name": "山城ゆい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_捏まな",
+      "name": "捏まな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_恋 ちづる",
+      "name": "恋 ちづる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "unknown_黒木ねこ",
+      "name": "黒木ねこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "unknown_山下ほのか",
+      "name": "山下ほのか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_社かな",
+      "name": "社かな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_久遠ゆうか",
+      "name": "久遠ゆうか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_櫻はるき",
+      "name": "櫻はるき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "unknown_一ノ瀬なな",
+      "name": "一ノ瀬なな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    }
+  ],
+  "area": "祐天寺"
+}

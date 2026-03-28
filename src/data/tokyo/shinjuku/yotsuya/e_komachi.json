@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_shinjuku_yotsuya_e_komachi",
+  "name": "E小町 (いいこまち)",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "四谷",
+  "address": "東京都新宿区四ツ谷エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分17,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://esthe-e-komachi.com/",
+  "nearestStation": "四ツ谷駅",
+  "description": "四ツ谷の日本人リラクゼーション。 / 料金システム: 80分17,000円〜 / 100分21,000円〜",
+  "threads": [],
+  "brandId": "e_komachi",
+  "therapists": []
+}

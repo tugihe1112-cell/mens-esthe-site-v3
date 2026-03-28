@@ -1,0 +1,842 @@
+{
+  "id": "tokyo_kita_yorimichi",
+  "name": "よりみち (Yorimichi) (旧いごこち)",
+  "prefecture": "東京都",
+  "city": "北区",
+  "address": "東京都吉祥寺・荻窪・赤羽エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 15,000円～",
+  "hours": "10:00～翌6:00",
+  "isPremium": false,
+  "tags": [
+    "吉祥寺",
+    "荻窪",
+    "赤羽",
+    "完全個室",
+    "深夜営業",
+    "カード払いOK",
+    "初回特典あり",
+    "複数エリア展開"
+  ],
+  "websiteUrl": "https://kichijoji-igokochi.com/",
+  "nearestStation": "吉祥寺駅 / 荻窪駅 / 赤羽駅",
+  "description": "吉祥寺・荻窪・赤羽で展開する日本人一般ルーム。旧店名「いごこち」。料金システム(割引後): 60分15,000円 / 80分20,000円 / 100分25,000円",
+  "brandId": "yorimichi",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "yorimichi_三石いのり",
+      "name": "三石いのり",
+      "age": 25,
+      "height": 152,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_麻倉まこ",
+      "name": "麻倉まこ",
+      "age": 25,
+      "height": 158,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_日野しずく",
+      "name": "日野しずく",
+      "age": 22,
+      "height": 166,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_水瀬さら",
+      "name": "水瀬さら",
+      "age": 29,
+      "height": 149,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_林ゆずな",
+      "name": "林ゆずな",
+      "age": 24,
+      "height": 156,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_赤坂れんか",
+      "name": "赤坂れんか",
+      "age": 20,
+      "height": 151,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_霧島りこ",
+      "name": "霧島りこ",
+      "age": 28,
+      "height": 147,
+      "bust": "(I)"
+    },
+    {
+      "id": "yorimichi_芦名さりな",
+      "name": "芦名さりな",
+      "age": 24,
+      "height": 165,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_夏目ひまり",
+      "name": "夏目ひまり",
+      "age": 23,
+      "height": 150,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_泉うさ",
+      "name": "泉うさ",
+      "age": 21,
+      "height": 157,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_根本かおり",
+      "name": "根本かおり",
+      "age": 27,
+      "height": 155,
+      "bust": "(H)"
+    },
+    {
+      "id": "yorimichi_井川らむ",
+      "name": "井川らむ",
+      "age": 26,
+      "height": 155,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_戸田みか",
+      "name": "戸田みか",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_佐倉ちほ",
+      "name": "佐倉ちほ",
+      "age": 25,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_牧野りつ",
+      "name": "牧野りつ",
+      "age": 23,
+      "height": 152,
+      "bust": "(I)"
+    },
+    {
+      "id": "yorimichi_平あいり",
+      "name": "平あいり",
+      "age": 27,
+      "height": 165,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_美咲ゆうか",
+      "name": "美咲ゆうか",
+      "age": 25,
+      "height": 153,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_大森みく",
+      "name": "大森みく",
+      "age": 23,
+      "height": 155,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_山田まり",
+      "name": "山田まり",
+      "age": 24,
+      "height": 160,
+      "bust": "(J)"
+    },
+    {
+      "id": "yorimichi_七海りの",
+      "name": "七海りの",
+      "age": 27,
+      "height": 157,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_雪代ちはや",
+      "name": "雪代ちはや",
+      "age": 23,
+      "height": 156,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_立花にこ",
+      "name": "立花にこ",
+      "age": 21,
+      "height": 165,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_北条さえ",
+      "name": "北条さえ",
+      "age": 23,
+      "height": 150,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_鹿島かほ",
+      "name": "鹿島かほ",
+      "age": 25,
+      "height": 155,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_神谷なえ",
+      "name": "神谷なえ",
+      "age": 25,
+      "height": 166,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_星野せら",
+      "name": "星野せら",
+      "age": 27,
+      "height": 156,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_野崎さき",
+      "name": "野崎さき",
+      "age": 20,
+      "height": 160,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_星宮のあ",
+      "name": "星宮のあ",
+      "age": 21,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_白井ゆきの",
+      "name": "白井ゆきの",
+      "age": 28,
+      "height": 156,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_遠野あやめ",
+      "name": "遠野あやめ",
+      "age": 22,
+      "height": 154,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_石田りな",
+      "name": "石田りな",
+      "age": 21,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_有馬さな",
+      "name": "有馬さな",
+      "age": 21,
+      "height": 165,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_清水かな",
+      "name": "清水かな",
+      "age": 25,
+      "height": 161,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_月島るか",
+      "name": "月島るか",
+      "age": 24,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_山川あんな",
+      "name": "山川あんな",
+      "age": 22,
+      "height": 168,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_福丸りの",
+      "name": "福丸りの",
+      "age": 21,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_桃園かなう",
+      "name": "桃園かなう",
+      "age": 23,
+      "height": 150,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_加藤なつ",
+      "name": "加藤なつ",
+      "age": 21,
+      "height": 162,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_朝比奈みゆ",
+      "name": "朝比奈みゆ",
+      "age": 23,
+      "height": 157,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_高畑その",
+      "name": "高畑その",
+      "age": 20,
+      "height": 165,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_夜空つき",
+      "name": "夜空つき",
+      "age": 24,
+      "height": 152,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_坂本しおり",
+      "name": "坂本しおり",
+      "age": 27,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_絢瀬えり",
+      "name": "絢瀬えり",
+      "age": 21,
+      "height": 149,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_鈴木あやな",
+      "name": "鈴木あやな",
+      "age": 25,
+      "height": 161,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_広瀬あき",
+      "name": "広瀬あき",
+      "age": 26,
+      "height": 155,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_能年まよ",
+      "name": "能年まよ",
+      "age": 25,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_瀬名いおり",
+      "name": "瀬名いおり",
+      "age": 23,
+      "height": 156,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_高島ちな",
+      "name": "高島ちな",
+      "age": 24,
+      "height": 158,
+      "bust": "(H)"
+    },
+    {
+      "id": "yorimichi_市川みおん",
+      "name": "市川みおん",
+      "age": 21,
+      "height": 154,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_天野すい",
+      "name": "天野すい",
+      "age": 20,
+      "height": 163,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_森山みつき",
+      "name": "森山みつき",
+      "age": 26,
+      "height": 157,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_藤沢はな",
+      "name": "藤沢はな",
+      "age": 24,
+      "height": 143,
+      "bust": "(H)"
+    },
+    {
+      "id": "yorimichi_谷崎のどか",
+      "name": "谷崎のどか",
+      "age": 23,
+      "height": 166,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_小松なお",
+      "name": "小松なお",
+      "age": 23,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_赤井りんか",
+      "name": "赤井りんか",
+      "age": 21,
+      "height": 157,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_小豆あず",
+      "name": "小豆あず",
+      "age": 20,
+      "height": 159,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_白鳥せな",
+      "name": "白鳥せな",
+      "age": 24,
+      "height": 164,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_百合あずさ",
+      "name": "百合あずさ",
+      "age": 20,
+      "height": 158,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_佐々木さや",
+      "name": "佐々木さや",
+      "age": 26,
+      "height": 165,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_桃乃かぐや",
+      "name": "桃乃かぐや",
+      "age": 24,
+      "height": 163,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_森川みさき",
+      "name": "森川みさき",
+      "age": 26,
+      "height": 162,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_猫宮まお",
+      "name": "猫宮まお",
+      "age": 26,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_愛川みやの",
+      "name": "愛川みやの",
+      "age": 28,
+      "height": 158,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_高町なのは",
+      "name": "高町なのは",
+      "age": 24,
+      "height": 161,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_夏野そら",
+      "name": "夏野そら",
+      "age": 29,
+      "height": 167,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_桜井りん",
+      "name": "桜井りん",
+      "age": 26,
+      "height": 166,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_小野あいの",
+      "name": "小野あいの",
+      "age": 28,
+      "height": 154,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_吉野ゆず",
+      "name": "吉野ゆず",
+      "age": 27,
+      "height": 168,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_秋山みお",
+      "name": "秋山みお",
+      "age": 21,
+      "height": 154,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_長谷川ゆり",
+      "name": "長谷川ゆり",
+      "age": 20,
+      "height": 156,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_早川ゆな",
+      "name": "早川ゆな",
+      "age": 23,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_南條ももか",
+      "name": "南條ももか",
+      "age": 27,
+      "height": 161,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_麻生ちか",
+      "name": "麻生ちか",
+      "age": 23,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_赤西ゆき",
+      "name": "赤西ゆき",
+      "age": 29,
+      "height": 164,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_朱沢えみ",
+      "name": "朱沢えみ",
+      "age": 26,
+      "height": 162,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_天使えり",
+      "name": "天使えり",
+      "age": 20,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_一色ももか",
+      "name": "一色ももか",
+      "age": 27,
+      "height": 150,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_大楠みう",
+      "name": "大楠みう",
+      "age": 30,
+      "height": 156,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_丘咲かのん",
+      "name": "丘咲かのん",
+      "age": 20,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_音無ななは",
+      "name": "音無ななは",
+      "age": 24,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_香山りほ",
+      "name": "香山りほ",
+      "age": 28,
+      "height": 158,
+      "bust": "(C)"
+    },
+    {
+      "id": "yorimichi_河本ゆう",
+      "name": "河本ゆう",
+      "age": 24,
+      "height": 153,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_神白みこ",
+      "name": "神白みこ",
+      "age": 24,
+      "height": 160,
+      "bust": "(C)"
+    },
+    {
+      "id": "yorimichi_倉本えま",
+      "name": "倉本えま",
+      "age": 26,
+      "height": 156,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_楠木すみれ",
+      "name": "楠木すみれ",
+      "age": 26,
+      "height": 151,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_栗原 るしあ",
+      "name": "栗原 るしあ",
+      "age": 27,
+      "height": 163,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_胡桃せいな",
+      "name": "胡桃せいな",
+      "age": 21,
+      "height": 165,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_木葉るい",
+      "name": "木葉るい",
+      "age": 24,
+      "height": 160,
+      "bust": "(C)"
+    },
+    {
+      "id": "yorimichi_四季いちか",
+      "name": "四季いちか",
+      "age": 26,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_月野きこ",
+      "name": "月野きこ",
+      "age": 26,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_中川らん",
+      "name": "中川らん",
+      "age": 27,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_中根ゆの",
+      "name": "中根ゆの",
+      "age": 22,
+      "height": 163,
+      "bust": "(H)"
+    },
+    {
+      "id": "yorimichi_中居まほ",
+      "name": "中居まほ",
+      "age": 24,
+      "height": 162,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_永井めぐみ",
+      "name": "永井めぐみ",
+      "age": 25,
+      "height": 163,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_永沢ゆりあ",
+      "name": "永沢ゆりあ",
+      "age": 24,
+      "height": 158,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_七瀬りお",
+      "name": "七瀬りお",
+      "age": 24,
+      "height": 157,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_成宮さとみ",
+      "name": "成宮さとみ",
+      "age": 22,
+      "height": 158,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_早坂えりな",
+      "name": "早坂えりな",
+      "age": 25,
+      "height": 160,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_波多野うい",
+      "name": "波多野うい",
+      "age": 25,
+      "height": 156,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_原田もね",
+      "name": "原田もね",
+      "age": 21,
+      "height": 165,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_日向なつ",
+      "name": "日向なつ",
+      "age": 27,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_福原ねる",
+      "name": "福原ねる",
+      "age": 22,
+      "height": 150,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_深田えりか",
+      "name": "深田えりか",
+      "age": 27,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_二見りい",
+      "name": "二見りい",
+      "age": 25,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_水川めい",
+      "name": "水川めい",
+      "age": 26,
+      "height": 160,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_水沢うみな",
+      "name": "水沢うみな",
+      "age": 29,
+      "height": 158,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_目黒 ことね",
+      "name": "目黒 ことね",
+      "age": 24,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_桃坂 ゆい",
+      "name": "桃坂 ゆい",
+      "age": 23,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_望月あんな",
+      "name": "望月あんな",
+      "age": 26,
+      "height": 152,
+      "bust": "(G)"
+    },
+    {
+      "id": "yorimichi_姫川れむ",
+      "name": "姫川れむ",
+      "age": 25,
+      "height": 152,
+      "bust": "(I)"
+    },
+    {
+      "id": "yorimichi_諸星 なつき",
+      "name": "諸星 なつき",
+      "age": 25,
+      "height": 157,
+      "bust": "(H)"
+    },
+    {
+      "id": "yorimichi_一ノ瀬れみ",
+      "name": "一ノ瀬れみ",
+      "age": 25,
+      "height": 161,
+      "bust": "(E)"
+    },
+    {
+      "id": "yorimichi_流川れい",
+      "name": "流川れい",
+      "age": 25,
+      "height": 154,
+      "bust": "(F)"
+    },
+    {
+      "id": "yorimichi_江黒あんな",
+      "name": "江黒あんな",
+      "age": 25,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_白石あゆ",
+      "name": "白石あゆ",
+      "age": 23,
+      "height": 156,
+      "bust": "(D)"
+    },
+    {
+      "id": "yorimichi_小野田ゆら",
+      "name": "小野田ゆら",
+      "age": 25,
+      "height": 163,
+      "bust": "(F)"
+    }
+  ]
+}

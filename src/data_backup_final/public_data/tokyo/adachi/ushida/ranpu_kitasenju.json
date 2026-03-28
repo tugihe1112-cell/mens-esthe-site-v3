@@ -1,0 +1,554 @@
+{
+  "id": "tokyo_adachi_ushida_ranpu_kitasenju",
+  "name": "らんぷ 北千住",
+  "url": "https://www.senju-lamp.com/",
+  "area": "牛田",
+  "price": "10,000円〜",
+  "interview": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "courses": [
+    {
+      "minutes": 90,
+      "price": "10,000"
+    },
+    {
+      "minutes": 120,
+      "price": "14,000"
+    },
+    {
+      "minutes": 150,
+      "price": "18,000"
+    },
+    {
+      "minutes": 180,
+      "price": "21,000"
+    },
+    {
+      "minutes": 240,
+      "price": "28,000"
+    },
+    {
+      "minutes": 300,
+      "price": "35,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "足立区",
+  "brandId": "ranpu_kitasenju",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "ranpu_kitasenju_松山 えりな",
+      "name": "松山 えりな",
+      "age": 26,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_藤井 まや",
+      "name": "藤井 まや",
+      "age": 47,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_渡辺 ゆあ",
+      "name": "渡辺 ゆあ",
+      "age": 31,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_片岡 さゆり",
+      "name": "片岡 さゆり",
+      "age": 49,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_愛咲 なな",
+      "name": "愛咲 なな",
+      "age": 30,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_長谷川 らん",
+      "name": "長谷川 らん",
+      "age": 38,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_中山 みく",
+      "name": "中山 みく",
+      "age": 37,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_花井 このか",
+      "name": "花井 このか",
+      "age": 33,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_一乃瀬 ゆいな",
+      "name": "一乃瀬 ゆいな",
+      "age": 34,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_暁 りこ",
+      "name": "暁 りこ",
+      "age": 36,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_天音 にな",
+      "name": "天音 にな",
+      "age": 26,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_神野 ひめか",
+      "name": "神野 ひめか",
+      "age": 37,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_上原 さき",
+      "name": "上原 さき",
+      "age": 44,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_本田 まり",
+      "name": "本田 まり",
+      "age": 36,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_加須部 なるみ",
+      "name": "加須部 なるみ",
+      "age": 36,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_神田 みみ",
+      "name": "神田 みみ",
+      "age": 48,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_一宮 ひびき",
+      "name": "一宮 ひびき",
+      "age": 30,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_岩田 くるみ",
+      "name": "岩田 くるみ",
+      "age": 30,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_永崎 れいか",
+      "name": "永崎 れいか",
+      "age": 37,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_宮本 けい",
+      "name": "宮本 けい",
+      "age": 40,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_美波 かこ",
+      "name": "美波 かこ",
+      "age": 40,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_小田 あつこ",
+      "name": "小田 あつこ",
+      "age": 37,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_北川 れいこ",
+      "name": "北川 れいこ",
+      "age": 44,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_相模 めぐみ",
+      "name": "相模 めぐみ",
+      "age": 32,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_田村 ちさ",
+      "name": "田村 ちさ",
+      "age": 29,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_東雲 こはる",
+      "name": "東雲 こはる",
+      "age": 40,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_桜木 いと",
+      "name": "桜木 いと",
+      "age": 38,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_八乙女 あい",
+      "name": "八乙女 あい",
+      "age": 23,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_滝 あかり",
+      "name": "滝 あかり",
+      "age": 41,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_中西 みかん",
+      "name": "中西 みかん",
+      "age": 30,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_菊山 あいり",
+      "name": "菊山 あいり",
+      "age": 53,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_仁科 ゆうひ",
+      "name": "仁科 ゆうひ",
+      "age": 28,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_結城 まなみ",
+      "name": "結城 まなみ",
+      "age": 41,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_池田 まい",
+      "name": "池田 まい",
+      "age": 46,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_小川 じゅり",
+      "name": "小川 じゅり",
+      "age": 34,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_朝日 さとみ",
+      "name": "朝日 さとみ",
+      "age": 35,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_真野 りつ",
+      "name": "真野 りつ",
+      "age": 40,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_西野 たまき",
+      "name": "西野 たまき",
+      "age": 30,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_松井 おと",
+      "name": "松井 おと",
+      "age": 39,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_柏葉 れん",
+      "name": "柏葉 れん",
+      "age": 39,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_宮野原 わか",
+      "name": "宮野原 わか",
+      "age": 38,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_安東 みき",
+      "name": "安東 みき",
+      "age": 32,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_久保 こはる",
+      "name": "久保 こはる",
+      "age": 50,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_高瀬 りん",
+      "name": "高瀬 りん",
+      "age": 27,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_高槻 あずさ",
+      "name": "高槻 あずさ",
+      "age": 44,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_秋川 ゆき",
+      "name": "秋川 ゆき",
+      "age": 32,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_松原 あゆみ",
+      "name": "松原 あゆみ",
+      "age": 34,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_桜井 しの",
+      "name": "桜井 しの",
+      "age": 38,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_羽山 すず",
+      "name": "羽山 すず",
+      "age": 42,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_望月 みな",
+      "name": "望月 みな",
+      "age": 47,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_月永 すみれ",
+      "name": "月永 すみれ",
+      "age": 47,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_杠 あいり",
+      "name": "杠 あいり",
+      "age": 32,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_緑 あやの",
+      "name": "緑 あやの",
+      "age": 46,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_松岡 ちえ",
+      "name": "松岡 ちえ",
+      "age": 43,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_相田 りさこ",
+      "name": "相田 りさこ",
+      "age": 39,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_高橋 りほ",
+      "name": "高橋 りほ",
+      "age": 28,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_一原 ゆい",
+      "name": "一原 ゆい",
+      "age": 29,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_村山 すみれ",
+      "name": "村山 すみれ",
+      "age": 39,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_吉本 ぼたん",
+      "name": "吉本 ぼたん",
+      "age": 38,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_音瀬 あすか",
+      "name": "音瀬 あすか",
+      "age": 29,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_綾瀬 ゆか",
+      "name": "綾瀬 ゆか",
+      "age": 34,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_橘 ちひろ",
+      "name": "橘 ちひろ",
+      "age": 52,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_月乃 なな",
+      "name": "月乃 なな",
+      "age": 27,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_只野 まり",
+      "name": "只野 まり",
+      "age": 40,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_星野 るびぃ",
+      "name": "星野 るびぃ",
+      "age": 46,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_宇佐美 ねね",
+      "name": "宇佐美 ねね",
+      "age": 23,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_遠野 ひかり",
+      "name": "遠野 ひかり",
+      "age": 44,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_三浦 みどりこ",
+      "name": "三浦 みどりこ",
+      "age": 42,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_西園寺 みつき",
+      "name": "西園寺 みつき",
+      "age": 46,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_吉野 あおい",
+      "name": "吉野 あおい",
+      "age": 30,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_朝霞 はる",
+      "name": "朝霞 はる",
+      "age": 49,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_森 みかこ",
+      "name": "森 みかこ",
+      "age": 29,
+      "height": 0,
+      "bust": "()"
+    },
+    {
+      "id": "ranpu_kitasenju_向井 さえ",
+      "name": "向井 さえ",
+      "age": 41,
+      "height": 0,
+      "bust": "()"
+    }
+  ]
+}

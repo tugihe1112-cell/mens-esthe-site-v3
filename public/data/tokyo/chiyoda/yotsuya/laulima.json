@@ -1,0 +1,39 @@
+{
+  "id": "tokyo_chiyoda_yotsuya_laulima",
+  "name": "Laulima (ラウリマ)",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "四谷",
+  "region": "新宿エリア",
+  "address": "東京都新宿区四谷4丁目",
+  "nearestStation": "四谷三丁目駅",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 19,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "color": "from-pink-500 to-rose-500",
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "初回特典あり",
+    "日本人"
+  ],
+  "websiteUrl": "http://www.laulima.tokyo/",
+  "description": "四谷の完全個室メンズエステ。厳選されたセラピストによる極上の癒やし。",
+  "brandId": "laulima",
+  "threads": [],
+  "therapists": [
+    "laulima_ゆうか",
+    "laulima_乙葉",
+    "laulima_中川 美沙",
+    "laulima_草薙 蘭",
+    "laulima_神崎 なおみ",
+    "laulima_水野 恋",
+    "laulima_磯野 すず",
+    "laulima_涼風 ななみ",
+    "laulima_石田 アイナ",
+    "laulima_田中 りえ"
+  ]
+}

@@ -1,47 +1,93 @@
-// src/components/TagSelector.jsx (新規作成)
-
 import React from 'react';
-
-// 仕様書 3.3 で指定された利用可能なタグ
-const AVAILABLE_TAGS = [
-  '巨乳', 'スレンダー', 'グラマー', '美脚', '小柄', '高身長', '美人系', 
-  '可愛い系', '清楚系', 'ギャル系', 'お姉さん系', '色白', '健康的', 
-  '10代', '20代', '20代前半', '20代後半', '30代', '40代', '新人', 
-  'ベテラン', '日本人', '外国人', '人気', 'おすすめ'
-];
+import { TAG_CATEGORIES } from '../data/constants';
 
 /**
- * タグ選択コンポーネント
- * @param {object} props
- * @param {string[]} props.selectedTags - 現在選択されているタグの配列
- * @param {function} props.setSelectedTags - タグ配列を更新する関数
+ * データ駆動型タグ選択コンポーネント (Universal)
+ * @param {object} counts - (Optional) タグごとの該当件数 { '巨乳': 5, ... }。渡されると検索モードになる。
  */
-export default function TagSelector({ selectedTags, setSelectedTags }) {
+export default function TagSelector({ selectedTags, setSelectedTags, counts = null }) {
   
-  const toggleTag = (tag) => {
-    setSelectedTags((prevTags) =>
-      prevTags.includes(tag)
-        ? prevTags.filter((t) => t !== tag) // 既に選択されていれば削除
-        : [...prevTags, tag] // 選択されていなければ追加
-    );
+  const handleTagClick = (category, tag) => {
+    // 件数データがあり、かつ0件ならクリック無効
+    if (counts && (counts[tag] || 0) === 0) return;
+
+    const isSingle = category.selectionMode === 'single';
+    const isSelected = selectedTags.includes(tag);
+
+    if (isSingle) {
+      // --- 単一選択モード (Radio) ---
+      const categoryTags = category.tags;
+      const otherTags = selectedTags.filter(t => !categoryTags.includes(t));
+      
+      if (isSelected) {
+        setSelectedTags(otherTags); // 解除
+      } else {
+        setSelectedTags([...otherTags, tag]); // 上書き
+      }
+    } else {
+      // --- 複数選択モード (Checkbox) ---
+      if (isSelected) {
+        setSelectedTags(selectedTags.filter(t => t !== tag));
+      } else {
+        setSelectedTags([...selectedTags, tag]);
+      }
+    }
   };
 
   return (
-    <div className="flex flex-wrap gap-2 p-3 bg-slate-800 rounded-md">
-      {AVAILABLE_TAGS.map((tag) => (
-        <button
-          key={tag}
-          type="button" // form の submit を防ぐ
-          onClick={() => toggleTag(tag)}
-          className={`px-3 py-1 text-sm rounded-full transition-colors ${
-            selectedTags.includes(tag)
-              ? 'bg-pink-600 text-white font-medium' // 選択中のスタイル
-              : 'bg-gray-700 text-gray-300 hover:bg-gray-600' // 未選択のスタイル
-          }`}
-        >
-          {tag}
-        </button>
+    <div className="space-y-8">
+      {TAG_CATEGORIES.map((category) => (
+        <div key={category.id} className="animate-fade-in">
+          {/* カテゴリヘッダー */}
+          <div className="flex items-end gap-2 mb-3 px-1 border-l-4 border-pink-500 pl-3">
+            <h4 className="text-sm font-bold text-white leading-none">
+              {category.title}
+            </h4>
+            <span className="text-[10px] text-slate-400 leading-none">
+              {category.subtitle}
+              {category.selectionMode === 'single' && <span className="ml-2 text-pink-500 text-[10px] border border-pink-500/20 px-1 rounded bg-pink-500/10">1つのみ</span>}
+            </span>
+          </div>
+
+          {/* タグボタン */}
+          <div className="flex flex-wrap gap-2">
+            {category.tags.map((tag) => {
+              const isSelected = selectedTags.includes(tag);
+              const count = counts ? (counts[tag] || 0) : null;
+              const isZero = counts && count === 0;
+
+              return (
+                <button
+                  key={tag}
+                  type="button"
+                  disabled={isZero}
+                  onClick={() => handleTagClick(category, tag)}
+                  className={`
+                    relative group flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 border
+                    ${isSelected 
+                      ? 'bg-gradient-to-r from-pink-600 to-rose-500 border-transparent text-white shadow-lg shadow-pink-500/30 transform scale-105 z-10' 
+                      : isZero
+                        ? 'bg-slate-800/30 border-slate-800 text-slate-600 cursor-not-allowed opacity-50'
+                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:border-pink-400 hover:text-white hover:bg-slate-700'
+                    }
+                  `}
+                >
+                  <span>{tag}</span>
+                  {counts && !isZero && (
+                     <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-900 text-slate-400'}`}>
+                       {count}
+                     </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       ))}
+      <style>{`
+        @keyframes fade-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
+      `}</style>
     </div>
   );
 }

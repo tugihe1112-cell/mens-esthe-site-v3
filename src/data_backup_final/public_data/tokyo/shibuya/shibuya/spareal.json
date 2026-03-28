@@ -1,0 +1,393 @@
+{
+  "id": 60364,
+  "name": "SPA Real (スパレアル)",
+  "prefecture": "東京都",
+  "city": "渋谷駅周辺",
+  "region": "関東エリア",
+  "address": "東京都渋谷区",
+  "image": "https://via.placeholder.com/300x200?text=SPAReal",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "10:00〜翌5:00",
+  "isPremium": true,
+  "color": "from-gray-800 to-yellow-600",
+  "tags": [
+    "高級店",
+    "完全個室",
+    "セラピスト多数"
+  ],
+  "websiteUrl": "https://spa-real.net/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_優木 なお (19)",
+      "name": "優木 なお (19)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_片岡 なみ (25)",
+      "name": "片岡 なみ (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_斉藤 みなみ (18)",
+      "name": "斉藤 みなみ (18)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_三谷 みな (26)",
+      "name": "三谷 みな (26)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_一ノ瀬 まりや (25)",
+      "name": "一ノ瀬 まりや (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_松本 えま (26)",
+      "name": "松本 えま (26)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_斉藤 ゆずき (21)",
+      "name": "斉藤 ゆずき (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_川口 かのん (25)",
+      "name": "川口 かのん (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_横山 りこ (26)",
+      "name": "横山 りこ (26)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_立花 かおる (25)",
+      "name": "立花 かおる (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_柚木 さら (20)",
+      "name": "柚木 さら (20)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_羽柴 ねね (20)",
+      "name": "羽柴 ねね (20)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_高梨 さき (25)",
+      "name": "高梨 さき (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_白石 つばさ (20)",
+      "name": "白石 つばさ (20)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_望月 るな (22)",
+      "name": "望月 るな (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_綾瀬 れな (24)",
+      "name": "綾瀬 れな (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_風宮 ひなこ (20)",
+      "name": "風宮 ひなこ (20)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_那須 のどか (19)",
+      "name": "那須 のどか (19)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_七瀬 ゆる (19)",
+      "name": "七瀬 ゆる (19)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_宇垣 みあ (24)",
+      "name": "宇垣 みあ (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_花宮 ほの (19)",
+      "name": "花宮 ほの (19)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_綾波 あやか (21)",
+      "name": "綾波 あやか (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_月村 りる (24)",
+      "name": "月村 りる (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_六条 ななみ (23)",
+      "name": "六条 ななみ (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_二ノ宮 はる (25)",
+      "name": "二ノ宮 はる (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_遠山 らん (24)",
+      "name": "遠山 らん (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_一条 おとは (26)",
+      "name": "一条 おとは (26)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_橋本 かれん (21)",
+      "name": "橋本 かれん (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_水城 せら (24)",
+      "name": "水城 せら (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_エミリア りり (19)",
+      "name": "エミリア りり (19)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_西村 ゆあ (22)",
+      "name": "西村 ゆあ (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_柏木 あいり (24)",
+      "name": "柏木 あいり (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_佐藤 なな (23)",
+      "name": "佐藤 なな (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_七瀬 いと (21)",
+      "name": "七瀬 いと (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_速水 こはく (20)",
+      "name": "速水 こはく (20)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_黒木 のあ (21)",
+      "name": "黒木 のあ (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_紺野 まひる (28)",
+      "name": "紺野 まひる (28)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_石井 りか (21)",
+      "name": "石井 りか (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_港 くみ (24)",
+      "name": "港 くみ (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_田ノ上 ちなつ (27)",
+      "name": "田ノ上 ちなつ (27)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_峰 ひかり (25)",
+      "name": "峰 ひかり (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_西月 さやか (28)",
+      "name": "西月 さやか (28)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_國村 ゆり (23)",
+      "name": "國村 ゆり (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_橘 あゆみ (27)",
+      "name": "橘 あゆみ (27)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_吉村 りか (24)",
+      "name": "吉村 りか (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_内山 なこ (27)",
+      "name": "内山 なこ (27)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": []
+    }
+  ],
+  "area": "渋谷"
+}

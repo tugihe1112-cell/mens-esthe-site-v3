@@ -1,0 +1,21 @@
+{
+  "id": "tokyo_shinagawa_gotanda_aroma_abc",
+  "name": "Aroma ABC (アロマABC)",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "五反田",
+  "address": "東京都品川区五反田エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分15,000円～",
+  "hours": "営業中",
+  "isPremium": false,
+  "tags": [],
+  "websiteUrl": "https://a-abc.tokyo/",
+  "nearestStation": "五反田駅",
+  "description": "芸能人顔負けのスレンダー美女専門店 / 70分15,000円 / 90分17,000円 / 120分21,000円 / 150分25,000円",
+  "threads": [],
+  "brandId": "aroma_abc",
+  "therapists": []
+}

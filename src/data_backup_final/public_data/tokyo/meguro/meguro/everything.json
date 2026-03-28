@@ -1,0 +1,69 @@
+{
+  "id": "tokyo_meguro_meguro_everything",
+  "name": "Everything (エブリシング)",
+  "prefecture": "東京都",
+  "city": "目黒区",
+  "area": "目黒",
+  "address": "東京都目黒区 (最寄: 目黒駅)",
+  "image": "/images/shops/everything.jpg",
+  "rating": 4.5,
+  "reviewCount": 0,
+  "price": "90分 13,000円～",
+  "hours": "12:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業",
+    "店舗型"
+  ],
+  "websiteUrl": "http://www.every-thing.jp",
+  "nearestStation": "目黒駅",
+  "description": "目黒駅近くの完全個室・店舗型メンズエステ。",
+  "brandId": "everything",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "everything_水沢ゆき",
+      "name": "水沢ゆき",
+      "age": 28,
+      "height": 151,
+      "bust": "(D)"
+    },
+    {
+      "id": "everything_関口みなみ",
+      "name": "関口みなみ",
+      "age": 25,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "everything_榎本さやか",
+      "name": "榎本さやか",
+      "age": 28,
+      "height": 165,
+      "bust": "(E)"
+    },
+    {
+      "id": "everything_福山かな",
+      "name": "福山かな",
+      "age": 31,
+      "height": 157,
+      "bust": "(C)"
+    },
+    {
+      "id": "everything_宮沢すみれ",
+      "name": "宮沢すみれ",
+      "age": 26,
+      "height": 168,
+      "bust": "(C)"
+    },
+    {
+      "id": "everything_朝倉みほ",
+      "name": "朝倉みほ",
+      "age": 29,
+      "height": 160,
+      "bust": "(C)"
+    }
+  ]
+}

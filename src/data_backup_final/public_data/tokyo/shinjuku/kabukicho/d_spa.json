@@ -1,0 +1,769 @@
+{
+  "id": "tokyo_shinjuku_kabukicho_d_spa",
+  "name": "D-SPA (ディースパ)",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "歌舞伎町",
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "90分",
+        "price": "19,000円"
+      },
+      {
+        "time": "120分",
+        "price": "24,000円"
+      },
+      {
+        "time": "150分",
+        "price": "28,000円"
+      },
+      {
+        "time": "180分",
+        "price": "33,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "もぎたてフレッシュコース 90分",
+        "price": "14,000円"
+      },
+      {
+        "name": "ときメロ♡にゃんコース 100分",
+        "price": "27,000円"
+      },
+      {
+        "name": "アルティメットコース 80分",
+        "price": "25,000円"
+      },
+      {
+        "name": "スペシャルコース 60分",
+        "price": "20,000円"
+      },
+      {
+        "name": "スペシャルコース 80分",
+        "price": "25,000円"
+      },
+      {
+        "name": "スペシャルコース 100分",
+        "price": "30,000円"
+      },
+      {
+        "name": "スペシャルコース 120分",
+        "price": "35,000円"
+      }
+    ]
+  },
+  "url": "https://spa-d.com/",
+  "threads": [],
+  "brandId": "d_spa",
+  "therapists": [
+    {
+      "id": "d_spa_白雪まゆ",
+      "name": "白雪まゆ",
+      "age": 21,
+      "height": 153,
+      "bust": null,
+      "tags": [
+        "天竜人💎プロフ必読⚠️"
+      ]
+    },
+    {
+      "id": "d_spa_一條カレン",
+      "name": "一條カレン",
+      "age": 22,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "The perfect lady❣️"
+      ]
+    },
+    {
+      "id": "d_spa_結城あかね",
+      "name": "結城あかね",
+      "age": 24,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "国宝級❣️もちとろ愛カップ🫶"
+      ]
+    },
+    {
+      "id": "d_spa_芹沼かえで",
+      "name": "芹沼かえで",
+      "age": 21,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "🔰新人🈹対象セラピスト🔥"
+      ]
+    },
+    {
+      "id": "d_spa_花星さな",
+      "name": "花星さな",
+      "age": 26,
+      "height": 153,
+      "bust": null,
+      "tags": [
+        "おもてなしエンジェル👼"
+      ]
+    },
+    {
+      "id": "d_spa_春風にこ",
+      "name": "春風にこ",
+      "age": 23,
+      "height": 150,
+      "bust": null,
+      "tags": [
+        "プレミアキャスト💎プロフ必読"
+      ]
+    },
+    {
+      "id": "d_spa_葵にじほ",
+      "name": "葵にじほ",
+      "age": 23,
+      "height": 155,
+      "bust": null,
+      "tags": [
+        "完璧で究極のアイドル❣️"
+      ]
+    },
+    {
+      "id": "d_spa_櫻井ひめの",
+      "name": "櫻井ひめの",
+      "age": 20,
+      "height": 148,
+      "bust": null,
+      "tags": [
+        "🌞太陽のなでしこ姫👸"
+      ]
+    },
+    {
+      "id": "d_spa_黒須ちあき",
+      "name": "黒須ちあき",
+      "age": 24,
+      "height": 158,
+      "bust": null,
+      "tags": [
+        "彼女にしたい女オブザイヤー💘"
+      ]
+    },
+    {
+      "id": "d_spa_星宮ゆりか",
+      "name": "星宮ゆりか",
+      "age": 23,
+      "height": 164,
+      "bust": null,
+      "tags": [
+        "🔰新人🈹対象セラピスト🔥"
+      ]
+    },
+    {
+      "id": "d_spa_天音りの",
+      "name": "天音りの",
+      "age": 23,
+      "height": 161,
+      "bust": null,
+      "tags": [
+        "SSSランク最強美女🩵"
+      ]
+    },
+    {
+      "id": "d_spa_山盛ぱいん",
+      "name": "山盛ぱいん",
+      "age": 20,
+      "height": 143,
+      "bust": null,
+      "tags": [
+        "🔰もぎたて！フレッシュコース🍒対応"
+      ]
+    },
+    {
+      "id": "d_spa_星月らむ",
+      "name": "星月らむ",
+      "age": 22,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "俺の妹がこんなに…💗"
+      ]
+    },
+    {
+      "id": "d_spa_一輝みさき",
+      "name": "一輝みさき",
+      "age": 20,
+      "height": 150,
+      "bust": null,
+      "tags": [
+        "超有名インフルエンサー🔥"
+      ]
+    },
+    {
+      "id": "d_spa_緑一色このみ",
+      "name": "緑一色このみ",
+      "age": 20,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "プレミアキャスト💎プロフ必読⚠️"
+      ]
+    },
+    {
+      "id": "d_spa_久保いろは",
+      "name": "久保いろは",
+      "age": 24,
+      "height": 170,
+      "bust": null,
+      "tags": [
+        "D-SPAのスーパーモデル🚺"
+      ]
+    },
+    {
+      "id": "d_spa_藤崎れい",
+      "name": "藤崎れい",
+      "age": 18,
+      "height": 168,
+      "bust": null,
+      "tags": [
+        "18歳⚡️衝撃デビュー⚡️"
+      ]
+    },
+    {
+      "id": "d_spa_綾瀬ももか",
+      "name": "綾瀬ももか",
+      "age": 24,
+      "height": 163,
+      "bust": null,
+      "tags": [
+        "圧倒的❣️本指名率✨No.1✨"
+      ]
+    },
+    {
+      "id": "d_spa_真田じゅり",
+      "name": "真田じゅり",
+      "age": 25,
+      "height": 165,
+      "bust": null,
+      "tags": [
+        "ふんわりエロbodyお姉さん💄"
+      ]
+    },
+    {
+      "id": "d_spa_月宮えれな",
+      "name": "月宮えれな",
+      "age": 22,
+      "height": 168,
+      "bust": null,
+      "tags": [
+        "🔰新人🈹対象セラピスト🔥"
+      ]
+    },
+    {
+      "id": "d_spa_小川りあ",
+      "name": "小川りあ",
+      "age": 21,
+      "height": 167,
+      "bust": null,
+      "tags": [
+        "秘められた魔性❣️"
+      ]
+    },
+    {
+      "id": "d_spa_峰上ふじこ",
+      "name": "峰上ふじこ",
+      "age": 23,
+      "height": 175,
+      "bust": null,
+      "tags": [
+        "🔰もぎたて！フレッシュコース🍒対応"
+      ]
+    },
+    {
+      "id": "d_spa_佐藤まひる",
+      "name": "佐藤まひる",
+      "age": 29,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "sexyゴッドハンド🔥"
+      ]
+    },
+    {
+      "id": "d_spa_星乃きらん",
+      "name": "星乃きらん",
+      "age": 18,
+      "height": 148,
+      "bust": null,
+      "tags": [
+        "🔰もぎたて！フレッシュコース🍒対応"
+      ]
+    },
+    {
+      "id": "d_spa_月城いちか",
+      "name": "月城いちか",
+      "age": 20,
+      "height": 162,
+      "bust": null,
+      "tags": [
+        "黒髪ロング美少女🔥"
+      ]
+    },
+    {
+      "id": "d_spa_姫宮のあ",
+      "name": "姫宮のあ",
+      "age": 19,
+      "height": 163,
+      "bust": null,
+      "tags": [
+        "🔰イマドキ19歳🤤"
+      ]
+    },
+    {
+      "id": "d_spa_黒崎かなの",
+      "name": "黒崎かなの",
+      "age": 24,
+      "height": 167,
+      "bust": null,
+      "tags": [
+        "必見❣️Ｉカップ密着施術💞"
+      ]
+    },
+    {
+      "id": "d_spa_華月みつり",
+      "name": "華月みつり",
+      "age": 25,
+      "height": 155,
+      "bust": null,
+      "tags": [
+        "清楚系お祭り美女❣️"
+      ]
+    },
+    {
+      "id": "d_spa_黒川みつき",
+      "name": "黒川みつき",
+      "age": 24,
+      "height": 163,
+      "bust": null,
+      "tags": [
+        "🔥千手観音？！スーパー手技✨"
+      ]
+    },
+    {
+      "id": "d_spa_百瀬みずき",
+      "name": "百瀬みずき",
+      "age": 26,
+      "height": 155,
+      "bust": null,
+      "tags": [
+        "Hの破壊力⚡️"
+      ]
+    },
+    {
+      "id": "d_spa_藍乃すい",
+      "name": "藍乃すい",
+      "age": 21,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "アニ声にキュン死💕"
+      ]
+    },
+    {
+      "id": "d_spa_海野まりん",
+      "name": "海野まりん",
+      "age": 23,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "🔰🔥心と体の0距離密着❣️"
+      ]
+    },
+    {
+      "id": "d_spa_日向ましろ",
+      "name": "日向ましろ",
+      "age": 25,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "🔰みんな大好き美人ショート！"
+      ]
+    },
+    {
+      "id": "d_spa_橋本あいり",
+      "name": "橋本あいり",
+      "age": 22,
+      "height": 158,
+      "bust": null,
+      "tags": [
+        "スタイル抜群💎天使ちゃん🪽"
+      ]
+    },
+    {
+      "id": "d_spa_鈴木みゆ",
+      "name": "鈴木みゆ",
+      "age": 25,
+      "height": 157,
+      "bust": null,
+      "tags": [
+        "元Ａ⚪︎女優の未経験美女❣️"
+      ]
+    },
+    {
+      "id": "d_spa_久遠みさき",
+      "name": "久遠みさき",
+      "age": 25,
+      "height": 157,
+      "bust": null,
+      "tags": [
+        "港区の不二子❣️"
+      ]
+    },
+    {
+      "id": "d_spa_華園リズ",
+      "name": "華園リズ",
+      "age": 24,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "にゃんこスター💎プロフ必読⚠️"
+      ]
+    },
+    {
+      "id": "d_spa_柊みくる",
+      "name": "柊みくる",
+      "age": 23,
+      "height": 157,
+      "bust": null,
+      "tags": [
+        "文句なしのルックス❣️"
+      ]
+    },
+    {
+      "id": "d_spa_二階堂なつ",
+      "name": "二階堂なつ",
+      "age": 28,
+      "height": 168,
+      "bust": null,
+      "tags": [
+        "安定と安心感❣️"
+      ]
+    },
+    {
+      "id": "d_spa_正野るな",
+      "name": "正野るな",
+      "age": 19,
+      "height": 158,
+      "bust": null,
+      "tags": [
+        "19歳黒髪美少女❣️"
+      ]
+    },
+    {
+      "id": "d_spa_神野ちちり",
+      "name": "神野ちちり",
+      "age": 28,
+      "height": 155,
+      "bust": null,
+      "tags": [
+        "サービスの神💘"
+      ]
+    },
+    {
+      "id": "d_spa_伊藤はむ",
+      "name": "伊藤はむ",
+      "age": 24,
+      "height": 161,
+      "bust": null,
+      "tags": [
+        "現役◯◯衝撃入店❗️"
+      ]
+    },
+    {
+      "id": "d_spa_百瀬なな",
+      "name": "百瀬なな",
+      "age": 25,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "巨乳エステティシャン🫧"
+      ]
+    },
+    {
+      "id": "d_spa_大空せりな",
+      "name": "大空せりな",
+      "age": 24,
+      "height": 165,
+      "bust": null,
+      "tags": [
+        "クビレ美BODY💗尻フェチ歓喜"
+      ]
+    },
+    {
+      "id": "d_spa_辻ゆな",
+      "name": "辻ゆな",
+      "age": 21,
+      "height": 158,
+      "bust": null,
+      "tags": [
+        "積極的な現役女子大生💋"
+      ]
+    },
+    {
+      "id": "d_spa_石川さとみ",
+      "name": "石川さとみ",
+      "age": 23,
+      "height": 168,
+      "bust": null,
+      "tags": [
+        "えくぼの満点笑顔にキュン💘"
+      ]
+    },
+    {
+      "id": "d_spa_倉科まな",
+      "name": "倉科まな",
+      "age": 23,
+      "height": 152,
+      "bust": null,
+      "tags": [
+        "美声の癒やし系💗"
+      ]
+    },
+    {
+      "id": "d_spa_歌乃おと",
+      "name": "歌乃おと",
+      "age": 20,
+      "height": 158,
+      "bust": null,
+      "tags": [
+        "プレミアキャスト💎プロフ必読⚠️"
+      ]
+    },
+    {
+      "id": "d_spa_神崎ミオ",
+      "name": "神崎ミオ",
+      "age": 24,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "香◯奈似の密着美女💘"
+      ]
+    },
+    {
+      "id": "d_spa_米田みぃな",
+      "name": "米田みぃな",
+      "age": 22,
+      "height": 170,
+      "bust": null,
+      "tags": [
+        "モデル体型"
+      ]
+    },
+    {
+      "id": "d_spa_宮本さくら",
+      "name": "宮本さくら",
+      "age": 24,
+      "height": 152,
+      "bust": null,
+      "tags": [
+        "小顔の指圧◎"
+      ]
+    },
+    {
+      "id": "d_spa_広末すず",
+      "name": "広末すず",
+      "age": 20,
+      "height": 162,
+      "bust": null,
+      "tags": [
+        "透明感美女🩵"
+      ]
+    },
+    {
+      "id": "d_spa_天野ゆめ",
+      "name": "天野ゆめ",
+      "age": 23,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "イチオシプレミアムキャスト❣️⚠️プロフ必読"
+      ]
+    },
+    {
+      "id": "d_spa_小澤せりか",
+      "name": "小澤せりか",
+      "age": 25,
+      "height": 167,
+      "bust": null,
+      "tags": [
+        "上級セラピスト✨✨"
+      ]
+    },
+    {
+      "id": "d_spa_胡蝶らん",
+      "name": "胡蝶らん",
+      "age": 24,
+      "height": 161,
+      "bust": null,
+      "tags": [
+        "ツンデレ猫ちゃん🐈"
+      ]
+    },
+    {
+      "id": "d_spa_星野いおり",
+      "name": "星野いおり",
+      "age": 22,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "正統派アイドル系美女✨"
+      ]
+    },
+    {
+      "id": "d_spa_海老原もな",
+      "name": "海老原もな",
+      "age": 22,
+      "height": 165,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "d_spa_月島なち",
+      "name": "月島なち",
+      "age": 22,
+      "height": 168,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "d_spa_櫻井さや",
+      "name": "櫻井さや",
+      "age": 26,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "d_spa_板垣ぴい",
+      "name": "板垣ぴい",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "🔰"
+      ]
+    },
+    {
+      "id": "d_spa_三上かりな",
+      "name": "三上かりな",
+      "age": 25,
+      "height": 164,
+      "bust": null,
+      "tags": [
+        "癒しの爆乳女神"
+      ]
+    },
+    {
+      "id": "d_spa_朝日奈プリン",
+      "name": "朝日奈プリン",
+      "age": 25,
+      "height": 159,
+      "bust": null,
+      "tags": [
+        "🔰激アツ完全未経験‼️"
+      ]
+    },
+    {
+      "id": "d_spa_桜井ゆの",
+      "name": "桜井ゆの",
+      "age": 24,
+      "height": 159,
+      "bust": null,
+      "tags": [
+        "小悪魔セラピスト💕"
+      ]
+    },
+    {
+      "id": "d_spa_椎名ゆい",
+      "name": "椎名ゆい",
+      "age": 27,
+      "height": 154,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "d_spa_白浜ゆうな",
+      "name": "白浜ゆうな",
+      "age": 23,
+      "height": 152,
+      "bust": null,
+      "tags": [
+        "🔰"
+      ]
+    },
+    {
+      "id": "d_spa_有馬みな",
+      "name": "有馬みな",
+      "age": 24,
+      "height": 166,
+      "bust": null,
+      "tags": [
+        "🔰完全未経験ガール"
+      ]
+    },
+    {
+      "id": "d_spa_平野はるひ",
+      "name": "平野はるひ",
+      "age": 23,
+      "height": 152,
+      "bust": null,
+      "tags": [
+        "🔰未経験の尽くしたガール❣️"
+      ]
+    },
+    {
+      "id": "d_spa_水瀬るる",
+      "name": "水瀬るる",
+      "age": 24,
+      "height": 158,
+      "bust": null,
+      "tags": [
+        "🔰新人🈹対象セラピスト🔥"
+      ]
+    },
+    {
+      "id": "d_spa_如月ゆりあ",
+      "name": "如月ゆりあ",
+      "age": 26,
+      "height": 162,
+      "bust": null,
+      "tags": [
+        "🔰新人🈹対象セラピスト��"
+      ]
+    },
+    {
+      "id": "d_spa_親指えくぼ",
+      "name": "親指えくぼ",
+      "age": 22,
+      "height": 158,
+      "bust": null,
+      "tags": [
+        "🔰新人🈹対象セラピスト🔥"
+      ]
+    },
+    {
+      "id": "d_spa_佐倉なな",
+      "name": "佐倉なな",
+      "age": 24,
+      "height": 158,
+      "bust": null,
+      "tags": [
+        "��🔥"
+      ]
+    }
+  ]
+}

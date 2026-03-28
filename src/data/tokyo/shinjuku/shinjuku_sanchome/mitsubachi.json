@@ -1,0 +1,73 @@
+{
+  "id": "tokyo_shinjuku_shinjuku_sanchome_mitsubachi",
+  "name": "MITSUBACHI (ミツバチ) 新宿三丁目店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "新宿三丁目",
+  "tags": [
+    "カード支払いOK",
+    "QR決済OK"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "60分",
+        "price": "13,000円"
+      },
+      {
+        "time": "80分",
+        "price": "17,000円"
+      },
+      {
+        "time": "100分",
+        "price": "21,000円"
+      },
+      {
+        "time": "120分",
+        "price": "25,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 30分",
+        "price": "6,000円"
+      }
+    ]
+  },
+  "url": "https://mitsubachi-aroma.com/",
+  "threads": [],
+  "brandId": "mitsubachi",
+  "therapists": [
+    "mitsubachi_なな",
+    "mitsubachi_ゆきめ",
+    "mitsubachi_はすみ",
+    "mitsubachi_つばさ",
+    "mitsubachi_うるは",
+    "mitsubachi_ゆめ",
+    "mitsubachi_しいな",
+    "mitsubachi_あすか",
+    "mitsubachi_ゆうき",
+    "mitsubachi_りん",
+    "mitsubachi_こなつ",
+    "mitsubachi_くるみ",
+    "mitsubachi_さらり",
+    "mitsubachi_りさ",
+    "mitsubachi_あずさ",
+    "mitsubachi_ゆき",
+    "mitsubachi_ひな",
+    "mitsubachi_おとは",
+    "mitsubachi_かのん",
+    "mitsubachi_みどり",
+    "mitsubachi_すずな",
+    "mitsubachi_れんか",
+    "mitsubachi_みゆ",
+    "mitsubachi_まる",
+    "mitsubachi_なぎ",
+    "mitsubachi_こころ",
+    "mitsubachi_みずき",
+    "mitsubachi_みみ",
+    "mitsubachi_なつ",
+    "mitsubachi_あい",
+    "mitsubachi_あかね"
+  ]
+}

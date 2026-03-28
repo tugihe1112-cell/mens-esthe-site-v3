@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_ota_omori_rhea",
+  "name": "RHEA SPA (レアスパ)",
+  "prefecture": "東京都",
+  "city": "大田区",
+  "area": "大森",
+  "address": "東京都大田区大森エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://rhea-spa.net/",
+  "nearestStation": "大森駅",
+  "description": "大森・大井町・品川・五反田の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分21,000円",
+  "threads": [],
+  "brandId": "rhea",
+  "therapists": []
+}

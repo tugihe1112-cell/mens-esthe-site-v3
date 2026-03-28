@@ -1,0 +1,616 @@
+{
+  "id": 60312,
+  "name": "Eren (エレン)",
+  "prefecture": "東京都",
+  "city": "代々木上原",
+  "region": "関東エリア",
+  "address": "東京都渋谷区 (最寄: 代々木上原駅 徒歩4分)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～29:00",
+  "isPremium": false,
+  "color": "from-cyan-500 to-blue-500",
+  "tags": [
+    "日本人",
+    "一般",
+    "ルーム",
+    "クレジット",
+    "qp決済可能"
+  ],
+  "websiteUrl": "http://www.eren.tokyo/",
+  "note": "【ルーム情報】代々木上原ルーム(徒歩4分)、経堂ルーム(徒歩2分)、下北沢ルーム(徒歩4分)、祖師谷大藏ルーム(徒歩3分)",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_涼宮ひとみ",
+      "name": "涼宮ひとみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T153",
+        "B84(E)"
+      ]
+    },
+    {
+      "id": "unknown_東條あおい",
+      "name": "東條あおい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T160",
+        "B87(F)"
+      ]
+    },
+    {
+      "id": "unknown_乃木坂ゆな",
+      "name": "乃木坂ゆな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T156",
+        "B78(A)"
+      ]
+    },
+    {
+      "id": "unknown_木崎ゆめ",
+      "name": "木崎ゆめ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "T158",
+        "B81(D)"
+      ]
+    },
+    {
+      "id": "unknown_川村もも",
+      "name": "川村もも",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T154",
+        "B82(D)"
+      ]
+    },
+    {
+      "id": "unknown_生田あみ",
+      "name": "生田あみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T165",
+        "B90(I)"
+      ]
+    },
+    {
+      "id": "unknown_黒咲れみ",
+      "name": "黒咲れみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳",
+        "T154",
+        "B88(G)"
+      ]
+    },
+    {
+      "id": "unknown_葉月みう",
+      "name": "葉月みう",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "T160",
+        "B80(D)"
+      ]
+    },
+    {
+      "id": "unknown_白雪えま",
+      "name": "白雪えま",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T158",
+        "B84(E)"
+      ]
+    },
+    {
+      "id": "unknown_白浜れいか",
+      "name": "白浜れいか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T157",
+        "B88(H)"
+      ]
+    },
+    {
+      "id": "unknown_佐々木ゆり",
+      "name": "佐々木ゆり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "T161",
+        "B89(G)"
+      ]
+    },
+    {
+      "id": "unknown_月野びび",
+      "name": "月野びび",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T163",
+        "B81(C)"
+      ]
+    },
+    {
+      "id": "unknown_谷崎くるみ",
+      "name": "谷崎くるみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T161",
+        "B80(D)"
+      ]
+    },
+    {
+      "id": "unknown_青山りん",
+      "name": "青山りん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T158",
+        "B80(D)"
+      ]
+    },
+    {
+      "id": "unknown_水谷かおり",
+      "name": "水谷かおり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T158",
+        "B75(A)"
+      ]
+    },
+    {
+      "id": "unknown_春野るい",
+      "name": "春野るい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T160",
+        "B83(D)"
+      ]
+    },
+    {
+      "id": "unknown_雪村かい",
+      "name": "雪村かい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "T152",
+        "B79(C)"
+      ]
+    },
+    {
+      "id": "unknown_如月なな",
+      "name": "如月なな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳",
+        "T156",
+        "B81(D)"
+      ]
+    },
+    {
+      "id": "unknown_美月ゆい",
+      "name": "美月ゆい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T156",
+        "B84(D)"
+      ]
+    },
+    {
+      "id": "unknown_梅田こはる",
+      "name": "梅田こはる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T155",
+        "B84(D)"
+      ]
+    },
+    {
+      "id": "unknown_白鳥ふうか",
+      "name": "白鳥ふうか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T153",
+        "B85(F)"
+      ]
+    },
+    {
+      "id": "unknown_西内のぞみ",
+      "name": "西内のぞみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "T153",
+        "B85(D)"
+      ]
+    },
+    {
+      "id": "unknown_上条こはる",
+      "name": "上条こはる",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T158",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "unknown_志田ゆうり",
+      "name": "志田ゆうり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T159",
+        "B88(H)"
+      ]
+    },
+    {
+      "id": "unknown_辻ほのか",
+      "name": "辻ほのか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T164",
+        "B83(E)"
+      ]
+    },
+    {
+      "id": "unknown_月見りこ",
+      "name": "月見りこ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T157",
+        "B88(F)"
+      ]
+    },
+    {
+      "id": "unknown_南ひな",
+      "name": "南ひな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T160",
+        "B88(G)"
+      ]
+    },
+    {
+      "id": "unknown_朝比奈かれん",
+      "name": "朝比奈かれん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T154",
+        "B89(G)"
+      ]
+    },
+    {
+      "id": "unknown_愛沢さな",
+      "name": "愛沢さな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "T170",
+        "B87(F)"
+      ]
+    },
+    {
+      "id": "unknown_赤坂あいり",
+      "name": "赤坂あいり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T164",
+        "B85(E)"
+      ]
+    },
+    {
+      "id": "unknown_小倉ひなの",
+      "name": "小倉ひなの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T155",
+        "B86(F)"
+      ]
+    },
+    {
+      "id": "unknown_宇多川うらら",
+      "name": "宇多川うらら",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T161",
+        "B81(D)"
+      ]
+    },
+    {
+      "id": "unknown_水野るな",
+      "name": "水野るな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "19歳",
+        "T162",
+        "B83(E)"
+      ]
+    },
+    {
+      "id": "unknown_神咲りの",
+      "name": "神咲りの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T163",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "unknown_松田もえ",
+      "name": "松田もえ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "28歳",
+        "T160",
+        "B87(E)"
+      ]
+    },
+    {
+      "id": "unknown_一ノ瀬あやか",
+      "name": "一ノ瀬あやか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "T151",
+        "B87(D)"
+      ]
+    },
+    {
+      "id": "unknown_鳴海るか",
+      "name": "鳴海るか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T163",
+        "B87(F)"
+      ]
+    },
+    {
+      "id": "unknown_成瀬まお",
+      "name": "成瀬まお",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T154",
+        "B86(F)"
+      ]
+    },
+    {
+      "id": "unknown_久我まひろ",
+      "name": "久我まひろ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T156",
+        "B88(F)"
+      ]
+    },
+    {
+      "id": "unknown_藤倉さえ",
+      "name": "藤倉さえ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "T158",
+        "B86(E)"
+      ]
+    },
+    {
+      "id": "unknown_三輪かなで",
+      "name": "三輪かなで",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T152",
+        "B88(E)"
+      ]
+    },
+    {
+      "id": "unknown_桜田ゆり",
+      "name": "桜田ゆり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T163",
+        "B86(E)"
+      ]
+    },
+    {
+      "id": "unknown_滝川りお",
+      "name": "滝川りお",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "T158",
+        "B82(E)"
+      ]
+    },
+    {
+      "id": "unknown_水原ほのか",
+      "name": "水原ほのか",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T150",
+        "B85(D)"
+      ]
+    },
+    {
+      "id": "unknown_一条さな",
+      "name": "一条さな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T165",
+        "B87(F)"
+      ]
+    },
+    {
+      "id": "unknown_月島あいり",
+      "name": "月島あいり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "T157",
+        "B85(E)"
+      ]
+    },
+    {
+      "id": "unknown_小宮あさみ",
+      "name": "小宮あさみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "29歳",
+        "T155",
+        "B87(D)"
+      ]
+    },
+    {
+      "id": "unknown_吉川みく",
+      "name": "吉川みく",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T153",
+        "B87(F)"
+      ]
+    },
+    {
+      "id": "unknown_黒木めぐ",
+      "name": "黒木めぐ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T166",
+        "B88(G)"
+      ]
+    }
+  ],
+  "area": "代々木・原宿"
+}

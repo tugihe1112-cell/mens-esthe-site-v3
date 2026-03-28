@@ -1,0 +1,21 @@
+{
+  "id": "tokyo_toshima_sugamo_ulrare_sugamo",
+  "name": "ウルレア巣鴨（旧リベア）",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "巣鴨",
+  "address": "東京都豊島区巣鴨（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分13,000円～",
+  "hours": "営業時間要確認",
+  "isPremium": false,
+  "tags": [],
+  "websiteUrl": "https://ulrare.net/",
+  "nearestStation": "巣鴨駅、大塚駅",
+  "description": "基本コース: 70分13,000円 / 90分18,000円 / 120分24,000円 / 150分30,000円 / プレミアコース: 110分33,000円 / 150分41,000円 / 180分46,000円 / ウルレアコース: 90分23,000円 / 指名料: 写真指名1,000円・本指名1,000円",
+  "threads": [],
+  "brandId": "ulrare_sugamo",
+  "therapists": []
+}

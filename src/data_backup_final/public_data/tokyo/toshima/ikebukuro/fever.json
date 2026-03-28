@@ -1,0 +1,452 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 12,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK",
+    "深夜営業",
+    "完全個室"
+  ],
+  "websiteUrl": "https://esthe-fever.com/",
+  "description": "メンズエステ フィーバー。60分12,000円から。",
+  "targetDir": "public/data/tokyo/ikebukuro",
+  "shopId": 1163,
+  "shopName": "フィーバー (FEVER) 池袋店",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都豊島区池袋",
+  "nearestStation": "池袋駅",
+  "brandId": "fever",
+  "id": "tokyo_toshima_ikebukuro_fever",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "fever_本田もえ",
+      "name": "本田もえ",
+      "age": 21,
+      "height": 158,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "fever_黒崎みく",
+      "name": "黒崎みく",
+      "age": 20,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_多田あきな",
+      "name": "多田あきな",
+      "age": 19,
+      "height": 152,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_月乃ことね",
+      "name": "月乃ことね",
+      "age": 21,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_白石みみ",
+      "name": "白石みみ",
+      "age": 25,
+      "height": 161,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_椛みれい",
+      "name": "椛みれい",
+      "age": 18,
+      "height": 160,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_天使るな",
+      "name": "天使るな",
+      "age": 26,
+      "height": 156,
+      "bust": "(I)",
+      "tags": null
+    },
+    {
+      "id": "fever_天乃みこと",
+      "name": "天乃みこと",
+      "age": 18,
+      "height": 154,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "fever_白雪ひめ",
+      "name": "白雪ひめ",
+      "age": 22,
+      "height": 161,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_岡田みお",
+      "name": "岡田みお",
+      "age": 27,
+      "height": 152,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_上田さくら",
+      "name": "上田さくら",
+      "age": 20,
+      "height": 162,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_宮田あいな",
+      "name": "宮田あいな",
+      "age": 21,
+      "height": 154,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_杉咲ねね",
+      "name": "杉咲ねね",
+      "age": 23,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_白咲あずさ",
+      "name": "白咲あずさ",
+      "age": 22,
+      "height": 160,
+      "bust": "(A)",
+      "tags": null
+    },
+    {
+      "id": "fever_太田いちか",
+      "name": "太田いちか",
+      "age": 24,
+      "height": 155,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_寺島はな",
+      "name": "寺島はな",
+      "age": 23,
+      "height": 165,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_朝妃りあ",
+      "name": "朝妃りあ",
+      "age": 20,
+      "height": 156,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_牧野えりか",
+      "name": "牧野えりか",
+      "age": 20,
+      "height": 162,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_鹿目まどか",
+      "name": "鹿目まどか",
+      "age": 20,
+      "height": 155,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "fever_戦慄なみ",
+      "name": "戦慄なみ",
+      "age": 22,
+      "height": 170,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "fever_月宮めいか",
+      "name": "月宮めいか",
+      "age": 22,
+      "height": 158,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "fever_水無月れい",
+      "name": "水無月れい",
+      "age": 21,
+      "height": 151,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "fever_今宮けい",
+      "name": "今宮けい",
+      "age": 23,
+      "height": 155,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "fever_西野ゆめ",
+      "name": "西野ゆめ",
+      "age": 21,
+      "height": 162,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_如月あみ",
+      "name": "如月あみ",
+      "age": 22,
+      "height": 163,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_姫野あいり",
+      "name": "姫野あいり",
+      "age": 20,
+      "height": 152,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "fever_佐々木りょう",
+      "name": "佐々木りょう",
+      "age": 24,
+      "height": 162,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "fever_心花ゆあ",
+      "name": "心花ゆあ",
+      "age": 22,
+      "height": 157,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "fever_桃木ももせ",
+      "name": "桃木ももせ",
+      "age": 22,
+      "height": 169,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_月島さな",
+      "name": "月島さな",
+      "age": 23,
+      "height": 158,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_綾瀬しおり",
+      "name": "綾瀬しおり",
+      "age": 22,
+      "height": 158,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_花咲ゆな",
+      "name": "花咲ゆな",
+      "age": 21,
+      "height": 152,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "fever_中野あやか",
+      "name": "中野あやか",
+      "age": 20,
+      "height": 161,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_愛咲かおる",
+      "name": "愛咲かおる",
+      "age": 23,
+      "height": 153,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_結城しの",
+      "name": "結城しの",
+      "age": 21,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_一咲あい",
+      "name": "一咲あい",
+      "age": 26,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_岡本ちい",
+      "name": "岡本ちい",
+      "age": 21,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_一条つばき",
+      "name": "一条つばき",
+      "age": 22,
+      "height": 155,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_星野ひな",
+      "name": "星野ひな",
+      "age": 21,
+      "height": 151,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_葉隠うらら",
+      "name": "葉隠うらら",
+      "age": 21,
+      "height": 150,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_中原りりか",
+      "name": "中原りりか",
+      "age": 21,
+      "height": 164,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_尾崎すみれ",
+      "name": "尾崎すみれ",
+      "age": 20,
+      "height": 148,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_目黒あいす",
+      "name": "目黒あいす",
+      "age": 22,
+      "height": 149,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_水野ふうな",
+      "name": "水野ふうな",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_大月りこ",
+      "name": "大月りこ",
+      "age": 22,
+      "height": 162,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "fever_佐藤ここな",
+      "name": "佐藤ここな",
+      "age": 21,
+      "height": 162,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_斎藤じゅん",
+      "name": "斎藤じゅん",
+      "age": 34,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "fever_葉月すず",
+      "name": "葉月すず",
+      "age": 26,
+      "height": 151,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "fever_雨宮なぎ",
+      "name": "雨宮なぎ",
+      "age": 27,
+      "height": 171,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_橘みるく",
+      "name": "橘みるく",
+      "age": 23,
+      "height": 151,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "fever_髙橋みあ",
+      "name": "髙橋みあ",
+      "age": 22,
+      "height": 152,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "fever_瀬名はるか",
+      "name": "瀬名はるか",
+      "age": 21,
+      "height": 150,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "fever_平野まい",
+      "name": "平野まい",
+      "age": 20,
+      "height": 163,
+      "bust": "(F)",
+      "tags": null
+    }
+  ]
+}

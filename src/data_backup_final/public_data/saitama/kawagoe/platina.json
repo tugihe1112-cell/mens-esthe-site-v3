@@ -1,0 +1,200 @@
+{
+  "id": 1179,
+  "name": "PLATINA (プラチナ) 川越",
+  "prefecture": "埼玉県",
+  "city": "川越",
+  "area": "川越",
+  "address": "埼玉県川越市",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 13,000円～",
+  "hours": "12:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://platina-kawagoe.com/",
+  "nearestStation": "川越駅",
+  "description": "川越のメンズエステ。70分13,000円から。",
+  "therapists": [
+    {
+      "id": "1179-1",
+      "name": "なお",
+      "age": 23,
+      "height": 160,
+      "bust": 83,
+      "cup": "C",
+      "waist": 58,
+      "hip": 83,
+      "description": ""
+    },
+    {
+      "id": "1179-2",
+      "name": "みゆ",
+      "age": 20,
+      "height": 155,
+      "bust": 85,
+      "cup": "C",
+      "waist": 56,
+      "hip": 84,
+      "description": "体験入店"
+    },
+    {
+      "id": "1179-3",
+      "name": "あみ",
+      "age": 25,
+      "height": 165,
+      "bust": 88,
+      "cup": "D",
+      "waist": 59,
+      "hip": 89,
+      "description": ""
+    },
+    {
+      "id": "1179-4",
+      "name": "りさ",
+      "age": 21,
+      "height": 152,
+      "bust": 83,
+      "cup": "C",
+      "waist": 56,
+      "hip": 84,
+      "description": ""
+    },
+    {
+      "id": "1179-5",
+      "name": "ゆい",
+      "age": 24,
+      "height": 163,
+      "bust": 85,
+      "cup": "D",
+      "waist": 58,
+      "hip": 87,
+      "description": ""
+    },
+    {
+      "id": "1179-6",
+      "name": "まや",
+      "age": 22,
+      "height": 158,
+      "bust": 84,
+      "cup": "C",
+      "waist": 57,
+      "hip": 85,
+      "description": ""
+    },
+    {
+      "id": "1179-7",
+      "name": "あい",
+      "age": 26,
+      "height": 160,
+      "bust": 89,
+      "cup": "E",
+      "waist": 59,
+      "hip": 88,
+      "description": ""
+    },
+    {
+      "id": "1179-8",
+      "name": "りの",
+      "age": 23,
+      "height": 156,
+      "bust": 82,
+      "cup": "B",
+      "waist": 55,
+      "hip": 83,
+      "description": ""
+    },
+    {
+      "id": "1179-9",
+      "name": "さき",
+      "age": 20,
+      "height": 154,
+      "bust": 86,
+      "cup": "D",
+      "waist": 57,
+      "hip": 86,
+      "description": ""
+    },
+    {
+      "id": "1179-10",
+      "name": "かな",
+      "age": 25,
+      "height": 162,
+      "bust": 87,
+      "cup": "D",
+      "waist": 58,
+      "hip": 87,
+      "description": ""
+    },
+    {
+      "id": "1179-11",
+      "name": "のあ",
+      "age": 21,
+      "height": 159,
+      "bust": 85,
+      "cup": "C",
+      "waist": 56,
+      "hip": 85,
+      "description": ""
+    },
+    {
+      "id": "1179-12",
+      "name": "みお",
+      "age": 24,
+      "height": 165,
+      "bust": 90,
+      "cup": "F",
+      "waist": 60,
+      "hip": 89,
+      "description": ""
+    },
+    {
+      "id": "1179-13",
+      "name": "はる",
+      "age": 22,
+      "height": 153,
+      "bust": 84,
+      "cup": "C",
+      "waist": 56,
+      "hip": 84,
+      "description": ""
+    },
+    {
+      "id": "1179-14",
+      "name": "ゆき",
+      "age": 27,
+      "height": 161,
+      "bust": 88,
+      "cup": "E",
+      "waist": 59,
+      "hip": 88,
+      "description": ""
+    },
+    {
+      "id": "1179-15",
+      "name": "なな",
+      "age": 20,
+      "height": 157,
+      "bust": 83,
+      "cup": "C",
+      "waist": 55,
+      "hip": 83,
+      "description": ""
+    },
+    {
+      "id": "1179-16",
+      "name": "れい",
+      "age": 23,
+      "height": 164,
+      "bust": 86,
+      "cup": "D",
+      "waist": 58,
+      "hip": 87,
+      "description": ""
+    }
+  ],
+  "brandId": "platina"
+}

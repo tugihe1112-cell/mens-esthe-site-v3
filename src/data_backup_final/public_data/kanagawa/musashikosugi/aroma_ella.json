@@ -1,0 +1,341 @@
+{
+  "id": 1039,
+  "name": "Aroma ELLA (アロマエラ)",
+  "prefecture": "神奈川県",
+  "city": "武蔵小杉",
+  "area": "武蔵小杉",
+  "address": "東京・神奈川エリア（詳細は予約時）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [],
+  "websiteUrl": "https://aroma-ella.com/",
+  "nearestStation": "三鷹駅 / 武蔵小杉駅 / 国分寺駅 / 府中駅 / 調布駅",
+  "description": "三鷹・武蔵小杉・国分寺・府中・調布で展開するメンズエステ。 / 料金システム: 90分18,000円 / 120分22,000円 / 150分26,000円",
+  "therapists": [
+    {
+      "id": "1039-1",
+      "name": "青葉りんか",
+      "age": 23,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-2",
+      "name": "葵ゆず",
+      "age": 26,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-3",
+      "name": "綾瀬ゆり",
+      "age": 29,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-4",
+      "name": "阿部まいか",
+      "age": 28,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-5",
+      "name": "渚",
+      "age": 23,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-6",
+      "name": "稲田りお",
+      "age": 29,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-7",
+      "name": "新田ゆな",
+      "age": 27,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-8",
+      "name": "林みう",
+      "age": 20,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-9",
+      "name": "月城せいな",
+      "age": 24,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-10",
+      "name": "月森まお",
+      "age": 26,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-11",
+      "name": "七瀬ひなの",
+      "age": 25,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-12",
+      "name": "白咲みさ",
+      "age": 24,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-13",
+      "name": "山下ゆずき",
+      "age": 27,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-14",
+      "name": "小川せな",
+      "age": 26,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-15",
+      "name": "瑞木",
+      "age": 25,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-16",
+      "name": "島風のあ",
+      "age": 24,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-17",
+      "name": "星野しずな",
+      "age": 25,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-18",
+      "name": "来栖",
+      "age": 24,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-19",
+      "name": "白石そら",
+      "age": 25,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-20",
+      "name": "美里",
+      "age": 29,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-21",
+      "name": "牧野",
+      "age": 26,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-22",
+      "name": "南里あいか",
+      "age": 23,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-23",
+      "name": "美波",
+      "age": 27,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-24",
+      "name": "宇佐美",
+      "age": 28,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-25",
+      "name": "南れい",
+      "age": 21,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-26",
+      "name": "金澄りん",
+      "age": 24,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-27",
+      "name": "望月あかね",
+      "age": 26,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-28",
+      "name": "華村ねね",
+      "age": 22,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-29",
+      "name": "金城ののな",
+      "age": 27,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-30",
+      "name": "美澄ゆい",
+      "age": 22,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-31",
+      "name": "織原めいか",
+      "age": 27,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1039-32",
+      "name": "有栖るな",
+      "age": 20,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    }
+  ],
+  "brandId": "aroma_ella"
+}

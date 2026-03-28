@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_toshima_ikebukuro_mens_pastime_ikebukuro",
+  "name": "メンズパスタイム（旧アルパカの想い）",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都豊島区池袋（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分15,000円～",
+  "hours": "営業時間要確認",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK"
+  ],
+  "websiteUrl": "https://mens-pastime.com/",
+  "nearestStation": "池袋駅、赤羽駅、練馬駅",
+  "description": "90分15,000円 / 120分20,000円 / 150分25,000円 / 延長30分6,000円 / 指名料・本指名料1,000円",
+  "threads": [],
+  "brandId": "mens_pastime_ikebukuro",
+  "therapists": []
+}

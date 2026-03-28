@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_ota_kamata_doigt_de_fee",
+  "name": "doigt de fee (ドゥワドフェ)",
+  "prefecture": "東京都",
+  "city": "大田区",
+  "area": "蒲田",
+  "address": "東京都大田区蒲田エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分10,000円～",
+  "hours": "10:00～翌6:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://exe-fee.com/",
+  "nearestStation": "蒲田駅",
+  "description": "多店舗展開の実力派日本人リラクゼーション。 / お試しコース: 60分12,000円→10,000円 / 通常SYSTEM: 60分12,000円 / 80分16,000円 / 100分20,000円 / 120分20,000円 / 150分24,000円 / 180分29,000円",
+  "threads": [],
+  "brandId": "doigt_de_fee",
+  "therapists": []
+}

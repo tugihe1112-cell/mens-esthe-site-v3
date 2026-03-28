@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_shinagawa_gotanda_esthe_king",
+  "name": "エステの王様",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "五反田",
+  "address": "東京都品川区五反田エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分16,000円～",
+  "hours": "営業中",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://www.estheking.jp/",
+  "nearestStation": "五反田駅",
+  "description": "80分18,000円→OPEN割引16,000円 / 100分22,000円→OPEN割引20,000円 / 120分26,000円→OPEN割引24,000円",
+  "threads": [],
+  "brandId": "esthe_king",
+  "therapists": []
+}

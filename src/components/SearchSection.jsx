@@ -1,89 +1,137 @@
-// src/components/SearchSection.jsx (新規作成)
+// src/components/SearchSection.jsx
+// 2025.12.26 地方・都道府県・エリア順序整理版
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSearchLogic } from '../hooks/useSearchLogic.js'; // ★ ステップ2で作成
 import { useAppContext } from '../context/AppContext.tsx';
 import toast from 'react-hot-toast';
+import { LOCATION_DATA, groupedLocations } from '../data/locations';
+import { matchesPrefectureAndCity } from '../utils/shopFilters';
 
 export default function SearchSection() {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAppContext();
-  
-  // 1. 作成したフックからロジックをすべて取得
-  const { values, options, errors, setters } = useSearchLogic();
+  const { isLoggedIn, shops = [] } = useAppContext();
 
-  // 「このセラピストを見る」ボタンが押された時の処理
+  // 検索用のState管理
+  const [pref, setPref] = useState("");
+  const [city, setCity] = useState("");
+  const [shopId, setShopId] = useState("");
+  const [threadId, setThreadId] = useState("");
+
+  // ▼ 1. エリア選択肢
+  const cityOptions = useMemo(() => {
+    if (!pref) return [];
+    return LOCATION_DATA[pref] || [];
+  }, [pref]);
+
+  // ▼ 2. 店舗選択肢（配列にも対応）
+  const shopOptions = useMemo(() => {
+    if (!pref || !city) return [];
+    return shops.filter(s => matchesPrefectureAndCity(s, pref, city));
+  }, [pref, city, shops]);
+
+  // ▼ 3. セラピスト選択肢
+  const threadOptions = useMemo(() => {
+    if (!shopId) return [];
+    const selectedShop = shops.find(s => s.id === parseInt(shopId));
+    return selectedShop ? (selectedShop.threads || []) : [];
+  }, [shopId, shops]);
+
+  const handlePrefChange = (e) => {
+    setPref(e.target.value);
+    setCity("");
+    setShopId("");
+    setThreadId("");
+  };
+
+  const handleCityChange = (e) => {
+    setCity(e.target.value);
+    setShopId("");
+    setThreadId("");
+  };
+
+  const handleShopChange = (e) => {
+    setShopId(e.target.value);
+    setThreadId("");
+  };
+
   const handleNavigate = () => {
-    if (values.shopId && values.threadId) {
-      navigate(`/shops/${values.shopId}/threads/${values.threadId}`);
+    if (shopId && threadId) {
+      navigate(`/shops/${shopId}/threads/${threadId}`);
+    } else {
+      toast.error("店舗とセラピストを選択してください");
     }
   };
 
-  // 「未掲載申請」が押された時の処理 (仕様書 3.3)
-  const handleRequestReview = (defaults) => {
+  const handleRequestReview = () => {
     if (!isLoggedIn) {
       toast.error('この操作にはログインが必要です');
       navigate('/login');
       return;
     }
-    // TODO: モーダルを開く (仕様書 4.3)
-    // openModal('ReviewRequestModal', defaults);
-    toast('（未実装）ここで未掲載申請モーダルを開きます', { icon: '🚧' });
-    console.log('申請モーダルに渡す初期値:', defaults);
+    navigate('/request-shop');
   };
 
   return (
-    <section className="bg-slate-800 p-6 rounded-lg shadow-lg mb-6">
-      <h2 className="text-xl font-bold text-pink-400 mb-4">セラピストを検索 (仕様書 3.2)</h2>
+    <section className="bg-slate-800 p-6 rounded-lg shadow-lg mb-6 border border-slate-700">
+      <h2 className="text-xl font-bold text-pink-400 mb-4">セラピストを検索</h2>
       
       {/* 1. 都道府県 */}
       <div className="mb-3">
-        <label htmlFor="pref-select" className="block text-sm font-medium text-gray-300 mb-1">
-          1. 都道府県
-        </label>
+        <label className="block text-sm font-medium text-gray-300 mb-1">1. 都道府県</label>
         <select
-          id="pref-select"
-          value={values.pref}
-          onChange={(e) => setters.setPref(e.target.value)}
-          className="w-full p-2 rounded bg-slate-700 text-white border border-slate-600"
+          value={pref}
+          onChange={handlePrefChange}
+          className="w-full p-2 rounded bg-slate-700 text-white border border-slate-600 focus:border-pink-500 outline-none"
         >
           <option value="">都道府県を選択</option>
-          {options.prefectures.map(p => <option key={p} value={p}>{p}</option>)}
+          
+          {/* ▼ 地方ごとにグループ化して表示 */}
+          {groupedLocations ? (
+            groupedLocations.map((group) => (
+              <optgroup key={group.region} label={group.region}>
+                {group.prefs.map(p => (
+                  // データが存在する都道府県のみ表示
+                  LOCATION_DATA[p] && LOCATION_DATA[p].length > 0 && (
+                    <option key={p} value={p}>{p}</option>
+                  )
+                ))}
+              </optgroup>
+            ))
+          ) : (
+            Object.keys(LOCATION_DATA).map(p => (
+              <option key={p} value={p}>{p}</option>
+            ))
+          )}
+
+          {/* その他（未分類）エリア */}
+          {groupedLocations && (
+            <optgroup label="その他">
+              {Object.keys(LOCATION_DATA)
+                .filter(p => !groupedLocations.flatMap(g => g.prefs).includes(p))
+                .map(p => <option key={p} value={p}>{p}</option>)}
+            </optgroup>
+          )}
         </select>
-        {errors.noCities && (
-          <div className="text-yellow-400 text-sm mt-2">
-            選択した都道府県に登録地域がありません。
-            <button 
-              onClick={() => handleRequestReview({ pref: values.pref })}
-              className="ml-2 underline hover:text-pink-400">
-              未掲載として申請する
-            </button>
-          </div>
-        )}
       </div>
 
-      {/* 2. 地域 (市区町村) */}
+      {/* 2. 地域 */}
       <div className="mb-3">
-        <label htmlFor="city-select" className="block text-sm font-medium text-gray-300 mb-1">
-          2. 地域（市区町村）
-        </label>
+        <label className="block text-sm font-medium text-gray-300 mb-1">2. 地域（エリア詳細）</label>
         <select
-          id="city-select"
-          value={values.city}
-          onChange={(e) => setters.setCity(e.target.value)}
-          disabled={!values.pref || options.cities.length === 0} // 上位が未選択か、候補が0なら無効
-          className="w-full p-2 rounded bg-slate-700 text-white border border-slate-600 disabled:opacity-50"
+          value={city}
+          onChange={handleCityChange}
+          disabled={!pref}
+          className="w-full p-2 rounded bg-slate-700 text-white border border-slate-600 disabled:opacity-50 focus:border-pink-500 outline-none"
         >
-          <option value="">地域を選択</option>
-          {options.cities.map(c => <option key={c} value={c}>{c}</option>)}
+          <option value="">{pref ? "エリアを選択" : "都道府県を選択してください"}</option>
+          {cityOptions.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
-        {errors.noShops && (
-          <div className="text-yellow-400 text-sm mt-2">
-            この地域に登録店舗がまだありません。
-            <button 
-              onClick={() => handleRequestReview({ pref: values.pref, city: values.city })}
-              className="ml-2 underline hover:text-pink-400">
+        
+        {pref && city && shopOptions.length === 0 && (
+          <div className="text-yellow-400 text-sm mt-2 bg-yellow-900/20 p-2 rounded">
+            ⚠️ このエリアにはまだ登録店舗がありません。
+            <button onClick={handleRequestReview} className="ml-2 underline hover:text-pink-400 font-bold">
               未掲載店舗として申請する
             </button>
           </div>
@@ -92,53 +140,41 @@ export default function SearchSection() {
 
       {/* 3. 店舗 */}
       <div className="mb-3">
-        <label htmlFor="shop-select" className="block text-sm font-medium text-gray-300 mb-1">
-          3. 店舗
-        </label>
+        <label className="block text-sm font-medium text-gray-300 mb-1">3. 店舗</label>
         <select
-          id="shop-select"
-          value={values.shopId}
-          onChange={(e) => setters.setShop(e.target.value)}
-          disabled={!values.city || options.shopOptions.length === 0}
-          className="w-full p-2 rounded bg-slate-700 text-white border border-slate-600 disabled:opacity-50"
+          value={shopId}
+          onChange={handleShopChange}
+          disabled={!city || shopOptions.length === 0}
+          className="w-full p-2 rounded bg-slate-700 text-white border border-slate-600 disabled:opacity-50 focus:border-pink-500 outline-none"
         >
           <option value="">店舗を選択</option>
-          {options.shopOptions.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+          {shopOptions.map(s => (<option key={s.id} value={s.id}>{s.name}</option>))}
         </select>
-        {errors.noThreads && (
-          <div className="text-yellow-400 text-sm mt-2">
-            この店舗に登録されたセラピストはまだいません。
-            <button 
-              onClick={() => handleRequestReview({ pref: values.pref, city: values.city, shopId: values.shopId })}
-              className="ml-2 underline hover:text-pink-400">
-              未掲載セラピストとして申請する
-            </button>
-          </div>
-        )}
       </div>
 
       {/* 4. セラピスト */}
       <div className="mb-4">
-        <label htmlFor="thread-select" className="block text-sm font-medium text-gray-300 mb-1">
-          4. セラピスト
-        </label>
+        <label className="block text-sm font-medium text-gray-300 mb-1">4. セラピスト</label>
         <select
-          id="thread-select"
-          value={values.threadId}
-          onChange={(e) => setters.setThread(e.target.value)}
-          disabled={!values.shopId || options.threadOptions.length === 0}
-          className="w-full p-2 rounded bg-slate-700 text-white border border-slate-600 disabled:opacity-50"
+          value={threadId}
+          onChange={(e) => setThreadId(e.target.value)}
+          disabled={!shopId || threadOptions.length === 0}
+          className="w-full p-2 rounded bg-slate-700 text-white border border-slate-600 disabled:opacity-50 focus:border-pink-500 outline-none"
         >
           <option value="">セラピストを選択</option>
-          {options.threadOptions.map(t => <option key={t.id} value={t.id}>{t.therapistName}</option>)}
+          {threadOptions.map(t => (
+            <option key={t.id} value={t.id}>{t.therapistName || t.title || "名無し"}</option>
+          ))}
         </select>
+        {shopId && threadOptions.length === 0 && (
+          <div className="text-gray-400 text-xs mt-1">※この店舗にはまだセラピストが登録されていません</div>
+        )}
       </div>
 
-      {/* 5. 決定ボタン */}
       <button
         onClick={handleNavigate}
-        disabled={!values.threadId}
-        className="w-full p-3 rounded-lg text-lg font-bold transition-colors bg-pink-600 text-white hover:bg-pink-700 disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed"
+        disabled={!shopId || !threadId}
+        className="w-full p-3 rounded-lg text-lg font-bold transition-colors bg-gradient-to-r from-pink-600 to-purple-600 text-white hover:from-pink-700 hover:to-purple-700 disabled:from-gray-700 disabled:to-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed shadow-lg"
       >
         このセラピストを見る
       </button>

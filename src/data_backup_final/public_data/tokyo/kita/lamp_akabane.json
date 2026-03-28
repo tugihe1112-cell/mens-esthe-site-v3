@@ -1,0 +1,659 @@
+{
+  "id": "tokyo_kita_lamp_akabane",
+  "name": "らんぷ 赤羽店",
+  "prefecture": "東京都",
+  "city": "北区",
+  "address": "東京都北区赤羽",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分10,000円～",
+  "hours": "10:00～23:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般",
+    "店舗型",
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "熟女"
+  ],
+  "websiteUrl": "http://a.senju-lamp.com/",
+  "nearestStation": "赤羽駅",
+  "description": "赤羽の個室メンズエステ。熟女セラピスト多数在籍。 / 料金システム: 90分10,000円 / 120分14,000円 / 150分18,000円",
+  "brandId": "lamp_akabane",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "lamp_akabane_新藤あみ",
+      "name": "新藤あみ",
+      "age": 47,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_三井ちよ",
+      "name": "三井ちよ",
+      "age": 36,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_桃瀬りな",
+      "name": "桃瀬りな",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_酒井すばる",
+      "name": "酒井すばる",
+      "age": 27,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_中谷ゆり",
+      "name": "中谷ゆり",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_織田のどか",
+      "name": "織田のどか",
+      "age": 50,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_辻井せいな",
+      "name": "辻井せいな",
+      "age": 47,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_深田めぐ",
+      "name": "深田めぐ",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_川崎ひな",
+      "name": "川崎ひな",
+      "age": 35,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_木村まりこ",
+      "name": "木村まりこ",
+      "age": 45,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_森田みえこ",
+      "name": "森田みえこ",
+      "age": 55,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_鹿島さおり",
+      "name": "鹿島さおり",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_日吉めぐ",
+      "name": "日吉めぐ",
+      "age": 46,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_平野かよ",
+      "name": "平野かよ",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_桃田なお",
+      "name": "桃田なお",
+      "age": 26,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_菊池ゆりか",
+      "name": "菊池ゆりか",
+      "age": 43,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_涼凪なつき",
+      "name": "涼凪なつき",
+      "age": 32,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_中野いつき",
+      "name": "中野いつき",
+      "age": 35,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_本田まいこ",
+      "name": "本田まいこ",
+      "age": 38,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_中城あやの",
+      "name": "中城あやの",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_小糸つむぎ",
+      "name": "小糸つむぎ",
+      "age": 26,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_明治まき",
+      "name": "明治まき",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_中川あずさ",
+      "name": "中川あずさ",
+      "age": 35,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_内田ゆきこ",
+      "name": "内田ゆきこ",
+      "age": 47,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_清野りみ",
+      "name": "清野りみ",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_足立みよこ",
+      "name": "足立みよこ",
+      "age": 48,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_小池ももこ",
+      "name": "小池ももこ",
+      "age": 45,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_室田けいこ",
+      "name": "室田けいこ",
+      "age": 33,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_三島さよ",
+      "name": "三島さよ",
+      "age": 52,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_水野せりな",
+      "name": "水野せりな",
+      "age": 29,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_村沢なほこ",
+      "name": "村沢なほこ",
+      "age": 39,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_赤井いと",
+      "name": "赤井いと",
+      "age": 45,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_吉本ぼたん",
+      "name": "吉本ぼたん",
+      "age": 38,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_遠山さや",
+      "name": "遠山さや",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_戸崎あやね",
+      "name": "戸崎あやね",
+      "age": 55,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_波多野さちこ",
+      "name": "波多野さちこ",
+      "age": 40,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_谷川まゆみ",
+      "name": "谷川まゆみ",
+      "age": 43,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_里中れな",
+      "name": "里中れな",
+      "age": 36,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_高野はな",
+      "name": "高野はな",
+      "age": 46,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_白咲やよい",
+      "name": "白咲やよい",
+      "age": 25,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_桜木こずえ",
+      "name": "桜木こずえ",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_大島なぎさ",
+      "name": "大島なぎさ",
+      "age": 32,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_柊つかさ",
+      "name": "柊つかさ",
+      "age": 53,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_沢口かおり",
+      "name": "沢口かおり",
+      "age": 52,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_山本なつみ",
+      "name": "山本なつみ",
+      "age": 55,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_瀬山つばき",
+      "name": "瀬山つばき",
+      "age": 29,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_杉田りり",
+      "name": "杉田りり",
+      "age": 23,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_朽木るな",
+      "name": "朽木るな",
+      "age": 28,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_吉川すみれ",
+      "name": "吉川すみれ",
+      "age": 37,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_和田あかね",
+      "name": "和田あかね",
+      "age": 25,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_神谷るい",
+      "name": "神谷るい",
+      "age": 52,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_迷井まよ",
+      "name": "迷井まよ",
+      "age": 32,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_山田さき",
+      "name": "山田さき",
+      "age": 21,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_北沢ゆら",
+      "name": "北沢ゆら",
+      "age": 31,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_長谷川れいら",
+      "name": "長谷川れいら",
+      "age": 36,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_佐倉りん",
+      "name": "佐倉りん",
+      "age": 29,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_寺井しの",
+      "name": "寺井しの",
+      "age": 43,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_手塚あや",
+      "name": "手塚あや",
+      "age": 45,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_羽田ゆりこ",
+      "name": "羽田ゆりこ",
+      "age": 51,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_四宮あい",
+      "name": "四宮あい",
+      "age": 36,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_佐藤まりん",
+      "name": "佐藤まりん",
+      "age": 40,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_後藤しずか",
+      "name": "後藤しずか",
+      "age": 37,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_音無なな",
+      "name": "音無なな",
+      "age": 31,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_花沢もも",
+      "name": "花沢もも",
+      "age": 26,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_池田ゆり",
+      "name": "池田ゆり",
+      "age": 50,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_中山まみこ",
+      "name": "中山まみこ",
+      "age": 47,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_牧瀬ゆいな",
+      "name": "牧瀬ゆいな",
+      "age": 30,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_五十嵐はな",
+      "name": "五十嵐はな",
+      "age": 31,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_麻美かほ",
+      "name": "麻美かほ",
+      "age": 32,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_青井そら",
+      "name": "青井そら",
+      "age": 30,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_瀬戸内あき",
+      "name": "瀬戸内あき",
+      "age": 40,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_水崎のあ",
+      "name": "水崎のあ",
+      "age": 34,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_轟れみ",
+      "name": "轟れみ",
+      "age": 30,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_成田れん",
+      "name": "成田れん",
+      "age": 38,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_福場しほ",
+      "name": "福場しほ",
+      "age": 47,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_赤木かなえ",
+      "name": "赤木かなえ",
+      "age": 44,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_滝川のの",
+      "name": "滝川のの",
+      "age": 43,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_蒼井あんな",
+      "name": "蒼井あんな",
+      "age": 43,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_尾崎うさぎ",
+      "name": "尾崎うさぎ",
+      "age": 35,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_西野ゆめ",
+      "name": "西野ゆめ",
+      "age": 34,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_夏目みやび",
+      "name": "夏目みやび",
+      "age": 42,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_本条さゆり",
+      "name": "本条さゆり",
+      "age": 39,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_松井おと",
+      "name": "松井おと",
+      "age": 39,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_青木みどり",
+      "name": "青木みどり",
+      "age": 51,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_花園れいら",
+      "name": "花園れいら",
+      "age": 39,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_椎名ゆい",
+      "name": "椎名ゆい",
+      "age": 30,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_開堂なずな",
+      "name": "開堂なずな",
+      "age": 40,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_黒木もも",
+      "name": "黒木もも",
+      "age": 39,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_野山なつみ",
+      "name": "野山なつみ",
+      "age": 39,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "lamp_akabane_早乙女りょう",
+      "name": "早乙女りょう",
+      "age": 36,
+      "height": null,
+      "bust": null
+    }
+  ]
+}

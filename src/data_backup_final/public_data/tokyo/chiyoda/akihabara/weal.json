@@ -1,0 +1,315 @@
+{
+  "name": "Weal (ウィール秋葉原店)",
+  "prefecture": "東京都",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://weal-group.jp/",
+  "description": "秋葉原・浅草橋で展開する実力派メンズエステ。清楚系からモデル系まで、多彩なセラピストが在籍。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "高リピート率"
+  ],
+  "brandId": "weal",
+  "threads": [],
+  "id": "tokyo_chiyoda_akihabara_weal",
+  "area": "秋葉原",
+  "city": "千代田区",
+  "nearestStation": "秋葉原駅",
+  "address": "東京都千代田区秋葉原エリア",
+  "therapists": [
+    {
+      "id": "weal_椎名ななせ",
+      "name": "椎名ななせ",
+      "age": "23歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "weal_高嶋りんか",
+      "name": "高嶋りんか",
+      "age": "23歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "weal_天宮いるる",
+      "name": "天宮いるる",
+      "age": "23歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "weal_葵きょうか",
+      "name": "葵きょうか",
+      "age": "25歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "weal_天使すず",
+      "name": "天使すず",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "weal_石原めい",
+      "name": "石原めい",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "weal_天羽ここあ",
+      "name": "天羽ここあ",
+      "age": "22歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "weal_一宮るい",
+      "name": "一宮るい",
+      "age": "20歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "weal_恋星もあ",
+      "name": "恋星もあ",
+      "age": "20歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "weal_櫻井あい",
+      "name": "櫻井あい",
+      "age": "23歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "weal_柚木さな",
+      "name": "柚木さな",
+      "age": "27歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "weal_那月なみ",
+      "name": "那月なみ",
+      "age": "25歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "weal_有栖みゆう",
+      "name": "有栖みゆう",
+      "age": "26歳",
+      "height": "147cm",
+      "bust": null
+    },
+    {
+      "id": "weal_星月ゆま",
+      "name": "星月ゆま",
+      "age": "25歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "weal_桜庭ひなの",
+      "name": "桜庭ひなの",
+      "age": "26歳",
+      "height": "144cm",
+      "bust": null
+    },
+    {
+      "id": "weal_水田まり",
+      "name": "水田まり",
+      "age": "27歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "weal_天野さおり",
+      "name": "天野さおり",
+      "age": "22歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "weal_花杉みなみ",
+      "name": "花杉みなみ",
+      "age": "22歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "weal_結城いおり",
+      "name": "結城いおり",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "weal_花城まなみ",
+      "name": "花城まなみ",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "weal_七瀬りお",
+      "name": "七瀬りお",
+      "age": "25歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "weal_初音らら",
+      "name": "初音らら",
+      "age": "23歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "weal_月乃ゆな",
+      "name": "月乃ゆな",
+      "age": "21歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "weal_愛川みさ",
+      "name": "愛川みさ",
+      "age": "26歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "weal_鈴音りん",
+      "name": "鈴音りん",
+      "age": "24歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "weal_夏目るな",
+      "name": "夏目るな",
+      "age": "25歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "weal_美咲れあ",
+      "name": "美咲れあ",
+      "age": "25歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "weal_相沢あみ",
+      "name": "相沢あみ",
+      "age": "34歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "weal_橘ひさき",
+      "name": "橘ひさき",
+      "age": "28歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "weal_神崎にこ",
+      "name": "神崎にこ",
+      "age": "21歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "weal_岡本さや",
+      "name": "岡本さや",
+      "age": "22歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "weal_朝比奈しお",
+      "name": "朝比奈しお",
+      "age": "22歳",
+      "height": "147cm",
+      "bust": null
+    },
+    {
+      "id": "weal_春宮ひかり",
+      "name": "春宮ひかり",
+      "age": "21歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "weal_茉白りね",
+      "name": "茉白りね",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "weal_二階堂ゆきの",
+      "name": "二階堂ゆきの",
+      "age": "26歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "weal_佐藤はな",
+      "name": "佐藤はな",
+      "age": "23歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "weal_青羽ゆいか",
+      "name": "青羽ゆいか",
+      "age": "23歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "weal_西川ゆかり",
+      "name": "西川ゆかり",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "weal_白波みなみ",
+      "name": "白波みなみ",
+      "age": "23歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "weal_雪白かのん",
+      "name": "雪白かのん",
+      "age": "22歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "weal_七海かな",
+      "name": "七海かな",
+      "age": "20歳",
+      "height": "158cm",
+      "bust": null
+    }
+  ]
+}

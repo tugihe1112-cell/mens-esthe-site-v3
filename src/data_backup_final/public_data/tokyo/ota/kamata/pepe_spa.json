@@ -1,0 +1,400 @@
+{
+  "id": "tokyo_ota_kamata_pepe_spa",
+  "name": "Pepe Spa (ペペスパ)",
+  "prefecture": "東京都",
+  "city": "大田区",
+  "area": "蒲田",
+  "address": "東京都大田区・神奈川県藤沢市エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 14,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://www.pepespa.com/",
+  "nearestStation": "蒲田駅 / 藤沢駅",
+  "description": "蒲田・藤沢のメンズエステ。 / 料金システム: 70分14,000円 / 80分16,000円 / 90分18,000円 / 120分22,000円",
+  "brandId": "pepe_spa",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "pepe_spa_宇宙　さき",
+      "name": "宇宙　さき",
+      "age": 28,
+      "height": 161,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_小鳥遊　ちえり",
+      "name": "小鳥遊　ちえり",
+      "age": 22,
+      "height": 155,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_琴　ことね",
+      "name": "琴　ことね",
+      "age": 25,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_碧えくぼ",
+      "name": "碧えくぼ",
+      "age": 21,
+      "height": 167,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_天使　ひな",
+      "name": "天使　ひな",
+      "age": 23,
+      "height": 165,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_松井　みな",
+      "name": "松井　みな",
+      "age": 27,
+      "height": 154,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_神楽あいり",
+      "name": "神楽あいり",
+      "age": 23,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_東雲しの",
+      "name": "東雲しの",
+      "age": 23,
+      "height": 166,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_伏見　すみれ",
+      "name": "伏見　すみれ",
+      "age": 26,
+      "height": 164,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_響　ひかる",
+      "name": "響　ひかる",
+      "age": 19,
+      "height": 159,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_麗日　そら",
+      "name": "麗日　そら",
+      "age": 23,
+      "height": 167,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_由良　ゆら",
+      "name": "由良　ゆら",
+      "age": 26,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_佐藤しお",
+      "name": "佐藤しお",
+      "age": 21,
+      "height": 161,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_宮崎　なぎさ",
+      "name": "宮崎　なぎさ",
+      "age": 24,
+      "height": 172,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_加賀美まい",
+      "name": "加賀美まい",
+      "age": 22,
+      "height": 161,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_若月　あんな",
+      "name": "若月　あんな",
+      "age": 24,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_星川るな",
+      "name": "星川るな",
+      "age": 25,
+      "height": 162,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_三谷かのん",
+      "name": "三谷かのん",
+      "age": 23,
+      "height": 160,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_御坂ひな",
+      "name": "御坂ひな",
+      "age": 22,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_白雪　める",
+      "name": "白雪　める",
+      "age": 21,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_芳野ゆな",
+      "name": "芳野ゆな",
+      "age": 24,
+      "height": 162,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_最上あや",
+      "name": "最上あや",
+      "age": 20,
+      "height": 169,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_大谷　かのん",
+      "name": "大谷　かのん",
+      "age": 25,
+      "height": 155,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_倉田ゆき",
+      "name": "倉田ゆき",
+      "age": 26,
+      "height": 164,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_飛鳥あおい",
+      "name": "飛鳥あおい",
+      "age": 23,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_青葉りんか",
+      "name": "青葉りんか",
+      "age": 24,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_鎌田れい",
+      "name": "鎌田れい",
+      "age": 24,
+      "height": 156,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_川口みき",
+      "name": "川口みき",
+      "age": 25,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_前田ゆいか",
+      "name": "前田ゆいか",
+      "age": 26,
+      "height": 163,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_七川こよみ",
+      "name": "七川こよみ",
+      "age": 25,
+      "height": 159,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_白雪める",
+      "name": "白雪める",
+      "age": 21,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_蓮見 ゆあ",
+      "name": "蓮見 ゆあ",
+      "age": 25,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_石森うか",
+      "name": "石森うか",
+      "age": 26,
+      "height": 162,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_糸師りの",
+      "name": "糸師りの",
+      "age": 26,
+      "height": 162,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_天谷　ちづる",
+      "name": "天谷　ちづる",
+      "age": 26,
+      "height": 156,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_結城ゆあ",
+      "name": "結城ゆあ",
+      "age": 26,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_北川みさと",
+      "name": "北川みさと",
+      "age": 32,
+      "height": 156,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_谷崎　ふうか",
+      "name": "谷崎　ふうか",
+      "age": 24,
+      "height": 154,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_平良れん",
+      "name": "平良れん",
+      "age": 30,
+      "height": 149,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_長谷川ゆみ",
+      "name": "長谷川ゆみ",
+      "age": 27,
+      "height": 158,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_叶りえ",
+      "name": "叶りえ",
+      "age": 35,
+      "height": 161,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_夢咲　ことり",
+      "name": "夢咲　ことり",
+      "age": 24,
+      "height": 151,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_本田いと",
+      "name": "本田いと",
+      "age": 26,
+      "height": 160,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_七瀬るい",
+      "name": "七瀬るい",
+      "age": 24,
+      "height": 149,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_江崎なな",
+      "name": "江崎なな",
+      "age": 25,
+      "height": 153,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_月乃はな",
+      "name": "月乃はな",
+      "age": 26,
+      "height": 164,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "pepe_spa_楓　みお",
+      "name": "楓　みお",
+      "age": 23,
+      "height": 153,
+      "bust": null,
+      "tags": null
+    }
+  ]
+}

@@ -1,12 +1,379 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-:root { color-scheme: dark; }
-body { @apply bg-gradient-to-br from-[#150622] via-[#0b0218] to-black text-white min-h-screen; }
-.card { @apply bg-[#2b1a4f]/60 backdrop-blur-md rounded-xl shadow-lg; }
-/* ...既存の @tailwind base; など... */
+
+:root {
+  color-scheme: dark;
+}
 
 body {
   @apply bg-gradient-to-br from-slate-900 to-purple-900 min-h-screen text-gray-200;
+}
+
+.card {
+  @apply bg-[#2b1a4f]/60 backdrop-blur-md rounded-xl shadow-lg;
+}
+
+/* ===================================== */
+/* トーストアニメーション */
+/* ===================================== */
+@keyframes slide-in {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+/* ===================================== */
+/* モバイルメニュー スライドインアニメーション */
+/* ===================================== */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+/* ===================================== */
+/* ローディングスピナー */
+/* ===================================== */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ===================================== */
+/* フェードインアニメーション */
+/* ===================================== */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-in;
+}
+
+/* ===================================== */
+/* バウンスアニメーション */
+/* ===================================== */
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.4s ease-out;
+}
+
+/* ===================================== */
+/* スケールアップアニメーション */
+/* ===================================== */
+@keyframes scale-up {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scale-up {
+  animation: scale-up 0.2s ease-out;
+}
+
+/* ===================================== */
+/* テキストトランケート（省略） */
+/* ===================================== */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===================================== */
+/* スムーススクロール */
+/* ===================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===================================== */
+/* カスタムスクロールバー（Webkit） */
+/* ===================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(219, 39, 119, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(219, 39, 119, 0.7);
+}
+
+/* ===================================== */
+/* タッチ操作の最適化 */
+/* ===================================== */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* タップ領域の拡大（モバイル） */
+@media (max-width: 768px) {
+  button,
+  a {
+    min-height: 44px; /* iOSのタップ推奨サイズ */
+  }
+}
+
+/* ===================================== */
+/* フォーカス時のアウトライン */
+/* ===================================== */
+*:focus-visible {
+  outline: 2px solid rgb(219, 39, 119);
+  outline-offset: 2px;
+}
+
+/* ===================================== */
+/* セーフエリア対応（モバイル） */
+/* ===================================== */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
+
+/* ===================================== */
+/* グラデーション背景 */
+/* ===================================== */
+.gradient-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* ===================================== */
+/* カードホバー効果 */
+/* ===================================== */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* モバイルではホバー効果を無効化 */
+@media (max-width: 768px) {
+  .card-hover:hover {
+    transform: none;
+  }
+}
+
+/* ===================================== */
+/* プログレスバー */
+/* ===================================== */
+@keyframes progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-progress {
+  animation: progress 1.5s ease-in-out;
+}
+
+/* ===================================== */
+/* パルスアニメーション */
+/* ===================================== */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ===================================== */
+/* グリッド自動フィット */
+/* ===================================== */
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .grid-auto-fit {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================================== */
+/* レスポンシブテキストサイズ */
+/* ===================================== */
+.text-responsive-xl {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+}
+
+.text-responsive-lg {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+}
+
+.text-responsive-base {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+/* ===================================== */
+/* モバイル専用スタイル */
+/* ===================================== */
+@media (max-width: 768px) {
+  /* モバイルでのパディング調整 */
+  .mobile-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* モバイルでのフォントサイズ調整 */
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
+
+  /* モバイルでのボタンサイズ */
+  button {
+    padding: 0.75rem 1rem;
+  }
+
+  /* モバイルでのインプットサイズ */
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* iOSのズーム防止 */
+  }
+}
+
+/* ===================================== */
+/* ダークモード対応（将来の拡張用） */
+/* ===================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* ===================================== */
+/* プリント用スタイル */
+/* ===================================== */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  .no-print {
+    display: none;
+  }
+}
+@layer utilities {
+  /* 1. スクロールバー非表示 */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* 2. 賢いグラスモーフィズム */
+  .glass-panel {
+    background-color: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  @supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
+    .glass-panel {
+      background-color: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
 }

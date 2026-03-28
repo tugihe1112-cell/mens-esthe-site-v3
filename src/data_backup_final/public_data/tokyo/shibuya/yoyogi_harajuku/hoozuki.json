@@ -1,0 +1,28 @@
+{
+  "id": "tokyo_shibuya_yoyogi_harajuku_hoozuki",
+  "name": "Ho・O・Zu・Ki・SPA (ホオズキスパ)",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "area": "代々木・原宿",
+  "address": "東京都渋谷区代々木エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分15,000円～",
+  "hours": "10:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム",
+    "熟女"
+  ],
+  "websiteUrl": "http://hoozuki-spa.net",
+  "nearestStation": "代々木駅",
+  "description": "武蔵小杉・代々木・原宿・蒲田・大森・大井町の日本人リラクゼーション。 / 料金システム: 90分15,000円〜",
+  "threads": [],
+  "brandId": "hoozuki",
+  "therapists": []
+}

@@ -1,0 +1,21 @@
+{
+  "id": "tokyo_toshima_otsuka_amaryllis",
+  "name": "アマリリス",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "大塚",
+  "address": "東京都豊島区大塚（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分10,000円～",
+  "hours": "10:00～23:00",
+  "isPremium": false,
+  "tags": [],
+  "websiteUrl": "http://amaryllis.ap1hp.com/",
+  "nearestStation": "大塚駅",
+  "description": "全コース2,000円割引！アロマコース: 70分10,000円 / 90分12,000円 / 120分15,000円 / 会員様限定ロングコース: 150分18,000円",
+  "threads": [],
+  "brandId": "amaryllis",
+  "therapists": []
+}

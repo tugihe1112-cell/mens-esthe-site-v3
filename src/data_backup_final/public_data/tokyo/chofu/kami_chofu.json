@@ -1,0 +1,839 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分 16,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "http://www.kami-tyofu.com/",
+  "description": "調布・府中エリアの日本人一般ルーム。圧倒的な在籍数と低価格が魅力。",
+  "tags": [
+    "複数エリア展開",
+    "カード支払いOK",
+    "日本人",
+    "深夜営業"
+  ],
+  "brandId": "kami_chofu",
+  "threads": [],
+  "id": "tokyo_chofu_kami_chofu",
+  "name": "神のエステ (調布店)",
+  "prefecture": "東京都",
+  "city": "調布市",
+  "area": "調布",
+  "nearestStation": "調布駅",
+  "address": "東京都調布市エリア",
+  "therapists": [
+    {
+      "id": "kami_chofu_うた",
+      "name": "うた",
+      "age": 21,
+      "height": 154,
+      "bust": "84(E)"
+    },
+    {
+      "id": "kami_chofu_きらり",
+      "name": "きらり",
+      "age": 23,
+      "height": 156,
+      "bust": "86(D)"
+    },
+    {
+      "id": "kami_chofu_こまち",
+      "name": "こまち",
+      "age": 20,
+      "height": 156,
+      "bust": "80(D)"
+    },
+    {
+      "id": "kami_chofu_さなえ",
+      "name": "さなえ",
+      "age": 20,
+      "height": 155,
+      "bust": "86(D)"
+    },
+    {
+      "id": "kami_chofu_しぐれ",
+      "name": "しぐれ",
+      "age": 20,
+      "height": 166,
+      "bust": "86(D)"
+    },
+    {
+      "id": "kami_chofu_すず",
+      "name": "すず",
+      "age": 22,
+      "height": 163,
+      "bust": "82(C)"
+    },
+    {
+      "id": "kami_chofu_ななみ",
+      "name": "ななみ",
+      "age": 23,
+      "height": 158,
+      "bust": "85(D)"
+    },
+    {
+      "id": "kami_chofu_にこ",
+      "name": "にこ",
+      "age": 22,
+      "height": 160,
+      "bust": "88(F)"
+    },
+    {
+      "id": "kami_chofu_ましろ",
+      "name": "ましろ",
+      "age": 22,
+      "height": 150,
+      "bust": "85(H)"
+    },
+    {
+      "id": "kami_chofu_みあ",
+      "name": "みあ",
+      "age": 19,
+      "height": 155,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_みほ",
+      "name": "みほ",
+      "age": 21,
+      "height": 160,
+      "bust": "82(F)"
+    },
+    {
+      "id": "kami_chofu_めば",
+      "name": "めば",
+      "age": 22,
+      "height": 159,
+      "bust": "78(D)"
+    },
+    {
+      "id": "kami_chofu_もえり",
+      "name": "もえり",
+      "age": 21,
+      "height": 160,
+      "bust": "82(F)"
+    },
+    {
+      "id": "kami_chofu_やすは",
+      "name": "やすは",
+      "age": 18,
+      "height": 154,
+      "bust": "82(E)"
+    },
+    {
+      "id": "kami_chofu_ゆうの",
+      "name": "ゆうの",
+      "age": 23,
+      "height": 157,
+      "bust": "85(D)"
+    },
+    {
+      "id": "kami_chofu_ゆゆ",
+      "name": "ゆゆ",
+      "age": 19,
+      "height": 156,
+      "bust": "85(D)"
+    },
+    {
+      "id": "kami_chofu_りお",
+      "name": "りお",
+      "age": 22,
+      "height": 163,
+      "bust": "86(D)"
+    },
+    {
+      "id": "kami_chofu_りなみ",
+      "name": "りなみ",
+      "age": 20,
+      "height": 160,
+      "bust": "84(D)"
+    },
+    {
+      "id": "kami_chofu_りりか",
+      "name": "りりか",
+      "age": 23,
+      "height": 161,
+      "bust": "90(D)"
+    },
+    {
+      "id": "kami_chofu_マカロン",
+      "name": "マカロン",
+      "age": 20,
+      "height": 162,
+      "bust": "85(D)"
+    },
+    {
+      "id": "kami_chofu_せな",
+      "name": "せな",
+      "age": 19,
+      "height": 156,
+      "bust": "77(C)"
+    },
+    {
+      "id": "kami_chofu_ももこ",
+      "name": "ももこ",
+      "age": 23,
+      "height": 170,
+      "bust": "85(C)"
+    },
+    {
+      "id": "kami_chofu_なぎ",
+      "name": "なぎ",
+      "age": 21,
+      "height": 153,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_あず",
+      "name": "あず",
+      "age": 25,
+      "height": 160,
+      "bust": "86(F)"
+    },
+    {
+      "id": "kami_chofu_ありす",
+      "name": "ありす",
+      "age": 20,
+      "height": 150,
+      "bust": "82(C)"
+    },
+    {
+      "id": "kami_chofu_すずめ",
+      "name": "すずめ",
+      "age": 20,
+      "height": 161,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_りんね",
+      "name": "りんね",
+      "age": 25,
+      "height": 156,
+      "bust": "84(C)"
+    },
+    {
+      "id": "kami_chofu_のえる",
+      "name": "のえる",
+      "age": 19,
+      "height": 148,
+      "bust": "83(C)"
+    },
+    {
+      "id": "kami_chofu_ひめり",
+      "name": "ひめり",
+      "age": 20,
+      "height": 160,
+      "bust": "86(D)"
+    },
+    {
+      "id": "kami_chofu_めいり",
+      "name": "めいり",
+      "age": 19,
+      "height": 150,
+      "bust": "89(G)"
+    },
+    {
+      "id": "kami_chofu_あげは",
+      "name": "あげは",
+      "age": 19,
+      "height": 160,
+      "bust": "87(E)"
+    },
+    {
+      "id": "kami_chofu_あてな",
+      "name": "あてな",
+      "age": 23,
+      "height": 160,
+      "bust": "93(G)"
+    },
+    {
+      "id": "kami_chofu_あむ",
+      "name": "あむ",
+      "age": 23,
+      "height": 160,
+      "bust": "87(E)"
+    },
+    {
+      "id": "kami_chofu_あやみ",
+      "name": "あやみ",
+      "age": 27,
+      "height": 159,
+      "bust": "89(G)"
+    },
+    {
+      "id": "kami_chofu_あんり",
+      "name": "あんり",
+      "age": 21,
+      "height": 161,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_あるは",
+      "name": "あるは",
+      "age": 21,
+      "height": 160,
+      "bust": "90(G)"
+    },
+    {
+      "id": "kami_chofu_いおん",
+      "name": "いおん",
+      "age": 21,
+      "height": 158,
+      "bust": "84(G)"
+    },
+    {
+      "id": "kami_chofu_いのり",
+      "name": "いのり",
+      "age": 24,
+      "height": 160,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_いるか",
+      "name": "いるか",
+      "age": 20,
+      "height": 153,
+      "bust": "90(G)"
+    },
+    {
+      "id": "kami_chofu_いろは",
+      "name": "いろは",
+      "age": 22,
+      "height": 158,
+      "bust": "87(E)"
+    },
+    {
+      "id": "kami_chofu_うい",
+      "name": "うい",
+      "age": 19,
+      "height": 157,
+      "bust": "88(G)"
+    },
+    {
+      "id": "kami_chofu_うたな",
+      "name": "うたな",
+      "age": 23,
+      "height": 160,
+      "bust": "88(E)"
+    },
+    {
+      "id": "kami_chofu_えりな",
+      "name": "えりな",
+      "age": 22,
+      "height": 157,
+      "bust": "88(F)"
+    },
+    {
+      "id": "kami_chofu_かなね",
+      "name": "かなね",
+      "age": 24,
+      "height": 158,
+      "bust": "84(F)"
+    },
+    {
+      "id": "kami_chofu_るみ",
+      "name": "るみ",
+      "age": 21,
+      "height": 156,
+      "bust": "85(E)"
+    },
+    {
+      "id": "kami_chofu_かげ",
+      "name": "かげ",
+      "age": 20,
+      "height": 161,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_かれな",
+      "name": "かれな",
+      "age": 19,
+      "height": 158,
+      "bust": "88(F)"
+    },
+    {
+      "id": "kami_chofu_きみか",
+      "name": "きみか",
+      "age": 22,
+      "height": 161,
+      "bust": "79(E)"
+    },
+    {
+      "id": "kami_chofu_くるみ",
+      "name": "くるみ",
+      "age": 23,
+      "height": 161,
+      "bust": "87(E)"
+    },
+    {
+      "id": "kami_chofu_くろな",
+      "name": "くろな",
+      "age": 22,
+      "height": 160,
+      "bust": "82(C)"
+    },
+    {
+      "id": "kami_chofu_けいら",
+      "name": "けいら",
+      "age": 25,
+      "height": 165,
+      "bust": "85(F)"
+    },
+    {
+      "id": "kami_chofu_ことり",
+      "name": "ことり",
+      "age": 18,
+      "height": 158,
+      "bust": "87(E)"
+    },
+    {
+      "id": "kami_chofu_しのぶ",
+      "name": "しのぶ",
+      "age": 23,
+      "height": 156,
+      "bust": "85(D)"
+    },
+    {
+      "id": "kami_chofu_じゅら",
+      "name": "じゅら",
+      "age": 20,
+      "height": 166,
+      "bust": "89(F)"
+    },
+    {
+      "id": "kami_chofu_せい",
+      "name": "せい",
+      "age": 20,
+      "height": 162,
+      "bust": "82(C)"
+    },
+    {
+      "id": "kami_chofu_たぴおか",
+      "name": "たぴおか",
+      "age": 26,
+      "height": 154,
+      "bust": "84(D)"
+    },
+    {
+      "id": "kami_chofu_ちふゆ",
+      "name": "ちふゆ",
+      "age": 21,
+      "height": 150,
+      "bust": "89(E)"
+    },
+    {
+      "id": "kami_chofu_月野うさぎ",
+      "name": "月野うさぎ",
+      "age": 20,
+      "height": 157,
+      "bust": "83(D)"
+    },
+    {
+      "id": "kami_chofu_つづな",
+      "name": "つづな",
+      "age": 20,
+      "height": 162,
+      "bust": "91(G)"
+    },
+    {
+      "id": "kami_chofu_てん",
+      "name": "てん",
+      "age": 20,
+      "height": 160,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_とむ",
+      "name": "とむ",
+      "age": 23,
+      "height": 157,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_にこり",
+      "name": "にこり",
+      "age": 20,
+      "height": 163,
+      "bust": "88(F)"
+    },
+    {
+      "id": "kami_chofu_ねる",
+      "name": "ねる",
+      "age": 22,
+      "height": 163,
+      "bust": "89(D)"
+    },
+    {
+      "id": "kami_chofu_のぞみ",
+      "name": "のぞみ",
+      "age": 25,
+      "height": 150,
+      "bust": "86(D)"
+    },
+    {
+      "id": "kami_chofu_はお",
+      "name": "はお",
+      "age": 21,
+      "height": 160,
+      "bust": "85(E)"
+    },
+    {
+      "id": "kami_chofu_ひなの",
+      "name": "ひなの",
+      "age": 25,
+      "height": 165,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_日野あかね",
+      "name": "日野あかね",
+      "age": 25,
+      "height": 160,
+      "bust": "88(F)"
+    },
+    {
+      "id": "kami_chofu_ふぇみあ",
+      "name": "ふぇみあ",
+      "age": 20,
+      "height": 162,
+      "bust": "80(C)"
+    },
+    {
+      "id": "kami_chofu_ふみか",
+      "name": "ふみか",
+      "age": 24,
+      "height": 166,
+      "bust": "84(C)"
+    },
+    {
+      "id": "kami_chofu_ぷりん",
+      "name": "ぷりん",
+      "age": 20,
+      "height": 155,
+      "bust": "86(F)"
+    },
+    {
+      "id": "kami_chofu_まどか",
+      "name": "まどか",
+      "age": 21,
+      "height": 156,
+      "bust": "82(C)"
+    },
+    {
+      "id": "kami_chofu_まほ",
+      "name": "まほ",
+      "age": 20,
+      "height": 159,
+      "bust": "86(D)"
+    },
+    {
+      "id": "kami_chofu_まみや",
+      "name": "まみや",
+      "age": 21,
+      "height": 158,
+      "bust": "87(E)"
+    },
+    {
+      "id": "kami_chofu_まゆ",
+      "name": "まゆ",
+      "age": 19,
+      "height": 158,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_まりる",
+      "name": "まりる",
+      "age": 20,
+      "height": 150,
+      "bust": "90(G)"
+    },
+    {
+      "id": "kami_chofu_みーちゃん",
+      "name": "みーちゃん",
+      "age": 21,
+      "height": 155,
+      "bust": "88(F)"
+    },
+    {
+      "id": "kami_chofu_みかな",
+      "name": "みかな",
+      "age": 19,
+      "height": 164,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_みつば",
+      "name": "みつば",
+      "age": 25,
+      "height": 163,
+      "bust": "84(C)"
+    },
+    {
+      "id": "kami_chofu_みなみ",
+      "name": "みなみ",
+      "age": 18,
+      "height": 158,
+      "bust": "88(E)"
+    },
+    {
+      "id": "kami_chofu_みねか",
+      "name": "みねか",
+      "age": 21,
+      "height": 156,
+      "bust": "88(F)"
+    },
+    {
+      "id": "kami_chofu_みふゆ",
+      "name": "みふゆ",
+      "age": 23,
+      "height": 162,
+      "bust": "83(D)"
+    },
+    {
+      "id": "kami_chofu_みすみ",
+      "name": "みすみ",
+      "age": 22,
+      "height": 156,
+      "bust": "92(F)"
+    },
+    {
+      "id": "kami_chofu_みりむ",
+      "name": "みりむ",
+      "age": 22,
+      "height": 160,
+      "bust": "88(G)"
+    },
+    {
+      "id": "kami_chofu_めだか",
+      "name": "めだか",
+      "age": 19,
+      "height": 155,
+      "bust": "88(F)"
+    },
+    {
+      "id": "kami_chofu_めろん",
+      "name": "めろん",
+      "age": 22,
+      "height": 164,
+      "bust": "90(G)"
+    },
+    {
+      "id": "kami_chofu_ももあ",
+      "name": "ももあ",
+      "age": 18,
+      "height": 162,
+      "bust": "84(D)"
+    },
+    {
+      "id": "kami_chofu_ももじり",
+      "name": "ももじり",
+      "age": 22,
+      "height": 147,
+      "bust": "78(E)"
+    },
+    {
+      "id": "kami_chofu_もな",
+      "name": "もな",
+      "age": 23,
+      "height": 163,
+      "bust": "83(C)"
+    },
+    {
+      "id": "kami_chofu_やすらぎ",
+      "name": "やすらぎ",
+      "age": 24,
+      "height": 165,
+      "bust": "82(C)"
+    },
+    {
+      "id": "kami_chofu_ゆきか",
+      "name": "ゆきか",
+      "age": 26,
+      "height": 163,
+      "bust": "93(E)"
+    },
+    {
+      "id": "kami_chofu_ゆなな",
+      "name": "ゆなな",
+      "age": 21,
+      "height": 165,
+      "bust": "86(D)"
+    },
+    {
+      "id": "kami_chofu_ゆはね",
+      "name": "ゆはね",
+      "age": 24,
+      "height": null,
+      "bust": "90(F)"
+    },
+    {
+      "id": "kami_chofu_ゆるる",
+      "name": "ゆるる",
+      "age": 19,
+      "height": 165,
+      "bust": "85(F)"
+    },
+    {
+      "id": "kami_chofu_らっきー",
+      "name": "らっきー",
+      "age": 20,
+      "height": 165,
+      "bust": "86(E)"
+    },
+    {
+      "id": "kami_chofu_りこ",
+      "name": "りこ",
+      "age": 20,
+      "height": 168,
+      "bust": "87(F)"
+    },
+    {
+      "id": "kami_chofu_りぶ",
+      "name": "りぶ",
+      "age": 19,
+      "height": 154,
+      "bust": "85(D)"
+    },
+    {
+      "id": "kami_chofu_りりほ",
+      "name": "りりほ",
+      "age": 20,
+      "height": 159,
+      "bust": "88(F)"
+    },
+    {
+      "id": "kami_chofu_りるあ",
+      "name": "りるあ",
+      "age": 22,
+      "height": 155,
+      "bust": "83(C)"
+    },
+    {
+      "id": "kami_chofu_きらめ",
+      "name": "きらめ",
+      "age": 20,
+      "height": 160,
+      "bust": "87(G)"
+    },
+    {
+      "id": "kami_chofu_ふわ",
+      "name": "ふわ",
+      "age": 19,
+      "height": 158,
+      "bust": "96(H)"
+    },
+    {
+      "id": "kami_chofu_まりこ",
+      "name": "まりこ",
+      "age": 31,
+      "height": 166,
+      "bust": "90(F)"
+    },
+    {
+      "id": "kami_chofu_あいむ",
+      "name": "あいむ",
+      "age": 24,
+      "height": 160,
+      "bust": "91(G)"
+    },
+    {
+      "id": "kami_chofu_えな",
+      "name": "えな",
+      "age": 23,
+      "height": 163,
+      "bust": "83(F)"
+    },
+    {
+      "id": "kami_chofu_まゆう",
+      "name": "まゆう",
+      "age": 20,
+      "height": 163,
+      "bust": "84(D)"
+    },
+    {
+      "id": "kami_chofu_まみこ",
+      "name": "まみこ",
+      "age": 23,
+      "height": null,
+      "bust": "88(D)"
+    },
+    {
+      "id": "kami_chofu_みゆ",
+      "name": "みゆ",
+      "age": 23,
+      "height": 156,
+      "bust": "84(F)"
+    },
+    {
+      "id": "kami_chofu_みつの",
+      "name": "みつの",
+      "age": 25,
+      "height": 157,
+      "bust": "88(E)"
+    },
+    {
+      "id": "kami_chofu_まゆみ",
+      "name": "まゆみ",
+      "age": 20,
+      "height": 164,
+      "bust": "99(H)"
+    },
+    {
+      "id": "kami_chofu_水原せり",
+      "name": "水原せり",
+      "age": 23,
+      "height": 160,
+      "bust": "100(H)"
+    },
+    {
+      "id": "kami_chofu_ゆき",
+      "name": "ゆき",
+      "age": 19,
+      "height": 161,
+      "bust": "88(E)"
+    },
+    {
+      "id": "kami_chofu_あゆん",
+      "name": "あゆん",
+      "age": 25,
+      "height": 155,
+      "bust": "89(G)"
+    },
+    {
+      "id": "kami_chofu_めある",
+      "name": "めある",
+      "age": 21,
+      "height": 157,
+      "bust": "82(D)"
+    },
+    {
+      "id": "kami_chofu_ゼシカ",
+      "name": "ゼシカ",
+      "age": 27,
+      "height": 153,
+      "bust": "88(G)"
+    },
+    {
+      "id": "kami_chofu_海物語",
+      "name": "海物語",
+      "age": 23,
+      "height": 160,
+      "bust": "85(C)"
+    },
+    {
+      "id": "kami_chofu_るい",
+      "name": "るい",
+      "age": 21,
+      "height": 160,
+      "bust": "83(C)"
+    },
+    {
+      "id": "kami_chofu_りな",
+      "name": "りな",
+      "age": 18,
+      "height": 157,
+      "bust": "87(C)"
+    }
+  ]
+}

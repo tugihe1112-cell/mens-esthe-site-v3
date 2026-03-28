@@ -1,0 +1,224 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分19,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://za-gin.com/",
+  "description": "銀座・茅場町・日本橋・人形町・市ヶ谷の日本人リラクゼーション。極上の癒やし空間。",
+  "brandId": "the_gin",
+  "threads": [],
+  "id": "tokyo_chuo_nihonbashi_the_gin",
+  "name": "THE★GIN (ザギン) 日本橋店",
+  "prefecture": "東京都",
+  "city": "中央区",
+  "area": "日本橋",
+  "nearestStation": "日本橋駅",
+  "address": "東京都中央区日本橋エリア",
+  "therapists": [
+    {
+      "id": "the_gin_富田かおる",
+      "name": "富田かおる",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_清澄すい",
+      "name": "清澄すい",
+      "age": "23歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_雪村まりか",
+      "name": "雪村まりか",
+      "age": "28歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_羽鳥さえ",
+      "name": "羽鳥さえ",
+      "age": "25歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_小柳さき",
+      "name": "小柳さき",
+      "age": "28歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_広瀬まゆ",
+      "name": "広瀬まゆ",
+      "age": "25歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_水瀬まひる",
+      "name": "水瀬まひる",
+      "age": "26歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_酒井りお",
+      "name": "酒井りお",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_菊川もえか",
+      "name": "菊川もえか",
+      "age": "32歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_黒咲ゆあ",
+      "name": "黒咲ゆあ",
+      "age": "27歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_清水さら",
+      "name": "清水さら",
+      "age": "25歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_柴咲ひとみ",
+      "name": "柴咲ひとみ",
+      "age": "24歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_尾花ありさ",
+      "name": "尾花ありさ",
+      "age": "26歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_岡野さゆな",
+      "name": "岡野さゆな",
+      "age": "29歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_桃井ちなみ",
+      "name": "桃井ちなみ",
+      "age": "30歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_一色かなで",
+      "name": "一色かなで",
+      "age": "28歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_木村まみ",
+      "name": "木村まみ",
+      "age": "29歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_玉井みな",
+      "name": "玉井みな",
+      "age": "30歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_池田ほの",
+      "name": "池田ほの",
+      "age": "22歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_丹波あずみ",
+      "name": "丹波あずみ",
+      "age": "32歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_染谷のの",
+      "name": "染谷のの",
+      "age": "23歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_風美りのん",
+      "name": "風美りのん",
+      "age": "22歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_矢野ななこ",
+      "name": "矢野ななこ",
+      "age": "30歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_琴美みづき",
+      "name": "琴美みづき",
+      "age": "23歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_寺田ましろ",
+      "name": "寺田ましろ",
+      "age": "27歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_小桜やよい",
+      "name": "小桜やよい",
+      "age": "28歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_高月はるか",
+      "name": "高月はるか",
+      "age": "26歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "the_gin_美空ゆう",
+      "name": "美空ゆう",
+      "age": "31歳",
+      "height": "163cm",
+      "bust": null
+    }
+  ]
+}

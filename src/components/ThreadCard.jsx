@@ -1,56 +1,61 @@
-// src/components/ThreadCard.jsx
+// ==================================================
+// ThreadCard.jsx（完全版）
+// ==================================================
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import StarRating from './ui/StarRating';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function ThreadCard({ shop, thread }) {
-  const {
-    id,
-    therapistName,
-    postCount,
-    averageRating,
-    averageDetailedRatings,
-    tags = [],     // ← ★ allTags を完全削除して tags を使用
-  } = thread;
+export default function ThreadCard({ shopId, thread }) {
+  const navigate = useNavigate();
 
   return (
-    <Link
-      to={`/shops/${shop.id}/threads/${id}`}
-      className="bg-slate-800 p-5 rounded-lg shadow-lg transition-all hover:shadow-pink-500/20 hover:ring-2 hover:ring-pink-600"
+    <div
+      className="bg-slate-800 rounded-lg p-4 border border-slate-700 cursor-pointer hover:scale-[1.02] transition-transform"
+      onClick={() => navigate(`/shops/${shopId}/threads/${thread.id}`)}
     >
-      <div className="flex justify-between items-center mb-3">
-        <h2 className="text-xl font-bold text-pink-400 truncate">{therapistName}</h2>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-2xl font-bold text-yellow-400">
-            {averageRating.toFixed(1)}
-          </span>
-          <StarRating rating={averageRating} interactive={false} />
-        </div>
-      </div>
+      <div className="flex gap-4">
 
-      <div className="flex justify-between text-sm text-gray-400 mb-3 border-b border-slate-700 pb-3">
-        <span>口コミ {postCount}件</span>
-        <div className="flex gap-3">
-          <span>容姿: <span className="text-white font-medium">{averageDetailedRatings.appearance.toFixed(1)}</span></span>
-          <span>スタイル: <span className="text-white font-medium">{averageDetailedRatings.style.toFixed(1)}</span></span>
-        </div>
-      </div>
+        {/* ▼ セラピスト画像 */}
+        <img
+          src={thread.image_url || thread.image}
+          className="w-24 h-24 rounded-lg object-cover"
+          alt={thread.name}
+        />
 
-      <div className="flex flex-wrap gap-1.5 h-12 overflow-hidden">
-        {tags.length > 0 ? (
-          tags.slice(0, 5).map(tag => (
-            <span
-              key={tag}
-              className="bg-purple-700/60 px-2 py-0.5 text-xs rounded-full text-purple-200"
-            >
-              {tag}
+        {/* ▼ 情報 */}
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-white">{thread.name}</h3>
+
+          <p className="text-gray-300 text-sm mt-1">
+            平均評価： 
+            <span className="text-yellow-400 font-bold">
+              {thread.averageRating.toFixed(1)}
             </span>
-          ))
-        ) : (
-          <span className="text-xs text-gray-500">タグはまだありません</span>
-        )}
+          </p>
+
+          <p className="text-gray-400 text-sm">
+            口コミ数：{thread.postCount}
+          </p>
+
+          {/* タグ */}
+          <div className="flex flex-wrap gap-1 mt-2">
+            {thread.tags.slice(0, 6).map((tag, index) => (
+              <span
+                key={index}
+                className="text-xs px-2 py-1 bg-slate-700 rounded-full border border-slate-600"
+              >
+                {tag}
+              </span>
+            ))}
+
+            {thread.tags.length > 6 && (
+              <span className="text-xs text-gray-400">
+                +{thread.tags.length - 6} もっと見る
+              </span>
+            )}
+          </div>
+        </div>
       </div>
-    </Link>
+    </div>
   );
 }

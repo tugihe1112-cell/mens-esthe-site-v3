@@ -1,0 +1,58 @@
+{
+  "id": "tokyo_shinjuku_nishishinjuku_yunispa",
+  "name": "Yuni Spa (ユニスパ)",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "region": "関東エリア",
+  "address": "東京都新宿区",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": true,
+  "color": "from-yellow-400 to-orange-500",
+  "tags": [
+    "カード支払いOK",
+    "出張可"
+  ],
+  "websiteUrl": "https://yunispa.tokyo/",
+  "system": {
+    "standard": [
+      {
+        "time": "60分",
+        "price": "16,000円"
+      },
+      {
+        "time": "80分",
+        "price": "18,000円"
+      },
+      {
+        "time": "100分",
+        "price": "21,000円"
+      },
+      {
+        "time": "120分",
+        "price": "25,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "特別オプション",
+        "price": "4,000円"
+      },
+      {
+        "name": "指名料",
+        "price": "1,000円"
+      },
+      {
+        "name": "本指名",
+        "price": "2,000円"
+      }
+    ]
+  },
+  "threads": [],
+  "area": "西新宿",
+  "brandId": "yunispa",
+  "therapists": []
+}

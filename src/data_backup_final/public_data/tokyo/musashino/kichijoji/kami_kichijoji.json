@@ -1,0 +1,553 @@
+{
+  "id": "tokyo_musashino_kichijoji_kami_kichijoji",
+  "name": "神のエステ 吉祥寺店",
+  "prefecture": "東京都",
+  "city": "武蔵野市",
+  "area": "吉祥寺",
+  "address": "東京都武蔵野市吉祥寺（詳細は予約時）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分 16,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "吉祥寺",
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://www.kami-kichijoji.com/",
+  "nearestStation": "吉祥寺駅",
+  "description": "吉祥寺エリアの日本人一般ルーム。 / 料金システム: 80分16,000円(割引後) / 100分20,000円(割引後) / 120分24,000円(割引後)",
+  "brandId": "kami_kichijoji",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "kami_kichijoji_まとい",
+      "name": "まとい",
+      "age": 24,
+      "height": 163,
+      "bust": "(I)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_かずは",
+      "name": "かずは",
+      "age": 25,
+      "height": 152,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_あき",
+      "name": "あき",
+      "age": 23,
+      "height": 165,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_えみ",
+      "name": "えみ",
+      "age": 22,
+      "height": 160,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ぴく",
+      "name": "ぴく",
+      "age": 165,
+      "height": 20,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_なみね",
+      "name": "なみね",
+      "age": 22,
+      "height": 149,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_美藤みる",
+      "name": "美藤みる",
+      "age": 25,
+      "height": 148,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_めろ",
+      "name": "めろ",
+      "age": 20,
+      "height": 167,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_あかね",
+      "name": "あかね",
+      "age": 24,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ごま",
+      "name": "ごま",
+      "age": 23,
+      "height": 152,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_まいこ",
+      "name": "まいこ",
+      "age": 26,
+      "height": 165,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_しゅか",
+      "name": "しゅか",
+      "age": 26,
+      "height": 162,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_りぜ",
+      "name": "りぜ",
+      "age": 26,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_あいか",
+      "name": "あいか",
+      "age": 20,
+      "height": 156,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ゆうか",
+      "name": "ゆうか",
+      "age": 21,
+      "height": 167,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_やえ",
+      "name": "やえ",
+      "age": 25,
+      "height": 165,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_さくらこ",
+      "name": "さくらこ",
+      "age": 24,
+      "height": 161,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_れいか",
+      "name": "れいか",
+      "age": 23,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_しゅう",
+      "name": "しゅう",
+      "age": 22,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ゆみさ",
+      "name": "ゆみさ",
+      "age": 25,
+      "height": 160,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_きりみ",
+      "name": "きりみ",
+      "age": 22,
+      "height": 154,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_かれん",
+      "name": "かれん",
+      "age": 20,
+      "height": 153,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_まふね",
+      "name": "まふね",
+      "age": 20,
+      "height": 162,
+      "bust": "(B)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_るる",
+      "name": "るる",
+      "age": 22,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ゆかり",
+      "name": "ゆかり",
+      "age": 26,
+      "height": 159,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_こあい",
+      "name": "こあい",
+      "age": 20,
+      "height": 160,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_徐倫",
+      "name": "徐倫",
+      "age": 25,
+      "height": 155,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_こはね",
+      "name": "こはね",
+      "age": 20,
+      "height": 149,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_かりな",
+      "name": "かりな",
+      "age": 20,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_不知火舞",
+      "name": "不知火舞",
+      "age": 21,
+      "height": 155,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_しのぶ",
+      "name": "しのぶ",
+      "age": 23,
+      "height": 156,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_いのり",
+      "name": "いのり",
+      "age": 24,
+      "height": 160,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_せん",
+      "name": "せん",
+      "age": 22,
+      "height": 157,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_すずか",
+      "name": "すずか",
+      "age": 23,
+      "height": 160,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_いるか",
+      "name": "いるか",
+      "age": 20,
+      "height": 153,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ちょこ",
+      "name": "ちょこ",
+      "age": 23,
+      "height": 166,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_マカロン",
+      "name": "マカロン",
+      "age": 20,
+      "height": 162,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_タピオカ",
+      "name": "タピオカ",
+      "age": 26,
+      "height": 154,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_あやみ",
+      "name": "あやみ",
+      "age": 27,
+      "height": 157,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_みすみ",
+      "name": "みすみ",
+      "age": 22,
+      "height": 156,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_たると",
+      "name": "たると",
+      "age": 22,
+      "height": 154,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ゆりか",
+      "name": "ゆりか",
+      "age": 24,
+      "height": 158,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ここみこ",
+      "name": "ここみこ",
+      "age": 20,
+      "height": 157,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_のこたん",
+      "name": "のこたん",
+      "age": 24,
+      "height": 160,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_優愛",
+      "name": "優愛",
+      "age": 22,
+      "height": 150,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_かのこ",
+      "name": "かのこ",
+      "age": 24,
+      "height": 159,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ひらり",
+      "name": "ひらり",
+      "age": 26,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_かほ",
+      "name": "かほ",
+      "age": 24,
+      "height": 166,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_その",
+      "name": "その",
+      "age": 23,
+      "height": 165,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_るみか",
+      "name": "るみか",
+      "age": 23,
+      "height": 156,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_えあり",
+      "name": "えあり",
+      "age": 23,
+      "height": 158,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_みら",
+      "name": "みら",
+      "age": 22,
+      "height": 167,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_つみき",
+      "name": "つみき",
+      "age": 20,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_るしあ",
+      "name": "るしあ",
+      "age": 22,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ゆずき",
+      "name": "ゆずき",
+      "age": 26,
+      "height": 160,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_なち",
+      "name": "なち",
+      "age": 22,
+      "height": 166,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_たんぽぽ",
+      "name": "たんぽぽ",
+      "age": 23,
+      "height": 152,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_すい",
+      "name": "すい",
+      "age": 20,
+      "height": 150,
+      "bust": "(H)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_はなか",
+      "name": "はなか",
+      "age": 20,
+      "height": 162,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_せいな",
+      "name": "せいな",
+      "age": 23,
+      "height": 167,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_つきね",
+      "name": "つきね",
+      "age": 24,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_えいみ",
+      "name": "えいみ",
+      "age": 22,
+      "height": 155,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_あるは",
+      "name": "あるは",
+      "age": 21,
+      "height": 160,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_つむ",
+      "name": "つむ",
+      "age": 21,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_ぴーち",
+      "name": "ぴーち",
+      "age": 21,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "kami_kichijoji_アルベール",
+      "name": "アルベール",
+      "age": 24,
+      "height": 162,
+      "bust": "(C)",
+      "tags": null
+    }
+  ]
+}

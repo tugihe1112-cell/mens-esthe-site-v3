@@ -1,0 +1,50 @@
+{
+  "id": "tokyo_shinjuku_kabukicho_salon_blanca",
+  "name": "SALON BLANCA (サロンブランカ) 歌舞伎町店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "歌舞伎町",
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "深夜営業"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "75分",
+        "price": "15,000円"
+      },
+      {
+        "time": "90分",
+        "price": "18,000円"
+      },
+      {
+        "time": "105分",
+        "price": "21,000円"
+      },
+      {
+        "time": "120分",
+        "price": "22,000円"
+      },
+      {
+        "time": "150分",
+        "price": "28,000円"
+      },
+      {
+        "time": "180分",
+        "price": "34,000円"
+      }
+    ],
+    "special": []
+  },
+  "url": "https://salon-blanca.jp/",
+  "threads": [],
+  "brandId": "salon_blanca",
+  "therapists": [
+    "salon_blanca_松岡りえ",
+    "salon_blanca_酒井えりな",
+    "salon_blanca_夏目すず",
+    "salon_blanca_鈴川ありさ"
+  ]
+}

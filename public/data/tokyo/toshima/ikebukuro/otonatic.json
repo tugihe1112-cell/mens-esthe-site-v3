@@ -1,0 +1,24 @@
+{
+  "id": "tokyo_toshima_ikebukuro_otonatic",
+  "name": "OTONA TIC (オトナチック)",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都豊島区池袋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分13,000円～",
+  "hours": "10:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "完全個室"
+  ],
+  "websiteUrl": "https://www.mens-esthe-salon.net/",
+  "nearestStation": "池袋駅",
+  "description": "池袋の日本人リラクゼーション。 / 料金システム: 60分13,000円 / 90分15,000円 / 120分19,000円 / 150分23,000円",
+  "threads": [],
+  "brandId": "otonatic",
+  "therapists": []
+}

@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_shibuya_ebisu_esthe_king",
+  "name": "エステの王様",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "area": "恵比寿",
+  "address": "東京都渋谷区恵比寿エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分16,000円～",
+  "hours": "営業中",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://www.estheking.jp/",
+  "nearestStation": "恵比寿駅",
+  "description": "80分18,000円→OPEN割引16,000円 / 100分22,000円→OPEN割引20,000円 / 120分26,000円→OPEN割引24,000円",
+  "threads": [],
+  "brandId": "esthe_king",
+  "therapists": []
+}

@@ -1,0 +1,446 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 14,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://ms-jesse.com/",
+  "description": "登戸・溝の口・武蔵小杉・調布・二子玉川で展開するメンズエステ。質の高いセラピストが多数在籍。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業"
+  ],
+  "brandId": "jesse",
+  "threads": [],
+  "id": "tokyo_chofu_jesse",
+  "name": "Jesse (ジェシー 調布店)",
+  "prefecture": "東京都",
+  "city": "調布市",
+  "area": "調布",
+  "nearestStation": "調布駅",
+  "address": "東京都調布市エリア",
+  "therapists": [
+    {
+      "id": "jesse_あいり",
+      "name": "あいり",
+      "age": 23,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_天使りん",
+      "name": "天使りん",
+      "age": 22,
+      "height": 152,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_ほのか",
+      "name": "ほのか",
+      "age": 21,
+      "height": 158,
+      "bust": "(G)"
+    },
+    {
+      "id": "jesse_らむ",
+      "name": "らむ",
+      "age": 26,
+      "height": 159,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_なな",
+      "name": "なな",
+      "age": 24,
+      "height": 150,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_めぐ",
+      "name": "めぐ",
+      "age": 25,
+      "height": 154,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_ここ",
+      "name": "ここ",
+      "age": 22,
+      "height": 156,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_しずく",
+      "name": "しずく",
+      "age": 21,
+      "height": 157,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_くるみ",
+      "name": "くるみ",
+      "age": 20,
+      "height": 158,
+      "bust": "(G)"
+    },
+    {
+      "id": "jesse_みこと",
+      "name": "みこと",
+      "age": 24,
+      "height": 155,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_のあ",
+      "name": "のあ",
+      "age": 22,
+      "height": 156,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_はるか",
+      "name": "はるか",
+      "age": 24,
+      "height": 162,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_まなか",
+      "name": "まなか",
+      "age": 26,
+      "height": 154,
+      "bust": "(G)"
+    },
+    {
+      "id": "jesse_いろは",
+      "name": "いろは",
+      "age": 19,
+      "height": 156,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_るか",
+      "name": "るか",
+      "age": 21,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_ゆい",
+      "name": "ゆい",
+      "age": 25,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_すい",
+      "name": "すい",
+      "age": 21,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_ゆずは",
+      "name": "ゆずは",
+      "age": 24,
+      "height": 168,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_ねね",
+      "name": "ねね",
+      "age": 24,
+      "height": 153,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_りほ",
+      "name": "りほ",
+      "age": 24,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_りさ",
+      "name": "りさ",
+      "age": 24,
+      "height": 157,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_おとは",
+      "name": "おとは",
+      "age": 24,
+      "height": 164,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_ひかり",
+      "name": "ひかり",
+      "age": 23,
+      "height": 157,
+      "bust": "(C)"
+    },
+    {
+      "id": "jesse_こいと",
+      "name": "こいと",
+      "age": 22,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_ふみか",
+      "name": "ふみか",
+      "age": 25,
+      "height": 156,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_りお",
+      "name": "りお",
+      "age": 22,
+      "height": 162,
+      "bust": "(G)"
+    },
+    {
+      "id": "jesse_かれん",
+      "name": "かれん",
+      "age": 25,
+      "height": 172,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_ゆな",
+      "name": "ゆな",
+      "age": 20,
+      "height": 159,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_ゆわ",
+      "name": "ゆわ",
+      "age": 21,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_きょう",
+      "name": "きょう",
+      "age": 25,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_まいか",
+      "name": "まいか",
+      "age": 26,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_すず",
+      "name": "すず",
+      "age": 21,
+      "height": 159,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_ふうか",
+      "name": "ふうか",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_きい",
+      "name": "きい",
+      "age": 23,
+      "height": 150,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_ななお",
+      "name": "ななお",
+      "age": 25,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_あい",
+      "name": "あい",
+      "age": 22,
+      "height": 158,
+      "bust": "(C)"
+    },
+    {
+      "id": "jesse_いちご",
+      "name": "いちご",
+      "age": 24,
+      "height": 153,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_あず",
+      "name": "あず",
+      "age": 23,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_めい",
+      "name": "めい",
+      "age": 24,
+      "height": 156,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_ひな",
+      "name": "ひな",
+      "age": 25,
+      "height": 160,
+      "bust": "(G)"
+    },
+    {
+      "id": "jesse_しお",
+      "name": "しお",
+      "age": 23,
+      "height": 166,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_あすな",
+      "name": "あすな",
+      "age": 26,
+      "height": 162,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_ゆり",
+      "name": "ゆり",
+      "age": 19,
+      "height": 157,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_さや",
+      "name": "さや",
+      "age": 25,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_むく",
+      "name": "むく",
+      "age": null,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_なずな",
+      "name": "なずな",
+      "age": null,
+      "height": 158,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_うゆ",
+      "name": "うゆ",
+      "age": 23,
+      "height": 164,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_えれな",
+      "name": "えれな",
+      "age": 20,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_みか",
+      "name": "みか",
+      "age": 22,
+      "height": 158,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_さな",
+      "name": "さな",
+      "age": 25,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_しおり",
+      "name": "しおり",
+      "age": 24,
+      "height": 159,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_みお",
+      "name": "みお",
+      "age": 25,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_ゆうり",
+      "name": "ゆうり",
+      "age": 22,
+      "height": 160,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_すずか",
+      "name": "すずか",
+      "age": 26,
+      "height": 163,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_りりか",
+      "name": "りりか",
+      "age": 22,
+      "height": 162,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_ちひろ",
+      "name": "ちひろ",
+      "age": 27,
+      "height": 159,
+      "bust": "(G)"
+    },
+    {
+      "id": "jesse_もも",
+      "name": "もも",
+      "age": 22,
+      "height": 157,
+      "bust": "(D)"
+    },
+    {
+      "id": "jesse_るな",
+      "name": "るな",
+      "age": 19,
+      "height": 159,
+      "bust": "(F)"
+    },
+    {
+      "id": "jesse_まなみ",
+      "name": "まなみ",
+      "age": 24,
+      "height": 154,
+      "bust": "(E)"
+    },
+    {
+      "id": "jesse_姫宮あみ",
+      "name": "姫宮あみ",
+      "age": 26,
+      "height": 155,
+      "bust": "(I)"
+    }
+  ]
+}

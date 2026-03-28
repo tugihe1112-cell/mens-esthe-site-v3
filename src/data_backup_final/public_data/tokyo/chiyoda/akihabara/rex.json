@@ -1,0 +1,322 @@
+{
+  "name": "Rex (レックス秋葉原店)",
+  "prefecture": "東京都",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 4.5,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://rex-tokyo.jp/",
+  "description": "池袋・秋葉原の人気店。経験豊富なセラピストから、未経験の新人まで幅広く在籍。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "高リピート率"
+  ],
+  "brandId": "rex",
+  "threads": [],
+  "id": "tokyo_chiyoda_akihabara_rex",
+  "area": "秋葉原",
+  "city": "千代田区",
+  "nearestStation": "秋葉原駅",
+  "address": "東京都千代田区秋葉原エリア",
+  "therapists": [
+    {
+      "id": "rex_鈴森ひな",
+      "name": "鈴森ひな",
+      "age": "24歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "rex_三ツ谷まい",
+      "name": "三ツ谷まい",
+      "age": "23歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "rex_篠宮ゆり",
+      "name": "篠宮ゆり",
+      "age": "20歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "rex_月島しずく",
+      "name": "月島しずく",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "rex_湊崎さやか",
+      "name": "湊崎さやか",
+      "age": "25歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "rex_一ノ瀬みな",
+      "name": "一ノ瀬みな",
+      "age": "23歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "rex_九条ことね",
+      "name": "九条ことね",
+      "age": "22歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "rex_早乙女りむ",
+      "name": "早乙女りむ",
+      "age": "23歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "rex_櫻井ゆら",
+      "name": "櫻井ゆら",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "rex_夏目すずか",
+      "name": "夏目すずか",
+      "age": "23歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "rex_七海そら",
+      "name": "七海そら",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "rex_七瀬りせ",
+      "name": "七瀬りせ",
+      "age": "22歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "rex_柊まりな",
+      "name": "柊まりな",
+      "age": "20歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "rex_瀬戸口もも",
+      "name": "瀬戸口もも",
+      "age": "21歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "rex_天使なの",
+      "name": "天使なの",
+      "age": "23歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "rex_東雲くるみ",
+      "name": "東雲くるみ",
+      "age": "19歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "rex_雨音まゆ",
+      "name": "雨音まゆ",
+      "age": "20歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "rex_白石ゆきの",
+      "name": "白石ゆきの",
+      "age": "26歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "rex_橘りょう",
+      "name": "橘りょう",
+      "age": "27歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "rex_田中ぽまれ",
+      "name": "田中ぽまれ",
+      "age": "28歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "rex_水城しほ",
+      "name": "水城しほ",
+      "age": "23歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "rex_如月ゆら",
+      "name": "如月ゆら",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "rex_御抹茶はんな",
+      "name": "御抹茶はんな",
+      "age": "23歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "rex_渋谷あみ",
+      "name": "渋谷あみ",
+      "age": "25歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "rex_篠咲いちか",
+      "name": "篠咲いちか",
+      "age": "24歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "rex_白星のえる",
+      "name": "白星のえる",
+      "age": "23歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "rex_涼宮かれん",
+      "name": "涼宮かれん",
+      "age": "25歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "rex_美神れむ",
+      "name": "美神れむ",
+      "age": "24歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "rex_星宮あかり",
+      "name": "星宮あかり",
+      "age": "25歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "rex_咲妃かのん",
+      "name": "咲妃かのん",
+      "age": "24歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "rex_有栖川えま",
+      "name": "有栖川えま",
+      "age": "22歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "rex_月野ひめか",
+      "name": "月野ひめか",
+      "age": "24歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "rex_蒼井まひろ",
+      "name": "蒼井まひろ",
+      "age": "24歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "rex_黒崎りこ",
+      "name": "黒崎りこ",
+      "age": "23歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "rex_妃乃えりな",
+      "name": "妃乃えりな",
+      "age": "21歳",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "rex_白咲らむ",
+      "name": "白咲らむ",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "rex_心愛まゆ",
+      "name": "心愛まゆ",
+      "age": "27歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "rex_美波しおり",
+      "name": "美波しおり",
+      "age": "25歳",
+      "height": "-",
+      "bust": null
+    },
+    {
+      "id": "rex_浜辺りお",
+      "name": "浜辺りお",
+      "age": "25歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "rex_一条ななみ",
+      "name": "一条ななみ",
+      "age": "24歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "rex_桜咲いおり",
+      "name": "桜咲いおり",
+      "age": "23歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "rex_北やよい",
+      "name": "北やよい",
+      "age": "23歳",
+      "height": "160cm",
+      "bust": null
+    }
+  ]
+}

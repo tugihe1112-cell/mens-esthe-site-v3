@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_shinagawa_gotanda_rains_rapt",
+  "name": "Rains Rapt (レインズラプト)",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "五反田",
+  "address": "東京都品川区五反田エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分14,000円～",
+  "hours": "10:00～24:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "初回特典あり",
+    "完全個室"
+  ],
+  "websiteUrl": "https://www.rainsrapt.com/top/",
+  "nearestStation": "五反田駅",
+  "description": "お試し60分14,000円 / 80分17,000円 / 100分20,000円（定番のイチオシコース） / 120分24,000円 / 140分29,000円",
+  "threads": [],
+  "brandId": "rains_rapt",
+  "therapists": []
+}

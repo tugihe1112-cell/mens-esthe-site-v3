@@ -1,0 +1,243 @@
+{
+  "id": "tokyo_fuchu_syalulu",
+  "name": "シャルル (旧ディープ府中)",
+  "prefecture": "東京都",
+  "city": "府中市",
+  "area": "府中",
+  "address": "東京都府中市エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://www.syalulu.tokyo/",
+  "nearestStation": "府中駅",
+  "description": "府中のメンズエステ。旧ディープ府中。 / 料金システム: 60分12,000円 / 80分15,000円 / 100分19,000円",
+  "brandId": "syalulu",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "syalulu_れおな",
+      "name": "れおな",
+      "age": "23歳",
+      "height": "154cm",
+      "bust": "(D)"
+    },
+    {
+      "id": "syalulu_まふゆ",
+      "name": "まふゆ",
+      "age": "24歳",
+      "height": "154cm",
+      "bust": "(G)"
+    },
+    {
+      "id": "syalulu_すい",
+      "name": "すい",
+      "age": "23歳",
+      "height": "154cm",
+      "bust": "(E)"
+    },
+    {
+      "id": "syalulu_もも",
+      "name": "もも",
+      "age": "25歳",
+      "height": "161cm",
+      "bust": "(F)"
+    },
+    {
+      "id": "syalulu_みゆ",
+      "name": "みゆ",
+      "age": "18歳",
+      "height": "161cm",
+      "bust": "(D)"
+    },
+    {
+      "id": "syalulu_ことね",
+      "name": "ことね",
+      "age": "24歳",
+      "height": "162cm",
+      "bust": "(D)"
+    },
+    {
+      "id": "syalulu_みき",
+      "name": "みき",
+      "age": "26歳",
+      "height": "153cm",
+      "bust": "(F)"
+    },
+    {
+      "id": "syalulu_みかな",
+      "name": "みかな",
+      "age": "25歳",
+      "height": "167cm",
+      "bust": "(F)"
+    },
+    {
+      "id": "syalulu_せりな",
+      "name": "せりな",
+      "age": "25歳",
+      "height": "158cm",
+      "bust": "(G)"
+    },
+    {
+      "id": "syalulu_まいか",
+      "name": "まいか",
+      "age": "20歳",
+      "height": "147cm",
+      "bust": "(E)"
+    },
+    {
+      "id": "syalulu_あむ",
+      "name": "あむ",
+      "age": "20歳",
+      "height": "165cm",
+      "bust": "(E)"
+    },
+    {
+      "id": "syalulu_みなみ",
+      "name": "みなみ",
+      "age": "26歳",
+      "height": "153cm",
+      "bust": "(F)"
+    },
+    {
+      "id": "syalulu_ひより",
+      "name": "ひより",
+      "age": "28歳",
+      "height": "150cm",
+      "bust": "(E)"
+    },
+    {
+      "id": "syalulu_すみれ",
+      "name": "すみれ",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": "(F)"
+    },
+    {
+      "id": "syalulu_りな",
+      "name": "りな",
+      "age": "19歳",
+      "height": "157cm",
+      "bust": "(D)"
+    },
+    {
+      "id": "syalulu_まゆ",
+      "name": "まゆ",
+      "age": "23歳",
+      "height": "163cm",
+      "bust": "(D)"
+    },
+    {
+      "id": "syalulu_はな",
+      "name": "はな",
+      "age": "20歳",
+      "height": "158cm",
+      "bust": "(C)"
+    },
+    {
+      "id": "syalulu_らん",
+      "name": "らん",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": "(D)"
+    },
+    {
+      "id": "syalulu_なつき",
+      "name": "なつき",
+      "age": "28歳",
+      "height": "160cm",
+      "bust": "(G)"
+    },
+    {
+      "id": "syalulu_ありす",
+      "name": "ありす",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": "(F)"
+    },
+    {
+      "id": "syalulu_なぎ",
+      "name": "なぎ",
+      "age": "21歳",
+      "height": "160cm",
+      "bust": "(G)"
+    },
+    {
+      "id": "syalulu_すず",
+      "name": "すず",
+      "age": "22歳",
+      "height": "156cm",
+      "bust": "(C)"
+    },
+    {
+      "id": "syalulu_さき",
+      "name": "さき",
+      "age": "24歳",
+      "height": "159cm",
+      "bust": "(E)"
+    },
+    {
+      "id": "syalulu_さな",
+      "name": "さな",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": "(D)"
+    },
+    {
+      "id": "syalulu_みれい",
+      "name": "みれい",
+      "age": "23歳",
+      "height": "156cm",
+      "bust": "(E)"
+    },
+    {
+      "id": "syalulu_ひなの",
+      "name": "ひなの",
+      "age": "23歳",
+      "height": "163cm",
+      "bust": "(E)"
+    },
+    {
+      "id": "syalulu_もあ",
+      "name": "もあ",
+      "age": "22歳",
+      "height": "148cm",
+      "bust": "(F)"
+    },
+    {
+      "id": "syalulu_ゆう",
+      "name": "ゆう",
+      "age": "25歳",
+      "height": "155cm",
+      "bust": "(E)"
+    },
+    {
+      "id": "syalulu_かのん",
+      "name": "かのん",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": "(D)"
+    },
+    {
+      "id": "syalulu_じゅん",
+      "name": "じゅん",
+      "age": "25歳",
+      "height": "158cm",
+      "bust": "(E)"
+    },
+    {
+      "id": "syalulu_みな",
+      "name": "みな",
+      "age": "23歳",
+      "height": "160cm",
+      "bust": "(E)"
+    }
+  ]
+}

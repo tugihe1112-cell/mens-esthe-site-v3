@@ -1,0 +1,212 @@
+{
+  "id": 60316,
+  "name": "Silk (シルク)",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都渋谷区笹塚",
+  "image": "/images/shops/silk.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "12:00～5:00",
+  "isPremium": false,
+  "color": "from-gray-900 to-slate-900",
+  "tags": [
+    "初台・笹塚エリア",
+    "年中無休",
+    "深夜営業"
+  ],
+  "websiteUrl": "http://www.ms-silk.tokyo/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_森 かれん",
+      "name": "森 かれん",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_木倉 しずく",
+      "name": "木倉 しずく",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_小嶋 あかり",
+      "name": "小嶋 あかり",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_榮倉 ななみ",
+      "name": "榮倉 ななみ",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_白石 せいな",
+      "name": "白石 せいな",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_佐藤 はるみ",
+      "name": "佐藤 はるみ",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_葉山 ゆうな",
+      "name": "葉山 ゆうな",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_今井 かほ",
+      "name": "今井 かほ",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_秋元 ちはる",
+      "name": "秋元 ちはる",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_桃瀬 あい",
+      "name": "桃瀬 あい",
+      "age": 21,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_吉岡 えみ",
+      "name": "吉岡 えみ",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_浜崎 あん",
+      "name": "浜崎 あん",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_井上 まなみ",
+      "name": "井上 まなみ",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_一条 りり",
+      "name": "一条 りり",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_永井 さつき",
+      "name": "永井 さつき",
+      "age": 28,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_篠宮 ゆかり",
+      "name": "篠宮 ゆかり",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_伊藤 ひかり",
+      "name": "伊藤 ひかり",
+      "age": 19,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_北野 りん",
+      "name": "北野 りん",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_立花 しおん",
+      "name": "立花 しおん",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_加藤 らん",
+      "name": "加藤 らん",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_水原 ももか",
+      "name": "水原 ももか",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_一宮 こころ",
+      "name": "一宮 こころ",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_綾瀬 めい",
+      "name": "綾瀬 めい",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": []
+    }
+  ],
+  "area": [
+    "代々木・原宿",
+    "原宿"
+  ]
+}

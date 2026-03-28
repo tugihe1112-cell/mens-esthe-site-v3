@@ -1,0 +1,399 @@
+{
+  "id": "tokyo_chuo_ginza_ginza_rich",
+  "name": "Ginza Rich (銀座リッチ)",
+  "prefecture": "東京都",
+  "city": "中央区",
+  "area": "銀座",
+  "address": "東京都中央区銀座エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分15,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://ginza-rich.work/",
+  "nearestStation": "銀座一丁目駅",
+  "description": "銀座の日本人リラクゼーション。洗練された空間と厳選されたセラピスト。",
+  "brandId": "ginza_rich",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "ginza_rich_天使みな",
+      "name": "天使みな",
+      "age": "26歳",
+      "height": "164cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_北川はな",
+      "name": "北川はな",
+      "age": "26歳",
+      "height": "165cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_紺野ありさ",
+      "name": "紺野ありさ",
+      "age": "27歳",
+      "height": "152cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "ginza_rich_仲間りほ",
+      "name": "仲間りほ",
+      "age": "26歳",
+      "height": "157cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_松村しほ",
+      "name": "松村しほ",
+      "age": "28歳",
+      "height": "157cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_浦沢もな",
+      "name": "浦沢もな",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_新木じゅり",
+      "name": "新木じゅり",
+      "age": "29歳",
+      "height": "161cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_戸沢ちさ",
+      "name": "戸沢ちさ",
+      "age": "24歳",
+      "height": "158cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_小坂あんり",
+      "name": "小坂あんり",
+      "age": "28歳",
+      "height": "162cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_仁科みやか",
+      "name": "仁科みやか",
+      "age": "28歳",
+      "height": "170cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_小嶋せりな",
+      "name": "小嶋せりな",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_生田みやび",
+      "name": "生田みやび",
+      "age": "27歳",
+      "height": "155cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_吉岡りり",
+      "name": "吉岡りり",
+      "age": "28歳",
+      "height": "166cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_柴咲そら",
+      "name": "柴咲そら",
+      "age": "28歳",
+      "height": "153cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "ginza_rich_関口かこ",
+      "name": "関口かこ",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_東條はすみ",
+      "name": "東條はすみ",
+      "age": "26歳",
+      "height": "163cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_高浪いあり",
+      "name": "高浪いあり",
+      "age": "31歳",
+      "height": "157cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_安藤なつ",
+      "name": "安藤なつ",
+      "age": "25歳",
+      "height": "161cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_新川つかさ",
+      "name": "新川つかさ",
+      "age": "28歳",
+      "height": "162cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_北乃くるみ",
+      "name": "北乃くるみ",
+      "age": "25歳",
+      "height": "164cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_里村ゆりあ",
+      "name": "里村ゆりあ",
+      "age": "29歳",
+      "height": "162cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_坂本ゆりな",
+      "name": "坂本ゆりな",
+      "age": "28歳",
+      "height": "163cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_雨宮くみ",
+      "name": "雨宮くみ",
+      "age": "25歳",
+      "height": "159cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_橋本かりん",
+      "name": "橋本かりん",
+      "age": "27歳",
+      "height": "158cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_今宮かれん",
+      "name": "今宮かれん",
+      "age": "28歳",
+      "height": "150cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_桜田ひなは",
+      "name": "桜田ひなは",
+      "age": "26歳",
+      "height": "169cm",
+      "bust": "(Gカップ)"
+    },
+    {
+      "id": "ginza_rich_高畑りか",
+      "name": "高畑りか",
+      "age": "25歳",
+      "height": "168cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_二宮なつき",
+      "name": "二宮なつき",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_清原ひまり",
+      "name": "清原ひまり",
+      "age": "27歳",
+      "height": "155cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_平子みお",
+      "name": "平子みお",
+      "age": "27歳",
+      "height": "165cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_有坂あかり",
+      "name": "有坂あかり",
+      "age": "26歳",
+      "height": "159cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_宮沢はるか",
+      "name": "宮沢はるか",
+      "age": "28歳",
+      "height": "164cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "ginza_rich_姫野さら",
+      "name": "姫野さら",
+      "age": "26歳",
+      "height": "157cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_真野こころ",
+      "name": "真野こころ",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_沢口まなつ",
+      "name": "沢口まなつ",
+      "age": "27歳",
+      "height": "156cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_小松ゆあ",
+      "name": "小松ゆあ",
+      "age": "25歳",
+      "height": "156cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_福山ましろ",
+      "name": "福山ましろ",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_桐谷るい",
+      "name": "桐谷るい",
+      "age": "27歳",
+      "height": "165cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_杉本あおい",
+      "name": "杉本あおい",
+      "age": "28歳",
+      "height": "163cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_秋元まい",
+      "name": "秋元まい",
+      "age": "28歳",
+      "height": "157cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_大橋すず",
+      "name": "大橋すず",
+      "age": "25歳",
+      "height": "152cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_高梨なぎさ",
+      "name": "高梨なぎさ",
+      "age": "25歳",
+      "height": "154cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_久松みれい",
+      "name": "久松みれい",
+      "age": "29歳",
+      "height": "157cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_上原みらい",
+      "name": "上原みらい",
+      "age": "26歳",
+      "height": "164cm",
+      "bust": "(Fカップ)"
+    },
+    {
+      "id": "ginza_rich_岡本ほのか",
+      "name": "岡本ほのか",
+      "age": "29歳",
+      "height": "162cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_遠藤しおん",
+      "name": "遠藤しおん",
+      "age": "28歳",
+      "height": "160cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_榎本りおな",
+      "name": "榎本りおな",
+      "age": "28歳",
+      "height": "159cm",
+      "bust": "(Eカップ)"
+    },
+    {
+      "id": "ginza_rich_藤原まり",
+      "name": "藤原まり",
+      "age": "25歳",
+      "height": "158cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_中島るか",
+      "name": "中島るか",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": "(Cカップ)"
+    },
+    {
+      "id": "ginza_rich_上野まほ",
+      "name": "上野まほ",
+      "age": "28歳",
+      "height": "160cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_西内にじほ",
+      "name": "西内にじほ",
+      "age": "27歳",
+      "height": "170cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_中里あいな",
+      "name": "中里あいな",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": "(Dカップ)"
+    },
+    {
+      "id": "ginza_rich_徳永りみ",
+      "name": "徳永りみ",
+      "age": "26歳",
+      "height": "159cm",
+      "bust": "(Cカップ)"
+    }
+  ]
+}

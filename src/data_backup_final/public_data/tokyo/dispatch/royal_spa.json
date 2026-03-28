@@ -1,0 +1,426 @@
+{
+  "id": "tokyo_dispatch_royal_spa",
+  "name": "Royal Spa (ロイヤルスパ) 麻布十番",
+  "prefecture": "東京都",
+  "city": "23区出張",
+  "area": "23wards",
+  "address": "東京都港区麻布十番（拠点）/ 23区出張",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 14,000円～",
+  "hours": "10:00～翌4:00",
+  "isPremium": false,
+  "tags": [
+    "23区出張",
+    "派遣型",
+    "麻布十番",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://royalspa.jp/top",
+  "nearestStation": "麻布十番駅 / 23区内出張",
+  "description": "麻布十番を拠点とする23区出張専門のメンズエステ。 / 料金システム: 60分14,000円 / 90分20,000円 / 120分28,000円 / 150分33,000円",
+  "brandId": "royal_spa",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "royal_spa_りな",
+      "name": "りな",
+      "age": 23,
+      "height": 158,
+      "bust": "83(D)"
+    },
+    {
+      "id": "royal_spa_ゆみ",
+      "name": "ゆみ",
+      "age": 22,
+      "height": 154,
+      "bust": "94(G)"
+    },
+    {
+      "id": "royal_spa_なつき",
+      "name": "なつき",
+      "age": 19,
+      "height": 156,
+      "bust": "83(D)"
+    },
+    {
+      "id": "royal_spa_ひなた",
+      "name": "ひなた",
+      "age": 24,
+      "height": 154,
+      "bust": "87(E)"
+    },
+    {
+      "id": "royal_spa_かえで",
+      "name": "かえで",
+      "age": 25,
+      "height": 162,
+      "bust": "85(D)"
+    },
+    {
+      "id": "royal_spa_つばさ",
+      "name": "つばさ",
+      "age": 27,
+      "height": 158,
+      "bust": "84(C)"
+    },
+    {
+      "id": "royal_spa_れいな",
+      "name": "れいな",
+      "age": 19,
+      "height": 164,
+      "bust": "107(J)"
+    },
+    {
+      "id": "royal_spa_あさひ",
+      "name": "あさひ",
+      "age": 24,
+      "height": 155,
+      "bust": "85(D)"
+    },
+    {
+      "id": "royal_spa_まな",
+      "name": "まな",
+      "age": 25,
+      "height": 148,
+      "bust": "90(H)"
+    },
+    {
+      "id": "royal_spa_あやめ",
+      "name": "あやめ",
+      "age": 20,
+      "height": 157,
+      "bust": "87(C)"
+    },
+    {
+      "id": "royal_spa_のあ",
+      "name": "のあ",
+      "age": 23,
+      "height": 166,
+      "bust": "86(E)"
+    },
+    {
+      "id": "royal_spa_ゆりか",
+      "name": "ゆりか",
+      "age": 26,
+      "height": 158,
+      "bust": "91(F)"
+    },
+    {
+      "id": "royal_spa_かおる",
+      "name": "かおる",
+      "age": 25,
+      "height": 148,
+      "bust": "86(E)"
+    },
+    {
+      "id": "royal_spa_かりん",
+      "name": "かりん",
+      "age": 26,
+      "height": 159,
+      "bust": "87(F)"
+    },
+    {
+      "id": "royal_spa_すい",
+      "name": "すい",
+      "age": 26,
+      "height": 166,
+      "bust": "95(G)"
+    },
+    {
+      "id": "royal_spa_ゆうか",
+      "name": "ゆうか",
+      "age": 26,
+      "height": 166,
+      "bust": "102(H)"
+    },
+    {
+      "id": "royal_spa_ゆあ",
+      "name": "ゆあ",
+      "age": 23,
+      "height": 156,
+      "bust": "89(F)"
+    },
+    {
+      "id": "royal_spa_まい",
+      "name": "まい",
+      "age": 27,
+      "height": 160,
+      "bust": "91(F)"
+    },
+    {
+      "id": "royal_spa_きさき",
+      "name": "きさき",
+      "age": 28,
+      "height": 163,
+      "bust": "83(D)"
+    },
+    {
+      "id": "royal_spa_みいな",
+      "name": "みいな",
+      "age": 26,
+      "height": 160,
+      "bust": "88(E)"
+    },
+    {
+      "id": "royal_spa_つき",
+      "name": "つき",
+      "age": 22,
+      "height": 160,
+      "bust": "93(F)"
+    },
+    {
+      "id": "royal_spa_りん",
+      "name": "りん",
+      "age": 25,
+      "height": 158,
+      "bust": "84(C)"
+    },
+    {
+      "id": "royal_spa_らら",
+      "name": "らら",
+      "age": 20,
+      "height": 170,
+      "bust": "85(D)"
+    },
+    {
+      "id": "royal_spa_わかな",
+      "name": "わかな",
+      "age": 23,
+      "height": 154,
+      "bust": "83(C)"
+    },
+    {
+      "id": "royal_spa_このは",
+      "name": "このは",
+      "age": 23,
+      "height": 149,
+      "bust": "94(F)"
+    },
+    {
+      "id": "royal_spa_なお",
+      "name": "なお",
+      "age": 27,
+      "height": 159,
+      "bust": "95(G)"
+    },
+    {
+      "id": "royal_spa_かいり",
+      "name": "かいり",
+      "age": 24,
+      "height": 157,
+      "bust": "84(D)"
+    },
+    {
+      "id": "royal_spa_ななせ",
+      "name": "ななせ",
+      "age": 25,
+      "height": 156,
+      "bust": "93(G)"
+    },
+    {
+      "id": "royal_spa_りり",
+      "name": "りり",
+      "age": 27,
+      "height": 159,
+      "bust": "91(G)"
+    },
+    {
+      "id": "royal_spa_みき",
+      "name": "みき",
+      "age": 25,
+      "height": 162,
+      "bust": "90(G)"
+    },
+    {
+      "id": "royal_spa_みわ",
+      "name": "みわ",
+      "age": 26,
+      "height": 163,
+      "bust": "90(G)"
+    },
+    {
+      "id": "royal_spa_えま",
+      "name": "えま",
+      "age": 20,
+      "height": 156,
+      "bust": "85(E)"
+    },
+    {
+      "id": "royal_spa_ゆな",
+      "name": "ゆな",
+      "age": 23,
+      "height": 156,
+      "bust": "85(E)"
+    },
+    {
+      "id": "royal_spa_えみり",
+      "name": "えみり",
+      "age": 24,
+      "height": 165,
+      "bust": "88(F)"
+    },
+    {
+      "id": "royal_spa_のぞみ",
+      "name": "のぞみ",
+      "age": 27,
+      "height": 159,
+      "bust": "82(C)"
+    },
+    {
+      "id": "royal_spa_れい",
+      "name": "れい",
+      "age": 21,
+      "height": 169,
+      "bust": "91(F)"
+    },
+    {
+      "id": "royal_spa_さくら",
+      "name": "さくら",
+      "age": 21,
+      "height": 157,
+      "bust": "85(E)"
+    },
+    {
+      "id": "royal_spa_さや",
+      "name": "さや",
+      "age": 20,
+      "height": 172,
+      "bust": "89(F)"
+    },
+    {
+      "id": "royal_spa_るい",
+      "name": "るい",
+      "age": 24,
+      "height": 157,
+      "bust": "84(E)"
+    },
+    {
+      "id": "royal_spa_みゆ",
+      "name": "みゆ",
+      "age": 25,
+      "height": 167,
+      "bust": "84(F)"
+    },
+    {
+      "id": "royal_spa_すみれ",
+      "name": "すみれ",
+      "age": 23,
+      "height": 167,
+      "bust": "87(C)"
+    },
+    {
+      "id": "royal_spa_こはる",
+      "name": "こはる",
+      "age": 25,
+      "height": 157,
+      "bust": "95(G)"
+    },
+    {
+      "id": "royal_spa_このみ",
+      "name": "このみ",
+      "age": 21,
+      "height": 158,
+      "bust": "84(D)"
+    },
+    {
+      "id": "royal_spa_みずか",
+      "name": "みずか",
+      "age": 26,
+      "height": 166,
+      "bust": "86(E)"
+    },
+    {
+      "id": "royal_spa_りりか",
+      "name": "りりか",
+      "age": 25,
+      "height": 163,
+      "bust": "96(I)"
+    },
+    {
+      "id": "royal_spa_るる",
+      "name": "るる",
+      "age": 21,
+      "height": 166,
+      "bust": "96(G)"
+    },
+    {
+      "id": "royal_spa_すず",
+      "name": "すず",
+      "age": 23,
+      "height": 156,
+      "bust": "82(C)"
+    },
+    {
+      "id": "royal_spa_れお",
+      "name": "れお",
+      "age": 21,
+      "height": 161,
+      "bust": "91(F)"
+    },
+    {
+      "id": "royal_spa_えみ",
+      "name": "えみ",
+      "age": 22,
+      "height": 159,
+      "bust": "82(D)"
+    },
+    {
+      "id": "royal_spa_ゆうり",
+      "name": "ゆうり",
+      "age": 23,
+      "height": 157,
+      "bust": "84(E)"
+    },
+    {
+      "id": "royal_spa_りか",
+      "name": "りか",
+      "age": 21,
+      "height": 158,
+      "bust": "84(D)"
+    },
+    {
+      "id": "royal_spa_ゆき",
+      "name": "ゆき",
+      "age": 21,
+      "height": 164,
+      "bust": "86(F)"
+    },
+    {
+      "id": "royal_spa_ねね",
+      "name": "ねね",
+      "age": 19,
+      "height": 163,
+      "bust": "86(F)"
+    },
+    {
+      "id": "royal_spa_さやか",
+      "name": "さやか",
+      "age": 25,
+      "height": 163,
+      "bust": "85(E)"
+    },
+    {
+      "id": "royal_spa_ありす",
+      "name": "ありす",
+      "age": 20,
+      "height": 150,
+      "bust": "84(E)"
+    },
+    {
+      "id": "royal_spa_ひかる",
+      "name": "ひかる",
+      "age": 24,
+      "height": 148,
+      "bust": "76(B)"
+    },
+    {
+      "id": "royal_spa_かこ",
+      "name": "かこ",
+      "age": 27,
+      "height": 161,
+      "bust": "87(F)"
+    }
+  ]
+}

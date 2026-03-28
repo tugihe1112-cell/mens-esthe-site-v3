@@ -1,0 +1,51 @@
+{
+  "id": 60316,
+  "name": "Silk (シルク)",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都渋谷区笹塚",
+  "image": "/images/shops/silk.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "12:00～5:00",
+  "isPremium": false,
+  "color": "from-gray-900 to-slate-900",
+  "tags": [
+    "初台・笹塚エリア",
+    "年中無休",
+    "深夜営業"
+  ],
+  "websiteUrl": "http://www.ms-silk.tokyo/",
+  "threads": [],
+  "therapists": [
+    "unknown_森 かれん",
+    "unknown_木倉 しずく",
+    "unknown_小嶋 あかり",
+    "unknown_榮倉 ななみ",
+    "unknown_白石 せいな",
+    "unknown_佐藤 はるみ",
+    "unknown_葉山 ゆうな",
+    "unknown_今井 かほ",
+    "unknown_秋元 ちはる",
+    "unknown_桃瀬 あい",
+    "unknown_吉岡 えみ",
+    "unknown_浜崎 あん",
+    "unknown_井上 まなみ",
+    "unknown_一条 りり",
+    "unknown_永井 さつき",
+    "unknown_篠宮 ゆかり",
+    "unknown_伊藤 ひかり",
+    "unknown_北野 りん",
+    "unknown_立花 しおん",
+    "unknown_加藤 らん",
+    "unknown_水原 ももか",
+    "unknown_一宮 こころ",
+    "unknown_綾瀬 めい"
+  ],
+  "area": [
+    "代々木・原宿",
+    "原宿"
+  ]
+}

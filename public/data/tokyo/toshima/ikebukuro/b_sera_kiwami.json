@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_toshima_ikebukuro_b_sera_kiwami",
+  "name": "美・セラ極～KIWAMI～",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都内各エリア（池袋・赤羽・大塚・巣鴨）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分15,000円～",
+  "hours": "10:00～3:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://b-s-kiwami.com/",
+  "nearestStation": "巣鴨駅、赤羽駅、駒込駅、池袋駅",
+  "description": "スタンダードコース: 90分15,000円 / 120分20,000円 / 150分25,000円 / 180分30,000円",
+  "threads": [],
+  "brandId": "b_sera_kiwami",
+  "therapists": []
+}

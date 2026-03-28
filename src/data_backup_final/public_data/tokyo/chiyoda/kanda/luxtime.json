@@ -1,0 +1,804 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://luxtime.jp/",
+  "description": "都内7エリア（秋葉原/神田/銀座/新橋/五反田/池袋/錦糸町）で展開する人気店。圧倒的な在籍数と質の高いサービス。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "高リピート率"
+  ],
+  "brandId": "luxtime",
+  "threads": [],
+  "id": "tokyo_chiyoda_kanda_luxtime",
+  "name": "Luxtime (神田店)",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "神田",
+  "address": "東京都千代田区神田エリア",
+  "therapists": [
+    {
+      "id": "luxtime_宗田あおは",
+      "name": "宗田あおは",
+      "age": "28歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_速水せな",
+      "name": "速水せな",
+      "age": "27歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_蓮水ふうり",
+      "name": "蓮水ふうり",
+      "age": "23歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_柚原もえ",
+      "name": "柚原もえ",
+      "age": "23歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_有栖のあ",
+      "name": "有栖のあ",
+      "age": "24歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_深見れおな",
+      "name": "深見れおな",
+      "age": "24歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_木南ちか",
+      "name": "木南ちか",
+      "age": "19歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_水本れみ",
+      "name": "水本れみ",
+      "age": "24歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_秋元めいみ",
+      "name": "秋元めいみ",
+      "age": "22歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_岸ののか",
+      "name": "岸ののか",
+      "age": "25歳",
+      "height": "165cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "luxtime_瞳みらい",
+      "name": "瞳みらい",
+      "age": "23歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_山本なな",
+      "name": "山本なな",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_村瀬とあ",
+      "name": "村瀬とあ",
+      "age": "23歳",
+      "height": "153cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "luxtime_浅井りこ",
+      "name": "浅井りこ",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_星野ななこ",
+      "name": "星野ななこ",
+      "age": "27歳",
+      "height": "149cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_杉浦ゆい",
+      "name": "杉浦ゆい",
+      "age": "27歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_森井ふゆ",
+      "name": "森井ふゆ",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_鈴川こはる",
+      "name": "鈴川こはる",
+      "age": "21歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_花井なぎ",
+      "name": "花井なぎ",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_三浦ことね",
+      "name": "三浦ことね",
+      "age": "21歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_中川りつ",
+      "name": "中川りつ",
+      "age": "20歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_海野そら",
+      "name": "海野そら",
+      "age": "28歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_桐谷みのり",
+      "name": "桐谷みのり",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_望月みく",
+      "name": "望月みく",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_瀬戸口みお",
+      "name": "瀬戸口みお",
+      "age": "22歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_上原れい",
+      "name": "上原れい",
+      "age": "23歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_星奈ゆうな",
+      "name": "星奈ゆうな",
+      "age": "20歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_最上あやの",
+      "name": "最上あやの",
+      "age": "22歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_天乃りお",
+      "name": "天乃りお",
+      "age": "21歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_葛城えれな",
+      "name": "葛城えれな",
+      "age": "19歳",
+      "height": "151cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "luxtime_雪見かずは",
+      "name": "雪見かずは",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_常田まどか",
+      "name": "常田まどか",
+      "age": "21歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_真田めぐみ",
+      "name": "真田めぐみ",
+      "age": "21歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_倉本かほ",
+      "name": "倉本かほ",
+      "age": "21歳",
+      "height": "151cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "luxtime_崎園まみ",
+      "name": "崎園まみ",
+      "age": "21歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_姫野ちふゆ",
+      "name": "姫野ちふゆ",
+      "age": "18歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_森宮みずき",
+      "name": "森宮みずき",
+      "age": "22歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_由井つきか",
+      "name": "由井つきか",
+      "age": "21歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_月見いおり",
+      "name": "月見いおり",
+      "age": "22歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_釘宮ゆうか",
+      "name": "釘宮ゆうか",
+      "age": "24歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_天道しずく",
+      "name": "天道しずく",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_早瀬ほのか",
+      "name": "早瀬ほのか",
+      "age": "26歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_冬月みさと",
+      "name": "冬月みさと",
+      "age": "25歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_小森いろは",
+      "name": "小森いろは",
+      "age": "20歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_春奈おぼろ",
+      "name": "春奈おぼろ",
+      "age": "21歳",
+      "height": "163cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "luxtime_伊吹れむ",
+      "name": "伊吹れむ",
+      "age": "23歳",
+      "height": "170cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "luxtime_神楽ふうか",
+      "name": "神楽ふうか",
+      "age": "26歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_宮坂らん",
+      "name": "宮坂らん",
+      "age": "28歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_竹内ななお",
+      "name": "竹内ななお",
+      "age": "28歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_白浜りの",
+      "name": "白浜りの",
+      "age": "20歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_成宮りん",
+      "name": "成宮りん",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_七星うた",
+      "name": "七星うた",
+      "age": "22歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_秋葉さくら",
+      "name": "秋葉さくら",
+      "age": "27歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_一条せりな",
+      "name": "一条せりな",
+      "age": "22歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_高瀬あいり",
+      "name": "高瀬あいり",
+      "age": "22歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_安藤れな",
+      "name": "安藤れな",
+      "age": "28歳",
+      "height": "164cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "luxtime_水澤まりな",
+      "name": "水澤まりな",
+      "age": "28歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_真白ことは",
+      "name": "真白ことは",
+      "age": "23歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_秋山せりか",
+      "name": "秋山せりか",
+      "age": "25歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_桃井にこ",
+      "name": "桃井にこ",
+      "age": "20歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_遠山ひめ",
+      "name": "遠山ひめ",
+      "age": "23歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_犬神あずき",
+      "name": "犬神あずき",
+      "age": "25歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_加賀美えれん",
+      "name": "加賀美えれん",
+      "age": "25歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_池田レイナ",
+      "name": "池田レイナ",
+      "age": "24歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_増田ねね",
+      "name": "増田ねね",
+      "age": "23歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_雪乃みう",
+      "name": "雪乃みう",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_佐々木えま",
+      "name": "佐々木えま",
+      "age": "24歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_椿谷ちふゆ",
+      "name": "椿谷ちふゆ",
+      "age": "19歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_雪村すず",
+      "name": "雪村すず",
+      "age": "25歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_姫村さち",
+      "name": "姫村さち",
+      "age": "24歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_夏川まお",
+      "name": "夏川まお",
+      "age": "21歳",
+      "height": "155cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "luxtime_白坂ゆいな",
+      "name": "白坂ゆいな",
+      "age": "24歳",
+      "height": "149cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_夜空みづき",
+      "name": "夜空みづき",
+      "age": "24歳",
+      "height": "147cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_白波みおん",
+      "name": "白波みおん",
+      "age": "20歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_一ノ瀬あかり",
+      "name": "一ノ瀬あかり",
+      "age": "19歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_百田そよか",
+      "name": "百田そよか",
+      "age": "25歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_鈴木まきな",
+      "name": "鈴木まきな",
+      "age": "26歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_星川あい",
+      "name": "星川あい",
+      "age": "26歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_小野寺かやの",
+      "name": "小野寺かやの",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_工藤ねる",
+      "name": "工藤ねる",
+      "age": "22歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_松雪るい",
+      "name": "松雪るい",
+      "age": "27歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_美澄かなで",
+      "name": "美澄かなで",
+      "age": "28歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_水川まりん",
+      "name": "水川まりん",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_夜神かんな",
+      "name": "夜神かんな",
+      "age": "27歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_美咲かのん",
+      "name": "美咲かのん",
+      "age": "28歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_佐野ほまれ",
+      "name": "佐野ほまれ",
+      "age": "21歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_坂本らら",
+      "name": "坂本らら",
+      "age": "20歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_海堂ちなつ",
+      "name": "海堂ちなつ",
+      "age": "24歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_白兎ゆらの",
+      "name": "白兎ゆらの",
+      "age": "20歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_雨宮るみ",
+      "name": "雨宮るみ",
+      "age": "22歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_新妻りり",
+      "name": "新妻りり",
+      "age": "28歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_向坂みな",
+      "name": "向坂みな",
+      "age": "21歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_村上みゆ",
+      "name": "村上みゆ",
+      "age": "27歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_水原きこ",
+      "name": "水原きこ",
+      "age": "25歳",
+      "height": "161cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "luxtime_関川ちえ",
+      "name": "関川ちえ",
+      "age": "27歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_青沼めい",
+      "name": "青沼めい",
+      "age": "24歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_黒川ののは",
+      "name": "黒川ののは",
+      "age": "21歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_遠山かなえ",
+      "name": "遠山かなえ",
+      "age": "26歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_花村いちか",
+      "name": "花村いちか",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_唐沢みわ",
+      "name": "唐沢みわ",
+      "age": "26歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_天使める",
+      "name": "天使める",
+      "age": "22歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_沢城もも",
+      "name": "沢城もも",
+      "age": "23歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_黒崎ゆあ",
+      "name": "黒崎ゆあ",
+      "age": "24歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_宇佐美ゆきの",
+      "name": "宇佐美ゆきの",
+      "age": "19歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_佐久間ゆり",
+      "name": "佐久間ゆり",
+      "age": "28歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_平野さき",
+      "name": "平野さき",
+      "age": "28歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_宮本つむぎ",
+      "name": "宮本つむぎ",
+      "age": "20歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_桜井あやみ",
+      "name": "桜井あやみ",
+      "age": "19歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_由良のの",
+      "name": "由良のの",
+      "age": "25歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_花咲ひまり",
+      "name": "花咲ひまり",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "luxtime_美谷はる",
+      "name": "美谷はる",
+      "age": "26歳",
+      "height": "166cm",
+      "bust": null
+    }
+  ]
+}

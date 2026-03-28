@@ -1,0 +1,209 @@
+{
+  "id": 60309,
+  "name": "Gloria (グロリア)",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都渋谷区 (最寄: 代々木上原駅)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 20,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": true,
+  "color": "from-yellow-500 to-amber-600",
+  "tags": [
+    "日本人",
+    "一般",
+    "ルーム",
+    "高級店"
+  ],
+  "websiteUrl": "https://esthe-gloria.com/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_みさ",
+      "name": "みさ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "T158",
+        "B(E)"
+      ]
+    },
+    {
+      "id": "unknown_しずく",
+      "name": "しずく",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T163",
+        "B(F)"
+      ]
+    },
+    {
+      "id": "unknown_かなで",
+      "name": "かなで",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T156",
+        "B(D)"
+      ]
+    },
+    {
+      "id": "unknown_かれん",
+      "name": "かれん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T160",
+        "B(E)"
+      ]
+    },
+    {
+      "id": "unknown_ひな",
+      "name": "ひな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "20歳",
+        "T155",
+        "B(C)"
+      ]
+    },
+    {
+      "id": "unknown_ゆな",
+      "name": "ゆな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T162",
+        "B(D)"
+      ]
+    },
+    {
+      "id": "unknown_りな",
+      "name": "りな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T159",
+        "B(E)"
+      ]
+    },
+    {
+      "id": "unknown_あいり",
+      "name": "あいり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T157",
+        "B(D)"
+      ]
+    },
+    {
+      "id": "unknown_みう",
+      "name": "みう",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "T161",
+        "B(C)"
+      ]
+    },
+    {
+      "id": "unknown_さき",
+      "name": "さき",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "27歳",
+        "T158",
+        "B(F)"
+      ]
+    },
+    {
+      "id": "unknown_ゆい",
+      "name": "ゆい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T165",
+        "B(G)"
+      ]
+    },
+    {
+      "id": "unknown_りお",
+      "name": "りお",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T154",
+        "B(D)"
+      ]
+    },
+    {
+      "id": "unknown_めい",
+      "name": "めい",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T160",
+        "B(E)"
+      ]
+    },
+    {
+      "id": "unknown_まり",
+      "name": "まり",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T156",
+        "B(D)"
+      ]
+    },
+    {
+      "id": "unknown_さくら",
+      "name": "さくら",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T158",
+        "B(C)"
+      ]
+    }
+  ],
+  "area": [
+    "代々木・原宿",
+    "原宿"
+  ]
+}

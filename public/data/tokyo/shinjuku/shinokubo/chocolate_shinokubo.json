@@ -1,0 +1,30 @@
+{
+  "id": 60249,
+  "name": "Chocolate (新大久保ルーム)",
+  "prefecture": "東京都",
+  "city": "新大久保",
+  "region": "関東エリア",
+  "address": "東京都新宿区百人町２丁目１１−２５ (最寄: 新大久保駅)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 19,000円～",
+  "hours": "12:00～25:00",
+  "isPremium": false,
+  "color": "from-pink-400 to-rose-600",
+  "tags": [
+    "日本人",
+    "個室待機",
+    "駅チカ"
+  ],
+  "websiteUrl": "https://www.aroma-chocolate.com/",
+  "threads": [],
+  "therapists": [
+    "unknown_白石 ゆな",
+    "unknown_本条 さゆり",
+    "unknown_日向 ゆう",
+    "unknown_植田 えま",
+    "unknown_森山 みさ",
+    "unknown_宇佐美 ありさ"
+  ]
+}

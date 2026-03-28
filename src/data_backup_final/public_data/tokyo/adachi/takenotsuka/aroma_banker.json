@@ -1,0 +1,64 @@
+{
+  "id": "tokyo_adachi_takenotsuka_aroma_banker",
+  "name": "Aroma BANKER (アロマバンカー)",
+  "url": "https://aroma-banker.com/",
+  "area": "竹ノ塚",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "足立区",
+  "brandId": "aroma_banker",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "aroma_banker_新垣 あい",
+      "name": "新垣 あい",
+      "age": 42,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "aroma_banker_桜庭 あい",
+      "name": "桜庭 あい",
+      "age": 44,
+      "height": 165,
+      "bust": "(F)"
+    },
+    {
+      "id": "aroma_banker_本多 ちか",
+      "name": "本多 ちか",
+      "age": 48,
+      "height": 155,
+      "bust": "(C)"
+    },
+    {
+      "id": "aroma_banker_森田 ゆう",
+      "name": "森田 ゆう",
+      "age": 46,
+      "height": 158,
+      "bust": "(D)"
+    }
+  ]
+}

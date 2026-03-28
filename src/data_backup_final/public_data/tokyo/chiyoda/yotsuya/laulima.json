@@ -1,0 +1,99 @@
+{
+  "id": "tokyo_chiyoda_yotsuya_laulima",
+  "name": "Laulima (ラウリマ)",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "四谷",
+  "region": "新宿エリア",
+  "address": "東京都新宿区四谷4丁目",
+  "nearestStation": "四谷三丁目駅",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 19,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "color": "from-pink-500 to-rose-500",
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "初回特典あり",
+    "日本人"
+  ],
+  "websiteUrl": "http://www.laulima.tokyo/",
+  "description": "四谷の完全個室メンズエステ。厳選されたセラピストによる極上の癒やし。",
+  "brandId": "laulima",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "laulima_ゆうか",
+      "name": "ゆうか",
+      "age": "31歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "laulima_乙葉",
+      "name": "乙葉",
+      "age": "31歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "laulima_中川 美沙",
+      "name": "中川 美沙",
+      "age": "27歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "laulima_草薙 蘭",
+      "name": "草薙 蘭",
+      "age": "33歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "laulima_神崎 なおみ",
+      "name": "神崎 なおみ",
+      "age": "36歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "laulima_水野 恋",
+      "name": "水野 恋",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "laulima_磯野 すず",
+      "name": "磯野 すず",
+      "age": "23歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "laulima_涼風 ななみ",
+      "name": "涼風 ななみ",
+      "age": "29歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "laulima_石田 アイナ",
+      "name": "石田 アイナ",
+      "age": "31歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "laulima_田中 りえ",
+      "name": "田中 りえ",
+      "age": "31歳",
+      "height": "157cm",
+      "bust": null
+    }
+  ]
+}

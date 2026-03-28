@@ -1,0 +1,619 @@
+{
+  "id": 60349,
+  "name": "NAOMI SPA (ナオミスパ)",
+  "prefecture": "東京都",
+  "city": "恵比寿",
+  "region": "関東エリア",
+  "address": "東京都渋谷区恵比寿",
+  "image": "https://via.placeholder.com/300x200?text=NaomiSpa",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "10:00〜23:00",
+  "isPremium": true,
+  "color": "from-gray-800 to-slate-700",
+  "tags": [
+    "高級店",
+    "完全個室",
+    "セラピスト多数"
+  ],
+  "websiteUrl": "http://naomi-spa.com/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_片桐ひめか (18)",
+      "name": "片桐ひめか (18)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "160cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_音ゆづき (23)",
+      "name": "音ゆづき (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "159cm",
+        "Dcup"
+      ]
+    },
+    {
+      "id": "unknown_福富あすか (21)",
+      "name": "福富あすか (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "153cm",
+        "Gcup"
+      ]
+    },
+    {
+      "id": "unknown_葵そら (22)",
+      "name": "葵そら (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "153cm",
+        "Ccup"
+      ]
+    },
+    {
+      "id": "unknown_櫻井える (22)",
+      "name": "櫻井える (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "168cm",
+        "Hcup"
+      ]
+    },
+    {
+      "id": "unknown_黒木かりん (20)",
+      "name": "黒木かりん (20)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "150cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_星咲ねむ (21)",
+      "name": "星咲ねむ (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "158cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_八咲りえ (20)",
+      "name": "八咲りえ (20)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "160cm",
+        "Ccup"
+      ]
+    },
+    {
+      "id": "unknown_卯月みれい (23)",
+      "name": "卯月みれい (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "163cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_行本あん (24)",
+      "name": "行本あん (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "166cm",
+        "Gcup"
+      ]
+    },
+    {
+      "id": "unknown_天野みあ (20)",
+      "name": "天野みあ (20)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "163cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_音葉らん (29)",
+      "name": "音葉らん (29)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "-",
+        "-"
+      ]
+    },
+    {
+      "id": "unknown_咲良ゆら (23)",
+      "name": "咲良ゆら (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "-",
+        "-"
+      ]
+    },
+    {
+      "id": "unknown_石川あんな (21)",
+      "name": "石川あんな (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "-",
+        "-"
+      ]
+    },
+    {
+      "id": "unknown_中條えり (22)",
+      "name": "中條えり (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "-",
+        "-"
+      ]
+    },
+    {
+      "id": "unknown_一ノ瀬かれん (24)",
+      "name": "一ノ瀬かれん (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "157cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_神園もか (24)",
+      "name": "神園もか (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "170cm",
+        "Gcup"
+      ]
+    },
+    {
+      "id": "unknown_朝日まなひ (23)",
+      "name": "朝日まなひ (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "159cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_春咲うらら (25)",
+      "name": "春咲うらら (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "164cm",
+        "Dcup"
+      ]
+    },
+    {
+      "id": "unknown_織田りお (22)",
+      "name": "織田りお (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "156cm",
+        "Gcup"
+      ]
+    },
+    {
+      "id": "unknown_五十嵐はな (23)",
+      "name": "五十嵐はな (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "146cm",
+        "Gcup"
+      ]
+    },
+    {
+      "id": "unknown_白雪えな (23)",
+      "name": "白雪えな (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "159cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_湊崎さな (28)",
+      "name": "湊崎さな (28)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "159cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_平井まりな (26)",
+      "name": "平井まりな (26)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "163cm",
+        "Hcup"
+      ]
+    },
+    {
+      "id": "unknown_藤原れいか (24)",
+      "name": "藤原れいか (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "153cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_伊藤りこ (22)",
+      "name": "伊藤りこ (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "155cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_市川ひめ (23)",
+      "name": "市川ひめ (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "153cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_月城あすな (24)",
+      "name": "月城あすな (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "158cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_神宮寺れな (24)",
+      "name": "神宮寺れな (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "156cm",
+        "Gcup"
+      ]
+    },
+    {
+      "id": "unknown_西村まりん (24)",
+      "name": "西村まりん (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "162cm",
+        "Hcup"
+      ]
+    },
+    {
+      "id": "unknown_波月あお (25)",
+      "name": "波月あお (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "164cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_一条なみ (25)",
+      "name": "一条なみ (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "150cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_雪音かのん (23)",
+      "name": "雪音かのん (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "159cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_皐月みな (23)",
+      "name": "皐月みな (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "160cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_花咲あいな (22)",
+      "name": "花咲あいな (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "160cm",
+        "Gcup"
+      ]
+    },
+    {
+      "id": "unknown_花宮なな (22)",
+      "name": "花宮なな (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "157cm",
+        "Dcup"
+      ]
+    },
+    {
+      "id": "unknown_相川ありさ (23)",
+      "name": "相川ありさ (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "153cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_谷口りさ (21)",
+      "name": "谷口りさ (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "155cm",
+        "Dcup"
+      ]
+    },
+    {
+      "id": "unknown_永瀬ゆめ (24)",
+      "name": "永瀬ゆめ (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "147cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_初音りな (20)",
+      "name": "初音りな (20)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "160cm",
+        "Gcup"
+      ]
+    },
+    {
+      "id": "unknown_城咲もな (23)",
+      "name": "城咲もな (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "156cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_美鈴りこ (25)",
+      "name": "美鈴りこ (25)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "155cm",
+        "Dcup"
+      ]
+    },
+    {
+      "id": "unknown_安堂まつり (26)",
+      "name": "安堂まつり (26)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "166cm",
+        "Dcup"
+      ]
+    },
+    {
+      "id": "unknown_白井りか (22)",
+      "name": "白井りか (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "156cm",
+        "Hcup"
+      ]
+    },
+    {
+      "id": "unknown_桃瀬りん (21)",
+      "name": "桃瀬りん (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "152cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_水乃ゆき (24)",
+      "name": "水乃ゆき (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "163cm",
+        "Dcup"
+      ]
+    },
+    {
+      "id": "unknown_谷元りさ (22)",
+      "name": "谷元りさ (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "153cm",
+        "Ccup"
+      ]
+    },
+    {
+      "id": "unknown_古瀬こはる (23)",
+      "name": "古瀬こはる (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "168cm",
+        "Dcup"
+      ]
+    },
+    {
+      "id": "unknown_愛咲あや (22)",
+      "name": "愛咲あや (22)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "149cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_葉月りさ (23)",
+      "name": "葉月りさ (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "159cm",
+        "Ecup"
+      ]
+    },
+    {
+      "id": "unknown_愛沢あかね (23)",
+      "name": "愛沢あかね (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "155cm",
+        "Fcup"
+      ]
+    },
+    {
+      "id": "unknown_加藤にな (23)",
+      "name": "加藤にな (23)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "153cm",
+        "Dcup"
+      ]
+    },
+    {
+      "id": "unknown_武井ねね (24)",
+      "name": "武井ねね (24)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "170cm",
+        "Ccup"
+      ]
+    },
+    {
+      "id": "unknown_神楽しり (21)",
+      "name": "神楽しり (21)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "164cm",
+        "Fcup"
+      ]
+    }
+  ],
+  "area": "恵比寿"
+}

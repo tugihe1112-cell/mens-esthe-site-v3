@@ -1,0 +1,328 @@
+{
+  "id": "tokyo_shibuya_sasazuka_reve_spa",
+  "name": "REVE SPA (レーヴスパ)",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "area": "笹塚",
+  "address": "東京都渋谷区・世田谷区エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://revespa.net/",
+  "nearestStation": "笹塚駅 / 千歳烏山駅 / 明大前駅",
+  "description": "笹塚・千歳烏山・明大前のメンズエステ。 / 料金システム: 90分18,000円 / 120分23,000円 / 150分28,000円",
+  "brandId": "reve_spa",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "reve_spa_畑野ゆず",
+      "name": "畑野ゆず",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_長谷川みづき",
+      "name": "長谷川みづき",
+      "age": 30,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_千里ちあき",
+      "name": "千里ちあき",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_白石あも",
+      "name": "白石あも",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_一ノ瀬のあ",
+      "name": "一ノ瀬のあ",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_滝沢ほのか",
+      "name": "滝沢ほのか",
+      "age": 30,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_水川あや",
+      "name": "水川あや",
+      "age": 35,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_夏目こころ",
+      "name": "夏目こころ",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_八神れい",
+      "name": "八神れい",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_星あやか",
+      "name": "星あやか",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_花宮もも",
+      "name": "花宮もも",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_花園かりん",
+      "name": "花園かりん",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_秦野るり",
+      "name": "秦野るり",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_白瀬さち",
+      "name": "白瀬さち",
+      "age": 21,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_神楽れん",
+      "name": "神楽れん",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_月城くるみ",
+      "name": "月城くるみ",
+      "age": 21,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_永瀬れいら",
+      "name": "永瀬れいら",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_結城らん",
+      "name": "結城らん",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_星乃みつき",
+      "name": "星乃みつき",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_大野ゆな",
+      "name": "大野ゆな",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_立花ゆづき",
+      "name": "立花ゆづき",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_姫乃りりか",
+      "name": "姫乃りりか",
+      "age": 21,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_百瀬れん",
+      "name": "百瀬れん",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_森りりあ",
+      "name": "森りりあ",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_真鍋むつみ",
+      "name": "真鍋むつみ",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_白鳥もえ",
+      "name": "白鳥もえ",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_蒼井ことみ",
+      "name": "蒼井ことみ",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_空乃りん",
+      "name": "空乃りん",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_雪城さら",
+      "name": "雪城さら",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_綾瀬まいか",
+      "name": "綾瀬まいか",
+      "age": 29,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_水原あかり",
+      "name": "水原あかり",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_石野ゆう",
+      "name": "石野ゆう",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_七瀬ひまり",
+      "name": "七瀬ひまり",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_有村もえ",
+      "name": "有村もえ",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_桐生もか",
+      "name": "桐生もか",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_白石いつき",
+      "name": "白石いつき",
+      "age": 26,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_桜井ひなた",
+      "name": "桜井ひなた",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": null
+    },
+    {
+      "id": "reve_spa_一条ななみ",
+      "name": "一条ななみ",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": null
+    }
+  ]
+}

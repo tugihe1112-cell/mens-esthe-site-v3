@@ -1,0 +1,244 @@
+{
+  "id": "tokyo_shinagawa_shinagawa_grace",
+  "name": "GRACE (グレース)",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "area": "品川",
+  "address": "東京都品川区品川エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分14,000円～",
+  "hours": "10:00～24:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "http://grace-meguro.com/",
+  "nearestStation": "品川駅",
+  "description": "目黒・品川・中目黒の日本人リラクゼーション。 / 料金システム: 60分14,000円 / 90分18,000円 / 120分23,000円 / 150分28,000円",
+  "threads": [],
+  "brandId": "grace",
+  "therapists": [
+    {
+      "id": "grace_石原あやか",
+      "name": "石原 あやか",
+      "age": 29,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "grace_森にき",
+      "name": "森 にき",
+      "age": 29,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "grace_松坂さおり",
+      "name": "松坂 さおり",
+      "age": 27,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "grace_大崎ゆうこ",
+      "name": "大崎 ゆうこ",
+      "age": 32,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "grace_中里ゆう",
+      "name": "中里 ゆう",
+      "age": 26,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "grace_新田りえ",
+      "name": "新田 りえ",
+      "age": 41,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "grace_白石こはる",
+      "name": "白石 こはる",
+      "age": 27,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "grace_葉月りょう",
+      "name": "葉月 りょう",
+      "age": 36,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "grace_伊波ひな",
+      "name": "伊波 ひな",
+      "age": 34,
+      "tags": []
+    },
+    {
+      "id": "grace_壇れいか",
+      "name": "壇 れいか",
+      "age": 44,
+      "tags": []
+    },
+    {
+      "id": "grace_池田モエ",
+      "name": "池田 モエ",
+      "age": 28,
+      "tags": []
+    },
+    {
+      "id": "grace_新垣マユ",
+      "name": "新垣 マユ",
+      "age": 27,
+      "tags": []
+    },
+    {
+      "id": "grace_月野あおい",
+      "name": "月野 あおい",
+      "age": 33,
+      "tags": []
+    },
+    {
+      "id": "grace_一条さくら",
+      "name": "一条さくら",
+      "age": 32,
+      "tags": []
+    },
+    {
+      "id": "grace_水島えみり",
+      "name": "水島えみり",
+      "age": 35,
+      "tags": []
+    },
+    {
+      "id": "grace_南ちか",
+      "name": "南 ちか",
+      "age": 27,
+      "tags": []
+    },
+    {
+      "id": "grace_有田カスミ",
+      "name": "有田 カスミ",
+      "age": 28,
+      "tags": []
+    },
+    {
+      "id": "grace_荒木りな",
+      "name": "荒木 りな",
+      "age": 31,
+      "tags": []
+    },
+    {
+      "id": "grace_風間じゅん",
+      "name": "風間 じゅん",
+      "age": 41,
+      "tags": []
+    },
+    {
+      "id": "grace_冬月なな",
+      "name": "冬月なな",
+      "age": 33,
+      "tags": []
+    },
+    {
+      "id": "grace_岡マルミ",
+      "name": "岡 マルミ",
+      "age": 36,
+      "tags": []
+    },
+    {
+      "id": "grace_紫月みな",
+      "name": "紫月 みな",
+      "age": 35,
+      "tags": []
+    },
+    {
+      "id": "grace_福富れな",
+      "name": "福富 れな",
+      "age": 39,
+      "tags": []
+    },
+    {
+      "id": "grace_星しほ",
+      "name": "星 しほ",
+      "age": 36,
+      "tags": []
+    },
+    {
+      "id": "grace_小栗あやな",
+      "name": "小栗 あやな",
+      "age": 35,
+      "tags": []
+    },
+    {
+      "id": "grace_一ノ瀬レナ",
+      "name": "一ノ瀬 レナ",
+      "age": 25,
+      "tags": []
+    },
+    {
+      "id": "grace_高梨みゆう",
+      "name": "高梨 みゆう",
+      "age": 31,
+      "tags": []
+    },
+    {
+      "id": "grace_港めぐみ",
+      "name": "港 めぐみ",
+      "age": 35,
+      "tags": []
+    },
+    {
+      "id": "grace_佐藤うらら",
+      "name": "佐藤 うらら",
+      "age": 28,
+      "tags": [
+        "新人"
+      ]
+    },
+    {
+      "id": "grace_雪乃さつき",
+      "name": "雪乃 さつき",
+      "age": 30,
+      "tags": []
+    },
+    {
+      "id": "grace_二ノ宮あい",
+      "name": "二ノ宮 あい",
+      "age": 34,
+      "tags": []
+    },
+    {
+      "id": "grace_麻川さら",
+      "name": "麻川さら",
+      "age": 29,
+      "tags": []
+    },
+    {
+      "id": "grace_川口ふう",
+      "name": "川口 ふう",
+      "age": 26,
+      "tags": []
+    }
+  ]
+}

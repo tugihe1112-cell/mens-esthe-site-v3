@@ -1,0 +1,27 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分19,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://grandaromatokyo.com/",
+  "description": "赤坂・銀座・六本木に展開する日本人リラクゼーション。圧倒的なルックスと技術。",
+  "tags": [
+    "複数エリア展開",
+    "カード支払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人"
+  ],
+  "brandId": "grand_aroma",
+  "threads": [],
+  "id": "tokyo_chuo_ginza_grand_aroma",
+  "name": "グランドアロマ東京 (銀座店)",
+  "prefecture": "東京都",
+  "city": "中央区",
+  "area": "銀座",
+  "nearestStation": "銀座駅",
+  "address": "東京都中央区銀座エリア",
+  "therapists": []
+}

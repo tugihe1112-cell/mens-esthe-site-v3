@@ -1,0 +1,268 @@
+{
+  "id": 60336,
+  "name": "神のエステ",
+  "prefecture": "東京都",
+  "city": "恵比寿",
+  "region": "関東エリア",
+  "address": "東京都渋谷区恵比寿",
+  "image": "/images/shops/kamipannoesthe.jpg",
+  "rating": 4.8,
+  "reviewCount": 0,
+  "price": "60分 14,000円〜",
+  "hours": "12:00-翌5:00",
+  "isPremium": true,
+  "color": "from-amber-600 to-yellow-600",
+  "tags": [],
+  "websiteUrl": "https://www.kamipannoesthe.com/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_ディオール",
+      "name": "ディオール",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T160",
+        "B88(F)",
+        "Platinum"
+      ]
+    },
+    {
+      "id": "unknown_不知火舞",
+      "name": "不知火舞",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "21歳",
+        "T155",
+        "B81(C)",
+        "Platinum"
+      ]
+    },
+    {
+      "id": "unknown_エミリア",
+      "name": "エミリア",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T158",
+        "B85(D)",
+        "Platinum"
+      ]
+    },
+    {
+      "id": "unknown_シャネル",
+      "name": "シャネル",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T162",
+        "B90(F)",
+        "Gold"
+      ]
+    },
+    {
+      "id": "unknown_グッチ",
+      "name": "グッチ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T159",
+        "B87(E)",
+        "Gold"
+      ]
+    },
+    {
+      "id": "unknown_プラダ",
+      "name": "プラダ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T161",
+        "B89(F)",
+        "Gold"
+      ]
+    },
+    {
+      "id": "unknown_エルメス",
+      "name": "エルメス",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T163",
+        "B92(G)",
+        "Gold"
+      ]
+    },
+    {
+      "id": "unknown_ヴィトン",
+      "name": "ヴィトン",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T157",
+        "B86(E)",
+        "Gold"
+      ]
+    },
+    {
+      "id": "unknown_フェンディ",
+      "name": "フェンディ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T160",
+        "B88(F)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_セリーヌ",
+      "name": "セリーヌ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T164",
+        "B91(G)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_バレンシアガ",
+      "name": "バレンシアガ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T158",
+        "B85(D)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_ジバンシィ",
+      "name": "ジバンシィ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T162",
+        "B89(F)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_ロエベ",
+      "name": "ロエベ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T159",
+        "B87(E)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_ボッテガ",
+      "name": "ボッテガ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T161",
+        "B90(F)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_バーバリー",
+      "name": "バーバリー",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "26歳",
+        "T163",
+        "B88(F)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_サンローラン",
+      "name": "サンローラン",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "22歳",
+        "T157",
+        "B86(E)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_アレキサンダー",
+      "name": "アレキサンダー",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "25歳",
+        "T160",
+        "B89(F)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_マルニ",
+      "name": "マルニ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "24歳",
+        "T162",
+        "B91(G)",
+        "Silver"
+      ]
+    },
+    {
+      "id": "unknown_メゾンマルジェラ",
+      "name": "メゾンマルジェラ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "23歳",
+        "T158",
+        "B87(E)",
+        "Silver"
+      ]
+    }
+  ],
+  "area": "恵比寿"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_minato_akasaka_kami_no_esthe",
+  "name": "神のエステ 赤坂店",
+  "prefecture": "東京都",
+  "city": "港区",
+  "area": "赤坂",
+  "address": "東京都港区赤坂エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分16,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://www.kami-akasaka.com/",
+  "nearestStation": "赤坂駅",
+  "description": "赤坂の日本人リラクゼーション。 / 料金システム: 80分16,000円〜 / 100分22,000円〜",
+  "threads": [],
+  "brandId": "kami_no_esthe",
+  "therapists": []
+}

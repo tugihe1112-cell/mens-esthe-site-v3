@@ -1,0 +1,144 @@
+{
+  "id": 60319,
+  "name": "Poonys (プーニーズ)",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都渋谷区千駄ヶ谷5-16-16 フラワーマンション (最寄: 代々木駅東口 徒歩5分)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 15,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "color": "from-pink-500 to-rose-400",
+  "tags": [
+    "日本人",
+    "ルーム",
+    "マシュマロ",
+    "ぽっちゃり"
+  ],
+  "websiteUrl": "https://www.poonys.tokyo/",
+  "note": "系列店：ビコーズ (旧リオン)",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_みく",
+      "name": "みく",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "T165",
+        "B100(H)",
+        "W69",
+        "H104"
+      ]
+    },
+    {
+      "id": "unknown_なな",
+      "name": "なな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "T160",
+        "B102(G)",
+        "W69",
+        "H104"
+      ]
+    },
+    {
+      "id": "unknown_エマ",
+      "name": "エマ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "T167",
+        "B103(I)",
+        "W66",
+        "H98"
+      ]
+    },
+    {
+      "id": "unknown_らん",
+      "name": "らん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "T162",
+        "B91(G)",
+        "W67",
+        "H97"
+      ]
+    },
+    {
+      "id": "unknown_りん",
+      "name": "りん",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "T151",
+        "B106(I)",
+        "W68",
+        "H108"
+      ]
+    },
+    {
+      "id": "unknown_せいな",
+      "name": "せいな",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "T153",
+        "B98(H)",
+        "W65",
+        "H96"
+      ]
+    },
+    {
+      "id": "unknown_芙美(FUMI)",
+      "name": "芙美(FUMI)",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "T169",
+        "B96(H)",
+        "W65",
+        "H95"
+      ]
+    },
+    {
+      "id": "unknown_よしの",
+      "name": "よしの",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "T155",
+        "B89(G)",
+        "W66",
+        "H98"
+      ]
+    },
+    {
+      "id": "unknown_かすみ",
+      "name": "かすみ",
+      "age": null,
+      "height": null,
+      "bust": null,
+      "tags": [
+        "T152",
+        "B92(F)",
+        "W63",
+        "H96"
+      ]
+    }
+  ],
+  "area": "代々木・原宿"
+}

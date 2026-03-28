@@ -1,0 +1,214 @@
+{
+  "id": "tokyo_hachioji_rere",
+  "name": "RERE GROUP (リリグループ)",
+  "prefecture": "東京都",
+  "city": "八王子市",
+  "area": "八王子市",
+  "address": "東京都・神奈川県 各エリア（八王子・町田・川崎など）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 13,000円～",
+  "hours": "11:00～24:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "複数エリア展開"
+  ],
+  "websiteUrl": "https://www.rere-group.com/",
+  "nearestStation": "八王子駅 / 町田駅 / 川崎駅",
+  "description": "武蔵小杉・戸塚・川崎・町田・八王子で展開するメンズエステグループ。",
+  "brandId": "rere",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "rere_平戸 明日香",
+      "name": "平戸 明日香",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_椎名 美月",
+      "name": "椎名 美月",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_斎藤 はすみ",
+      "name": "斎藤 はすみ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_桜木 すず",
+      "name": "桜木 すず",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_秋田 こまち",
+      "name": "秋田 こまち",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_月野 あかり",
+      "name": "月野 あかり",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_宮崎 めぐみ",
+      "name": "宮崎 めぐみ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_永瀬 みなみ",
+      "name": "永瀬 みなみ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_月城 むく",
+      "name": "月城 むく",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_加瀬みつき",
+      "name": "加瀬みつき",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_城咲 ゆりあ",
+      "name": "城咲 ゆりあ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_河奈 礼",
+      "name": "河奈 礼",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_渡辺 まゆ",
+      "name": "渡辺 まゆ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_柏 てん",
+      "name": "柏 てん",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_橋本 ことみ",
+      "name": "橋本 ことみ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_七海 りく",
+      "name": "七海 りく",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_佐藤 むみ",
+      "name": "佐藤 むみ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_姫宮 美咲",
+      "name": "姫宮 美咲",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_朝比奈 めぐみ",
+      "name": "朝比奈 めぐみ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_早坂 ゆき",
+      "name": "早坂 ゆき",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_さの かすみ",
+      "name": "さの かすみ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_白雪 まひろ",
+      "name": "白雪 まひろ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_蒼井 みさき",
+      "name": "蒼井 みさき",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_水神 あい",
+      "name": "水神 あい",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_桜木 穂乃香",
+      "name": "桜木 穂乃香",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_天野 あかね",
+      "name": "天野 あかね",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "rere_小鳥遊 るい",
+      "name": "小鳥遊 るい",
+      "age": null,
+      "height": null,
+      "bust": null
+    }
+  ]
+}

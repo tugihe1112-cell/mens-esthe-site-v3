@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_minato_azabujuban_carinna",
+  "name": "Carinna (カリナ)",
+  "prefecture": "東京都",
+  "city": "港区",
+  "area": "麻布十番",
+  "address": "東京都港区麻布十番エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://carinna-azabu.com/",
+  "nearestStation": "麻布十番駅",
+  "description": "麻布十番・恵比寿の日本人リラクゼーション(旧ハイアット)。 / 料金システム: 60分16,000円〜",
+  "threads": [],
+  "brandId": "carinna",
+  "therapists": []
+}

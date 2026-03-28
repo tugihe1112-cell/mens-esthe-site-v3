@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_setagaya_meidaimae_belle_lily",
+  "name": "ベルリリー (Belle Lily)",
+  "prefecture": "東京都",
+  "city": "世田谷区",
+  "area": "明大前",
+  "address": "東京都世田谷区明大前エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://shibuya-belle-lily.com/",
+  "nearestStation": "明大前駅",
+  "description": "渋谷・下北沢・明大前の日本人リラクゼーション。 / 料金システム: ショートコース60分12,000円 / スタンダード90分16,000円 / プレミア120分22,000円 / プラチナ150分28,000円 / サンクスキャンペーン等各種割引あり",
+  "threads": [],
+  "brandId": "belle_lily",
+  "therapists": []
+}

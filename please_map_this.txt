@@ -1,0 +1,1137 @@
+=== 🏪 店舗リスト（数字ID : 日本語店名） ===
+1130 : 愛知県 メンズエステ Cucue (きゅきゅ)
+1134 : 愛知県 M Spa (エムスパ)
+1130 : 愛知県 メンズエステ Cucue (きゅきゅ)
+1134 : 愛知県 M Spa (エムスパ)
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1140 : 愛知県 Number9 (ナンバーナイン)
+1121 : 愛知県 RESEXY (リゼクシー) 栄
+1126 : 愛知県 ゆりかご FC名古屋
+1126 : 愛知県 ゆりかご FC名古屋
+1142 : 愛知県 チャンス 名古屋 (旧フラワー)
+1134 : 愛知県 M Spa (エムスパ)
+1136 : 愛知県 Spur Luxury (シュプールラグジュアリー)
+1122 : 愛知県 MADAME聖子 (マダムセイコ)
+1135 : 愛知県 メンズエステ一宮
+1126 : 愛知県 ゆりかご FC名古屋
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1130 : 愛知県 メンズエステ Cucue (きゅきゅ)
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1123 : 愛知県 タイガーアイ (旧タイガー)
+1126 : 愛知県 ゆりかご FC名古屋
+1120 : 愛知県 Aroma Terrace (アロマテラス) 名古屋
+1128 : 愛知県 ENCORE (アンコール)
+1123 : 愛知県 タイガーアイ (旧タイガー)
+1130 : 愛知県 メンズエステ Cucue (きゅきゅ)
+1122 : 愛知県 MADAME聖子 (マダムセイコ)
+1141 : 愛知県 マジセラ (旧ワタセラ)
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1140 : 愛知県 Number9 (ナンバーナイン)
+1121 : 愛知県 RESEXY (リゼクシー) 栄
+1126 : 愛知県 ゆりかご FC名古屋
+1126 : 愛知県 ゆりかご FC名古屋
+1142 : 愛知県 チャンス 名古屋 (旧フラワー)
+1120 : 愛知県 Aroma Terrace (アロマテラス) 名古屋
+1142 : 愛知県 チャンス 名古屋 (旧フラワー)
+1134 : 愛知県 M Spa (エムスパ)
+1124 : 愛知県 Marigold (マリーゴールド)
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1121 : 愛知県 RESEXY (リゼクシー) 栄
+1136 : 愛知県 Spur Luxury (シュプールラグジュアリー)
+1123 : 愛知県 タイガーアイ (旧タイガー)
+1126 : 愛知県 ゆりかご FC名古屋
+1127 : 愛知県 century (センチュリー)
+1142 : 愛知県 チャンス 名古屋 (旧フラワー)
+1130 : 愛知県 メンズエステ Cucue (きゅきゅ)
+1128 : 愛知県 ENCORE (アンコール)
+1132 : 愛知県 Galaxy-NAGOYA (ギャラクシーナゴヤ)
+1125 : 愛知県 GOLDEN ROSE (ゴールデンローズ)
+1134 : 愛知県 M Spa (エムスパ)
+1143 : 愛知県 milk repos (ミルクルポ)
+1136 : 愛知県 Spur Luxury (シュプールラグジュアリー)
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1123 : 愛知県 タイガーアイ (旧タイガー)
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1148 : 愛知県 THE BLANC (ザブラン)
+1120 : 愛知県 Aroma Terrace (アロマテラス) 名古屋
+1134 : 愛知県 M Spa (エムスパ)
+1124 : 愛知県 Marigold (マリーゴールド)
+1120 : 愛知県 Aroma Terrace (アロマテラス) 名古屋
+1142 : 愛知県 チャンス 名古屋 (旧フラワー)
+1123 : 愛知県 タイガーアイ (旧タイガー)
+1131 : 愛知県 Tororich (とろリッチ)
+1120 : 愛知県 Aroma Terrace (アロマテラス) 名古屋
+1137 : 愛知県 Aromana (アロマーナ)
+1133 : 愛知県 CAMPBELL (キャンベル)
+1127 : 愛知県 century (センチュリー)
+1142 : 愛知県 チャンス 名古屋 (旧フラワー)
+1130 : 愛知県 メンズエステ Cucue (きゅきゅ)
+1125 : 愛知県 GOLDEN ROSE (ゴールデンローズ)
+1134 : 愛知県 M Spa (エムスパ)
+1138 : 愛知県 RESEXY (リゼクシー) 栄
+1129 : 愛知県 RICH AROMA (リッチアロマ)
+1136 : 愛知県 Spur Luxury (シュプールラグジュアリー)
+1139 : 愛知県 VENIRE (ヴェニーレ)
+1122 : 愛知県 MADAME聖子 (マダムセイコ)
+1141 : 愛知県 マジセラ (旧ワタセラ)
+1139 : 愛知県 VENIRE (ヴェニーレ)
+1127 : 愛知県 century (センチュリー)
+1142 : 愛知県 チャンス 名古屋 (旧フラワー)
+1128 : 愛知県 ENCORE (アンコール)
+1125 : 愛知県 GOLDEN ROSE (ゴールデンローズ)
+1124 : 愛知県 Marigold (マリーゴールド)
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1119 : 愛知県 Mrs Crystal (ミセスクリスタル) 名古屋
+1120 : 愛知県 Aroma Terrace (アロマテラス) 名古屋
+1124 : 愛知県 Marigold (マリーゴールド)
+1126 : 愛知県 ゆりかご FC名古屋
+1001 : 千葉県 メンズエステ Lynx 千葉店
+1175 : 千葉県 MadameRest (マダムレスト)
+1180 : 千葉県 AROMA CHARIS (アロマカリス)
+1181 : 千葉県 美吟 (ビギン) 船橋店
+77504 : 千葉県 Limited Spa (リミテッドスパ)
+999 : 千葉県 メンズエステ Lynx 船橋店
+1182 : 千葉県 M～second～ (エムセカンド)
+77503 : 千葉県 Limited Spa (リミテッドスパ)
+1000 : 千葉県 メンズエステ Lynx 西船橋店
+77505 : 千葉県 Limited Spa (リミテッドスパ)
+1183 : 千葉県 LUANA (ルアナ) 柏
+1176 : 千葉県 ささやき (旧ラビット)
+1177 : 千葉県 神のエステ 柏・松戸店
+998 : 千葉県 メンズエステ Lynx 松戸店
+77433 : 千葉県 超レベチなエステ24
+1180 : 千葉県 AROMA CHARIS (アロマカリス)
+1181 : 千葉県 美吟 (ビギン) 船橋店
+77435 : 千葉県 超レベチなエステ24
+1035 : 千葉県 アロマギルド 津田沼
+1203 : 福岡県 Feerique (フェリーク) 福岡
+1205 : 福岡県 メンズアロマ博多人妻さん
+1204 : 福岡県 Lion Heart (ライオンハート) 福岡
+1207 : 福岡県 MOTHERS (マザーズ)
+1206 : 福岡県 Request (リクエスト)
+1208 : 福岡県 ピンキーグラッツェ小倉
+1187 : 兵庫県 ミセスムーンR 兵庫
+1189 : 兵庫県 Kobe Eslino (神戸エスリノ)
+1192 : 兵庫県 10ct RESORT (テンカラットリゾート)
+1190 : 兵庫県 KOBE QUEEN (コウベクイーン)
+1188 : 兵庫県 lemonade (レモネード) 神戸
+1191 : 兵庫県 Mrs.melty (ミセスメルティー)
+1193 : 兵庫県 MRS.TENOR (ミセステノール)
+77411 : 神奈川県 doigt de fee (ドゥワドフェ)
+1145 : 神奈川県 ラビットスパ (Rabbit Spa) 横浜店
+1148 : 神奈川県 THE BLANC (ザブラン)
+1151 : 神奈川県 Guarigione (グアリジョーネ)
+1158 : 神奈川県 リオラ (旧マリラ)
+1050 : 神奈川県 Pepe Spa (ペペスパ)
+1146 : 神奈川県 オトナコード4030 (旧オトナクチュール)
+1042 : 神奈川県 レッドアイ (Red Eye)
+1145 : 神奈川県 ラビットスパ (Rabbit Spa) 横浜店
+1145 : 神奈川県 ラビットスパ (Rabbit Spa) 横浜店
+1146 : 神奈川県 オトナコード4030 (旧オトナクチュール)
+1151 : 神奈川県 Guarigione (グアリジョーネ)
+1158 : 神奈川県 リオラ (旧マリラ)
+1146 : 神奈川県 オトナコード4030 (旧オトナクチュール)
+1145 : 神奈川県 ラビットスパ (Rabbit Spa) 横浜店
+1148 : 神奈川県 THE BLANC (ザブラン)
+1144 : 神奈川県 ゆるスパ横浜店
+1152 : 神奈川県 アプローチ 川崎店 (旧らんぷ新川崎)
+1153 : 神奈川県 DEEP ESSENTIAL (ディープエッセンシャル) 川崎
+1154 : 神奈川県 Fromage (フロマージュ)
+1157 : 神奈川県 GOLD (ゴールド) 川崎・溝の口
+1151 : 神奈川県 Guarigione (グアリジョーネ)
+77404 : 神奈川県 doigt de fee (ドゥワドフェ)
+1155 : 神奈川県 LIVSPA (リブスパ)
+77408 : 神奈川県 doigt de fee (ドゥワドフェ)
+77410 : 神奈川県 doigt de fee (ドゥワドフェ)
+77407 : 神奈川県 doigt de fee (ドゥワドフェ)
+77479 : 神奈川県 Ho・O・Zu・Ki・SPA (ホオズキスパ)
+77409 : 神奈川県 doigt de fee (ドゥワドフェ)
+1156 : 神奈川県 RERE GROUP (リリグループ)
+1150 : 神奈川県 川崎メンズエステ RiRe (リル)
+1157 : 神奈川県 GOLD (ゴールド) 川崎・溝の口
+1042 : 神奈川県 レッドアイ (Red Eye)
+1159 : 神奈川県 Agu (アグ) 武蔵小杉
+1039 : 神奈川県 Aroma ELLA (アロマエラ)
+1161 : 神奈川県 ベッドオブローゼス（Bed of Roses） 旧スリーピングシープ
+1145 : 神奈川県 ラビットスパ (Rabbit Spa) 横浜店
+1156 : 神奈川県 RERE GROUP (リリグループ)
+1160 : 神奈川県 武蔵小杉 ROYCE (ロイス)
+1042 : 神奈川県 レッドアイ (Red Eye)
+1145 : 神奈川県 ラビットスパ (Rabbit Spa) 横浜店
+1048 : 神奈川県 Luxury Romance GROUP (ラグジュアリーロマンスグループ)
+1048 : 神奈川県 Luxury Romance GROUP (ラグジュアリーロマンスグループ)
+1151 : 神奈川県 Guarigione (グアリジョーネ)
+1144 : 神奈川県 ゆるスパ横浜店
+1042 : 神奈川県 レッドアイ (Red Eye)
+1156 : 神奈川県 RERE GROUP (リリグループ)
+1149 : 神奈川県 Marine (マリン) 横浜
+1151 : 神奈川県 Guarigione (グアリジョーネ)
+60199 : 神奈川県 メンズエステ Lynx 横浜関内店
+1158 : 神奈川県 リオラ (旧マリラ)
+1146 : 神奈川県 オトナコード4030 (旧オトナクチュール)
+1145 : 神奈川県 ラビットスパ (Rabbit Spa) 横浜店
+1148 : 神奈川県 THE BLANC (ザブラン)
+1147 : 神奈川県 ワイプライム (旧ワイプラ)
+1185 : 京都府 クイーンズプレミアム 旧グラマー
+1186 : 京都府 Pure White (ピュアホワイト)
+1196 : 宮城県 ARENA SPA (アリーナスパ)
+1197 : 宮城県 AROMA No5 (アロマファイブ) 仙台
+1198 : 宮城県 Aroma Rich (アロマリッチ) 仙台
+1202 : 宮城県 Cuaura (クオーラ)
+1201 : 宮城県 ONE time (ワンタイム)
+1200 : 宮城県 Platonic SPA (プラトニックスパ)
+1195 : 宮城県 Pulunt (プルント)
+1199 : 宮城県 SHIZUKU SPA (雫スパ)
+1068 : 大阪府 美魔女セラピー大阪
+1118 : 大阪府 セレブスパプレミアム
+1110 : 大阪府 原価屋
+1067 : 大阪府 ダーリンプレミアム
+1069 : 大阪府 La vie et (ラヴィエ)
+1082 : 大阪府 もくきん堂
+1082 : 大阪府 もくきん堂
+1088 : 大阪府 感謝 旧愛燦燦
+1109 : 大阪府 ベルマドンナ (旧ベラドンナ)
+1118 : 大阪府 セレブスパプレミアム
+1085 : 大阪府 ミセスの子守唄
+1082 : 大阪府 もくきん堂
+1073 : 大阪府 僕のママスパ
+1111 : 大阪府 スーパーハッピーガールズ (SUPER HAPPY GIRLS)
+1105 : 大阪府 タマネギ 大阪
+1104 : 大阪府 和いふらいん 大阪
+1089 : 大阪府 和いふらいん 大阪
+1088 : 大阪府 感謝 旧愛燦燦
+1075 : 大阪府 ビューティーアンドビースト
+1067 : 大阪府 ダーリンプレミアム
+1069 : 大阪府 La vie et (ラヴィエ)
+1081 : 大阪府 ムフフフットケアセンター
+1109 : 大阪府 ベルマドンナ (旧ベラドンナ)
+1065 : 大阪府 うさぎのお部屋
+1118 : 大阪府 セレブスパプレミアム
+1107 : 大阪府 DSP
+1066 : 大阪府 FIRST CLASS (ファーストクラス) 大阪
+1115 : 大阪府 Furyu 風流 (フウリュウ)
+1114 : 大阪府 隠れ家~大人の癒し空間~
+1117 : 大阪府 綺麗なサロン
+1116 : 大阪府 マ・ジ・メSPA（マジメスパ）
+1107 : 大阪府 DSP
+1094 : 大阪府 LIRICA OSAKA (リリカ大阪)
+1068 : 大阪府 美魔女セラピー大阪
+1114 : 大阪府 隠れ家~大人の癒し空間~
+1088 : 大阪府 感謝 旧愛燦燦
+1112 : 大阪府 FROG SPA (フロッグスパ)
+1113 : 大阪府 Skit (スキット)
+1095 : 大阪府 ミセスあまおうセラピ 旧ミセスマドンナ
+1068 : 大阪府 美魔女セラピー大阪
+1117 : 大阪府 綺麗なサロン
+1096 : 大阪府 Queen Spumante (クイーンスプマンテ)
+1066 : 大阪府 FIRST CLASS (ファーストクラス) 大阪
+1107 : 大阪府 DSP
+1066 : 大阪府 FIRST CLASS (ファーストクラス) 大阪
+1101 : 大阪府 LEON SPA Gold (レオンスパゴールド)
+1100 : 大阪府 ミセス美オーラ
+1095 : 大阪府 ミセスあまおうセラピ 旧ミセスマドンナ
+1071 : 大阪府 アロマワン
+1109 : 大阪府 ベルマドンナ (旧ベラドンナ)
+1068 : 大阪府 美魔女セラピー大阪
+1065 : 大阪府 うさぎのお部屋
+1118 : 大阪府 セレブスパプレミアム
+1092 : 大阪府 C.r.e.a.m (クリーム)
+1107 : 大阪府 DSP
+1078 : 大阪府 イーエスドールプレミアム
+1066 : 大阪府 FIRST CLASS (ファーストクラス) 大阪
+1106 : 大阪府 マダムと紳士
+1116 : 大阪府 マ・ジ・メSPA（マジメスパ）
+1097 : 大阪府 milk tea (ミルクティー)
+1087 : 大阪府 ミセスムーンR 大阪
+1108 : 大阪府 俺の家
+1099 : 大阪府 Sanando (サナンド)
+1113 : 大阪府 Skit (スキット)
+1091 : 大阪府 SEACRET ROOM ひまわり
+1111 : 大阪府 スーパーハッピーガールズ (SUPER HAPPY GIRLS)
+1093 : 大阪府 天上人PREMIUM
+1109 : 大阪府 ベルマドンナ (旧ベラドンナ)
+1118 : 大阪府 セレブスパプレミアム
+1082 : 大阪府 もくきん堂
+1109 : 大阪府 ベルマドンナ (旧ベラドンナ)
+1065 : 大阪府 うさぎのお部屋
+1118 : 大阪府 セレブスパプレミアム
+1085 : 大阪府 ミセスの子守唄
+1103 : 大阪府 LEON SPA (レオンスパ)
+1101 : 大阪府 LEON SPA Gold (レオンスパゴールド)
+1087 : 大阪府 ミセスムーンR 大阪
+1076 : 大阪府 SEACRET ROOM ひまわり
+1095 : 大阪府 ミセスあまおうセラピ 旧ミセスマドンナ
+1109 : 大阪府 ベルマドンナ (旧ベラドンナ)
+1068 : 大阪府 美魔女セラピー大阪
+1118 : 大阪府 セレブスパプレミアム
+1092 : 大阪府 C.r.e.a.m (クリーム)
+1107 : 大阪府 DSP
+1078 : 大阪府 イーエスドールプレミアム
+1066 : 大阪府 FIRST CLASS (ファーストクラス) 大阪
+1112 : 大阪府 FROG SPA (フロッグスパ)
+1115 : 大阪府 Furyu 風流 (フウリュウ)
+1080 : 大阪府 GOAT(ゴート) 旧琥珀
+1088 : 大阪府 感謝 旧愛燦燦
+1117 : 大阪府 綺麗なサロン
+1077 : 大阪府 こころのゆりかご 大阪
+1085 : 大阪府 ミセスの子守唄
+1094 : 大阪府 LIRICA OSAKA (リリカ大阪)
+1116 : 大阪府 マ・ジ・メSPA（マジメスパ）
+1087 : 大阪府 ミセスムーンR 大阪
+1096 : 大阪府 Queen Spumante (クイーンスプマンテ)
+1113 : 大阪府 Skit (スキット)
+1098 : 大阪府 SPALOT.Mrs (スパロットミセス)
+1091 : 大阪府 SEACRET ROOM ひまわり
+1105 : 大阪府 タマネギ 大阪
+1093 : 大阪府 天上人PREMIUM
+1104 : 大阪府 和いふらいん 大阪
+1089 : 大阪府 和いふらいん 大阪
+1101 : 大阪府 LEON SPA Gold (レオンスパゴールド)
+1100 : 大阪府 ミセス美オーラ
+1109 : 大阪府 ベルマドンナ (旧ベラドンナ)
+1065 : 大阪府 うさぎのお部屋
+1118 : 大阪府 セレブスパプレミアム
+1107 : 大阪府 DSP
+1066 : 大阪府 FIRST CLASS (ファーストクラス) 大阪
+1077 : 大阪府 こころのゆりかご 大阪
+1085 : 大阪府 ミセスの子守唄
+1116 : 大阪府 マ・ジ・メSPA（マジメスパ）
+1082 : 大阪府 もくきん堂
+1100 : 大阪府 ミセス美オーラ
+1073 : 大阪府 僕のママスパ
+1098 : 大阪府 SPALOT.Mrs (スパロットミセス)
+1091 : 大阪府 SEACRET ROOM ひまわり
+1107 : 大阪府 DSP
+1066 : 大阪府 FIRST CLASS (ファーストクラス) 大阪
+1113 : 大阪府 Skit (スキット)
+1091 : 大阪府 SEACRET ROOM ひまわり
+1100 : 大阪府 ミセス美オーラ
+1091 : 大阪府 SEACRET ROOM ひまわり
+1105 : 大阪府 タマネギ 大阪
+1089 : 大阪府 和いふらいん 大阪
+1095 : 大阪府 ミセスあまおうセラピ 旧ミセスマドンナ
+1109 : 大阪府 ベルマドンナ (旧ベラドンナ)
+1065 : 大阪府 うさぎのお部屋
+1118 : 大阪府 セレブスパプレミアム
+1092 : 大阪府 C.r.e.a.m (クリーム)
+1107 : 大阪府 DSP
+1066 : 大阪府 FIRST CLASS (ファーストクラス) 大阪
+1106 : 大阪府 マダムと紳士
+1116 : 大阪府 マ・ジ・メSPA（マジメスパ）
+1087 : 大阪府 ミセスムーンR 大阪
+1108 : 大阪府 俺の家
+1091 : 大阪府 SEACRET ROOM ひまわり
+1111 : 大阪府 スーパーハッピーガールズ (SUPER HAPPY GIRLS)
+1068 : 大阪府 美魔女セラピー大阪
+1065 : 大阪府 うさぎのお部屋
+1108 : 大阪府 俺の家
+1075 : 大阪府 ビューティーアンドビースト
+1109 : 大阪府 ベルマドンナ (旧ベラドンナ)
+1068 : 大阪府 美魔女セラピー大阪
+1065 : 大阪府 うさぎのお部屋
+1118 : 大阪府 セレブスパプレミアム
+1067 : 大阪府 ダーリンプレミアム
+1107 : 大阪府 DSP
+1066 : 大阪府 FIRST CLASS (ファーストクラス) 大阪
+1115 : 大阪府 Furyu 風流 (フウリュウ)
+1080 : 大阪府 GOAT(ゴート) 旧琥珀
+1114 : 大阪府 隠れ家~大人の癒し空間~
+1077 : 大阪府 こころのゆりかご 大阪
+1069 : 大阪府 La vie et (ラヴィエ)
+1094 : 大阪府 LIRICA OSAKA (リリカ大阪)
+1106 : 大阪府 マダムと紳士
+1116 : 大阪府 マ・ジ・メSPA（マジメスパ）
+1081 : 大阪府 ムフフフットケアセンター
+1073 : 大阪府 僕のママスパ
+1108 : 大阪府 俺の家
+1091 : 大阪府 SEACRET ROOM ひまわり
+1111 : 大阪府 スーパーハッピーガールズ (SUPER HAPPY GIRLS)
+1070 : 大阪府 スーパーハッピーガールズ (SUPER HAPPY GIRLS)
+1179 : 埼玉県 PLATINA (プラチナ) 川越
+997 : 埼玉県 メンズエステ Lynx 川口店
+77509 : 埼玉県 Limited Spa (リミテッドスパ)
+1162 : 埼玉県 神のエステ 大宮店
+1172 : 埼玉県 今日子の姉妹 大宮
+1173 : 埼玉県 らんぷ 大宮
+1166 : 埼玉県 オフスート (Offsuit) 旧ランクプラス
+6008 : 埼玉県 PLATINUM TOKYO 大宮店
+1165 : 埼玉県 Queendom (クイーンダム)
+1171 : 埼玉県 Regis (レジス)
+996 : 埼玉県 メンズエステ Lynx 大宮店
+1174 : 埼玉県 メンズエステ妻 浦和
+1166 : 埼玉県 オフスート (Offsuit) 旧ランクプラス
+1171 : 埼玉県 Regis (レジス)
+1167 : 埼玉県 MABUI SPA (マブイスパ)
+1184 : 滋賀県 ゆりかご 京都
+1158 : 静岡県 リオラ (旧マリラ)
+77530 : 静岡県 竜宮城 旧百万石
+60026 : shops_backup.json Mirajour (ミラジュール)
+60231 : 東京都 Aroma Blossom (アロマブロッサム)
+60216 : 東京都 わたしのおうち
+60211 : 東京都 Aroma Blossom (広尾店)
+60210 : 東京都 Aroma Blossom (港区・中目黒)
+60209 : 東京都 NATURAL (六本木店)
+60212 : 東京都 Aroma Blossom (田町店)
+60204 : 東京都 Eren (経堂ルーム)
+60201 : 東京都 Eren (下北沢ルーム)
+60202 : 東京都 UraSanEsu (下北沢店)
+60205 : 東京都 Eren (祖師谷大蔵ルーム)
+60327 : 東京都 ANAICHI (アナイチ)
+60352 : 東京都 AQUA (アクア) 中目黒
+60351 : 東京都 Aroma Blanca (アロマブランカ)
+60341 : 東京都 Aroma Blossom (恵比寿店)
+60357 : 東京都 AROMA EMERALD (アロマエメラルド)
+60334 : 東京都 Aroma Miely (アロマミエリー)
+60343 : 東京都 AROMA TIAMO (アロマティアモ)
+60345 : 東京都 BELLA SPA (ベラスパ)
+60358 : 東京都 Belle É (ベルエ)
+60347 : 東京都 Belle Lily (ベルリリィ)
+60331 : 東京都 Candy Spa (キャンディスパ)
+60353 : 東京都 GRANMATOM (グランマトム)
+60336 : 東京都 神のエステ
+60360 : 東京都 Love it (ラヴィット)
+60361 : 東京都 MINERVA (ミネルバ)
+60350 : 東京都 MoMo Spa (モモスパ)
+60339 : 東京都 ムーブプラス
+60349 : 東京都 NAOMI SPA (ナオミスパ)
+60354 : 東京都 ポセイドン
+60340 : 東京都 天界のスパ 中目黒
+60329 : 東京都 THE HALF (ザ・ハーフ)
+60342 : 東京都 Vicca+plus. (ヴィッカプラス)
+60364 : 東京都 SPA Real (スパレアル)
+60319 : 東京都 Poonys (プーニーズ)
+60324 : 東京都 Chocolate (代々木ルーム)
+60321 : 東京都 Aroma Levante (代々木ルーム)
+60312 : 東京都 Eren (エレン)
+60309 : 東京都 Gloria (グロリア)
+60318 : 東京都 極楽エステ
+60307 : 東京都 LugarTOKYO (代々木店)
+60320 : 東京都 NATURAL (代々木店)
+60306 : 東京都 温故知新 (旧ユアタイム)
+60313 : 東京都 六本木メンズエステ
+60316 : 東京都 Silk (シルク)
+60315 : 東京都 Spa Ytree (ワイツリー)
+60308 : 東京都 Sugar Spa (シュガースパ)
+60322 : 東京都 UraSanEsu (ウラサネス)
+60242 : 東京都 LugarTOKYO (五反田店)
+60236 : 東京都 Esthe Spa (エステスパ)
+60237 : 東京都 Aroma Blossom (大崎店)
+60269 : 東京都 NATURAL (神楽坂店)
+60284 : 東京都 LugarTOKYO (新宿店)
+60254 : 東京都 Aroma Levante (新宿ルーム)
+60255 : 東京都 Chocolate (新宿ルーム)
+60251 : 東京都 NATURAL (新宿御苑店)
+60252 : 東京都 Tokyo Panic (トウキョウパニック)
+60249 : 東京都 Chocolate (新大久保ルーム)
+60250 : 東京都 NATURAL (新大久保店)
+60303 : 東京都 NATURAL (池袋店)
+60298 : 東京都 Tokyo Fairy Land (東京フェアリーランド)
+
+=== 🔠 ローマ字IDリスト ===
+chiba_tsudanuma_aroma_guild
+kanagawa_musashikosugi_aroma_ella
+kanagawa_shinyurigaoka_redeye
+tokyo_ota_kamata_pepe_spa
+osaka_umeda_bunny_room
+osaka_umeda_first_class
+osaka_umeda_darlin_premium
+osaka_umeda_bimajo_therapy
+osaka_umeda_lavieet
+osaka_umeda_super_happy_girls
+osaka_nipponbashi_aroma_one
+osaka_umeda_my_mama_spa
+osaka_umeda_beauty_and_beast
+osaka_umeda_sr_himawari
+osaka_umeda_kokoronoyurikago
+osaka_sakaisujihonmachi_es_doll
+osaka_umeda_goat
+osaka_umeda_mufufu
+osaka_shinosaka_mokukindo
+osaka_shinosaka_komoriuta
+osaka_tanimachi9_mrs_moonr
+osaka_takatsuki_wifeline
+osaka_tanimachi9_cream
+osaka_sakaisujihonmachi_tenjoubito_pr
+osaka_umeda_lirica
+osaka_tanimachi9_amaou
+osaka_sakaisujihonmachi_queen_spumante
+osaka_nipponbashi_milktea
+osaka_shinosaka_spalot_mrs
+osaka_nipponbashi_sanando
+osaka_takatsuki_mrs_viaura
+osaka_sakuragawa_leonspa_gold
+osaka_sakaihigashi_leonspa
+osaka_takatsuki_tamanegi
+osaka_umeda_madam_gentleman
+osaka_umeda_dsp
+osaka_umeda_orenoie
+osaka_umeda_bellmadonna
+osaka_dispatch_genkaya
+osaka_sakaisujihonmachi_frog_spa
+osaka_shinsaibashi_skit
+osaka_umeda_kakurega
+osaka_umeda_furyu
+osaka_umeda_majimespa
+osaka_umeda_celeb_spa
+aichi_tsurumai_mrs_crystal
+aichi_yabacho_aroma_terrace
+aichi_sakae_resexy
+aichi_shinsakae_madame_seiko
+aichi_osu_tiger_eye
+aichi_yabacho_marigold
+aichi_takaoka_golden_rose
+aichi_yabacho_yurikago
+aichi_takaoka_century
+aichi_takaoka_encore
+aichi_sakae_rich_aroma
+aichi_sakae_cucue
+aichi_osu_tororich
+aichi_meieki_galaxy_nagoya
+aichi_sakae_campbell
+aichi_sakae_m_spa
+aichi_ichinomiya_mens_esthe_ichinomiya
+aichi_sakae_spur_luxury
+aichi_sakae_aromana
+aichi_shinsakae_venire
+aichi_kanayama_number9
+aichi_shinsakae_majisera
+aichi_takaoka_chance
+aichi_meieki_milk_repos
+kanagawa_shinyokohama_yuru_spa
+kanagawa_yokohama_rabbit_spa
+tokyo_shibuya_yoyogi_harajuku_otona_code
+kanagawa_yokohama_y_prime
+kanagawa_yokohama_the_blanc
+kanagawa_tsunashima_marine
+kanagawa_kawasaki_rire
+kanagawa_yokohama_guarigione
+kanagawa_kawasaki_approach
+kanagawa_kawasaki_deep_essential
+kanagawa_kawasaki_fromage
+tokyo_ota_kamata_livspa
+tokyo_machida_rere
+kanagawa_mizonokuchi_gold
+tokyo_shibuya_ebisu_liora
+kanagawa_musashikosugi_agu
+kanagawa_musashikosugi_royce
+kanagawa_musashikosugi_bed_of_roses
+saitama_omiya_kami_no_esthe
+saitama_omiya_queendom
+saitama_urawa_offsuit
+saitama_warabi_mabui_spa
+saitama_urawa_regis
+saitama_omiya_kyoko_no_shimai
+saitama_omiya_lamp_omiya
+saitama_urawa_mens_esthe_tsuma
+chiba_chiba_madame_rest
+chiba_kashiwa_sasayaki
+chiba_matsudo_kami_no_esthe
+saitama_kawagoe_platina
+chiba_nishifunabashi_aroma_charis
+chiba_nishifunabashi_begin
+chiba_funabashi_m_second
+chiba_kashiwa_luana
+shiga_otsu_station_yurikago
+kyoto_kyoto_station_queens_premium
+kyoto_senbon_sanjo_pure_white
+hyogo_kobe_mrs_moon
+hyogo_sannomiya_lemonade
+hyogo_ninomiya_eslino
+hyogo_sannomiya_kobe_queen
+hyogo_sannomiya_mrs_melty
+hyogo_sannomiya_10ct_resort
+hyogo_sannomiya_mrs_tenor
+miyagi_sendai_pulunt
+miyagi_sendai_arena_spa
+miyagi_sendai_aroma_no5
+miyagi_sendai_aroma_rich
+miyagi_sendai_shizuku_spa
+miyagi_sendai_platonic_spa
+miyagi_sendai_onetime
+miyagi_sendai_cuaura
+fukuoka_hakata_feerique
+fukuoka_hakata_lion_heart
+fukuoka_hakata_hakatahitozuma
+fukuoka_hakata_request
+fukuoka_kurume_mothers
+fukuoka_kokura_pinky_grazie
+tokyo_setagaya_eren_shimokita
+tokyo_setagaya_urasanesu_shimokita
+tokyo_setagaya_linda_spa
+tokyo_setagaya_eren_kyodo
+tokyo_setagaya_eren_soshigaya
+tokyo_minato_natural_roppongi
+tokyo_minato_aroma_blossom_3
+tokyo_meguro_watashi_ouchi
+tokyo_meguro_linda_spa
+tokyo_shinagawa_linda_spa
+tokyo_shinagawa_esthe_spa
+tokyo_shinagawa_aroma_blossom
+tokyo_shinagawa_lugar_tokyo_gotanda
+tokyo_shinjuku_chocolate_shinokubo
+tokyo_shinjuku_natural_shinokubo
+tokyo_shinjuku_natural_shinjukugyoen
+tokyo_shinjuku_tokyo_panic
+tokyo_shinjuku_aroma_levante_shinjuku
+tokyo_shinjuku_chocolate_shinjuku
+tokyo_shinjuku_natural_kagurazaka
+tokyo_shinjuku_lugar_tokyo_shinjuku
+tokyo_toshima_tokyo_fairy_land
+tokyo_toshima_natural_ikebukuro
+tokyo_shibuya_onkochishin
+tokyo_shibuya_lugar_tokyo
+tokyo_shibuya_sugar_spa
+tokyo_shibuya_gloria
+tokyo_shibuya_eren
+tokyo_shibuya_roppongi_mens_esthe
+tokyo_shibuya_spa_ytree
+tokyo_shibuya_silk
+tokyo_shibuya_gokuraku_esthe
+tokyo_shibuya_Poonys
+tokyo_shibuya_natural_yoyogi
+tokyo_shibuya_aroma_levante
+tokyo_shibuya_urasanes
+tokyo_shibuya_aroma_chocolate_tokyo
+tokyo_shibuya_anaichi
+tokyo_shibuya_the_half
+tokyo_shibuya_aroma_miely
+tokyo_shinagawa_shinagawa_kami_no_esthe
+tokyo_shibuya_linda_spa
+tokyo_shibuya_aroma_blossom
+tokyo_shibuya_aromatiamo
+tokyo_shibuya_bellelily
+tokyo_shibuya_naomispa
+tokyo_shibuya_aroma_blanca
+tokyo_shibuya_granmatom
+tokyo_shibuya_belle_e
+tokyo_shibuya_minerva
+tokyo_shibuya_spareal
+tokyo_ota_kamata_doigt_de_fee
+tokyo_shibuya_hatsudai_levechi_esthe
+tokyo_shinagawa_oimachi_hoozuki
+tokyo_sumida_kinshicho_limited_spa
+shizuoka_numazu_ryugujo
+saitama_saitama-minami_himitsu_mrs_room
+saitama_saitama-minami_muchispa_room
+tokyo_adachi_kitasenju_macherie
+tokyo_adachi_kitasenju_muchispa_room
+tokyo_adachi_ushida_ranpu_kitasenju
+tokyo_adachi_kitasenju_remis
+tokyo_adachi_takenotsuka_aroma_banker
+tokyo_arakawa_nippori_aroma_giraffe
+tokyo_arakawa_nippori_be_majo
+tokyo_arakawa_nippori_deep_black
+tokyo_chiyoda_akihabara_ar_tokyo
+tokyo_chiyoda_akihabara_aroma_amour
+tokyo_chiyoda_akihabara_aroma_jewels
+tokyo_chiyoda_akihabara_aroma_lunabelle_akihabara
+tokyo_chiyoda_akihabara_aroma_maison
+tokyo_chiyoda_akihabara_aroma_rejina
+tokyo_chiyoda_akihabara_assouplir
+tokyo_chiyoda_akihabara_hiran_next
+tokyo_chiyoda_akihabara_luxtime
+tokyo_chiyoda_akihabara_prispa
+tokyo_chiyoda_akihabara_rex
+tokyo_chiyoda_akihabara_the_salon
+tokyo_chiyoda_akihabara_weal
+tokyo_chiyoda_akihabara_zexterior
+tokyo_chiyoda_iidabashi_tokyo_aroma_este
+tokyo_chiyoda_iwamotocho_kami_no_esthe
+tokyo_chiyoda_jimbocho_queens_collection
+tokyo_chiyoda_kanda_chill_spa
+tokyo_chiyoda_kanda_kami_no_esthe
+tokyo_chiyoda_kanda_luxtime
+tokyo_chiyoda_yotsuya_e_komachi
+tokyo_chiyoda_yotsuya_laulima
+tokyo_chofu_aroma_ella
+tokyo_chofu_jesse
+tokyo_chofu_kami_chofu
+tokyo_chofu_platinum_tokyo
+tokyo_chofu_trendy_spa
+tokyo_chofu_unison_spa
+tokyo_chuo_ginza_alba
+tokyo_chuo_ginza_aroma_amour
+tokyo_chuo_ginza_aroma_maison
+tokyo_toshima_ikebukuro_aromamore
+tokyo_chuo_ginza_dejavu-tokyo
+tokyo_chuo_ginza_ginza_rich
+tokyo_chuo_ginza_kami_no_esthe_shinbashi
+tokyo_chuo_ginza_luxtime
+tokyo_chuo_ginza_otonaspa
+tokyo_chuo_ginza_ryugujo
+tokyo_chuo_ginza_salon-blanca
+tokyo_chuo_ginza_the_gin
+tokyo_chuo_kayabacho_the_gin
+tokyo_chuo_nihonbashi_kami_no_esthe
+tokyo_chuo_nihonbashi_salon_blanca
+tokyo_chuo_nihonbashi_the_gin
+tokyo_chuo_ningyocho_ryugujo
+tokyo_chuo_ningyocho_the_gin
+tokyo_dispatch_aqua_premium
+tokyo_dispatch_because
+tokyo_shibuya_candy_spa
+tokyo_dispatch_hananoame
+tokyo_dispatch_jukujo_tokyo
+tokyo_dispatch_royal_spa
+tokyo_dispatch_the_aroma
+tokyo_dispatch_outside_no_brand
+tokyo_fuchu_aroma_ella
+tokyo_fuchu_kami_chofu
+tokyo_fuchu_luxury_romance
+tokyo_fuchu_syalulu
+tokyo_tachikawa_rabbit_spa
+tokyo_tachikawa_tokyopla
+tokyo_kita_alice
+tokyo_kita_cozy_akabane
+tokyo_tachikawa_crest_spa_tokyo
+tokyo_kita_lamp_akabane
+tokyo_suginami_ogikubo_yorimichi
+tokyo_kokubunji_west_tokyo
+tokyo_kokubunji_aroma_ella
+tokyo_musashino_kichijoji_esthe_bijin_madam
+tokyo_koto_kameido_muchispa_room
+tokyo_koto_monzennakacho_rondo
+tokyo_setagaya_sakurashinmachi_tokyo_esthe_club
+tokyo_shinagawa_musashikoyama_mens_esthe_group
+tokyo_shinagawa_oimachi_dahlia
+tokyo_meguro_meguro_everything
+tokyo_shinagawa_shinagawa_grace
+tokyo_meguro_meguro_organic_spa
+tokyo_meguro_meguro_otona_kakurega
+tokyo_meguro_meguro_taiiku_jikan
+tokyo_meguro_meguro_teacher_secret
+tokyo_shibuya_ebisu_aqua
+tokyo_meguro_nakameguro_tenkai_no_spa
+tokyo_meguro_toritsudaigaku_tokyo_mensesthe
+tokyo_minato_akabanebashi_dejavu_tokyo
+tokyo_minato_akasaka_alba
+tokyo_minato_akasaka_grand_aroma
+tokyo_minato_akasaka_the_salon
+tokyo_minato_azabujuban_dejavu_tokyo
+tokyo_minato_azabujuban_kami_no_esthe
+tokyo_minato_azabujuban_linda_spa
+tokyo_minato_azabujuban_lunabelle
+tokyo_minato_azabujuban_sweet_mist
+tokyo_minato_nishiazabu_dejavu_tokyo
+tokyo_minato_roppongi_grand_aroma
+tokyo_minato_roppongi_sweet_mist
+tokyo_minato_shinbashi_aroma_maison
+tokyo_minato_shinbashi_kami_no_esthe_shinbashi
+tokyo_minato_shinbashi_lunabelle
+tokyo_minato_shinbashi_luxtime
+tokyo_minato_shinbashi_sweet_mist
+tokyo_minato_shinbashi_the_salon
+tokyo_minato_shinbashi_ultimate_spa_shinbashi
+tokyo_minato_tamachi_alba
+tokyo_mitaka_aroma_ella
+tokyo_suginami_ogikubo_aroma_charmant
+tokyo_musashino_kichijoji_kami_kichijoji
+tokyo_nakano_red_ribbon
+tokyo_shinjuku_higashishinjuku_aroma_modeste
+tokyo_nerima_nerima_around_forty
+tokyo_nerima_nerima_cannele
+tokyo_nerima_nerima_kami_no_esthe_nerima
+tokyo_nerima_nerima_xenispa
+tokyo_nerima_oizumigakuen_select
+tokyo_shibuya_sasazuka_reve_spa
+tokyo_setagaya_chitose_karasuyama_unison_spa
+tokyo_setagaya_futakotamagawa_jesse
+tokyo_setagaya_sangenjaya_dejavu_tokyo
+tokyo_shibuya_ebisu_otonaspa
+tokyo_shibuya_ebisu_salon_blanca
+tokyo_shibuya_ebisu_sweet_mist
+tokyo_shibuya_shibuya_oneroom
+tokyo_shibuya_yoyogi_harajuku_kaminoesthe
+tokyo_shibuya_yoyogi_harajuku_lunabelle
+tokyo_shibuya_yoyogi_harajuku_platinum_tokyo
+tokyo_shibuya_yoyogi_harajuku_salon_blanca
+tokyo_shinagawa_gotanda_anna
+tokyo_shinagawa_gotanda_aroma_jewels
+tokyo_shinagawa_gotanda_aroma_rejina
+tokyo_shinagawa_gotanda_lunabelle
+tokyo_shinagawa_gotanda_luxtime
+tokyo_shinjuku_higashishinjuku_aroma_jewels
+tokyo_shinjuku_higashishinjuku_cor_caroli
+tokyo_shinjuku_higashishinjuku_dejavu_tokyo
+tokyo_shinjuku_higashishinjuku_oneroom
+tokyo_shinjuku_higashishinjuku_peach_next
+tokyo_shinjuku_higashishinjuku_platinum_tokyo
+tokyo_shinjuku_higashishinjuku_salon_blanca
+tokyo_shinjuku_higashishinjuku_sweet_mist
+tokyo_shinjuku_higashishinjuku_tokyo_aroma_este
+tokyo_shinjuku_ichigaya_the_gin
+tokyo_shinjuku_kabukicho_aroma_modeste
+tokyo_shinjuku_kabukicho_aromacharm
+tokyo_shinjuku_kabukicho_d_spa
+tokyo_shinjuku_kabukicho_fiorespa
+tokyo_shinjuku_kabukicho_salon_blanca
+tokyo_shinjuku_kagurazaka_zexterior
+tokyo_shinjuku_nishishinjuku_aroma_jewels
+tokyo_shinjuku_nishishinjuku_cor_caroli
+tokyo_shinjuku_nishishinjuku_platinum_tokyo
+tokyo_shinjuku_nishishinjuku_salon_blanca
+tokyo_shinjuku_nishishinjuku_tokyo_aroma_este
+tokyo_shinjuku_okubo_elteras
+tokyo_shinjuku_okubo_oneroom
+tokyo_shinjuku_okubo_platinum_tokyo
+tokyo_shinjuku_shinjuku_aroma_laluna
+tokyo_shinjuku_shinjuku_first
+tokyo_shinjuku_shinjuku_lunabelle
+tokyo_shinjuku_shinjuku_natural_organic_spa
+tokyo_shinjuku_shinjuku_gyoen_aroma_glamour
+tokyo_shinjuku_shinjuku_gyoen_aroma_jewels
+tokyo_shinjuku_shinjuku_gyoen_cor_caroli
+tokyo_shinjuku_shinjuku_gyoen_mitsubachi
+tokyo_shinjuku_shinjuku_gyoen_oneroom
+tokyo_shinjuku_shinjuku_gyoen_platinum_tokyo
+tokyo_shinjuku_shinjuku_sanchome_aroma_glamour
+tokyo_shinjuku_shinjuku_sanchome_aroma_jewels
+tokyo_shinjuku_shinjuku_sanchome_mitsubachi
+tokyo_shinjuku_shinjuku_sanchome_oneroom
+tokyo_shinjuku_shinjuku_sanchome_peach_next
+tokyo_shinjuku_takadanobaba_chat_noir
+tokyo_shinjuku_takadanobaba_salon_blanca
+tokyo_shinjuku_wakamatsu_kawada_zexterior
+tokyo_shinjuku_yotsuya_sanchome_e_komachi
+tokyo_shinjuku_yotsuya_sanchome_zexterior
+tokyo_suginami_koenji_spa_flame
+tokyo_sumida_kinshicho_aroma_cura
+tokyo_sumida_kinshicho_kaminoesthe_kinshicho
+tokyo_sumida_kinshicho_luxtime
+tokyo_sumida_kinshicho_wife_collection
+tokyo_sumida_ryougoku_otonaspa_kutsurogi
+tokyo_tachikawa_disini
+tokyo_tachikawa_morganite
+tokyo_tachikawa_tachikawa_tokyopla
+tokyo_taito_asakusabashi_assouplir
+tokyo_taito_asakusabashi_weal
+tokyo_taito_ueno_aroma_rejina
+tokyo_taito_ueno_iyashinokuukan_annex
+tokyo_taito_ueno_ueno_luxury
+tokyo_taito_ueno_ultimate_spa_ueno
+tokyo_tama_seisekisakuragaoka_trendy_spa
+tokyo_tama_tamacenter_trendy_spa
+tokyo_toshima_ikebukuro_atlantis
+tokyo_toshima_ikebukuro_cor_caroli
+tokyo_toshima_ikebukuro_lunabelle
+tokyo_toshima_ikebukuro_luxtime
+tokyo_toshima_ikebukuro_platinum_tokyo
+tokyo_toshima_ikebukuro_rex
+tokyo_toshima_ikebukuro_salon_blanca
+kanagawa_kawasaki_mizonokuchi_jesse
+kanagawa_kawasaki_musashikosugi_aroma_ella
+kanagawa_kawasaki_musashikosugi_jesse
+kanagawa_kawasaki_noborito_jesse
+kanagawa_sagamihara_unison_spa
+aichi_chikusa_cucue
+aichi_chikusa_m_spa
+aichi_fushimi_cucue
+aichi_fushimi_m_spa
+aichi_fushimi_mrs_crystal
+aichi_fushimi_number9
+aichi_fushimi_resexy
+aichi_fushimi_yurikago
+aichi_gifu_yurikago
+aichi_hisaya_chance
+aichi_hisaya_m_spa
+aichi_hisaya_spur_luxury
+aichi_ichinomiya_madame_seiko
+aichi_ichinomiya_yurikago
+aichi_ichinomiyahon_mrs_crystal
+aichi_ichinomiyamae_mrs_crystal
+aichi_imaike_cucue
+aichi_imaike_mrs_crystal
+aichi_imaike_tiger_eye
+aichi_imaike_yurikago
+aichi_izumi_aroma_terrace
+aichi_izumi_encore
+aichi_izumi_tiger_eye
+aichi_kanayama_cucue
+aichi_kanayama_madame_seiko
+aichi_kanayama_majisera
+aichi_kanayama_mrs_crystal
+aichi_kanayama_resexy
+aichi_kanayama_yurikago
+aichi_kariya_yurikago
+aichi_kokusai_center_chance
+aichi_marunouchi_nagoya_aroma_terrace
+aichi_marunouchi_nagoya_chance
+aichi_marunouchi_nagoya_m_spa
+aichi_marunouchi_nagoya_marigold
+aichi_marunouchi_nagoya_mrs_crystal
+aichi_marunouchi_nagoya_resexy
+aichi_marunouchi_nagoya_spur_luxury
+aichi_marunouchi_nagoya_tiger_eye
+aichi_marunouchi_nagoya_yurikago
+aichi_meieki_century
+aichi_meieki_chance
+aichi_meieki_cucue
+aichi_meieki_encore
+aichi_meieki_golden_rose
+aichi_meieki_m_spa
+aichi_meieki_spur_luxury
+aichi_meiekiminami_mrs_crystal
+aichi_meiekiminami_tiger_eye
+aichi_nagono_mrs_crystal
+aichi_nagoya_the_blanc
+aichi_nishiki_aroma_terrace
+aichi_nishiki_m_spa
+aichi_nishiki_marigold
+aichi_noritake_aroma_terrace
+aichi_osu_chance
+aichi_sakae_aroma_terrace
+aichi_sakae_century
+aichi_sakae_chance
+aichi_sakae_golden_rose
+aichi_sakae_venire
+aichi_takaoka_marigold
+aichi_takaoka_mrs_crystal
+chiba_funabashi_aroma_charis
+chiba_funabashi_begin
+fukui_tsuruga_yurikago
+fukuoka_hakata_mothers
+hyogo_asahidori_eslino
+hyogo_himeji_mrs_melty
+hyogo_kanocho_eslino
+hyogo_motomachi_mrs_tenor
+kanagawa_atsugi_rabbit_spa
+kanagawa_ebina_the_blanc
+kanagawa_fujisawa_guarigione
+kanagawa_fujisawa_liora
+kanagawa_fujisawa_pepe_spa
+kanagawa_honatsugi_otona_code
+kanagawa_inadazutsumi_redeye
+kanagawa_isezaki_rabbit_spa
+kanagawa_isezakicho_rabbit_spa
+kanagawa_kamiooka_otona_code
+kanagawa_kannai_guarigione
+kanagawa_kannai_liora
+kanagawa_kannai_otona_code
+kanagawa_kannai_rabbit_spa
+kanagawa_kannai_the_blanc
+kanagawa_kannai_yuru_spa
+kanagawa_kawasaki_gold
+kanagawa_kawasaki_guarigione
+kanagawa_kawasaki_livspa
+kanagawa_kawasaki_rere
+kanagawa_mukogaokayuen_redeye
+kanagawa_musashikosugi_rabbit_spa
+kanagawa_musashikosugi_rere
+kanagawa_noborito_redeye
+kanagawa_nogecho_rabbit_spa
+kanagawa_sakuragicho_guarigione
+kanagawa_totsuka_rere
+kanagawa_yokohama_liora
+kanagawa_yokohama_otona_code
+kyoto_kyoto_omiya_pure_white
+kyoto_kyoto_station_pure_white
+kyoto_kyoto_station_yurikago
+kyoto_nijo_pure_white
+kyoto_shijo_nishinotoin_yurikago
+osaka_awaza_bimajo_therapy
+osaka_dispatch_celeb_spa
+osaka_doyama_darlin_premium
+osaka_doyama_lavieet
+osaka_esaka_mokukindo
+osaka_higashimikuni_mokukindo
+osaka_juso_bellmadonna
+osaka_juso_celeb_spa
+osaka_juso_komoriuta
+osaka_juso_mokukindo
+osaka_juso_my_mama_spa
+osaka_juso_super_happy
+osaka_juso_tamanegi
+osaka_juso_wife_line
+osaka_juso_wifeline
+osaka_kitashinchi_beauty_and_beast
+osaka_kitashinchi_darlin_premium
+osaka_kitashinchi_lavieet
+osaka_kitashinchi_mufufu
+osaka_kyobashi_bellmadonna
+osaka_kyobashi_bunny_room
+osaka_kyobashi_celeb_spa
+osaka_kyobashi_dsp
+osaka_kyobashi_first_class
+osaka_kyobashi_furyu
+osaka_kyobashi_kakurega
+osaka_kyobashi_majimespa
+osaka_matsuyamachi_dsp
+osaka_matsuyamachi_lirica
+osaka_minamimorimachi_bimajo_therapy
+osaka_minamimorimachi_kakurega
+osaka_minamisenba_frog_spa
+osaka_minamisenba_skit
+osaka_nagahoribashi_amaou
+osaka_nagahoribashi_bimajo_therapy
+osaka_nagahoribashi_queen_spumante
+osaka_nagahoribashi_matsuyamachi_first_class
+osaka_namba_dsp
+osaka_namba_first_class
+osaka_namba_leonspa_gold
+osaka_namba_mrs_viaura
+osaka_nipponbashi_amaou
+osaka_nipponbashi_bellmadonna
+osaka_nipponbashi_bimajo_therapy
+osaka_nipponbashi_bunny_room
+osaka_nipponbashi_celeb_spa
+osaka_nipponbashi_cream
+osaka_nipponbashi_dsp
+osaka_nipponbashi_es_doll
+osaka_nipponbashi_first_class
+osaka_nipponbashi_madam_gentleman
+osaka_nipponbashi_majimespa
+osaka_nipponbashi_mrs_moonr
+osaka_nipponbashi_orenoie
+osaka_nipponbashi_skit
+osaka_nipponbashi_sr_himawari
+osaka_nipponbashi_super_happy
+osaka_nipponbashi_tenjoubito_pr
+osaka_nishinakajima_bellmadonna
+osaka_nishinakajima_celeb_spa
+osaka_nishinakajima_mokukindo
+osaka_sakaihigashi_bellmadonna
+osaka_sakaihigashi_bunny_room
+osaka_sakaihigashi_celeb_spa
+osaka_sakaihigashi_komoriuta
+osaka_sakaihigashi_leonspa_gold
+osaka_sakaihigashi_mrs_moonr
+osaka_sakaihigashi_sr_himawari
+osaka_sakaisujihonmachi_amaou
+osaka_sakaisujihonmachi_bellmadonna
+osaka_sakaisujihonmachi_bimajo_therapy
+osaka_sakaisujihonmachi_celeb_spa
+osaka_sakaisujihonmachi_cream
+osaka_sakaisujihonmachi_dsp
+osaka_sakaisujihonmachi_first_class
+osaka_sakaisujihonmachi_furyu
+osaka_sakaisujihonmachi_goat
+osaka_sakaisujihonmachi_kokoronoyurikago
+osaka_sakaisujihonmachi_komoriuta
+osaka_sakaisujihonmachi_lirica
+osaka_sakaisujihonmachi_majimespa
+osaka_sakaisujihonmachi_mrs_moonr
+osaka_sakaisujihonmachi_skit
+osaka_sakaisujihonmachi_spalot_mrs
+osaka_sakaisujihonmachi_sr_himawari
+osaka_sakaisujihonmachi_tamanegi
+osaka_sakaisujihonmachi_wife_line
+osaka_sakaisujihonmachi_wifeline
+osaka_sakuragawa_mrs_viaura
+osaka_shinosaka_bellmadonna
+osaka_shinosaka_bunny_room
+osaka_shinosaka_celeb_spa
+osaka_shinosaka_dsp
+osaka_shinosaka_first_class
+osaka_shinosaka_kokoronoyurikago
+osaka_shinosaka_majimespa
+osaka_shinosaka_mrs_viaura
+osaka_shinosaka_my_mama_spa
+osaka_shinosaka_sr_himawari
+osaka_shinsaibashi_dsp
+osaka_shinsaibashi_first_class
+osaka_suita_sr_himawari
+osaka_takatsuki_sr_himawari
+osaka_tanimachi9_bellmadonna
+osaka_tanimachi9_bunny_room
+osaka_tanimachi9_celeb_spa
+osaka_tanimachi9_dsp
+osaka_tanimachi9_first_class
+osaka_tanimachi9_madam_gentleman
+osaka_tanimachi9_majimespa
+osaka_tanimachi9_orenoie
+osaka_tanimachi9_sr_himawari
+osaka_tanimachi9_super_happy
+osaka_temmabashi_bimajo_therapy
+osaka_tennoji_bunny_room
+osaka_tennoji_orenoie
+osaka_umeda_super_happy
+saitama_omiya_offsuit
+saitama_omiya_regis
+shiga_hikone_yurikago
+shiga_kusatsu_yurikago
+shizuoka_mishima_liora
+tokyo_hachioji_rere
+tokyo_koganei_west_tokyo
+tokyo_kokubunji_esthe_bijin_madam
+tokyo_meguro_jiyugaoka_livspa
+tokyo_mitaka_esthe_bijin_madam
+chiba_chiba_lynx
+chiba_funabashi_lynx
+chiba_nishi_funabashi_lynx
+chiba_matsudo_lynx
+kanagawa_yokohama_lynx
+saitama_kawaguchi_lynx
+saitama_saitama_lynx
+tokyo_chiyoda_akihabara_lynx
+tokyo_kita_lynx
+tokyo_shinagawa_gotanda_lynx
+tokyo_shinjuku_shinjuku_lynx
+tokyo_shinjuku_takadanobaba_lynx
+tokyo_toshima_ikebukuro_lynx
+chiba_funabashi_limited_spa_2
+chiba_kashiwa_limited_spa
+saitama_kuki_limited_spa
+tokyo_shinjuku_higashishinjuku_limited_spa
+tokyo_shinjuku_okubo_limited_spa
+chiba_narita_levechi_esthe
+chiba_togane_levechi_esthe
+tokyo_nakano_levechi_esthe
+kanagawa_atsugi_doigt_de_fee
+kanagawa_kawasaki_doigt_de_fee_5
+tokyo_meguro_jiyugaoka_doigt_de_fee
+kanagawa_kawasaki_hoozuki
+tokyo_ota_kamata_hoozuki
+tokyo_ota_omori_hoozuki
+tokyo_shibuya_yoyogi_harajuku_hoozuki
+kanagawa_sagamihara_luxury_romance_2
+saitama_omiya_platinum_tokyo
+tokyo_adachi_kitasenju_himitsu_mrs_room
+tokyo_adachi_kitasenju_ranpu_kitasenju
+tokyo_chiyoda_kudanshita_rondo
+tokyo_chuo_ginza_rondo
+tokyo_chuo_ginza_aromamore
+tokyo_minato_roppongi_aromamore
+tokyo_shinjuku_kabukicho_aromamore
+tokyo_chuo_ginza_grand_aroma
+tokyo_hachioji_rabbit_spa
+tokyo_hachioji_tokyopla
+tokyo_shinjuku_shinjuku_gyoen_tokyopla
+tokyo_shinjuku_shinjuku_sanchome_tokyopla
+tokyo_kita_crest_spa_tokyo
+tokyo_suginami_ogikubo_crest_spa_tokyo
+tokyo_kita_yorimichi
+tokyo_musashino_kichijoji_yorimichi
+tokyo_koto_monzennakacho_ryugujo
+tokyo_ota_kamata_ryugujo
+tokyo_meguro_gakugei_daigaku_tokyo_esthe_club
+tokyo_setagaya_komazawa_daigaku_tokyo_esthe_club
+tokyo_meguro_jiyugaoka_mens_esthe_group
+tokyo_meguro_meguro_mens_esthe_group
+tokyo_nerima_nerima_mens_esthe_group
+tokyo_setagaya_futakotamagawa_mens_esthe_group
+tokyo_meguro_meguro_dahlia
+tokyo_minato_tamachi_dahlia
+tokyo_shibuya_ebisu_dahlia
+tokyo_shinagawa_gotanda_dahlia
+tokyo_meguro_meguro_grace
+tokyo_meguro_nakameguro_grace
+tokyo_meguro_nakameguro_aqua
+tokyo_minato_akasaka_kami_no_esthe
+tokyo_shinagawa_gotanda_kami_no_esthe
+tokyo_musashino_kichijoji_aroma_charmant
+tokyo_nakano_tokyo_mensesthe
+tokyo_shinjuku_higashishinjuku_tokyo_mensesthe
+tokyo_shinjuku_nishishinjuku_tokyo_mensesthe
+tokyo_shinjuku_shinjuku_sanchome_tokyo_mensesthe
+tokyo_toshima_ikebukuro_tokyo_mensesthe
+tokyo_nerima_nerima_aroma_modeste
+tokyo_setagaya_chitose_karasuyama_reve_spa
+tokyo_setagaya_meidaimae_reve_spa
+tokyo_setagaya_meidaimae_queens_collection
+tokyo_shibuya_sasazuka_queens_collection
+tokyo_shinjuku_shinjuku_queens_collection
+tokyo_shinjuku_shinjuku_sanchome_queens_collection
+tokyo_shinagawa_gotanda_yuru_spa
+tokyo_shinjuku_ichigaya_be_majo
+tokyo_shinjuku_yotsuya_e_komachi

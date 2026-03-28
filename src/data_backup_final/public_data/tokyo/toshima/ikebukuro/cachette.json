@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_toshima_ikebukuro_cachette",
+  "name": "カシェット (旧紳士のエステ)",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都豊島区池袋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分17,000円～",
+  "hours": "12:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "完全個室",
+    "深夜営業",
+    "foreigner ok"
+  ],
+  "websiteUrl": "https://cachette-ikebukuro.com/",
+  "nearestStation": "池袋駅",
+  "description": "70分17,000円 / 90分17,000円 / 120分23,000円 / 延長30分6,000円",
+  "threads": [],
+  "brandId": "cachette",
+  "therapists": []
+}

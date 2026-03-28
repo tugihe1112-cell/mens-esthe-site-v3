@@ -1,0 +1,64 @@
+{
+  "id": "himitsu_mrs_room_minamiurawa",
+  "name": "秘密のミセスルーム 南浦和",
+  "url": "https://mrs-room.com/",
+  "area": "南浦和",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK",
+    "個室あり"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "埼玉県",
+  "city": "南浦和",
+  "brandId": "himitsu_mrs_room",
+  "therapists": [
+    {
+      "name": "綾瀬 あい",
+      "age": 42,
+      "height": 160,
+      "cup": "E",
+      "tags": []
+    },
+    {
+      "name": "石原 みか",
+      "age": 45,
+      "height": 155,
+      "cup": "C",
+      "tags": []
+    },
+    {
+      "name": "広瀬 ゆり",
+      "age": 38,
+      "height": 165,
+      "cup": "F",
+      "tags": []
+    },
+    {
+      "name": "竹内 りな",
+      "age": 41,
+      "height": 158,
+      "cup": "D",
+      "tags": []
+    }
+  ]
+}

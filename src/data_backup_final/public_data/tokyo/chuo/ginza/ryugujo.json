@@ -1,0 +1,617 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム",
+    "熟女"
+  ],
+  "websiteUrl": "https://esthe-ryugujo.com/",
+  "description": "人形町・門前仲町・銀座・沼津・蒲田のリラクゼーション。大人のための隠れ家サロン。",
+  "brandId": "ryugujo",
+  "threads": [],
+  "id": "tokyo_chuo_ginza_ryugujo",
+  "name": "竜宮城 旧百万石 (銀座店)",
+  "prefecture": "東京都",
+  "city": "中央区",
+  "area": "銀座",
+  "nearestStation": "銀座駅",
+  "address": "東京都中央区銀座エリア",
+  "therapists": [
+    {
+      "id": "ryugujo_葉月みお",
+      "name": "葉月みお",
+      "age": "39歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_佐伯れいか",
+      "name": "佐伯れいか",
+      "age": "39歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_夏目みゆ",
+      "name": "夏目みゆ",
+      "age": "33歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_成瀬かんな",
+      "name": "成瀬かんな",
+      "age": "33歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_神田りか",
+      "name": "神田りか",
+      "age": "33歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_間宮ともか",
+      "name": "間宮ともか",
+      "age": "33歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_滝りえ",
+      "name": "滝りえ",
+      "age": "32歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_富永みこと",
+      "name": "富永みこと",
+      "age": "34歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_天宮あんな",
+      "name": "天宮あんな",
+      "age": "30歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_桃井りほ",
+      "name": "桃井りほ",
+      "age": "40歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_我孫子まり",
+      "name": "我孫子まり",
+      "age": "42歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_星まこ",
+      "name": "星まこ",
+      "age": "40歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_中条りん",
+      "name": "中条りん",
+      "age": "39歳",
+      "height": "171cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_真野ゆりか",
+      "name": "真野ゆりか",
+      "age": "45歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_柚木りこ",
+      "name": "柚木りこ",
+      "age": "39歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_天月そら",
+      "name": "天月そら",
+      "age": "34歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_鈴野ななか",
+      "name": "鈴野ななか",
+      "age": "30歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_一ノ木えま",
+      "name": "一ノ木えま",
+      "age": "38歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_宇佐美かなえ",
+      "name": "宇佐美かなえ",
+      "age": "34歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_一ノ瀬しほ",
+      "name": "一ノ瀬しほ",
+      "age": "42歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_真木れいな",
+      "name": "真木れいな",
+      "age": "28歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_結城りな",
+      "name": "結城りな",
+      "age": "40歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_浅川えれん",
+      "name": "浅川えれん",
+      "age": "29歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_白金あん",
+      "name": "白金あん",
+      "age": "38歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_美咲まどか",
+      "name": "美咲まどか",
+      "age": "33歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_藤田ゆりあ",
+      "name": "藤田ゆりあ",
+      "age": "35歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_立花ももか",
+      "name": "立花ももか",
+      "age": "32歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_朝比奈さな",
+      "name": "朝比奈さな",
+      "age": "35歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_戸村ほなみ",
+      "name": "戸村ほなみ",
+      "age": "35歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_高島みれい",
+      "name": "高島みれい",
+      "age": "31歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_椎名まゆこ",
+      "name": "椎名まゆこ",
+      "age": "31歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_大谷ゆうか",
+      "name": "大谷ゆうか",
+      "age": "36歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_永野ななみ",
+      "name": "永野ななみ",
+      "age": "35歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_影山まゆか",
+      "name": "影山まゆか",
+      "age": "34歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_松坂いろは",
+      "name": "松坂いろは",
+      "age": "28歳",
+      "height": "149cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_月城とわ",
+      "name": "月城とわ",
+      "age": "36歳",
+      "height": "171cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_月島ゆめな",
+      "name": "月島ゆめな",
+      "age": "36歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_伊織みずほ",
+      "name": "伊織みずほ",
+      "age": "40歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_森永せいか",
+      "name": "森永せいか",
+      "age": "42歳",
+      "height": "173cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_青山みさき",
+      "name": "青山みさき",
+      "age": "30歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_白百合さえ",
+      "name": "白百合さえ",
+      "age": "33歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_黒崎なつみ",
+      "name": "黒崎なつみ",
+      "age": "33歳",
+      "height": "161cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "ryugujo_星野せり",
+      "name": "星野せり",
+      "age": "30歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_桐谷れん",
+      "name": "桐谷れん",
+      "age": "28歳",
+      "height": "168cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "ryugujo_一条すみれ",
+      "name": "一条すみれ",
+      "age": "34歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_明日香るみ",
+      "name": "明日香るみ",
+      "age": "30歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_篠原みおか",
+      "name": "篠原みおか",
+      "age": "38歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_朝陽せな",
+      "name": "朝陽せな",
+      "age": "29歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_川村ゆま",
+      "name": "川村ゆま",
+      "age": "34歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_青木せりか",
+      "name": "青木せりか",
+      "age": "42歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_美波ここ",
+      "name": "美波ここ",
+      "age": "28歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_愛原のんあ",
+      "name": "愛原のんあ",
+      "age": "32歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_佐々木さら",
+      "name": "佐々木さら",
+      "age": "33歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_宝生さや",
+      "name": "宝生さや",
+      "age": "34歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_黒木ゆり",
+      "name": "黒木ゆり",
+      "age": "30歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_桜田かれん",
+      "name": "桜田かれん",
+      "age": "33歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_七瀬りの",
+      "name": "七瀬りの",
+      "age": "29歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_蒼井りお",
+      "name": "蒼井りお",
+      "age": "33歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_姫川りいさ",
+      "name": "姫川りいさ",
+      "age": "40歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_市川ひかり",
+      "name": "市川ひかり",
+      "age": "33歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_小笠原ゆい",
+      "name": "小笠原ゆい",
+      "age": "30歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_宮沢すずほ",
+      "name": "宮沢すずほ",
+      "age": "40歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_九条りさ",
+      "name": "九条りさ",
+      "age": "40歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_石田みのり",
+      "name": "石田みのり",
+      "age": "29歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_花尻はるな",
+      "name": "花尻はるな",
+      "age": "35歳",
+      "height": "151cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_藤原あおい",
+      "name": "藤原あおい",
+      "age": "33歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_藤咲まや",
+      "name": "藤咲まや",
+      "age": "49歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_秋空かすみ",
+      "name": "秋空かすみ",
+      "age": "38歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_妃えりか",
+      "name": "妃えりか",
+      "age": "36歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_伊東えり",
+      "name": "伊東えり",
+      "age": "38歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_中村あんじゅ",
+      "name": "中村あんじゅ",
+      "age": "42歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_藍田もえ",
+      "name": "藍田もえ",
+      "age": "36歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_湊咲りりな",
+      "name": "湊咲りりな",
+      "age": "35歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_眞杉ほの",
+      "name": "眞杉ほの",
+      "age": "39歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_綾瀬ゆうき",
+      "name": "綾瀬ゆうき",
+      "age": "45歳",
+      "height": "173cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_川島かほ",
+      "name": "川島かほ",
+      "age": "41歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_宮田ひかる",
+      "name": "宮田ひかる",
+      "age": "37歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_桐島れな",
+      "name": "桐島れな",
+      "age": "35歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_浅香ひな",
+      "name": "浅香ひな",
+      "age": "29歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_千葉なぎさ",
+      "name": "千葉なぎさ",
+      "age": "32歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_水嶋あやみ",
+      "name": "水嶋あやみ",
+      "age": "36歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_原みなみ",
+      "name": "原みなみ",
+      "age": "34歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_沢尻もも",
+      "name": "沢尻もも",
+      "age": "46歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "ryugujo_深川まい",
+      "name": "深川まい",
+      "age": "30歳",
+      "height": "161cm",
+      "bust": null
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_toshima_ikebukuro_tokyo-fairy-land",
+  "name": "東京フェアリーランド",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都豊島区池袋（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分18,000円～",
+  "hours": "11:00～5:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://tokyo-fairy-land.men-este.com/",
+  "nearestStation": "池袋駅、高田馬場駅、新宿駅",
+  "description": "70分16,000円 / 90分18,000円 / 120分23,000円 / 150分28,000円 / 延長30分6,000円",
+  "threads": [],
+  "brandId": "tokyo-fairy-land",
+  "therapists": []
+}

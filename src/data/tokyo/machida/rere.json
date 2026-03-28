@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_machida_rere",
+  "name": "RERE GROUP (リリグループ)",
+  "prefecture": "東京都",
+  "city": "町田市",
+  "address": "東京都・神奈川県 各エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 13,000円～",
+  "hours": "11:00～24:00",
+  "isPremium": false,
+  "websiteUrl": "https://www.rere-group.com/",
+  "nearestStation": "武蔵小杉駅/戸塚駅/川崎駅/町田駅/八王子駅",
+  "description": "武蔵小杉・戸塚・川崎・町田・八王子のメンズエステ。90分13,000円から。",
+  "tags": [
+    "カード払いOK",
+    "複数エリア展開"
+  ],
+  "brandId": "rere",
+  "threads": [],
+  "therapists": []
+}

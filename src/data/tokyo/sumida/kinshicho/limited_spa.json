@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_sumida_kinshicho_limited_spa",
+  "name": "Limited Spa (リミテッドスパ)",
+  "prefecture": "東京都",
+  "city": "墨田区",
+  "area": "錦糸町",
+  "address": "東京都墨田区錦糸町エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://limited-spa.com/",
+  "nearestStation": "錦糸町駅",
+  "description": "西船橋・船橋・柏・錦糸町・東新宿・大久保・久喜の日本人リラクゼーション。 / 料金システム: 60分12,000円〜",
+  "threads": [],
+  "brandId": "limited_spa",
+  "therapists": []
+}

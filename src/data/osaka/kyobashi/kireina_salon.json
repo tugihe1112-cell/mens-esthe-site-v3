@@ -1,0 +1,24 @@
+{
+  "id": 1117,
+  "name": "綺麗なサロン",
+  "prefecture": "大阪府",
+  "city": "京橋",
+  "area": "京橋",
+  "address": "大阪府大阪市中央区エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 14,000円～",
+  "hours": "10:00～翌1:00",
+  "isPremium": false,
+  "tags": [
+    "指名料無料",
+    "完全個室",
+    "オイルマッサージ"
+  ],
+  "websiteUrl": "https://kirei1212.livedoor.blog/",
+  "nearestStation": "堺筋本町駅/長堀橋駅/京橋駅",
+  "description": "大阪（堺筋本町・長堀橋・京橋）のメンズエステ。90分14,000円から。オイルデトックスコースなど。",
+  "therapists": [],
+  "brandId": "kireina_salon"
+}

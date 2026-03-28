@@ -1,0 +1,28 @@
+{
+  "id": "tokyo_minato_shinbashi_tiger_gate",
+  "name": "TIGER GATE (タイガーゲート)",
+  "prefecture": "東京都",
+  "city": "港区",
+  "area": "新橋",
+  "address": "東京都港区新橋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分18,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://www.tiger-gate.net/",
+  "nearestStation": "新橋駅",
+  "description": "虎ノ門・新橋の日本人リラクゼーション。 / 料金システム: 90分18,000円〜",
+  "threads": [],
+  "brandId": "tiger_gate",
+  "therapists": []
+}

@@ -1,0 +1,76 @@
+{
+  "id": "tokyo_sumida_kinshicho_aroma_cura",
+  "name": "Aroma Cura (アロマクラ)",
+  "url": "https://aromacura0606.com/",
+  "area": "錦糸町",
+  "price": "16,000円〜",
+  "interview": false,
+  "tags": [
+    "カード支払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "courses": [
+    {
+      "minutes": 60,
+      "price": "16,000"
+    },
+    {
+      "minutes": 75,
+      "price": "17,000"
+    },
+    {
+      "minutes": 90,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "24,000"
+    },
+    {
+      "minutes": 150,
+      "price": "29,000"
+    },
+    {
+      "minutes": 180,
+      "price": "35,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "墨田区",
+  "brandId": "aroma_cura",
+  "threads": [],
+  "therapists": [
+    "aroma_cura_田中 ももこ",
+    "aroma_cura_藤井 ななか",
+    "aroma_cura_桔梗 とうか",
+    "aroma_cura_白石 ほのか",
+    "aroma_cura_中条 めぐ",
+    "aroma_cura_猫橋 なお",
+    "aroma_cura_七星 あいり",
+    "aroma_cura_森川 みお",
+    "aroma_cura_佐々木 このみ",
+    "aroma_cura_桜井 りん",
+    "aroma_cura_妃 ゆきな",
+    "aroma_cura_小鳥遊 みう",
+    "aroma_cura_花咲 ちむ",
+    "aroma_cura_小夏 まな",
+    "aroma_cura_白咲 ゆめか",
+    "aroma_cura_石神 さくら",
+    "aroma_cura_立花 すみか",
+    "aroma_cura_山川 うみ",
+    "aroma_cura_綾里 ゆきの",
+    "aroma_cura_影山 れい",
+    "aroma_cura_中村 あん",
+    "aroma_cura_広瀬 ちほ",
+    "aroma_cura_琥珀 かれん",
+    "aroma_cura_佐藤 める",
+    "aroma_cura_天野 るな",
+    "aroma_cura_山田 あやみ",
+    "aroma_cura_日向 ひより",
+    "aroma_cura_井上 はるか",
+    "aroma_cura_加藤 ひかり",
+    "aroma_cura_花星 さな",
+    "aroma_cura_月乃 ありさ"
+  ]
+}

@@ -1,0 +1,493 @@
+{
+  "id": 1050,
+  "name": "Pepe Spa (ペペスパ)",
+  "prefecture": "神奈川県",
+  "city": "藤沢",
+  "area": "藤沢",
+  "address": "東京都大田区・神奈川県藤沢市エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "70分 14,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://www.pepespa.com/",
+  "nearestStation": "蒲田駅 / 藤沢駅",
+  "description": "蒲田・藤沢のメンズエステ。 / 料金システム: 70分14,000円 / 80分16,000円 / 90分18,000円 / 120分22,000円",
+  "therapists": [
+    {
+      "id": "1050-1",
+      "name": "宇宙　さき",
+      "age": 28,
+      "height": 161,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-2",
+      "name": "小鳥遊　ちえり",
+      "age": 22,
+      "height": 155,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-3",
+      "name": "琴　ことね",
+      "age": 25,
+      "height": 158,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-4",
+      "name": "碧えくぼ",
+      "age": 21,
+      "height": 167,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-5",
+      "name": "天使　ひな",
+      "age": 23,
+      "height": 165,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-6",
+      "name": "松井　みな",
+      "age": 27,
+      "height": 154,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-7",
+      "name": "神楽あいり",
+      "age": 23,
+      "height": 160,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-8",
+      "name": "東雲しの",
+      "age": 23,
+      "height": 166,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-9",
+      "name": "伏見　すみれ",
+      "age": 26,
+      "height": 164,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-10",
+      "name": "響　ひかる",
+      "age": 19,
+      "height": 159,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-11",
+      "name": "麗日　そら",
+      "age": 23,
+      "height": 167,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-12",
+      "name": "由良　ゆら",
+      "age": 26,
+      "height": 160,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-13",
+      "name": "佐藤しお",
+      "age": 21,
+      "height": 161,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-14",
+      "name": "宮崎　なぎさ",
+      "age": 24,
+      "height": 172,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-15",
+      "name": "加賀美まい",
+      "age": 22,
+      "height": 161,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-16",
+      "name": "若月　あんな",
+      "age": 24,
+      "height": 158,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-17",
+      "name": "星川るな",
+      "age": 25,
+      "height": 162,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-18",
+      "name": "三谷かのん",
+      "age": 23,
+      "height": 160,
+      "bust": 0,
+      "cup": "F",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-19",
+      "name": "御坂ひな",
+      "age": 22,
+      "height": 158,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-20",
+      "name": "白雪　める",
+      "age": 21,
+      "height": 158,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-21",
+      "name": "芳野ゆな",
+      "age": 24,
+      "height": 162,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-22",
+      "name": "最上あや",
+      "age": 20,
+      "height": 169,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-23",
+      "name": "大谷　かのん",
+      "age": 25,
+      "height": 155,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-24",
+      "name": "倉田ゆき",
+      "age": 26,
+      "height": 164,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-25",
+      "name": "飛鳥あおい",
+      "age": 23,
+      "height": 160,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-26",
+      "name": "青葉りんか",
+      "age": 24,
+      "height": 160,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-27",
+      "name": "鎌田れい",
+      "age": 24,
+      "height": 156,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-28",
+      "name": "川口みき",
+      "age": 25,
+      "height": 160,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-29",
+      "name": "前田ゆいか",
+      "age": 26,
+      "height": 163,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-30",
+      "name": "七川こよみ",
+      "age": 25,
+      "height": 159,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-31",
+      "name": "白雪める",
+      "age": 21,
+      "height": 158,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-32",
+      "name": "蓮見 ゆあ",
+      "age": 25,
+      "height": 160,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-33",
+      "name": "石森うか",
+      "age": 26,
+      "height": 162,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-34",
+      "name": "糸師りの",
+      "age": 26,
+      "height": 162,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-35",
+      "name": "天谷　ちづる",
+      "age": 26,
+      "height": 156,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-36",
+      "name": "結城ゆあ",
+      "age": 26,
+      "height": 160,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-37",
+      "name": "北川みさと",
+      "age": 32,
+      "height": 156,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-38",
+      "name": "谷崎　ふうか",
+      "age": 24,
+      "height": 154,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-39",
+      "name": "平良れん",
+      "age": 30,
+      "height": 149,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-40",
+      "name": "長谷川ゆみ",
+      "age": 27,
+      "height": 158,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-41",
+      "name": "叶りえ",
+      "age": 35,
+      "height": 161,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-42",
+      "name": "夢咲　ことり",
+      "age": 24,
+      "height": 151,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-43",
+      "name": "本田いと",
+      "age": 26,
+      "height": 160,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-44",
+      "name": "七瀬るい",
+      "age": 24,
+      "height": 149,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-45",
+      "name": "江崎なな",
+      "age": 25,
+      "height": 153,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-46",
+      "name": "月乃はな",
+      "age": 26,
+      "height": 164,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "1050-47",
+      "name": "楓　みお",
+      "age": 23,
+      "height": 153,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0
+    }
+  ],
+  "brandId": "pepe_spa"
+}

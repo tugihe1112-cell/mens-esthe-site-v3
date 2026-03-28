@@ -1,0 +1,53 @@
+{
+  "id": "tokyo_shinagawa_gotanda_koakuma_spa_tokyo",
+  "name": "小悪魔スパトウキョウ 五反田ルーム",
+  "prefecture": "東京都",
+  "city": "品川区",
+  "region": "関東エリア",
+  "address": "東京都品川区西五反田",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分 16,000円～",
+  "hours": "10:00～翌4:00",
+  "isPremium": true,
+  "color": "from-purple-500 to-indigo-600",
+  "tags": [
+    "高級店"
+  ],
+  "websiteUrl": "https://mens-esthe-aroma.site/index.html",
+  "system": {
+    "standard": [
+      {
+        "time": "80分",
+        "price": "16,000円"
+      },
+      {
+        "time": "100分",
+        "price": "20,000円"
+      },
+      {
+        "time": "120分",
+        "price": "24,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長15分",
+        "price": "3,000円"
+      },
+      {
+        "name": "延長30分",
+        "price": "6,000円"
+      },
+      {
+        "name": "指名料",
+        "price": "1,000円"
+      }
+    ]
+  },
+  "threads": [],
+  "area": "五反田",
+  "brandId": "koakuma_spa_tokyo",
+  "therapists": []
+}

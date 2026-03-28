@@ -1,0 +1,491 @@
+{
+  "id": 60315,
+  "name": "Spa Ytree (ワイツリー)",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都渋谷区代々木",
+  "image": "/images/shops/spa_ytree.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "11:00～28:00",
+  "isPremium": false,
+  "color": "from-green-900 to-teal-900",
+  "tags": [
+    "深夜営業",
+    "熟女セラピスト"
+  ],
+  "websiteUrl": "https://spa-ytree.com/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_しおん",
+      "name": "しおん",
+      "age": 49,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_らん",
+      "name": "らん",
+      "age": 46,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_なおみ",
+      "name": "なおみ",
+      "age": 45,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_くみ",
+      "name": "くみ",
+      "age": 46,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_るりか",
+      "name": "るりか",
+      "age": 45,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ふたば",
+      "name": "ふたば",
+      "age": 44,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_とわ",
+      "name": "とわ",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_セイラ",
+      "name": "セイラ",
+      "age": 39,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_さき",
+      "name": "さき",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_優",
+      "name": "優",
+      "age": 55,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_れいか",
+      "name": "れいか",
+      "age": 40,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ひめか",
+      "name": "ひめか",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_あいの",
+      "name": "あいの",
+      "age": 41,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ゆりな",
+      "name": "ゆりな",
+      "age": 40,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_葵",
+      "name": "葵",
+      "age": 40,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_りお",
+      "name": "りお",
+      "age": 43,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_音羽",
+      "name": "音羽",
+      "age": 49,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ミイ",
+      "name": "ミイ",
+      "age": 50,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_リリー",
+      "name": "リリー",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_芽依",
+      "name": "芽依",
+      "age": 42,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_みゆめ",
+      "name": "みゆめ",
+      "age": 45,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_りょう",
+      "name": "りょう",
+      "age": 38,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_まや",
+      "name": "まや",
+      "age": 47,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_はな",
+      "name": "はな",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ゆたか",
+      "name": "ゆたか",
+      "age": 40,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ねね",
+      "name": "ねね",
+      "age": 45,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_みお",
+      "name": "みお",
+      "age": 38,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_もえ",
+      "name": "もえ",
+      "age": 52,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_夏菜子",
+      "name": "夏菜子",
+      "age": 41,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_静香",
+      "name": "静香",
+      "age": 51,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_こころ",
+      "name": "こころ",
+      "age": 38,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_桃香",
+      "name": "桃香",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_るり",
+      "name": "るり",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_凛",
+      "name": "凛",
+      "age": 40,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_みおり",
+      "name": "みおり",
+      "age": 40,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_はるか",
+      "name": "はるか",
+      "age": 43,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_なな",
+      "name": "なな",
+      "age": 44,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_みゆき",
+      "name": "みゆき",
+      "age": 41,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_よしの",
+      "name": "よしの",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_めぐ",
+      "name": "めぐ",
+      "age": 45,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ありす",
+      "name": "ありす",
+      "age": 40,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_瑞音",
+      "name": "瑞音",
+      "age": 45,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_あんな",
+      "name": "あんな",
+      "age": 50,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_あやめ",
+      "name": "あやめ",
+      "age": 32,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_えみり",
+      "name": "えみり",
+      "age": 46,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_まりあ",
+      "name": "まりあ",
+      "age": 53,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_はるな",
+      "name": "はるな",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_りの",
+      "name": "りの",
+      "age": 35,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_あや",
+      "name": "あや",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_みき",
+      "name": "みき",
+      "age": 47,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_小鳥",
+      "name": "小鳥",
+      "age": 44,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_すず",
+      "name": "すず",
+      "age": 43,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_みか",
+      "name": "みか",
+      "age": 50,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_まい",
+      "name": "まい",
+      "age": 42,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ほのか",
+      "name": "ほのか",
+      "age": 47,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ちかこ",
+      "name": "ちかこ",
+      "age": 48,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_きょうこ",
+      "name": "きょうこ",
+      "age": 45,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_りえ",
+      "name": "りえ",
+      "age": 45,
+      "height": null,
+      "bust": null,
+      "tags": []
+    }
+  ],
+  "area": [
+    "代々木・原宿",
+    "原宿"
+  ]
+}

@@ -1,0 +1,1496 @@
+{
+  "id": 6008,
+  "name": "PLATINUM TOKYO 大宮店",
+  "prefecture": "埼玉県",
+  "city": "大宮",
+  "area": "大宮",
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "出張可能"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "75分",
+        "price": "15,000円"
+      },
+      {
+        "time": "90分",
+        "price": "18,000円"
+      },
+      {
+        "time": "120分",
+        "price": "23,000円"
+      },
+      {
+        "time": "150分",
+        "price": "28,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 15分",
+        "price": "4,000円"
+      },
+      {
+        "name": "本指名・ネット指名",
+        "price": "1,000円"
+      }
+    ]
+  },
+  "url": "https://esthe-platinum.tokyo/",
+  "threads": [
+    {
+      "id": 600001,
+      "therapistName": "鳳城あおい",
+      "age": 24,
+      "height": 170,
+      "measurements": "B93(G)W58H89",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600002,
+      "therapistName": "最上ゆい",
+      "age": 20,
+      "height": 168,
+      "measurements": "B87(D)W55H89",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600003,
+      "therapistName": "美月ゆら",
+      "age": 25,
+      "height": 160,
+      "measurements": "B85(C)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600004,
+      "therapistName": "雨宮るね",
+      "age": 20,
+      "height": 161,
+      "measurements": "B91(H)W56H88",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600005,
+      "therapistName": "佐藤あん",
+      "age": 26,
+      "height": 167,
+      "measurements": "B90(F)W58H88",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600006,
+      "therapistName": "宝月るな",
+      "age": 20,
+      "height": 170,
+      "measurements": "B86W57H87",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600007,
+      "therapistName": "松岡はね",
+      "age": 20,
+      "height": 159,
+      "measurements": "B85(C)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600008,
+      "therapistName": "仲間あすか",
+      "age": 38,
+      "height": 160,
+      "measurements": "B91(H)W58H89",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600009,
+      "therapistName": "古谷みつき",
+      "age": 26,
+      "height": 153,
+      "measurements": "B84(C)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600010,
+      "therapistName": "芹沢あん",
+      "age": 21,
+      "height": 160,
+      "measurements": "B86W56H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600011,
+      "therapistName": "鈴本あいり",
+      "age": 28,
+      "height": 157,
+      "measurements": "B88(D)W56H87",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600012,
+      "therapistName": "花咲よる",
+      "age": 22,
+      "height": 171,
+      "measurements": "B88(E)W54H87",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600013,
+      "therapistName": "市川かれん",
+      "age": 23,
+      "height": 160,
+      "measurements": "B91(E)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600014,
+      "therapistName": "冬月ゆうり",
+      "age": 27,
+      "height": 155,
+      "measurements": "B88(D)W58H90",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600015,
+      "therapistName": "蓮見さら",
+      "age": 26,
+      "height": 163,
+      "measurements": "B89(F)W57H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600016,
+      "therapistName": "朝日奈まほ",
+      "age": 28,
+      "height": 165,
+      "measurements": "B88(F)W58H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600017,
+      "therapistName": "藤咲しおり",
+      "age": 22,
+      "height": 167,
+      "measurements": "B86(D)W58H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600018,
+      "therapistName": "日向のん",
+      "age": 22,
+      "height": 157,
+      "measurements": "B89(F)W56H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600019,
+      "therapistName": "琴石みれい",
+      "age": 24,
+      "height": 160,
+      "measurements": "B87(D)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600020,
+      "therapistName": "桃瀬もも",
+      "age": 20,
+      "height": 152,
+      "measurements": "B84(C)W56H83",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600021,
+      "therapistName": "星宮そら",
+      "age": 24,
+      "height": 150,
+      "measurements": "B88(D)W56H87",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600022,
+      "therapistName": "白星せな",
+      "age": 24,
+      "height": 170,
+      "measurements": "B89(D)W58H91",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600023,
+      "therapistName": "白川あいさ",
+      "age": 24,
+      "height": 158,
+      "measurements": "B87(D)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600024,
+      "therapistName": "佐倉にじ",
+      "age": 24,
+      "height": 155,
+      "measurements": "B87(D)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600025,
+      "therapistName": "月森かなめ",
+      "age": 26,
+      "height": 151,
+      "measurements": "B86(D)W57H87",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600026,
+      "therapistName": "伊藤れな",
+      "age": 25,
+      "height": 160,
+      "measurements": "B89(D)W56H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600027,
+      "therapistName": "桜ゆりの",
+      "age": 26,
+      "height": 163,
+      "measurements": "B85(C)W57H92",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600028,
+      "therapistName": "澄田りん",
+      "age": 24,
+      "height": 158,
+      "measurements": "B89(E)W58H97",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600029,
+      "therapistName": "渚あみ",
+      "age": 23,
+      "height": 157,
+      "measurements": "B88(F)W55H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600030,
+      "therapistName": "七瀬みな",
+      "age": 27,
+      "height": 155,
+      "measurements": "B85(D)W56H83",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600031,
+      "therapistName": "月乃うた",
+      "age": 24,
+      "height": 154,
+      "measurements": "B84W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600032,
+      "therapistName": "天音ゆきの",
+      "age": 27,
+      "height": 155,
+      "measurements": "B83(E)W54H81",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600033,
+      "therapistName": "工藤まな",
+      "age": 21,
+      "height": 156,
+      "measurements": "B99(H)W58H88",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600034,
+      "therapistName": "東雲めぐる",
+      "age": 22,
+      "height": 163,
+      "measurements": "B86(D)W58H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600035,
+      "therapistName": "月見里ひより",
+      "age": 21,
+      "height": 156,
+      "measurements": "B85(C)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600036,
+      "therapistName": "小鳥遊きき",
+      "age": 22,
+      "height": 159,
+      "measurements": "B85(D)W59H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600037,
+      "therapistName": "一ノ瀬さな",
+      "age": 24,
+      "height": 163,
+      "measurements": "B87(D)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600038,
+      "therapistName": "柊みくる",
+      "age": 21,
+      "height": 155,
+      "measurements": "B90(E)W57H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600039,
+      "therapistName": "橘のあ",
+      "age": 21,
+      "height": 152,
+      "measurements": "B90(E)W56H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600040,
+      "therapistName": "村上すず",
+      "age": 20,
+      "height": 150,
+      "measurements": "B85(D)W58H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600041,
+      "therapistName": "夏目えみ",
+      "age": 28,
+      "height": 170,
+      "measurements": "B90(F)W57H89",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600042,
+      "therapistName": "一葉ゆず",
+      "age": 23,
+      "height": 159,
+      "measurements": "B93(G)W58H89",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600043,
+      "therapistName": "井上もも",
+      "age": 22,
+      "height": 158,
+      "measurements": "B87(D)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600044,
+      "therapistName": "橋本れいな",
+      "age": 26,
+      "height": 160,
+      "measurements": "B92(G)W58H90",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600045,
+      "therapistName": "及川みこと",
+      "age": 21,
+      "height": 163,
+      "measurements": "B88(E)W55H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600046,
+      "therapistName": "夢咲のの",
+      "age": 20,
+      "height": 159,
+      "measurements": "B90(G)W57H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600047,
+      "therapistName": "雫のどか",
+      "age": 26,
+      "height": 164,
+      "measurements": "B96(F)W58H90",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600048,
+      "therapistName": "東條みほ",
+      "age": 27,
+      "height": 155,
+      "measurements": "B86(E)W57H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600049,
+      "therapistName": "聚楽いちか",
+      "age": 26,
+      "height": 150,
+      "measurements": "B90(F)W56H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600050,
+      "therapistName": "橘みる",
+      "age": 20,
+      "height": 160,
+      "measurements": "B87(D)W56H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600051,
+      "therapistName": "天月ことみ",
+      "age": 27,
+      "height": 160,
+      "measurements": "B86(D)W57H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600052,
+      "therapistName": "織野ゆな",
+      "age": 28,
+      "height": 158,
+      "measurements": "B88(D)W57H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600053,
+      "therapistName": "岩田りさ",
+      "age": 22,
+      "height": 161,
+      "measurements": "B92(F)W58H87",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600054,
+      "therapistName": "望月みれい",
+      "age": 24,
+      "height": 168,
+      "measurements": "B86(C)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600055,
+      "therapistName": "神宮寺なみ",
+      "age": 23,
+      "height": 157,
+      "measurements": "B90(G)W56H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600056,
+      "therapistName": "鈴野ねね",
+      "age": 23,
+      "height": 150,
+      "measurements": "B89(F)W56H88",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600057,
+      "therapistName": "甘宮める",
+      "age": 20,
+      "height": 153,
+      "measurements": "B85(C)W56H84",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600058,
+      "therapistName": "立花るい",
+      "age": 23,
+      "height": 160,
+      "measurements": "B86(D)W56H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600059,
+      "therapistName": "桜庭りさ",
+      "age": 21,
+      "height": 155,
+      "measurements": "B86(D)W58H84",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600060,
+      "therapistName": "七海ひかる",
+      "age": 24,
+      "height": 160,
+      "measurements": "B83(C)W54H83",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600061,
+      "therapistName": "長月さくら",
+      "age": 22,
+      "height": 150,
+      "measurements": "B87(D)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600062,
+      "therapistName": "三森りか",
+      "age": 20,
+      "height": 158,
+      "measurements": "B85(C)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600063,
+      "therapistName": "末永りせ",
+      "age": 20,
+      "height": 155,
+      "measurements": "B87(E)W58H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600064,
+      "therapistName": "篠原かな",
+      "age": 20,
+      "height": 160,
+      "measurements": "B96(F)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600065,
+      "therapistName": "唯月りか",
+      "age": 24,
+      "height": 163,
+      "measurements": "B84(C)W56H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600066,
+      "therapistName": "初音ゆう",
+      "age": 26,
+      "height": 154,
+      "measurements": "B84(C)W58H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600067,
+      "therapistName": "桜井くるみ",
+      "age": 25,
+      "height": 155,
+      "measurements": "B100(I)W60H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600068,
+      "therapistName": "小室まほ",
+      "age": 21,
+      "height": 160,
+      "measurements": "B87(D)W58H85",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    },
+    {
+      "id": 600069,
+      "therapistName": "明菜もも",
+      "age": 22,
+      "height": 161,
+      "measurements": "B85(D)W55H86",
+      "tags": [],
+      "image": "/images/therapists/placeholder.jpg",
+      "rating": 0,
+      "reviewCount": 0,
+      "averageRating": 0,
+      "averageDetailedRatings": {
+        "cleanliness": 0,
+        "appearance": 0,
+        "style": 0,
+        "service": 0,
+        "skill": 0,
+        "intensity": 0
+      },
+      "posts": []
+    }
+  ],
+  "brandId": "platinum_tokyo"
+}

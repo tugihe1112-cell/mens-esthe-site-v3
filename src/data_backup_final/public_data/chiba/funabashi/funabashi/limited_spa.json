@@ -1,0 +1,784 @@
+{
+  "id": 77504,
+  "name": "Limited Spa (リミテッドスパ)",
+  "prefecture": "千葉県",
+  "city": "船橋",
+  "area": "船橋",
+  "address": "千葉県船橋市船橋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://limited-spa.com/",
+  "nearestStation": "船橋駅",
+  "description": "西船橋・船橋・柏・錦糸町・東新宿・大久保・久喜の日本人リラクゼーション。 / 料金システム: 60分12,000円〜",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "77504-yuri",
+      "name": "ゆり",
+      "age": 24,
+      "height": 160,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-noa",
+      "name": "のあ",
+      "age": 20,
+      "height": 158,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-mio",
+      "name": "みお",
+      "age": 25,
+      "height": 160,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-mona",
+      "name": "もな",
+      "age": 18,
+      "height": 159,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-remon",
+      "name": "れもん",
+      "age": 21,
+      "height": 153,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-kokona",
+      "name": "ここな",
+      "age": 19,
+      "height": 155,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-mizuki",
+      "name": "みずき",
+      "age": 19,
+      "height": 164,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-kanna",
+      "name": "かんな",
+      "age": 19,
+      "height": 151,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-runa",
+      "name": "るな",
+      "age": 24,
+      "height": 165,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-emiri",
+      "name": "えみり",
+      "age": 31,
+      "height": 154,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-sakurako",
+      "name": "さくらこ",
+      "age": 23,
+      "height": 153,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-rara",
+      "name": "らら",
+      "age": 26,
+      "height": 162,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-kana",
+      "name": "かな",
+      "age": 23,
+      "height": 153,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-minami",
+      "name": "みなみ",
+      "age": 21,
+      "height": 161,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-aika",
+      "name": "あいか",
+      "age": 23,
+      "height": 148,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-emi",
+      "name": "えみ",
+      "age": 26,
+      "height": 154,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-riona",
+      "name": "りおな",
+      "age": 20,
+      "height": 160,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-rika",
+      "name": "りか",
+      "age": 27,
+      "height": 165,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-kirara",
+      "name": "きらら",
+      "age": 19,
+      "height": 156,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-hiyori",
+      "name": "ひより",
+      "age": 24,
+      "height": 157,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yuzuha",
+      "name": "ゆづは",
+      "age": 20,
+      "height": 150,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-arisa",
+      "name": "ありさ",
+      "age": 29,
+      "height": 160,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yurika",
+      "name": "ゆりか",
+      "age": 26,
+      "height": 158,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-kanon",
+      "name": "かのん",
+      "age": 20,
+      "height": 150,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yuki",
+      "name": "ゆうき",
+      "age": 27,
+      "height": 153,
+      "bust": 0,
+      "cup": "F",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-hinaki",
+      "name": "ひなき",
+      "age": 24,
+      "height": 169,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yuki-2",
+      "name": "ゆき",
+      "age": 18,
+      "height": 161,
+      "bust": 0,
+      "cup": "E",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-tsugumi",
+      "name": "つぐみ",
+      "age": 27,
+      "height": 155,
+      "bust": 0,
+      "cup": "E",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-sumire",
+      "name": "すみれ",
+      "age": 25,
+      "height": 155,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-ai",
+      "name": "あい",
+      "age": 25,
+      "height": 148,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-kokoro",
+      "name": "こころ",
+      "age": 26,
+      "height": 158,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-misa",
+      "name": "みさ",
+      "age": 19,
+      "height": 157,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-mone",
+      "name": "もね",
+      "age": 21,
+      "height": 162,
+      "bust": 0,
+      "cup": "E",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yui",
+      "name": "ゆい",
+      "age": 20,
+      "height": 155,
+      "bust": 0,
+      "cup": "G",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-rana",
+      "name": "らな",
+      "age": 22,
+      "height": 158,
+      "bust": 0,
+      "cup": "G",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-moka",
+      "name": "もか",
+      "age": 18,
+      "height": 160,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-natsuki",
+      "name": "なつき",
+      "age": 21,
+      "height": 158,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-sakura",
+      "name": "さくら",
+      "age": 27,
+      "height": 154,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-ria",
+      "name": "りあ",
+      "age": 23,
+      "height": 151,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-rina",
+      "name": "りな",
+      "age": 30,
+      "height": 153,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-aya",
+      "name": "あや",
+      "age": 22,
+      "height": 160,
+      "bust": 0,
+      "cup": "F",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-rui",
+      "name": "るい",
+      "age": 26,
+      "height": 157,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-sayaka",
+      "name": "さやか",
+      "age": 23,
+      "height": 166,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yuka",
+      "name": "ゆか",
+      "age": 24,
+      "height": 148,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yuna",
+      "name": "ゆうな",
+      "age": 19,
+      "height": 160,
+      "bust": 0,
+      "cup": "E",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-ema",
+      "name": "えま",
+      "age": 21,
+      "height": 160,
+      "bust": 0,
+      "cup": "E",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-asahi",
+      "name": "あさひ",
+      "age": 22,
+      "height": 157,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-kanae",
+      "name": "かなえ",
+      "age": 30,
+      "height": 163,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-non",
+      "name": "のん",
+      "age": 21,
+      "height": 157,
+      "bust": 0,
+      "cup": "E",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-ichika",
+      "name": "いちか",
+      "age": 24,
+      "height": 165,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-ame",
+      "name": "あめ",
+      "age": 19,
+      "height": 160,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-rai-2",
+      "name": "らい",
+      "age": 19,
+      "height": 156,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-kaoru",
+      "name": "かおる",
+      "age": 25,
+      "height": 168,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-karin",
+      "name": "かりん",
+      "age": 20,
+      "height": 153,
+      "bust": 0,
+      "cup": "E",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-haruka",
+      "name": "はるか",
+      "age": 20,
+      "height": 154,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-nayu",
+      "name": "なゆ",
+      "age": 22,
+      "height": 155,
+      "bust": 0,
+      "cup": "G",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yuina",
+      "name": "ゆいな",
+      "age": 20,
+      "height": 148,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-mimi",
+      "name": "みみ",
+      "age": 21,
+      "height": 153,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-maho",
+      "name": "まほ",
+      "age": 24,
+      "height": 155,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-ririko",
+      "name": "りりこ",
+      "age": 27,
+      "height": 162,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-kaede",
+      "name": "かえで",
+      "age": 26,
+      "height": 155,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-hino",
+      "name": "ひの",
+      "age": 19,
+      "height": 154,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-ami",
+      "name": "あみ",
+      "age": 26,
+      "height": 147,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-itsuki",
+      "name": "いつき",
+      "age": 22,
+      "height": 152,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-risa",
+      "name": "りさ",
+      "age": 22,
+      "height": 153,
+      "bust": 0,
+      "cup": "E",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-nao",
+      "name": "なお",
+      "age": 18,
+      "height": 159,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-suzu",
+      "name": "すず",
+      "age": 25,
+      "height": 156,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yukino",
+      "name": "ゆきの",
+      "age": 27,
+      "height": 163,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-izumi",
+      "name": "いずみ",
+      "age": 28,
+      "height": 157,
+      "bust": 0,
+      "cup": "E",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-mea",
+      "name": "めあ",
+      "age": 21,
+      "height": 152,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-ran",
+      "name": "らん",
+      "age": 21,
+      "height": 153,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-mii",
+      "name": "みい",
+      "age": 19,
+      "height": 158,
+      "bust": 0,
+      "cup": "D",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-anna",
+      "name": "あんな",
+      "age": 18,
+      "height": 153,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-rei",
+      "name": "れい",
+      "age": 23,
+      "height": 160,
+      "bust": 0,
+      "cup": "B",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-yua",
+      "name": "ゆあ",
+      "age": 19,
+      "height": 148,
+      "bust": 0,
+      "cup": "C",
+      "waist": 0,
+      "hip": 0
+    },
+    {
+      "id": "77504-nanoha",
+      "name": "なのは",
+      "age": 19,
+      "height": 160,
+      "bust": 0,
+      "cup": "F",
+      "waist": 0,
+      "hip": 0
+    }
+  ],
+  "brandId": "limited_spa"
+}

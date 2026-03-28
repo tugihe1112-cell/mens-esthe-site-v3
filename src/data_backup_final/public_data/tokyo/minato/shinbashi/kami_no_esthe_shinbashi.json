@@ -1,0 +1,578 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://www.kami-shimbashi.com/",
+  "description": "新橋・銀座の日本人リラクゼーション。厳選されたセラピストによる極上の癒やし。",
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "brandId": "kami_no_esthe_shinbashi",
+  "threads": [],
+  "id": "tokyo_minato_shinbashi_kami_no_esthe_shinbashi",
+  "name": "神のエステ 新橋・銀座新富町店 (新橋)",
+  "prefecture": "東京都",
+  "city": "港区",
+  "area": "新橋",
+  "nearestStation": "新橋駅",
+  "address": "東京都港区新橋エリア",
+  "therapists": [
+    {
+      "id": "kami_no_esthe_shinbashi_ほのん",
+      "name": "ほのん",
+      "age": 23,
+      "height": 165,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_セイラ",
+      "name": "セイラ",
+      "age": 23,
+      "height": 151,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_みさ",
+      "name": "みさ",
+      "age": 20,
+      "height": 155,
+      "bust": "(I)",
+      "tags": [
+        "Iカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_まのん",
+      "name": "まのん",
+      "age": 23,
+      "height": 157,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ろこ",
+      "name": "ろこ",
+      "age": 23,
+      "height": 157,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_すいせい",
+      "name": "すいせい",
+      "age": 21,
+      "height": 166,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ゆあ",
+      "name": "ゆあ",
+      "age": 21,
+      "height": 154,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_えあり",
+      "name": "えあり",
+      "age": 23,
+      "height": 158,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ましゅまろ",
+      "name": "ましゅまろ",
+      "age": 24,
+      "height": 160,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ヨナ",
+      "name": "ヨナ",
+      "age": 24,
+      "height": 155,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_あかりん",
+      "name": "あかりん",
+      "age": 21,
+      "height": 158,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_麗日(うららか)",
+      "name": "麗日(うららか)",
+      "age": 25,
+      "height": 155,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_みはる",
+      "name": "みはる",
+      "age": 21,
+      "height": 155,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_なるみ",
+      "name": "なるみ",
+      "age": 20,
+      "height": 158,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_もかろん",
+      "name": "もかろん",
+      "age": 21,
+      "height": 156,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_りいさ",
+      "name": "りいさ",
+      "age": 25,
+      "height": 153,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ファイティング・ニモ",
+      "name": "ファイティング・ニモ",
+      "age": 21,
+      "height": 158,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_はる",
+      "name": "はる",
+      "age": 26,
+      "height": 159,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_海まりん",
+      "name": "海まりん",
+      "age": 22,
+      "height": 166,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ふゆき",
+      "name": "ふゆき",
+      "age": 26,
+      "height": 165,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ゆめこ",
+      "name": "ゆめこ",
+      "age": 22,
+      "height": 160,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ぱるん",
+      "name": "ぱるん",
+      "age": 21,
+      "height": 150,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "小柄",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_椎名 ゆい",
+      "name": "椎名 ゆい",
+      "age": 23,
+      "height": 154,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_えみる",
+      "name": "えみる",
+      "age": 22,
+      "height": 158,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_りんこ",
+      "name": "りんこ",
+      "age": 20,
+      "height": 154,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ソア",
+      "name": "ソア",
+      "age": 22,
+      "height": 162,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_れおん",
+      "name": "れおん",
+      "age": 25,
+      "height": 160,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_ゆな",
+      "name": "ゆな",
+      "age": 25,
+      "height": 167,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_みっふぃー",
+      "name": "みっふぃー",
+      "age": 20,
+      "height": 163,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_みふゆ",
+      "name": "みふゆ",
+      "age": 23,
+      "height": 162,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_みら",
+      "name": "みら",
+      "age": 22,
+      "height": 167,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_みずき",
+      "name": "みずき",
+      "age": 21,
+      "height": 150,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "小柄",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_いるか",
+      "name": "いるか",
+      "age": 20,
+      "height": 153,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "小柄",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_水原せり",
+      "name": "水原せり",
+      "age": 24,
+      "height": 162,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_よぞら",
+      "name": "よぞら",
+      "age": 20,
+      "height": 150,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "小柄",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_海物語",
+      "name": "海物語",
+      "age": 23,
+      "height": 160,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_あすか",
+      "name": "あすか",
+      "age": 21,
+      "height": 160,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_あれな",
+      "name": "あれな",
+      "age": 18,
+      "height": 161,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_あられ",
+      "name": "あられ",
+      "age": 22,
+      "height": 162,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_あゆみ",
+      "name": "あゆみ",
+      "age": 23,
+      "height": null,
+      "bust": "(E)",
+      "tags": [
+        "Eカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_あと",
+      "name": "あと",
+      "age": 23,
+      "height": 164,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_あろま",
+      "name": "あろま",
+      "age": 21,
+      "height": 158,
+      "bust": "(H)",
+      "tags": [
+        "Hカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_きょう",
+      "name": "きょう",
+      "age": 22,
+      "height": 150,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "小柄",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_しあ",
+      "name": "しあ",
+      "age": 20,
+      "height": 163,
+      "bust": "(F)",
+      "tags": [
+        "Fカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_くろな",
+      "name": "くろな",
+      "age": 22,
+      "height": 160,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_つづな",
+      "name": "つづな",
+      "age": 20,
+      "height": 162,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_まほ",
+      "name": "まほ",
+      "age": 20,
+      "height": 159,
+      "bust": "(D)",
+      "tags": [
+        "Dカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_とあ",
+      "name": "とあ",
+      "age": 22,
+      "height": 155,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_まりる",
+      "name": "まりる",
+      "age": 20,
+      "height": 150,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "小柄",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_のえ",
+      "name": "のえ",
+      "age": 20,
+      "height": 165,
+      "bust": "(G)",
+      "tags": [
+        "Gカップ",
+        "若手"
+      ]
+    },
+    {
+      "id": "kami_no_esthe_shinbashi_こあい",
+      "name": "こあい",
+      "age": 19,
+      "height": 160,
+      "bust": "(C)",
+      "tags": [
+        "Cカップ",
+        "若手"
+      ]
+    }
+  ]
+}

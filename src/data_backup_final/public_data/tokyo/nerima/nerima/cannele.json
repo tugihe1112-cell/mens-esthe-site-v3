@@ -1,0 +1,307 @@
+{
+  "id": "tokyo_nerima_nerima_cannele",
+  "name": "Cannele (カヌレ)",
+  "prefecture": "東京都",
+  "city": "練馬区",
+  "area": "練馬",
+  "address": "東京都練馬区（詳細は予約時）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 17,000円～",
+  "hours": "12:00～翌3:00",
+  "isPremium": false,
+  "tags": [
+    "練馬",
+    "江古田",
+    "日本人",
+    "可愛い系"
+  ],
+  "websiteUrl": "https://cannele-nerima.com/",
+  "nearestStation": "練馬駅",
+  "description": "練馬・江古田エリアの日本人美女エステ。 / 料金システム: 90分17,000円 / 120分21,000円 / 150分25,000円",
+  "brandId": "cannele",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "cannele_ゆりな",
+      "name": "ゆりな",
+      "age": 24,
+      "height": 155,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "cannele_せいか",
+      "name": "せいか",
+      "age": 21,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "cannele_おとは",
+      "name": "おとは",
+      "age": 20,
+      "height": 148,
+      "bust": "(C)",
+      "tags": null
+    },
+    {
+      "id": "cannele_えみ",
+      "name": "えみ",
+      "age": 24,
+      "height": 160,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "cannele_すみれ",
+      "name": "すみれ",
+      "age": 23,
+      "height": 154,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "cannele_なの",
+      "name": "なの",
+      "age": 22,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "cannele_みく",
+      "name": "みく",
+      "age": 21,
+      "height": 160,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "cannele_みさき",
+      "name": "みさき",
+      "age": 24,
+      "height": 153,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "cannele_ねね",
+      "name": "ねね",
+      "age": 20,
+      "height": 150,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "cannele_みる",
+      "name": "みる",
+      "age": 21,
+      "height": 150,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "cannele_みつき",
+      "name": "みつき",
+      "age": 22,
+      "height": 160,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "cannele_つぐみ",
+      "name": "つぐみ",
+      "age": 23,
+      "height": 155,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "cannele_うな",
+      "name": "うな",
+      "age": 22,
+      "height": 160,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "cannele_ゆめ",
+      "name": "ゆめ",
+      "age": 21,
+      "height": 158,
+      "bust": "(F)",
+      "tags": null
+    },
+    {
+      "id": "cannele_みき",
+      "name": "みき",
+      "age": 22,
+      "height": 153,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "cannele_せりの",
+      "name": "せりの",
+      "age": 25,
+      "height": 163,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "cannele_おと",
+      "name": "おと",
+      "age": 20,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "cannele_のあ",
+      "name": "のあ",
+      "age": 20,
+      "height": 155,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "cannele_かれん",
+      "name": "かれん",
+      "age": 20,
+      "height": 160,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "cannele_じゅり",
+      "name": "じゅり",
+      "age": 24,
+      "height": 162,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "cannele_るな",
+      "name": "るな",
+      "age": 20,
+      "height": 157,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "cannele_りん",
+      "name": "りん",
+      "age": 24,
+      "height": 152,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "cannele_ゆり",
+      "name": "ゆり",
+      "age": 25,
+      "height": 147,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "cannele_ゆい",
+      "name": "ゆい",
+      "age": 21,
+      "height": 158,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "cannele_あや",
+      "name": "あや",
+      "age": 22,
+      "height": 153,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "cannele_うた",
+      "name": "うた",
+      "age": 22,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "cannele_みさ",
+      "name": "みさ",
+      "age": 20,
+      "height": 158,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "cannele_すずな",
+      "name": "すずな",
+      "age": 24,
+      "height": 155,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "cannele_すず",
+      "name": "すず",
+      "age": 20,
+      "height": 158,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "cannele_はな",
+      "name": "はな",
+      "age": 23,
+      "height": 159,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "cannele_まりな",
+      "name": "まりな",
+      "age": 20,
+      "height": 150,
+      "bust": "(E)",
+      "tags": null
+    },
+    {
+      "id": "cannele_あんな",
+      "name": "あんな",
+      "age": 26,
+      "height": 164,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "cannele_ひまり",
+      "name": "ひまり",
+      "age": 27,
+      "height": 160,
+      "bust": "(D)",
+      "tags": null
+    },
+    {
+      "id": "cannele_まどか",
+      "name": "まどか",
+      "age": 26,
+      "height": 155,
+      "bust": "(G)",
+      "tags": null
+    },
+    {
+      "id": "cannele_うらら",
+      "name": "うらら",
+      "age": 22,
+      "height": 148,
+      "bust": "(E)",
+      "tags": null
+    }
+  ]
+}

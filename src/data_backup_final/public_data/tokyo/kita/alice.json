@@ -1,0 +1,325 @@
+{
+  "id": "tokyo_kita_alice",
+  "name": "Alice (アリス) 赤羽",
+  "prefecture": "東京都",
+  "city": "北区",
+  "address": "東京都北区赤羽エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分22,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム"
+  ],
+  "websiteUrl": "https://esthe-alice.net/",
+  "nearestStation": "赤羽駅",
+  "description": "赤羽のメンズエステ。基本料金: 90分22,000円 / 120分27,000円 / 150分32,000円。各種割引あり。",
+  "brandId": "alice",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "alice_橘みゆき",
+      "name": "橘みゆき",
+      "age": 27,
+      "height": 163,
+      "bust": "(B)"
+    },
+    {
+      "id": "alice_如月つばさ",
+      "name": "如月つばさ",
+      "age": 25,
+      "height": 163,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_日向すず",
+      "name": "日向すず",
+      "age": 26,
+      "height": 155,
+      "bust": "(C)"
+    },
+    {
+      "id": "alice_佐々木れいな",
+      "name": "佐々木れいな",
+      "age": 26,
+      "height": 162,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_四宮はるな",
+      "name": "四宮はるな",
+      "age": 28,
+      "height": 163,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_真白なぎ",
+      "name": "真白なぎ",
+      "age": 24,
+      "height": 166,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_雨音るな",
+      "name": "雨音るな",
+      "age": 26,
+      "height": 153,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_藤咲なな",
+      "name": "藤咲なな",
+      "age": 25,
+      "height": 164,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_咲良まな",
+      "name": "咲良まな",
+      "age": 25,
+      "height": 153,
+      "bust": "(C)"
+    },
+    {
+      "id": "alice_園田さくら",
+      "name": "園田さくら",
+      "age": 24,
+      "height": 163,
+      "bust": "(C)"
+    },
+    {
+      "id": "alice_星崎みゆ",
+      "name": "星崎みゆ",
+      "age": 22,
+      "height": 164,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_雪乃もも",
+      "name": "雪乃もも",
+      "age": 22,
+      "height": 160,
+      "bust": "(F)"
+    },
+    {
+      "id": "alice_白石ひびき",
+      "name": "白石ひびき",
+      "age": 21,
+      "height": 156,
+      "bust": "(F)"
+    },
+    {
+      "id": "alice_白咲はな",
+      "name": "白咲はな",
+      "age": 22,
+      "height": 164,
+      "bust": "(G)"
+    },
+    {
+      "id": "alice_音海かなで",
+      "name": "音海かなで",
+      "age": 21,
+      "height": 157,
+      "bust": "(C)"
+    },
+    {
+      "id": "alice_蒼井れな",
+      "name": "蒼井れな",
+      "age": 21,
+      "height": 163,
+      "bust": "(C)"
+    },
+    {
+      "id": "alice_波咲ゆあ",
+      "name": "波咲ゆあ",
+      "age": 20,
+      "height": 163,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_桜庭あやめ",
+      "name": "桜庭あやめ",
+      "age": 24,
+      "height": 162,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_唯月こころ",
+      "name": "唯月こころ",
+      "age": 26,
+      "height": 160,
+      "bust": "(F)"
+    },
+    {
+      "id": "alice_佐波みさ",
+      "name": "佐波みさ",
+      "age": 26,
+      "height": 153,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_生田はに",
+      "name": "生田はに",
+      "age": 25,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_目黒さな",
+      "name": "目黒さな",
+      "age": 27,
+      "height": 160,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_櫻井ねね",
+      "name": "櫻井ねね",
+      "age": 25,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_篠原ひまり",
+      "name": "篠原ひまり",
+      "age": 25,
+      "height": 153,
+      "bust": "(F)"
+    },
+    {
+      "id": "alice_夏海まりん",
+      "name": "夏海まりん",
+      "age": 27,
+      "height": 161,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_南ななせ",
+      "name": "南ななせ",
+      "age": 23,
+      "height": 162,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_黒崎りん",
+      "name": "黒崎りん",
+      "age": 24,
+      "height": 165,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_綾瀬せな",
+      "name": "綾瀬せな",
+      "age": 24,
+      "height": 165,
+      "bust": "(F)"
+    },
+    {
+      "id": "alice_如月まこと",
+      "name": "如月まこと",
+      "age": 21,
+      "height": 150,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_市川りりさ",
+      "name": "市川りりさ",
+      "age": 25,
+      "height": 154,
+      "bust": "(F)"
+    },
+    {
+      "id": "alice_星月なほ",
+      "name": "星月なほ",
+      "age": 23,
+      "height": 164,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_七瀬ういか",
+      "name": "七瀬ういか",
+      "age": 22,
+      "height": 158,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_星街みやび",
+      "name": "星街みやび",
+      "age": 23,
+      "height": 169,
+      "bust": "(F)"
+    },
+    {
+      "id": "alice_黒川えな",
+      "name": "黒川えな",
+      "age": 25,
+      "height": 161,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_桐山あずさ",
+      "name": "桐山あずさ",
+      "age": 25,
+      "height": 152,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_桃園らら",
+      "name": "桃園らら",
+      "age": 26,
+      "height": 162,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_渡辺るる",
+      "name": "渡辺るる",
+      "age": 28,
+      "height": 157,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_中条えま",
+      "name": "中条えま",
+      "age": 26,
+      "height": 167,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_西園寺 ゆい",
+      "name": "西園寺 ゆい",
+      "age": 22,
+      "height": 163,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_佐野えれな",
+      "name": "佐野えれな",
+      "age": 26,
+      "height": 153,
+      "bust": "(F)"
+    },
+    {
+      "id": "alice_西野なぎさ",
+      "name": "西野なぎさ",
+      "age": 25,
+      "height": 160,
+      "bust": "(D)"
+    },
+    {
+      "id": "alice_心ほのか",
+      "name": "心ほのか",
+      "age": 21,
+      "height": 159,
+      "bust": "(E)"
+    },
+    {
+      "id": "alice_北条かれん",
+      "name": "北条かれん",
+      "age": 26,
+      "height": 165,
+      "bust": "(D)"
+    }
+  ]
+}

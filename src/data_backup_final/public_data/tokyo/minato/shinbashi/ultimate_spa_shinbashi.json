@@ -1,0 +1,101 @@
+{
+  "id": "tokyo_minato_shinbashi_ultimate_spa_shinbashi",
+  "name": "ULTIMATE SPA (アルティメットスパ) 新橋",
+  "url": "https://ultimate-spa.jp/",
+  "area": "新橋",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "体験レポートあり",
+    "個室あり"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "港区",
+  "brandId": "ultimate_spa_shinbashi",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "ultimate_spa_shinbashi_神代 りな",
+      "name": "神代 りな",
+      "age": 42,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "ultimate_spa_shinbashi_佐野 あやか",
+      "name": "佐野 あやか",
+      "age": 35,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "ultimate_spa_shinbashi_相沢 ひとみ",
+      "name": "相沢 ひとみ",
+      "age": 48,
+      "height": 165,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "ultimate_spa_shinbashi_松嶋 めい",
+      "name": "松嶋 めい",
+      "age": 41,
+      "height": 162,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "ultimate_spa_shinbashi_永井 ちか",
+      "name": "永井 ちか",
+      "age": 46,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "ultimate_spa_shinbashi_美波 ゆり",
+      "name": "美波 ゆり",
+      "age": 39,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "ultimate_spa_shinbashi_星野 あい",
+      "name": "星野 あい",
+      "age": 45,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "ultimate_spa_shinbashi_桜木 なな",
+      "name": "桜木 なな",
+      "age": 38,
+      "height": 161,
+      "bust": null,
+      "tags": []
+    }
+  ]
+}

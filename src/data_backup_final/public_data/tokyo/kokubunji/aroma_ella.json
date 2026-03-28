@@ -1,0 +1,248 @@
+{
+  "id": "tokyo_kokubunji_aroma_ella",
+  "name": "Aroma ELLA (アロマエラ 国分寺店)",
+  "prefecture": "東京都",
+  "city": "国分寺市",
+  "address": "東京都国分寺市エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://aroma-ella.com/",
+  "description": "三鷹・武蔵小杉・国分寺・府中・調布で展開するメンズエステ。エリア屈指の在籍数。",
+  "tags": [
+    "完全個室",
+    "深夜営業"
+  ],
+  "brandId": "aroma_ella",
+  "nearestStation": "国分寺駅",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "aroma_ella_青葉りんか",
+      "name": "青葉りんか",
+      "age": 23,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_葵ゆず",
+      "name": "葵ゆず",
+      "age": 26,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_綾瀬ゆり",
+      "name": "綾瀬ゆり",
+      "age": 29,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_阿部まいか",
+      "name": "阿部まいか",
+      "age": 28,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_渚",
+      "name": "渚",
+      "age": 23,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_稲田りお",
+      "name": "稲田りお",
+      "age": 29,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_新田ゆな",
+      "name": "新田ゆな",
+      "age": 27,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_林みう",
+      "name": "林みう",
+      "age": 20,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_月城せいな",
+      "name": "月城せいな",
+      "age": 24,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_月森まお",
+      "name": "月森まお",
+      "age": 26,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_七瀬ひなの",
+      "name": "七瀬ひなの",
+      "age": 25,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_白咲みさ",
+      "name": "白咲みさ",
+      "age": 24,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_山下ゆずき",
+      "name": "山下ゆずき",
+      "age": 27,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_小川せな",
+      "name": "小川せな",
+      "age": 26,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_瑞木",
+      "name": "瑞木",
+      "age": 25,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_島風のあ",
+      "name": "島風のあ",
+      "age": 24,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_星野しずな",
+      "name": "星野しずな",
+      "age": 25,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_来栖",
+      "name": "来栖",
+      "age": 24,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_白石そら",
+      "name": "白石そら",
+      "age": 25,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_美里",
+      "name": "美里",
+      "age": 29,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_牧野",
+      "name": "牧野",
+      "age": 26,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_南里あいか",
+      "name": "南里あいか",
+      "age": 23,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_美波",
+      "name": "美波",
+      "age": 27,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_宇佐美",
+      "name": "宇佐美",
+      "age": 28,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_南れい",
+      "name": "南れい",
+      "age": 21,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_金澄りん",
+      "name": "金澄りん",
+      "age": 24,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_望月あかね",
+      "name": "望月あかね",
+      "age": 26,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_華村ねね",
+      "name": "華村ねね",
+      "age": 22,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_金城ののな",
+      "name": "金城ののな",
+      "age": 27,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_美澄ゆい",
+      "name": "美澄ゆい",
+      "age": 22,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_織原めいか",
+      "name": "織原めいか",
+      "age": 27,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "aroma_ella_有栖るな",
+      "name": "有栖るな",
+      "age": 20,
+      "height": null,
+      "bust": null
+    }
+  ]
+}

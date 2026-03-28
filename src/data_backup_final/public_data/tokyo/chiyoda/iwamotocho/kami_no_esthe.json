@@ -1,0 +1,386 @@
+{
+  "name": "神のエステ (東京・岩本町店)",
+  "prefecture": "東京都",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "80分18,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "https://www.kami-nihonbashi.com/",
+  "description": "日本橋・神田・岩本町エリアで展開する日本人リラクゼーション。圧倒的なルックスと技術を兼ね備えたセラピストが多数在籍。",
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "高リピート率",
+    "カード払いOK"
+  ],
+  "brandId": "kami_no_esthe",
+  "threads": [],
+  "id": "tokyo_chiyoda_iwamotocho_kami_no_esthe",
+  "area": "岩本町",
+  "city": "千代田区",
+  "nearestStation": "岩本町駅",
+  "address": "東京都千代田区岩本町エリア",
+  "therapists": [
+    {
+      "id": "kami_no_esthe_るるは",
+      "name": "るるは",
+      "age": "24歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_りりぃ",
+      "name": "りりぃ",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_エミリー",
+      "name": "エミリー",
+      "age": "25歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_おん",
+      "name": "おん",
+      "age": "21歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_ひととせ",
+      "name": "ひととせ",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_ゆつき",
+      "name": "ゆつき",
+      "age": "28歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_ここは",
+      "name": "ここは",
+      "age": "27歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_れなほ",
+      "name": "れなほ",
+      "age": "21歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_らんぎく",
+      "name": "らんぎく",
+      "age": "25歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_きなつ",
+      "name": "きなつ",
+      "age": "19歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_にこる",
+      "name": "にこる",
+      "age": "24歳",
+      "height": "168cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_きりな",
+      "name": "きりな",
+      "age": "20歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_いちは",
+      "name": "いちは",
+      "age": "20歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_えみりあ",
+      "name": "えみりあ",
+      "age": "20歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_すうちゃん",
+      "name": "すうちゃん",
+      "age": "22歳",
+      "height": "143cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_ゆりり",
+      "name": "ゆりり",
+      "age": "22歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_のんのん",
+      "name": "のんのん",
+      "age": "25歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_せりの",
+      "name": "せりの",
+      "age": "27歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_はるる",
+      "name": "はるる",
+      "age": "19歳",
+      "height": "150cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "kami_no_esthe_ももよ",
+      "name": "ももよ",
+      "age": "23歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_みうみう",
+      "name": "みうみう",
+      "age": "24歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_みりさ",
+      "name": "みりさ",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_きらり",
+      "name": "きらり",
+      "age": "20歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_桜麗",
+      "name": "桜麗",
+      "age": "25歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_玲葉",
+      "name": "玲葉",
+      "age": "20歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_るのあ",
+      "name": "るのあ",
+      "age": "23歳",
+      "height": "169cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_愛田みつき",
+      "name": "愛田みつき",
+      "age": "23歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_葵",
+      "name": "葵",
+      "age": "22歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_心咲",
+      "name": "心咲",
+      "age": "20歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_帝リナ",
+      "name": "帝リナ",
+      "age": "24歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_梨花",
+      "name": "梨花",
+      "age": "20歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_らずべり",
+      "name": "らずべり",
+      "age": "22歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_湊",
+      "name": "湊",
+      "age": "23歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_幸姫",
+      "name": "幸姫",
+      "age": "22歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_うな",
+      "name": "うな",
+      "age": "22歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_紗耶",
+      "name": "紗耶",
+      "age": "23歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_花鈴",
+      "name": "花鈴",
+      "age": "24歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_胡桃",
+      "name": "胡桃",
+      "age": "24歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_みもり",
+      "name": "みもり",
+      "age": "20歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_彩那",
+      "name": "彩那",
+      "age": "20歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_なつは",
+      "name": "なつは",
+      "age": "23歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_しずき",
+      "name": "しずき",
+      "age": "21歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_あかねこ",
+      "name": "あかねこ",
+      "age": "18歳",
+      "height": "155cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "kami_no_esthe_ひろな",
+      "name": "ひろな",
+      "age": "24歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_かのか",
+      "name": "かのか",
+      "age": "20歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_涼楓",
+      "name": "涼楓",
+      "age": "25歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_麗依",
+      "name": "麗依",
+      "age": "21歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_みみり",
+      "name": "みみり",
+      "age": "19歳",
+      "height": "146cm",
+      "bust": "カップ"
+    },
+    {
+      "id": "kami_no_esthe_みるあ",
+      "name": "みるあ",
+      "age": "22歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_ちぐさ",
+      "name": "ちぐさ",
+      "age": "20歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "kami_no_esthe_るるしゅ",
+      "name": "るるしゅ",
+      "age": "21歳",
+      "height": "165cm",
+      "bust": null
+    }
+  ]
+}

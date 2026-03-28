@@ -1,0 +1,94 @@
+{
+  "id": "tokyo_chiyoda_jimbocho_queens_collection",
+  "name": "QUEEN'S COLLECTION 神保町ルーム",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "神保町",
+  "region": "関東エリア",
+  "address": "東京都千代田区神田神保町",
+  "nearestStation": "神保町駅",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～翌10:00",
+  "isPremium": true,
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "高偏差値",
+    "女子大生多数"
+  ],
+  "websiteUrl": "https://queens-collection-esthe.com/",
+  "description": "全てにディープリンパが含まれます。厳選されたハイレベルなセラピストが多数在籍。",
+  "brandId": "queens_collection",
+  "system": {
+    "standard": [
+      {
+        "time": "90分",
+        "price": "18,000円"
+      },
+      {
+        "time": "120分",
+        "price": "23,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長30分",
+        "price": "7,000円"
+      }
+    ]
+  },
+  "threads": [],
+  "therapists": [
+    "queens_collection_千歳みづき",
+    "queens_collection_立教かすみ",
+    "queens_collection_めろん♡NH♡",
+    "queens_collection_白百合響",
+    "queens_collection_早稲田真衣",
+    "queens_collection_本女にこ",
+    "queens_collection_桜美林はな",
+    "queens_collection_灘かりん",
+    "queens_collection_光華まほ",
+    "queens_collection_京月みやび",
+    "queens_collection_敬愛まろん",
+    "queens_collection_南山める",
+    "queens_collection_明治舞華",
+    "queens_collection_一宮渚",
+    "queens_collection_相模れん",
+    "queens_collection_跡見らら",
+    "queens_collection_横国みか",
+    "queens_collection_尚美めぐ",
+    "queens_collection_清泉あゆみ",
+    "queens_collection_学習院つばき",
+    "queens_collection_法政まゆ",
+    "queens_collection_上越ひまわり",
+    "queens_collection_慶應くれあ",
+    "queens_collection_星城うみ",
+    "queens_collection_杏林芽郁",
+    "queens_collection_月見桃菜",
+    "queens_collection_上智れいか",
+    "queens_collection_桃山みかん",
+    "queens_collection_初音カレン",
+    "queens_collection_目黒りお",
+    "queens_collection_常葉音羽",
+    "queens_collection_天使みゆ",
+    "queens_collection_学習院えれん",
+    "queens_collection_共立りな",
+    "queens_collection_立教いおり",
+    "queens_collection_桜花つばめ",
+    "queens_collection_酪農みるく",
+    "queens_collection_イエール閻魔",
+    "queens_collection_信州りんご",
+    "queens_collection_青山あいら",
+    "queens_collection_お茶の水るい",
+    "queens_collection_高知なぎ",
+    "queens_collection_フェリスあん",
+    "queens_collection_桐朋あまね",
+    "queens_collection_三田れい",
+    "queens_collection_明治なみ",
+    "queens_collection_神戸あやな"
+  ]
+}

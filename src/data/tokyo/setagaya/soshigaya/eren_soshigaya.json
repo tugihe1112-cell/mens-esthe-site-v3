@@ -1,0 +1,31 @@
+{
+  "id": 60205,
+  "name": "Eren (祖師谷大蔵ルーム)",
+  "prefecture": "東京都",
+  "city": "祖師谷",
+  "region": "関東エリア",
+  "address": "東京都世田谷区 (最寄: 祖師ヶ谷大蔵駅 徒歩3分)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "color": "from-cyan-500 to-blue-500",
+  "tags": [
+    "日本人",
+    "ルーム",
+    "クレジット",
+    "qp決済可能"
+  ],
+  "websiteUrl": "http://www.eren.tokyo/",
+  "threads": [],
+  "therapists": [
+    "unknown_涼宮ひとみ",
+    "unknown_東條あおい",
+    "unknown_乃木坂ゆな",
+    "unknown_木崎ゆめ",
+    "unknown_川村もも"
+  ],
+  "area": "祖師ヶ谷大蔵"
+}

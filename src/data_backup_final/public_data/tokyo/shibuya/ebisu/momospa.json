@@ -1,0 +1,20 @@
+{
+  "id": 60350,
+  "name": "MoMo Spa (モモスパ)",
+  "prefecture": "東京都",
+  "city": "恵比寿",
+  "region": "関東エリア",
+  "address": "東京都渋谷区恵比寿",
+  "image": "/images/shops/momospa.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "要確認",
+  "isPremium": false,
+  "color": "from-rose-900 to-pink-900",
+  "tags": [],
+  "websiteUrl": "https://www.momospa.tokyo/",
+  "threads": [],
+  "therapists": [],
+  "area": "恵比寿"
+}

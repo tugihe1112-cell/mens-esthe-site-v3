@@ -1,0 +1,190 @@
+{
+  "id": 1205,
+  "name": "メンズアロマ博多人妻さん",
+  "prefecture": "福岡県",
+  "city": "博多",
+  "area": "博多",
+  "address": "福岡県福岡市博多区",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 7,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "人妻"
+  ],
+  "websiteUrl": "https://hakatahitozuma.com/",
+  "nearestStation": "博多駅",
+  "description": "博多のメンズエステ メンズアロマ博多人妻さん。60分7,000円から。",
+  "therapists": [
+    {
+      "id": "1205-1",
+      "name": "桃瀬夫人",
+      "age": 26,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 👙"
+    },
+    {
+      "id": "1205-2",
+      "name": "水沢夫人",
+      "age": 30,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-3",
+      "name": "菊川夫人",
+      "age": 30,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-4",
+      "name": "早乙女夫人",
+      "age": 30,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-5",
+      "name": "島田夫人",
+      "age": 31,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 👙"
+    },
+    {
+      "id": "1205-6",
+      "name": "前田夫人",
+      "age": 31,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-7",
+      "name": "五十嵐夫人",
+      "age": 32,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-8",
+      "name": "川辺夫人",
+      "age": 33,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-9",
+      "name": "吉岡夫人",
+      "age": 33,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-10",
+      "name": "平野夫人",
+      "age": 33,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-11",
+      "name": "林田夫人",
+      "age": 35,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-12",
+      "name": "虹川夫人",
+      "age": 35,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-13",
+      "name": "久保田夫人",
+      "age": 36,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-14",
+      "name": "梅崎夫人",
+      "age": 36,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    },
+    {
+      "id": "1205-15",
+      "name": "和久井夫人",
+      "age": 38,
+      "height": 0,
+      "bust": 0,
+      "cup": "",
+      "waist": 0,
+      "hip": 0,
+      "description": "特徴: 🉑"
+    }
+  ],
+  "brandId": "hakatahitozuma"
+}

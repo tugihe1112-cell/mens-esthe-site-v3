@@ -1,0 +1,28 @@
+{
+  "id": "tokyo_toshima_ikebukuro_eternal",
+  "name": "Eternal (エターナル) 池袋",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都豊島区池袋エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分14,000円～",
+  "hours": "12:00～5:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般ルーム",
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://www.aroma-eternal.net/",
+  "nearestStation": "池袋駅",
+  "description": "お試しコース 60分10,000円 / スタンダード 90分14,000円 / ロング 120分18,000円 / VIP 150分22,000円 / 延長 30分6,000円",
+  "threads": [],
+  "brandId": "eternal",
+  "therapists": []
+}

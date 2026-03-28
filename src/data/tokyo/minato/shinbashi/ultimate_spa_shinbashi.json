@@ -1,0 +1,45 @@
+{
+  "id": "tokyo_minato_shinbashi_ultimate_spa_shinbashi",
+  "name": "ULTIMATE SPA (アルティメットスパ) 新橋",
+  "url": "https://ultimate-spa.jp/",
+  "area": "新橋",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "体験レポートあり",
+    "個室あり"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "港区",
+  "brandId": "ultimate_spa_shinbashi",
+  "threads": [],
+  "therapists": [
+    "ultimate_spa_shinbashi_神代 りな",
+    "ultimate_spa_shinbashi_佐野 あやか",
+    "ultimate_spa_shinbashi_相沢 ひとみ",
+    "ultimate_spa_shinbashi_松嶋 めい",
+    "ultimate_spa_shinbashi_永井 ちか",
+    "ultimate_spa_shinbashi_美波 ゆり",
+    "ultimate_spa_shinbashi_星野 あい",
+    "ultimate_spa_shinbashi_桜木 なな"
+  ]
+}

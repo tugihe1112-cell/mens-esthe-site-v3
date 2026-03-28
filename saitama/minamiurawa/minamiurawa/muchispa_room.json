@@ -1,0 +1,64 @@
+{
+  "id": "muchispa_room_minamiurawa",
+  "name": "むちすぱルーム 南浦和",
+  "url": "https://muchispa-room.com/",
+  "area": "saitama/minamiurawa/minamiurawa",
+  "price": "12,000円〜",
+  "interview": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "courses": [
+    {
+      "minutes": 60,
+      "price": "12,000"
+    },
+    {
+      "minutes": 80,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "16,000"
+    },
+    {
+      "minutes": 120,
+      "price": "20,000"
+    },
+    {
+      "minutes": 150,
+      "price": "26,000"
+    },
+    {
+      "minutes": 180,
+      "price": "32,000"
+    }
+  ],
+  "girls": [
+    { "name": "はづき", "age": 26, "height": 0, "cup": "G", "tags": ["新人"] },
+    { "name": "みや", "age": 24, "height": 0, "cup": "H", "tags": ["新人"] },
+    { "name": "ひまり", "age": 25, "height": 0, "cup": "I", "tags": ["新人"] },
+    { "name": "あやか", "age": 26, "height": 0, "cup": "F", "tags": ["新人"] },
+    { "name": "りょう", "age": 26, "height": 0, "cup": "J", "tags": [] },
+    { "name": "かすみ", "age": 26, "height": 0, "cup": "G", "tags": [] },
+    { "name": "うみ", "age": 24, "height": 0, "cup": "H", "tags": [] },
+    { "name": "もえ", "age": 30, "height": 0, "cup": "F", "tags": [] },
+    { "name": "まりあ", "age": 31, "height": 0, "cup": "J", "tags": [] },
+    { "name": "みるく", "age": 28, "height": 0, "cup": "H", "tags": [] },
+    { "name": "あやね", "age": 28, "height": 0, "cup": "F", "tags": [] },
+    { "name": "くるみ", "age": 26, "height": 0, "cup": "I", "tags": [] },
+    { "name": "ゆあ", "age": 23, "height": 0, "cup": "F", "tags": [] },
+    { "name": "みつき", "age": 27, "height": 0, "cup": "G", "tags": [] },
+    { "name": "かれん", "age": 26, "height": 0, "cup": "K", "tags": [] },
+    { "name": "すず", "age": 26, "height": 0, "cup": "F", "tags": [] },
+    { "name": "りん", "age": 28, "height": 0, "cup": "H", "tags": [] },
+    { "name": "なな", "age": 25, "height": 0, "cup": "J", "tags": [] },
+    { "name": "ねね", "age": 20, "height": 0, "cup": "F", "tags": [] },
+    { "name": "ここな", "age": 24, "height": 0, "cup": "F", "tags": [] },
+    { "name": "えみ", "age": 34, "height": 0, "cup": "H", "tags": [] },
+    { "name": "ゆかり", "age": 28, "height": 0, "cup": "G", "tags": [] },
+    { "name": "かのん", "age": 31, "height": 0, "cup": "F", "tags": [] },
+    { "name": "しほ", "age": 24, "height": 0, "cup": "G", "tags": ["新人"] },
+    { "name": "まゆ", "age": 26, "height": 0, "cup": "F", "tags": [] }
+  ]
+}

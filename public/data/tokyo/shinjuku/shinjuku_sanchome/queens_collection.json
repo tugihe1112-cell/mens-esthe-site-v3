@@ -1,0 +1,40 @@
+{
+  "id": "tokyo_shinjuku_shinjuku_sanchome_queens_collection",
+  "name": "QUEEN'S COLLECTION 新宿三丁目ルーム",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "region": "関東エリア",
+  "address": "東京都新宿区新宿",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～翌10:00",
+  "isPremium": true,
+  "color": "from-pink-400 to-rose-500",
+  "tags": [],
+  "websiteUrl": "https://queens-collection-esthe.com/",
+  "description": "全てにディープリンパが含まれます。",
+  "system": {
+    "standard": [
+      {
+        "time": "90分",
+        "price": "18,000円"
+      },
+      {
+        "time": "120分",
+        "price": "23,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長30分",
+        "price": "7,000円"
+      }
+    ]
+  },
+  "threads": [],
+  "area": "新宿三丁目",
+  "brandId": "queens_collection",
+  "therapists": []
+}

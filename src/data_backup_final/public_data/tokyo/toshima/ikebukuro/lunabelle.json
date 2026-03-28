@@ -1,0 +1,654 @@
+{
+  "name": "Aroma Lunabelle (池袋店)",
+  "prefecture": "東京都",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 4.5,
+  "reviewCount": 0,
+  "price": "90分20,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "複数エリア展開",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "カード払いOK"
+  ],
+  "websiteUrl": "https://aroma-lunabelle.com/",
+  "description": "秋葉原・代々木・麻布十番・新橋・池袋・五反田に展開する日本人リラクゼーション。 / 全店舗共通でセラピストが出勤します。",
+  "brandId": "aroma_lunabelle",
+  "threads": [],
+  "id": "tokyo_toshima_ikebukuro_lunabelle",
+  "area": "池袋",
+  "city": "豊島区",
+  "nearestStation": "池袋駅",
+  "therapists": [
+    {
+      "id": "aroma_lunabelle_夏目れいな",
+      "name": "夏目れいな",
+      "age": 32,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_川端はな",
+      "name": "川端はな",
+      "age": 37,
+      "height": 152,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_土方こころ",
+      "name": "土方こころ",
+      "age": 32,
+      "height": 150,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_芹沢みれい",
+      "name": "芹沢みれい",
+      "age": 31,
+      "height": 163,
+      "bust": null,
+      "tags": [
+        "Eカップ",
+        "美脚"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_白咲もな",
+      "name": "白咲もな",
+      "age": 38,
+      "height": 159,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "熟女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_有村みさき",
+      "name": "有村みさき",
+      "age": 37,
+      "height": 165,
+      "bust": null,
+      "tags": [
+        "Eカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_吉井まゆ",
+      "name": "吉井まゆ",
+      "age": 36,
+      "height": 165,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_夕月みすず",
+      "name": "夕月みすず",
+      "age": 26,
+      "height": 151,
+      "bust": null,
+      "tags": [
+        "Gカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_小倉ゆかり",
+      "name": "小倉ゆかり",
+      "age": 28,
+      "height": 167,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "モデル体型"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_木村さとみ",
+      "name": "木村さとみ",
+      "age": 34,
+      "height": 162,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_黒木まな",
+      "name": "黒木まな",
+      "age": 25,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "20代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_石川くる",
+      "name": "石川くる",
+      "age": 25,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Cカップ",
+        "20代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_倉持はるか",
+      "name": "倉持はるか",
+      "age": 28,
+      "height": 167,
+      "bust": null,
+      "tags": [
+        "Cカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_国仲いずみ",
+      "name": "国仲いずみ",
+      "age": 36,
+      "height": 152,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_大石けいこ",
+      "name": "大石けいこ",
+      "age": 35,
+      "height": 161,
+      "bust": null,
+      "tags": [
+        "Gカップ",
+        "美魔女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_矢澤さくら",
+      "name": "矢澤さくら",
+      "age": 30,
+      "height": 168,
+      "bust": null,
+      "tags": [
+        "Hカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_菊池みゆ",
+      "name": "菊池みゆ",
+      "age": 30,
+      "height": 157,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_天野あやか",
+      "name": "天野あやか",
+      "age": 33,
+      "height": 148,
+      "bust": null,
+      "tags": [
+        "Gカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_羽月あい",
+      "name": "羽月あい",
+      "age": 28,
+      "height": 148,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_森咲れいか",
+      "name": "森咲れいか",
+      "age": 31,
+      "height": 168,
+      "bust": null,
+      "tags": [
+        "Gカップ",
+        "モデル体型"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_咲本あすな",
+      "name": "咲本あすな",
+      "age": 30,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "Cカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_明日花ねね",
+      "name": "明日花ねね",
+      "age": 35,
+      "height": 159,
+      "bust": null,
+      "tags": [
+        "Gカップ",
+        "美魔女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_藤川なるみ",
+      "name": "藤川なるみ",
+      "age": 34,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Gカップ",
+        "フェロモン"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_滝川ななこ",
+      "name": "滝川ななこ",
+      "age": 31,
+      "height": 166,
+      "bust": null,
+      "tags": [
+        "Eカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_田中あき",
+      "name": "田中あき",
+      "age": 37,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "熟女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_花沢ちよ",
+      "name": "花沢ちよ",
+      "age": 33,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "Cカップ",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_福原まりん",
+      "name": "福原まりん",
+      "age": 27,
+      "height": 154,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "20代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_黒川まい",
+      "name": "黒川まい",
+      "age": 35,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "熟女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_長峰すみれ",
+      "name": "長峰すみれ",
+      "age": 34,
+      "height": 163,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "美脚"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_泉しほ",
+      "name": "泉しほ",
+      "age": 32,
+      "height": 150,
+      "bust": null,
+      "tags": [
+        "Eカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_本田ちひろ",
+      "name": "本田ちひろ",
+      "age": 28,
+      "height": 153,
+      "bust": null,
+      "tags": [
+        "Gカップ",
+        "巨乳"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_吉川りな",
+      "name": "吉川りな",
+      "age": 31,
+      "height": 154,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_広末あやな",
+      "name": "広末あやな",
+      "age": 40,
+      "height": 159,
+      "bust": null,
+      "tags": [
+        "Gカップ",
+        "熟女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_宮かおり",
+      "name": "宮かおり",
+      "age": 32,
+      "height": 163,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "スタイル抜群"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_渡辺せな",
+      "name": "渡辺せな",
+      "age": 35,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Eカップ",
+        "美魔女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_水野なお",
+      "name": "水野なお",
+      "age": 37,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "癒し系"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_桜井ほのか",
+      "name": "桜井ほのか",
+      "age": 32,
+      "height": 159,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "美人"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_倉科かれん",
+      "name": "倉科かれん",
+      "age": 30,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_流川りょう",
+      "name": "流川りょう",
+      "age": 36,
+      "height": 162,
+      "bust": null,
+      "tags": [
+        "Hカップ",
+        "爆乳"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_竹田みく",
+      "name": "竹田みく",
+      "age": 30,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_相澤りお",
+      "name": "相澤りお",
+      "age": 35,
+      "height": 155,
+      "bust": null,
+      "tags": [
+        "Cカップ",
+        "熟女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_海老原えま",
+      "name": "海老原えま",
+      "age": 27,
+      "height": 154,
+      "bust": null,
+      "tags": [
+        "Cカップ",
+        "20代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_川口みな",
+      "name": "川口みな",
+      "age": 31,
+      "height": 165,
+      "bust": null,
+      "tags": [
+        "Eカップ",
+        "美脚"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_笹本りんか",
+      "name": "笹本りんか",
+      "age": 37,
+      "height": 162,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "熟女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_愛瀬みずき",
+      "name": "愛瀬みずき",
+      "age": 30,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "Cカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_森さやか",
+      "name": "森さやか",
+      "age": 31,
+      "height": 165,
+      "bust": null,
+      "tags": [
+        "Gカップ",
+        "スタイル抜群"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_宮下えりさ",
+      "name": "宮下えりさ",
+      "age": 32,
+      "height": 166,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_花咲しおり",
+      "name": "花咲しおり",
+      "age": 30,
+      "height": 166,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "モデル体型"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_内田ちさ",
+      "name": "内田ちさ",
+      "age": 30,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_伊藤めい",
+      "name": "伊藤めい",
+      "age": 30,
+      "height": 148,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "小柄"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_神崎みさ",
+      "name": "神崎みさ",
+      "age": 31,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "美人"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_渋谷りの",
+      "name": "渋谷りの",
+      "age": 33,
+      "height": 166,
+      "bust": null,
+      "tags": [
+        "Fカップ",
+        "長身"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_一宮ひな",
+      "name": "一宮ひな",
+      "age": 36,
+      "height": 155,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "熟女"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_林もも",
+      "name": "林もも",
+      "age": 31,
+      "height": 160,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_白井もか",
+      "name": "白井もか",
+      "age": 30,
+      "height": 162,
+      "bust": null,
+      "tags": [
+        "Dカップ",
+        "スレンダー"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_中村ゆり",
+      "name": "中村ゆり",
+      "age": 31,
+      "height": 161,
+      "bust": null,
+      "tags": [
+        "Cカップ",
+        "30代"
+      ]
+    },
+    {
+      "id": "aroma_lunabelle_月見ゆず",
+      "name": "月見ゆず",
+      "age": 25,
+      "height": 165,
+      "bust": null,
+      "tags": [
+        "Cカップ",
+        "モデル体型"
+      ]
+    }
+  ]
+}

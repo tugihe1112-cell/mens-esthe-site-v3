@@ -1,0 +1,117 @@
+{
+  "id": "tokyo_shinjuku_nishishinjuku_platinum_tokyo",
+  "name": "PLATINUM TOKYO 西新宿店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "西新宿",
+  "tags": [
+    "カード払いOK",
+    "完全個室",
+    "深夜営業",
+    "出張可能"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "75分",
+        "price": "15,000円"
+      },
+      {
+        "time": "90分",
+        "price": "18,000円"
+      },
+      {
+        "time": "120分",
+        "price": "23,000円"
+      },
+      {
+        "time": "150分",
+        "price": "28,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 15分",
+        "price": "4,000円"
+      },
+      {
+        "name": "本指名・ネット指名",
+        "price": "1,000円"
+      }
+    ]
+  },
+  "url": "https://esthe-platinum.tokyo/",
+  "threads": [],
+  "brandId": "platinum_tokyo",
+  "therapists": [
+    "platinum_tokyo_鳳城あおい",
+    "platinum_tokyo_最上ゆい",
+    "platinum_tokyo_美月ゆら",
+    "platinum_tokyo_雨宮るね",
+    "platinum_tokyo_佐藤あん",
+    "platinum_tokyo_宝月るな",
+    "platinum_tokyo_松岡はね",
+    "platinum_tokyo_仲間あすか",
+    "platinum_tokyo_古谷みつき",
+    "platinum_tokyo_芹沢あん",
+    "platinum_tokyo_鈴本あいり",
+    "platinum_tokyo_花咲よる",
+    "platinum_tokyo_市川かれん",
+    "platinum_tokyo_冬月ゆうり",
+    "platinum_tokyo_蓮見さら",
+    "platinum_tokyo_朝日奈まほ",
+    "platinum_tokyo_藤咲しおり",
+    "platinum_tokyo_日向のん",
+    "platinum_tokyo_琴石みれい",
+    "platinum_tokyo_桃瀬もも",
+    "platinum_tokyo_星宮そら",
+    "platinum_tokyo_白星せな",
+    "platinum_tokyo_白川あいさ",
+    "platinum_tokyo_佐倉にじ",
+    "platinum_tokyo_月森かなめ",
+    "platinum_tokyo_伊藤れな",
+    "platinum_tokyo_桜ゆりの",
+    "platinum_tokyo_澄田りん",
+    "platinum_tokyo_渚あみ",
+    "platinum_tokyo_七瀬みな",
+    "platinum_tokyo_月乃うた",
+    "platinum_tokyo_天音ゆきの",
+    "platinum_tokyo_工藤まな",
+    "platinum_tokyo_東雲めぐる",
+    "platinum_tokyo_月見里ひより",
+    "platinum_tokyo_小鳥遊きき",
+    "platinum_tokyo_一ノ瀬さな",
+    "platinum_tokyo_柊みくる",
+    "platinum_tokyo_橘のあ",
+    "platinum_tokyo_村上すず",
+    "platinum_tokyo_夏目えみ",
+    "platinum_tokyo_一葉ゆず",
+    "platinum_tokyo_井上もも",
+    "platinum_tokyo_橋本れいな",
+    "platinum_tokyo_及川みこと",
+    "platinum_tokyo_夢咲のの",
+    "platinum_tokyo_雫のどか",
+    "platinum_tokyo_東條みほ",
+    "platinum_tokyo_聚楽いちか",
+    "platinum_tokyo_橘みる",
+    "platinum_tokyo_天月ことみ",
+    "platinum_tokyo_織野ゆな",
+    "platinum_tokyo_岩田りさ",
+    "platinum_tokyo_望月みれい",
+    "platinum_tokyo_神宮寺なみ",
+    "platinum_tokyo_鈴野ねね",
+    "platinum_tokyo_甘宮める",
+    "platinum_tokyo_立花るい",
+    "platinum_tokyo_桜庭りさ",
+    "platinum_tokyo_七海ひかる",
+    "platinum_tokyo_長月さくら",
+    "platinum_tokyo_三森りか",
+    "platinum_tokyo_末永りせ",
+    "platinum_tokyo_篠原かな",
+    "platinum_tokyo_唯月りか",
+    "platinum_tokyo_初音ゆう",
+    "platinum_tokyo_桜井くるみ",
+    "platinum_tokyo_小室まほ",
+    "platinum_tokyo_明菜もも"
+  ]
+}

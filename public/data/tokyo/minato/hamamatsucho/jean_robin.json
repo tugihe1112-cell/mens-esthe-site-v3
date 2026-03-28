@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_minato_hamamatsucho_jean_robin",
+  "name": "JEAN ROBIN (ジャンロビン)",
+  "prefecture": "東京都",
+  "city": "港区",
+  "area": "浜松町",
+  "address": "東京都港区浜松町エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分17,000円～",
+  "hours": "10:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://jean-robin.com/",
+  "nearestStation": "浜松町駅",
+  "description": "田町・浜松町の日本人リラクゼーション。 / 料金システム: 60分17,000円 / 90分20,000円 / 120分26,000円 / 150分32,000円 / 180分39,000円",
+  "threads": [],
+  "brandId": "jean_robin",
+  "therapists": []
+}

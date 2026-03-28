@@ -1,0 +1,101 @@
+{
+  "id": "tokyo_taito_ueno_aroma_rejina",
+  "name": "Aroma Rejina (アロマレジーナ) 上野",
+  "url": "https://aroma-rejina.com/",
+  "area": "上野",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "体験レポートあり",
+    "カード支払いOK"
+  ],
+  "courses": [
+    {
+      "minutes": 60,
+      "price": "14,000"
+    },
+    {
+      "minutes": 90,
+      "price": "20,000"
+    },
+    {
+      "minutes": 120,
+      "price": "26,000"
+    },
+    {
+      "minutes": 150,
+      "price": "32,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "台東区",
+  "brandId": "aroma_rejina",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "aroma_rejina_長澤 まゆ",
+      "name": "長澤 まゆ",
+      "age": 42,
+      "height": 160,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "aroma_rejina_広末 あい",
+      "name": "広末 あい",
+      "age": 44,
+      "height": 165,
+      "bust": "(E)",
+      "tags": []
+    },
+    {
+      "id": "aroma_rejina_竹内 みか",
+      "name": "竹内 みか",
+      "age": 35,
+      "height": 155,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "aroma_rejina_深田 りな",
+      "name": "深田 りな",
+      "age": 48,
+      "height": 158,
+      "bust": "(G)",
+      "tags": []
+    },
+    {
+      "id": "aroma_rejina_石田 ゆき",
+      "name": "石田 ゆき",
+      "age": 41,
+      "height": 162,
+      "bust": "(D)",
+      "tags": []
+    },
+    {
+      "id": "aroma_rejina_松嶋 あい",
+      "name": "松嶋 あい",
+      "age": 46,
+      "height": 160,
+      "bust": "(F)",
+      "tags": []
+    },
+    {
+      "id": "aroma_rejina_堀北 ひとみ",
+      "name": "堀北 ひとみ",
+      "age": 39,
+      "height": 157,
+      "bust": "(C)",
+      "tags": []
+    },
+    {
+      "id": "aroma_rejina_綾瀬 さき",
+      "name": "綾瀬 さき",
+      "age": 45,
+      "height": 161,
+      "bust": "(E)",
+      "tags": []
+    }
+  ]
+}

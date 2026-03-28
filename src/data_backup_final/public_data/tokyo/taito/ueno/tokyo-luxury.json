@@ -1,0 +1,27 @@
+{
+  "id": "tokyo_taito_ueno_tokyo-luxury",
+  "name": "東京ラグジュアリー（旧ビジョスパ）",
+  "prefecture": "東京都",
+  "city": "台東区",
+  "area": "上野",
+  "address": "東京都台東区上野（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "100分 20,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業",
+    "24時間営業",
+    "カード払いOK"
+  ],
+  "websiteUrl": "https://tokyo-luxury.xyz/",
+  "nearestStation": "上野駅",
+  "description": "24時間営業、完全個室、カード払い対応で幅広いニーズに対応",
+  "threads": [],
+  "brandId": "tokyo-luxury",
+  "therapists": []
+}

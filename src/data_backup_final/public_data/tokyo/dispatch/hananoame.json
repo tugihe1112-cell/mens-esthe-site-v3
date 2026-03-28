@@ -1,0 +1,215 @@
+{
+  "id": "tokyo_dispatch_hananoame",
+  "name": "花の雨リラクゼーション",
+  "prefecture": "東京都",
+  "city": "23区出張",
+  "area": "23wards",
+  "address": "東京都23区内出張",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 15,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "23区出張",
+    "派遣型",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://hananoame.com/",
+  "nearestStation": "23区内出張",
+  "description": "23区出張のメンズエステ。 / 料金システム: 90分15,000円 / 120分18,000円 / 150分22,000円 / 180分26,000円 / 210分30,000円",
+  "brandId": "hananoame",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "hananoame_椿 リオ",
+      "name": "椿 リオ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_森 静",
+      "name": "森 静",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_財前 ひまり",
+      "name": "財前 ひまり",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_峯岸 杏",
+      "name": "峯岸 杏",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_原野 香澄",
+      "name": "原野 香澄",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_小沢 文乃",
+      "name": "小沢 文乃",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_黒柳 さき",
+      "name": "黒柳 さき",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_林 ゆうな",
+      "name": "林 ゆうな",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_白石 もも香",
+      "name": "白石 もも香",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_金山 真理",
+      "name": "金山 真理",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_森 楓",
+      "name": "森 楓",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_緑川 いと",
+      "name": "緑川 いと",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_神宮寺 しおん",
+      "name": "神宮寺 しおん",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_高松 志帆",
+      "name": "高松 志帆",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_藤本 あや",
+      "name": "藤本 あや",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_佐藤 薫",
+      "name": "佐藤 薫",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_橘 遥",
+      "name": "橘 遥",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_奈良 美希",
+      "name": "奈良 美希",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_野村 和可",
+      "name": "野村 和可",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_三嶋 菜々",
+      "name": "三嶋 菜々",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_相葉 恵梨香",
+      "name": "相葉 恵梨香",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_森川 舞",
+      "name": "森川 舞",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_笹木 美穂",
+      "name": "笹木 美穂",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_佐野 みく",
+      "name": "佐野 みく",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_新田 りほ",
+      "name": "新田 りほ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_長瀬 優",
+      "name": "長瀬 優",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "hananoame_桐島 カンナ",
+      "name": "桐島 カンナ",
+      "age": null,
+      "height": null,
+      "bust": null
+    }
+  ]
+}

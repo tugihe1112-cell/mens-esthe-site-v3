@@ -1,0 +1,483 @@
+{
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分20,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "websiteUrl": "http://www.akiba-amour.com/",
+  "description": "秋葉原・銀座の日本人リラクゼーション。圧倒的なクオリティのセラピストが多数在籍。",
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業",
+    "日本人",
+    "一般ルーム"
+  ],
+  "brandId": "aroma_amour",
+  "threads": [],
+  "id": "tokyo_chiyoda_akihabara_aroma_amour",
+  "name": "AROMA AMOUR (秋葉原店)",
+  "prefecture": "東京都",
+  "city": "千代田区",
+  "area": "秋葉原",
+  "nearestStation": "秋葉原駅",
+  "address": "東京都千代田区秋葉原エリア",
+  "therapists": [
+    {
+      "id": "aroma_amour_里吉るの",
+      "name": "里吉るの",
+      "age": "26歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_結城ゆあ",
+      "name": "結城ゆあ",
+      "age": "25歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_猫又れあ",
+      "name": "猫又れあ",
+      "age": "24歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_水森あおい",
+      "name": "水森あおい",
+      "age": "26歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_天音すず",
+      "name": "天音すず",
+      "age": "22歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_星野じゅん",
+      "name": "星野じゅん",
+      "age": "23歳",
+      "height": "166cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_小倉いおり",
+      "name": "小倉いおり",
+      "age": "25歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_星川ひより",
+      "name": "星川ひより",
+      "age": "20歳",
+      "height": "148cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_雛森みく",
+      "name": "雛森みく",
+      "age": "23歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_上原ゆみか",
+      "name": "上原ゆみか",
+      "age": "26歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_七瀬のあ",
+      "name": "七瀬のあ",
+      "age": "26歳",
+      "height": "145cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_篠咲りょう",
+      "name": "篠咲りょう",
+      "age": "26歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_愛内ここあ",
+      "name": "愛内ここあ",
+      "age": "20歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_武井りな",
+      "name": "武井りな",
+      "age": "20歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_杉浦ののか",
+      "name": "杉浦ののか",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_鈴原らん",
+      "name": "鈴原らん",
+      "age": "22歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_小町ゆの",
+      "name": "小町ゆの",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_藍野ことは",
+      "name": "藍野ことは",
+      "age": "26歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_桐生はるか",
+      "name": "桐生はるか",
+      "age": "20歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_西野あいり",
+      "name": "西野あいり",
+      "age": "25歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_折原のの",
+      "name": "折原のの",
+      "age": "22歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_大森さとみ",
+      "name": "大森さとみ",
+      "age": "25歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_宮崎ひまり",
+      "name": "宮崎ひまり",
+      "age": "21歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_夏木うた",
+      "name": "夏木うた",
+      "age": "24歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_白咲もえ",
+      "name": "白咲もえ",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_麻宮ゆず",
+      "name": "麻宮ゆず",
+      "age": "27歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_堂本まな",
+      "name": "堂本まな",
+      "age": "25歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_堤ほのか",
+      "name": "堤ほのか",
+      "age": "24歳",
+      "height": "159cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_稲垣まお",
+      "name": "稲垣まお",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_相原まなみ",
+      "name": "相原まなみ",
+      "age": "22歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_若菜いお",
+      "name": "若菜いお",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_愛葉さくら",
+      "name": "愛葉さくら",
+      "age": "25歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_安西さおり",
+      "name": "安西さおり",
+      "age": "27歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_杉野りおん",
+      "name": "杉野りおん",
+      "age": "25歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_氷堂なつか",
+      "name": "氷堂なつか",
+      "age": "27歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_姫宮りか",
+      "name": "姫宮りか",
+      "age": "22歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_花宮さゆみ",
+      "name": "花宮さゆみ",
+      "age": "23歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_青野みれい",
+      "name": "青野みれい",
+      "age": "25歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_渚すずは",
+      "name": "渚すずは",
+      "age": "27歳",
+      "height": "162cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_綿貫つばさ",
+      "name": "綿貫つばさ",
+      "age": "23歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_桜井あいか",
+      "name": "桜井あいか",
+      "age": "21歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_星ゆうか",
+      "name": "星ゆうか",
+      "age": "24歳",
+      "height": "154cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_伊東しゅり",
+      "name": "伊東しゅり",
+      "age": "26歳",
+      "height": "165cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_本田あかね",
+      "name": "本田あかね",
+      "age": "28歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_外村ゆうき",
+      "name": "外村ゆうき",
+      "age": "26歳",
+      "height": "170cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_咲宮なぎ",
+      "name": "咲宮なぎ",
+      "age": "23歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_白河はすな",
+      "name": "白河はすな",
+      "age": "21歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_宮野まり",
+      "name": "宮野まり",
+      "age": "26歳",
+      "height": "167cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_南きこ",
+      "name": "南きこ",
+      "age": "26歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_牧瀬あゆな",
+      "name": "牧瀬あゆな",
+      "age": "24歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_白坂はな",
+      "name": "白坂はな",
+      "age": "26歳",
+      "height": "152cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_瀬名ふうか",
+      "name": "瀬名ふうか",
+      "age": "21歳",
+      "height": "155cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_速水しおり",
+      "name": "速水しおり",
+      "age": "25歳",
+      "height": "160cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_綾波めい",
+      "name": "綾波めい",
+      "age": "22歳",
+      "height": "150cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_妹尾うた",
+      "name": "妹尾うた",
+      "age": "20歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_叶まどか",
+      "name": "叶まどか",
+      "age": "27歳",
+      "height": "158cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_黒川みさ",
+      "name": "黒川みさ",
+      "age": "24歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_苺谷えま",
+      "name": "苺谷えま",
+      "age": "22歳",
+      "height": "156cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_瀬戸なずな",
+      "name": "瀬戸なずな",
+      "age": "22歳",
+      "height": "153cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_吉澤みずき",
+      "name": "吉澤みずき",
+      "age": "26歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_樋口はづき",
+      "name": "樋口はづき",
+      "age": "22歳",
+      "height": "161cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_北乃ゆうり",
+      "name": "北乃ゆうり",
+      "age": "22歳",
+      "height": "163cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_睦月しの",
+      "name": "睦月しの",
+      "age": "20歳",
+      "height": "157cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_川越るな",
+      "name": "川越るな",
+      "age": "23歳",
+      "height": "164cm",
+      "bust": null
+    },
+    {
+      "id": "aroma_amour_与田みな",
+      "name": "与田みな",
+      "age": "23歳",
+      "height": "152cm",
+      "bust": null
+    }
+  ]
+}

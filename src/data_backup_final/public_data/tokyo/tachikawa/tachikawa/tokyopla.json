@@ -1,0 +1,516 @@
+{
+  "id": "tokyo_tachikawa_tachikawa_tokyopla",
+  "name": "トキョプラ (旧T+Plus)",
+  "prefecture": "東京都",
+  "city": "立川市",
+  "region": "広域エリア",
+  "address": "東京都新宿区・立川市・八王子市 (各線駅近)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "color": "from-teal-500 to-emerald-500",
+  "tags": [
+    "カード決済可",
+    "深夜営業",
+    "完全個室"
+  ],
+  "websiteUrl": "https://tokyopla.com/",
+  "threads": [],
+  "area": "立川",
+  "brandId": "tokyopla",
+  "therapists": [
+    {
+      "id": "tokyopla_早坂みゆ",
+      "name": "早坂みゆ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_須藤ねね♦︎",
+      "name": "須藤ねね♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_小鳥遊もね♦︎",
+      "name": "小鳥遊もね♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_菜々美なみ♦︎",
+      "name": "菜々美なみ♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_小日向ちい♦︎",
+      "name": "小日向ちい♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_星乃りあん♦︎",
+      "name": "星乃りあん♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_黒咲みれい♦︎",
+      "name": "黒咲みれい♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_武藤りの",
+      "name": "武藤りの",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_速見ゆいか",
+      "name": "速見ゆいか",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_水無月あむ♦︎",
+      "name": "水無月あむ♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_氷室いろは",
+      "name": "氷室いろは",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_愛沢ここね♦︎",
+      "name": "愛沢ここね♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_夢野ひまり",
+      "name": "夢野ひまり",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_五十嵐えりか",
+      "name": "五十嵐えりか",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_一色ゆう♦︎",
+      "name": "一色ゆう♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_有栖りこ♦︎",
+      "name": "有栖りこ♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_桃木もな♦︎",
+      "name": "桃木もな♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_七沢かりん♦︎",
+      "name": "七沢かりん♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_佐野まや♦︎",
+      "name": "佐野まや♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_白野すず♦︎",
+      "name": "白野すず♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_姫宮ののみ",
+      "name": "姫宮ののみ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_姫川かれん♦︎",
+      "name": "姫川かれん♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_水入まき♦︎",
+      "name": "水入まき♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_七森さつき♦︎",
+      "name": "七森さつき♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_朝日きき♦︎",
+      "name": "朝日きき♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_田中れみ♦︎",
+      "name": "田中れみ♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_愛須める♦︎",
+      "name": "愛須める♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_池田あいな♦︎",
+      "name": "池田あいな♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_森あかり♦︎",
+      "name": "森あかり♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_長濱ももか♦︎",
+      "name": "長濱ももか♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_野々宮つかさ♦︎",
+      "name": "野々宮つかさ♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_足立れな♦︎",
+      "name": "足立れな♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_宮下くりす",
+      "name": "宮下くりす",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_佐々木りんか♦︎",
+      "name": "佐々木りんか♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_宮川つばさ♦︎",
+      "name": "宮川つばさ♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_千森かごめ♦︎",
+      "name": "千森かごめ♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_可愛川あい♦︎",
+      "name": "可愛川あい♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_河北ゆきな",
+      "name": "河北ゆきな",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_栗原かな♦︎",
+      "name": "栗原かな♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_天野にいな♦︎",
+      "name": "天野にいな♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_渚みおり♦︎",
+      "name": "渚みおり♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_香椎ありす♦︎",
+      "name": "香椎ありす♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_飯島ののあ",
+      "name": "飯島ののあ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_有坂みく♦︎",
+      "name": "有坂みく♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_京本あや♦︎",
+      "name": "京本あや♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_姫乃つぐみ♦︎",
+      "name": "姫乃つぐみ♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_桜井ひより♦︎",
+      "name": "桜井ひより♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_柚木らな♦︎",
+      "name": "柚木らな♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_愛内りな",
+      "name": "愛内りな",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_神谷はるか♦︎",
+      "name": "神谷はるか♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_野尻さき",
+      "name": "野尻さき",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_羽乃れむ",
+      "name": "羽乃れむ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_月城いと",
+      "name": "月城いと",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_滝沢あみ",
+      "name": "滝沢あみ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_愛菜みり♦︎",
+      "name": "愛菜みり♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_三柴わかな",
+      "name": "三柴わかな",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_真白あず",
+      "name": "真白あず",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_桃園ももえ",
+      "name": "桃園ももえ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_水瀬せな♦︎",
+      "name": "水瀬せな♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_宮内ゆい♦︎",
+      "name": "宮内ゆい♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_奈月しおり",
+      "name": "奈月しおり",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_三浦ひまり",
+      "name": "三浦ひまり",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_水野のあ",
+      "name": "水野のあ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_雪音かんな",
+      "name": "雪音かんな",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_月宮りあ",
+      "name": "月宮りあ",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_香坂あいり♦︎",
+      "name": "香坂あいり♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_翠月まう♦︎",
+      "name": "翠月まう♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_八乙女さくら",
+      "name": "八乙女さくら",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_峰りりな♦︎",
+      "name": "峰りりな♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    },
+    {
+      "id": "tokyopla_山口みほ♦︎",
+      "name": "山口みほ♦︎",
+      "age": null,
+      "height": null,
+      "bust": null
+    }
+  ]
+}

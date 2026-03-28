@@ -1,0 +1,120 @@
+{
+  "id": 60318,
+  "name": "極楽エステ",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都新宿区新宿",
+  "image": "/images/shops/gokuraku_esthe.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "要確認",
+  "isPremium": false,
+  "color": "from-red-900 to-orange-900",
+  "tags": [],
+  "websiteUrl": "https://gokuraku-esthe.com/",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "unknown_あおい",
+      "name": "あおい",
+      "age": 20,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_こころ",
+      "name": "こころ",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_ほの",
+      "name": "ほの",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_もも",
+      "name": "もも",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_さとみ",
+      "name": "さとみ",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_さな",
+      "name": "さな",
+      "age": 25,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_るな",
+      "name": "るな",
+      "age": 22,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_こはる",
+      "name": "こはる",
+      "age": 27,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_うい",
+      "name": "うい",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_あすか",
+      "name": "あすか",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_せいら",
+      "name": "せいら",
+      "age": 23,
+      "height": null,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "unknown_しゅうか",
+      "name": "しゅうか",
+      "age": 24,
+      "height": null,
+      "bust": null,
+      "tags": []
+    }
+  ],
+  "area": [
+    "代々木・原宿",
+    "原宿"
+  ]
+}

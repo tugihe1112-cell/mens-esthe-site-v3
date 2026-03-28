@@ -1,0 +1,28 @@
+{
+  "id": "tokyo_toshima_otsuka_otsuka_mg",
+  "name": "大塚メンズエステMG",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "大塚",
+  "address": "東京都豊島区大塚・巣鴨",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "100分15,000円～",
+  "hours": "11:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般",
+    "店舗型",
+    "初回特典あり",
+    "カード払いOK",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://ootsuka-mg.com/",
+  "nearestStation": "大塚駅",
+  "description": "70分10,000円 / 100分15,000円 / 130分19,000円 / 160分23,000円 / 延長30分6,000円",
+  "threads": [],
+  "brandId": "otsuka_mg",
+  "therapists": []
+}

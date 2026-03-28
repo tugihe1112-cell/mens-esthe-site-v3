@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_toshima_ikebukuro_otonazyoshi",
+  "name": "おとな女子",
+  "prefecture": "東京都",
+  "city": "豊島区",
+  "area": "池袋",
+  "address": "東京都豊島区池袋（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "スタンダード 90分 15,000円～ / リッチ 90分 17,000円～",
+  "hours": "12:00～5:00",
+  "isPremium": false,
+  "tags": [
+    "30代以上",
+    "完全個室",
+    "初回特典あり"
+  ],
+  "websiteUrl": "http://men-esthe.net",
+  "phone": "090-8486-3755",
+  "nearestStation": "池袋駅",
+  "description": "【スタンダードリンパ】90分15,000円/120分19,000円/150分23,000円 【リッチリンパ】90分17,000円/120分21,000円/150分25,000円",
+  "threads": [],
+  "brandId": "otonazyoshi",
+  "therapists": []
+}

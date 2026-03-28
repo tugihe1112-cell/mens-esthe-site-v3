@@ -1,0 +1,51 @@
+{
+  "id": "tokyo_shinjuku_higashishinjuku_gyokurou",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "region": "関東エリア",
+  "address": "東京都新宿区",
+  "name": "玉楼",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 20,000円～",
+  "hours": "10:00～翌6:00",
+  "isPremium": true,
+  "color": "from-emerald-500 to-teal-600",
+  "tags": [],
+  "websiteUrl": "https://gyokurou.com/",
+  "description": "【コル・カロリのミラー店】\n当店は「コル・カロリ」のミラー店です。在籍セラピストやシステム等は系列店と同一となります。",
+  "affiliatedStores": [
+    {
+      "name": "コル・カロリ",
+      "url": "https://cor-caroli.com",
+      "note": "ミラー店（本家）"
+    }
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "90分",
+        "price": "20,000円"
+      },
+      {
+        "time": "120分",
+        "price": "26,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長15分",
+        "price": "4,000円"
+      },
+      {
+        "name": "指名料",
+        "price": "2,000円"
+      }
+    ]
+  },
+  "threads": [],
+  "area": "東新宿",
+  "brandId": "gyokurou",
+  "therapists": []
+}

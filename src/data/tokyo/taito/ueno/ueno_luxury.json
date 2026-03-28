@@ -1,0 +1,45 @@
+{
+  "id": "tokyo_taito_ueno_ueno_luxury",
+  "name": "Ueno Luxury (上野ラグジュアリー)",
+  "url": "https://ueno-luxury.com/",
+  "area": "上野",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK",
+    "個室あり"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "台東区",
+  "brandId": "ueno_luxury",
+  "threads": [],
+  "therapists": [
+    "ueno_luxury_新垣 あい",
+    "ueno_luxury_桜庭 あい",
+    "ueno_luxury_本多 ちか",
+    "ueno_luxury_森田 ゆう",
+    "ueno_luxury_夏目 りな",
+    "ueno_luxury_堀北 ゆき",
+    "ueno_luxury_宮崎 さき",
+    "ueno_luxury_相武 みな"
+  ]
+}

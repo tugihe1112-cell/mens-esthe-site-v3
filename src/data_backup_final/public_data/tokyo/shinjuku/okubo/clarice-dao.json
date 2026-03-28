@@ -1,0 +1,26 @@
+{
+  "id": "tokyo_shinjuku_okubo_clarice-dao",
+  "name": "クラリスDAO",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "大久保",
+  "address": "東京都新宿区百人町1丁目（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分 10,000円～（ネット指名料込）",
+  "hours": "11:00～24:00",
+  "isPremium": false,
+  "tags": [
+    "出張可",
+    "カード払いOK",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://clarice-dao.jp/",
+  "phone": "070-4380-1234",
+  "nearestStation": "新大久保駅",
+  "description": "【一般ルーム】60分10,000円～180分27,000円 【出張】90分19,000円～プレミアム120分40,000円 延長も可能",
+  "threads": [],
+  "brandId": "clarice-dao",
+  "therapists": []
+}

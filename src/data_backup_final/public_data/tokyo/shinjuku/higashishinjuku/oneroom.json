@@ -1,0 +1,398 @@
+{
+  "id": "tokyo_shinjuku_higashishinjuku_oneroom",
+  "name": "ONE ROOM (ワンルーム) 東新宿店",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "東新宿",
+  "tags": [
+    "完全個室",
+    "深夜営業"
+  ],
+  "system": {
+    "standard": [
+      {
+        "time": "60分",
+        "price": "13,000円"
+      },
+      {
+        "time": "90分",
+        "price": "19,000円"
+      },
+      {
+        "time": "120分",
+        "price": "25,000円"
+      },
+      {
+        "time": "150分",
+        "price": "31,000円"
+      }
+    ],
+    "special": [
+      {
+        "name": "延長 20分",
+        "price": "6,000円"
+      },
+      {
+        "name": "ネット(写真)指名料",
+        "price": "1,000円"
+      }
+    ]
+  },
+  "url": "https://www.oneroom-shinjyuku.com",
+  "threads": [],
+  "brandId": "oneroom",
+  "therapists": [
+    {
+      "id": "oneroom_早乙女",
+      "name": "早乙女",
+      "age": 36,
+      "height": 170,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_横知 みく",
+      "name": "横知 みく",
+      "age": 23,
+      "height": 153,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_浅香 めい",
+      "name": "浅香 めい",
+      "age": 26,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_北条 姫奈",
+      "name": "北条 姫奈",
+      "age": 26,
+      "height": 150,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_葵",
+      "name": "葵",
+      "age": 27,
+      "height": 151,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_村瀬 なぎ",
+      "name": "村瀬 なぎ",
+      "age": 18,
+      "height": 161,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_椿 れむ",
+      "name": "椿 れむ",
+      "age": 20,
+      "height": 159,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_月瀬 美優",
+      "name": "月瀬 美優",
+      "age": 37,
+      "height": 158,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_原口 れいか",
+      "name": "原口 れいか",
+      "age": 24,
+      "height": 161,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_音嶋 りり",
+      "name": "音嶋 りり",
+      "age": 20,
+      "height": 157,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_藤 かえで",
+      "name": "藤 かえで",
+      "age": 24,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_双葉",
+      "name": "双葉",
+      "age": 24,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_宮中 るな",
+      "name": "宮中 るな",
+      "age": 23,
+      "height": 146,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_源 しずか",
+      "name": "源 しずか",
+      "age": 25,
+      "height": 162,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_保科",
+      "name": "保科",
+      "age": 35,
+      "height": 159,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_佐々木",
+      "name": "佐々木",
+      "age": 31,
+      "height": 153,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_深瀬 まいか",
+      "name": "深瀬 まいか",
+      "age": 19,
+      "height": 161,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_白鳥 わかな",
+      "name": "白鳥 わかな",
+      "age": 20,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_紫季 しき",
+      "name": "紫季 しき",
+      "age": 26,
+      "height": 161,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_瀬古",
+      "name": "瀬古",
+      "age": 34,
+      "height": 161,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_甘音 かれん",
+      "name": "甘音 かれん",
+      "age": 21,
+      "height": 153,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_咲良 愛梨",
+      "name": "咲良 愛梨",
+      "age": 19,
+      "height": 162,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_吉田 ひな",
+      "name": "吉田 ひな",
+      "age": 23,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_弓木 みゆ",
+      "name": "弓木 みゆ",
+      "age": 22,
+      "height": 157,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_相田 さおり",
+      "name": "相田 さおり",
+      "age": 25,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_愛宮",
+      "name": "愛宮",
+      "age": 32,
+      "height": 160,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_天海",
+      "name": "天海",
+      "age": 38,
+      "height": 153,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_牧野",
+      "name": "牧野",
+      "age": 24,
+      "height": 149,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_有坂 りお",
+      "name": "有坂 りお",
+      "age": 23,
+      "height": 153,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_有栖 ゆあ",
+      "name": "有栖 ゆあ",
+      "age": 27,
+      "height": 147,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_西山",
+      "name": "西山",
+      "age": 29,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_工藤 まな",
+      "name": "工藤 まな",
+      "age": 19,
+      "height": 156,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_秋山 ゆう",
+      "name": "秋山 ゆう",
+      "age": 20,
+      "height": 157,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_黒田 のあ",
+      "name": "黒田 のあ",
+      "age": 20,
+      "height": 161,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_松坂 かほ",
+      "name": "松坂 かほ",
+      "age": 23,
+      "height": 156,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_望月 みさき",
+      "name": "望月 みさき",
+      "age": 26,
+      "height": 157,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_岩本",
+      "name": "岩本",
+      "age": 28,
+      "height": 162,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_三上",
+      "name": "三上",
+      "age": 25,
+      "height": 155,
+      "bust": null,
+      "tags": [
+        "NEW"
+      ]
+    },
+    {
+      "id": "oneroom_花村 ネネ",
+      "name": "花村 ネネ",
+      "age": 39,
+      "height": 149,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_谷",
+      "name": "谷",
+      "age": 32,
+      "height": 158,
+      "bust": null,
+      "tags": []
+    },
+    {
+      "id": "oneroom_水城 にじ",
+      "name": "水城 にじ",
+      "age": 18,
+      "height": 155,
+      "bust": null,
+      "tags": []
+    }
+  ]
+}

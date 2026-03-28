@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mens Esthe.Map | 静寂と癒やしのプレミアムサロン予約</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #F2F0EB;       /* ライト・グレージュ */
+            --bg-section: #EBE7E0;    /* 少し濃いグレージュ */
+            --text-main: #1A1A2E;     /* ネイビー */
+            --accent-blue: #2C3E6B;
+            --text-sub: #5D6370;
+            --card-bg: #FFFFFF;
+        }
+
+        /* ゴールド・グラデーション（金属感） */
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #C9A96E 0%, #B8965E 40%, #E6D2A8 70%, #C9A96E 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: #C9A96E;
+        }
+        .bg-gold-gradient {
+            background: linear-gradient(135deg, #C9A96E 0%, #B8965E 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .serif { font-family: 'Cormorant Garamond', serif; }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* Animation */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-in { animation: fadeIn 1s cubic-bezier(0.2, 1, 0.3, 1) forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+        /* --- Header --- */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 5%; position: fixed; width: 100%; top: 0;
+            background: rgba(242, 240, 235, 0.8); backdrop-filter: blur(10px); z-index: 1000;
+        }
+        .logo { font-size: 1.6rem; font-weight: 600; letter-spacing: 0.05em; }
+        nav ul { display: flex; gap: 3rem; align-items: center; }
+        nav a { font-size: 0.9rem; font-weight: 500; color: var(--text-main); letter-spacing: 0.05em; position: relative; }
+        nav a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 1px; background: #C9A96E; transition: width 0.3s; }
+        nav a:hover::after { width: 100%; }
+        
+        .btn-reserve {
+            border: 1px solid #C9A96E; color: #C9A96E; padding: 0.5rem 1.5rem;
+            border-radius: 50px; font-size: 0.85rem; transition: 0.3s;
+        }
+        .btn-reserve:hover { background: #C9A96E; color: white; }
+
+        /* --- Hero Section (Editorial Style) --- */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr; /* 左広め */
+            align-items: center;
+            padding: 0 5%;
+            padding-top: 80px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 装飾：背景に巨大な薄い文字 */
+        .bg-typo {
+            position: absolute; top: 10%; left: -5%;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20rem; opacity: 0.03; font-weight: 700;
+            z-index: 0; pointer-events: none;
+            color: var(--accent-blue);
+        }
+
+        .hero-content {
+            padding-right: 4rem;
+            z-index: 1;
+        }
+
+        .hero-label {
+            display: inline-block;
+            font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: #C9A96E;
+            font-weight: 600;
+            border-bottom: 1px solid #C9A96E;
+            padding-bottom: 5px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem; line-height: 1.1; font-weight: 300;
+            margin-bottom: 1.5rem; color: var(--text-main);
+        }
+        .hero h1 span { display: block; font-size: 2rem; margin-top: 1rem; color: var(--text-sub); font-weight: 400; }
+
+        .search-wrapper {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            margin-top: 3rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .search-wrapper input {
+            border: none; outline: none; flex-grow: 1; padding: 10px 15px;
+            font-size: 1rem; color: var(--text-main); font-family: 'Noto Sans JP';
+        }
+        .search-wrapper button {
+            background: var(--text-main); color: white; border: none;
+            padding: 0 2rem; font-family: 'Cormorant Garamond';
+            font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+        }
+        .search-wrapper button:hover { background: var(--accent-blue); }
+
+        /* 画像エリア（右側） */
+        .hero-image-container {
+            position: relative;
+            height: 85vh;
+            border-top-left-radius: 200px;
+            border-bottom-left-radius: 0;
+            overflow: hidden;
+            box-shadow: -20px 20px 60px rgba(0,0,0,0.1);
+        }
+
+        /* ダミー画像 (Unsplash) */
+        .hero-img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 10s ease;
+        }
+        .hero-image-container:hover .hero-img { transform: scale(1.05); }
+
+        /* --- Categories (Floating) --- */
+        .categories {
+            transform: translateY(-50%);
+            z-index: 10; position: relative;
+            max-width: 900px; margin: 0 auto;
+        }
+        .cat-row {
+            background: white;
+            padding: 2rem 4rem;
+            border-radius: 4px;
+            display: flex; justify-content: space-between;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+        .cat-item { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-sub); transition: 0.3s; }
+        .cat-item:hover { color: var(--accent-blue); transform: translateY(-3px); }
+        .cat-icon { font-size: 1.5rem; margin-bottom: 0.2rem; }
+        .cat-text { font-size: 0.85rem; font-weight: 500; }
+
+        /* --- Featured Salons --- */
+        .featured { padding: 0 5% 8rem; }
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; padding-bottom: 1rem; border-bottom: 1px solid #ddd; }
+        .section-header h2 { font-size: 3rem; font-weight: 300; }
+        .view-all { font-family: 'Cormorant Garamond'; font-size: 1.1rem; color: var(--text-sub); border-bottom: 1px solid transparent; }
+        .view-all:hover { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
+
+        .card-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+        }
+        .card {
+            background: transparent; /* 背景色なし */
+            cursor: pointer;
+        }
+        .card-img-box {
+            height: 280px; width: 100%;
+            background: #ddd; margin-bottom: 1.5rem;
+            position: relative; overflow: hidden;
+            border-radius: 4px;
+        }
+        .card-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .card:hover .card-img-box img { transform: scale(1.05); }
+
+        .rank-tag {
+            position: absolute; top: 10px; left: 10px;
+            background: white; color: var(--text-main);
+            padding: 5px 15px; font-family: 'Cormorant Garamond';
+            font-weight: 600; font-size: 0.9rem;
+        }
+
+        .card-info h3 { font-size: 1.6rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .card-meta { display: flex; gap: 1rem; color: var(--text-sub); font-size: 0.9rem; margin-bottom: 1rem; }
+        .tags { display: flex; gap: 10px; }
+        .tag { font-size: 0.75rem; border: 1px solid #ccc; padding: 2px 10px; color: #777; border-radius: 50px; }
+
+        /* --- Footer --- */
+        footer { background: #111; color: #555; padding: 4rem 5%; text-align: center; font-size: 0.8rem; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero { grid-template-columns: 1fr; padding-top: 100px; height: auto; display: block; }
+            .hero-image-container { height: 40vh; width: 100%; border-radius: 0; margin-top: 2rem; }
+            .bg-typo { display: none; }
+            .categories { transform: none; margin-top: -30px; padding: 0 5%; }
+            .cat-row { padding: 1.5rem; }
+            .card-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .hero h1 { font-size: 3rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo text-gold-gradient">Mens Esthe.Map</div>
+        <nav>
+            <ul>
+                <li><a href="#">Ranking</a></li>
+                <li><a href="#">New Arrivals</a></li>
+                <li><a href="#">Area</a></li>
+                <li><a href="#" class="btn-reserve">サロンを探す</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="bg-typo">Sanctuary</div>
+
+    <section class="hero">
+        <div class="hero-content animate-in">
+            <span class="hero-label">Premium Relaxation</span>
+            <h1>
+                信じられる、<br>
+                静かな時間。
+                <span class="serif text-gold-gradient">Discover your inner calm.</span>
+            </h1>
+            
+            <div class="search-wrapper delay-1">
+                <input type="text" placeholder="エリア・店名・タグで検索">
+                <button>Search</button>
+            </div>
+        </div>
+
+        <div class="hero-image-container animate-in delay-2">
+            <img src="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?q=80&w=2070&auto=format&fit=crop" class="hero-img" alt="Luxury Spa">
+        </div>
+    </section>
+
+    <section class="categories animate-in delay-3">
+        <div class="cat-row">
+            <div class="cat-item">
+                <div class="cat-icon">👑</div>
+                <div class="cat-text">ランキング</div>
+            </div>
+            <div class="cat-item">
+                <div class="cat-icon">🆕</div>
+                <div class="cat-text">新着店舗</div>
+            </div>
+            <div class="cat-item">
+                <div class="cat-icon">📍</div>
+                <div class="cat-text">現在地</div>
+            </div>
+            <div class="cat-item">
+                <div class="cat-icon">🕒</div>
+                <div class="cat-text">閲覧履歴</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured">
+        <div class="section-header">
+            <h2>注目のサロン</h2>
+            <a href="#" class="view-all">View All Collection →</a>
+        </div>
+
+        <div class="card-grid">
+            <article class="card">
+                <div class="card-img-box">
+                    <span class="rank-tag">#1 Pickup</span>
+                    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2070&auto=format&fit=crop" alt="Spa">
+                </div>
+                <div class="card-info">
+                    <h3>LINDA SPA Tokyo</h3>
+                    <div class="card-meta">
+                        <span>六本木</span> • <span class="text-gold-gradient">★★★★★ 4.9</span>
+                    </div>
+                    <div class="tags">
+                        <span class="tag">完全個室</span>
+                        <span class="tag">日本人セラピスト</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img-box">
+                    <span class="rank-tag">#2 Pickup</span>
+                    <img src="https://images.unsplash.com/photo-1519823551278-64ac927ac4dd?q=80&w=2070&auto=format&fit=crop" alt="Spa">
+                </div>
+                <div class="card-info">
+                    <h3>Aroma More</h3>
+                    <div class="card-meta">
+                        <span>恵比寿</span> • <span class="text-gold-gradient">★★★★☆ 4.7</span>
+                    </div>
+                    <div class="tags">
+                        <span class="tag">アロマ</span>
+                        <span class="tag">シャワー完備</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-img-box">
+                    <span class="rank-tag">#3 Pickup</span>
+                    <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=2070&auto=format&fit=crop" alt="Spa">
+                </div>
+                <div class="card-info">
+                    <h3>Tenkai no Spa</h3>
+                    <div class="card-meta">
+                        <span>銀座</span> • <span class="text-gold-gradient">★★★★★ 4.8</span>
+                    </div>
+                    <div class="tags">
+                        <span class="tag">ラグジュアリー</span>
+                        <span class="tag">駅近</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Mens Esthe.Map - Premium Relaxation Guide</p>
+    </footer>
+
+</body>
+</html>

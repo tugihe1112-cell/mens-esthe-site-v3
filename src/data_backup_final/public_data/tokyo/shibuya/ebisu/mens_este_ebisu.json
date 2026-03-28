@@ -1,0 +1,21 @@
+{
+  "id": "tokyo_shibuya_ebisu_mens_este_ebisu",
+  "name": "メンズエステ恵比寿",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "region": "関東エリア",
+  "address": "東京都渋谷区恵比寿",
+  "image": "/images/shops/mens_este_ebisu.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "要確認",
+  "isPremium": false,
+  "color": "from-blue-900 to-cyan-900",
+  "tags": [],
+  "websiteUrl": "https://mens-este.com/",
+  "threads": [],
+  "area": "恵比寿",
+  "brandId": "mens_este_ebisu",
+  "therapists": []
+}

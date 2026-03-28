@@ -1,0 +1,21 @@
+{
+  "id": "tokyo_shibuya_hatagaya_hataesu",
+  "name": "HaTaEsu (ハタエス)",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "area": "幡ヶ谷",
+  "address": "東京都渋谷区幡ヶ谷エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分12,000円～",
+  "hours": "12:00～翌4:00",
+  "isPremium": false,
+  "tags": [],
+  "websiteUrl": "http://hataesu.com/",
+  "nearestStation": "幡ヶ谷駅",
+  "description": "幡ヶ谷の日本人リラクゼーション。採用率10%の高水準セラピストのみでお客様をお出迎えします。 / 料金システム: Short60分12,000円(平日17:30まで) / Standard90分18,000円 / Premium120分24,000円 / Long150分30,000円",
+  "threads": [],
+  "brandId": "hataesu",
+  "therapists": []
+}

@@ -1,0 +1,40 @@
+{
+  "id": "himitsu_mrs_room_minamiurawa",
+  "name": "秘密のミセスルーム 南浦和",
+  "url": "https://mrs-room.com/",
+  "area": "南浦和",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "カード支払いOK",
+    "個室あり"
+  ],
+  "courses": [
+    {
+      "minutes": 70,
+      "price": "14,000"
+    },
+    {
+      "minutes": 100,
+      "price": "19,000"
+    },
+    {
+      "minutes": 120,
+      "price": "23,000"
+    },
+    {
+      "minutes": 150,
+      "price": "28,000"
+    }
+  ],
+  "prefecture": "埼玉県",
+  "city": "南浦和",
+  "brandId": "himitsu_mrs_room",
+  "therapists": [
+    "himitsu_mrs_room_minamiurawa_綾瀬あい",
+    "himitsu_mrs_room_minamiurawa_石原みか",
+    "himitsu_mrs_room_minamiurawa_広瀬ゆり",
+    "himitsu_mrs_room_minamiurawa_竹内りな"
+  ]
+}

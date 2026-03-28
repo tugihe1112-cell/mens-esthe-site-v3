@@ -1,20 +1,15 @@
 // src/types/index.ts
+// 型定義
 
-/**
- * 詳細評価（5段階評価）
- */
 export interface DetailedRatings {
-  cleanliness: number; // 清潔さ
-  appearance: number; // 容姿
-  style: number;       // スタイル
-  service: number;     // 接客
-  skill: number;       // マッサージのうまさ
-  intensity: number;   // マッサージの際どさ
+  cleanliness: number;
+  appearance: number;
+  style: number;
+  service: number;
+  skill: number;
+  intensity: number;
 }
 
-/**
- * 口コミ（投稿）データ
- */
 export interface Post {
   id: number | string;
   user: string;
@@ -23,32 +18,29 @@ export interface Post {
   isVerified: boolean;
   likes: number;
   replies: number;
-  course: string;
-  hasSecret: boolean;
+  course?: string;
+  hasSecret?: boolean;
+  secretContent?: string;
   detailedRatings: DetailedRatings;
-  rating: number; // 総合評価 (自動計算)
+  rating: number;
   content: string;
-  userTags: string[]; // ユーザーが投稿時に選択したタグ
+  userTags?: string[];
+  
+  isPremiumContent?: boolean;
 }
 
-/**
- * セラピスト（スレッド）データ
- */
 export interface Thread {
-  id: number | string;
+  id: number;
   therapistName: string;
   postCount: number;
-  tags: string[]; // セラピストの特徴タグ (口コミのuserTagsから集計)
+  tags: string[];
   averageRating: number;
   averageDetailedRatings: DetailedRatings;
-  posts: Post[]; // このセラピストに紐づく口コミ一覧
+  posts: Post[];
 }
 
-/**
- * 店舗データ
- */
 export interface Shop {
-  id: number | string;
+  id: number;
   name: string;
   prefecture: string;
   city: string;
@@ -58,49 +50,54 @@ export interface Shop {
   image: string;
   price: string;
   hours: string;
-  color: string; // UI表示用のテーマカラー
-  websiteUrl: string;
-  threads: Thread[]; // この店舗に紐づくセラピスト一覧
+  color?: string;
+  websiteUrl?: string;
+  threads: Thread[];
 }
 
-/**
- * ユーザーデータ
- */
 export interface User {
-  id: number | string;
+  id: number;
   name: string;
   email: string;
   isPremium: boolean;
+  
+  memberType?: 'free' | 'contributor' | 'premium';
+  canViewReviews?: boolean;
+  reviewAccessExpiresAt?: string | null;
+  premiumExpiresAt?: string | null;
 }
 
-/**
- * 口コミの掲載申請（承認待ち）データ
- */
 export interface PendingReview {
   id: number | string;
-  userId: number | string;
+  userId: number;
   userEmail: string;
-  user: string; // ★★★ これが修正点です ★★★
   isPremium: boolean;
-  submittedAt: string;
+  requestedPrefecture: string;
+  requestedCity: string;
   requestedShopName: string;
   requestedTherapistName: string;
-  requestedAddress: string;
-  course: string;
-  hasSecret: boolean;
+  content: string;
   detailedRatings: DetailedRatings;
   rating: number;
-  postContent: string;
-  status: 'pending' | 'approved' | 'rejected';
+  submittedAt: string;
+  status: "pending" | "approved" | "rejected";
+  userTags?: string[];
+  course?: string;
+  
+  grantedDays?: number;
 }
 
-/**
- * 通知データ
- */
 export interface Notification {
   id: number | string;
-  userId: number | string; // この通知の宛先ユーザーID
+  userId: number;
   message: string;
   timestamp: Date;
   isRead: boolean;
+}
+
+// ⭐ トースト通知の型定義（新規追加）
+export interface Toast {
+  id: number | string;
+  message: string;
+  type: 'success' | 'error' | 'info' | 'warning';
 }

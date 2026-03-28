@@ -1,0 +1,24 @@
+{
+  "id": "tokyo_shinjuku_takadanobaba_grand-chariot",
+  "name": "GRAND CHARIOT",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "高田馬場",
+  "address": "東京都新宿区（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円～",
+  "hours": "12:00～5:00",
+  "isPremium": false,
+  "tags": [
+    "カード払いOK",
+    "深夜営業"
+  ],
+  "websiteUrl": "http://www.grandchariottakadababa.com/",
+  "nearestStation": "高田馬場駅",
+  "description": "70分15,000円/90分19,000円/120分24,000円/150分29,000円/180分37,000円/210分42,000円/240分48,000円 延長30分6,000円",
+  "threads": [],
+  "brandId": "grand-chariot",
+  "therapists": []
+}

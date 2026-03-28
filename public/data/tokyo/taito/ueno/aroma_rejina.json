@@ -1,0 +1,45 @@
+{
+  "id": "tokyo_taito_ueno_aroma_rejina",
+  "name": "Aroma Rejina (アロマレジーナ) 上野",
+  "url": "https://aroma-rejina.com/",
+  "area": "上野",
+  "price": "14,000円〜",
+  "interview": false,
+  "tags": [
+    "熟女",
+    "体験レポートあり",
+    "カード支払いOK"
+  ],
+  "courses": [
+    {
+      "minutes": 60,
+      "price": "14,000"
+    },
+    {
+      "minutes": 90,
+      "price": "20,000"
+    },
+    {
+      "minutes": 120,
+      "price": "26,000"
+    },
+    {
+      "minutes": 150,
+      "price": "32,000"
+    }
+  ],
+  "prefecture": "東京都",
+  "city": "台東区",
+  "brandId": "aroma_rejina",
+  "threads": [],
+  "therapists": [
+    "aroma_rejina_長澤 まゆ",
+    "aroma_rejina_広末 あい",
+    "aroma_rejina_竹内 みか",
+    "aroma_rejina_深田 りな",
+    "aroma_rejina_石田 ゆき",
+    "aroma_rejina_松嶋 あい",
+    "aroma_rejina_堀北 ひとみ",
+    "aroma_rejina_綾瀬 さき"
+  ]
+}

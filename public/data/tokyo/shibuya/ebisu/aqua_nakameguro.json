@@ -1,0 +1,20 @@
+{
+  "id": 60352,
+  "name": "AQUA (アクア) 中目黒",
+  "prefecture": "東京都",
+  "city": "恵比寿",
+  "region": "関東エリア",
+  "address": "東京都目黒区中目黒",
+  "image": "/images/shops/aqua_nakameguro.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "要確認",
+  "hours": "要確認",
+  "isPremium": false,
+  "color": "from-blue-900 to-cyan-900",
+  "tags": [],
+  "websiteUrl": "https://www.nakameguro-aqua.com/",
+  "threads": [],
+  "therapists": [],
+  "area": "恵比寿"
+}

@@ -1,0 +1,36 @@
+{
+  "id": 60308,
+  "name": "Sugar Spa (シュガースパ)",
+  "prefecture": "東京都",
+  "city": "代々木",
+  "region": "関東エリア",
+  "address": "東京都渋谷区代々木 (最寄: 代々木駅)",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 20,000円～",
+  "hours": "11:00～24:00",
+  "isPremium": false,
+  "color": "from-pink-400 to-rose-500",
+  "tags": [
+    "初回特典あり",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "http://www.sugar-spa.net",
+  "threads": [],
+  "therapists": [
+    "unknown_柏木 みこと",
+    "unknown_白川 りょう",
+    "unknown_守谷 なち",
+    "unknown_星乃 エマ",
+    "unknown_峰 ゆりあ",
+    "unknown_夏川 ゆうか",
+    "unknown_千原 あさな",
+    "unknown_愛沢 みすず"
+  ],
+  "area": [
+    "代々木・原宿",
+    "原宿"
+  ]
+}

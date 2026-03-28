@@ -1,0 +1,23 @@
+{
+  "id": "tokyo_shibuya_ebisu_carinna",
+  "name": "Carinna (カリナ)",
+  "prefecture": "東京都",
+  "city": "渋谷区",
+  "area": "恵比寿",
+  "address": "東京都渋谷区恵比寿エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "60分16,000円～",
+  "hours": "12:00～翌5:00",
+  "isPremium": false,
+  "tags": [
+    "カード支払いOK"
+  ],
+  "websiteUrl": "https://carinna-azabu.com/",
+  "nearestStation": "恵比寿駅",
+  "description": "麻布十番・恵比寿の日本人リラクゼーション(旧ハイアット)。 / 料金システム: 60分16,000円〜",
+  "threads": [],
+  "brandId": "carinna",
+  "therapists": []
+}

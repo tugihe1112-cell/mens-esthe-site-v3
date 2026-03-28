@@ -1,0 +1,24 @@
+{
+  "id": 60210,
+  "name": "Aroma Blossom (港区・中目黒)",
+  "prefecture": "東京都",
+  "city": "中目黒",
+  "region": "関東エリア",
+  "address": "東京都目黒区上目黒（港区エリアからもアクセス良好）",
+  "image": "/images/shops/aroma_blossom.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 18,000円〜",
+  "hours": "10:00〜翌5:00",
+  "isPremium": false,
+  "color": "from-pink-500 to-rose-400",
+  "tags": [
+    "初回特典あり",
+    "カード払いOK",
+    "完全個室",
+    "深夜営業"
+  ],
+  "websiteUrl": "https://aroma-blossom.com/",
+  "threads": [],
+  "therapists": []
+}

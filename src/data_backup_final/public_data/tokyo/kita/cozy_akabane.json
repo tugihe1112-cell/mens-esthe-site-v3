@@ -1,0 +1,231 @@
+{
+  "id": "tokyo_kita_cozy_akabane",
+  "name": "コーズィー 赤羽店 (旧ビター)",
+  "prefecture": "東京都",
+  "city": "北区",
+  "address": "東京都北区赤羽エリア",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分14,000円～",
+  "hours": "12:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "日本人",
+    "一般",
+    "店舗型",
+    "完全個室",
+    "深夜営業",
+    "男女OK"
+  ],
+  "websiteUrl": "http://www.bitter-aroma.com/",
+  "nearestStation": "赤羽駅",
+  "description": "赤羽の個室メンズエステ。旧ビター。料金システム: 60分14,000円 / 90分18,000円 / 120分22,000円 (土日祝は割引あり)",
+  "brandId": "cozy_akabane",
+  "threads": [],
+  "therapists": [
+    {
+      "id": "cozy_akabane_大原",
+      "name": "大原",
+      "age": 22,
+      "height": 170,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_早見",
+      "name": "早見",
+      "age": 27,
+      "height": 153,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_井本",
+      "name": "井本",
+      "age": 33,
+      "height": 160,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_白山",
+      "name": "白山",
+      "age": 20,
+      "height": 160,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_月島",
+      "name": "月島",
+      "age": 24,
+      "height": 153,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_宮近",
+      "name": "宮近",
+      "age": 27,
+      "height": 155,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_指原",
+      "name": "指原",
+      "age": 30,
+      "height": 158,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_沢野",
+      "name": "沢野",
+      "age": 44,
+      "height": 160,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_宮田",
+      "name": "宮田",
+      "age": 34,
+      "height": 158,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_沙京",
+      "name": "沙京",
+      "age": 30,
+      "height": 159,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_三井",
+      "name": "三井",
+      "age": 36,
+      "height": 167,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_永野",
+      "name": "永野",
+      "age": 28,
+      "height": 150,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_ひな野うさぎ",
+      "name": "ひな野うさぎ",
+      "age": 25,
+      "height": 153,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_平子",
+      "name": "平子",
+      "age": 29,
+      "height": 160,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_茂川",
+      "name": "茂川",
+      "age": 31,
+      "height": 166,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_若葉",
+      "name": "若葉",
+      "age": 31,
+      "height": 158,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_大石",
+      "name": "大石",
+      "age": 30,
+      "height": 163,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_香月",
+      "name": "香月",
+      "age": 31,
+      "height": 161,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_源(みなもと)",
+      "name": "源(みなもと)",
+      "age": 40,
+      "height": 164,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_東(あずま)",
+      "name": "東(あずま)",
+      "age": 27,
+      "height": 160,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_七峰(ななみね)",
+      "name": "七峰(ななみね)",
+      "age": 28,
+      "height": 160,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_明石",
+      "name": "明石",
+      "age": 41,
+      "height": 156,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_斎森みく",
+      "name": "斎森みく",
+      "age": 25,
+      "height": 165,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_沢木",
+      "name": "沢木",
+      "age": 31,
+      "height": 165,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_秋野",
+      "name": "秋野",
+      "age": 21,
+      "height": 152,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_横田",
+      "name": "横田",
+      "age": 40,
+      "height": 150,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_七川",
+      "name": "七川",
+      "age": 24,
+      "height": 153,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_千秋",
+      "name": "千秋",
+      "age": 28,
+      "height": 153,
+      "bust": null
+    },
+    {
+      "id": "cozy_akabane_黒崎",
+      "name": "黒崎",
+      "age": 31,
+      "height": 158,
+      "bust": null
+    }
+  ]
+}

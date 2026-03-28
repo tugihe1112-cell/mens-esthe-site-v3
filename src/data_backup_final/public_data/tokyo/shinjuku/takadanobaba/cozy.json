@@ -1,0 +1,25 @@
+{
+  "id": "tokyo_shinjuku_takadanobaba_cozy",
+  "name": "Cozy（コーズィー）",
+  "prefecture": "東京都",
+  "city": "新宿区",
+  "area": "高田馬場",
+  "address": "東京都新宿区高田馬場（詳細は要確認）",
+  "image": "/images/shops/no_image.jpg",
+  "rating": 0,
+  "reviewCount": 0,
+  "price": "90分 13,000円～（平日割引あり）",
+  "hours": "12:00～LAST",
+  "isPremium": false,
+  "tags": [
+    "完全個室",
+    "深夜営業",
+    "初回特典あり"
+  ],
+  "websiteUrl": "https://cozy-takadanobaba.com/",
+  "nearestStation": "高田馬場駅",
+  "description": "【土日祝】60分12,000円/90分15,000円/120分19,000円/150分24,000円 【平日12-17時】60分11,000円/90分14,000円/120分18,000円/150分23,000円 延長30分6,000円",
+  "threads": [],
+  "brandId": "cozy",
+  "therapists": []
+}
