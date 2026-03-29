@@ -248,19 +248,8 @@ export default function PostReviewPage() {
         return;
       }
 
-      // 1. まず手元の共有データ（Context）を探す
-      const targetShop = shops.find(s => String(s.id) === String(selectedShopId));
-      if (targetShop && targetShop.therapists && targetShop.therapists.length > 0) {
-        if (isMounted) setShopTherapists(targetShop.therapists);
-        return;
-      }
-      const ctxTherapists = getTherapistsByShopId ? getTherapistsByShopId(selectedShopId) : [];
-      if (ctxTherapists && ctxTherapists.length > 0) {
-        if (isMounted) setShopTherapists(ctxTherapists);
-        return;
-      }
-
-      // 2. 手元に無ければ、CASTタブと同じようにSupabaseから直接取得する！
+      // 🚨 共有データ(Context)は文字列しか返さないバグがあるため無視！
+      // 常にSupabaseから直接「写真・名前入り」の完全なオブジェクトを取得する
       try {
         const url = import.meta.env.VITE_SUPABASE_URL;
         const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -272,6 +261,8 @@ export default function PostReviewPage() {
         
         if (data && data.length > 0 && isMounted) {
           setShopTherapists(data);
+        } else if (isMounted) {
+          setShopTherapists([]);
         }
       } catch (e) {
         console.error("セラピスト取得エラー:", e);
@@ -279,7 +270,7 @@ export default function PostReviewPage() {
     };
     fetchTherapists();
     return () => { isMounted = false; };
-  }, [selectedShopId, shops, getTherapistsByShopId]);
+  }, [selectedShopId]);
 
   const validateStep = async () => {
     let isValid = false;
