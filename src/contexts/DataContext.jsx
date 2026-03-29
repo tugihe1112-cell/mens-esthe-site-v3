@@ -51,10 +51,10 @@ export const DataProvider = ({ children }) => {
     if (!shopId || loadedShopIds.has(shopId)) return;
     const brandIds = getBrandShopIds(shopId);
     try {
-      const { data, error } = await supabase.from('therapists').select('id, shop_id, raw_data, image_url, website_url, price_system, business_hours').in('shop_id', brandIds);
+      const { data, error } = await supabase.from('therapists').select('*').in('shop_id', brandIds);
       if (error) throw error;
       if (data) {
-        const newTherapists = data.map(d => ({ ...d.raw_data, id: d.id, shop_id: d.shop_id }));
+        const newTherapists = data.map(d => ({ ...(d.raw_data || {}), ...d }));
         setTherapists(prev => {
           const merged = [...prev, ...newTherapists];
           return Array.from(new Map(merged.filter(t => t.name).map(t => [t.name, t])).values());
