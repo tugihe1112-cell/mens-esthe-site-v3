@@ -46,7 +46,7 @@ export const SHOPS = [
     name: "AROMA more (アロマモア)",
     group_id: "g_aromamore",
     brandId: "AromaMore",
-    image: "https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?q=80&w=2070&auto=format&fit=crop",
+    image: "https://placehold.co/400x500/1e293b/94a3b8?text=No+Image",
     area: "東口",
     city: "豊島区",
     prefecture: "東京都",

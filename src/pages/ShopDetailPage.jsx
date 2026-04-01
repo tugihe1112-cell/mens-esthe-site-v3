@@ -43,9 +43,9 @@ export default function ShopDetailPage() {
         
         // 店舗・キャスト・クチコミを並列で一気にSupabaseから直接取得！
         const [shopRes, tRes, rRes] = await Promise.all([
-          fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers }),
-          fetch(`${url}/rest/v1/therapists?shop_id=eq.${shopId}&select=*`, { headers }),
-          fetch(`${url}/rest/v1/reviews?shop_id=eq.${shopId}&select=*`, { headers })
+          fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers, cache: 'no-store' }),
+          fetch(`${url}/rest/v1/therapists?shop_id=eq.${shopId}&select=*`, { headers, cache: 'no-store' }),
+          fetch(`${url}/rest/v1/reviews?shop_id=eq.${shopId}&select=*`, { headers, cache: 'no-store' })
         ]);
         
         const [shopData, tData, rData] = await Promise.all([
@@ -193,7 +193,15 @@ export default function ShopDetailPage() {
             {/* ▼ サイト＆キャスト＆スケジュールリンク (洗練版・3ボタン) ▼ */}
             {(shop.website_url || shop?.raw_data?.website) && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
-                <a href={cloudShop?.raw_data?.schedule_url || shop?.raw_data?.schedule_url || (shop?.website_url || shop?.raw_data?.website || '').replace(/\/?$/, '') + '/schedule/'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg"><span className="text-xl opacity-60 group-hover:opacity-100 transition">📅</span><div className="text-left flex-1"><div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Schedule</div><div className="text-xs font-bold text-slate-200 tracking-wide group-hover:text-green-400 transition">出勤情報</div></div></a>
+                {cloudShop?.schedule_url && (
+              <a href={cloudShop.schedule_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg">
+                <span className="text-xl opacity-60 group-hover:opacity-100 transition">📅</span>
+                <div className="text-left flex-1">
+                  <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Schedule</div>
+                  <div className="text-xs font-bold text-slate-200 tracking-wide group-hover:text-green-400 transition">出勤情報</div>
+                </div>
+              </a>
+            )}
               </div>
             )}
 <div className="bg-slate-900/50 rounded-3xl p-6 md:p-8 border border-white/5 relative overflow-hidden">
@@ -213,7 +221,7 @@ export default function ShopDetailPage() {
                 </div>
                 <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
                   <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">PRICE</dt>
-                  <dd className="text-sm md:text-base text-white whitespace-pre-wrap leading-loose font-medium bg-slate-800/50 p-4 rounded-xl border border-white/5">{shop.price_system || shop.raw_data?.price || '料金情報なし'}</dd>
+                  <dd className="text-sm md:text-base text-white whitespace-pre-wrap leading-loose font-medium bg-slate-800/50 p-4 rounded-xl border border-white/5">{cloudShop?.price_system || shop?.price_system || shop?.raw_data?.price || '料金情報なし'}</dd>
                 </div>
                 {(shop.phone_number || shop.raw_data?.phone) && (
                   <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">

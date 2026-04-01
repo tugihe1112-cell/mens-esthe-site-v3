@@ -20,7 +20,7 @@ export const DataProvider = ({ children }) => {
         const { data: shopsData, error } = await supabase.from('shops').select('id, group_id, name, raw_data, website_url, phone_number, business_hours, price_system, image_url');
         if (error) throw error;
         if (shopsData) {
-          setShops(shopsData.map(d => ({ ...d.raw_data, id: d.id, group_id: d.group_id, name: d.name })));
+          setShops(shopsData.map(d => ({ ...d.raw_data, id: d.id, group_id: d.group_id, name: d.name, image_url: d.image_url, website_url: d.website_url, phone_number: d.phone_number, business_hours: d.business_hours, price_system: d.price_system })));
         }
       } catch (error) {
         console.error('❌ Failed to fetch initial data:', error);
@@ -140,7 +140,7 @@ export const DataProvider = ({ children }) => {
             name: cleanName, 
             therapistName: cleanName, 
             shopName: shop?.name || '',
-            image: therapists.find(dbT => dbT.name === cleanName || dbT.id === t)?.image || therapists.find(dbT => dbT.name === cleanName || dbT.id === t)?.image_url || '/images/therapists/placeholder.jpg'
+            image: therapists.find(dbT => dbT.name === cleanName || dbT.id === t)?.image || therapists.find(dbT => dbT.name === cleanName || dbT.id === t)?.image_url || null
           };
         }
         return t;
