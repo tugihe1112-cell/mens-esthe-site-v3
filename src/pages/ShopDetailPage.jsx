@@ -42,15 +42,22 @@ export default function ShopDetailPage() {
         const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
         
         // 店舗・キャスト・クチコミを並列で一気にSupabaseから直接取得！
-        const [shopRes, tRes, rRes] = await Promise.all([
-          fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers, cache: 'no-store' }),
+        // 1. 先に店舗データだけを取得してブランドIDを確定させる
+        const shopRes = await fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers, cache: 'no-store' });
+        const shopData = await shopRes.json();
+        const brandId = shopData?.[0]?.brand_id;
+
+        // 2. 確定したブランドIDを含めて、口コミとキャストを並列取得する
+        const reviewFetchUrl = brandId 
+          ? `${url}/rest/v1/reviews?shop_id.in.(${shopId},${brandId || 'none'})&select=*`
+          : `${url}/rest/v1/reviews?shop_id=eq.${shopId}&select=*`;
+
+        const [tRes, rRes] = await Promise.all([
           fetch(`${url}/rest/v1/therapists?shop_id=eq.${shopId}&select=*`, { headers, cache: 'no-store' }),
-          fetch(`${url}/rest/v1/reviews?shop_id=eq.${shopId}&select=*`, { headers, cache: 'no-store' })
+          fetch(reviewFetchUrl, { headers, cache: 'no-store' })
         ]);
-        
-        const [shopData, tData, rData] = await Promise.all([
-          shopRes.json(), tRes.json(), rRes.json()
-        ]);
+
+        const [tData, rData] = await Promise.all([tRes.json(), rRes.json()]);
         
         if (isMounted) {
           if (shopData && shopData.length > 0) setCloudShop(shopData[0]);
@@ -72,6 +79,14 @@ export default function ShopDetailPage() {
   const therapists = cloudTherapists || (getTherapistsByShopId ? getTherapistsByShopId(shopId) : []) || [];
   const reviews = cloudReviews || (getReviewsByShopId ? getReviewsByShopId(shopId, isPremiumUser) : []) || [];
   const isFavorite = shop ? favorites.includes(shop.id) : false;
+
+  // 🌟 店舗IDからロゴ画像を判定するロジック
+  let logoUrl = null;
+  if (shopId?.includes('yuruspa') || shop?.brand_id === 'yuruspa') {
+    logoUrl = 'https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/yuruspa.png';
+  } else if (shopId?.includes('mens_esthe_group') || shopId?.includes('menes_group') || shop?.brand_id === 'mens_esthe_group') {
+    logoUrl = 'https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/menesgroup.png';
+  }
 
   const visibleReviews = reviews.slice(0, reviewDisplayCount);
   const visibleTherapists = therapists.slice(0, displayCount);
@@ -119,7 +134,8 @@ export default function ShopDetailPage() {
                    </span>
                  )}
                </div>
-               <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-2 drop-shadow-xl tracking-tight">
+               {logoUrl && (<div className="mb-4 flex justify-center"><img src={logoUrl} alt="Brand Logo" className="h-16 md:h-20 w-auto object-contain" /></div>)}
+              <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-2 drop-shadow-xl tracking-tight">
                  {shop.name}
                </h1>
                <div className="flex items-center gap-4 text-slate-300 text-xs md:text-sm font-medium">
@@ -191,7 +207,7 @@ export default function ShopDetailPage() {
             
             
             {/* ▼ サイト＆キャスト＆スケジュールリンク (洗練版・3ボタン) ▼ */}
-            {(shop.website_url || shop?.raw_data?.website) && (
+            {(shop.websiteUrl || shop.website_url || shop?.raw_data?.website || cloudShop?.schedule_url) && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
                 {cloudShop?.schedule_url && (
               <a href={cloudShop.schedule_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg">
@@ -221,7 +237,24 @@ export default function ShopDetailPage() {
                 </div>
                 <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
                   <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">PRICE</dt>
-                  <dd className="text-sm md:text-base text-white whitespace-pre-wrap leading-loose font-medium bg-slate-800/50 p-4 rounded-xl border border-white/5">{cloudShop?.price_system || shop?.price_system || shop?.raw_data?.price || '料金情報なし'}</dd>
+                  <dd className="text-sm md:text-base text-white w-full bg-slate-800/50 p-4 rounded-xl border border-white/5">{shop?.price_system ? (
+  <div className="flex flex-col space-y-3 w-full">
+    {shop.price_system.split('\n').map((line, idx) => {
+      const parts = line.split(':');
+      const time = parts[0];
+      const price = parts[1] || '';
+      return (
+        <div key={idx} className="flex justify-between items-center border-b border-white/5 pb-2 last:border-0 last:pb-0">
+          <span className="text-slate-300">{time}</span>
+          <span className="text-white font-bold tracking-wider">{price}</span>
+        </div>
+      );
+    })}
+  </div>
+) : (
+  <div className="text-slate-300">料金情報なし</div>
+)}
+                </dd>
                 </div>
                 {(shop.phone_number || shop.raw_data?.phone) && (
                   <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">

@@ -74,7 +74,8 @@ export default function SearchPage() {
             const sAddr = (shop.address || '').toLowerCase();
             const sArea = (shop.area || '').toLowerCase();
             const sCity = (shop.city || '').toLowerCase();
-            return sName.includes(q) || sAddr.includes(q) || sArea.includes(q) || sCity.includes(q);
+            const sAreaId = (shop.area_id || '').toLowerCase();
+            return sName.includes(q) || sAddr.includes(q) || sArea.includes(q) || sCity.includes(q) || sAreaId.includes(q);
           }).map(s => s.id);
 
           // 2. その店舗に所属しているセラピストをDBから取得
@@ -97,7 +98,29 @@ export default function SearchPage() {
 
           // 4. 合体して重複を削除！
           const merged = [...shopTherapists, ...(nameTherapists || [])];
-          const unique = Array.from(new Map(merged.map(item => [item.id, item])).values());
+
+          // --- 店舗名での重複排除ロジック追加 ---
+          // 1. まずキャストIDで一意にする
+          const uniqueById = Array.from(new Map(merged.map(item => [item.id, item])).values());
+          
+          // 2. 店舗名で重複を排除する（同じ名前の店舗のキャストは、既に取得した店舗のものを優先）
+          const seenShopNames = new Set();
+          const unique = uniqueById.filter(item => {
+             const shop = shops.find(s => s.id === item.shop_id);
+             if (!shop) return true; // 店舗情報がない場合はそのまま
+             
+             // 店舗名を正規化（空白除去や小文字化）して比較しやすくする
+             const normalizedShopName = (shop.name || '').replace(/\s+/g, '').toLowerCase();
+             
+             if (seenShopNames.has(normalizedShopName)) {
+                return false; // すでに同じ名前の店舗のキャストを採用している場合は弾く
+             } else {
+                seenShopNames.add(normalizedShopName);
+                return true;
+             }
+          });
+          // ------------------------------------
+
           fetchedData = unique;
         }
 
@@ -356,7 +379,7 @@ export default function SearchPage() {
                                {/* ★エリア名表示 */}
                                <p className="text-[10px] text-slate-300 font-bold truncate flex items-center gap-1 mt-1">
                                  <span className="text-pink-500">📍</span> 
-                                 {shop ? (shop.area || shop.city) : ''} 
+                                 {shop ? ((shop.area_id && debouncedQuery && shop.area_id.includes(debouncedQuery.toLowerCase())) ? debouncedQuery : (shop.area || shop.city)) : ''} 
                                  <span className="opacity-50 mx-1">|</span>
                                  {shop ? shop.name : ''}
                                </p>

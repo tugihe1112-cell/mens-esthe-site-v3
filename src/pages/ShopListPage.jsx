@@ -18,7 +18,20 @@ export default function ShopListPage() {
   const initialQuery = searchParams.get('q') || '';
 
   // 検索フック
-  const { query, setQuery, result, mode, summary, isSearching } = useSearch(shops, initialQuery);
+  const { query, setQuery, result: rawResult, mode, summary, isSearching } = useSearch(shops, initialQuery);
+
+  // ★ 店舗名での重複排除ロジック
+  const result = React.useMemo(() => {
+    if (!rawResult) return [];
+    const seen = new Set();
+    return rawResult.filter(shop => {
+      // 空白（全角・半角）を消して小文字化し、完全に一致する店舗名を弾く
+      const normalizedName = (shop.name || '').replace(/[\s　]+/g, '').toLowerCase();
+      if (seen.has(normalizedName)) return false;
+      seen.add(normalizedName);
+      return true;
+    });
+  }, [rawResult]);
 
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
 

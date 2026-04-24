@@ -1,0 +1,17 @@
+[
+  {
+    "id": "test-review-001",
+    "shop_id": "test_shop",
+    "shop_name": "テスト店舗",
+    "therapist_id": "test_therapist",
+    "therapist_name": "テストちゃん",
+    "user_id": "test_user",
+    "user_name": "テストユーザー",
+    "rating": 5,
+    "course": "120分",
+    "detailed_ratings": null,
+    "tags": null,
+    "content": "これはターミナルからの接続テストです！無事に通信できています！",
+    "created_at": "2026-03-03T06:43:47.423236+00:00"
+  }
+]

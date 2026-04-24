@@ -75,13 +75,13 @@ export default function PrefectureSelector() {
                                 {/* 4階層目 (詳細エリア): 歌舞伎町、新宿三丁目... */}
                                 {isCityOpen && areas.length > 0 && (
                                   <div className="mt-2 ml-2 pl-2 border-l border-pink-500/30 flex flex-col gap-1">
-                                    <Link to={`/shops?q=${city}`} className="text-[10px] text-pink-400 py-1">
+                                    <Link to={`/shops?q=${pref} ${city}`} className="text-[10px] text-pink-400 py-1">
                                       👉 {city}すべて
                                     </Link>
                                     {areas.map((area) => (
                                       <Link 
                                         key={area} 
-                                        to={`/shops?q=${area}`} // ★検索先を/shopsに変更
+                                        to={`/shops?q=${pref} ${area}`} // ★都道府県名を追加して検索
                                         className="text-[10px] text-slate-400 hover:text-white py-0.5"
                                       >
                                         - {area}

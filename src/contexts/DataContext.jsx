@@ -41,11 +41,21 @@ export const DataProvider = ({ children }) => {
   }, []);
 
   const getBrandShopIds = useCallback((shopId) => {
-    const shop = shops.find(s => s.id === shopId);
-    if (!shop) return [shopId];
-    const targetBrand = getBrandName(shop.name);
-    return shops.filter(s => getBrandName(s.name) === targetBrand).map(s => s.id);
-  }, [shops, getBrandName]);
+    // 現在の店舗データを取得
+    const currentShop = shops.find(s => s.id === shopId);
+    if (!currentShop) return [shopId];
+
+    // 店舗名を正規化（空白除去・小文字化）
+    const normalizedName = (currentShop.name || '').replace(/[\s　]+/g, '').toLowerCase();
+
+    // 同じ名前を持つすべての店舗のIDを配列にして返す
+    const relatedIds = shops
+      .filter(s => (s.name || '').replace(/[\s　]+/g, '').toLowerCase() === normalizedName)
+      .map(s => s.id);
+
+    // 念のため、見つからなかった場合は元のIDだけは返す
+    return relatedIds.length > 0 ? relatedIds : [shopId];
+  }, [shops]);
 
   const loadTherapistsForShop = useCallback(async (shopId) => {
     if (!shopId || loadedShopIds.has(shopId)) return;

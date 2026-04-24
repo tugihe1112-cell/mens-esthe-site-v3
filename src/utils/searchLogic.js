@@ -1,6 +1,6 @@
 /**
- * 検索ロジック: ハイブリッド・グルーピング方式
- * * @param {Array} shops - 全店舗データ
+ * 検索ロジック: ハイブリッド・グルーピング方式（複数キーワードAND検索対応）
+ * @param {Array} shops - 全店舗データ
  * @param {string} query - 検索クエリ
  * @returns {Object} 結果オブジェクト
  */
@@ -10,9 +10,10 @@ export const performSearch = (shops, query) => {
     return { type: 'all', data: shops, summary: null };
   }
 
-  const normalizedQuery = query.toLowerCase().trim();
+  // クエリを小文字化し、全角スペースを半角スペースに変換後、スペースで分割して配列にする
+  const searchTerms = query.toLowerCase().replace(/　/g, ' ').split(/\s+/).filter(term => term.length > 0);
 
-  // 2. フィルタリング実行
+  // 2. フィルタリング実行 (AND検索)
   const matchedShops = shops.filter(shop => {
     if (!shop) return false;
     
@@ -25,16 +26,19 @@ export const performSearch = (shops, query) => {
     const pref = safeStr(shop.prefecture);
     const city = safeStr(shop.city);
     
-    // タグ検索
+    // タグ検索用
     const tags = Array.isArray(shop.tags) ? shop.tags.map(t => safeStr(t)) : [];
-    const tagMatch = tags.some(t => t.includes(normalizedQuery));
 
-    return name.includes(normalizedQuery) || 
-           brand.includes(normalizedQuery) || 
-           area.includes(normalizedQuery) ||
-           pref.includes(normalizedQuery) ||
-           city.includes(normalizedQuery) ||
-           tagMatch;
+    // 入力されたすべてのキーワード(term)が、店舗の持つ情報のいずれかに含まれているかチェックする
+    return searchTerms.every(term => {
+      const tagMatch = tags.some(t => t.includes(term));
+      return name.includes(term) || 
+             brand.includes(term) || 
+             area.includes(term) ||
+             pref.includes(term) ||
+             city.includes(term) ||
+             tagMatch;
+    });
   });
 
   if (matchedShops.length === 0) {
@@ -88,7 +92,7 @@ export const performSearch = (shops, query) => {
         brandName: representativeShop.brandId || representativeShop.name.split(' ')[0],
         shopCount: groupShops.length,
         therapistCount: totalTherapists,
-        representativeImage: representativeShop.image
+        representativeImage: representativeShop.image_url || representativeShop.image
       }
     };
   }
