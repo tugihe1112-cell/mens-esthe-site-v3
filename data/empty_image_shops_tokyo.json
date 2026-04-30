@@ -1,0 +1,1907 @@
+[
+  {
+    "id": "tokyo_adachi_kitasenju_himitsu_mrs_room",
+    "name": "秘密のミセスルーム 北千住",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_adachi_kitasenju_macherie",
+    "name": "マシェリ",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_adachi_kitasenju_muchispa",
+    "name": "むちすぱルーム 北千住",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/muchispa.png"
+  },
+  {
+    "id": "tokyo_adachi_kitasenju_muchispa_room",
+    "name": "むちすぱルーム 北千住",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_adachi_kitasenju_ranpu_kitasenju",
+    "name": "らんぷ 北千住",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_adachi_kitasenju_remis",
+    "name": "ランス (REMIS) 旧ニルス",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_adachi_takenotsuka_aroma_banker",
+    "name": "Aroma BANKER (アロマバンカー)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_adachi_ushida_ranpu_kitasenju",
+    "name": "らんぷ 北千住",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_arakawa_nippori_aroma_blossom",
+    "name": "Aroma Blossom (日暮里店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Blossom.png"
+  },
+  {
+    "id": "tokyo_arakawa_nippori_aroma_giraffe",
+    "name": "アロマジラフ 旧アロマオリオ",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_arakawa_nippori_be_majo",
+    "name": "be-majo (ビマージョ) 日暮里",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/be-majo.png"
+  },
+  {
+    "id": "tokyo_arakawa_nippori_deep_black",
+    "name": "Deep Black (ディープブラック)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_candy_spa",
+    "name": "キャンディスパ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/candy%20spa.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_ar_tokyo",
+    "name": "ar Tokyo (アールトウキョウ秋葉原)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ar%20tokyo.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_aroma_amour",
+    "name": "AROMA AMOUR (秋葉原店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AMOUR.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_aroma_lunabelle_akihabara",
+    "name": "Aroma Lunabelle (アロマルナベール秋葉原)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Lunabelle.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_aroma_maison",
+    "name": "Aroma Maison (アロマメゾン 秋葉原店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/aroma%20maison.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_assouplir",
+    "name": "Assouplir (アスプリー秋葉原店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Assouplir.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_hiran_next",
+    "name": "Hiran Next (平安NEXT)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/HIRAN%20NEXT.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_luxtime",
+    "name": "ラグタイム lux time (秋葉原店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/lux%20time.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_lynx",
+    "name": "メンズエステ Lynx 秋葉原店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Lynx.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_prispa",
+    "name": "Prispa (プリスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/pri%20spa.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_rex",
+    "name": "Rex (レックス秋葉原店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rex.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_weal",
+    "name": "Weal (ウィール秋葉原店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/weal%20akihabara.png"
+  },
+  {
+    "id": "tokyo_chiyoda_akihabara_zexterior",
+    "name": "Zexterior (旧アンビエンス) 秋葉原店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Zexterior.png"
+  },
+  {
+    "id": "tokyo_chiyoda_iidabashi_tokyo_aroma_este",
+    "name": "Tokyo Aroma Este (東京アロマエステ) 飯田橋店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Tokyo%20Aroma%20Este.png"
+  },
+  {
+    "id": "tokyo_chiyoda_jimbocho_queens_collection",
+    "name": "QUEEN'S COLLECTION 神保町ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/QUEEN'S%20COLLECTION.png"
+  },
+  {
+    "id": "tokyo_chiyoda_kanda_chill_spa",
+    "name": "Chill Spa (ちるスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/chill%20spa.png"
+  },
+  {
+    "id": "tokyo_chiyoda_kanda_luxtime",
+    "name": "ラグタイム lux time (神田店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/lux%20time.png"
+  },
+  {
+    "id": "tokyo_chiyoda_kudanshita_rondo",
+    "name": "ロンド 旧下弦の月 (九段下店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rond.png"
+  },
+  {
+    "id": "tokyo_chiyoda_yotsuya_laulima",
+    "name": "Laulima (ラウリマ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Laulima.png"
+  },
+  {
+    "id": "tokyo_chofu_aroma_ella",
+    "name": "Aroma ELLA (アロマエラ 調布店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_chofu_chofu_pepe_spa",
+    "name": "Pepe Spa (ペペスパ) 調布",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Pepe%20Spa.png"
+  },
+  {
+    "id": "tokyo_chofu_jesse",
+    "name": "Jesse (ジェシー 調布店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_chofu_platinum_tokyo",
+    "name": "PLATINUM TOKYO (プラチナム東京 調布店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/platinum%20tokyo.png"
+  },
+  {
+    "id": "tokyo_chofu_trendy_spa",
+    "name": "TRENDY SPA (調布店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_chofu_unison_spa",
+    "name": "ユニゾンスパ (調布店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_chuo_ginza_alba",
+    "name": "アルバTOKYO (銀座店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/alba%20tokyo.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_aroma_amour",
+    "name": "AROMA AMOUR (銀座店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AMOUR.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_aroma_maison",
+    "name": "Aroma Maison (アロマメゾン 銀座店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/aroma%20maison.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_dejavu-tokyo",
+    "name": "Dejavu TOKYO (デジャヴ東京) 銀座店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Dejavu%20TOKYO%20.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_ginza_rich",
+    "name": "Ginza Rich (銀座リッチ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ginza%20rich.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_grand_aroma",
+    "name": "グランドアロマ東京 (銀座店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/grand%20aroma.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_luxtime",
+    "name": "ラグタイム lux time (銀座店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/lux%20time.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_otonaspa",
+    "name": "大人のやすらぎSPA (銀座店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/otonanoyasuragisupa.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_rondo",
+    "name": "ロンド 旧下弦の月 (銀座店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rond.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_ryugujo",
+    "name": "竜宮城 旧百万石 (人形町店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ryuuguzyo.png"
+  },
+  {
+    "id": "tokyo_chuo_ginza_the_gin",
+    "name": "THE★GIN (ザギン) 銀座店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/THE%20GIN.png"
+  },
+  {
+    "id": "tokyo_chuo_kayabacho_the_gin",
+    "name": "THE★GIN (ザギン) 茅場町店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/THE%20GIN.png"
+  },
+  {
+    "id": "tokyo_chuo_nihonbashi_berryz_spa",
+    "name": "Berryz Spa (ベリーズスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/belly%20spa.png"
+  },
+  {
+    "id": "tokyo_chuo_nihonbashi_the_gin",
+    "name": "THE★GIN (ザギン) 日本橋店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/THE%20GIN.png"
+  },
+  {
+    "id": "tokyo_chuo_nihonbashi_urekaji_nihonbashi",
+    "name": "熟れた果実",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ureta%20kajitsu.png"
+  },
+  {
+    "id": "tokyo_chuo_ningyocho_ryugujo",
+    "name": "竜宮城 旧百万石 (人形町店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ryuuguzyo.png"
+  },
+  {
+    "id": "tokyo_chuo_ningyocho_the_gin",
+    "name": "THE★GIN (ザギン) 人形町店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/THE%20GIN.png"
+  },
+  {
+    "id": "tokyo_dispatch_aqua_premium",
+    "name": "AQUA PREMIUM (アクアプレミアム)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_dispatch_because",
+    "name": "ビコーズ (旧リオン)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_dispatch_candy_spa",
+    "name": "Candy Spa (キャンディスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/candy%20spa.png"
+  },
+  {
+    "id": "tokyo_dispatch_hananoame",
+    "name": "花の雨リラクゼーション",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_dispatch_jukujo_tokyo",
+    "name": "熟女東京",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_dispatch_outside_no_brand",
+    "name": "No Brand (ノーブランド)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_dispatch_royal_spa",
+    "name": "Royal Spa (ロイヤルスパ) 麻布十番",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/royal%20spa.png"
+  },
+  {
+    "id": "tokyo_dispatch_the_aroma",
+    "name": "ザ アロマ (The Aroma)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_fuchu_aroma_ella",
+    "name": "Aroma ELLA (アロマエラ 府中店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_fuchu_luxury_romance",
+    "name": "Luxury Romance GROUP (ラグジュアリーロマンスグループ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_fuchu_syalulu",
+    "name": "シャルル (旧ディープ府中)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_hachioji_hachioji_pepe_spa",
+    "name": "Pepe Spa (ペペスパ) 八王子",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Pepe%20Spa.png"
+  },
+  {
+    "id": "tokyo_hachioji_rabbit_spa",
+    "name": "ラビットスパ (Rabbit Spa) 立川店",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_hachioji_rere",
+    "name": "RERE GROUP (リリグループ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_hachioji_tokyopla",
+    "name": "トキョプラ 旧T+Plus (ティープラス) 新宿",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyoplus.png"
+  },
+  {
+    "id": "tokyo_katsushika_kameari_luxury",
+    "name": "ラグジュアリーグループ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Luxuary%20Group.png"
+  },
+  {
+    "id": "tokyo_katsushika_shinkoiwa_luxury",
+    "name": "ラグジュアリーグループ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Luxuary%20Group.png"
+  },
+  {
+    "id": "tokyo_kita_alice",
+    "name": "Alice (アリス) 赤羽",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_kita_cozy_akabane",
+    "name": "コーズィー 赤羽店 (旧ビター)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Cozy.png"
+  },
+  {
+    "id": "tokyo_kita_crest_spa_tokyo",
+    "name": "CREST SPA TOKYO (クレストスパ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_kita_lamp_akabane",
+    "name": "らんぷ 赤羽店",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_kita_lynx",
+    "name": "メンズエステ Lynx 赤羽店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Lynx.png"
+  },
+  {
+    "id": "tokyo_koganei_west_tokyo",
+    "name": "WEST TOKYO (旧結有)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_kokubunji_aroma_ella",
+    "name": "Aroma ELLA (アロマエラ 国分寺店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_kokubunji_esthe_bijin_madam",
+    "name": "エステ美人マダム 三鷹店",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_kokubunji_west_tokyo",
+    "name": "WEST TOKYO (旧結有)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_koto_kameido_muchispa_room",
+    "name": "むちすぱルーム 亀戸",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/muchispa.png"
+  },
+  {
+    "id": "tokyo_koto_monzennakacho_rondo",
+    "name": "ロンド 旧下弦の月 (銀座店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rond.png"
+  },
+  {
+    "id": "tokyo_koto_monzennakacho_ryugujo",
+    "name": "竜宮城 旧百万石 (門前仲町店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ryuuguzyo.png"
+  },
+  {
+    "id": "tokyo_machida_machida_pepe_spa",
+    "name": "Pepe Spa (ペペスパ) 町田",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Pepe%20Spa.png"
+  },
+  {
+    "id": "tokyo_machida_rere",
+    "name": "RERE GROUP (リリグループ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_meguro_gakugei_daigaku_tokyo_esthe_club",
+    "name": "東京えすてクラブ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyo%20este%20club.png"
+  },
+  {
+    "id": "tokyo_meguro_jiyugaoka_bqins",
+    "name": "B-QINS (ビークインズ) 自由が丘",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Bqins.png"
+  },
+  {
+    "id": "tokyo_meguro_jiyugaoka_doigt_de_fee",
+    "name": "doigt de fee (ドゥワドフェ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_meguro_jiyugaoka_livspa",
+    "name": "LIVSPA (リブスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/LIVSPA.png"
+  },
+  {
+    "id": "tokyo_meguro_jiyugaoka_mens_esthe_group",
+    "name": "メンエスグループ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/menesgroup.png"
+  },
+  {
+    "id": "tokyo_meguro_meguro_dahlia",
+    "name": "DAHLIA (ダリア)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/dalia.png"
+  },
+  {
+    "id": "tokyo_meguro_meguro_everything",
+    "name": "Everything",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/everything.png"
+  },
+  {
+    "id": "tokyo_meguro_meguro_grace",
+    "name": "GRACE (グレイス)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Grace.png"
+  },
+  {
+    "id": "tokyo_meguro_meguro_mens_esthe_group",
+    "name": "メンエスグループ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/menesgroup.png"
+  },
+  {
+    "id": "tokyo_meguro_meguro_petime",
+    "name": "体育の時間",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/taiikunozikan.png"
+  },
+  {
+    "id": "tokyo_meguro_meguro_taiiku_jikan",
+    "name": "体育の時間",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_meguro_meguro_teacher_secret",
+    "name": "女教師の秘め事",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/zyokyoushinohimegoto.png"
+  },
+  {
+    "id": "tokyo_meguro_nakameguro_bqins",
+    "name": "B-QINS (ビークインズ) 中目黒",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Bqins.png"
+  },
+  {
+    "id": "tokyo_meguro_nakameguro_grace",
+    "name": "GRACE (グレイス)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Grace.png"
+  },
+  {
+    "id": "tokyo_meguro_toritsudaigaku_tokyo_mensesthe",
+    "name": "東京メンズエステ 目黒 池袋",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyomenseste.png"
+  },
+  {
+    "id": "tokyo_meguro_watashi_ouchi",
+    "name": "わたしのおうち",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_minato_akabanebashi_dejavu_tokyo",
+    "name": "Dejavu TOKYO (デジャヴ東京) 赤羽橋店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Dejavu%20TOKYO%20.png"
+  },
+  {
+    "id": "tokyo_minato_akasaka_alba",
+    "name": "アルバTOKYO (赤坂店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/alba%20tokyo.png"
+  },
+  {
+    "id": "tokyo_minato_akasaka_emerald",
+    "name": "AROMA EMERALD (アロマエメラルド)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMA%20EMERALD.png"
+  },
+  {
+    "id": "tokyo_minato_akasaka_grand_aroma",
+    "name": "グランドアロマ東京 (赤坂店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/grand%20aroma.png"
+  },
+  {
+    "id": "tokyo_minato_aroma_blossom_3",
+    "name": "Aroma Blossom (広尾店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Blossom.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_aria",
+    "name": "ARIA (アリア)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/aria.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_carinna",
+    "name": "Carinna (カリナ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Carinna.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_dejavu_tokyo",
+    "name": "Dejavu TOKYO (デジャヴ東京) 麻布十番店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Dejavu%20TOKYO%20.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_edel",
+    "name": "EDEL AZABU (エデル麻布)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/edel%20azabu.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_emerald",
+    "name": "AROMA EMERALD (アロマエメラルド)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMA%20EMERALD.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_lunabelle",
+    "name": "Aroma Lunabelle (麻布十番店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Lunabelle.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_saudade",
+    "name": "サウダージ (旧リセット)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/saudade_logo.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_sweet_mist",
+    "name": "Sweet Mist (スイートミスト) 麻布十番店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Sweet%20Mist.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_the_esthe",
+    "name": "THE ESTHE AZABU (ザ・エステアザブ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/the%20este%20azabu.png"
+  },
+  {
+    "id": "tokyo_minato_azabujuban_the_premium_spa",
+    "name": "THE PREMIUM SPA (ザ・プレミアムスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/the%20premium%20spa.png"
+  },
+  {
+    "id": "tokyo_minato_hamamatsucho_jean_robin",
+    "name": "JEAN ROBIN (ジャンロビン)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/jean%20robin.png"
+  },
+  {
+    "id": "tokyo_minato_natural_roppongi",
+    "name": "NATURAL (六本木店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/NATURAL.png"
+  },
+  {
+    "id": "tokyo_minato_nishiazabu_dejavu_tokyo",
+    "name": "Dejavu TOKYO (デジャヴ東京) 西麻布店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Dejavu%20TOKYO%20.png"
+  },
+  {
+    "id": "tokyo_minato_roppongi_grand_aroma",
+    "name": "グランドアロマ東京 (六本木店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/grand%20aroma.png"
+  },
+  {
+    "id": "tokyo_minato_roppongi_sweet_mist",
+    "name": "Sweet Mist (スイートミスト) 六本木店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Sweet%20Mist.png"
+  },
+  {
+    "id": "tokyo_minato_roppongi_the_premium_spa",
+    "name": "THE PREMIUM SPA (ザ・プレミアムスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/the%20premium%20spa.png"
+  },
+  {
+    "id": "tokyo_minato_shinbashi_aroma_maison",
+    "name": "Aroma Maison (アロマメゾン 新橋店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/aroma%20maison.png"
+  },
+  {
+    "id": "tokyo_minato_shinbashi_lumespa",
+    "name": "ルメスパ 旧Aroma Spec (アロマスペック)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/lume%20spa.png"
+  },
+  {
+    "id": "tokyo_minato_shinbashi_lunabelle",
+    "name": "Aroma Lunabelle (新橋店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Lunabelle.png"
+  },
+  {
+    "id": "tokyo_minato_shinbashi_luxtime",
+    "name": "ラグタイム lux time (新橋店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/lux%20time.png"
+  },
+  {
+    "id": "tokyo_minato_shinbashi_relax_tokyo",
+    "name": "RELAX (リラックス)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/relax.png"
+  },
+  {
+    "id": "tokyo_minato_shinbashi_sweet_mist",
+    "name": "Sweet Mist (スイートミスト) 新橋店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Sweet%20Mist.png"
+  },
+  {
+    "id": "tokyo_minato_shinbashi_tiger_gate",
+    "name": "TIGER GATE (タイガーゲート)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tiger%20gate.png"
+  },
+  {
+    "id": "tokyo_minato_shinbashi_ultimate_spa_shinbashi",
+    "name": "ULTIMATE SPA (アルティメットスパ) 新橋",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ultimate%20spa.png"
+  },
+  {
+    "id": "tokyo_minato_tamachi_alba",
+    "name": "アルバTOKYO (田町店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/alba%20tokyo.png"
+  },
+  {
+    "id": "tokyo_minato_tamachi_dahlia",
+    "name": "DAHLIA (ダリア)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/dalia.png"
+  },
+  {
+    "id": "tokyo_minato_tamachi_edel",
+    "name": "EDEL AZABU (エデル麻布)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/edel%20azabu.png"
+  },
+  {
+    "id": "tokyo_minato_tamachi_jean_robin",
+    "name": "JEAN ROBIN (ジャンロビン)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/jean%20robin.png"
+  },
+  {
+    "id": "tokyo_minato_toranomon_tiger_gate",
+    "name": "TIGER GATE (タイガーゲート)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tiger%20gate.png"
+  },
+  {
+    "id": "tokyo_mitaka_aroma_ella",
+    "name": "Aroma ELLA (アロマエラ 三鷹店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_mitaka_esthe_bijin_madam",
+    "name": "エステ美人マダム 三鷹店",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_musashino_kichijoji_esthe_bijin_madam",
+    "name": "エステ美人マダム 三鷹店",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_nakano_golden",
+    "name": "ゴールデン（GOLDEN） 旧ガーデン",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_nakano_levechi_esthe",
+    "name": "超レベチなエステ24",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/chourebechinaspa24.png"
+  },
+  {
+    "id": "tokyo_nakano_nakano_golden",
+    "name": "ゴールデン（GOLDEN） 旧ガーデン",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/GOLDEN.png"
+  },
+  {
+    "id": "tokyo_nakano_nakano_red_ribbon",
+    "name": "NAMEX SPA",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/NAMEX%20SPA.png"
+  },
+  {
+    "id": "tokyo_nakano_tokyo_mensesthe",
+    "name": "東京メンズエステ 中野ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyomenseste.png"
+  },
+  {
+    "id": "tokyo_nerima_nerima_around_forty",
+    "name": "アラウンドフォーティー",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_nerima_nerima_cannele",
+    "name": "Cannele (カヌレ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_nerima_nerima_mens_esthe_group",
+    "name": "メンエスグループ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/menesgroup.png"
+  },
+  {
+    "id": "tokyo_nerima_nerima_xenispa",
+    "name": "ゼニスパ",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_nerima_oizumigakuen_select",
+    "name": "セレクト (SELECT)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_ota_kamata_angeaile",
+    "name": "Anjuaile (アンジュエール)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Angeaile%20(1).png"
+  },
+  {
+    "id": "tokyo_ota_kamata_anjuaile",
+    "name": "Anjuaile (アンジュエール)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_ota_kamata_doigt_de_fee",
+    "name": "doigt de fee (ドゥワドフェ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_ota_kamata_gokujou",
+    "name": "HANASPA (ハナスパ) 旧GOKUJOU 極嬢",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/HANA%20SPA.png"
+  },
+  {
+    "id": "tokyo_ota_kamata_hoozuki",
+    "name": "Ho・O・Zu・Ki・SPA (ホオズキスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/HoOZuKiSPA.png"
+  },
+  {
+    "id": "tokyo_ota_kamata_koakuma_spa_tokyo",
+    "name": "小悪魔スパトウキョウ 蒲田ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/koakumaspa.png"
+  },
+  {
+    "id": "tokyo_ota_kamata_livspa",
+    "name": "LIVSPA～リブスパ～ 蒲田",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/LIVSPA.png"
+  },
+  {
+    "id": "tokyo_ota_kamata_nocturne",
+    "name": "ノクターンスパ (Nocturne Spa)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Nocturne%20Spa.png"
+  },
+  {
+    "id": "tokyo_ota_kamata_pepe_spa",
+    "name": "Pepe Spa (ペペスパ) 蒲田",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Pepe%20Spa.png"
+  },
+  {
+    "id": "tokyo_ota_kamata_ryugujo",
+    "name": "竜宮城 旧百万石 (蒲田店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ryuuguzyo.png"
+  },
+  {
+    "id": "tokyo_ota_omori_gokujou",
+    "name": "美・セラ極～KIWAMI～",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/biserakiwami.png"
+  },
+  {
+    "id": "tokyo_ota_omori_hoozuki",
+    "name": "Ho・O・Zu・Ki・SPA (ホオズキスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/HoOZuKiSPA.png"
+  },
+  {
+    "id": "tokyo_ota_omori_nocturne",
+    "name": "ノクターンスパ (Nocturne Spa)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Nocturne%20Spa.png"
+  },
+  {
+    "id": "tokyo_ota_omori_rhea",
+    "name": "RHEA SPA (レアスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rhea%20spa.png"
+  },
+  {
+    "id": "tokyo_setagaya_chitose_karasuyama_reve_spa",
+    "name": "REVE SPA (レーヴスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/REVE%20SPA%20.png"
+  },
+  {
+    "id": "tokyo_setagaya_chitose_karasuyama_unison_spa",
+    "name": "ユニゾンスパ (千歳烏山店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_chitose_karasuyama_winning_heaven",
+    "name": "WINNING HEAVEN (ウイニングヘブン)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_eren_kyodo",
+    "name": "Eren (経堂ルーム)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_eren_shimokita",
+    "name": "Eren (下北沢ルーム)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_eren_soshigaya",
+    "name": "Eren (祖師谷大蔵ルーム)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_futakotamagawa_jesse",
+    "name": "Jesse (ジェシー 二子玉川店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_futakotamagawa_menes_group",
+    "name": "メンエスグループ 二子玉川",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/menesgroup.png"
+  },
+  {
+    "id": "tokyo_setagaya_ikejiriohashi_authority",
+    "name": "AUTHORITY (オーソリティ) 池尻大橋",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AUTHORITY.png"
+  },
+  {
+    "id": "tokyo_setagaya_komazawa_daigaku_tokyo_esthe_club",
+    "name": "東京えすてクラブ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyo%20este%20club.png"
+  },
+  {
+    "id": "tokyo_setagaya_kyodo_winning_heaven",
+    "name": "WINNING HEAVEN (ウイニングヘブン)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_meidaimae_annex",
+    "name": "明大前ANNEX (アネックス)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_meidaimae_aroma_woo",
+    "name": "Aroma Woo (アロマウー)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_meidaimae_belle_lily",
+    "name": "ベルリリー (Belle Lily)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Belle%20Lily.png"
+  },
+  {
+    "id": "tokyo_setagaya_meidaimae_queens_collection",
+    "name": "QUEEN'S COLLECTION 明大前ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/QUEEN'S%20COLLECTION.png"
+  },
+  {
+    "id": "tokyo_setagaya_meidaimae_reve_spa",
+    "name": "REVE SPA (レーヴスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/REVE%20SPA%20.png"
+  },
+  {
+    "id": "tokyo_setagaya_sakurashinmachi_tokyo_esthe_club",
+    "name": "東京えすてクラブ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyo%20este%20club.png"
+  },
+  {
+    "id": "tokyo_setagaya_sangenjaya_authority",
+    "name": "AUTHORITY (オーソリティ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AUTHORITY.png"
+  },
+  {
+    "id": "tokyo_setagaya_sangenjaya_bqins",
+    "name": "B-QINS (ビークインズ) 三軒茶屋",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Bqins.png"
+  },
+  {
+    "id": "tokyo_setagaya_sangenjaya_dejavu_tokyo",
+    "name": "Dejavu TOKYO (デジャヴ東京) 三軒茶屋店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Dejavu%20TOKYO%20.png"
+  },
+  {
+    "id": "tokyo_setagaya_sangenjaya_nanashi_spa",
+    "name": "名無しスパ (旧ラリマスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/774.png"
+  },
+  {
+    "id": "tokyo_setagaya_sangenjaya_sancha_bijin",
+    "name": "三茶美人",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_sangenjaya_sanchabijin",
+    "name": "三茶美人",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/sancha%20bijin.png"
+  },
+  {
+    "id": "tokyo_setagaya_shimokitazawa_belle_lily",
+    "name": "ベルリリー (Belle Lily)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Belle%20Lily.png"
+  },
+  {
+    "id": "tokyo_setagaya_shimokitazawa_eren",
+    "name": "EREN (エレン)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_shimokitazawa_jd_spa",
+    "name": "JDスパ (女子大生エステ) 下北沢",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_shimokitazawa_pepe_spa",
+    "name": "Pepe Spa (ペペスパ) 下北沢",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Pepe%20Spa.png"
+  },
+  {
+    "id": "tokyo_setagaya_soshigaya_okura_winning_heaven",
+    "name": "WINNING HEAVEN (ウイニングヘブン)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_setagaya_urasanesu_shimokita",
+    "name": "UraSanEsu (下北沢店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/UraSanEsu.png"
+  },
+  {
+    "id": "tokyo_setagaya_yoga_tokyo_esthe_club",
+    "name": "東京えすてクラブ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyo%20este%20club.png"
+  },
+  {
+    "id": "tokyo_shibuya_aroma_blossom",
+    "name": "Aroma Blossom (恵比寿店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Blossom.png"
+  },
+  {
+    "id": "tokyo_shibuya_aroma_chocolate_tokyo",
+    "name": "Chocolate (代々木ルーム)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Chocolate.png"
+  },
+  {
+    "id": "tokyo_shibuya_aroma_emerald",
+    "name": "AROMA EMERALD (アロマエメラルド)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMA%20EMERALD.png"
+  },
+  {
+    "id": "tokyo_shibuya_aroma_levante",
+    "name": "Aroma Levante (代々木ルーム)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Levante%20.png"
+  },
+  {
+    "id": "tokyo_shibuya_aroma_miely",
+    "name": "Aroma Miely (アロマミエリー)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyo_shibuya_aroma_miely_logo.png"
+  },
+  {
+    "id": "tokyo_shibuya_aromatiamo",
+    "name": "AROMA TIAMO (アロマティアモ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMA%20TIAMO.png"
+  },
+  {
+    "id": "tokyo_shibuya_belle_e",
+    "name": "Belle É (ベルエ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Belle%20E.png"
+  },
+  {
+    "id": "tokyo_shibuya_bellelily",
+    "name": "Belle Lily (ベルリリィ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Belle%20Lily.png"
+  },
+  {
+    "id": "tokyo_shibuya_candy_spa",
+    "name": "Candy Spa (キャンディスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/candy%20spa.png"
+  },
+  {
+    "id": "tokyo_shibuya_ebisu_aromalys",
+    "name": "AromaLys (アロマリース)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AromaLys%20.png"
+  },
+  {
+    "id": "tokyo_shibuya_ebisu_carinna",
+    "name": "Carinna (カリナ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Carinna.png"
+  },
+  {
+    "id": "tokyo_shibuya_ebisu_dahlia",
+    "name": "DAHLIA (ダリア)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/dalia.png"
+  },
+  {
+    "id": "tokyo_shibuya_ebisu_emerald",
+    "name": "AROMA EMERALD (アロマエメラルド)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMA%20EMERALD.png"
+  },
+  {
+    "id": "tokyo_shibuya_ebisu_esthe_king",
+    "name": "エステの王様",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/esutenosama.png"
+  },
+  {
+    "id": "tokyo_shibuya_ebisu_liora",
+    "name": "リオラ (旧マリラ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/riola.png"
+  },
+  {
+    "id": "tokyo_shibuya_ebisu_otonaspa",
+    "name": "大人のやすらぎSPA (恵比寿店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/otonanoyasuragisupa.png"
+  },
+  {
+    "id": "tokyo_shibuya_ebisu_saudade",
+    "name": "サウダージ (旧リセット)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/saudade_logo.png"
+  },
+  {
+    "id": "tokyo_shibuya_ebisu_sweet_mist",
+    "name": "Sweet Mist (スイートミスト) 恵比寿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Sweet%20Mist.png"
+  },
+  {
+    "id": "tokyo_shibuya_eren",
+    "name": "Eren (エレン)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Eren.png"
+  },
+  {
+    "id": "tokyo_shibuya_gloria",
+    "name": "Gloria (グロリア)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Gloria.png"
+  },
+  {
+    "id": "tokyo_shibuya_gokuraku_esthe",
+    "name": "KIWAMI TOKYO",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/biserakiwami.png"
+  },
+  {
+    "id": "tokyo_shibuya_hatagaya_hataesu",
+    "name": "HaTaEsu (ハタエス)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/HaTaEsu.png"
+  },
+  {
+    "id": "tokyo_shibuya_hatsudai_levechi_esthe",
+    "name": "超レベチなエステ24",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/chourebechinaspa24.png"
+  },
+  {
+    "id": "tokyo_shibuya_natural_yoyogi",
+    "name": "NATURAL (代々木店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/NATURAL.png"
+  },
+  {
+    "id": "tokyo_shibuya_Poonys",
+    "name": "Poonys (プーニーズ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Poonys.png"
+  },
+  {
+    "id": "tokyo_shibuya_sasazuka_queens_collection",
+    "name": "QUEEN'S COLLECTION 笹塚ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/QUEEN'S%20COLLECTION.png"
+  },
+  {
+    "id": "tokyo_shibuya_sasazuka_reve_spa",
+    "name": "REVE SPA (レーヴスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/REVE%20SPA%20.png"
+  },
+  {
+    "id": "tokyo_shibuya_sasazuka_saudade",
+    "name": "サウダージ (旧リセット)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/saudade_logo.png"
+  },
+  {
+    "id": "tokyo_shibuya_shibuya_a5spa",
+    "name": "A5 SPA (エーゴスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/A5%20SPA.png"
+  },
+  {
+    "id": "tokyo_shibuya_shibuya_aroma_tiamo",
+    "name": "AROMA TIAMO (アロマティアーモ) 渋谷店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMA%20TIAMO.png"
+  },
+  {
+    "id": "tokyo_shibuya_shibuya_belle_lily",
+    "name": "ベルリリー (Belle Lily)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Belle%20Lily.png"
+  },
+  {
+    "id": "tokyo_shibuya_shibuya_oneroom",
+    "name": "ONE ROOM (ワンルーム) 渋谷店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ONE%20ROOM.png"
+  },
+  {
+    "id": "tokyo_shibuya_shibuya_rise",
+    "name": "Rise～リゼ～ 渋谷店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Rise.png"
+  },
+  {
+    "id": "tokyo_shibuya_silk",
+    "name": "Silk (シルク)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/silk.png"
+  },
+  {
+    "id": "tokyo_shibuya_spa_ytree",
+    "name": "Spa Ytree (ワイツリー)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Spa%20Ytree.png"
+  },
+  {
+    "id": "tokyo_shibuya_spareal",
+    "name": "SPA Real (スパレアル)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/SPA%20Real.png"
+  },
+  {
+    "id": "tokyo_shibuya_sugar_spa",
+    "name": "Sugar Spa (シュガースパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Sugar%20Spa.png"
+  },
+  {
+    "id": "tokyo_shibuya_the_half",
+    "name": "THE HALF (ザ・ハーフ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyo_shinagawa_gotanda_the_half_logo.png"
+  },
+  {
+    "id": "tokyo_shibuya_urasanes",
+    "name": "UraSanEsu (ウラサネス)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/UraSanEsu.png"
+  },
+  {
+    "id": "tokyo_shibuya_yoyogi_harajuku_grand_gaia",
+    "name": "グランドガイア (Grand Gaia)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Grand%20Gaia.png"
+  },
+  {
+    "id": "tokyo_shibuya_yoyogi_harajuku_hoozuki",
+    "name": "Ho・O・Zu・Ki・SPA (ホオズキスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/HoOZuKiSPA.png"
+  },
+  {
+    "id": "tokyo_shibuya_yoyogi_harajuku_lunabelle",
+    "name": "Aroma Lunabelle (代々木店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Lunabelle.png"
+  },
+  {
+    "id": "tokyo_shibuya_yoyogi_harajuku_otona_code",
+    "name": "オトナコード4030 (旧オトナクチュール)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_shibuya_yoyogi_harajuku_platinum_tokyo",
+    "name": "PLATINUM TOKYO 代々木店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/platinum%20tokyo.png"
+  },
+  {
+    "id": "tokyo_shinagawa_aroma_blossom",
+    "name": "Aroma Blossom (大崎店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Blossom.png"
+  },
+  {
+    "id": "tokyo_shinagawa_esthe_spa",
+    "name": "Esthe Spa (エステスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/este%20spa.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_anna",
+    "name": "ANNA (アンナ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/anna.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_aroma_abc",
+    "name": "Aroma ABC (アロマABC)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/aroma%20abc.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_aromalys",
+    "name": "AromaLys (アロマリース)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AromaLys%20.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_dahlia",
+    "name": "DAHLIA (ダリア)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/dalia.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_esthe_king",
+    "name": "エステの王様",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/esutenosama.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_kanoneko",
+    "name": "カノネコ (旧もしも彼女が黒猫だったら)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/kanoneko.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_koakuma_spa_tokyo",
+    "name": "小悪魔スパトウキョウ 五反田ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/koakumaspa.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_lunabelle",
+    "name": "Aroma Lunabelle (五反田店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Lunabelle.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_luxtime",
+    "name": "ラグタイム lux time (五反田店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/lux%20time.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_lynx",
+    "name": "メンズエステ Lynx 五反田店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Lynx.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_rains_rapt",
+    "name": "Rains Rapt (レインズラプト)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rainsrapt.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_rhea",
+    "name": "RHEA SPA (レアスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rhea%20spa.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_teacher_secret",
+    "name": "女教師の秘め事",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/zyokyoushinohimegoto.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_the_half",
+    "name": "THE HALF",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyo_shinagawa_gotanda_the_half_logo.png"
+  },
+  {
+    "id": "tokyo_shinagawa_gotanda_yuru_spa",
+    "name": "ゆるスパ 五反田店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/yuruspa.png"
+  },
+  {
+    "id": "tokyo_shinagawa_musashikoyama_mens_esthe_group",
+    "name": "メンエスグループ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/menesgroup.png"
+  },
+  {
+    "id": "tokyo_shinagawa_oimachi_dahlia",
+    "name": "DAHLIA (ダリア)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/dalia.png"
+  },
+  {
+    "id": "tokyo_shinagawa_oimachi_gokujou",
+    "name": "HANASPA (ハナスパ) 旧GOKUJOU 極嬢",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/HANA%20SPA.png"
+  },
+  {
+    "id": "tokyo_shinagawa_oimachi_hoozuki",
+    "name": "Ho・O・Zu・Ki・SPA (ホオズキスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/HoOZuKiSPA.png"
+  },
+  {
+    "id": "tokyo_shinagawa_oimachi_nocturne",
+    "name": "ノクターンスパ (Nocturne Spa)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Nocturne%20Spa.png"
+  },
+  {
+    "id": "tokyo_shinagawa_oimachi_rhea",
+    "name": "RHEA SPA (レアスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rhea%20spa.png"
+  },
+  {
+    "id": "tokyo_shinagawa_oimachi_showa_refresh",
+    "name": "昭和リフレッシュ館",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/shouwanorifresh.png"
+  },
+  {
+    "id": "tokyo_shinagawa_shinagawa_aria",
+    "name": "ARIA (アリア)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/aria.png"
+  },
+  {
+    "id": "tokyo_shinagawa_shinagawa_esthe_king",
+    "name": "エステの王様",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/esutenosama.png"
+  },
+  {
+    "id": "tokyo_shinagawa_shinagawa_grace",
+    "name": "GRACE (グレイス)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Grace.png"
+  },
+  {
+    "id": "tokyo_shinagawa_shinagawa_kanoneko",
+    "name": "カノネコ (旧もしも彼女が黒猫だったら)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/kanoneko.png"
+  },
+  {
+    "id": "tokyo_shinagawa_shinagawa_nocturne",
+    "name": "ノクターンスパ (Nocturne Spa)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Nocturne%20Spa.png"
+  },
+  {
+    "id": "tokyo_shinagawa_shinagawa_rhea",
+    "name": "RHEA SPA (レアスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rhea%20spa.png"
+  },
+  {
+    "id": "tokyo_shinjuku_aroma_levante_shinjuku",
+    "name": "Aroma Levante (新宿ルーム)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Levante%20.png"
+  },
+  {
+    "id": "tokyo_shinjuku_chocolate_shinjuku",
+    "name": "Chocolate (新宿ルーム)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Chocolate.png"
+  },
+  {
+    "id": "tokyo_shinjuku_chocolate_shinokubo",
+    "name": "Chocolate (新大久保ルーム)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Chocolate.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_cor_caroli",
+    "name": "メンズエステ コル・カロリ 東新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/corcaroli.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_dejavu_tokyo",
+    "name": "Dejavu TOKYO (デジャヴ東京) 東新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Dejavu%20TOKYO%20.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_gyokurou",
+    "name": "玉楼",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/gyokurou.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_koakuma_spa_tokyo",
+    "name": "小悪魔スパトウキョウ 東新宿ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/koakumaspa.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_limited_spa",
+    "name": "Limited Spa (リミテッドスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Limited%20Spa.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_oneroom",
+    "name": "ONE ROOM (ワンルーム) 東新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ONE%20ROOM.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_peach_next",
+    "name": "ピーチネクスト 東新宿ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/peach%20next.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_platinum_tokyo",
+    "name": "PLATINUM TOKYO 東新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/platinum%20tokyo.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_sweet_mist",
+    "name": "Sweet Mist (スイートミスト) 東新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Sweet%20Mist.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_tokyo_aroma_este",
+    "name": "Tokyo Aroma Este (東京アロマエステ) 東新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Tokyo%20Aroma%20Este.png"
+  },
+  {
+    "id": "tokyo_shinjuku_higashishinjuku_tokyo_mensesthe",
+    "name": "東京メンズエステ 東新宿ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyomenseste.png"
+  },
+  {
+    "id": "tokyo_shinjuku_ichigaya_be_majo",
+    "name": "be-majo (ビマージョ) 市ヶ谷",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/be-majo.png"
+  },
+  {
+    "id": "tokyo_shinjuku_ichigaya_the_gin",
+    "name": "THE★GIN (ザギン) 市ヶ谷店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/THE%20GIN.png"
+  },
+  {
+    "id": "tokyo_shinjuku_kabukicho_aromacharm",
+    "name": "AromaCharm (アロマチャーム)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AromaCharm.png"
+  },
+  {
+    "id": "tokyo_shinjuku_kagurazaka_aromantic",
+    "name": "AROMAntic (アロマンティック)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMAntic%20.png"
+  },
+  {
+    "id": "tokyo_shinjuku_kagurazaka_zexterior",
+    "name": "Zexterior (旧アンビエンス) 神楽坂店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Zexterior.png"
+  },
+  {
+    "id": "tokyo_shinjuku_natural_kagurazaka",
+    "name": "NATURAL (神楽坂店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/NATURAL.png"
+  },
+  {
+    "id": "tokyo_shinjuku_natural_shinjukugyoen",
+    "name": "NATURAL (新宿御苑店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/NATURAL.png"
+  },
+  {
+    "id": "tokyo_shinjuku_natural_shinokubo",
+    "name": "NATURAL (新大久保店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/NATURAL.png"
+  },
+  {
+    "id": "tokyo_shinjuku_nishishinjuku_cor_caroli",
+    "name": "メンズエステ コル・カロリ 西新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/corcaroli.png"
+  },
+  {
+    "id": "tokyo_shinjuku_nishishinjuku_koakuma_spa_tokyo",
+    "name": "小悪魔スパトウキョウ 西新宿ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/koakumaspa.png"
+  },
+  {
+    "id": "tokyo_shinjuku_nishishinjuku_platinum_tokyo",
+    "name": "PLATINUM TOKYO 西新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/platinum%20tokyo.png"
+  },
+  {
+    "id": "tokyo_shinjuku_nishishinjuku_tokyo_aroma_este",
+    "name": "Tokyo Aroma Este (東京アロマエステ) 西新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Tokyo%20Aroma%20Este.png"
+  },
+  {
+    "id": "tokyo_shinjuku_nishishinjuku_tokyo_mensesthe",
+    "name": "東京メンズエステ 西新宿ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyomenseste.png"
+  },
+  {
+    "id": "tokyo_shinjuku_nishishinjuku_yunispa",
+    "name": "Yuni Spa (ユニスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Yuni%20Spa.png"
+  },
+  {
+    "id": "tokyo_shinjuku_okubo_clarice-dao",
+    "name": "クラリスDAO",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/krarisDAO.png"
+  },
+  {
+    "id": "tokyo_shinjuku_okubo_limited_spa",
+    "name": "Limited Spa (リミテッドスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Limited%20Spa.png"
+  },
+  {
+    "id": "tokyo_shinjuku_okubo_oneroom",
+    "name": "ONE ROOM (ワンルーム) 大久保店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ONE%20ROOM.png"
+  },
+  {
+    "id": "tokyo_shinjuku_okubo_platinum_tokyo",
+    "name": "PLATINUM TOKYO 大久保店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/platinum%20tokyo.png"
+  },
+  {
+    "id": "tokyo_shinjuku_okubo_rise",
+    "name": "Rise～リゼ～ 大久保店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Rise.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_aroma_laluna",
+    "name": "Aroma LaLuna (アロマラルーナ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_first",
+    "name": "First (ファースト) 新宿店",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_gyoen_aroma_glamour",
+    "name": "AROMA GLAMOUR 新宿御苑店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AMOUR.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_gyoen_cor_caroli",
+    "name": "メンズエステ コル・カロリ 新宿御苑店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/corcaroli.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_gyoen_mitsubachi",
+    "name": "MITSUBACHI (ミツバチ) 新宿御苑店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/MITSUBACHI%20.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_gyoen_oneroom",
+    "name": "ONE ROOM (ワンルーム) 新宿御苑店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ONE%20ROOM.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_gyoen_platinum_tokyo",
+    "name": "PLATINUM TOKYO 新宿御苑店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/platinum%20tokyo.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_gyoen_rise",
+    "name": "Rise～リゼ～ 新宿御苑店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Rise.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_gyoen_tokyopla",
+    "name": "トキョプラ 旧T+Plus (ティープラス) 新宿",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyoplus.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_lunabelle",
+    "name": "Aroma Lunabelle (新宿店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Lunabelle.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_lynx",
+    "name": "メンズエステ Lynx 新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Lynx.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_natural_organic_spa",
+    "name": "Natural Organic Spa (ナチュラルオーガニックスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/NATURAL.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_queens_collection",
+    "name": "QUEEN'S COLLECTION 新宿ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/QUEEN'S%20COLLECTION.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_sanchome_aroma_glamour",
+    "name": "AROMA GLAMOUR 新宿三丁目店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AMOUR.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_sanchome_aroma_tiamo",
+    "name": "AROMA TIAMO (アロマティアーモ) 新宿三丁目店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMA%20TIAMO.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_sanchome_mitsubachi",
+    "name": "MITSUBACHI (ミツバチ) 新宿三丁目店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/MITSUBACHI%20.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_sanchome_oneroom",
+    "name": "ONE ROOM (ワンルーム) 新宿三丁目店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ONE%20ROOM.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_sanchome_peach_next",
+    "name": "ピーチネクスト 新宿三丁目ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/peach%20next.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_sanchome_queens_collection",
+    "name": "QUEEN'S COLLECTION 新宿三丁目ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/QUEEN'S%20COLLECTION.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_sanchome_rise",
+    "name": "Rise～リゼ～ 新宿三丁目店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Rise.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_sanchome_tokyo_mensesthe",
+    "name": "東京メンズエステ 新宿三丁目ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyomenseste.png"
+  },
+  {
+    "id": "tokyo_shinjuku_shinjuku_sanchome_tokyopla",
+    "name": "トキョプラ 旧T+Plus (ティープラス) 新宿",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyoplus.png"
+  },
+  {
+    "id": "tokyo_shinjuku_takadanobaba_aroma-mrs",
+    "name": "AROMA MRS",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMA%20MRS.png"
+  },
+  {
+    "id": "tokyo_shinjuku_takadanobaba_cozy",
+    "name": "Cozy（コーズィー）",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Cozy.png"
+  },
+  {
+    "id": "tokyo_shinjuku_takadanobaba_evergreen",
+    "name": "everGreen",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/evergreen.png"
+  },
+  {
+    "id": "tokyo_shinjuku_takadanobaba_felix",
+    "name": "felix（フェリックス）",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/felix..png"
+  },
+  {
+    "id": "tokyo_shinjuku_takadanobaba_grand-chariot",
+    "name": "GRAND CHARIOT",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/GRAND%20CHARIOT.png"
+  },
+  {
+    "id": "tokyo_shinjuku_takadanobaba_lynx",
+    "name": "メンズエステ Lynx 高田馬場店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Lynx.png"
+  },
+  {
+    "id": "tokyo_shinjuku_takadanobaba_rs-spa",
+    "name": "R.sスパ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/R.sspa.png"
+  },
+  {
+    "id": "tokyo_shinjuku_tokyo_panic",
+    "name": "Tokyo Panic (トウキョウパニック)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyopanic.png"
+  },
+  {
+    "id": "tokyo_shinjuku_wakamatsu_kawada_zexterior",
+    "name": "Zexterior (旧アンビエンス) 新宿店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Zexterior.png"
+  },
+  {
+    "id": "tokyo_shinjuku_yotsuya_sanchome_zexterior",
+    "name": "Zexterior (旧アンビエンス) 四谷３丁目店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Zexterior.png"
+  },
+  {
+    "id": "tokyo_suginami_koenji_spa_flame",
+    "name": "スパフレイム (Spa Flame)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/spa%20flame.png"
+  },
+  {
+    "id": "tokyo_sumida_kinshicho_aroma_cura",
+    "name": "Aroma Cura (アロマクラ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20cura.png"
+  },
+  {
+    "id": "tokyo_sumida_kinshicho_limited_spa",
+    "name": "Limited Spa (リミテッドスパ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Limited%20Spa.png"
+  },
+  {
+    "id": "tokyo_sumida_kinshicho_luxtime",
+    "name": "ラグタイム lux time (錦糸町店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/lux%20time.png"
+  },
+  {
+    "id": "tokyo_sumida_kinshicho_wife_collection",
+    "name": "ワイフコレクション",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/y%20collection.png"
+  },
+  {
+    "id": "tokyo_sumida_ryogoku_otonaspa_kutsurogi",
+    "name": "大人スパ くつろぎ 両国",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/otonaspa%20kutsurogi%20ryogoku.png"
+  },
+  {
+    "id": "tokyo_sumida_ryougoku_otonaspa_kutsurogi",
+    "name": "大人スパ くつろぎ 両国",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_tachikawa_crest_spa_tokyo",
+    "name": "CREST SPA TOKYO (クレストスパ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_tachikawa_disini",
+    "name": "Disini (ディシニ)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_tachikawa_morganite",
+    "name": "MORGANITE (モルガナイト)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_tachikawa_rabbit_spa",
+    "name": "ラビットスパ (Rabbit Spa) 立川店",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_tachikawa_tachikawa_gladol-spa",
+    "name": "ぐらどるスパ",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_tachikawa_tachikawa_tokyopla",
+    "name": "トキョプラ (旧T+Plus)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyoplus.png"
+  },
+  {
+    "id": "tokyo_tachikawa_tokyopla",
+    "name": "トキョプラ 旧T+Plus (ティープラス) 新宿",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyoplus.png"
+  },
+  {
+    "id": "tokyo_taito_asakusabashi_assouplir",
+    "name": "Assouplir (アスプリー秋葉原店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Assouplir.png"
+  },
+  {
+    "id": "tokyo_taito_asakusabashi_weal",
+    "name": "Weal (ウィール秋葉原店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/weal%20akihabara.png"
+  },
+  {
+    "id": "tokyo_taito_ueno_iyashi_annex",
+    "name": "癒しの空間 Annex",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/iyashinokuukan%20anex.png"
+  },
+  {
+    "id": "tokyo_taito_ueno_iyashinokuukan_annex",
+    "name": "癒しの空間 Annex",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_taito_ueno_tokyo_luxury",
+    "name": "東京ラグジュアリー（旧ビジョスパ）",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Tokyo%20luxuary.png"
+  },
+  {
+    "id": "tokyo_taito_ueno_tokyo-luxury",
+    "name": "東京ラグジュアリー（旧ビジョスパ）",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_taito_ueno_ueno_luxury",
+    "name": "ラグジュアリーグループ",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Luxuary%20Group.png"
+  },
+  {
+    "id": "tokyo_taito_ueno_ultimate_spa_ueno",
+    "name": "ULTIMATE SPA (アルティメットスパ) 上野",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/ultimate%20spa.png"
+  },
+  {
+    "id": "tokyo_tama_seisekisakuragaoka_trendy_spa",
+    "name": "TRENDY SPA (聖蹟桜ヶ丘店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_tama_tamacenter_trendy_spa",
+    "name": "TRENDY SPA (多摩センター店)",
+    "image_url": null
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_anemone",
+    "name": "Anemone (アネモネ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/anemone.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_aroma_resort",
+    "name": "アロマリゾート (旧昭和倶楽部)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/aroma%20world.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_aroma_tiamo",
+    "name": "AROMA TIAMO (アロマティアーモ) 池袋店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/AROMA%20TIAMO.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_b_sera_kiwami",
+    "name": "美・セラ極～KIWAMI～",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/biserakiwami.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_cachette",
+    "name": "カシェット (旧紳士のエステ)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/cacchette.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_cor_caroli",
+    "name": "メンズエステ コル・カロリ 池袋店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/corcaroli.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_eternal",
+    "name": "Eternal (エターナル)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/eternal.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_fever",
+    "name": "FEVER",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/FEVER.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_kiwami",
+    "name": "美・セラ極～KIWAMI～",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/biserakiwami.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_le_reve_ck",
+    "name": "ルレーヴ (Le Reve CK)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Le%20Reve%20CK.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_lunabelle",
+    "name": "Aroma Lunabelle (池袋店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Lunabelle.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_luxtime",
+    "name": "ラグタイム lux time (池袋店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/lux%20time.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_lynx",
+    "name": "メンズエステ Lynx 池袋店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Lynx.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_mens_pastime_ikebukuro",
+    "name": "メンズパスタイム (旧アルパカの想い)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/mens%20pastime.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_muchimuchi_onesan",
+    "name": "むちむちお姉さん",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/muchimuchi%20spa.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_otonatic",
+    "name": "OTONA TIC (オトナチック)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/otona%20tic.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_otonazyoshi",
+    "name": "おとな女子",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/otona%20joshi.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_platinum_tokyo",
+    "name": "PLATINUM TOKYO 池袋店",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/platinum%20tokyo.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_rex",
+    "name": "Rex (レックス池袋店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/rex.png"
+  },
+  {
+    "id": "tokyo_toshima_ikebukuro_tokyo_mensesthe",
+    "name": "東京メンズエステ 池袋ルーム",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/tokyomenseste.png"
+  },
+  {
+    "id": "tokyo_toshima_natural_ikebukuro",
+    "name": "NATURAL (池袋店)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/NATURAL.png"
+  },
+  {
+    "id": "tokyo_toshima_otsuka_amaryllis",
+    "name": "アマリリス",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/amariris.png"
+  },
+  {
+    "id": "tokyo_toshima_otsuka_otsuka_mg",
+    "name": "大塚メンズエステMG",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/otsuka%20menzeste%20mg.png"
+  },
+  {
+    "id": "tokyo_toshima_sugamo_ulrare_sugamo",
+    "name": "UNICON (ユニコン)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/unicon.png"
+  },
+  {
+    "id": "tokyo_toshima_tokyo_fairy_land",
+    "name": "Tokyo Fairy Land (東京フェアリーランド)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/fairy%20land.png"
+  },
+  {
+    "id": "tokyo_yoyogi_aroma_levante",
+    "name": "Aroma Levante (代々木ルーム)",
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/Aroma%20Levante%20.png"
+  }
+]

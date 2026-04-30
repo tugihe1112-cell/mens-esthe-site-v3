@@ -47,13 +47,28 @@ export default function ShopDetailPage() {
         const shopData = await shopRes.json();
         const brandId = shopData?.[0]?.brand_id;
 
-        // 2. 確定したブランドIDを含めて、口コミとキャストを並列取得する
-        const reviewFetchUrl = brandId 
-          ? `${url}/rest/v1/reviews?shop_id.in.(${shopId},${brandId || 'none'})&select=*`
+        
+        // 2. group_id (系列店) があれば系列店すべての口コミを取得、なければ shop_id (単一店) で取得
+        const groupId = shopData?.[0]?.group_id;
+        
+        // group_id で shops を検索し、紐づく reviews を取得するための URL
+        const reviewFetchUrl = groupId 
+          ? `${url}/rest/v1/reviews?select=*,shops!inner(name,group_id)&shops.group_id=eq.${groupId}`
           : `${url}/rest/v1/reviews?shop_id=eq.${shopId}&select=*`;
 
+        // group_idが同じ店舗のIDを先に取得してからセラピストを取得
+        let therapistShopIds = [shopId];
+        if (groupId) {
+          const groupShopsRes = await fetch(`${url}/rest/v1/shops?group_id=eq.${groupId}&select=id`, { headers, cache: 'no-store' });
+          const groupShops = await groupShopsRes.json();
+          if (Array.isArray(groupShops) && groupShops.length > 0) {
+            therapistShopIds = groupShops.map(s => s.id);
+          }
+        }
+        const therapistQuery = `shop_id=in.(${therapistShopIds.join(',')})`;
+
         const [tRes, rRes] = await Promise.all([
-          fetch(`${url}/rest/v1/therapists?shop_id=eq.${shopId}&select=*`, { headers, cache: 'no-store' }),
+          fetch(`${url}/rest/v1/therapists?select=*&${therapistQuery}`, { headers, cache: 'no-store' }),
           fetch(reviewFetchUrl, { headers, cache: 'no-store' })
         ]);
 
@@ -207,7 +222,7 @@ export default function ShopDetailPage() {
             
             
             {/* ▼ サイト＆キャスト＆スケジュールリンク (洗練版・3ボタン) ▼ */}
-            {(shop.websiteUrl || shop.website_url || shop?.raw_data?.website || cloudShop?.schedule_url) && (
+            {(shop.url || shop.websiteUrl || shop.website_url || shop?.raw_data?.url || shop?.raw_data?.website || cloudShop?.schedule_url) && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
                 {cloudShop?.schedule_url && (
               <a href={cloudShop.schedule_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg">
@@ -273,7 +288,7 @@ export default function ShopDetailPage() {
               </dl>
               
               <div className="mt-8">
-                 <a href={shop.website_url || shop.raw_data?.websiteUrl || '#'} target="_blank" rel="noreferrer" className="block w-full bg-white text-slate-900 hover:bg-slate-200 py-4 rounded-xl text-sm font-black text-center transition shadow-lg tracking-widest uppercase">
+                 <a href={shop.url || shop.website_url || shop.raw_data?.url || shop.raw_data?.websiteUrl || '#'} target="_blank" rel="noreferrer" className="block w-full bg-white text-slate-900 hover:bg-slate-200 py-4 rounded-xl text-sm font-black text-center transition shadow-lg tracking-widest uppercase">
                    Official Website ↗
                  </a>
               </div>

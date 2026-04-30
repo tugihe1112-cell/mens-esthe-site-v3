@@ -99,7 +99,8 @@
       "1130_1130-76",
       "1130_1130-77"
     ],
-    "brandId": "cucue"
+    "brandId": "cucue",
+    "group_id": "g_brand_cucue"
   },
   {
     "id": 1134,
@@ -166,7 +167,8 @@
       "1134_1134-41",
       "1134_1134-42"
     ],
-    "brandId": "m_spa"
+    "brandId": "m_spa",
+    "group_id": "g_brand_m_spa"
   },
   {
     "id": 1130,
@@ -268,7 +270,8 @@
       "1130_1130-76",
       "1130_1130-77"
     ],
-    "brandId": "cucue"
+    "brandId": "cucue",
+    "group_id": "g_brand_cucue"
   },
   {
     "id": 1134,
@@ -335,7 +338,8 @@
       "1134_1134-41",
       "1134_1134-42"
     ],
-    "brandId": "m_spa"
+    "brandId": "m_spa",
+    "group_id": "g_brand_m_spa"
   },
   {
     "id": 1119,
@@ -436,7 +440,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1140,
@@ -513,7 +518,8 @@
       "1140_1140-52",
       "1140_1140-53"
     ],
-    "brandId": "number9"
+    "brandId": "number9",
+    "group_id": "g_brand_number9"
   },
   {
     "id": 1121,
@@ -714,7 +720,8 @@
       "1121_1121-175",
       "1121_1121-176"
     ],
-    "brandId": "resexy"
+    "brandId": "resexy",
+    "group_id": "g_brand_resexy"
   },
   {
     "id": 1126,
@@ -857,7 +864,8 @@
       "1126_1126-117",
       "1126_1126-118"
     ],
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1126,
@@ -1000,7 +1008,8 @@
       "1126_1126-117",
       "1126_1126-118"
     ],
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1142,
@@ -1074,7 +1083,8 @@
       "1142_1142-49",
       "1142_1142-50"
     ],
-    "brandId": "chance"
+    "brandId": "chance",
+    "group_id": "g_brand_chance"
   },
   {
     "id": 1134,
@@ -1141,7 +1151,8 @@
       "1134_1134-41",
       "1134_1134-42"
     ],
-    "brandId": "m_spa"
+    "brandId": "m_spa",
+    "group_id": "g_brand_m_spa"
   },
   {
     "id": 1136,
@@ -1216,7 +1227,8 @@
       "1136_1136-49",
       "1136_1136-50"
     ],
-    "brandId": "spur_luxury"
+    "brandId": "spur_luxury",
+    "group_id": "g_brand_spur_luxury"
   },
   {
     "id": 1122,
@@ -1358,7 +1370,8 @@
       "1122_1122-116",
       "1122_1122-117"
     ],
-    "brandId": "madame_seiko"
+    "brandId": "madame_seiko",
+    "group_id": "g_brand_madame_seiko"
   },
   {
     "id": 1135,
@@ -1417,7 +1430,8 @@
       "1135_1135-34",
       "1135_1135-35"
     ],
-    "brandId": "mens_esthe_ichinomiya"
+    "brandId": "mens_esthe_ichinomiya",
+    "group_id": "g_brand_mens_esthe_ichinomiya"
   },
   {
     "id": 1126,
@@ -1560,7 +1574,8 @@
       "1126_1126-117",
       "1126_1126-118"
     ],
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1119,
@@ -1661,7 +1676,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1119,
@@ -1762,7 +1778,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1130,
@@ -1864,7 +1881,8 @@
       "1130_1130-76",
       "1130_1130-77"
     ],
-    "brandId": "cucue"
+    "brandId": "cucue",
+    "group_id": "g_brand_cucue"
   },
   {
     "id": 1119,
@@ -1965,7 +1983,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1123,
@@ -2089,7 +2108,8 @@
       "1123_1123-99",
       "1123_1123-100"
     ],
-    "brandId": "tiger_eye"
+    "brandId": "tiger_eye",
+    "group_id": "g_brand_tiger_eye"
   },
   {
     "id": 1126,
@@ -2232,7 +2252,8 @@
       "1126_1126-117",
       "1126_1126-118"
     ],
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1120,
@@ -2367,7 +2388,8 @@
       "1120_1120-108",
       "1120_1120-109"
     ],
-    "brandId": "aroma_terrace"
+    "brandId": "aroma_terrace",
+    "group_id": "g_brand_aroma_terrace"
   },
   {
     "id": 1128,
@@ -2421,7 +2443,8 @@
       "1128_1128-29",
       "1128_1128-30"
     ],
-    "brandId": "encore"
+    "brandId": "encore",
+    "group_id": "g_brand_encore"
   },
   {
     "id": 1123,
@@ -2545,7 +2568,8 @@
       "1123_1123-99",
       "1123_1123-100"
     ],
-    "brandId": "tiger_eye"
+    "brandId": "tiger_eye",
+    "group_id": "g_brand_tiger_eye"
   },
   {
     "id": 1130,
@@ -2647,7 +2671,8 @@
       "1130_1130-76",
       "1130_1130-77"
     ],
-    "brandId": "cucue"
+    "brandId": "cucue",
+    "group_id": "g_brand_cucue"
   },
   {
     "id": 1122,
@@ -2789,7 +2814,8 @@
       "1122_1122-116",
       "1122_1122-117"
     ],
-    "brandId": "madame_seiko"
+    "brandId": "madame_seiko",
+    "group_id": "g_brand_madame_seiko"
   },
   {
     "id": 1141,
@@ -2853,7 +2879,8 @@
       "1141_1141-39",
       "1141_1141-40"
     ],
-    "brandId": "majisera"
+    "brandId": "majisera",
+    "group_id": "g_brand_majisera"
   },
   {
     "id": 1119,
@@ -2954,7 +2981,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1140,
@@ -3031,7 +3059,8 @@
       "1140_1140-52",
       "1140_1140-53"
     ],
-    "brandId": "number9"
+    "brandId": "number9",
+    "group_id": "g_brand_number9"
   },
   {
     "id": 1121,
@@ -3232,7 +3261,8 @@
       "1121_1121-175",
       "1121_1121-176"
     ],
-    "brandId": "resexy"
+    "brandId": "resexy",
+    "group_id": "g_brand_resexy"
   },
   {
     "id": 1126,
@@ -3375,7 +3405,8 @@
       "1126_1126-117",
       "1126_1126-118"
     ],
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1126,
@@ -3518,7 +3549,8 @@
       "1126_1126-117",
       "1126_1126-118"
     ],
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1142,
@@ -3592,7 +3624,8 @@
       "1142_1142-49",
       "1142_1142-50"
     ],
-    "brandId": "chance"
+    "brandId": "chance",
+    "group_id": "g_brand_chance"
   },
   {
     "id": 1120,
@@ -3727,7 +3760,8 @@
       "1120_1120-108",
       "1120_1120-109"
     ],
-    "brandId": "aroma_terrace"
+    "brandId": "aroma_terrace",
+    "group_id": "g_brand_aroma_terrace"
   },
   {
     "id": 1142,
@@ -3801,7 +3835,8 @@
       "1142_1142-49",
       "1142_1142-50"
     ],
-    "brandId": "chance"
+    "brandId": "chance",
+    "group_id": "g_brand_chance"
   },
   {
     "id": 1134,
@@ -3868,7 +3903,8 @@
       "1134_1134-41",
       "1134_1134-42"
     ],
-    "brandId": "m_spa"
+    "brandId": "m_spa",
+    "group_id": "g_brand_m_spa"
   },
   {
     "id": 1124,
@@ -4021,7 +4057,8 @@
       "1124_1124-127",
       "1124_1124-128"
     ],
-    "brandId": "marigold"
+    "brandId": "marigold",
+    "group_id": "g_brand_marigold"
   },
   {
     "id": 1119,
@@ -4122,7 +4159,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1121,
@@ -4323,7 +4361,8 @@
       "1121_1121-175",
       "1121_1121-176"
     ],
-    "brandId": "resexy"
+    "brandId": "resexy",
+    "group_id": "g_brand_resexy"
   },
   {
     "id": 1136,
@@ -4398,7 +4437,8 @@
       "1136_1136-49",
       "1136_1136-50"
     ],
-    "brandId": "spur_luxury"
+    "brandId": "spur_luxury",
+    "group_id": "g_brand_spur_luxury"
   },
   {
     "id": 1123,
@@ -4522,7 +4562,8 @@
       "1123_1123-99",
       "1123_1123-100"
     ],
-    "brandId": "tiger_eye"
+    "brandId": "tiger_eye",
+    "group_id": "g_brand_tiger_eye"
   },
   {
     "id": 1126,
@@ -4665,7 +4706,8 @@
       "1126_1126-117",
       "1126_1126-118"
     ],
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1127,
@@ -4790,7 +4832,8 @@
       "1127_1127-99",
       "1127_1127-100"
     ],
-    "brandId": "century"
+    "brandId": "century",
+    "group_id": "g_brand_century"
   },
   {
     "id": 1142,
@@ -4864,7 +4907,8 @@
       "1142_1142-49",
       "1142_1142-50"
     ],
-    "brandId": "chance"
+    "brandId": "chance",
+    "group_id": "g_brand_chance"
   },
   {
     "id": 1130,
@@ -4966,7 +5010,8 @@
       "1130_1130-76",
       "1130_1130-77"
     ],
-    "brandId": "cucue"
+    "brandId": "cucue",
+    "group_id": "g_brand_cucue"
   },
   {
     "id": 1128,
@@ -5020,7 +5065,8 @@
       "1128_1128-29",
       "1128_1128-30"
     ],
-    "brandId": "encore"
+    "brandId": "encore",
+    "group_id": "g_brand_encore"
   },
   {
     "id": 1132,
@@ -5064,7 +5110,8 @@
       "1132_1132-19",
       "1132_1132-20"
     ],
-    "brandId": "galaxy_nagoya"
+    "brandId": "galaxy_nagoya",
+    "group_id": "g_brand_galaxy_nagoya"
   },
   {
     "id": 1125,
@@ -5226,7 +5273,8 @@
       "1125_1125-136",
       "1125_1125-137"
     ],
-    "brandId": "golden_rose"
+    "brandId": "golden_rose",
+    "group_id": "g_brand_golden_rose"
   },
   {
     "id": 1134,
@@ -5293,7 +5341,8 @@
       "1134_1134-41",
       "1134_1134-42"
     ],
-    "brandId": "m_spa"
+    "brandId": "m_spa",
+    "group_id": "g_brand_m_spa"
   },
   {
     "id": 1143,
@@ -5396,7 +5445,8 @@
       "1143_1143-78",
       "1143_1143-79"
     ],
-    "brandId": "milk_repos"
+    "brandId": "milk_repos",
+    "group_id": "g_brand_milk_repos"
   },
   {
     "id": 1136,
@@ -5471,7 +5521,8 @@
       "1136_1136-49",
       "1136_1136-50"
     ],
-    "brandId": "spur_luxury"
+    "brandId": "spur_luxury",
+    "group_id": "g_brand_spur_luxury"
   },
   {
     "id": 1119,
@@ -5572,7 +5623,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1123,
@@ -5696,7 +5748,8 @@
       "1123_1123-99",
       "1123_1123-100"
     ],
-    "brandId": "tiger_eye"
+    "brandId": "tiger_eye",
+    "group_id": "g_brand_tiger_eye"
   },
   {
     "id": 1119,
@@ -5797,7 +5850,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1148,
@@ -5859,7 +5913,8 @@
       "1148_1148-37",
       "1148_1148-38"
     ],
-    "brandId": "the_blanc"
+    "brandId": "the_blanc",
+    "group_id": "g_brand_the_blanc"
   },
   {
     "id": 1120,
@@ -5994,7 +6049,8 @@
       "1120_1120-108",
       "1120_1120-109"
     ],
-    "brandId": "aroma_terrace"
+    "brandId": "aroma_terrace",
+    "group_id": "g_brand_aroma_terrace"
   },
   {
     "id": 1134,
@@ -6061,7 +6117,8 @@
       "1134_1134-41",
       "1134_1134-42"
     ],
-    "brandId": "m_spa"
+    "brandId": "m_spa",
+    "group_id": "g_brand_m_spa"
   },
   {
     "id": 1124,
@@ -6214,7 +6271,8 @@
       "1124_1124-127",
       "1124_1124-128"
     ],
-    "brandId": "marigold"
+    "brandId": "marigold",
+    "group_id": "g_brand_marigold"
   },
   {
     "id": 1120,
@@ -6349,7 +6407,8 @@
       "1120_1120-108",
       "1120_1120-109"
     ],
-    "brandId": "aroma_terrace"
+    "brandId": "aroma_terrace",
+    "group_id": "g_brand_aroma_terrace"
   },
   {
     "id": 1142,
@@ -6423,7 +6482,8 @@
       "1142_1142-49",
       "1142_1142-50"
     ],
-    "brandId": "chance"
+    "brandId": "chance",
+    "group_id": "g_brand_chance"
   },
   {
     "id": 1123,
@@ -6547,7 +6607,8 @@
       "1123_1123-99",
       "1123_1123-100"
     ],
-    "brandId": "tiger_eye"
+    "brandId": "tiger_eye",
+    "group_id": "g_brand_tiger_eye"
   },
   {
     "id": 1131,
@@ -6632,7 +6693,8 @@
       "1131_1131-60",
       "1131_1131-61"
     ],
-    "brandId": "tororich"
+    "brandId": "tororich",
+    "group_id": "g_brand_tororich"
   },
   {
     "id": 1120,
@@ -6767,7 +6829,8 @@
       "1120_1120-108",
       "1120_1120-109"
     ],
-    "brandId": "aroma_terrace"
+    "brandId": "aroma_terrace",
+    "group_id": "g_brand_aroma_terrace"
   },
   {
     "id": 1137,
@@ -7089,7 +7152,8 @@
       "1137_1137-296",
       "1137_1137-297"
     ],
-    "brandId": "aromana"
+    "brandId": "aromana",
+    "group_id": "g_brand_aromana"
   },
   {
     "id": 1133,
@@ -7133,7 +7197,8 @@
       "1133_1133-17",
       "1133_1133-18"
     ],
-    "brandId": "campbell"
+    "brandId": "campbell",
+    "group_id": "g_brand_campbell"
   },
   {
     "id": 1127,
@@ -7258,7 +7323,8 @@
       "1127_1127-99",
       "1127_1127-100"
     ],
-    "brandId": "century"
+    "brandId": "century",
+    "group_id": "g_brand_century"
   },
   {
     "id": 1142,
@@ -7332,7 +7398,8 @@
       "1142_1142-49",
       "1142_1142-50"
     ],
-    "brandId": "chance"
+    "brandId": "chance",
+    "group_id": "g_brand_chance"
   },
   {
     "id": 1130,
@@ -7434,7 +7501,8 @@
       "1130_1130-76",
       "1130_1130-77"
     ],
-    "brandId": "cucue"
+    "brandId": "cucue",
+    "group_id": "g_brand_cucue"
   },
   {
     "id": 1125,
@@ -7596,7 +7664,8 @@
       "1125_1125-136",
       "1125_1125-137"
     ],
-    "brandId": "golden_rose"
+    "brandId": "golden_rose",
+    "group_id": "g_brand_golden_rose"
   },
   {
     "id": 1134,
@@ -7663,7 +7732,8 @@
       "1134_1134-41",
       "1134_1134-42"
     ],
-    "brandId": "m_spa"
+    "brandId": "m_spa",
+    "group_id": "g_brand_m_spa"
   },
   {
     "id": 1138,
@@ -7789,7 +7859,8 @@
       "1138_1138-99",
       "1138_1138-100"
     ],
-    "brandId": "resexy"
+    "brandId": "resexy",
+    "group_id": "g_brand_resexy"
   },
   {
     "id": 1129,
@@ -7838,7 +7909,8 @@
       "1129_1129-24",
       "1129_1129-25"
     ],
-    "brandId": "rich_aroma"
+    "brandId": "rich_aroma",
+    "group_id": "g_brand_rich_aroma"
   },
   {
     "id": 1136,
@@ -7913,7 +7985,8 @@
       "1136_1136-49",
       "1136_1136-50"
     ],
-    "brandId": "spur_luxury"
+    "brandId": "spur_luxury",
+    "group_id": "g_brand_spur_luxury"
   },
   {
     "id": 1139,
@@ -8032,7 +8105,8 @@
       "1139_1139-93",
       "1139_1139-94"
     ],
-    "brandId": "venire"
+    "brandId": "venire",
+    "group_id": "g_brand_venire"
   },
   {
     "id": 1122,
@@ -8174,7 +8248,8 @@
       "1122_1122-116",
       "1122_1122-117"
     ],
-    "brandId": "madame_seiko"
+    "brandId": "madame_seiko",
+    "group_id": "g_brand_madame_seiko"
   },
   {
     "id": 1141,
@@ -8238,7 +8313,8 @@
       "1141_1141-39",
       "1141_1141-40"
     ],
-    "brandId": "majisera"
+    "brandId": "majisera",
+    "group_id": "g_brand_majisera"
   },
   {
     "id": 1139,
@@ -8357,7 +8433,8 @@
       "1139_1139-93",
       "1139_1139-94"
     ],
-    "brandId": "venire"
+    "brandId": "venire",
+    "group_id": "g_brand_venire"
   },
   {
     "id": 1127,
@@ -8482,7 +8559,8 @@
       "1127_1127-99",
       "1127_1127-100"
     ],
-    "brandId": "century"
+    "brandId": "century",
+    "group_id": "g_brand_century"
   },
   {
     "id": 1142,
@@ -8556,7 +8634,8 @@
       "1142_1142-49",
       "1142_1142-50"
     ],
-    "brandId": "chance"
+    "brandId": "chance",
+    "group_id": "g_brand_chance"
   },
   {
     "id": 1128,
@@ -8610,7 +8689,8 @@
       "1128_1128-29",
       "1128_1128-30"
     ],
-    "brandId": "encore"
+    "brandId": "encore",
+    "group_id": "g_brand_encore"
   },
   {
     "id": 1125,
@@ -8772,7 +8852,8 @@
       "1125_1125-136",
       "1125_1125-137"
     ],
-    "brandId": "golden_rose"
+    "brandId": "golden_rose",
+    "group_id": "g_brand_golden_rose"
   },
   {
     "id": 1124,
@@ -8925,7 +9006,8 @@
       "1124_1124-127",
       "1124_1124-128"
     ],
-    "brandId": "marigold"
+    "brandId": "marigold",
+    "group_id": "g_brand_marigold"
   },
   {
     "id": 1119,
@@ -9026,7 +9108,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1119,
@@ -9127,7 +9210,8 @@
       "1119_1119-73",
       "1119_1119-74"
     ],
-    "brandId": "mrs_crystal"
+    "brandId": "mrs_crystal",
+    "group_id": "g_brand_mrs_crystal"
   },
   {
     "id": 1120,
@@ -9262,7 +9346,8 @@
       "1120_1120-108",
       "1120_1120-109"
     ],
-    "brandId": "aroma_terrace"
+    "brandId": "aroma_terrace",
+    "group_id": "g_brand_aroma_terrace"
   },
   {
     "id": 1124,
@@ -9415,7 +9500,8 @@
       "1124_1124-127",
       "1124_1124-128"
     ],
-    "brandId": "marigold"
+    "brandId": "marigold",
+    "group_id": "g_brand_marigold"
   },
   {
     "id": 1126,
@@ -9558,7 +9644,8 @@
       "1126_1126-117",
       "1126_1126-118"
     ],
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1001,
@@ -14555,7 +14642,8 @@
     ],
     "prefecture": "千葉県",
     "city": "千葉県",
-    "brandId": "lynx"
+    "brandId": "lynx",
+    "group_id": "g_brand_lynx"
   },
   {
     "id": 1175,
@@ -14625,7 +14713,8 @@
       "1175_1175-43",
       "1175_1175-44"
     ],
-    "brandId": "madame_rest"
+    "brandId": "madame_rest",
+    "group_id": "g_brand_madame_rest"
   },
   {
     "id": 1180,
@@ -14716,7 +14805,8 @@
       "1180_1180-65",
       "1180_1180-66"
     ],
-    "brandId": "aroma_charis"
+    "brandId": "aroma_charis",
+    "group_id": "g_brand_aroma_charis"
   },
   {
     "id": 1181,
@@ -14776,7 +14866,8 @@
       "1181_1181-36",
       "1181_1181-37"
     ],
-    "brandId": "begin"
+    "brandId": "begin",
+    "group_id": "g_brand_begin"
   },
   {
     "id": 77504,
@@ -14876,7 +14967,8 @@
       "77504-yua",
       "77504-nanoha"
     ],
-    "brandId": "limited_spa"
+    "brandId": "limited_spa",
+    "group_id": "g_brand_limited_spa"
   },
   {
     "id": 999,
@@ -19873,7 +19965,8 @@
     ],
     "prefecture": "千葉県",
     "city": "船橋",
-    "brandId": "lynx"
+    "brandId": "lynx",
+    "group_id": "g_brand_lynx"
   },
   {
     "id": 1182,
@@ -19937,7 +20030,8 @@
       "1182_1182-39",
       "1182_1182-40"
     ],
-    "brandId": "m_second"
+    "brandId": "m_second",
+    "group_id": "g_brand_m_second"
   },
   {
     "id": 77503,
@@ -20037,7 +20131,8 @@
       "77503-yua",
       "77503-nanoha"
     ],
-    "brandId": "limited_spa"
+    "brandId": "limited_spa",
+    "group_id": "g_brand_limited_spa"
   },
   {
     "id": 1000,
@@ -25034,7 +25129,8 @@
     ],
     "prefecture": "千葉県",
     "city": "船橋",
-    "brandId": "lynx"
+    "brandId": "lynx",
+    "group_id": "g_brand_lynx"
   },
   {
     "id": 77505,
@@ -25134,7 +25230,8 @@
       "77505-yua",
       "77505-nanoha"
     ],
-    "brandId": "limited_spa"
+    "brandId": "limited_spa",
+    "group_id": "g_brand_limited_spa"
   },
   {
     "id": 1183,
@@ -25214,7 +25311,8 @@
       "1183_1183-56",
       "1183_1183-57"
     ],
-    "brandId": "luana"
+    "brandId": "luana",
+    "group_id": "g_brand_luana"
   },
   {
     "id": 1176,
@@ -25429,7 +25527,8 @@
       "1176_1176-189",
       "1176_1176-190"
     ],
-    "brandId": "sasayaki"
+    "brandId": "sasayaki",
+    "group_id": "g_brand_sasayaki"
   },
   {
     "id": 1177,
@@ -25637,7 +25736,8 @@
       "1177_1177-182",
       "1177_1177-183"
     ],
-    "brandId": "kami_no_esthe"
+    "brandId": "kami_no_esthe",
+    "group_id": "g_brand_kami_no_esthe"
   },
   {
     "id": 998,
@@ -30634,7 +30734,8 @@
     ],
     "prefecture": "千葉県",
     "city": "松戸",
-    "brandId": "lynx"
+    "brandId": "lynx",
+    "group_id": "g_brand_lynx"
   },
   {
     "id": 77433,
@@ -30708,7 +30809,8 @@
       "77433-kashiwagi-meru",
       "77433-minami-mina"
     ],
-    "brandId": "levechi_esthe"
+    "brandId": "levechi_esthe",
+    "group_id": "g_brand_levechi_esthe"
   },
   {
     "id": 1180,
@@ -30799,7 +30901,8 @@
       "1180_1180-65",
       "1180_1180-66"
     ],
-    "brandId": "aroma_charis"
+    "brandId": "aroma_charis",
+    "group_id": "g_brand_aroma_charis"
   },
   {
     "id": 1181,
@@ -30859,7 +30962,8 @@
       "1181_1181-36",
       "1181_1181-37"
     ],
-    "brandId": "begin"
+    "brandId": "begin",
+    "group_id": "g_brand_begin"
   },
   {
     "id": 77435,
@@ -30933,7 +31037,8 @@
       "77433-kashiwagi-meru",
       "77433-minami-mina"
     ],
-    "brandId": "levechi_esthe"
+    "brandId": "levechi_esthe",
+    "group_id": "g_brand_levechi_esthe"
   },
   {
     "id": 1035,
@@ -30977,7 +31082,8 @@
       "1035_1035-17",
       "1035_1035-18"
     ],
-    "brandId": "aroma_guild"
+    "brandId": "aroma_guild",
+    "group_id": "g_brand_aroma_guild"
   },
   {
     "id": "1184_1",
@@ -31062,7 +31168,8 @@
     "prefecture": "福井県",
     "city": "敦賀",
     "area": "tsuruga",
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1203,
@@ -31141,7 +31248,8 @@
       "1203_1203-53",
       "1203_1203-54"
     ],
-    "brandId": "feerique"
+    "brandId": "feerique",
+    "group_id": "g_brand_feerique"
   },
   {
     "id": 1205,
@@ -31181,7 +31289,8 @@
       "1205_1205-14",
       "1205_1205-15"
     ],
-    "brandId": "hakatahitozuma"
+    "brandId": "hakatahitozuma",
+    "group_id": "g_brand_hakatahitozuma"
   },
   {
     "id": 1204,
@@ -31283,7 +31392,8 @@
       "1204_1204-76",
       "1204_1204-77"
     ],
-    "brandId": "lion_heart"
+    "brandId": "lion_heart",
+    "group_id": "g_brand_lion_heart"
   },
   {
     "id": 1207,
@@ -31364,7 +31474,8 @@
     ],
     "city": "博多",
     "area": "博多",
-    "brandId": "mothers"
+    "brandId": "mothers",
+    "group_id": "g_brand_mothers"
   },
   {
     "id": 1206,
@@ -31456,7 +31567,8 @@
       "1206_1206-66",
       "1206_1206-67"
     ],
-    "brandId": "request"
+    "brandId": "request",
+    "group_id": "g_brand_request"
   },
   {
     "id": 1208,
@@ -31516,7 +31628,8 @@
       "1208_1208-35",
       "1208_1208-36"
     ],
-    "brandId": "pinky_grazie"
+    "brandId": "pinky_grazie",
+    "group_id": "g_brand_pinky_grazie"
   },
   {
     "id": "1207_1",
@@ -31565,7 +31678,8 @@
     ],
     "city": "久留米",
     "area": "久留米",
-    "brandId": "mothers"
+    "brandId": "mothers",
+    "group_id": "g_brand_mothers"
   },
   {
     "id": "1189_1",
@@ -31690,7 +31804,8 @@
     ],
     "city": "旭通",
     "area": "旭通",
-    "brandId": "eslino"
+    "brandId": "eslino",
+    "group_id": "g_brand_eslino"
   },
   {
     "id": "1191_1",
@@ -31810,7 +31925,8 @@
     ],
     "city": "姫路",
     "area": "姫路",
-    "brandId": "mrs_melty"
+    "brandId": "mrs_melty",
+    "group_id": "g_brand_mrs_melty"
   },
   {
     "id": "1189_2",
@@ -31935,7 +32051,8 @@
     ],
     "city": "加納町",
     "area": "加納町",
-    "brandId": "eslino"
+    "brandId": "eslino",
+    "group_id": "g_brand_eslino"
   },
   {
     "id": 1187,
@@ -32058,7 +32175,8 @@
       "1187_1187-97",
       "1187_1187-98"
     ],
-    "brandId": "mrs_moon"
+    "brandId": "mrs_moon",
+    "group_id": "g_brand_mrs_moon"
   },
   {
     "id": "1193_1",
@@ -32155,7 +32273,8 @@
     ],
     "city": "元町",
     "area": "元町",
-    "brandId": "mrs_tenor"
+    "brandId": "mrs_tenor",
+    "group_id": "g_brand_mrs_tenor"
   },
   {
     "id": 1189,
@@ -32280,7 +32399,8 @@
     ],
     "city": "二宮",
     "area": "二宮",
-    "brandId": "eslino"
+    "brandId": "eslino",
+    "group_id": "g_brand_eslino"
   },
   {
     "id": 1192,
@@ -32341,7 +32461,8 @@
       "1192_1192-35",
       "1192_1192-36"
     ],
-    "brandId": "10ct_resort"
+    "brandId": "10ct_resort",
+    "group_id": "g_brand_10ct_resort"
   },
   {
     "id": 1190,
@@ -32429,7 +32550,8 @@
       "1190_1190-62",
       "1190_1190-63"
     ],
-    "brandId": "kobe_queen"
+    "brandId": "kobe_queen",
+    "group_id": "g_brand_kobe_queen"
   },
   {
     "id": 1188,
@@ -32553,7 +32675,8 @@
       "1188_1188-99",
       "1188_1188-100"
     ],
-    "brandId": "lemonade"
+    "brandId": "lemonade",
+    "group_id": "g_brand_lemonade"
   },
   {
     "id": 1191,
@@ -32673,7 +32796,8 @@
     ],
     "city": "三宮",
     "area": "三宮",
-    "brandId": "mrs_melty"
+    "brandId": "mrs_melty",
+    "group_id": "g_brand_mrs_melty"
   },
   {
     "id": 1193,
@@ -32770,7 +32894,8 @@
     ],
     "city": "三宮",
     "area": "三宮",
-    "brandId": "mrs_tenor"
+    "brandId": "mrs_tenor",
+    "group_id": "g_brand_mrs_tenor"
   },
   {
     "id": 77411,
@@ -32912,7 +33037,8 @@
       "77404-fukada-ryo",
       "77404-tachibana-rinka"
     ],
-    "brandId": "doigt_de_fee"
+    "brandId": "doigt_de_fee",
+    "group_id": "g_brand_doigt_de_fee"
   },
   {
     "id": 1145,
@@ -33139,7 +33265,8 @@
       "1145_1145-202",
       "1145_1145-203"
     ],
-    "brandId": "rabbit_spa"
+    "brandId": "rabbit_spa",
+    "group_id": "g_brand_rabbit_spa"
   },
   {
     "id": 1148,
@@ -33201,7 +33328,8 @@
       "1148_1148-37",
       "1148_1148-38"
     ],
-    "brandId": "the_blanc"
+    "brandId": "the_blanc",
+    "group_id": "g_brand_the_blanc"
   },
   {
     "id": 1151,
@@ -33382,7 +33510,8 @@
       "1151_1151-155",
       "1151_1151-156"
     ],
-    "brandId": "guarigione"
+    "brandId": "guarigione",
+    "group_id": "g_brand_guarigione"
   },
   {
     "id": 1158,
@@ -33467,7 +33596,8 @@
       "1158_1158-60",
       "1158_1158-61"
     ],
-    "brandId": "liora"
+    "brandId": "liora",
+    "group_id": "g_brand_liora"
   },
   {
     "id": 1050,
@@ -33537,7 +33667,8 @@
       "1050_1050-46",
       "1050_1050-47"
     ],
-    "brandId": "pepe_spa"
+    "brandId": "pepe_spa",
+    "group_id": "g_brand_pepe_spa"
   },
   {
     "id": 1146,
@@ -33613,7 +33744,8 @@
       "1146_1146-50",
       "1146_1146-51"
     ],
-    "brandId": "otona_code"
+    "brandId": "otona_code",
+    "group_id": "g_brand_otona_code"
   },
   {
     "id": 1042,
@@ -33747,7 +33879,8 @@
       "1042_1042-112",
       "1042_1042-113"
     ],
-    "brandId": "redeye"
+    "brandId": "redeye",
+    "group_id": "g_brand_redeye"
   },
   {
     "id": 1145,
@@ -33974,7 +34107,8 @@
       "1145_1145-202",
       "1145_1145-203"
     ],
-    "brandId": "rabbit_spa"
+    "brandId": "rabbit_spa",
+    "group_id": "g_brand_rabbit_spa"
   },
   {
     "id": 1145,
@@ -34201,7 +34335,8 @@
       "1145_1145-202",
       "1145_1145-203"
     ],
-    "brandId": "rabbit_spa"
+    "brandId": "rabbit_spa",
+    "group_id": "g_brand_rabbit_spa"
   },
   {
     "id": 1146,
@@ -34277,7 +34412,8 @@
       "1146_1146-50",
       "1146_1146-51"
     ],
-    "brandId": "otona_code"
+    "brandId": "otona_code",
+    "group_id": "g_brand_otona_code"
   },
   {
     "id": 1151,
@@ -34458,7 +34594,8 @@
       "1151_1151-155",
       "1151_1151-156"
     ],
-    "brandId": "guarigione"
+    "brandId": "guarigione",
+    "group_id": "g_brand_guarigione"
   },
   {
     "id": 1158,
@@ -34543,7 +34680,8 @@
       "1158_1158-60",
       "1158_1158-61"
     ],
-    "brandId": "liora"
+    "brandId": "liora",
+    "group_id": "g_brand_liora"
   },
   {
     "id": 1146,
@@ -34619,7 +34757,8 @@
       "1146_1146-50",
       "1146_1146-51"
     ],
-    "brandId": "otona_code"
+    "brandId": "otona_code",
+    "group_id": "g_brand_otona_code"
   },
   {
     "id": 1145,
@@ -34846,7 +34985,8 @@
       "1145_1145-202",
       "1145_1145-203"
     ],
-    "brandId": "rabbit_spa"
+    "brandId": "rabbit_spa",
+    "group_id": "g_brand_rabbit_spa"
   },
   {
     "id": 1148,
@@ -34908,7 +35048,8 @@
       "1148_1148-37",
       "1148_1148-38"
     ],
-    "brandId": "the_blanc"
+    "brandId": "the_blanc",
+    "group_id": "g_brand_the_blanc"
   },
   {
     "id": 1144,
@@ -34995,7 +35136,8 @@
       "1144_1144-62",
       "1144_1144-63"
     ],
-    "brandId": "yuru_spa"
+    "brandId": "yuru_spa",
+    "group_id": "g_brand_yuru_spa"
   },
   {
     "id": 1152,
@@ -35056,7 +35198,8 @@
       "1152_1152-37",
       "1152_1152-38"
     ],
-    "brandId": "approach"
+    "brandId": "approach",
+    "group_id": "g_brand_approach"
   },
   {
     "id": 1153,
@@ -35108,7 +35251,8 @@
       "1153_1153-26",
       "1153_1153-27"
     ],
-    "brandId": "deep_essential"
+    "brandId": "deep_essential",
+    "group_id": "g_brand_deep_essential"
   },
   {
     "id": 1154,
@@ -35164,7 +35308,8 @@
       "1154_1154-31",
       "1154_1154-32"
     ],
-    "brandId": "fromage"
+    "brandId": "fromage",
+    "group_id": "g_brand_fromage"
   },
   {
     "id": 1157,
@@ -35260,7 +35405,8 @@
       "1157_1157-71",
       "1157_1157-72"
     ],
-    "brandId": "gold"
+    "brandId": "gold",
+    "group_id": "g_brand_gold"
   },
   {
     "id": 1151,
@@ -35441,7 +35587,8 @@
       "1151_1151-155",
       "1151_1151-156"
     ],
-    "brandId": "guarigione"
+    "brandId": "guarigione",
+    "group_id": "g_brand_guarigione"
   },
   {
     "id": 77404,
@@ -35583,7 +35730,8 @@
       "77404-fukada-ryo",
       "77404-tachibana-rinka"
     ],
-    "brandId": "doigt_de_fee"
+    "brandId": "doigt_de_fee",
+    "group_id": "g_brand_doigt_de_fee"
   },
   {
     "id": 1155,
@@ -35634,7 +35782,8 @@
       "1155_1155-26",
       "1155_1155-27"
     ],
-    "brandId": "livspa"
+    "brandId": "livspa",
+    "group_id": "g_brand_livspa"
   },
   {
     "id": 77408,
@@ -35776,7 +35925,8 @@
       "77404-fukada-ryo",
       "77404-tachibana-rinka"
     ],
-    "brandId": "doigt_de_fee"
+    "brandId": "doigt_de_fee",
+    "group_id": "g_brand_doigt_de_fee"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -36399,7 +36549,8 @@
     "city": "川崎市",
     "area": "溝の口",
     "nearestStation": "溝の口駅",
-    "address": "神奈川県川崎市エリア"
+    "address": "神奈川県川崎市エリア",
+    "group_id": "g_brand_jesse"
   },
   {
     "id": 77410,
@@ -36541,7 +36692,8 @@
       "77404-fukada-ryo",
       "77404-tachibana-rinka"
     ],
-    "brandId": "doigt_de_fee"
+    "brandId": "doigt_de_fee",
+    "group_id": "g_brand_doigt_de_fee"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -36790,7 +36942,8 @@
     "city": "川崎市",
     "area": "武蔵小杉",
     "nearestStation": "武蔵小杉駅",
-    "address": "神奈川県川崎市エリア"
+    "address": "神奈川県川崎市エリア",
+    "group_id": "g_brand_aroma_ella"
   },
   {
     "id": 77407,
@@ -36932,7 +37085,8 @@
       "77404-fukada-ryo",
       "77404-tachibana-rinka"
     ],
-    "brandId": "doigt_de_fee"
+    "brandId": "doigt_de_fee",
+    "group_id": "g_brand_doigt_de_fee"
   },
   {
     "id": 77479,
@@ -37055,7 +37209,8 @@
       "77479-kimura-nana",
       "77479-kawanabe-mina"
     ],
-    "brandId": "hoozuki"
+    "brandId": "hoozuki",
+    "group_id": "g_brand_hoozuki"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -37678,7 +37833,8 @@
     "city": "川崎市",
     "area": "武蔵小杉",
     "nearestStation": "武蔵小杉駅",
-    "address": "神奈川県川崎市エリア"
+    "address": "神奈川県川崎市エリア",
+    "group_id": "g_brand_jesse"
   },
   {
     "id": 77409,
@@ -37820,7 +37976,8 @@
       "77404-fukada-ryo",
       "77404-tachibana-rinka"
     ],
-    "brandId": "doigt_de_fee"
+    "brandId": "doigt_de_fee",
+    "group_id": "g_brand_doigt_de_fee"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -38443,7 +38600,8 @@
     "city": "川崎市",
     "area": "登戸",
     "nearestStation": "登戸駅",
-    "address": "神奈川県川崎市エリア"
+    "address": "神奈川県川崎市エリア",
+    "group_id": "g_brand_jesse"
   },
   {
     "id": 1156,
@@ -38493,7 +38651,8 @@
       "1156_1156-26",
       "1156_1156-27"
     ],
-    "brandId": "rere"
+    "brandId": "rere",
+    "group_id": "g_brand_rere"
   },
   {
     "id": 1150,
@@ -38568,7 +38727,8 @@
       "1150_1150-49",
       "1150_1150-50"
     ],
-    "brandId": "rire"
+    "brandId": "rire",
+    "group_id": "g_brand_rire"
   },
   {
     "id": 1157,
@@ -38664,7 +38824,8 @@
       "1157_1157-71",
       "1157_1157-72"
     ],
-    "brandId": "gold"
+    "brandId": "gold",
+    "group_id": "g_brand_gold"
   },
   {
     "id": 1042,
@@ -38798,7 +38959,8 @@
       "1042_1042-112",
       "1042_1042-113"
     ],
-    "brandId": "redeye"
+    "brandId": "redeye",
+    "group_id": "g_brand_redeye"
   },
   {
     "id": 1159,
@@ -38879,7 +39041,8 @@
       "1159_1159-56",
       "1159_1159-57"
     ],
-    "brandId": "agu"
+    "brandId": "agu",
+    "group_id": "g_brand_agu"
   },
   {
     "id": 1039,
@@ -38932,7 +39095,8 @@
       "1039_1039-31",
       "1039_1039-32"
     ],
-    "brandId": "aroma_ella"
+    "brandId": "aroma_ella",
+    "group_id": "g_brand_aroma_ella"
   },
   {
     "id": 1161,
@@ -38999,7 +39163,8 @@
       "1161_1161-41",
       "1161_1161-42"
     ],
-    "brandId": "bed_of_roses"
+    "brandId": "bed_of_roses",
+    "group_id": "g_brand_bed_of_roses"
   },
   {
     "id": 1145,
@@ -39226,7 +39391,8 @@
       "1145_1145-202",
       "1145_1145-203"
     ],
-    "brandId": "rabbit_spa"
+    "brandId": "rabbit_spa",
+    "group_id": "g_brand_rabbit_spa"
   },
   {
     "id": 1156,
@@ -39276,7 +39442,8 @@
       "1156_1156-26",
       "1156_1156-27"
     ],
-    "brandId": "rere"
+    "brandId": "rere",
+    "group_id": "g_brand_rere"
   },
   {
     "id": 1160,
@@ -39337,7 +39504,8 @@
       "1160_1160-35",
       "1160_1160-36"
     ],
-    "brandId": "royce"
+    "brandId": "royce",
+    "group_id": "g_brand_royce"
   },
   {
     "id": 1042,
@@ -39471,7 +39639,8 @@
       "1042_1042-112",
       "1042_1042-113"
     ],
-    "brandId": "redeye"
+    "brandId": "redeye",
+    "group_id": "g_brand_redeye"
   },
   {
     "id": 1145,
@@ -39698,7 +39867,8 @@
       "1145_1145-202",
       "1145_1145-203"
     ],
-    "brandId": "rabbit_spa"
+    "brandId": "rabbit_spa",
+    "group_id": "g_brand_rabbit_spa"
   },
   {
     "id": 1048,
@@ -39722,7 +39892,8 @@
     "nearestStation": "分倍河原駅 / 相模原駅 / 府中駅 / 淵野辺駅",
     "description": "分倍河原・相模原・府中・淵野辺で展開するメンズエステ。たっぷりホットオイルとリンパドレナージュを盛り込んだオリジナルコース。 / 料金システム: 60分13,000円 / 75分14,000円 / 90分16,000円 / 105分18,000円 / 120分20,000円",
     "therapists": [],
-    "brandId": "luxury_romance"
+    "brandId": "luxury_romance",
+    "group_id": "g_brand_luxury_romance"
   },
   {
     "id": 1048,
@@ -39746,7 +39917,8 @@
     "nearestStation": "分倍河原駅 / 相模原駅 / 府中駅 / 淵野辺駅",
     "description": "分倍河原・相模原・府中・淵野辺で展開するメンズエステ。たっぷりホットオイルとリンパドレナージュを盛り込んだオリジナルコース。 / 料金システム: 60分13,000円 / 75分14,000円 / 90分16,000円 / 105分18,000円 / 120分20,000円",
     "therapists": [],
-    "brandId": "luxury_romance"
+    "brandId": "luxury_romance",
+    "group_id": "g_brand_luxury_romance"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -40832,7 +41004,8 @@
     "city": "相模原市",
     "area": "相模原",
     "nearestStation": "相模原駅",
-    "address": "神奈川県相模原市エリア"
+    "address": "神奈川県相模原市エリア",
+    "group_id": "g_brand_unison_spa"
   },
   {
     "id": 1151,
@@ -41013,7 +41186,8 @@
       "1151_1151-155",
       "1151_1151-156"
     ],
-    "brandId": "guarigione"
+    "brandId": "guarigione",
+    "group_id": "g_brand_guarigione"
   },
   {
     "id": 1144,
@@ -41100,7 +41274,8 @@
       "1144_1144-62",
       "1144_1144-63"
     ],
-    "brandId": "yuru_spa"
+    "brandId": "yuru_spa",
+    "group_id": "g_brand_yuru_spa"
   },
   {
     "id": 1042,
@@ -41234,7 +41409,8 @@
       "1042_1042-112",
       "1042_1042-113"
     ],
-    "brandId": "redeye"
+    "brandId": "redeye",
+    "group_id": "g_brand_redeye"
   },
   {
     "id": 1156,
@@ -41284,7 +41460,8 @@
       "1156_1156-26",
       "1156_1156-27"
     ],
-    "brandId": "rere"
+    "brandId": "rere",
+    "group_id": "g_brand_rere"
   },
   {
     "id": 1149,
@@ -41368,7 +41545,8 @@
       "1149_1149-59",
       "1149_1149-60"
     ],
-    "brandId": "marine"
+    "brandId": "marine",
+    "group_id": "g_brand_marine"
   },
   {
     "id": 1151,
@@ -41549,7 +41727,8 @@
       "1151_1151-155",
       "1151_1151-156"
     ],
-    "brandId": "guarigione"
+    "brandId": "guarigione",
+    "group_id": "g_brand_guarigione"
   },
   {
     "id": 60199,
@@ -46546,7 +46725,8 @@
     ],
     "prefecture": "神奈川県",
     "city": "横浜",
-    "brandId": "lynx"
+    "brandId": "lynx",
+    "group_id": "g_brand_lynx"
   },
   {
     "id": 1158,
@@ -46631,7 +46811,8 @@
       "1158_1158-60",
       "1158_1158-61"
     ],
-    "brandId": "liora"
+    "brandId": "liora",
+    "group_id": "g_brand_liora"
   },
   {
     "id": 1146,
@@ -46707,7 +46888,8 @@
       "1146_1146-50",
       "1146_1146-51"
     ],
-    "brandId": "otona_code"
+    "brandId": "otona_code",
+    "group_id": "g_brand_otona_code"
   },
   {
     "id": 1145,
@@ -46934,7 +47116,8 @@
       "1145_1145-202",
       "1145_1145-203"
     ],
-    "brandId": "rabbit_spa"
+    "brandId": "rabbit_spa",
+    "group_id": "g_brand_rabbit_spa"
   },
   {
     "id": 1148,
@@ -46996,7 +47179,8 @@
       "1148_1148-37",
       "1148_1148-38"
     ],
-    "brandId": "the_blanc"
+    "brandId": "the_blanc",
+    "group_id": "g_brand_the_blanc"
   },
   {
     "id": 1147,
@@ -47061,7 +47245,8 @@
       "1147_1147-40",
       "1147_1147-41"
     ],
-    "brandId": "y_prime"
+    "brandId": "y_prime",
+    "group_id": "g_brand_y_prime"
   },
   {
     "id": "1186_1",
@@ -47145,7 +47330,8 @@
     ],
     "city": "大宮",
     "area": "大宮",
-    "brandId": "pure_white"
+    "brandId": "pure_white",
+    "group_id": "g_brand_pure_white"
   },
   {
     "id": "1186_3",
@@ -47229,7 +47415,8 @@
     ],
     "city": "京都駅",
     "area": "京都駅",
-    "brandId": "pure_white"
+    "brandId": "pure_white",
+    "group_id": "g_brand_pure_white"
   },
   {
     "id": 1185,
@@ -47288,7 +47475,8 @@
       "1185_1185-34",
       "1185_1185-35"
     ],
-    "brandId": "queens_premium"
+    "brandId": "queens_premium",
+    "group_id": "g_brand_queens_premium"
   },
   {
     "id": "1184_3",
@@ -47373,7 +47561,8 @@
     "prefecture": "京都府",
     "city": "京都駅",
     "area": "京都駅",
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1186,
@@ -47457,7 +47646,8 @@
     ],
     "city": "二条",
     "area": "二条",
-    "brandId": "pure_white"
+    "brandId": "pure_white",
+    "group_id": "g_brand_pure_white"
   },
   {
     "id": "1186_2",
@@ -47541,7 +47731,8 @@
     ],
     "city": "千本三条",
     "area": "千本三条",
-    "brandId": "pure_white"
+    "brandId": "pure_white",
+    "group_id": "g_brand_pure_white"
   },
   {
     "id": "1184_2",
@@ -47626,7 +47817,8 @@
     "prefecture": "京都府",
     "city": "四条西洞院",
     "area": "四条西洞院",
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1196,
@@ -47700,7 +47892,8 @@
       "1196_1196-48",
       "1196_1196-49"
     ],
-    "brandId": "arena_spa"
+    "brandId": "arena_spa",
+    "group_id": "g_brand_arena_spa"
   },
   {
     "id": 1197,
@@ -47759,7 +47952,8 @@
       "1197_1197-33",
       "1197_1197-34"
     ],
-    "brandId": "aroma_no5"
+    "brandId": "aroma_no5",
+    "group_id": "g_brand_aroma_no5"
   },
   {
     "id": 1198,
@@ -47809,7 +48003,8 @@
       "1198_1198-25",
       "1198_1198-26"
     ],
-    "brandId": "aroma_rich"
+    "brandId": "aroma_rich",
+    "group_id": "g_brand_aroma_rich"
   },
   {
     "id": 1202,
@@ -47853,7 +48048,8 @@
       "1202_1202-19",
       "1202_1202-20"
     ],
-    "brandId": "cuaura"
+    "brandId": "cuaura",
+    "group_id": "g_brand_cuaura"
   },
   {
     "id": 1201,
@@ -47899,7 +48095,8 @@
       "1201_1201-21",
       "1201_1201-22"
     ],
-    "brandId": "onetime"
+    "brandId": "onetime",
+    "group_id": "g_brand_onetime"
   },
   {
     "id": 1200,
@@ -47977,7 +48174,8 @@
       "1200_1200-52",
       "1200_1200-53"
     ],
-    "brandId": "platonic_spa"
+    "brandId": "platonic_spa",
+    "group_id": "g_brand_platonic_spa"
   },
   {
     "id": 1195,
@@ -48054,7 +48252,8 @@
       "1195_1195-52",
       "1195_1195-53"
     ],
-    "brandId": "pulunt"
+    "brandId": "pulunt",
+    "group_id": "g_brand_pulunt"
   },
   {
     "id": 1199,
@@ -48129,7 +48328,8 @@
       "1199_1199-49",
       "1199_1199-50"
     ],
-    "brandId": "shizuku_spa"
+    "brandId": "shizuku_spa",
+    "group_id": "g_brand_shizuku_spa"
   },
   {
     "id": 1068,
@@ -48316,7 +48516,8 @@
       "1068_1068-163",
       "1068_1068-164"
     ],
-    "brandId": "bimajo_therapy"
+    "brandId": "bimajo_therapy",
+    "group_id": "g_brand_bimajo_therapy"
   },
   {
     "id": 1118,
@@ -48404,7 +48605,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1110,
@@ -48513,7 +48715,8 @@
       "1110_1110-85",
       "1110_1110-86"
     ],
-    "brandId": "genkaya"
+    "brandId": "genkaya",
+    "group_id": "g_brand_genkaya"
   },
   {
     "id": 1067,
@@ -48645,7 +48848,8 @@
       "1067_1067-110",
       "1067_1067-111"
     ],
-    "brandId": "darlin_premium"
+    "brandId": "darlin_premium",
+    "group_id": "g_brand_darlin_premium"
   },
   {
     "id": 1069,
@@ -48758,7 +48962,8 @@
       "1069_1069-91",
       "1069_1069-92"
     ],
-    "brandId": "lavieet"
+    "brandId": "lavieet",
+    "group_id": "g_brand_lavieet"
   },
   {
     "id": 1082,
@@ -48873,7 +49078,8 @@
       "1082_1082-89",
       "1082_1082-90"
     ],
-    "brandId": "mokukindo"
+    "brandId": "mokukindo",
+    "group_id": "g_brand_mokukindo"
   },
   {
     "id": 1082,
@@ -48988,7 +49194,8 @@
       "1082_1082-89",
       "1082_1082-90"
     ],
-    "brandId": "mokukindo"
+    "brandId": "mokukindo",
+    "group_id": "g_brand_mokukindo"
   },
   {
     "id": 1088,
@@ -49010,7 +49217,8 @@
     "nearestStation": "肥後橋駅/南森町駅/北浜駅/堺筋本町駅",
     "description": "大阪（肥後橋・南森町・北浜・堺筋本町）の熟女専門メンズエステ。癒しのひとときをご提供します。",
     "therapists": [],
-    "brandId": "kansya"
+    "brandId": "kansya",
+    "group_id": "g_brand_kansya"
   },
   {
     "id": 1109,
@@ -49191,7 +49399,8 @@
       "1109_1109-152",
       "1109_1109-153"
     ],
-    "brandId": "bellmadonna"
+    "brandId": "bellmadonna",
+    "group_id": "g_brand_bellmadonna"
   },
   {
     "id": 1118,
@@ -49279,7 +49488,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1085,
@@ -49405,7 +49615,8 @@
       "1085_1085-102",
       "1085_1085-103"
     ],
-    "brandId": "komoriuta"
+    "brandId": "komoriuta",
+    "group_id": "g_brand_komoriuta"
   },
   {
     "id": 1082,
@@ -49520,7 +49731,8 @@
       "1082_1082-89",
       "1082_1082-90"
     ],
-    "brandId": "mokukindo"
+    "brandId": "mokukindo",
+    "group_id": "g_brand_mokukindo"
   },
   {
     "id": 1073,
@@ -49615,7 +49827,8 @@
       "1073_1073-73",
       "1073_1073-74"
     ],
-    "brandId": "my_mama_spa"
+    "brandId": "my_mama_spa",
+    "group_id": "g_brand_my_mama_spa"
   },
   {
     "id": 1111,
@@ -49682,7 +49895,8 @@
       "1111_1111-41",
       "1111_1111-42"
     ],
-    "brandId": "super_happy"
+    "brandId": "super_happy",
+    "group_id": "g_brand_super_happy"
   },
   {
     "id": 1105,
@@ -49770,7 +49984,8 @@
       "1105_1105-60",
       "1105_1105-61"
     ],
-    "brandId": "tamanegi"
+    "brandId": "tamanegi",
+    "group_id": "g_brand_tamanegi"
   },
   {
     "id": 1104,
@@ -49879,7 +50094,8 @@
       "1104_1104-82",
       "1104_1104-83"
     ],
-    "brandId": "wife_line"
+    "brandId": "wife_line",
+    "group_id": "g_brand_wife_line"
   },
   {
     "id": 1089,
@@ -49987,7 +50203,8 @@
       "1089_1089-82",
       "1089_1089-83"
     ],
-    "brandId": "wifeline"
+    "brandId": "wifeline",
+    "group_id": "g_brand_wifeline"
   },
   {
     "id": 1088,
@@ -50009,7 +50226,8 @@
     "nearestStation": "肥後橋駅/南森町駅/北浜駅/堺筋本町駅",
     "description": "大阪（肥後橋・南森町・北浜・堺筋本町）の熟女専門メンズエステ。癒しのひとときをご提供します。",
     "therapists": [],
-    "brandId": "kansya"
+    "brandId": "kansya",
+    "group_id": "g_brand_kansya"
   },
   {
     "id": 1075,
@@ -50151,7 +50369,8 @@
       "1075_1075-120",
       "1075_1075-121"
     ],
-    "brandId": "beauty_and_beast"
+    "brandId": "beauty_and_beast",
+    "group_id": "g_brand_beauty_and_beast"
   },
   {
     "id": 1067,
@@ -50283,7 +50502,8 @@
       "1067_1067-110",
       "1067_1067-111"
     ],
-    "brandId": "darlin_premium"
+    "brandId": "darlin_premium",
+    "group_id": "g_brand_darlin_premium"
   },
   {
     "id": 1069,
@@ -50396,7 +50616,8 @@
       "1069_1069-91",
       "1069_1069-92"
     ],
-    "brandId": "lavieet"
+    "brandId": "lavieet",
+    "group_id": "g_brand_lavieet"
   },
   {
     "id": 1081,
@@ -50453,7 +50674,8 @@
       "1081_1081-31",
       "1081_1081-32"
     ],
-    "brandId": "mufufu"
+    "brandId": "mufufu",
+    "group_id": "g_brand_mufufu"
   },
   {
     "id": 1109,
@@ -50634,7 +50856,8 @@
       "1109_1109-152",
       "1109_1109-153"
     ],
-    "brandId": "bellmadonna"
+    "brandId": "bellmadonna",
+    "group_id": "g_brand_bellmadonna"
   },
   {
     "id": 1065,
@@ -50749,7 +50972,8 @@
       "1065_1065-93",
       "1065_1065-94"
     ],
-    "brandId": "bunny_room"
+    "brandId": "bunny_room",
+    "group_id": "g_brand_bunny_room"
   },
   {
     "id": 1118,
@@ -50837,7 +51061,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1107,
@@ -50919,7 +51144,8 @@
       "1107_1107-55",
       "1107_1107-56"
     ],
-    "brandId": "dsp"
+    "brandId": "dsp",
+    "group_id": "g_brand_dsp"
   },
   {
     "id": 1066,
@@ -51023,7 +51249,8 @@
       "1066_1066-82",
       "1066_1066-83"
     ],
-    "brandId": "first_class"
+    "brandId": "first_class",
+    "group_id": "g_brand_first_class"
   },
   {
     "id": 1115,
@@ -51106,7 +51333,8 @@
       "1115_1115-58",
       "1115_1115-59"
     ],
-    "brandId": "furyu"
+    "brandId": "furyu",
+    "group_id": "g_brand_furyu"
   },
   {
     "id": 1114,
@@ -51167,7 +51395,8 @@
       "1114_1114-35",
       "1114_1114-36"
     ],
-    "brandId": "kakurega"
+    "brandId": "kakurega",
+    "group_id": "g_brand_kakurega"
   },
   {
     "id": 1117,
@@ -51191,7 +51420,8 @@
     "nearestStation": "堺筋本町駅/長堀橋駅/京橋駅",
     "description": "大阪（堺筋本町・長堀橋・京橋）のメンズエステ。90分14,000円から。オイルデトックスコースなど。",
     "therapists": [],
-    "brandId": "kireina_salon"
+    "brandId": "kireina_salon",
+    "group_id": "g_brand_kireina_salon"
   },
   {
     "id": 1116,
@@ -51294,7 +51524,8 @@
       "1116_1116-77",
       "1116_1116-78"
     ],
-    "brandId": "majimespa"
+    "brandId": "majimespa",
+    "group_id": "g_brand_majimespa"
   },
   {
     "id": 1107,
@@ -51376,7 +51607,8 @@
       "1107_1107-55",
       "1107_1107-56"
     ],
-    "brandId": "dsp"
+    "brandId": "dsp",
+    "group_id": "g_brand_dsp"
   },
   {
     "id": 1094,
@@ -51469,7 +51701,8 @@
       "1094_1094-67",
       "1094_1094-68"
     ],
-    "brandId": "lirica"
+    "brandId": "lirica",
+    "group_id": "g_brand_lirica"
   },
   {
     "id": 1068,
@@ -51656,7 +51889,8 @@
       "1068_1068-163",
       "1068_1068-164"
     ],
-    "brandId": "bimajo_therapy"
+    "brandId": "bimajo_therapy",
+    "group_id": "g_brand_bimajo_therapy"
   },
   {
     "id": 1114,
@@ -51717,7 +51951,8 @@
       "1114_1114-35",
       "1114_1114-36"
     ],
-    "brandId": "kakurega"
+    "brandId": "kakurega",
+    "group_id": "g_brand_kakurega"
   },
   {
     "id": 1088,
@@ -51739,7 +51974,8 @@
     "nearestStation": "肥後橋駅/南森町駅/北浜駅/堺筋本町駅",
     "description": "大阪（肥後橋・南森町・北浜・堺筋本町）の熟女専門メンズエステ。癒しのひとときをご提供します。",
     "therapists": [],
-    "brandId": "kansya"
+    "brandId": "kansya",
+    "group_id": "g_brand_kansya"
   },
   {
     "id": 1112,
@@ -51857,7 +52093,8 @@
       "1112_1112-91",
       "1112_1112-92"
     ],
-    "brandId": "frog_spa"
+    "brandId": "frog_spa",
+    "group_id": "g_brand_frog_spa"
   },
   {
     "id": 1113,
@@ -51927,7 +52164,8 @@
       "1113_1113-44",
       "1113_1113-45"
     ],
-    "brandId": "skit"
+    "brandId": "skit",
+    "group_id": "g_brand_skit"
   },
   {
     "id": 1095,
@@ -51988,7 +52226,8 @@
       "1095_1095-35",
       "1095_1095-36"
     ],
-    "brandId": "amaou"
+    "brandId": "amaou",
+    "group_id": "g_brand_amaou"
   },
   {
     "id": 1068,
@@ -52175,7 +52414,8 @@
       "1068_1068-163",
       "1068_1068-164"
     ],
-    "brandId": "bimajo_therapy"
+    "brandId": "bimajo_therapy",
+    "group_id": "g_brand_bimajo_therapy"
   },
   {
     "id": 1117,
@@ -52199,7 +52439,8 @@
     "nearestStation": "堺筋本町駅/長堀橋駅/京橋駅",
     "description": "大阪（堺筋本町・長堀橋・京橋）のメンズエステ。90分14,000円から。オイルデトックスコースなど。",
     "therapists": [],
-    "brandId": "kireina_salon"
+    "brandId": "kireina_salon",
+    "group_id": "g_brand_kireina_salon"
   },
   {
     "id": 1096,
@@ -52244,7 +52485,8 @@
       "1096_1096-23",
       "1096_1096-24"
     ],
-    "brandId": "queen_spumante"
+    "brandId": "queen_spumante",
+    "group_id": "g_brand_queen_spumante"
   },
   {
     "id": 1066,
@@ -52351,7 +52593,8 @@
       "1066_1066-82",
       "1066_1066-83"
     ],
-    "brandId": "first_class"
+    "brandId": "first_class",
+    "group_id": "g_brand_first_class"
   },
   {
     "id": 1107,
@@ -52433,7 +52676,8 @@
       "1107_1107-55",
       "1107_1107-56"
     ],
-    "brandId": "dsp"
+    "brandId": "dsp",
+    "group_id": "g_brand_dsp"
   },
   {
     "id": 1066,
@@ -52537,7 +52781,8 @@
       "1066_1066-82",
       "1066_1066-83"
     ],
-    "brandId": "first_class"
+    "brandId": "first_class",
+    "group_id": "g_brand_first_class"
   },
   {
     "id": 1101,
@@ -52654,7 +52899,8 @@
       "1101_1101-95",
       "1101_1101-96"
     ],
-    "brandId": "leonspa_gold"
+    "brandId": "leonspa_gold",
+    "group_id": "g_brand_leonspa_gold"
   },
   {
     "id": 1100,
@@ -52870,7 +53116,8 @@
       "1100_1100-189",
       "1100_1100-190"
     ],
-    "brandId": "mrs_viaura"
+    "brandId": "mrs_viaura",
+    "group_id": "g_brand_mrs_viaura"
   },
   {
     "id": 1095,
@@ -52931,7 +53178,8 @@
       "1095_1095-35",
       "1095_1095-36"
     ],
-    "brandId": "amaou"
+    "brandId": "amaou",
+    "group_id": "g_brand_amaou"
   },
   {
     "id": 1071,
@@ -53034,7 +53282,8 @@
       "1071_1071-79",
       "1071_1071-80"
     ],
-    "brandId": "aroma_one"
+    "brandId": "aroma_one",
+    "group_id": "g_brand_aroma_one"
   },
   {
     "id": 1109,
@@ -53215,7 +53464,8 @@
       "1109_1109-152",
       "1109_1109-153"
     ],
-    "brandId": "bellmadonna"
+    "brandId": "bellmadonna",
+    "group_id": "g_brand_bellmadonna"
   },
   {
     "id": 1068,
@@ -53402,7 +53652,8 @@
       "1068_1068-163",
       "1068_1068-164"
     ],
-    "brandId": "bimajo_therapy"
+    "brandId": "bimajo_therapy",
+    "group_id": "g_brand_bimajo_therapy"
   },
   {
     "id": 1065,
@@ -53517,7 +53768,8 @@
       "1065_1065-93",
       "1065_1065-94"
     ],
-    "brandId": "bunny_room"
+    "brandId": "bunny_room",
+    "group_id": "g_brand_bunny_room"
   },
   {
     "id": 1118,
@@ -53605,7 +53857,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1092,
@@ -53686,7 +53939,8 @@
       "1092_1092-55",
       "1092_1092-56"
     ],
-    "brandId": "cream"
+    "brandId": "cream",
+    "group_id": "g_brand_cream"
   },
   {
     "id": 1107,
@@ -53768,7 +54022,8 @@
       "1107_1107-55",
       "1107_1107-56"
     ],
-    "brandId": "dsp"
+    "brandId": "dsp",
+    "group_id": "g_brand_dsp"
   },
   {
     "id": 1078,
@@ -53852,7 +54107,8 @@
       "1078_1078-58",
       "1078_1078-59"
     ],
-    "brandId": "es_doll"
+    "brandId": "es_doll",
+    "group_id": "g_brand_es_doll"
   },
   {
     "id": 1066,
@@ -53956,7 +54212,8 @@
       "1066_1066-82",
       "1066_1066-83"
     ],
-    "brandId": "first_class"
+    "brandId": "first_class",
+    "group_id": "g_brand_first_class"
   },
   {
     "id": 1106,
@@ -54033,7 +54290,8 @@
       "1106_1106-48",
       "1106_1106-49"
     ],
-    "brandId": "madam_gentleman"
+    "brandId": "madam_gentleman",
+    "group_id": "g_brand_madam_gentleman"
   },
   {
     "id": 1116,
@@ -54136,7 +54394,8 @@
       "1116_1116-77",
       "1116_1116-78"
     ],
-    "brandId": "majimespa"
+    "brandId": "majimespa",
+    "group_id": "g_brand_majimespa"
   },
   {
     "id": 1097,
@@ -54210,7 +54469,8 @@
       "1097_1097-48",
       "1097_1097-49"
     ],
-    "brandId": "milktea"
+    "brandId": "milktea",
+    "group_id": "g_brand_milktea"
   },
   {
     "id": 1087,
@@ -54336,7 +54596,8 @@
       "1087_1087-98",
       "1087_1087-99"
     ],
-    "brandId": "mrs_moonr"
+    "brandId": "mrs_moonr",
+    "group_id": "g_brand_mrs_moonr"
   },
   {
     "id": 1108,
@@ -54475,7 +54736,8 @@
       "1108_1108-112",
       "1108_1108-113"
     ],
-    "brandId": "orenoie"
+    "brandId": "orenoie",
+    "group_id": "g_brand_orenoie"
   },
   {
     "id": 1099,
@@ -54542,7 +54804,8 @@
       "1099_1099-40",
       "1099_1099-41"
     ],
-    "brandId": "sanando"
+    "brandId": "sanando",
+    "group_id": "g_brand_sanando"
   },
   {
     "id": 1113,
@@ -54612,7 +54875,8 @@
       "1113_1113-44",
       "1113_1113-45"
     ],
-    "brandId": "skit"
+    "brandId": "skit",
+    "group_id": "g_brand_skit"
   },
   {
     "id": 1091,
@@ -54701,7 +54965,8 @@
       "1091_1091-65",
       "1091_1091-66"
     ],
-    "brandId": "sr_himawari"
+    "brandId": "sr_himawari",
+    "group_id": "g_brand_sr_himawari"
   },
   {
     "id": 1111,
@@ -54768,7 +55033,8 @@
       "1111_1111-41",
       "1111_1111-42"
     ],
-    "brandId": "super_happy"
+    "brandId": "super_happy",
+    "group_id": "g_brand_super_happy"
   },
   {
     "id": 1093,
@@ -54841,7 +55107,8 @@
       "1093_1093-49",
       "1093_1093-50"
     ],
-    "brandId": "tenjoubito_pr"
+    "brandId": "tenjoubito_pr",
+    "group_id": "g_brand_tenjoubito_pr"
   },
   {
     "id": 1109,
@@ -55022,7 +55289,8 @@
       "1109_1109-152",
       "1109_1109-153"
     ],
-    "brandId": "bellmadonna"
+    "brandId": "bellmadonna",
+    "group_id": "g_brand_bellmadonna"
   },
   {
     "id": 1118,
@@ -55110,7 +55378,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1082,
@@ -55225,7 +55494,8 @@
       "1082_1082-89",
       "1082_1082-90"
     ],
-    "brandId": "mokukindo"
+    "brandId": "mokukindo",
+    "group_id": "g_brand_mokukindo"
   },
   {
     "id": 1109,
@@ -55406,7 +55676,8 @@
       "1109_1109-152",
       "1109_1109-153"
     ],
-    "brandId": "bellmadonna"
+    "brandId": "bellmadonna",
+    "group_id": "g_brand_bellmadonna"
   },
   {
     "id": 1065,
@@ -55521,7 +55792,8 @@
       "1065_1065-93",
       "1065_1065-94"
     ],
-    "brandId": "bunny_room"
+    "brandId": "bunny_room",
+    "group_id": "g_brand_bunny_room"
   },
   {
     "id": 1118,
@@ -55609,7 +55881,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1085,
@@ -55735,7 +56008,8 @@
       "1085_1085-102",
       "1085_1085-103"
     ],
-    "brandId": "komoriuta"
+    "brandId": "komoriuta",
+    "group_id": "g_brand_komoriuta"
   },
   {
     "id": 1103,
@@ -55802,7 +56076,8 @@
       "1103_1103-40",
       "1103_1103-41"
     ],
-    "brandId": "leonspa"
+    "brandId": "leonspa",
+    "group_id": "g_brand_leonspa"
   },
   {
     "id": 1101,
@@ -55919,7 +56194,8 @@
       "1101_1101-95",
       "1101_1101-96"
     ],
-    "brandId": "leonspa_gold"
+    "brandId": "leonspa_gold",
+    "group_id": "g_brand_leonspa_gold"
   },
   {
     "id": 1087,
@@ -56045,7 +56321,8 @@
       "1087_1087-98",
       "1087_1087-99"
     ],
-    "brandId": "mrs_moonr"
+    "brandId": "mrs_moonr",
+    "group_id": "g_brand_mrs_moonr"
   },
   {
     "id": 1076,
@@ -56132,7 +56409,8 @@
       "1076_1076-65",
       "1076_1076-66"
     ],
-    "brandId": "sr_himawari"
+    "brandId": "sr_himawari",
+    "group_id": "g_brand_sr_himawari"
   },
   {
     "id": 1095,
@@ -56193,7 +56471,8 @@
       "1095_1095-35",
       "1095_1095-36"
     ],
-    "brandId": "amaou"
+    "brandId": "amaou",
+    "group_id": "g_brand_amaou"
   },
   {
     "id": 1109,
@@ -56374,7 +56653,8 @@
       "1109_1109-152",
       "1109_1109-153"
     ],
-    "brandId": "bellmadonna"
+    "brandId": "bellmadonna",
+    "group_id": "g_brand_bellmadonna"
   },
   {
     "id": 1068,
@@ -56561,7 +56841,8 @@
       "1068_1068-163",
       "1068_1068-164"
     ],
-    "brandId": "bimajo_therapy"
+    "brandId": "bimajo_therapy",
+    "group_id": "g_brand_bimajo_therapy"
   },
   {
     "id": 1118,
@@ -56649,7 +56930,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1092,
@@ -56730,7 +57012,8 @@
       "1092_1092-55",
       "1092_1092-56"
     ],
-    "brandId": "cream"
+    "brandId": "cream",
+    "group_id": "g_brand_cream"
   },
   {
     "id": 1107,
@@ -56812,7 +57095,8 @@
       "1107_1107-55",
       "1107_1107-56"
     ],
-    "brandId": "dsp"
+    "brandId": "dsp",
+    "group_id": "g_brand_dsp"
   },
   {
     "id": 1078,
@@ -56896,7 +57180,8 @@
       "1078_1078-58",
       "1078_1078-59"
     ],
-    "brandId": "es_doll"
+    "brandId": "es_doll",
+    "group_id": "g_brand_es_doll"
   },
   {
     "id": 1066,
@@ -57000,7 +57285,8 @@
       "1066_1066-82",
       "1066_1066-83"
     ],
-    "brandId": "first_class"
+    "brandId": "first_class",
+    "group_id": "g_brand_first_class"
   },
   {
     "id": 1112,
@@ -57118,7 +57404,8 @@
       "1112_1112-91",
       "1112_1112-92"
     ],
-    "brandId": "frog_spa"
+    "brandId": "frog_spa",
+    "group_id": "g_brand_frog_spa"
   },
   {
     "id": 1115,
@@ -57201,7 +57488,8 @@
       "1115_1115-58",
       "1115_1115-59"
     ],
-    "brandId": "furyu"
+    "brandId": "furyu",
+    "group_id": "g_brand_furyu"
   },
   {
     "id": 1080,
@@ -57245,7 +57533,8 @@
       "1080_1080-22",
       "1080_1080-23"
     ],
-    "brandId": "goat"
+    "brandId": "goat",
+    "group_id": "g_brand_goat"
   },
   {
     "id": 1088,
@@ -57267,7 +57556,8 @@
     "nearestStation": "肥後橋駅/南森町駅/北浜駅/堺筋本町駅",
     "description": "大阪（肥後橋・南森町・北浜・堺筋本町）の熟女専門メンズエステ。癒しのひとときをご提供します。",
     "therapists": [],
-    "brandId": "kansya"
+    "brandId": "kansya",
+    "group_id": "g_brand_kansya"
   },
   {
     "id": 1117,
@@ -57291,7 +57581,8 @@
     "nearestStation": "堺筋本町駅/長堀橋駅/京橋駅",
     "description": "大阪（堺筋本町・長堀橋・京橋）のメンズエステ。90分14,000円から。オイルデトックスコースなど。",
     "therapists": [],
-    "brandId": "kireina_salon"
+    "brandId": "kireina_salon",
+    "group_id": "g_brand_kireina_salon"
   },
   {
     "id": 1077,
@@ -57384,7 +57675,8 @@
       "1077_1077-67",
       "1077_1077-68"
     ],
-    "brandId": "kokoronoyurikago"
+    "brandId": "kokoronoyurikago",
+    "group_id": "g_brand_kokoronoyurikago"
   },
   {
     "id": 1085,
@@ -57510,7 +57802,8 @@
       "1085_1085-102",
       "1085_1085-103"
     ],
-    "brandId": "komoriuta"
+    "brandId": "komoriuta",
+    "group_id": "g_brand_komoriuta"
   },
   {
     "id": 1094,
@@ -57603,7 +57896,8 @@
       "1094_1094-67",
       "1094_1094-68"
     ],
-    "brandId": "lirica"
+    "brandId": "lirica",
+    "group_id": "g_brand_lirica"
   },
   {
     "id": 1116,
@@ -57706,7 +58000,8 @@
       "1116_1116-77",
       "1116_1116-78"
     ],
-    "brandId": "majimespa"
+    "brandId": "majimespa",
+    "group_id": "g_brand_majimespa"
   },
   {
     "id": 1087,
@@ -57832,7 +58127,8 @@
       "1087_1087-98",
       "1087_1087-99"
     ],
-    "brandId": "mrs_moonr"
+    "brandId": "mrs_moonr",
+    "group_id": "g_brand_mrs_moonr"
   },
   {
     "id": 1096,
@@ -57877,7 +58173,8 @@
       "1096_1096-23",
       "1096_1096-24"
     ],
-    "brandId": "queen_spumante"
+    "brandId": "queen_spumante",
+    "group_id": "g_brand_queen_spumante"
   },
   {
     "id": 1113,
@@ -57947,7 +58244,8 @@
       "1113_1113-44",
       "1113_1113-45"
     ],
-    "brandId": "skit"
+    "brandId": "skit",
+    "group_id": "g_brand_skit"
   },
   {
     "id": 1098,
@@ -58023,7 +58321,8 @@
       "1098_1098-48",
       "1098_1098-49"
     ],
-    "brandId": "spalot_mrs"
+    "brandId": "spalot_mrs",
+    "group_id": "g_brand_spalot_mrs"
   },
   {
     "id": 1091,
@@ -58112,7 +58411,8 @@
       "1091_1091-65",
       "1091_1091-66"
     ],
-    "brandId": "sr_himawari"
+    "brandId": "sr_himawari",
+    "group_id": "g_brand_sr_himawari"
   },
   {
     "id": 1105,
@@ -58200,7 +58500,8 @@
       "1105_1105-60",
       "1105_1105-61"
     ],
-    "brandId": "tamanegi"
+    "brandId": "tamanegi",
+    "group_id": "g_brand_tamanegi"
   },
   {
     "id": 1093,
@@ -58273,7 +58574,8 @@
       "1093_1093-49",
       "1093_1093-50"
     ],
-    "brandId": "tenjoubito_pr"
+    "brandId": "tenjoubito_pr",
+    "group_id": "g_brand_tenjoubito_pr"
   },
   {
     "id": 1104,
@@ -58382,7 +58684,8 @@
       "1104_1104-82",
       "1104_1104-83"
     ],
-    "brandId": "wife_line"
+    "brandId": "wife_line",
+    "group_id": "g_brand_wife_line"
   },
   {
     "id": 1089,
@@ -58490,7 +58793,8 @@
       "1089_1089-82",
       "1089_1089-83"
     ],
-    "brandId": "wifeline"
+    "brandId": "wifeline",
+    "group_id": "g_brand_wifeline"
   },
   {
     "id": 1101,
@@ -58607,7 +58911,8 @@
       "1101_1101-95",
       "1101_1101-96"
     ],
-    "brandId": "leonspa_gold"
+    "brandId": "leonspa_gold",
+    "group_id": "g_brand_leonspa_gold"
   },
   {
     "id": 1100,
@@ -58823,7 +59128,8 @@
       "1100_1100-189",
       "1100_1100-190"
     ],
-    "brandId": "mrs_viaura"
+    "brandId": "mrs_viaura",
+    "group_id": "g_brand_mrs_viaura"
   },
   {
     "id": 1109,
@@ -59004,7 +59310,8 @@
       "1109_1109-152",
       "1109_1109-153"
     ],
-    "brandId": "bellmadonna"
+    "brandId": "bellmadonna",
+    "group_id": "g_brand_bellmadonna"
   },
   {
     "id": 1065,
@@ -59119,7 +59426,8 @@
       "1065_1065-93",
       "1065_1065-94"
     ],
-    "brandId": "bunny_room"
+    "brandId": "bunny_room",
+    "group_id": "g_brand_bunny_room"
   },
   {
     "id": 1118,
@@ -59207,7 +59515,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1107,
@@ -59289,7 +59598,8 @@
       "1107_1107-55",
       "1107_1107-56"
     ],
-    "brandId": "dsp"
+    "brandId": "dsp",
+    "group_id": "g_brand_dsp"
   },
   {
     "id": 1066,
@@ -59393,7 +59703,8 @@
       "1066_1066-82",
       "1066_1066-83"
     ],
-    "brandId": "first_class"
+    "brandId": "first_class",
+    "group_id": "g_brand_first_class"
   },
   {
     "id": 1077,
@@ -59486,7 +59797,8 @@
       "1077_1077-67",
       "1077_1077-68"
     ],
-    "brandId": "kokoronoyurikago"
+    "brandId": "kokoronoyurikago",
+    "group_id": "g_brand_kokoronoyurikago"
   },
   {
     "id": 1085,
@@ -59612,7 +59924,8 @@
       "1085_1085-102",
       "1085_1085-103"
     ],
-    "brandId": "komoriuta"
+    "brandId": "komoriuta",
+    "group_id": "g_brand_komoriuta"
   },
   {
     "id": 1116,
@@ -59715,7 +60028,8 @@
       "1116_1116-77",
       "1116_1116-78"
     ],
-    "brandId": "majimespa"
+    "brandId": "majimespa",
+    "group_id": "g_brand_majimespa"
   },
   {
     "id": 1082,
@@ -59830,7 +60144,8 @@
       "1082_1082-89",
       "1082_1082-90"
     ],
-    "brandId": "mokukindo"
+    "brandId": "mokukindo",
+    "group_id": "g_brand_mokukindo"
   },
   {
     "id": 1100,
@@ -60046,7 +60361,8 @@
       "1100_1100-189",
       "1100_1100-190"
     ],
-    "brandId": "mrs_viaura"
+    "brandId": "mrs_viaura",
+    "group_id": "g_brand_mrs_viaura"
   },
   {
     "id": 1073,
@@ -60141,7 +60457,8 @@
       "1073_1073-73",
       "1073_1073-74"
     ],
-    "brandId": "my_mama_spa"
+    "brandId": "my_mama_spa",
+    "group_id": "g_brand_my_mama_spa"
   },
   {
     "id": 1098,
@@ -60217,7 +60534,8 @@
       "1098_1098-48",
       "1098_1098-49"
     ],
-    "brandId": "spalot_mrs"
+    "brandId": "spalot_mrs",
+    "group_id": "g_brand_spalot_mrs"
   },
   {
     "id": 1091,
@@ -60306,7 +60624,8 @@
       "1091_1091-65",
       "1091_1091-66"
     ],
-    "brandId": "sr_himawari"
+    "brandId": "sr_himawari",
+    "group_id": "g_brand_sr_himawari"
   },
   {
     "id": 1107,
@@ -60388,7 +60707,8 @@
       "1107_1107-55",
       "1107_1107-56"
     ],
-    "brandId": "dsp"
+    "brandId": "dsp",
+    "group_id": "g_brand_dsp"
   },
   {
     "id": 1066,
@@ -60492,7 +60812,8 @@
       "1066_1066-82",
       "1066_1066-83"
     ],
-    "brandId": "first_class"
+    "brandId": "first_class",
+    "group_id": "g_brand_first_class"
   },
   {
     "id": 1113,
@@ -60562,7 +60883,8 @@
       "1113_1113-44",
       "1113_1113-45"
     ],
-    "brandId": "skit"
+    "brandId": "skit",
+    "group_id": "g_brand_skit"
   },
   {
     "id": 1091,
@@ -60651,7 +60973,8 @@
       "1091_1091-65",
       "1091_1091-66"
     ],
-    "brandId": "sr_himawari"
+    "brandId": "sr_himawari",
+    "group_id": "g_brand_sr_himawari"
   },
   {
     "id": 1100,
@@ -60867,7 +61190,8 @@
       "1100_1100-189",
       "1100_1100-190"
     ],
-    "brandId": "mrs_viaura"
+    "brandId": "mrs_viaura",
+    "group_id": "g_brand_mrs_viaura"
   },
   {
     "id": 1091,
@@ -60956,7 +61280,8 @@
       "1091_1091-65",
       "1091_1091-66"
     ],
-    "brandId": "sr_himawari"
+    "brandId": "sr_himawari",
+    "group_id": "g_brand_sr_himawari"
   },
   {
     "id": 1105,
@@ -61044,7 +61369,8 @@
       "1105_1105-60",
       "1105_1105-61"
     ],
-    "brandId": "tamanegi"
+    "brandId": "tamanegi",
+    "group_id": "g_brand_tamanegi"
   },
   {
     "id": 1089,
@@ -61152,7 +61478,8 @@
       "1089_1089-82",
       "1089_1089-83"
     ],
-    "brandId": "wifeline"
+    "brandId": "wifeline",
+    "group_id": "g_brand_wifeline"
   },
   {
     "id": 1095,
@@ -61213,7 +61540,8 @@
       "1095_1095-35",
       "1095_1095-36"
     ],
-    "brandId": "amaou"
+    "brandId": "amaou",
+    "group_id": "g_brand_amaou"
   },
   {
     "id": 1109,
@@ -61394,7 +61722,8 @@
       "1109_1109-152",
       "1109_1109-153"
     ],
-    "brandId": "bellmadonna"
+    "brandId": "bellmadonna",
+    "group_id": "g_brand_bellmadonna"
   },
   {
     "id": 1065,
@@ -61509,7 +61838,8 @@
       "1065_1065-93",
       "1065_1065-94"
     ],
-    "brandId": "bunny_room"
+    "brandId": "bunny_room",
+    "group_id": "g_brand_bunny_room"
   },
   {
     "id": 1118,
@@ -61597,7 +61927,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1092,
@@ -61678,7 +62009,8 @@
       "1092_1092-55",
       "1092_1092-56"
     ],
-    "brandId": "cream"
+    "brandId": "cream",
+    "group_id": "g_brand_cream"
   },
   {
     "id": 1107,
@@ -61760,7 +62092,8 @@
       "1107_1107-55",
       "1107_1107-56"
     ],
-    "brandId": "dsp"
+    "brandId": "dsp",
+    "group_id": "g_brand_dsp"
   },
   {
     "id": 1066,
@@ -61864,7 +62197,8 @@
       "1066_1066-82",
       "1066_1066-83"
     ],
-    "brandId": "first_class"
+    "brandId": "first_class",
+    "group_id": "g_brand_first_class"
   },
   {
     "id": 1106,
@@ -61941,7 +62275,8 @@
       "1106_1106-48",
       "1106_1106-49"
     ],
-    "brandId": "madam_gentleman"
+    "brandId": "madam_gentleman",
+    "group_id": "g_brand_madam_gentleman"
   },
   {
     "id": 1116,
@@ -62044,7 +62379,8 @@
       "1116_1116-77",
       "1116_1116-78"
     ],
-    "brandId": "majimespa"
+    "brandId": "majimespa",
+    "group_id": "g_brand_majimespa"
   },
   {
     "id": 1087,
@@ -62170,7 +62506,8 @@
       "1087_1087-98",
       "1087_1087-99"
     ],
-    "brandId": "mrs_moonr"
+    "brandId": "mrs_moonr",
+    "group_id": "g_brand_mrs_moonr"
   },
   {
     "id": 1108,
@@ -62309,7 +62646,8 @@
       "1108_1108-112",
       "1108_1108-113"
     ],
-    "brandId": "orenoie"
+    "brandId": "orenoie",
+    "group_id": "g_brand_orenoie"
   },
   {
     "id": 1091,
@@ -62398,7 +62736,8 @@
       "1091_1091-65",
       "1091_1091-66"
     ],
-    "brandId": "sr_himawari"
+    "brandId": "sr_himawari",
+    "group_id": "g_brand_sr_himawari"
   },
   {
     "id": 1111,
@@ -62465,7 +62804,8 @@
       "1111_1111-41",
       "1111_1111-42"
     ],
-    "brandId": "super_happy"
+    "brandId": "super_happy",
+    "group_id": "g_brand_super_happy"
   },
   {
     "id": 1068,
@@ -62652,7 +62992,8 @@
       "1068_1068-163",
       "1068_1068-164"
     ],
-    "brandId": "bimajo_therapy"
+    "brandId": "bimajo_therapy",
+    "group_id": "g_brand_bimajo_therapy"
   },
   {
     "id": 1065,
@@ -62767,7 +63108,8 @@
       "1065_1065-93",
       "1065_1065-94"
     ],
-    "brandId": "bunny_room"
+    "brandId": "bunny_room",
+    "group_id": "g_brand_bunny_room"
   },
   {
     "id": 1108,
@@ -62906,7 +63248,8 @@
       "1108_1108-112",
       "1108_1108-113"
     ],
-    "brandId": "orenoie"
+    "brandId": "orenoie",
+    "group_id": "g_brand_orenoie"
   },
   {
     "id": 1075,
@@ -63048,7 +63391,8 @@
       "1075_1075-120",
       "1075_1075-121"
     ],
-    "brandId": "beauty_and_beast"
+    "brandId": "beauty_and_beast",
+    "group_id": "g_brand_beauty_and_beast"
   },
   {
     "id": 1109,
@@ -63229,7 +63573,8 @@
       "1109_1109-152",
       "1109_1109-153"
     ],
-    "brandId": "bellmadonna"
+    "brandId": "bellmadonna",
+    "group_id": "g_brand_bellmadonna"
   },
   {
     "id": 1068,
@@ -63416,7 +63761,8 @@
       "1068_1068-163",
       "1068_1068-164"
     ],
-    "brandId": "bimajo_therapy"
+    "brandId": "bimajo_therapy",
+    "group_id": "g_brand_bimajo_therapy"
   },
   {
     "id": 1065,
@@ -63531,7 +63877,8 @@
       "1065_1065-93",
       "1065_1065-94"
     ],
-    "brandId": "bunny_room"
+    "brandId": "bunny_room",
+    "group_id": "g_brand_bunny_room"
   },
   {
     "id": 1118,
@@ -63619,7 +63966,8 @@
       "1118_1118-61",
       "1118_1118-62"
     ],
-    "brandId": "celeb_spa"
+    "brandId": "celeb_spa",
+    "group_id": "g_brand_celeb_spa"
   },
   {
     "id": 1067,
@@ -63751,7 +64099,8 @@
       "1067_1067-110",
       "1067_1067-111"
     ],
-    "brandId": "darlin_premium"
+    "brandId": "darlin_premium",
+    "group_id": "g_brand_darlin_premium"
   },
   {
     "id": 1107,
@@ -63833,7 +64182,8 @@
       "1107_1107-55",
       "1107_1107-56"
     ],
-    "brandId": "dsp"
+    "brandId": "dsp",
+    "group_id": "g_brand_dsp"
   },
   {
     "id": 1066,
@@ -63937,7 +64287,8 @@
       "1066_1066-82",
       "1066_1066-83"
     ],
-    "brandId": "first_class"
+    "brandId": "first_class",
+    "group_id": "g_brand_first_class"
   },
   {
     "id": 1115,
@@ -64020,7 +64371,8 @@
       "1115_1115-58",
       "1115_1115-59"
     ],
-    "brandId": "furyu"
+    "brandId": "furyu",
+    "group_id": "g_brand_furyu"
   },
   {
     "id": 1080,
@@ -64064,7 +64416,8 @@
       "1080_1080-22",
       "1080_1080-23"
     ],
-    "brandId": "goat"
+    "brandId": "goat",
+    "group_id": "g_brand_goat"
   },
   {
     "id": 1114,
@@ -64125,7 +64478,8 @@
       "1114_1114-35",
       "1114_1114-36"
     ],
-    "brandId": "kakurega"
+    "brandId": "kakurega",
+    "group_id": "g_brand_kakurega"
   },
   {
     "id": 1077,
@@ -64218,7 +64572,8 @@
       "1077_1077-67",
       "1077_1077-68"
     ],
-    "brandId": "kokoronoyurikago"
+    "brandId": "kokoronoyurikago",
+    "group_id": "g_brand_kokoronoyurikago"
   },
   {
     "id": 1069,
@@ -64331,7 +64686,8 @@
       "1069_1069-91",
       "1069_1069-92"
     ],
-    "brandId": "lavieet"
+    "brandId": "lavieet",
+    "group_id": "g_brand_lavieet"
   },
   {
     "id": 1094,
@@ -64424,7 +64780,8 @@
       "1094_1094-67",
       "1094_1094-68"
     ],
-    "brandId": "lirica"
+    "brandId": "lirica",
+    "group_id": "g_brand_lirica"
   },
   {
     "id": 1106,
@@ -64501,7 +64858,8 @@
       "1106_1106-48",
       "1106_1106-49"
     ],
-    "brandId": "madam_gentleman"
+    "brandId": "madam_gentleman",
+    "group_id": "g_brand_madam_gentleman"
   },
   {
     "id": 1116,
@@ -64604,7 +64962,8 @@
       "1116_1116-77",
       "1116_1116-78"
     ],
-    "brandId": "majimespa"
+    "brandId": "majimespa",
+    "group_id": "g_brand_majimespa"
   },
   {
     "id": 1081,
@@ -64661,7 +65020,8 @@
       "1081_1081-31",
       "1081_1081-32"
     ],
-    "brandId": "mufufu"
+    "brandId": "mufufu",
+    "group_id": "g_brand_mufufu"
   },
   {
     "id": 1073,
@@ -64756,7 +65116,8 @@
       "1073_1073-73",
       "1073_1073-74"
     ],
-    "brandId": "my_mama_spa"
+    "brandId": "my_mama_spa",
+    "group_id": "g_brand_my_mama_spa"
   },
   {
     "id": 1108,
@@ -64895,7 +65256,8 @@
       "1108_1108-112",
       "1108_1108-113"
     ],
-    "brandId": "orenoie"
+    "brandId": "orenoie",
+    "group_id": "g_brand_orenoie"
   },
   {
     "id": 1091,
@@ -64984,7 +65346,8 @@
       "1091_1091-65",
       "1091_1091-66"
     ],
-    "brandId": "sr_himawari"
+    "brandId": "sr_himawari",
+    "group_id": "g_brand_sr_himawari"
   },
   {
     "id": 1111,
@@ -65051,7 +65414,8 @@
       "1111_1111-41",
       "1111_1111-42"
     ],
-    "brandId": "super_happy"
+    "brandId": "super_happy",
+    "group_id": "g_brand_super_happy"
   },
   {
     "id": 1070,
@@ -65116,7 +65480,8 @@
       "1070_1070-41",
       "1070_1070-42"
     ],
-    "brandId": "super_happy_girls"
+    "brandId": "super_happy_girls",
+    "group_id": "g_brand_super_happy_girls"
   },
   {
     "id": 1179,
@@ -65156,7 +65521,8 @@
       "1179_1179-15",
       "1179_1179-16"
     ],
-    "brandId": "platina"
+    "brandId": "platina",
+    "group_id": "g_brand_platina"
   },
   {
     "id": 997,
@@ -70153,7 +70519,8 @@
         "posts": []
       }
     ],
-    "brandId": "lynx"
+    "brandId": "lynx",
+    "group_id": "g_brand_lynx"
   },
   {
     "id": 77509,
@@ -70253,7 +70620,8 @@
       "77509-yua",
       "77509-nanoha"
     ],
-    "brandId": "limited_spa"
+    "brandId": "limited_spa",
+    "group_id": "g_brand_limited_spa"
   },
   {
     "id": 1162,
@@ -70401,7 +70769,8 @@
       "1162_1162-123",
       "1162_1162-124"
     ],
-    "brandId": "kami_no_esthe"
+    "brandId": "kami_no_esthe",
+    "group_id": "g_brand_kami_no_esthe"
   },
   {
     "id": 1172,
@@ -70453,7 +70822,8 @@
       "1172_1172-27",
       "1172_1172-28"
     ],
-    "brandId": "kyoko_no_shimai"
+    "brandId": "kyoko_no_shimai",
+    "group_id": "g_brand_kyoko_no_shimai"
   },
   {
     "id": 1173,
@@ -70515,7 +70885,8 @@
       "1173_1173-36",
       "1173_1173-37"
     ],
-    "brandId": "lamp_omiya"
+    "brandId": "lamp_omiya",
+    "group_id": "g_brand_lamp_omiya"
   },
   {
     "id": 1166,
@@ -70634,7 +71005,8 @@
       "1166_1166-93",
       "1166_1166-94"
     ],
-    "brandId": "offsuit"
+    "brandId": "offsuit",
+    "group_id": "g_brand_offsuit"
   },
   {
     "id": 6008,
@@ -72130,7 +72502,8 @@
         "posts": []
       }
     ],
-    "brandId": "platinum_tokyo"
+    "brandId": "platinum_tokyo",
+    "group_id": "g_brand_platinum_tokyo"
   },
   {
     "id": 1165,
@@ -72245,7 +72618,8 @@
       "1165_1165-88",
       "1165_1165-89"
     ],
-    "brandId": "queendom"
+    "brandId": "queendom",
+    "group_id": "g_brand_queendom"
   },
   {
     "id": 1171,
@@ -72299,7 +72673,8 @@
       "1171_1171-28",
       "1171_1171-29"
     ],
-    "brandId": "regis"
+    "brandId": "regis",
+    "group_id": "g_brand_regis"
   },
   {
     "id": 996,
@@ -77296,7 +77671,8 @@
         "posts": []
       }
     ],
-    "brandId": "lynx"
+    "brandId": "lynx",
+    "group_id": "g_brand_lynx"
   },
   {
     "id": "himitsu_mrs_room_minamiurawa",
@@ -77336,7 +77712,8 @@
       "himitsu_mrs_room_minamiurawa_石原みか",
       "himitsu_mrs_room_minamiurawa_広瀬ゆり",
       "himitsu_mrs_room_minamiurawa_竹内りな"
-    ]
+    ],
+    "group_id": "g_brand_himitsu_mrs_room"
   },
   {
     "id": "muchispa_minamiurawa",
@@ -77377,7 +77754,8 @@
       "muchispa_minamiurawa_佐々木あい",
       "muchispa_minamiurawa_田中ゆり",
       "muchispa_minamiurawa_中村さき"
-    ]
+    ],
+    "group_id": "g_brand_muchispa_room"
   },
   {
     "id": 1174,
@@ -77459,7 +77837,8 @@
       "1174_1174-55",
       "1174_1174-56"
     ],
-    "brandId": "mens_esthe_tsuma"
+    "brandId": "mens_esthe_tsuma",
+    "group_id": "g_brand_mens_esthe_tsuma"
   },
   {
     "id": 1166,
@@ -77578,7 +77957,8 @@
       "1166_1166-93",
       "1166_1166-94"
     ],
-    "brandId": "offsuit"
+    "brandId": "offsuit",
+    "group_id": "g_brand_offsuit"
   },
   {
     "id": 1171,
@@ -77632,7 +78012,8 @@
       "1171_1171-28",
       "1171_1171-29"
     ],
-    "brandId": "regis"
+    "brandId": "regis",
+    "group_id": "g_brand_regis"
   },
   {
     "id": 1167,
@@ -77736,7 +78117,8 @@
       "1167_1167-78",
       "1167_1167-79"
     ],
-    "brandId": "mabui_spa"
+    "brandId": "mabui_spa",
+    "group_id": "g_brand_mabui_spa"
   },
   {
     "id": 1184,
@@ -77821,7 +78203,8 @@
     "prefecture": "滋賀県",
     "city": "彦根",
     "area": "彦根",
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": "1184_5",
@@ -77906,7 +78289,8 @@
     "prefecture": "滋賀県",
     "city": "草津",
     "area": "草津",
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": "1184_4",
@@ -77991,7 +78375,8 @@
     "prefecture": "滋賀県",
     "city": "大津駅",
     "area": "大津駅",
-    "brandId": "yurikago"
+    "brandId": "yurikago",
+    "group_id": "g_brand_yurikago"
   },
   {
     "id": 1158,
@@ -78076,7 +78461,8 @@
       "1158_1158-60",
       "1158_1158-61"
     ],
-    "brandId": "liora"
+    "brandId": "liora",
+    "group_id": "g_brand_liora"
   },
   {
     "id": 77530,
@@ -78181,7 +78567,8 @@
       "77530-sawajiri-momo",
       "77530-fukagawa-mai"
     ],
-    "brandId": "ryugujo"
+    "brandId": "ryugujo",
+    "group_id": "g_brand_ryugujo"
   },
   {
     "id": 60026,
@@ -79071,7 +79458,8 @@
         "posts": []
       }
     ],
-    "brandId": "shops_backup"
+    "brandId": "shops_backup",
+    "group_id": "g_brand_shops_backup"
   },
   {
     "id": "tokyo_adachi_kitasenju_himitsu_mrs_room",
@@ -79107,7 +79495,8 @@
     "city": "足立区",
     "brandId": "himitsu_mrs_room",
     "threads": [],
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_himitsu_mrs_room"
   },
   {
     "id": "tokyo_adachi_kitasenju_macherie",
@@ -79152,7 +79541,8 @@
       "macherie_石田 ひとみ",
       "macherie_広末 りな",
       "macherie_綾瀬 まゆ"
-    ]
+    ],
+    "group_id": "g_brand_macherie"
   },
   {
     "id": "tokyo_adachi_kitasenju_muchispa_room",
@@ -79194,7 +79584,8 @@
       "muchispa_room_佐々木 あい",
       "muchispa_room_田中 ゆり",
       "muchispa_room_中村 さき"
-    ]
+    ],
+    "group_id": "g_brand_muchispa_room"
   },
   {
     "id": "tokyo_adachi_kitasenju_ranpu_kitasenju",
@@ -79239,7 +79630,8 @@
       "ranpu_kitasenju_堀北 ゆき",
       "ranpu_kitasenju_宮崎 さき",
       "ranpu_kitasenju_相武 みな"
-    ]
+    ],
+    "group_id": "g_brand_ranpu_kitasenju"
   },
   {
     "id": "tokyo_adachi_kitasenju_remis",
@@ -79312,7 +79704,8 @@
       "remis_春先 こはる",
       "remis_白石 あんな",
       "remis_香月 あみ"
-    ]
+    ],
+    "group_id": "g_brand_remis"
   },
   {
     "id": "tokyo_adachi_takenotsuka_aroma_banker",
@@ -79352,7 +79745,8 @@
       "aroma_banker_桜庭 あい",
       "aroma_banker_本多 ちか",
       "aroma_banker_森田 ゆう"
-    ]
+    ],
+    "group_id": "g_brand_aroma_banker"
   },
   {
     "id": "tokyo_adachi_ushida_ranpu_kitasenju",
@@ -79468,7 +79862,8 @@
       "ranpu_kitasenju_朝霞 はる",
       "ranpu_kitasenju_森 みかこ",
       "ranpu_kitasenju_向井 さえ"
-    ]
+    ],
+    "group_id": "g_brand_ranpu_kitasenju"
   },
   {
     "id": "tokyo_arakawa_nippori_aroma_blossom",
@@ -79493,7 +79888,8 @@
     "city": "荒川区",
     "brandId": "aroma_blossom",
     "threads": [],
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aroma_blossom"
   },
   {
     "id": "tokyo_arakawa_nippori_aroma_giraffe",
@@ -79598,7 +79994,8 @@
       "aroma_giraffe_天宮 ゆに",
       "aroma_giraffe_咲良 えり",
       "aroma_giraffe_湊 しゅうか"
-    ]
+    ],
+    "group_id": "g_brand_aroma_giraffe"
   },
   {
     "id": "tokyo_arakawa_nippori_be_majo",
@@ -79670,7 +80067,8 @@
       "be_majo_ひなた",
       "be_majo_かなで",
       "be_majo_まな"
-    ]
+    ],
+    "group_id": "g_brand_be_majo"
   },
   {
     "id": "tokyo_arakawa_nippori_deep_black",
@@ -79733,7 +80131,8 @@
       "deep_black_りの",
       "deep_black_みなみ",
       "deep_black_ひなた"
-    ]
+    ],
+    "group_id": "g_brand_deep_black"
   },
   {
     "id": "tokyo_chiyoda_akihabara_ar_tokyo",
@@ -79869,7 +80268,8 @@
       "ar_tokyo_小池ありさ",
       "ar_tokyo_若狭まほ",
       "ar_tokyo_堀内なつめ"
-    ]
+    ],
+    "group_id": "g_brand_ar_tokyo"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -79962,7 +80362,8 @@
       "aroma_amour_睦月しの",
       "aroma_amour_川越るな",
       "aroma_amour_与田みな"
-    ]
+    ],
+    "group_id": "g_brand_aroma_amour"
   },
   {
     "id": "tokyo_chiyoda_akihabara_aroma_jewels",
@@ -80129,7 +80530,8 @@
       "aroma_jewels_華月 とわ",
       "aroma_jewels_水羽 ゆあ",
       "aroma_jewels_月奈 さほ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_jewels"
   },
   {
     "id": "tokyo_chiyoda_akihabara_aroma_lunabelle_akihabara",
@@ -80214,7 +80616,8 @@
       "aroma_lunabelle_白井もか",
       "aroma_lunabelle_中村ゆり",
       "aroma_lunabelle_月見ゆず"
-    ]
+    ],
+    "group_id": "g_brand_aroma_lunabelle"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -80354,7 +80757,8 @@
       "aroma_maison_長澤あさみ",
       "aroma_maison_峰藤さくら",
       "aroma_maison_広末まなみ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_maison"
   },
   {
     "id": "tokyo_chiyoda_akihabara_aroma_rejina",
@@ -80476,7 +80880,8 @@
       "aroma_rejina_相内 ねね",
       "aroma_rejina_沙月 こなん",
       "aroma_rejina_佐々木 ゆの"
-    ]
+    ],
+    "group_id": "g_brand_aroma_rejina"
   },
   {
     "name": "Assouplir (アスプリー秋葉原店)",
@@ -80562,7 +80967,8 @@
       "assouplir_葉月れな",
       "assouplir_朝倉りら",
       "assouplir_南りょう"
-    ]
+    ],
+    "group_id": "g_brand_assouplir"
   },
   {
     "id": "tokyo_chiyoda_akihabara_hiran_next",
@@ -80621,7 +81027,8 @@
       "hiran_next_藤原まゆ",
       "hiran_next_姫野おんぷ",
       "hiran_next_坂下みお"
-    ]
+    ],
+    "group_id": "g_brand_hiran_next"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -80759,7 +81166,8 @@
       "luxtime_由良のの",
       "luxtime_花咲ひまり",
       "luxtime_美谷はる"
-    ]
+    ],
+    "group_id": "g_brand_luxtime"
   },
   {
     "id": "tokyo_chiyoda_akihabara_lynx",
@@ -81032,7 +81440,8 @@
       "lynx_浦瀬もも",
       "lynx_坂田みなみ",
       "lynx_荻野まなみ"
-    ]
+    ],
+    "group_id": "g_brand_lynx"
   },
   {
     "id": "tokyo_chiyoda_akihabara_prispa",
@@ -81138,7 +81547,8 @@
       "prispa_平井りな",
       "prispa_宮城ゆうな",
       "prispa_真鍋まどか"
-    ]
+    ],
+    "group_id": "g_brand_prispa"
   },
   {
     "name": "Rex (レックス秋葉原店)",
@@ -81208,7 +81618,8 @@
       "rex_一条ななみ",
       "rex_桜咲いおり",
       "rex_北やよい"
-    ]
+    ],
+    "group_id": "g_brand_rex"
   },
   {
     "name": "The Salon (ザ・サロン秋葉原店)",
@@ -81337,7 +81748,8 @@
       "the_salon_あいか",
       "the_salon_めあり",
       "the_salon_こはる"
-    ]
+    ],
+    "group_id": "g_brand_the_salon"
   },
   {
     "name": "Weal (ウィール秋葉原店)",
@@ -81406,7 +81818,8 @@
       "weal_白波みなみ",
       "weal_雪白かのん",
       "weal_七海かな"
-    ]
+    ],
+    "group_id": "g_brand_weal"
   },
   {
     "id": "tokyo_chiyoda_akihabara_zexterior",
@@ -81488,7 +81901,8 @@
       "zexterior_久宝 由奈",
       "zexterior_桃瀬 にこる",
       "zexterior_蒼井 瑠菜"
-    ]
+    ],
+    "group_id": "g_brand_zexterior"
   },
   {
     "id": "tokyo_chiyoda_iidabashi_tokyo_aroma_este",
@@ -81652,7 +82066,8 @@
       "tokyo_aroma_este_天野おうか",
       "tokyo_aroma_este_天使りか",
       "tokyo_aroma_este_宮澤あんず"
-    ]
+    ],
+    "group_id": "g_brand_tokyo_aroma_este"
   },
   {
     "name": "神のエステ (東京・岩本町店)",
@@ -81732,7 +82147,8 @@
       "kami_no_esthe_みるあ",
       "kami_no_esthe_ちぐさ",
       "kami_no_esthe_るるしゅ"
-    ]
+    ],
+    "group_id": "g_brand_kami_no_esthe"
   },
   {
     "id": "tokyo_chiyoda_jimbocho_queens_collection",
@@ -81826,7 +82242,8 @@
       "queens_collection_三田れい",
       "queens_collection_明治なみ",
       "queens_collection_神戸あやな"
-    ]
+    ],
+    "group_id": "g_brand_queens_collection"
   },
   {
     "id": "tokyo_chiyoda_kanda_chill_spa",
@@ -81874,7 +82291,8 @@
       "chill_spa_かすみ",
       "chill_spa_さくら",
       "chill_spa_ひまり"
-    ]
+    ],
+    "group_id": "g_brand_chill_spa"
   },
   {
     "name": "神のエステ (東京・神田店)",
@@ -81954,7 +82372,8 @@
       "kami_no_esthe_みるあ",
       "kami_no_esthe_ちぐさ",
       "kami_no_esthe_るるしゅ"
-    ]
+    ],
+    "group_id": "g_brand_kami_no_esthe"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -82092,7 +82511,8 @@
       "luxtime_由良のの",
       "luxtime_花咲ひまり",
       "luxtime_美谷はる"
-    ]
+    ],
+    "group_id": "g_brand_luxtime"
   },
   {
     "prefecture": "東京都",
@@ -82118,7 +82538,8 @@
     "city": "千代田区",
     "nearestStation": "九段下駅",
     "address": "東京都千代田区九段下エリア",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rondo"
   },
   {
     "id": "tokyo_chiyoda_yotsuya_e_komachi",
@@ -82255,7 +82676,8 @@
       "e_komachi_向坂ひより",
       "e_komachi_葉月りりな",
       "e_komachi_白咲ななみ"
-    ]
+    ],
+    "group_id": "g_brand_e_komachi"
   },
   {
     "id": "tokyo_chiyoda_yotsuya_laulima",
@@ -82294,7 +82716,8 @@
       "laulima_涼風 ななみ",
       "laulima_石田 アイナ",
       "laulima_田中 りえ"
-    ]
+    ],
+    "group_id": "g_brand_laulima"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -82352,7 +82775,8 @@
       "aroma_ella_美澄ゆい",
       "aroma_ella_織原めいか",
       "aroma_ella_有栖るな"
-    ]
+    ],
+    "group_id": "g_brand_aroma_ella"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -82438,7 +82862,8 @@
       "jesse_るな",
       "jesse_まなみ",
       "jesse_姫宮あみ"
-    ]
+    ],
+    "group_id": "g_brand_jesse"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -82581,7 +83006,8 @@
       "kami_chofu_海物語",
       "kami_chofu_るい",
       "kami_chofu_りな"
-    ]
+    ],
+    "group_id": "g_brand_kami_chofu"
   },
   {
     "id": "tokyo_chofu_platinum_tokyo",
@@ -82677,7 +83103,8 @@
       "platinum_tokyo_桜井くるみ",
       "platinum_tokyo_小室まほ",
       "platinum_tokyo_明菜もも"
-    ]
+    ],
+    "group_id": "g_brand_platinum_tokyo"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -82728,7 +83155,8 @@
       "trendy_spa_宮森 みか",
       "trendy_spa_中原 すず",
       "trendy_spa_望月 れい"
-    ]
+    ],
+    "group_id": "g_brand_trendy_spa"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -82861,7 +83289,8 @@
       "unison_spa_野上 ゆかな",
       "unison_spa_五十嵐 あんり",
       "unison_spa_夕季 なつめ"
-    ]
+    ],
+    "group_id": "g_brand_unison_spa"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -82924,7 +83353,8 @@
       "alba_はるな",
       "alba_真理子",
       "alba_なつこ"
-    ]
+    ],
+    "group_id": "g_brand_alba"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -83017,7 +83447,8 @@
       "aroma_amour_睦月しの",
       "aroma_amour_川越るな",
       "aroma_amour_与田みな"
-    ]
+    ],
+    "group_id": "g_brand_aroma_amour"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -83157,7 +83588,8 @@
       "aroma_maison_長澤あさみ",
       "aroma_maison_峰藤さくら",
       "aroma_maison_広末まなみ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_maison"
   },
   {
     "id": "tokyo_chuo_ginza_aromamore",
@@ -83314,7 +83746,8 @@
       "aromamore_有栖川かれん",
       "aromamore_香坂ゆずは",
       "aromamore_有村りお"
-    ]
+    ],
+    "group_id": "g_brand_aromamore"
   },
   {
     "id": "tokyo_chuo_ginza_dejavu-tokyo",
@@ -83579,7 +84012,8 @@
       "dejavu-tokyo_桜井 のあ",
       "dejavu-tokyo_宮田 るな",
       "dejavu-tokyo_久保 まなみ"
-    ]
+    ],
+    "group_id": "g_brand_dejavu-tokyo"
   },
   {
     "id": "tokyo_chuo_ginza_ginza_rich",
@@ -83660,7 +84094,8 @@
       "ginza_rich_西内にじほ",
       "ginza_rich_中里あいな",
       "ginza_rich_徳永りみ"
-    ]
+    ],
+    "group_id": "g_brand_ginza_rich"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -83687,7 +84122,8 @@
     "area": "銀座",
     "nearestStation": "銀座駅",
     "address": "東京都中央区銀座エリア",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_grand_aroma"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -83766,7 +84202,8 @@
       "kami_no_esthe_shinbashi_まりる",
       "kami_no_esthe_shinbashi_のえ",
       "kami_no_esthe_shinbashi_こあい"
-    ]
+    ],
+    "group_id": "g_brand_kami_no_esthe_shinbashi"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -83904,7 +84341,8 @@
       "luxtime_由良のの",
       "luxtime_花咲ひまり",
       "luxtime_美谷はる"
-    ]
+    ],
+    "group_id": "g_brand_luxtime"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -84006,7 +84444,8 @@
       "otonaspa_北川のぞみ",
       "otonaspa_平松ゆりか",
       "otonaspa_浅倉ななみ"
-    ]
+    ],
+    "group_id": "g_brand_otonaspa"
   },
   {
     "id": "tokyo_chuo_ginza_rondo",
@@ -84031,7 +84470,8 @@
     ],
     "brandId": "rondo",
     "threads": [],
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rondo"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -84144,7 +84584,8 @@
       "ryugujo_原みなみ",
       "ryugujo_沢尻もも",
       "ryugujo_深川まい"
-    ]
+    ],
+    "group_id": "g_brand_ryugujo"
   },
   {
     "id": "tokyo_chuo_ginza_salon-blanca",
@@ -84194,7 +84635,8 @@
       "salon-blanca_酒井えりな",
       "salon-blanca_夏目すず",
       "salon-blanca_鈴川ありさ"
-    ]
+    ],
+    "group_id": "g_brand_salon-blanca"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -84250,7 +84692,8 @@
       "the_gin_小桜やよい",
       "the_gin_高月はるか",
       "the_gin_美空ゆう"
-    ]
+    ],
+    "group_id": "g_brand_the_gin"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -84306,7 +84749,8 @@
       "the_gin_小桜やよい",
       "the_gin_高月はるか",
       "the_gin_美空ゆう"
-    ]
+    ],
+    "group_id": "g_brand_the_gin"
   },
   {
     "id": "tokyo_chuo_nihonbashi_berryz_spa",
@@ -84332,7 +84776,8 @@
     "description": "日本橋の日本人リラクゼーション。 / 料金システム: 60分20,000円〜 / 120分25,000円〜",
     "threads": [],
     "brandId": "berryz_spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_berryz_spa"
   },
   {
     "id": "tokyo_chuo_nihonbashi_high_grande",
@@ -84358,7 +84803,8 @@
     "description": "表参道・日本橋の日本人リラクゼーション。 / 料金システム: 70分16,000円〜",
     "threads": [],
     "brandId": "high_grande",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_high_grande"
   },
   {
     "name": "神のエステ (東京・日本橋店)",
@@ -84438,7 +84884,8 @@
       "kami_no_esthe_みるあ",
       "kami_no_esthe_ちぐさ",
       "kami_no_esthe_るるしゅ"
-    ]
+    ],
+    "group_id": "g_brand_kami_no_esthe"
   },
   {
     "id": "tokyo_chuo_nihonbashi_salon_blanca",
@@ -84488,7 +84935,8 @@
       "salon_blanca_酒井えりな",
       "salon_blanca_夏目すず",
       "salon_blanca_鈴川ありさ"
-    ]
+    ],
+    "group_id": "g_brand_salon_blanca"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -84544,7 +84992,8 @@
       "the_gin_小桜やよい",
       "the_gin_高月はるか",
       "the_gin_美空ゆう"
-    ]
+    ],
+    "group_id": "g_brand_the_gin"
   },
   {
     "id": "tokyo_chuo_nihonbashi_urekaji_nihonbashi",
@@ -84567,7 +85016,8 @@
     "description": "60分10,000円 / 70分11,000円 / 90分13,000円 / 120分17,000円 / 150分21,000円 / 延長30分6,000円",
     "threads": [],
     "brandId": "urekaji_nihonbashi",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_urekaji_nihonbashi"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -84680,7 +85130,8 @@
       "ryugujo_原みなみ",
       "ryugujo_沢尻もも",
       "ryugujo_深川まい"
-    ]
+    ],
+    "group_id": "g_brand_ryugujo"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -84736,7 +85187,8 @@
       "the_gin_小桜やよい",
       "the_gin_高月はるか",
       "the_gin_美空ゆう"
-    ]
+    ],
+    "group_id": "g_brand_the_gin"
   },
   {
     "id": "tokyo_dispatch_aqua_premium",
@@ -84866,7 +85318,8 @@
       "aqua_premium_藤井なな",
       "aqua_premium_高橋ありさ",
       "aqua_premium_山崎みお"
-    ]
+    ],
+    "group_id": "g_brand_aqua_premium"
   },
   {
     "id": "tokyo_dispatch_because",
@@ -84920,7 +85373,8 @@
       "because_平塚ゆり",
       "because_桜井ゆうり",
       "because_白井ほのか"
-    ]
+    ],
+    "group_id": "g_brand_because"
   },
   {
     "id": "tokyo_dispatch_candy_spa",
@@ -85050,7 +85504,8 @@
       "candy_spa_田中 もも",
       "candy_spa_美山 ゆり",
       "candy_spa_丘月花枝"
-    ]
+    ],
+    "group_id": "g_brand_candy_spa"
   },
   {
     "id": "tokyo_dispatch_hananoame",
@@ -85103,7 +85558,8 @@
       "hananoame_新田 りほ",
       "hananoame_長瀬 優",
       "hananoame_桐島 カンナ"
-    ]
+    ],
+    "group_id": "g_brand_hananoame"
   },
   {
     "id": "tokyo_dispatch_jukujo_tokyo",
@@ -85156,7 +85612,8 @@
       "jukujo_tokyo_青木 広美",
       "jukujo_tokyo_雨宮ゆみ",
       "jukujo_tokyo_秋吉 美鈴"
-    ]
+    ],
+    "group_id": "g_brand_jukujo_tokyo"
   },
   {
     "id": "tokyo_dispatch_royal_spa",
@@ -85240,7 +85697,8 @@
       "royal_spa_ありす",
       "royal_spa_ひかる",
       "royal_spa_かこ"
-    ]
+    ],
+    "group_id": "g_brand_royal_spa"
   },
   {
     "id": "tokyo_dispatch_the_aroma",
@@ -85307,7 +85765,8 @@
       "the_aroma_望月あやね",
       "the_aroma_天音かのん",
       "the_aroma_花村みお"
-    ]
+    ],
+    "group_id": "g_brand_the_aroma"
   },
   {
     "id": "tokyo_dispatch_outside_no_brand",
@@ -85409,7 +85868,8 @@
       "no_brand_吉野",
       "no_brand_山岸",
       "no_brand_藤ヶ谷"
-    ]
+    ],
+    "group_id": "g_brand_no_brand"
   },
   {
     "id": "tokyo_fuchu_aroma_ella",
@@ -85467,7 +85927,8 @@
       "aroma_ella_美澄ゆい",
       "aroma_ella_織原めいか",
       "aroma_ella_有栖るな"
-    ]
+    ],
+    "group_id": "g_brand_aroma_ella"
   },
   {
     "id": "tokyo_fuchu_kami_chofu",
@@ -85610,7 +86071,8 @@
       "kami_chofu_海物語",
       "kami_chofu_るい",
       "kami_chofu_りな"
-    ]
+    ],
+    "group_id": "g_brand_kami_chofu"
   },
   {
     "id": "tokyo_fuchu_luxury_romance",
@@ -85657,7 +86119,8 @@
       "luxury_romance_朝比奈 ゆいか",
       "luxury_romance_橋本 みく",
       "luxury_romance_愛沢 ことね"
-    ]
+    ],
+    "group_id": "g_brand_luxury_romance"
   },
   {
     "id": "tokyo_fuchu_syalulu",
@@ -85714,7 +86177,8 @@
       "syalulu_かのん",
       "syalulu_じゅん",
       "syalulu_みな"
-    ]
+    ],
+    "group_id": "g_brand_syalulu"
   },
   {
     "id": "tokyo_hachioji_rabbit_spa",
@@ -85808,7 +86272,8 @@
       "rabbit_spa_あかり",
       "rabbit_spa_ひめか",
       "rabbit_spa_きなこ"
-    ]
+    ],
+    "group_id": "g_brand_rabbit_spa"
   },
   {
     "id": "tokyo_hachioji_rere",
@@ -85860,7 +86325,8 @@
       "rere_桜木 穂乃香",
       "rere_天野 あかね",
       "rere_小鳥遊 るい"
-    ]
+    ],
+    "group_id": "g_brand_rere"
   },
   {
     "id": "tokyo_hachioji_tokyopla",
@@ -85957,7 +86423,8 @@
       "tokyopla_八乙女さくら",
       "tokyopla_峰りりな",
       "tokyopla_山口みほ"
-    ]
+    ],
+    "group_id": "g_brand_tokyopla"
   },
   {
     "id": "tokyo_kita_alice",
@@ -86024,7 +86491,8 @@
       "alice_西野なぎさ",
       "alice_心ほのか",
       "alice_北条かれん"
-    ]
+    ],
+    "group_id": "g_brand_alice"
   },
   {
     "id": "tokyo_kita_cozy_akabane",
@@ -86081,7 +86549,8 @@
       "cozy_akabane_七川",
       "cozy_akabane_千秋",
       "cozy_akabane_黒崎"
-    ]
+    ],
+    "group_id": "g_brand_cozy_akabane"
   },
   {
     "id": "tokyo_kita_crest_spa_tokyo",
@@ -86150,7 +86619,8 @@
       "crest_spa_tokyo_なつき",
       "crest_spa_tokyo_えり",
       "crest_spa_tokyo_ゆかな"
-    ]
+    ],
+    "group_id": "g_brand_crest_spa_tokyo"
   },
   {
     "id": "tokyo_kita_lamp_akabane",
@@ -86269,7 +86739,8 @@
       "lamp_akabane_黒木もも",
       "lamp_akabane_野山なつみ",
       "lamp_akabane_早乙女りょう"
-    ]
+    ],
+    "group_id": "g_brand_lamp_akabane"
   },
   {
     "id": "tokyo_kita_lynx",
@@ -86549,7 +87020,9 @@
       "lynx_浦瀬もも",
       "lynx_坂田みなみ",
       "lynx_荻野まなみ"
-    ]
+    ],
+    "area": "赤羽",
+    "group_id": "g_brand_lynx"
   },
   {
     "id": "tokyo_kita_yorimichi",
@@ -86695,7 +87168,8 @@
       "yorimichi_江黒あんな",
       "yorimichi_白石あゆ",
       "yorimichi_小野田ゆら"
-    ]
+    ],
+    "group_id": "g_brand_yorimichi"
   },
   {
     "id": "tokyo_koganei_west_tokyo",
@@ -86750,7 +87224,8 @@
       "west_tokyo_28",
       "west_tokyo_29",
       "west_tokyo_30"
-    ]
+    ],
+    "group_id": "g_brand_west_tokyo"
   },
   {
     "id": "tokyo_kokubunji_aroma_ella",
@@ -86806,7 +87281,8 @@
       "aroma_ella_美澄ゆい",
       "aroma_ella_織原めいか",
       "aroma_ella_有栖るな"
-    ]
+    ],
+    "group_id": "g_brand_aroma_ella"
   },
   {
     "id": "tokyo_kokubunji_esthe_bijin_madam",
@@ -86858,7 +87334,8 @@
       "esthe_bijin_madam_24",
       "esthe_bijin_madam_25",
       "esthe_bijin_madam_26"
-    ]
+    ],
+    "group_id": "g_brand_esthe_bijin_madam"
   },
   {
     "id": "tokyo_kokubunji_west_tokyo",
@@ -86911,7 +87388,8 @@
       "west_tokyo_28",
       "west_tokyo_29",
       "west_tokyo_30"
-    ]
+    ],
+    "group_id": "g_brand_west_tokyo"
   },
   {
     "id": "tokyo_koto_kameido_muchispa_room",
@@ -86966,7 +87444,8 @@
       "muchispa_room_ここな",
       "muchispa_room_しほ",
       "muchispa_room_まゆ"
-    ]
+    ],
+    "group_id": "g_brand_muchispa_room"
   },
   {
     "id": "tokyo_koto_monzennakacho_rondo",
@@ -87057,7 +87536,8 @@
       "rondo_香",
       "rondo_凛",
       "rondo_心"
-    ]
+    ],
+    "group_id": "g_brand_rondo"
   },
   {
     "id": "tokyo_koto_monzennakacho_ryugujo",
@@ -87086,7 +87566,8 @@
     ],
     "brandId": "ryugujo",
     "threads": [],
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_ryugujo"
   },
   {
     "id": "tokyo_machida_rere",
@@ -87109,7 +87590,8 @@
     ],
     "brandId": "rere",
     "threads": [],
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rere"
   },
   {
     "id": "tokyo_meguro_gakugei_daigaku_tokyo_esthe_club",
@@ -87154,7 +87636,8 @@
       "tokyo_esthe_club_浅井かな",
       "tokyo_esthe_club_三神レオ",
       "tokyo_esthe_club_桜井もえ"
-    ]
+    ],
+    "group_id": "g_brand_tokyo_esthe_club"
   },
   {
     "id": "tokyo_meguro_jiyugaoka_doigt_de_fee",
@@ -87292,7 +87775,8 @@
       "doigt_de_fee_葵ひびき",
       "doigt_de_fee_深田りょう",
       "doigt_de_fee_橘りんか"
-    ]
+    ],
+    "group_id": "g_brand_doigt_de_fee"
   },
   {
     "id": "tokyo_meguro_jiyugaoka_livspa",
@@ -87344,7 +87828,8 @@
       "livspa_萌木なの",
       "livspa_癒川にな",
       "livspa_藤田りこ"
-    ]
+    ],
+    "group_id": "g_brand_livspa"
   },
   {
     "id": "tokyo_meguro_jiyugaoka_mens_esthe_group",
@@ -87481,7 +87966,8 @@
       "mens_esthe_group_さき",
       "mens_esthe_group_ゆき",
       "mens_esthe_group_きき"
-    ]
+    ],
+    "group_id": "g_brand_mens_esthe_group"
   },
   {
     "id": "tokyo_meguro_meguro_dahlia",
@@ -87548,7 +88034,8 @@
       "dahlia_松原すみれ",
       "dahlia_吉田さき",
       "dahlia_相川さなみ"
-    ]
+    ],
+    "group_id": "g_brand_dahlia"
   },
   {
     "id": "tokyo_meguro_meguro_everything",
@@ -87581,7 +88068,8 @@
       "everything_福山かな",
       "everything_宮沢すみれ",
       "everything_朝倉みほ"
-    ]
+    ],
+    "group_id": "g_brand_everything"
   },
   {
     "id": "tokyo_meguro_meguro_grace",
@@ -87642,7 +88130,8 @@
       "grace_二ノ宮あい",
       "grace_麻川さら",
       "grace_川口ふう"
-    ]
+    ],
+    "group_id": "g_brand_grace"
   },
   {
     "id": "tokyo_meguro_meguro_mens_esthe_group",
@@ -87779,7 +88268,8 @@
       "mens_esthe_group_さき",
       "mens_esthe_group_ゆき",
       "mens_esthe_group_きき"
-    ]
+    ],
+    "group_id": "g_brand_mens_esthe_group"
   },
   {
     "id": "tokyo_meguro_meguro_organic_spa",
@@ -87844,7 +88334,8 @@
       "organic_spa_日野りあ",
       "organic_spa_水沢かんな",
       "organic_spa_三上れな"
-    ]
+    ],
+    "group_id": "g_brand_organic_spa"
   },
   {
     "id": "tokyo_meguro_meguro_otona_kakurega",
@@ -87930,7 +88421,8 @@
       "otona_kakurega_水沢ゆな",
       "otona_kakurega_瀬戸レモン",
       "otona_kakurega_牧原れいな"
-    ]
+    ],
+    "group_id": "g_brand_otona_kakurega"
   },
   {
     "id": "tokyo_meguro_meguro_taiiku_jikan",
@@ -87985,7 +88477,8 @@
       "taiiku_jikan_榎並可憐",
       "taiiku_jikan_宇佐美瑠々",
       "taiiku_jikan_如月雪愛"
-    ]
+    ],
+    "group_id": "g_brand_taiiku_jikan"
   },
   {
     "id": "tokyo_meguro_meguro_teacher_secret",
@@ -88030,7 +88523,8 @@
       "teacher_secret_小阪 真帆",
       "teacher_secret_桜井 星奈",
       "teacher_secret_七瀬 愛菜"
-    ]
+    ],
+    "group_id": "g_brand_teacher_secret"
   },
   {
     "id": "tokyo_meguro_nakameguro_aqua",
@@ -88209,7 +88703,8 @@
       "aqua_柳田いおり",
       "aqua_水沢まり",
       "aqua_三上さつき"
-    ]
+    ],
+    "group_id": "g_brand_aqua"
   },
   {
     "id": 60231,
@@ -88295,7 +88790,8 @@
       "grace_二ノ宮あい",
       "grace_麻川さら",
       "grace_川口ふう"
-    ]
+    ],
+    "group_id": "g_brand_grace"
   },
   {
     "id": 60230,
@@ -88669,7 +89165,8 @@
       "tenkai_no_spa_なぎ",
       "tenkai_no_spa_るま",
       "tenkai_no_spa_あんな"
-    ]
+    ],
+    "group_id": "g_brand_tenkai_no_spa"
   },
   {
     "id": "tokyo_meguro_toritsudaigaku_tokyo_mensesthe",
@@ -88731,7 +89228,8 @@
       "tokyo_mensesthe_アンジェリーナ フジモト",
       "tokyo_mensesthe_坂井のあ",
       "tokyo_mensesthe_柴咲みか"
-    ]
+    ],
+    "group_id": "g_brand_tokyo_mensesthe"
   },
   {
     "id": 60216,
@@ -89046,7 +89544,8 @@
       "dejavu_tokyo_桜井 のあ",
       "dejavu_tokyo_宮田 るな",
       "dejavu_tokyo_久保 まなみ"
-    ]
+    ],
+    "group_id": "g_brand_dejavu_tokyo"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -89109,7 +89608,8 @@
       "alba_はるな",
       "alba_真理子",
       "alba_なつこ"
-    ]
+    ],
+    "group_id": "g_brand_alba"
   },
   {
     "id": "tokyo_minato_akasaka_emerald",
@@ -89132,7 +89632,8 @@
     "description": "赤坂・麻布十番・恵比寿の日本人リラクゼーション。 / 料金システム: 70分13,000円 / 90分17,000円 / 120分22,000円",
     "threads": [],
     "brandId": "emerald",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_emerald"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -89208,7 +89709,8 @@
       "grand_aroma_本郷めい",
       "grand_aroma_赤澤れい",
       "grand_aroma_綾瀬はる"
-    ]
+    ],
+    "group_id": "g_brand_grand_aroma"
   },
   {
     "id": "tokyo_minato_akasaka_kami_no_esthe",
@@ -89235,7 +89737,8 @@
     "description": "赤坂の日本人リラクゼーション。 / 料金システム: 80分16,000円〜 / 100分22,000円〜",
     "threads": [],
     "brandId": "kami_no_esthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_kami_no_esthe"
   },
   {
     "name": "The Salon (ザ・サロン赤坂店)",
@@ -89364,7 +89867,8 @@
       "the_salon_あいか",
       "the_salon_めあり",
       "the_salon_こはる"
-    ]
+    ],
+    "group_id": "g_brand_the_salon"
   },
   {
     "id": "tokyo_minato_azabujuban_aria",
@@ -89391,7 +89895,8 @@
     "description": "麻布十番・品川の日本人リラクゼーション。 / 料金システム: 90分17,000円〜",
     "threads": [],
     "brandId": "aria",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aria"
   },
   {
     "id": "tokyo_minato_azabujuban_carinna",
@@ -89414,7 +89919,8 @@
     "description": "麻布十番・恵比寿の日本人リラクゼーション(旧ハイアット)。 / 料金システム: 60分16,000円〜",
     "threads": [],
     "brandId": "carinna",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_carinna"
   },
   {
     "id": "tokyo_minato_azabujuban_dejavu_tokyo",
@@ -89679,7 +90185,8 @@
       "dejavu_tokyo_桜井 のあ",
       "dejavu_tokyo_宮田 るな",
       "dejavu_tokyo_久保 まなみ"
-    ]
+    ],
+    "group_id": "g_brand_dejavu_tokyo"
   },
   {
     "id": "tokyo_minato_azabujuban_edel",
@@ -89706,7 +90213,8 @@
     "description": "麻布十番・田町の日本人リラクゼーション。 / 料金システム: 90分20,000円 / 120分25,000円 / 150分30,000円",
     "threads": [],
     "brandId": "edel",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_edel"
   },
   {
     "id": "tokyo_minato_azabujuban_emerald",
@@ -89729,7 +90237,8 @@
     "description": "赤坂・麻布十番・恵比寿の日本人リラクゼーション。 / 料金システム: 70分13,000円 / 90分17,000円 / 120分22,000円",
     "threads": [],
     "brandId": "emerald",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_emerald"
   },
   {
     "id": "tokyo_minato_azabujuban_kami_no_esthe",
@@ -90064,7 +90573,8 @@
       "kami_no_esthe_るぶたん",
       "kami_no_esthe_レアス",
       "kami_no_esthe_れい"
-    ]
+    ],
+    "group_id": "g_brand_kami_no_esthe"
   },
   {
     "id": "tokyo_minato_azabujuban_linda_spa",
@@ -90275,7 +90785,8 @@
       "linda_spa_渚れい",
       "linda_spa_谷村あいり",
       "linda_spa_志田あかり"
-    ]
+    ],
+    "group_id": "g_brand_linda_spa"
   },
   {
     "name": "Aroma Lunabelle (麻布十番店)",
@@ -90359,7 +90870,8 @@
       "aroma_lunabelle_白井もか",
       "aroma_lunabelle_中村ゆり",
       "aroma_lunabelle_月見ゆず"
-    ]
+    ],
+    "group_id": "g_brand_aroma_lunabelle"
   },
   {
     "id": "tokyo_minato_azabujuban_roppongi_mens",
@@ -90386,7 +90898,8 @@
     "description": "六本木・麻布十番の日本人リラクゼーション。 / 料金システム: 75分19,000円 / 120分25,000円 / 150分30,000円 / 180分37,000円",
     "threads": [],
     "brandId": "roppongi_mens",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_roppongi_mens"
   },
   {
     "id": "tokyo_minato_azabujuban_saudade",
@@ -90413,7 +90926,8 @@
     "description": "笹塚・恵比寿・麻布十番の日本人リラクゼーション。 / 新規限定コース: 60分14,000円 / 90分18,000円 / 120分22,000円 / 通常80分23,000円〜",
     "threads": [],
     "brandId": "saudade",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_saudade"
   },
   {
     "id": "tokyo_minato_azabujuban_sweet_mist",
@@ -90575,7 +91089,8 @@
       "sweet_mist_松田みう",
       "sweet_mist_神奈美月",
       "sweet_mist_姫乃りおん"
-    ]
+    ],
+    "group_id": "g_brand_sweet_mist"
   },
   {
     "id": "tokyo_minato_azabujuban_the_esthe",
@@ -90603,7 +91118,8 @@
     "description": "麻布十番の日本人リラクゼーション。 / 料金システム: 90分18,000円〜",
     "threads": [],
     "brandId": "the_esthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_the_esthe"
   },
   {
     "id": "tokyo_minato_azabujuban_the_premium_spa",
@@ -90631,7 +91147,8 @@
     "description": "麻布十番・六本木の日本人リラクゼーション。 / 料金システム: 80分16,000円〜",
     "threads": [],
     "brandId": "the_premium_spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_the_premium_spa"
   },
   {
     "id": "tokyo_minato_hamamatsucho_jean_robin",
@@ -90654,7 +91171,8 @@
     "description": "田町・浜松町の日本人リラクゼーション。 / 料金システム: 60分17,000円 / 90分20,000円 / 120分26,000円 / 150分32,000円 / 180分39,000円",
     "threads": [],
     "brandId": "jean_robin",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_jean_robin"
   },
   {
     "id": 60211,
@@ -91146,7 +91664,8 @@
       "dejavu_tokyo_桜井 のあ",
       "dejavu_tokyo_宮田 るな",
       "dejavu_tokyo_久保 まなみ"
-    ]
+    ],
+    "group_id": "g_brand_dejavu_tokyo"
   },
   {
     "id": "tokyo_minato_roppongi_aromamore",
@@ -91303,7 +91822,8 @@
       "aromamore_有栖川かれん",
       "aromamore_香坂ゆずは",
       "aromamore_有村りお"
-    ]
+    ],
+    "group_id": "g_brand_aromamore"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -91379,7 +91899,8 @@
       "grand_aroma_本郷めい",
       "grand_aroma_赤澤れい",
       "grand_aroma_綾瀬はる"
-    ]
+    ],
+    "group_id": "g_brand_grand_aroma"
   },
   {
     "id": 60209,
@@ -91493,7 +92014,8 @@
     "description": "六本木・麻布十番の日本人リラクゼーション。 / 料金システム: 75分19,000円 / 120分25,000円 / 150分30,000円 / 180分37,000円",
     "threads": [],
     "brandId": "roppongi_mens",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_roppongi_mens"
   },
   {
     "id": "tokyo_minato_roppongi_sweet_mist",
@@ -91655,7 +92177,8 @@
       "sweet_mist_松田みう",
       "sweet_mist_神奈美月",
       "sweet_mist_姫乃りおん"
-    ]
+    ],
+    "group_id": "g_brand_sweet_mist"
   },
   {
     "id": "tokyo_minato_roppongi_the_premium_spa",
@@ -91683,7 +92206,8 @@
     "description": "麻布十番・六本木の日本人リラクゼーション。 / 料金システム: 80分16,000円〜",
     "threads": [],
     "brandId": "the_premium_spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_the_premium_spa"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -91823,7 +92347,8 @@
       "aroma_maison_長澤あさみ",
       "aroma_maison_峰藤さくら",
       "aroma_maison_広末まなみ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_maison"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -91902,7 +92427,8 @@
       "kami_no_esthe_shinbashi_まりる",
       "kami_no_esthe_shinbashi_のえ",
       "kami_no_esthe_shinbashi_こあい"
-    ]
+    ],
+    "group_id": "g_brand_kami_no_esthe_shinbashi"
   },
   {
     "id": "tokyo_minato_shinbashi_lumespa",
@@ -91930,7 +92456,8 @@
     "description": "新橋の24時間営業リラクゼーション。 / 料金システム: 60分14,000円〜 / 80分18,000円〜",
     "threads": [],
     "brandId": "lumespa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_lumespa"
   },
   {
     "name": "Aroma Lunabelle (新橋店)",
@@ -92014,7 +92541,8 @@
       "aroma_lunabelle_白井もか",
       "aroma_lunabelle_中村ゆり",
       "aroma_lunabelle_月見ゆず"
-    ]
+    ],
+    "group_id": "g_brand_aroma_lunabelle"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -92152,7 +92680,8 @@
       "luxtime_由良のの",
       "luxtime_花咲ひまり",
       "luxtime_美谷はる"
-    ]
+    ],
+    "group_id": "g_brand_luxtime"
   },
   {
     "id": "tokyo_minato_shinbashi_relax_tokyo",
@@ -92178,7 +92707,8 @@
     "description": "新橋の日本人リラクゼーション。 / 料金システム: 75分15,000円 / 90分19,000円 / 120分23,000円",
     "threads": [],
     "brandId": "relax_tokyo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_relax_tokyo"
   },
   {
     "id": "tokyo_minato_shinbashi_sweet_mist",
@@ -92340,7 +92870,8 @@
       "sweet_mist_松田みう",
       "sweet_mist_神奈美月",
       "sweet_mist_姫乃りおん"
-    ]
+    ],
+    "group_id": "g_brand_sweet_mist"
   },
   {
     "name": "The Salon (ザ・サロン新橋店)",
@@ -92469,7 +93000,8 @@
       "the_salon_あいか",
       "the_salon_めあり",
       "the_salon_こはる"
-    ]
+    ],
+    "group_id": "g_brand_the_salon"
   },
   {
     "id": "tokyo_minato_shinbashi_tiger_gate",
@@ -92497,7 +93029,8 @@
     "description": "虎ノ門・新橋の日本人リラクゼーション。 / 料金システム: 90分18,000円〜",
     "threads": [],
     "brandId": "tiger_gate",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tiger_gate"
   },
   {
     "id": "tokyo_minato_shinbashi_ultimate_spa_shinbashi",
@@ -92542,7 +93075,8 @@
       "ultimate_spa_shinbashi_美波 ゆり",
       "ultimate_spa_shinbashi_星野 あい",
       "ultimate_spa_shinbashi_桜木 なな"
-    ]
+    ],
+    "group_id": "g_brand_ultimate_spa_shinbashi"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -92605,7 +93139,8 @@
       "alba_はるな",
       "alba_真理子",
       "alba_なつこ"
-    ]
+    ],
+    "group_id": "g_brand_alba"
   },
   {
     "id": 60212,
@@ -92875,7 +93410,8 @@
       "dahlia_松原すみれ",
       "dahlia_吉田さき",
       "dahlia_相川さなみ"
-    ]
+    ],
+    "group_id": "g_brand_dahlia"
   },
   {
     "id": "tokyo_minato_tamachi_edel",
@@ -92902,7 +93438,8 @@
     "description": "麻布十番・田町の日本人リラクゼーション。 / 料金システム: 90分20,000円 / 120分25,000円 / 150分30,000円",
     "threads": [],
     "brandId": "edel",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_edel"
   },
   {
     "id": "tokyo_minato_tamachi_jean_robin",
@@ -92925,7 +93462,8 @@
     "description": "田町・浜松町の日本人リラクゼーション。 / 料金システム: 60分17,000円 / 90分20,000円 / 120分26,000円 / 150分32,000円 / 180分39,000円",
     "threads": [],
     "brandId": "jean_robin",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_jean_robin"
   },
   {
     "id": "tokyo_minato_toranomon_tiger_gate",
@@ -92953,7 +93491,8 @@
     "description": "虎ノ門・新橋の日本人リラクゼーション。 / 料金システム: 90分18,000円〜",
     "threads": [],
     "brandId": "tiger_gate",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tiger_gate"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -93011,7 +93550,8 @@
       "aroma_ella_美澄ゆい",
       "aroma_ella_織原めいか",
       "aroma_ella_有栖るな"
-    ]
+    ],
+    "group_id": "g_brand_aroma_ella"
   },
   {
     "id": "tokyo_mitaka_esthe_bijin_madam",
@@ -93063,7 +93603,8 @@
       "esthe_bijin_madam_24",
       "esthe_bijin_madam_25",
       "esthe_bijin_madam_26"
-    ]
+    ],
+    "group_id": "g_brand_esthe_bijin_madam"
   },
   {
     "id": "tokyo_musashino_kichijoji_aroma_charmant",
@@ -93114,7 +93655,8 @@
       "aroma_charmant_なつき",
       "aroma_charmant_ノア",
       "aroma_charmant_さよ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_charmant"
   },
   {
     "id": "tokyo_musashino_kichijoji_esthe_bijin_madam",
@@ -93166,7 +93708,8 @@
       "esthe_bijin_madam_24",
       "esthe_bijin_madam_25",
       "esthe_bijin_madam_26"
-    ]
+    ],
+    "group_id": "g_brand_esthe_bijin_madam"
   },
   {
     "id": "tokyo_musashino_kichijoji_kami_kichijoji",
@@ -93257,7 +93800,8 @@
       "kami_kichijoji_つむ",
       "kami_kichijoji_ぴーち",
       "kami_kichijoji_アルベール"
-    ]
+    ],
+    "group_id": "g_brand_kami_kichijoji"
   },
   {
     "id": "tokyo_musashino_kichijoji_yorimichi",
@@ -93403,7 +93947,8 @@
       "yorimichi_江黒あんな",
       "yorimichi_白石あゆ",
       "yorimichi_小野田ゆら"
-    ]
+    ],
+    "group_id": "g_brand_yorimichi"
   },
   {
     "id": "tokyo_nakano_golden",
@@ -93430,7 +93975,8 @@
     "description": "中野の日本人リラクゼーション。60分10,000円～。新規限定コースあり。",
     "threads": [],
     "brandId": "golden",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_golden"
   },
   {
     "id": "tokyo_nakano_levechi_esthe",
@@ -93455,7 +94001,8 @@
     "description": "成田・中野・東金・初台の日本人リラクゼーション。 / 料金システム: Short60分12,000円 / Standard90分18,000円 / Premium120分24,000円 / Long150分30,000円 / 延長20分5,000円",
     "threads": [],
     "brandId": "levechi_esthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_levechi_esthe"
   },
   {
     "id": "tokyo_nakano_red_ribbon",
@@ -93547,7 +94094,8 @@
       "red_ribbon_おとは (PLATINUM)",
       "red_ribbon_まゆか (PLATINUM)",
       "red_ribbon_こころ (GOLD)"
-    ]
+    ],
+    "group_id": "g_brand_red_ribbon"
   },
   {
     "id": "tokyo_nakano_tokyo_mensesthe",
@@ -93595,7 +94143,8 @@
     "threads": [],
     "area": "中野区",
     "brandId": "tokyo_mensesthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tokyo_mensesthe"
   },
   {
     "id": "tokyo_nerima_nerima_aroma_modeste",
@@ -93697,7 +94246,8 @@
       "aroma_modeste_玉井 ふみか",
       "aroma_modeste_月島 ゆら",
       "aroma_modeste_清水 まき"
-    ]
+    ],
+    "group_id": "g_brand_aroma_modeste"
   },
   {
     "id": "tokyo_nerima_nerima_around_forty",
@@ -93753,7 +94303,8 @@
       "around_forty_あまね",
       "around_forty_もえ",
       "around_forty_かよ"
-    ]
+    ],
+    "group_id": "g_brand_around_forty"
   },
   {
     "id": "tokyo_nerima_nerima_cannele",
@@ -93815,7 +94366,8 @@
       "cannele_ひまり",
       "cannele_まどか",
       "cannele_うらら"
-    ]
+    ],
+    "group_id": "g_brand_cannele"
   },
   {
     "id": "tokyo_nerima_nerima_kami_no_esthe_nerima",
@@ -94188,7 +94740,8 @@
       "kami_no_esthe_nerima_めいり",
       "kami_no_esthe_nerima_あおい",
       "kami_no_esthe_nerima_りささ"
-    ]
+    ],
+    "group_id": "g_brand_kami_no_esthe_nerima"
   },
   {
     "id": "tokyo_nerima_nerima_mens_esthe_group",
@@ -94325,7 +94878,8 @@
       "mens_esthe_group_さき",
       "mens_esthe_group_ゆき",
       "mens_esthe_group_きき"
-    ]
+    ],
+    "group_id": "g_brand_mens_esthe_group"
   },
   {
     "id": "tokyo_nerima_nerima_xenispa",
@@ -94431,7 +94985,8 @@
       "xenispa_西野 ひまり",
       "xenispa_七瀬 みやび",
       "xenispa_朝倉 あや"
-    ]
+    ],
+    "group_id": "g_brand_xenispa"
   },
   {
     "id": "tokyo_nerima_oizumigakuen_select",
@@ -94477,7 +95032,8 @@
       "select_めぐろ",
       "select_ましろ",
       "select_やまざき"
-    ]
+    ],
+    "group_id": "g_brand_select"
   },
   {
     "id": "tokyo_ota_kamata_anjuaile",
@@ -94504,7 +95060,8 @@
     "description": "蒲田の日本人リラクゼーション。 / 料金システム: 90分22,000円 / 120分27,000円 / 150分32,000円 / 70分18,000円(初回限定)",
     "threads": [],
     "brandId": "anjuaile",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_anjuaile"
   },
   {
     "id": "tokyo_ota_kamata_doigt_de_fee",
@@ -94530,7 +95087,8 @@
     "description": "多店舗展開の実力派日本人リラクゼーション。 / お試しコース: 60分12,000円→10,000円 / 通常SYSTEM: 60分12,000円 / 80分16,000円 / 100分20,000円 / 120分20,000円 / 150分24,000円 / 180分29,000円",
     "threads": [],
     "brandId": "doigt_de_fee",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_doigt_de_fee"
   },
   {
     "id": "tokyo_ota_kamata_gokujou",
@@ -94557,7 +95115,8 @@
     "description": "大井町・大森・蒲田の日本人リラクゼーション(旧ゴクラク)。 / 料金システム: 60分13,000円 / 90分17,000円 / 120分22,000円",
     "threads": [],
     "brandId": "gokujou",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_gokujou"
   },
   {
     "id": "tokyo_ota_kamata_hoozuki",
@@ -94585,7 +95144,8 @@
     "description": "武蔵小杉・代々木・原宿・蒲田・大森・大井町の日本人リラクゼーション。 / 料金システム: 90分15,000円〜",
     "threads": [],
     "brandId": "hoozuki",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_hoozuki"
   },
   {
     "id": "tokyo_ota_kamata_koakuma_spa_tokyo",
@@ -94638,7 +95198,8 @@
     "threads": [],
     "area": "蒲田",
     "brandId": "koakuma_spa_tokyo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_koakuma_spa_tokyo"
   },
   {
     "id": "tokyo_ota_kamata_livspa",
@@ -94690,7 +95251,8 @@
       "livspa_萌木なの",
       "livspa_癒川にな",
       "livspa_藤田りこ"
-    ]
+    ],
+    "group_id": "g_brand_livspa"
   },
   {
     "id": "tokyo_ota_kamata_nocturne",
@@ -94717,7 +95279,8 @@
     "description": "大井町・大森・蒲田の日本人リラクゼーション。 / 料金システム: 90分22,500円 / 120分27,500円 / 150分32,500円 / 180分37,500円",
     "threads": [],
     "brandId": "nocturne",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_nocturne"
   },
   {
     "id": "tokyo_ota_kamata_pepe_spa",
@@ -94788,7 +95351,8 @@
       "pepe_spa_江崎なな",
       "pepe_spa_月乃はな",
       "pepe_spa_楓　みお"
-    ]
+    ],
+    "group_id": "g_brand_pepe_spa"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -94816,7 +95380,8 @@
     "area": "蒲田",
     "nearestStation": "蒲田駅",
     "address": "東京都大田区蒲田エリア",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_ryugujo"
   },
   {
     "id": "tokyo_ota_omori_gokujou",
@@ -94843,7 +95408,8 @@
     "description": "大井町・大森・蒲田の日本人リラクゼーション(旧ゴクラク)。 / 料金システム: 60分13,000円 / 90分17,000円 / 120分22,000円",
     "threads": [],
     "brandId": "gokujou",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_gokujou"
   },
   {
     "id": "tokyo_ota_omori_hoozuki",
@@ -94871,7 +95437,8 @@
     "description": "武蔵小杉・代々木・原宿・蒲田・大森・大井町の日本人リラクゼーション。 / 料金システム: 90分15,000円〜",
     "threads": [],
     "brandId": "hoozuki",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_hoozuki"
   },
   {
     "id": "tokyo_ota_omori_nocturne",
@@ -94898,7 +95465,8 @@
     "description": "大井町・大森・蒲田の日本人リラクゼーション。 / 料金システム: 90分22,500円 / 120分27,500円 / 150分32,500円 / 180分37,500円",
     "threads": [],
     "brandId": "nocturne",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_nocturne"
   },
   {
     "id": "tokyo_ota_omori_rhea",
@@ -94921,7 +95489,8 @@
     "description": "大森・大井町・品川・五反田の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分21,000円",
     "threads": [],
     "brandId": "rhea",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rhea"
   },
   {
     "id": "tokyo_setagaya_chitose_karasuyama_reve_spa",
@@ -94983,7 +95552,8 @@
       "reve_spa_白石いつき",
       "reve_spa_桜井ひなた",
       "reve_spa_一条ななみ"
-    ]
+    ],
+    "group_id": "g_brand_reve_spa"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -95116,7 +95686,8 @@
       "unison_spa_野上 ゆかな",
       "unison_spa_五十嵐 あんり",
       "unison_spa_夕季 なつめ"
-    ]
+    ],
+    "group_id": "g_brand_unison_spa"
   },
   {
     "id": "tokyo_setagaya_chitose_karasuyama_winning_heaven",
@@ -95143,7 +95714,8 @@
     "description": "世田谷エリアの日本人リラクゼーション。 / オープン割引開催中: 90分19,000円→17,000円 / 120分24,000円→22,000円 / 150分29,000円→27,000円 / 180分34,000円→32,000円",
     "threads": [],
     "brandId": "winning_heaven",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_winning_heaven"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -95229,7 +95801,8 @@
       "jesse_るな",
       "jesse_まなみ",
       "jesse_姫宮あみ"
-    ]
+    ],
+    "group_id": "g_brand_jesse"
   },
   {
     "id": "tokyo_setagaya_futakotamagawa_menes_group",
@@ -95476,7 +96049,8 @@
       "mens_esthe_group_さき",
       "mens_esthe_group_ゆき",
       "mens_esthe_group_きき"
-    ]
+    ],
+    "group_id": "g_brand_mens_esthe_group"
   },
   {
     "id": "tokyo_setagaya_komazawa_daigaku_tokyo_esthe_club",
@@ -95502,7 +96076,8 @@
     "description": "駒沢大学・桜新町・学芸大学の日本人リラクゼーション。 / オープン割引開催中: 90分19,000円→17,000円 / 120分24,000円→22,000円 / 150分29,000円→27,000円 / 180分34,000円→32,000円 / 延長30分6,000円 / カード支払いOK",
     "threads": [],
     "brandId": "tokyo_esthe_club",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tokyo_esthe_club"
   },
   {
     "id": 60204,
@@ -95560,7 +96135,8 @@
     "description": "世田谷エリアの日本人リラクゼーション。 / オープン割引開催中: 90分19,000円→17,000円 / 120分24,000円→22,000円 / 150分29,000円→27,000円 / 180分34,000円→32,000円",
     "threads": [],
     "brandId": "winning_heaven",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_winning_heaven"
   },
   {
     "id": "tokyo_setagaya_meidaimae_annex",
@@ -95584,7 +96160,8 @@
     "description": "明大前の日本人リラクゼーション。",
     "threads": [],
     "brandId": "annex",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_annex"
   },
   {
     "id": "tokyo_setagaya_meidaimae_aroma_woo",
@@ -95609,7 +96186,8 @@
     "description": "明大前の日本人リラクゼーション。 / サンクスキャンペーン: 60分15,000円→12,000円 / 90分19,000円→18,000円 / 120分24,000円→23,000円 / お試しコース(背面のみ): 60分10,000円",
     "threads": [],
     "brandId": "aroma_woo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aroma_woo"
   },
   {
     "id": "tokyo_setagaya_meidaimae_belle_lily",
@@ -95635,7 +96213,8 @@
     "description": "渋谷・下北沢・明大前の日本人リラクゼーション。 / 料金システム: ショートコース60分12,000円 / スタンダード90分16,000円 / プレミア120分22,000円 / プラチナ150分28,000円 / サンクスキャンペーン等各種割引あり",
     "threads": [],
     "brandId": "belle_lily",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_belle_lily"
   },
   {
     "id": "tokyo_setagaya_meidaimae_queens_collection",
@@ -95675,7 +96254,8 @@
     "threads": [],
     "area": "明大前",
     "brandId": "queens_collection",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_queens_collection"
   },
   {
     "id": "tokyo_setagaya_meidaimae_reve_spa",
@@ -95737,7 +96317,8 @@
       "reve_spa_白石いつき",
       "reve_spa_桜井ひなた",
       "reve_spa_一条ななみ"
-    ]
+    ],
+    "group_id": "g_brand_reve_spa"
   },
   {
     "id": "tokyo_setagaya_sakurashinmachi_tokyo_esthe_club",
@@ -95763,7 +96344,8 @@
     "description": "駒沢大学・桜新町・学芸大学の日本人リラクゼーション。 / オープン割引開催中: 90分19,000円→17,000円 / 120分24,000円→22,000円 / 150分29,000円→27,000円 / 180分34,000円→32,000円 / 延長30分6,000円 / カード支払いOK",
     "threads": [],
     "brandId": "tokyo_esthe_club",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tokyo_esthe_club"
   },
   {
     "id": "tokyo_setagaya_sangenjaya_authority",
@@ -95784,7 +96366,8 @@
     "description": "三軒茶屋・池尻大橋の日本人リラクゼーション。 / 料金システム: 60分15,000円→12,000円 / 80分20,000円→16,000円 / 100分25,000円→20,000円 / サンクスキャンペーン(全コース1,000円OFF対応)",
     "threads": [],
     "brandId": "authority",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_authority"
   },
   {
     "id": "tokyo_setagaya_sangenjaya_bqins",
@@ -95807,7 +96390,8 @@
     "description": "三軒茶屋のリラクゼーションスペース。 / SYSTEM: 60分15,000円→12,000円 / 80分20,000円→16,000円 / 100分25,000円→20,000円 / ショートコース(背面のみ) 60分12,000円〜",
     "threads": [],
     "brandId": "bqins",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_bqins"
   },
   {
     "id": "tokyo_setagaya_sangenjaya_dejavu_tokyo",
@@ -96072,7 +96656,8 @@
       "dejavu_tokyo_桜井 のあ",
       "dejavu_tokyo_宮田 るな",
       "dejavu_tokyo_久保 まなみ"
-    ]
+    ],
+    "group_id": "g_brand_dejavu_tokyo"
   },
   {
     "id": 60203,
@@ -96209,7 +96794,8 @@
     "description": "三軒茶屋の日本人リラクゼーション。完全個室・深夜営業対応。 / 料金システム: 60分15,000円→12,000円 / 80分20,000円→16,000円 / 100分25,000円→20,000円 / 120分以上はお電話にてお問い合わせください。",
     "threads": [],
     "brandId": "nanashi_spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_nanashi_spa"
   },
   {
     "id": "tokyo_setagaya_sangenjaya_sancha_bijin",
@@ -96235,7 +96821,8 @@
     "description": "三軒茶屋の日本人リラクゼーション。 / サンクスキャンペーン(全コース1,000円OFF): 70分14,000円 / 90分18,000円 / 120分23,000円 / 150分28,000円 / 180分33,000円",
     "threads": [],
     "brandId": "sancha_bijin",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_sancha_bijin"
   },
   {
     "id": "tokyo_setagaya_shimokitazawa_belle_lily",
@@ -96261,7 +96848,8 @@
     "description": "渋谷・下北沢・明大前の日本人リラクゼーション。 / 料金システム: ショートコース60分12,000円 / スタンダード90分16,000円 / プレミア120分22,000円 / プラチナ150分28,000円 / サンクスキャンペーン等各種割引あり",
     "threads": [],
     "brandId": "belle_lily",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_belle_lily"
   },
   {
     "id": "tokyo_setagaya_shimokitazawa_eren",
@@ -96286,7 +96874,8 @@
     "description": "70分14,000円 / 90分18,000円→16,000円(Open割引) / 120分24,000円→22,000円(Open割引) / 150分30,000円→28,000円(Open割引) / 180分36,000円→34,000円(Open割引)",
     "threads": [],
     "brandId": "eren",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_eren"
   },
   {
     "id": 60201,
@@ -96336,7 +96925,8 @@
     "description": "入会手数料2,000円→無料 / 70分14,000円(2,000円OFF) / 90分18,000円(2,000円OFF) / 110分22,000円(2,000円OFF) / 指名料一律1,000円",
     "threads": [],
     "brandId": "jd_spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_jd_spa"
   },
   {
     "id": 60202,
@@ -96434,7 +97024,8 @@
     "description": "世田谷エリアの日本人リラクゼーション。 / オープン割引開催中: 90分19,000円→17,000円 / 120分24,000円→22,000円 / 150分29,000円→27,000円 / 180分34,000円→32,000円",
     "threads": [],
     "brandId": "winning_heaven",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_winning_heaven"
   },
   {
     "id": 60327,
@@ -96533,7 +97124,8 @@
     "description": "中目黒・恵比寿の日本人リラクゼーション。 / 料金システム: 90分18,000円 / 120分22,000円 / 150分26,000円 / 180分30,000円",
     "threads": [],
     "brandId": "aqua",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aqua"
   },
   {
     "id": 60352,
@@ -96945,7 +97537,8 @@
     "description": "恵比寿・五反田の日本人リラクゼーション。 / 料金システム: 90分22,000円〜 / 初回割引あり",
     "threads": [],
     "brandId": "aromalys",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aromalys"
   },
   {
     "id": 60343,
@@ -97238,7 +97831,8 @@
     "description": "麻布十番・恵比寿の日本人リラクゼーション(旧ハイアット)。 / 料金システム: 60分16,000円〜",
     "threads": [],
     "brandId": "carinna",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_carinna"
   },
   {
     "id": "tokyo_shibuya_ebisu_dahlia",
@@ -97305,7 +97899,8 @@
       "dahlia_松原すみれ",
       "dahlia_吉田さき",
       "dahlia_相川さなみ"
-    ]
+    ],
+    "group_id": "g_brand_dahlia"
   },
   {
     "id": "tokyo_shibuya_ebisu_emerald",
@@ -97328,7 +97923,8 @@
     "description": "赤坂・麻布十番・恵比寿の日本人リラクゼーション。 / 料金システム: 70分13,000円 / 90分17,000円 / 120分22,000円",
     "threads": [],
     "brandId": "emerald",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_emerald"
   },
   {
     "id": "tokyo_shibuya_ebisu_esthe_king",
@@ -97351,7 +97947,8 @@
     "description": "80分18,000円→OPEN割引16,000円 / 100分22,000円→OPEN割引20,000円 / 120分26,000円→OPEN割引24,000円",
     "threads": [],
     "brandId": "esthe_king",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_esthe_king"
   },
   {
     "id": 60353,
@@ -97751,7 +98348,8 @@
       "liora_葵えま",
       "liora_藤咲さち",
       "liora_黒崎はる"
-    ]
+    ],
+    "group_id": "g_brand_liora"
   },
   {
     "id": 60360,
@@ -97792,7 +98390,8 @@
     "threads": [],
     "area": "恵比寿",
     "brandId": "mens_este_ebisu",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_mens_este_ebisu"
   },
   {
     "id": 60361,
@@ -98087,7 +98686,8 @@
       "otonaspa_北川のぞみ",
       "otonaspa_平松ゆりか",
       "otonaspa_浅倉ななみ"
-    ]
+    ],
+    "group_id": "g_brand_otonaspa"
   },
   {
     "id": 60354,
@@ -98157,7 +98757,8 @@
       "salon_blanca_酒井えりな",
       "salon_blanca_夏目すず",
       "salon_blanca_鈴川ありさ"
-    ]
+    ],
+    "group_id": "g_brand_salon_blanca"
   },
   {
     "id": "tokyo_shibuya_ebisu_saudade",
@@ -98184,7 +98785,8 @@
     "description": "笹塚・恵比寿・麻布十番の日本人リラクゼーション。 / 新規限定コース: 60分14,000円 / 90分18,000円 / 120分22,000円 / 通常80分23,000円〜",
     "threads": [],
     "brandId": "saudade",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_saudade"
   },
   {
     "id": "tokyo_shibuya_ebisu_sweet_mist",
@@ -98346,7 +98948,8 @@
       "sweet_mist_松田みう",
       "sweet_mist_神奈美月",
       "sweet_mist_姫乃りおん"
-    ]
+    ],
+    "group_id": "g_brand_sweet_mist"
   },
   {
     "id": 60340,
@@ -98478,7 +99081,73 @@
     "description": "幡ヶ谷の日本人リラクゼーション。採用率10%の高水準セラピストのみでお客様をお出迎えします。 / 料金システム: Short60分12,000円(平日17:30まで) / Standard90分18,000円 / Premium120分24,000円 / Long150分30,000円",
     "threads": [],
     "brandId": "hataesu",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_hataesu"
+  },
+  {
+    "id": "tokyo_shibuya_silk",
+    "group_id": null,
+    "name": "Silk (シルク)",
+    "created_at": "2026-03-04T05:40:55.902838+00:00",
+    "raw_data": {
+      "id": "tokyo_shibuya_silk",
+      "area": [
+        "代々木・原宿",
+        "原宿"
+      ],
+      "city": "代々木",
+      "name": "Silk (シルク)",
+      "tags": [
+        "初台・笹塚エリア",
+        "年中無休",
+        "深夜営業"
+      ],
+      "color": "from-gray-900 to-slate-900",
+      "hours": "12:00～5:00",
+      "image": "/images/shops/silk.jpg",
+      "price": "要確認",
+      "rating": 0,
+      "region": "関東エリア",
+      "address": "東京都渋谷区笹塚",
+      "threads": [],
+      "isPremium": false,
+      "prefecture": "東京都",
+      "therapists": [
+        "unknown_森 かれん",
+        "unknown_木倉 しずく",
+        "unknown_小嶋 あかり",
+        "unknown_榮倉 ななみ",
+        "unknown_白石 せいな",
+        "unknown_佐藤 はるみ",
+        "unknown_葉山 ゆうな",
+        "unknown_今井 かほ",
+        "unknown_秋元 ちはる",
+        "unknown_桃瀬 あい",
+        "unknown_吉岡 えみ",
+        "unknown_浜崎 あん",
+        "unknown_井上 まなみ",
+        "unknown_一条 りり",
+        "unknown_永井 さつき",
+        "unknown_篠宮 ゆかり",
+        "unknown_伊藤 ひかり",
+        "unknown_北野 りん",
+        "unknown_立花 しおん",
+        "unknown_加藤 らん",
+        "unknown_水原 ももか",
+        "unknown_一宮 こころ",
+        "unknown_綾瀬 めい"
+      ],
+      "websiteUrl": "http://www.ms-silk.tokyo/",
+      "reviewCount": 0
+    },
+    "image_url": "https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/silk.png",
+    "phone_number": null,
+    "business_hours": "12:00～5:00",
+    "price_system": "70分(ディープリンパ込): 14,000円\n90分(ディープリンパ込): 18,000円 ⇨ 16,000円 (HP割引)\n120分(ディープリンパ込): 24,000円 ⇨ 22,000円 (HP割引)\n150分(ディープリンパ込): 28,000円 ⇨ 26,000円 (HP割引)\n180分(ディープリンパ込): 36,000円 ⇨ 34,000円 (HP割引)",
+    "website_url": "http://www.ms-silk.tokyo/",
+    "schedule_url": "http://www.ms-silk.tokyo/schedule/",
+    "area_id": "tokyo_shibuya_hatagaya",
+    "brand_id": null
   },
   {
     "id": "tokyo_shibuya_hatsudai_levechi_esthe",
@@ -98503,7 +99172,8 @@
     "description": "成田・中野・東金・初台の日本人リラクゼーション。 / 料金システム: Short60分12,000円 / Standard90分18,000円 / Premium120分24,000円 / Long150分30,000円 / 延長20分5,000円",
     "threads": [],
     "brandId": "levechi_esthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_levechi_esthe"
   },
   {
     "id": "tokyo_shibuya_omotesando_high_grande",
@@ -98529,7 +99199,8 @@
     "description": "表参道・日本橋の日本人リラクゼーション。 / 料金システム: 70分16,000円〜",
     "threads": [],
     "brandId": "high_grande",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_high_grande"
   },
   {
     "id": "tokyo_shibuya_sasazuka_queens_collection",
@@ -98569,7 +99240,8 @@
     "threads": [],
     "area": "笹塚",
     "brandId": "queens_collection",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_queens_collection"
   },
   {
     "id": "tokyo_shibuya_sasazuka_reve_spa",
@@ -98631,7 +99303,8 @@
       "reve_spa_白石いつき",
       "reve_spa_桜井ひなた",
       "reve_spa_一条ななみ"
-    ]
+    ],
+    "group_id": "g_brand_reve_spa"
   },
   {
     "id": "tokyo_shibuya_sasazuka_saudade",
@@ -98658,7 +99331,8 @@
     "description": "笹塚・恵比寿・麻布十番の日本人リラクゼーション。 / 新規限定コース: 60分14,000円 / 90分18,000円 / 120分22,000円 / 通常80分23,000円〜",
     "threads": [],
     "brandId": "saudade",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_saudade"
   },
   {
     "id": "tokyo_shibuya_shibuya_a5spa",
@@ -98683,7 +99357,8 @@
     "description": "渋谷・五反田・代々木・新宿の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分20,000円",
     "threads": [],
     "brandId": "a5spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_a5spa"
   },
   {
     "id": "tokyo_shibuya_shibuya_aroma_tiamo",
@@ -98718,7 +99393,8 @@
     "threads": [],
     "area": "渋谷",
     "brandId": "aroma_tiamo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aroma_tiamo"
   },
   {
     "id": "tokyo_shibuya_shibuya_belle_lily",
@@ -98744,7 +99420,8 @@
     "description": "渋谷・下北沢・明大前の日本人リラクゼーション。 / 料金システム: ショートコース60分12,000円 / スタンダード90分16,000円 / プレミア120分22,000円 / プラチナ150分28,000円 / サンクスキャンペーン等各種割引あり",
     "threads": [],
     "brandId": "belle_lily",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_belle_lily"
   },
   {
     "id": "tokyo_shibuya_shibuya_oneroom",
@@ -98831,7 +99508,8 @@
       "oneroom_花村 ネネ",
       "oneroom_谷",
       "oneroom_水城 にじ"
-    ]
+    ],
+    "group_id": "g_brand_oneroom"
   },
   {
     "id": "tokyo_shibuya_shibuya_rise",
@@ -98870,7 +99548,8 @@
     "threads": [],
     "area": "渋谷",
     "brandId": "rise",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rise"
   },
   {
     "id": 60364,
@@ -99002,7 +99681,8 @@
     "description": "渋谷・五反田・代々木・新宿の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分20,000円",
     "threads": [],
     "brandId": "a5spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_a5spa"
   },
   {
     "id": 60324,
@@ -99104,7 +99784,7 @@
     "area": "代々木・原宿"
   },
   {
-    "id": 60312,
+    "id": "tokyo_shibuya_eren",
     "name": "Eren (エレン)",
     "prefecture": "東京都",
     "city": "代々木上原",
@@ -99178,7 +99858,9 @@
       "unknown_吉川みく",
       "unknown_黒木めぐ"
     ],
-    "area": "代々木・原宿"
+    "area": "代々木・原宿",
+    "brandId": "eren",
+    "group_id": "g_brand_eren"
   },
   {
     "id": 60309,
@@ -99314,7 +99996,8 @@
     "threads": [],
     "area": "代々木・原宿",
     "brandId": "grand_gaia",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_grand_gaia"
   },
   {
     "id": "tokyo_shibuya_yoyogi_harajuku_hoozuki",
@@ -99342,7 +100025,8 @@
     "description": "武蔵小杉・代々木・原宿・蒲田・大森・大井町の日本人リラクゼーション。 / 料金システム: 90分15,000円〜",
     "threads": [],
     "brandId": "hoozuki",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_hoozuki"
   },
   {
     "id": "tokyo_shibuya_yoyogi_harajuku_kaminoesthe",
@@ -99498,7 +100182,8 @@
       "kaminoesthe_コナン",
       "kaminoesthe_ふじこ",
       "kaminoesthe_ねお"
-    ]
+    ],
+    "group_id": "g_brand_kaminoesthe"
   },
   {
     "id": 60307,
@@ -99651,7 +100336,8 @@
       "aroma_lunabelle_白井もか",
       "aroma_lunabelle_中村ゆり",
       "aroma_lunabelle_月見ゆず"
-    ]
+    ],
+    "group_id": "g_brand_aroma_lunabelle"
   },
   {
     "id": 60320,
@@ -99850,7 +100536,8 @@
       "otona_code_飯島",
       "otona_code_蒼井",
       "otona_code_朝野"
-    ]
+    ],
+    "group_id": "g_brand_otona_code"
   },
   {
     "id": "tokyo_shibuya_yoyogi_harajuku_platinum_tokyo",
@@ -99967,7 +100654,8 @@
       "platinum_tokyo_桜井くるみ",
       "platinum_tokyo_小室まほ",
       "platinum_tokyo_明菜もも"
-    ]
+    ],
+    "group_id": "g_brand_platinum_tokyo"
   },
   {
     "id": 60313,
@@ -100098,7 +100786,8 @@
       "salon_blanca_酒井えりな",
       "salon_blanca_夏目すず",
       "salon_blanca_鈴川ありさ"
-    ]
+    ],
+    "group_id": "g_brand_salon_blanca"
   },
   {
     "id": 60316,
@@ -100339,7 +101028,8 @@
     "description": "渋谷・五反田・代々木・新宿の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分20,000円",
     "threads": [],
     "brandId": "a5spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_a5spa"
   },
   {
     "id": "tokyo_shinagawa_gotanda_anna",
@@ -100441,7 +101131,8 @@
       "anna_神崎せな",
       "anna_吉川あさみ",
       "anna_宇佐美るい"
-    ]
+    ],
+    "group_id": "g_brand_anna"
   },
   {
     "id": "tokyo_shinagawa_gotanda_aroma_abc",
@@ -100462,7 +101153,8 @@
     "description": "芸能人顔負けのスレンダー美女専門店 / 70分15,000円 / 90分17,000円 / 120分21,000円 / 150分25,000円",
     "threads": [],
     "brandId": "aroma_abc",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aroma_abc"
   },
   {
     "id": "tokyo_shinagawa_gotanda_aroma_jewels",
@@ -100629,7 +101321,8 @@
       "aroma_jewels_華月 とわ",
       "aroma_jewels_水羽 ゆあ",
       "aroma_jewels_月奈 さほ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_jewels"
   },
   {
     "id": "tokyo_shinagawa_gotanda_aroma_rejina",
@@ -100674,7 +101367,8 @@
       "aroma_rejina_松嶋 あい",
       "aroma_rejina_堀北 ひとみ",
       "aroma_rejina_綾瀬 さき"
-    ]
+    ],
+    "group_id": "g_brand_aroma_rejina"
   },
   {
     "id": "tokyo_shinagawa_gotanda_aromalys",
@@ -100701,7 +101395,8 @@
     "description": "恵比寿・五反田の日本人リラクゼーション。 / 料金システム: 90分22,000円〜 / 初回割引あり",
     "threads": [],
     "brandId": "aromalys",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aromalys"
   },
   {
     "id": "tokyo_shinagawa_gotanda_dahlia",
@@ -100768,7 +101463,8 @@
       "dahlia_松原すみれ",
       "dahlia_吉田さき",
       "dahlia_相川さなみ"
-    ]
+    ],
+    "group_id": "g_brand_dahlia"
   },
   {
     "id": "tokyo_shinagawa_gotanda_esthe_king",
@@ -100791,7 +101487,8 @@
     "description": "80分18,000円→OPEN割引16,000円 / 100分22,000円→OPEN割引20,000円 / 120分26,000円→OPEN割引24,000円",
     "threads": [],
     "brandId": "esthe_king",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_esthe_king"
   },
   {
     "id": "tokyo_shinagawa_gotanda_kami_no_esthe",
@@ -100814,7 +101511,8 @@
     "description": "五反田・品川の日本人リラクゼーション。 / 料金システム: 80分16,000円 / 100分20,000円 / 120分24,000円",
     "threads": [],
     "brandId": "kami_no_esthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_kami_no_esthe"
   },
   {
     "id": "tokyo_shinagawa_gotanda_kanoneko",
@@ -100840,7 +101538,8 @@
     "description": "五反田・品川の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分21,000円 / 各種オプションあり",
     "threads": [],
     "brandId": "kanoneko",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_kanoneko"
   },
   {
     "id": "tokyo_shinagawa_gotanda_koakuma_spa_tokyo",
@@ -100893,7 +101592,8 @@
     "threads": [],
     "area": "五反田",
     "brandId": "koakuma_spa_tokyo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_koakuma_spa_tokyo"
   },
   {
     "id": 60242,
@@ -101043,7 +101743,8 @@
       "aroma_lunabelle_白井もか",
       "aroma_lunabelle_中村ゆり",
       "aroma_lunabelle_月見ゆず"
-    ]
+    ],
+    "group_id": "g_brand_aroma_lunabelle"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -101181,7 +101882,8 @@
       "luxtime_由良のの",
       "luxtime_花咲ひまり",
       "luxtime_美谷はる"
-    ]
+    ],
+    "group_id": "g_brand_luxtime"
   },
   {
     "id": "tokyo_shinagawa_gotanda_lynx",
@@ -101454,7 +102156,8 @@
       "lynx_浦瀬もも",
       "lynx_坂田みなみ",
       "lynx_荻野まなみ"
-    ]
+    ],
+    "group_id": "g_brand_lynx"
   },
   {
     "id": "tokyo_shinagawa_gotanda_rains_rapt",
@@ -101480,7 +102183,8 @@
     "description": "お試し60分14,000円 / 80分17,000円 / 100分20,000円（定番のイチオシコース） / 120分24,000円 / 140分29,000円",
     "threads": [],
     "brandId": "rains_rapt",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rains_rapt"
   },
   {
     "id": "tokyo_shinagawa_gotanda_relax",
@@ -101504,7 +102208,8 @@
     "description": "五反田の日本人リラクゼーション。 / 料金システム: 60分9,000円 / 90分13,000円 / 120分17,000円 / 150分23,000円 / 180分27,000円",
     "threads": [],
     "brandId": "relax",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_relax"
   },
   {
     "id": "tokyo_shinagawa_gotanda_rhea",
@@ -101527,7 +102232,8 @@
     "description": "大森・大井町・品川・五反田の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分21,000円",
     "threads": [],
     "brandId": "rhea",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rhea"
   },
   {
     "id": "tokyo_shinagawa_gotanda_the_half",
@@ -101553,7 +102259,8 @@
     "description": "五反田、中目黒、恵比寿、麻布十番、新橋、銀座、六本木、西麻布エリアで展開",
     "threads": [],
     "brandId": "the_half",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_the_half"
   },
   {
     "id": "tokyo_shinagawa_gotanda_yuru_spa",
@@ -102009,7 +102716,8 @@
       "mens_esthe_group_さき",
       "mens_esthe_group_ゆき",
       "mens_esthe_group_きき"
-    ]
+    ],
+    "group_id": "g_brand_mens_esthe_group"
   },
   {
     "id": "tokyo_shinagawa_oimachi_dahlia",
@@ -102076,7 +102784,8 @@
       "dahlia_松原すみれ",
       "dahlia_吉田さき",
       "dahlia_相川さなみ"
-    ]
+    ],
+    "group_id": "g_brand_dahlia"
   },
   {
     "id": "tokyo_shinagawa_oimachi_gokujou",
@@ -102103,7 +102812,8 @@
     "description": "大井町・大森・蒲田の日本人リラクゼーション(旧ゴクラク)。 / 料金システム: 60分13,000円 / 90分17,000円 / 120分22,000円",
     "threads": [],
     "brandId": "gokujou",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_gokujou"
   },
   {
     "id": "tokyo_shinagawa_oimachi_hoozuki",
@@ -102131,7 +102841,8 @@
     "description": "武蔵小杉・代々木・原宿・蒲田・大森・大井町の日本人リラクゼーション。 / 料金システム: 90分15,000円〜",
     "threads": [],
     "brandId": "hoozuki",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_hoozuki"
   },
   {
     "id": "tokyo_shinagawa_oimachi_nocturne",
@@ -102158,7 +102869,8 @@
     "description": "大井町・大森・蒲田の日本人リラクゼーション。 / 料金システム: 90分22,500円 / 120分27,500円 / 150分32,500円 / 180分37,500円",
     "threads": [],
     "brandId": "nocturne",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_nocturne"
   },
   {
     "id": "tokyo_shinagawa_oimachi_rhea",
@@ -102181,7 +102893,8 @@
     "description": "大森・大井町・品川・五反田の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分21,000円",
     "threads": [],
     "brandId": "rhea",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rhea"
   },
   {
     "id": "tokyo_shinagawa_oimachi_showa_refresh",
@@ -102208,7 +102921,8 @@
     "description": "大井町の日本人リラクゼーション。 / 料金システム: 60分11,000円 / 90分14,000円 / 120分18,000円",
     "threads": [],
     "brandId": "showa_refresh",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_showa_refresh"
   },
   {
     "id": 60237,
@@ -102438,7 +103152,8 @@
     "description": "麻布十番・品川の日本人リラクゼーション。 / 料金システム: 90分17,000円〜",
     "threads": [],
     "brandId": "aria",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aria"
   },
   {
     "id": "tokyo_shinagawa_shinagawa_esthe_king",
@@ -102461,7 +103176,8 @@
     "description": "80分18,000円→OPEN割引16,000円 / 100分22,000円→OPEN割引20,000円 / 120分26,000円→OPEN割引24,000円",
     "threads": [],
     "brandId": "esthe_king",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_esthe_king"
   },
   {
     "id": "tokyo_shinagawa_shinagawa_grace",
@@ -102522,7 +103238,8 @@
       "grace_二ノ宮あい",
       "grace_麻川さら",
       "grace_川口ふう"
-    ]
+    ],
+    "group_id": "g_brand_grace"
   },
   {
     "id": "tokyo_shinagawa_shinagawa_kami_no_esthe",
@@ -102545,7 +103262,8 @@
     "description": "五反田・品川の日本人リラクゼーション。 / 料金システム: 80分16,000円 / 100分20,000円 / 120分24,000円",
     "threads": [],
     "brandId": "kami_no_esthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_kami_no_esthe"
   },
   {
     "id": "tokyo_shinagawa_shinagawa_kanoneko",
@@ -102571,7 +103289,8 @@
     "description": "五反田・品川の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分21,000円 / 各種オプションあり",
     "threads": [],
     "brandId": "kanoneko",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_kanoneko"
   },
   {
     "id": "tokyo_shinagawa_shinagawa_nocturne",
@@ -102598,7 +103317,8 @@
     "description": "品川・蒲田・大井町の日本人リラクゼーション。 / 料金システム: 60分17,500円 / 90分22,500円 / 120分27,500円 / 150分32,500円 / 180分37,500円",
     "threads": [],
     "brandId": "nocturne",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_nocturne"
   },
   {
     "id": "tokyo_shinagawa_shinagawa_rhea",
@@ -102621,7 +103341,8 @@
     "description": "大森・大井町・品川・五反田の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分21,000円",
     "threads": [],
     "brandId": "rhea",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rhea"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_aroma_jewels",
@@ -102788,7 +103509,8 @@
       "aroma_jewels_華月 とわ",
       "aroma_jewels_水羽 ゆあ",
       "aroma_jewels_月奈 さほ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_jewels"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_aroma_modeste",
@@ -102890,7 +103612,8 @@
       "aroma_modeste_玉井 ふみか",
       "aroma_modeste_月島 ゆら",
       "aroma_modeste_清水 まき"
-    ]
+    ],
+    "group_id": "g_brand_aroma_modeste"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_cor_caroli",
@@ -103076,7 +103799,8 @@
       "cor_caroli_司らん",
       "cor_caroli_木苺すずか",
       "cor_caroli_天宮えみり"
-    ]
+    ],
+    "group_id": "g_brand_cor_caroli"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_dejavu_tokyo",
@@ -103341,7 +104065,8 @@
       "dejavu_tokyo_桜井 のあ",
       "dejavu_tokyo_宮田 るな",
       "dejavu_tokyo_久保 まなみ"
-    ]
+    ],
+    "group_id": "g_brand_dejavu_tokyo"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_gyokurou",
@@ -103392,7 +104117,8 @@
     "threads": [],
     "area": "東新宿",
     "brandId": "gyokurou",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_gyokurou"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_koakuma_spa_tokyo",
@@ -103445,7 +104171,8 @@
     "threads": [],
     "area": "東新宿",
     "brandId": "koakuma_spa_tokyo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_koakuma_spa_tokyo"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_limited_spa",
@@ -103468,7 +104195,8 @@
     "description": "西船橋・船橋・柏・錦糸町・東新宿・大久保・久喜の日本人リラクゼーション。 / 料金システム: 60分12,000円〜",
     "threads": [],
     "brandId": "limited_spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_limited_spa"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_oneroom",
@@ -103555,7 +104283,8 @@
       "oneroom_花村 ネネ",
       "oneroom_谷",
       "oneroom_水城 にじ"
-    ]
+    ],
+    "group_id": "g_brand_oneroom"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_peach_next",
@@ -103701,7 +104430,8 @@
       "peach_next_渚あいか",
       "peach_next_月島きらり",
       "peach_next_美咲りん"
-    ]
+    ],
+    "group_id": "g_brand_peach_next"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_platinum_tokyo",
@@ -103818,7 +104548,8 @@
       "platinum_tokyo_桜井くるみ",
       "platinum_tokyo_小室まほ",
       "platinum_tokyo_明菜もも"
-    ]
+    ],
+    "group_id": "g_brand_platinum_tokyo"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_salon_blanca",
@@ -103868,7 +104599,8 @@
       "salon_blanca_酒井えりな",
       "salon_blanca_夏目すず",
       "salon_blanca_鈴川ありさ"
-    ]
+    ],
+    "group_id": "g_brand_salon_blanca"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_sweet_mist",
@@ -104030,7 +104762,8 @@
       "sweet_mist_松田みう",
       "sweet_mist_神奈美月",
       "sweet_mist_姫乃りおん"
-    ]
+    ],
+    "group_id": "g_brand_sweet_mist"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_tokyo_aroma_este",
@@ -104194,7 +104927,8 @@
       "tokyo_aroma_este_天野おうか",
       "tokyo_aroma_este_天使りか",
       "tokyo_aroma_este_宮澤あんず"
-    ]
+    ],
+    "group_id": "g_brand_tokyo_aroma_este"
   },
   {
     "id": "tokyo_shinjuku_higashishinjuku_tokyo_mensesthe",
@@ -104242,7 +104976,8 @@
     "threads": [],
     "area": "東新宿",
     "brandId": "tokyo_mensesthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tokyo_mensesthe"
   },
   {
     "id": "tokyo_shinjuku_ichigaya_be_majo",
@@ -104269,7 +105004,8 @@
     "description": "市ヶ谷の日本人リラクゼーション（熟女系）。 / 料金システム: 90分13,000円〜 / 120分16,000円〜",
     "threads": [],
     "brandId": "be_majo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_be_majo"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -104325,7 +105061,8 @@
       "the_gin_小桜やよい",
       "the_gin_高月はるか",
       "the_gin_美空ゆう"
-    ]
+    ],
+    "group_id": "g_brand_the_gin"
   },
   {
     "id": "tokyo_shinjuku_kabukicho_aroma_modeste",
@@ -104442,7 +105179,8 @@
       "aroma_modeste_玉井 ふみか",
       "aroma_modeste_月島 ゆら",
       "aroma_modeste_清水 まき"
-    ]
+    ],
+    "group_id": "g_brand_aroma_modeste"
   },
   {
     "id": "tokyo_shinjuku_kabukicho_aromacharm",
@@ -104582,7 +105320,8 @@
       "aromacharm_白倉 みく",
       "aromacharm_宮野 せいな",
       "aromacharm_遠野 ゆき"
-    ]
+    ],
+    "group_id": "g_brand_aromacharm"
   },
   {
     "id": "tokyo_shinjuku_kabukicho_aromamore",
@@ -104739,7 +105478,8 @@
       "aromamore_有栖川かれん",
       "aromamore_香坂ゆずは",
       "aromamore_有村りお"
-    ]
+    ],
+    "group_id": "g_brand_aromamore"
   },
   {
     "id": "tokyo_shinjuku_kabukicho_d_spa",
@@ -104877,7 +105617,8 @@
       "d_spa_如月ゆりあ",
       "d_spa_親指えくぼ",
       "d_spa_佐倉なな"
-    ]
+    ],
+    "group_id": "g_brand_d_spa"
   },
   {
     "id": "tokyo_shinjuku_kabukicho_fiorespa",
@@ -104972,7 +105713,8 @@
       "fiorespa_大西あや",
       "fiorespa_深瀬ふゆき",
       "fiorespa_望月るな"
-    ]
+    ],
+    "group_id": "g_brand_fiorespa"
   },
   {
     "id": "tokyo_shinjuku_kabukicho_salon_blanca",
@@ -105022,7 +105764,8 @@
       "salon_blanca_酒井えりな",
       "salon_blanca_夏目すず",
       "salon_blanca_鈴川ありさ"
-    ]
+    ],
+    "group_id": "g_brand_salon_blanca"
   },
   {
     "id": "tokyo_shinjuku_kagurazaka_aromantic",
@@ -105049,7 +105792,8 @@
     "description": "神楽坂の日本人リラクゼーション。 / 料金システム: 90分19,000円〜 / 120分25,000円〜",
     "threads": [],
     "brandId": "aromantic",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aromantic"
   },
   {
     "id": 60269,
@@ -105215,7 +105959,8 @@
       "zexterior_久宝 由奈",
       "zexterior_桃瀬 にこる",
       "zexterior_蒼井 瑠菜"
-    ]
+    ],
+    "group_id": "g_brand_zexterior"
   },
   {
     "id": "tokyo_shinjuku_nishishinjuku_aroma_jewels",
@@ -105382,7 +106127,8 @@
       "aroma_jewels_華月 とわ",
       "aroma_jewels_水羽 ゆあ",
       "aroma_jewels_月奈 さほ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_jewels"
   },
   {
     "id": "tokyo_shinjuku_nishishinjuku_cor_caroli",
@@ -105568,7 +106314,8 @@
       "cor_caroli_司らん",
       "cor_caroli_木苺すずか",
       "cor_caroli_天宮えみり"
-    ]
+    ],
+    "group_id": "g_brand_cor_caroli"
   },
   {
     "id": "tokyo_shinjuku_nishishinjuku_koakuma_spa_tokyo",
@@ -105621,7 +106368,8 @@
     "threads": [],
     "area": "西新宿",
     "brandId": "koakuma_spa_tokyo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_koakuma_spa_tokyo"
   },
   {
     "id": "tokyo_shinjuku_nishishinjuku_platinum_tokyo",
@@ -105738,7 +106486,8 @@
       "platinum_tokyo_桜井くるみ",
       "platinum_tokyo_小室まほ",
       "platinum_tokyo_明菜もも"
-    ]
+    ],
+    "group_id": "g_brand_platinum_tokyo"
   },
   {
     "id": "tokyo_shinjuku_nishishinjuku_salon_blanca",
@@ -105788,7 +106537,8 @@
       "salon_blanca_酒井えりな",
       "salon_blanca_夏目すず",
       "salon_blanca_鈴川ありさ"
-    ]
+    ],
+    "group_id": "g_brand_salon_blanca"
   },
   {
     "id": "tokyo_shinjuku_nishishinjuku_tokyo_aroma_este",
@@ -105952,7 +106702,8 @@
       "tokyo_aroma_este_天野おうか",
       "tokyo_aroma_este_天使りか",
       "tokyo_aroma_este_宮澤あんず"
-    ]
+    ],
+    "group_id": "g_brand_tokyo_aroma_este"
   },
   {
     "id": "tokyo_shinjuku_nishishinjuku_tokyo_mensesthe",
@@ -106000,7 +106751,8 @@
     "threads": [],
     "area": "西新宿",
     "brandId": "tokyo_mensesthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tokyo_mensesthe"
   },
   {
     "id": "tokyo_shinjuku_nishishinjuku_yunispa",
@@ -106058,7 +106810,8 @@
     "threads": [],
     "area": "西新宿",
     "brandId": "yunispa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_yunispa"
   },
   {
     "id": "tokyo_shinjuku_okubo_clarice-dao",
@@ -106084,7 +106837,8 @@
     "description": "【一般ルーム】60分10,000円～180分27,000円 【出張】90分19,000円～プレミアム120分40,000円 延長も可能",
     "threads": [],
     "brandId": "clarice-dao",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_clarice-dao"
   },
   {
     "id": "tokyo_shinjuku_okubo_elteras",
@@ -106329,7 +107083,8 @@
       "elteras_RIKO",
       "elteras_アリス",
       "elteras_川口こなつ"
-    ]
+    ],
+    "group_id": "g_brand_elteras"
   },
   {
     "id": "tokyo_shinjuku_okubo_limited_spa",
@@ -106352,7 +107107,8 @@
     "description": "西船橋・船橋・柏・錦糸町・東新宿・大久保・久喜の日本人リラクゼーション。 / 料金システム: 60分12,000円〜",
     "threads": [],
     "brandId": "limited_spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_limited_spa"
   },
   {
     "id": "tokyo_shinjuku_okubo_oneroom",
@@ -106439,7 +107195,8 @@
       "oneroom_花村 ネネ",
       "oneroom_谷",
       "oneroom_水城 にじ"
-    ]
+    ],
+    "group_id": "g_brand_oneroom"
   },
   {
     "id": "tokyo_shinjuku_okubo_platinum_tokyo",
@@ -106556,7 +107313,8 @@
       "platinum_tokyo_桜井くるみ",
       "platinum_tokyo_小室まほ",
       "platinum_tokyo_明菜もも"
-    ]
+    ],
+    "group_id": "g_brand_platinum_tokyo"
   },
   {
     "id": "tokyo_shinjuku_okubo_rise",
@@ -106595,7 +107353,8 @@
     "threads": [],
     "area": "大久保",
     "brandId": "rise",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rise"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_a5spa",
@@ -106620,7 +107379,8 @@
     "description": "渋谷・五反田・代々木・新宿の日本人リラクゼーション。 / 料金システム: 60分12,000円 / 90分16,000円 / 120分20,000円",
     "threads": [],
     "brandId": "a5spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_a5spa"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_aroma_laluna",
@@ -106764,7 +107524,8 @@
       "aroma_laluna_御影ひな",
       "aroma_laluna_水瀬ゆな",
       "aroma_laluna_足立みう"
-    ]
+    ],
+    "group_id": "g_brand_aroma_laluna"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_first",
@@ -106848,7 +107609,8 @@
       "first_福美れい",
       "first_彩川みゆき",
       "first_大槻かな"
-    ]
+    ],
+    "group_id": "g_brand_first"
   },
   {
     "id": 60284,
@@ -106998,7 +107760,8 @@
       "aroma_lunabelle_白井もか",
       "aroma_lunabelle_中村ゆり",
       "aroma_lunabelle_月見ゆず"
-    ]
+    ],
+    "group_id": "g_brand_aroma_lunabelle"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_lynx",
@@ -107271,7 +108034,8 @@
       "lynx_浦瀬もも",
       "lynx_坂田みなみ",
       "lynx_荻野まなみ"
-    ]
+    ],
+    "group_id": "g_brand_lynx"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_natural_organic_spa",
@@ -107379,7 +108143,8 @@
       "natural_organic_spa_あすみ",
       "natural_organic_spa_らみ",
       "natural_organic_spa_かほ"
-    ]
+    ],
+    "group_id": "g_brand_natural_organic_spa"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_queens_collection",
@@ -107419,7 +108184,8 @@
     "threads": [],
     "area": "新宿",
     "brandId": "queens_collection",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_queens_collection"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_gyoen_aroma_glamour",
@@ -107458,7 +108224,8 @@
       "aroma_glamour_えん",
       "aroma_glamour_さくら",
       "aroma_glamour_ほの"
-    ]
+    ],
+    "group_id": "g_brand_aroma_glamour"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_gyoen_aroma_jewels",
@@ -107625,7 +108392,8 @@
       "aroma_jewels_華月 とわ",
       "aroma_jewels_水羽 ゆあ",
       "aroma_jewels_月奈 さほ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_jewels"
   },
   {
     "id": 60254,
@@ -107908,7 +108676,8 @@
       "cor_caroli_司らん",
       "cor_caroli_木苺すずか",
       "cor_caroli_天宮えみり"
-    ]
+    ],
+    "group_id": "g_brand_cor_caroli"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_gyoen_mitsubachi",
@@ -107981,7 +108750,8 @@
       "mitsubachi_なつ",
       "mitsubachi_あい",
       "mitsubachi_あかね"
-    ]
+    ],
+    "group_id": "g_brand_mitsubachi"
   },
   {
     "id": 60251,
@@ -108152,7 +108922,8 @@
       "oneroom_花村 ネネ",
       "oneroom_谷",
       "oneroom_水城 にじ"
-    ]
+    ],
+    "group_id": "g_brand_oneroom"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_gyoen_platinum_tokyo",
@@ -108269,7 +109040,8 @@
       "platinum_tokyo_桜井くるみ",
       "platinum_tokyo_小室まほ",
       "platinum_tokyo_明菜もも"
-    ]
+    ],
+    "group_id": "g_brand_platinum_tokyo"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_gyoen_rise",
@@ -108308,7 +109080,8 @@
     "threads": [],
     "area": "新宿御苑",
     "brandId": "rise",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rise"
   },
   {
     "id": 60252,
@@ -108476,7 +109249,8 @@
       "tokyopla_八乙女さくら",
       "tokyopla_峰りりな",
       "tokyopla_山口みほ"
-    ]
+    ],
+    "group_id": "g_brand_tokyopla"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_aroma_glamour",
@@ -108515,7 +109289,8 @@
       "aroma_glamour_えん",
       "aroma_glamour_さくら",
       "aroma_glamour_ほの"
-    ]
+    ],
+    "group_id": "g_brand_aroma_glamour"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_aroma_jewels",
@@ -108682,7 +109457,8 @@
       "aroma_jewels_華月 とわ",
       "aroma_jewels_水羽 ゆあ",
       "aroma_jewels_月奈 さほ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_jewels"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_aroma_tiamo",
@@ -108717,7 +109493,8 @@
     "threads": [],
     "area": "新宿三丁目",
     "brandId": "aroma_tiamo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aroma_tiamo"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_mitsubachi",
@@ -108790,7 +109567,8 @@
       "mitsubachi_なつ",
       "mitsubachi_あい",
       "mitsubachi_あかね"
-    ]
+    ],
+    "group_id": "g_brand_mitsubachi"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_oneroom",
@@ -108877,7 +109655,8 @@
       "oneroom_花村 ネネ",
       "oneroom_谷",
       "oneroom_水城 にじ"
-    ]
+    ],
+    "group_id": "g_brand_oneroom"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_peach_next",
@@ -109023,7 +109802,8 @@
       "peach_next_渚あいか",
       "peach_next_月島きらり",
       "peach_next_美咲りん"
-    ]
+    ],
+    "group_id": "g_brand_peach_next"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_queens_collection",
@@ -109063,7 +109843,8 @@
     "threads": [],
     "area": "新宿三丁目",
     "brandId": "queens_collection",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_queens_collection"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_rise",
@@ -109102,7 +109883,8 @@
     "threads": [],
     "area": "新宿三丁目",
     "brandId": "rise",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rise"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_tokyo_mensesthe",
@@ -109150,7 +109932,8 @@
     "threads": [],
     "area": "新宿三丁目",
     "brandId": "tokyo_mensesthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tokyo_mensesthe"
   },
   {
     "id": "tokyo_shinjuku_shinjuku_sanchome_tokyopla",
@@ -109244,7 +110027,8 @@
       "tokyopla_八乙女さくら",
       "tokyopla_峰りりな",
       "tokyopla_山口みほ"
-    ]
+    ],
+    "group_id": "g_brand_tokyopla"
   },
   {
     "id": 60249,
@@ -109382,7 +110166,8 @@
     "description": "Aroma Mrsトリートメント: 60分12,000円/90分16,000円/120分20,000円 VIPラグジュアリーコース: 60分16,000円/90分20,000円/120分24,000円",
     "threads": [],
     "brandId": "aroma-mrs",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aroma-mrs"
   },
   {
     "id": "tokyo_shinjuku_takadanobaba_chat_noir",
@@ -109512,7 +110297,8 @@
       "chat_noir_北川れいこ",
       "chat_noir_冴木はてな",
       "chat_noir_松岡ゆらら"
-    ]
+    ],
+    "group_id": "g_brand_chat_noir"
   },
   {
     "id": "tokyo_shinjuku_takadanobaba_cozy",
@@ -109537,7 +110323,8 @@
     "description": "【土日祝】60分12,000円/90分15,000円/120分19,000円/150分24,000円 【平日12-17時】60分11,000円/90分14,000円/120分18,000円/150分23,000円 延長30分6,000円",
     "threads": [],
     "brandId": "cozy",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_cozy"
   },
   {
     "id": "tokyo_shinjuku_takadanobaba_evergreen",
@@ -109561,7 +110348,8 @@
     "description": "グリーン・コース: 90分15,000円/120分18,000円/150分22,000円 ブルー・コース: 100分18,000円/110分19,000円/120分20,000円 オプション: 泡ホイップ・クレンジング 20分5,000円/30分6,000円",
     "threads": [],
     "brandId": "evergreen",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_evergreen"
   },
   {
     "id": "tokyo_shinjuku_takadanobaba_felix",
@@ -109587,7 +110375,8 @@
     "description": "100分18,000円～140分26,000円 外国人対応可能、深夜営業で幅広いニーズに対応",
     "threads": [],
     "brandId": "felix",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_felix"
   },
   {
     "id": "tokyo_shinjuku_takadanobaba_grand-chariot",
@@ -109611,7 +110400,8 @@
     "description": "70分15,000円/90分19,000円/120分24,000円/150分29,000円/180分37,000円/210分42,000円/240分48,000円 延長30分6,000円",
     "threads": [],
     "brandId": "grand-chariot",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_grand-chariot"
   },
   {
     "id": "tokyo_shinjuku_takadanobaba_lynx",
@@ -109884,7 +110674,8 @@
       "lynx_浦瀬もも",
       "lynx_坂田みなみ",
       "lynx_荻野まなみ"
-    ]
+    ],
+    "group_id": "g_brand_lynx"
   },
   {
     "id": "tokyo_shinjuku_takadanobaba_rs-spa",
@@ -109908,7 +110699,8 @@
     "description": "【Average】90分17,000円/120分22,000円/150分27,000円/延長30分6,000円 【Special】70分19,000円/100分24,000円/延長15分4,000円",
     "threads": [],
     "brandId": "rs-spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_rs-spa"
   },
   {
     "id": "tokyo_shinjuku_takadanobaba_salon_blanca",
@@ -109958,7 +110750,8 @@
       "salon_blanca_酒井えりな",
       "salon_blanca_夏目すず",
       "salon_blanca_鈴川ありさ"
-    ]
+    ],
+    "group_id": "g_brand_salon_blanca"
   },
   {
     "id": "tokyo_shinjuku_wakamatsu_kawada_zexterior",
@@ -110040,7 +110833,8 @@
       "zexterior_久宝 由奈",
       "zexterior_桃瀬 にこる",
       "zexterior_蒼井 瑠菜"
-    ]
+    ],
+    "group_id": "g_brand_zexterior"
   },
   {
     "id": "tokyo_shinjuku_yotsuya_e_komachi",
@@ -110067,7 +110861,8 @@
     "description": "四ツ谷の日本人リラクゼーション。 / 料金システム: 80分17,000円〜 / 100分21,000円〜",
     "threads": [],
     "brandId": "e_komachi",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_e_komachi"
   },
   {
     "id": "tokyo_shinjuku_yotsuya_sanchome_e_komachi",
@@ -110204,7 +110999,8 @@
       "e_komachi_向坂ひより",
       "e_komachi_葉月りりな",
       "e_komachi_白咲ななみ"
-    ]
+    ],
+    "group_id": "g_brand_e_komachi"
   },
   {
     "id": "tokyo_shinjuku_yotsuya_sanchome_zexterior",
@@ -110286,7 +111082,8 @@
       "zexterior_久宝 由奈",
       "zexterior_桃瀬 にこる",
       "zexterior_蒼井 瑠菜"
-    ]
+    ],
+    "group_id": "g_brand_zexterior"
   },
   {
     "id": "tokyo_suginami_koenji_spa_flame",
@@ -110364,7 +111161,8 @@
       "spa_flame_あや",
       "spa_flame_はるな",
       "spa_flame_小鳥（ことり）"
-    ]
+    ],
+    "group_id": "g_brand_spa_flame"
   },
   {
     "id": "tokyo_suginami_ogikubo_a-laise",
@@ -110390,7 +111188,8 @@
     "description": "60分15,000円/90分16,000円/120分20,000円/150分25,000円/180分30,000円 a laiseオリジナルリンパドレナージュになります",
     "threads": [],
     "brandId": "a-laise",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_a-laise"
   },
   {
     "id": "tokyo_suginami_ogikubo_aroma_charmant",
@@ -110441,7 +111240,8 @@
       "aroma_charmant_なつき",
       "aroma_charmant_ノア",
       "aroma_charmant_さよ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_charmant"
   },
   {
     "id": "tokyo_suginami_ogikubo_crest_spa_tokyo",
@@ -110509,7 +111309,8 @@
       "crest_spa_tokyo_なつき",
       "crest_spa_tokyo_えり",
       "crest_spa_tokyo_ゆかな"
-    ]
+    ],
+    "group_id": "g_brand_crest_spa_tokyo"
   },
   {
     "id": "tokyo_suginami_ogikubo_mens_esthe_jj",
@@ -110536,7 +111337,8 @@
     "description": "荻窪・西荻窪・中野エリアの日本人一般ルーム。 / 料金システム: 80分15,000円 / 100分17,000円 / 120分19,000円",
     "threads": [],
     "brandId": "mens_esthe_jj",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_mens_esthe_jj"
   },
   {
     "id": "tokyo_suginami_ogikubo_yorimichi",
@@ -110682,7 +111484,8 @@
       "yorimichi_江黒あんな",
       "yorimichi_白石あゆ",
       "yorimichi_小野田ゆら"
-    ]
+    ],
+    "group_id": "g_brand_yorimichi"
   },
   {
     "id": "tokyo_sumida_kinshicho_aroma_cura",
@@ -110758,7 +111561,8 @@
       "aroma_cura_加藤 ひかり",
       "aroma_cura_花星 さな",
       "aroma_cura_月乃 ありさ"
-    ]
+    ],
+    "group_id": "g_brand_aroma_cura"
   },
   {
     "id": "tokyo_sumida_kinshicho_kaminoesthe_kinshicho",
@@ -110939,7 +111743,8 @@
       "kaminoesthe_kinshicho_泉 あやめ",
       "kaminoesthe_kinshicho_アルベール",
       "kaminoesthe_kinshicho_あんじゅ"
-    ]
+    ],
+    "group_id": "g_brand_kaminoesthe_kinshicho"
   },
   {
     "id": "tokyo_sumida_kinshicho_limited_spa",
@@ -110962,7 +111767,8 @@
     "description": "西船橋・船橋・柏・錦糸町・東新宿・大久保・久喜の日本人リラクゼーション。 / 料金システム: 60分12,000円〜",
     "threads": [],
     "brandId": "limited_spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_limited_spa"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -111100,7 +111906,8 @@
       "luxtime_由良のの",
       "luxtime_花咲ひまり",
       "luxtime_美谷はる"
-    ]
+    ],
+    "group_id": "g_brand_luxtime"
   },
   {
     "id": "tokyo_sumida_kinshicho_wife_collection",
@@ -111409,7 +112216,8 @@
       "wife_collection_朝比奈 かな",
       "wife_collection_早乙女 らん",
       "wife_collection_宮下 さくら"
-    ]
+    ],
+    "group_id": "g_brand_wife_collection"
   },
   {
     "id": "tokyo_sumida_ryougoku_otonaspa_kutsurogi",
@@ -111451,7 +112259,8 @@
       "otonaspa_kutsurogi_壇（だん）",
       "otonaspa_kutsurogi_並木(なみき)",
       "otonaspa_kutsurogi_野原(のはら)"
-    ]
+    ],
+    "group_id": "g_brand_otonaspa_kutsurogi"
   },
   {
     "id": "tokyo_tachikawa_crest_spa_tokyo",
@@ -111519,7 +112328,8 @@
       "crest_spa_tokyo_なつき",
       "crest_spa_tokyo_えり",
       "crest_spa_tokyo_ゆかな"
-    ]
+    ],
+    "group_id": "g_brand_crest_spa_tokyo"
   },
   {
     "id": "tokyo_tachikawa_disini",
@@ -111594,7 +112404,8 @@
       "disini_早乙女",
       "disini_譜久村(ふくむら)",
       "disini_岡宮"
-    ]
+    ],
+    "group_id": "g_brand_disini"
   },
   {
     "id": "tokyo_tachikawa_morganite",
@@ -111642,7 +112453,8 @@
       "morganite_咲間ゆの",
       "morganite_麻倉そら",
       "morganite_遊木まこと"
-    ]
+    ],
+    "group_id": "g_brand_morganite"
   },
   {
     "id": "tokyo_tachikawa_rabbit_spa",
@@ -111735,7 +112547,8 @@
       "rabbit_spa_あかり",
       "rabbit_spa_ひめか",
       "rabbit_spa_きなこ"
-    ]
+    ],
+    "group_id": "g_brand_rabbit_spa"
   },
   {
     "id": "tokyo_tachikawa_tachikawa_gladol-spa",
@@ -111758,7 +112571,8 @@
     "description": "60分11,000円/90分13,000円/120分17,000円/150分22,000円 延長30分5,000円 オプション:ホットアイマスク4,000円/極液2,000円",
     "threads": [],
     "brandId": "gladol-spa",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_gladol-spa"
   },
   {
     "id": "tokyo_tachikawa_tachikawa_tokyopla",
@@ -111854,7 +112668,8 @@
       "tokyopla_八乙女さくら",
       "tokyopla_峰りりな♦︎",
       "tokyopla_山口みほ♦︎"
-    ]
+    ],
+    "group_id": "g_brand_tokyopla"
   },
   {
     "id": "tokyo_tachikawa_tokyopla",
@@ -111948,7 +112763,8 @@
       "tokyopla_八乙女さくら",
       "tokyopla_峰りりな",
       "tokyopla_山口みほ"
-    ]
+    ],
+    "group_id": "g_brand_tokyopla"
   },
   {
     "name": "Assouplir (アスプリー浅草橋店)",
@@ -112034,7 +112850,8 @@
       "assouplir_葉月れな",
       "assouplir_朝倉りら",
       "assouplir_南りょう"
-    ]
+    ],
+    "group_id": "g_brand_assouplir"
   },
   {
     "name": "Weal (ウィール浅草橋店)",
@@ -112103,7 +112920,8 @@
       "weal_白波みなみ",
       "weal_雪白かのん",
       "weal_七海かな"
-    ]
+    ],
+    "group_id": "g_brand_weal"
   },
   {
     "id": "tokyo_taito_ueno_aroma_rejina",
@@ -112148,7 +112966,8 @@
       "aroma_rejina_松嶋 あい",
       "aroma_rejina_堀北 ひとみ",
       "aroma_rejina_綾瀬 さき"
-    ]
+    ],
+    "group_id": "g_brand_aroma_rejina"
   },
   {
     "id": "tokyo_taito_ueno_iyashinokuukan_annex",
@@ -112189,7 +113008,8 @@
       "iyashinokuukan_annex_吉岡 さな",
       "iyashinokuukan_annex_白石 ゆり",
       "iyashinokuukan_annex_水沢 みみ"
-    ]
+    ],
+    "group_id": "g_brand_iyashinokuukan_annex"
   },
   {
     "id": "tokyo_taito_ueno_tokyo-luxury",
@@ -112216,7 +113036,8 @@
     "description": "24時間営業、完全個室、カード払い対応で幅広いニーズに対応",
     "threads": [],
     "brandId": "tokyo-luxury",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tokyo-luxury"
   },
   {
     "id": "tokyo_taito_ueno_ueno_luxury",
@@ -112261,7 +113082,8 @@
       "ueno_luxury_堀北 ゆき",
       "ueno_luxury_宮崎 さき",
       "ueno_luxury_相武 みな"
-    ]
+    ],
+    "group_id": "g_brand_ueno_luxury"
   },
   {
     "id": "tokyo_taito_ueno_ultimate_spa_ueno",
@@ -112306,7 +113128,8 @@
       "ultimate_spa_ueno_美波 ゆり",
       "ultimate_spa_ueno_星野 あい",
       "ultimate_spa_ueno_桜木 なな"
-    ]
+    ],
+    "group_id": "g_brand_ultimate_spa_ueno"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -112357,7 +113180,8 @@
       "trendy_spa_宮森 みか",
       "trendy_spa_中原 すず",
       "trendy_spa_望月 れい"
-    ]
+    ],
+    "group_id": "g_brand_trendy_spa"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -112408,7 +113232,8 @@
       "trendy_spa_宮森 みか",
       "trendy_spa_中原 すず",
       "trendy_spa_望月 れい"
-    ]
+    ],
+    "group_id": "g_brand_trendy_spa"
   },
   {
     "id": "tokyo_toshima_ikebukuro_anemone",
@@ -112431,7 +113256,8 @@
     "description": "90分13,000円 / 120分18,000円 / 150分23,000円 / 180分28,000円 / 210分33,000円 / 延長30分5,000円",
     "threads": [],
     "brandId": "anemone",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_anemone"
   },
   {
     "id": "tokyo_toshima_ikebukuro_aroma_resort",
@@ -112454,7 +113280,8 @@
     "description": "アロマリゾートコース（18～27歳）: 70分14,000円 / 90分16,000円 / 120分22,000円 / 150分28,000円 / 大人リゾートコース（28～47歳）: 70分12,000円 / 90分14,000円 / 120分20,000円 / 150分26,000円",
     "threads": [],
     "brandId": "aroma_resort",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aroma_resort"
   },
   {
     "id": "tokyo_toshima_ikebukuro_aroma_tiamo",
@@ -112489,7 +113316,8 @@
     "threads": [],
     "area": "池袋",
     "brandId": "aroma_tiamo",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_aroma_tiamo"
   },
   {
     "id": "tokyo_toshima_ikebukuro_aromamore",
@@ -112545,7 +113373,8 @@
         "content": "【入店〜システム】\n駅近の雑居ビルですが、看板がないので隠れ家感があり、入る時からドキドキします。\n予約時の電話対応も非常にスムーズでした。\n部屋に入ると外観からは想像できないほど綺麗にリノベーションされており、ふわっとアロマの良い香りがしてリラックスできました。シャワールームも清潔感◎です。\n\n【ご対面】\nドアが開いた瞬間、思わず「おぉ…」と声が出そうになりました。\n写真通りの、いや写真以上に整ったハーフ顔の超美人さん！身長は高めでスラッとしていますが、出るべきところはしっかり出ている理想的なスタイルです。\n最初はハーフ特有の少しクールな印象を受けましたが、挨拶するとニコッと笑ってくれて、そのギャップに早くもやられました。\n\n【施術タイム】\nマッサージ技術はかなり高めです。\n最初は指圧ベースで背中全体をほぐしてくれますが、細い腕からは想像できないほど力がしっかりしています。「そこ、凝ってますね〜」と、コリがある部分はグッと強めに入れてくるので思わず声が出ちゃいました（笑）。\n私が「痛気持ちいいです」と言うと、「痛いですか？ふふっ」と少しSっ気のある感じで聞いてくるのがたまりません。\n\n【密着・余韻】\n後半のオイルトリートメントに入ってからの密着タイムが凄かったです。\nオイルをたっぷり使い、肌と肌が吸い付くような感覚。耳元での囁きや、鼠径部ギリギリの際どいラインへの攻め込みが絶妙で、何度も限界ギリギリまで焦らされました。\n特に仰向け時は、彼女の整った顔が目の前に迫り、ビジュアルの破壊力が抜群で目のやり場に困るほど。\n\n【退店】\nシャワーを浴びて着替えている間も、ドアの外で待っていてくれて最後はお見送りまで丁寧でした。\nエレベーターが閉まるまで深々とお辞儀をしてくれていて、接客レベルの高さを感じました。\n「また凝ったら来てくださいね」と言われたら、行かないわけにはいきません。\nルックス、技術、愛嬌、どれをとってもレベルが高く、久しぶりに指名リピート確定の子に出会えました。",
         "date": "2024-02-13T18:00:00Z"
       }
-    ]
+    ],
+    "group_id": "g_brand_aromamore"
   },
   {
     "id": "tokyo_toshima_ikebukuro_atlantis",
@@ -112614,7 +113443,8 @@
       "atlantis_カレン",
       "atlantis_ニコ",
       "atlantis_マフユ"
-    ]
+    ],
+    "group_id": "g_brand_atlantis"
   },
   {
     "id": "tokyo_toshima_ikebukuro_b_sera_kiwami",
@@ -112641,7 +113471,8 @@
     "description": "スタンダードコース: 90分15,000円 / 120分20,000円 / 150分25,000円 / 180分30,000円",
     "threads": [],
     "brandId": "b_sera_kiwami",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_b_sera_kiwami"
   },
   {
     "id": "tokyo_toshima_ikebukuro_cachette",
@@ -112668,7 +113499,8 @@
     "description": "70分17,000円 / 90分17,000円 / 120分23,000円 / 延長30分6,000円",
     "threads": [],
     "brandId": "cachette",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_cachette"
   },
   {
     "id": "tokyo_toshima_ikebukuro_cor_caroli",
@@ -112854,7 +113686,8 @@
       "cor_caroli_司らん",
       "cor_caroli_木苺すずか",
       "cor_caroli_天宮えみり"
-    ]
+    ],
+    "group_id": "g_brand_cor_caroli"
   },
   {
     "id": "tokyo_toshima_ikebukuro_eternal",
@@ -112882,7 +113715,8 @@
     "description": "お試しコース 60分10,000円 / スタンダード 90分14,000円 / ロング 120分18,000円 / VIP 150分22,000円 / 延長 30分6,000円",
     "threads": [],
     "brandId": "eternal",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_eternal"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -112963,7 +113797,8 @@
       "fever_髙橋みあ",
       "fever_瀬名はるか",
       "fever_平野まい"
-    ]
+    ],
+    "group_id": "g_brand_fever"
   },
   {
     "id": "tokyo_toshima_ikebukuro_le_reve_ck",
@@ -112990,7 +113825,8 @@
     "description": "CKコース: 60分15,000円 / 90分16,000円 / 120分20,000円 / 150分25,000円 / 180分30,000円 / KINGコース: 120分24,000円 / 150分29,000円 / 180分34,000円",
     "threads": [],
     "brandId": "le_reve_ck",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_le_reve_ck"
   },
   {
     "name": "Aroma Lunabelle (池袋店)",
@@ -113074,7 +113910,8 @@
       "aroma_lunabelle_白井もか",
       "aroma_lunabelle_中村ゆり",
       "aroma_lunabelle_月見ゆず"
-    ]
+    ],
+    "group_id": "g_brand_aroma_lunabelle"
   },
   {
     "image": "/images/shops/no_image.jpg",
@@ -113212,7 +114049,8 @@
       "luxtime_由良のの",
       "luxtime_花咲ひまり",
       "luxtime_美谷はる"
-    ]
+    ],
+    "group_id": "g_brand_luxtime"
   },
   {
     "id": "tokyo_toshima_ikebukuro_lynx",
@@ -113485,7 +114323,8 @@
       "lynx_浦瀬もも",
       "lynx_坂田みなみ",
       "lynx_荻野まなみ"
-    ]
+    ],
+    "group_id": "g_brand_lynx"
   },
   {
     "id": "tokyo_toshima_ikebukuro_mens_pastime_ikebukuro",
@@ -113508,7 +114347,8 @@
     "description": "90分15,000円 / 120分20,000円 / 150分25,000円 / 延長30分6,000円 / 指名料・本指名料1,000円",
     "threads": [],
     "brandId": "mens_pastime_ikebukuro",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_mens_pastime_ikebukuro"
   },
   {
     "id": "tokyo_toshima_ikebukuro_muchimuchi_onesan",
@@ -113532,7 +114372,8 @@
     "description": "通常コース: 90分18,000円 / 120分24,000円 / 150分30,000円 / 70分18,000円(仰向けのみ) / 30分延長6,000円 / マットコース: 100分24,000円 / 130分30,000円 / 160分36,000円 / 指名料1,000円 / 本指名料2,000円",
     "threads": [],
     "brandId": "muchimuchi_onesan",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_muchimuchi_onesan"
   },
   {
     "id": 60303,
@@ -113640,7 +114481,8 @@
     "description": "池袋の日本人リラクゼーション。 / 料金システム: 60分13,000円 / 90分15,000円 / 120分19,000円 / 150分23,000円",
     "threads": [],
     "brandId": "otonatic",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_otonatic"
   },
   {
     "id": "tokyo_toshima_ikebukuro_otonazyoshi",
@@ -113666,7 +114508,8 @@
     "description": "【スタンダードリンパ】90分15,000円/120分19,000円/150分23,000円 【リッチリンパ】90分17,000円/120分21,000円/150分25,000円",
     "threads": [],
     "brandId": "otonazyoshi",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_otonazyoshi"
   },
   {
     "id": "tokyo_toshima_ikebukuro_platinum_tokyo",
@@ -113783,7 +114626,8 @@
       "platinum_tokyo_桜井くるみ",
       "platinum_tokyo_小室まほ",
       "platinum_tokyo_明菜もも"
-    ]
+    ],
+    "group_id": "g_brand_platinum_tokyo"
   },
   {
     "name": "Rex (レックス池袋店)",
@@ -113853,7 +114697,8 @@
       "rex_一条ななみ",
       "rex_桜咲いおり",
       "rex_北やよい"
-    ]
+    ],
+    "group_id": "g_brand_rex"
   },
   {
     "id": "tokyo_toshima_ikebukuro_salon_blanca",
@@ -113903,7 +114748,8 @@
       "salon_blanca_酒井えりな",
       "salon_blanca_夏目すず",
       "salon_blanca_鈴川ありさ"
-    ]
+    ],
+    "group_id": "g_brand_salon_blanca"
   },
   {
     "id": "tokyo_toshima_ikebukuro_tokyo-fairy-land",
@@ -113930,7 +114776,8 @@
     "description": "70分16,000円 / 90分18,000円 / 120分23,000円 / 150分28,000円 / 延長30分6,000円",
     "threads": [],
     "brandId": "tokyo-fairy-land",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tokyo-fairy-land"
   },
   {
     "id": 60298,
@@ -114055,7 +114902,8 @@
     "threads": [],
     "area": "池袋",
     "brandId": "tokyo_mensesthe",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_tokyo_mensesthe"
   },
   {
     "id": "tokyo_toshima_otsuka_amaryllis",
@@ -114076,7 +114924,8 @@
     "description": "全コース2,000円割引！アロマコース: 70分10,000円 / 90分12,000円 / 120分15,000円 / 会員様限定ロングコース: 150分18,000円",
     "threads": [],
     "brandId": "amaryllis",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_amaryllis"
   },
   {
     "id": "tokyo_toshima_otsuka_otsuka_mg",
@@ -114104,7 +114953,8 @@
     "description": "70分10,000円 / 100分15,000円 / 130分19,000円 / 160分23,000円 / 延長30分6,000円",
     "threads": [],
     "brandId": "otsuka_mg",
-    "therapists": []
+    "therapists": [],
+    "group_id": "g_brand_otsuka_mg"
   },
   {
     "id": "tokyo_toshima_sugamo_ulrare_sugamo",
@@ -114146,6 +114996,7 @@
         ],
         "image": "/images/no_image.png"
       }
-    ]
+    ],
+    "group_id": "g_brand_ulrare_sugamo"
   }
 ]

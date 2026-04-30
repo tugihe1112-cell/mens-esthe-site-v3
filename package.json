@@ -28,6 +28,7 @@
     "fs-extra": "^11.3.3",
     "lucide-react": "^0.475.0",
     "prop-types": "^15.8.1",
+    "puppeteer": "^24.42.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-helmet-async": "^2.0.5",

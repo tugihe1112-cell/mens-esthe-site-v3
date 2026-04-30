@@ -1,5 +1,5 @@
 {
-  "id": 60312,
+  "id": "tokyo_shibuya_eren",
   "name": "Eren (エレン)",
   "prefecture": "東京都",
   "city": "代々木上原",
@@ -73,5 +73,6 @@
     "unknown_吉川みく",
     "unknown_黒木めぐ"
   ],
-  "area": "代々木・原宿"
+  "area": "代々木・原宿",
+  "brandId": "eren"
 }

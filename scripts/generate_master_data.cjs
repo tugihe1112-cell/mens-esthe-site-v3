@@ -40,6 +40,7 @@ function main() {
   // 2. ソースファイルの収集
   const allFiles = getAllJsonFiles(SRC_DIR);
   const shops = [];
+  const brandGroupMap = {}; // brandId → group_id のマッピング
   let allReviews = [];
 
   console.log(`📋 Found ${allFiles.length} source files.`);
@@ -54,6 +55,14 @@ function main() {
       if (data.id) {
         // 店舗データをリストに追加
         // ★重要: reviewsが含まれていれば、そのままshops.jsonにも含める
+        // brandIdが同じ店舗には同じgroup_idを付与（レビュー吸収のため）
+        if (data.brandId) {
+          if (!brandGroupMap[data.brandId]) {
+            // 既存のgroup_idがあればそれを使い、なければ新規生成
+            brandGroupMap[data.brandId] = data.group_id || ('g_brand_' + data.brandId);
+          }
+          data.group_id = brandGroupMap[data.brandId];
+        }
         shops.push(data);
 
         // クチコミがあれば、reviews.json用に抽出して平坦化する
