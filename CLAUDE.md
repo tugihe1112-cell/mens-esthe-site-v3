@@ -3,7 +3,7 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-05-14 （むちすぱルーム 南浦和 29名登録完了。website_url も正しいURLに修正。残り未処理店舗: no-brand.jp（サイトダウン）・natural organic spa（URL不明）の2店舗のみ。前回: 写真修正第4弾: 女教師20件・熟れた果実2件・ムーンR大阪1件・Zexterior suffix 16件・HaTaEsu/UraSanEsu prefix 32件。LIRICA26件・子守唄3件・ムーンR兵庫8件・Aroma BANKER5件・小悪魔16件はいずれも退職者または修正不可。小悪魔16件（橋本るい等4名×4店舗）削除済み。東京都追加9店舗完了。写真修正第2弾 計623件更新。未登録セラピスト追加 計135名）**
+> **最終更新: 2026-05-21 （東京中央エリア口コミ一括スクレイピング・268件v2書き直し完了）**
 > 作業がひと段落するたびに、Claudeがこのファイルを自動更新する。
 
 ---
@@ -602,6 +602,272 @@ const isNoise = (name) => {
 - `/photos/{id}/raw_{id}.jpg?{ts}` → `imageUrl.split('?')[0]` でタイムスタンプ除去してからfetch
 - `img[src*="/photos/"]` + `src.match(/\/photos\/(\d+)\/raw_\d+/)` でphotoId抽出
 - Storage filename: `{prefix}_photo_{photoId}.{ext}`
+
+### 2026-05-16
+- **schedule_url 一括設定完了**
+  - 44件を `fix_missing_schedule_urls.mjs` で自動設定（姉妹店参照 + パターン検出）
+  - ARENA SPA・Natural Organic Spa を追加設定（計46件）
+  - UraSanEsu 2店舗 → `https://shimoesu.com/week.cgi`
+  - Mirajour → `https://total-beauty-salon.net/scheduleAll.html`
+  - 残り未設定: No Brand（サイトダウン）・Aroma Rich・ムーブプラス・僕のママスパ・キャンディスパ の5件
+
+- **shop画像 未設定店舗を自動取得・設定完了** → `fix_missing_shop_images.mjs`
+  - og:image → apple-touch-icon → logo → background-image の優先順位で自動検出
+  - Mirajour の image_url も背景画像から設定済み
+  - 残り未設定: No Brand 1件（サイトダウン）
+
+- **フロントエンド UI 改善（Claude）**
+  - BottomNav ラベル日本語化: HOME→ホーム / SEARCH→探す / RANK→ランキング / MY PAGE→マイページ
+  - ShopDetailPage タブ日本語化: TOP→トップ / CAST→キャスト / REVIEW→口コミ / SCHEDULE→出勤
+  - 出勤タブのフォールバックをボタン形式に改善
+  - Home 新着店舗を `created_at` 降順に修正
+  - SearchPage 英語テキスト全て日本語化（「Results for」→「の検索結果」等）
+  - RankingPage タブラベル日本語化・「もっと見る」ページネーション追加
+  - SeoHead: ドメイン動的化・og:image / twitter:image 対応
+
+- **ヘッダー/ナビ ラベル統一（Claude + Codex協働）**
+  - `/search` がキャスト検索ページである実態に合わせて文言統一
+  - PCヘッダー「店舗検索」→「キャスト検索」（Claude）
+  - BottomNav「探す」→「キャスト」（Claude）
+  - モバイルメニュー「店舗・キャスト検索」→「キャスト検索」（Codex）
+
+- **BRIEFING.md 作成**
+  - Codex等への引き継ぎ用の精緻な技術ドキュメント
+  - DB設計・データフロー・スクリプト体系・注意事項を網羅
+  - ※ React/router バージョンは package.json を直接確認すること（BRIEFINGは概説）
+
+### 2026-05-17
+- **スペーサー画像バグ 全24店舗 調査・修正完了**
+  - 原因: `alt="〇〇さんの写真" + style="background-image: url(...)"` パターンのCMSで、スクレイパーが `<img src="spacer300x450.png">` のsrcを取得していた
+  - 調査: `check_spacer_shops.mjs` + `check_spacer_html.mjs` で24店舗を特定
+  - 修正: `fix_all_spacer_images.mjs` で一括対応（--dry-run対応、グループ店舗はURL一回フェッチで全店舗に適用）
+
+  **修正結果:**
+  | 店舗 | 結果 |
+  |------|------|
+  | AR TOKYO 秋葉原 | 96件更新 + name修正（「さんの写真」除去） |
+  | ビコーズ（旧リオン） | 20件更新 + name修正 |
+  | PEPE SPA（全6店舗） | 236件更新 + name修正 |
+  | Deep Black | 1件更新 + 新規12件追加（英語名フォーマット変更対応）|
+  | 天界のスパ・EREN・ぐらどるスパ・シャルル・ONE ROOM・東京えすてクラブ | すでに修正済みを確認（スキップ） |
+
+  **Deep Black クリーンアップ** → `fix_deep_black_cleanup.mjs`
+  - `まなさんの写真` 等の旧名前重複レコード 18件を削除
+  - 対応する正常名レコード（写真あり）が存在するため削除のみで完結
+
+  **スクリプトのノウハウ（Supabase注意点）:**
+  - `.or('column.ilike.%pattern%,column2.is.null')` の `ilike` 内 `%` はSupabase JSで動作しない
+  - 代替: 全件取得後、JS側でフィルタ `(allData).filter(t => !t.image_url || t.image_url.toLowerCase().includes('xxx'))`
+
+  **スペーサー画像 汎用パターン:**
+  - `img[alt*="さんの写真"][style*="background-image"]` で名前・画像URLを一括取得
+  - 名前: `.replace(/さんの写真$/, '').replace(/\s+/g, ' ').trim()`
+  - DB名に「さんの写真」サフィックスが混入している場合: normName関数で除去して照合 + 更新時にname修正も実施
+
+  **PEPE SPA ノイズ削除** → `fix_pepespa_noise_cleanup.mjs`
+  - スクレイプ時にノイズが混入（キャンペーン画像・SNS情報・WEB予約バナー等）
+  - 5件のノイズレコード削除（★Twitter・Bluesky情報★、🔴フリー限定割引、WEB予約、限定割引、早割）
+  - 8件の「さんの写真」重複レコード削除（正常レコードが存在するため）
+  - 合計13件削除 → kanagawa_fujisawa_pepe_spa が124件に
+  - **教訓**: isNoise() の ★ 判定は `{2,}` ではなく `{1,}` （1個でもノイズ）にすること
+
+  **グループ内重複表示バグ修正** → `src/pages/ShopDetailPage.jsx`
+  - 同一セラピストが複数店舗に登録されているグループで、セラピストが店舗数分重複表示されていた
+  - `check_group_duplicates.mjs` で調査したところ80+グループ全てで同問題を確認
+  - DB修正（PEPE SPA: fix_pepespa_dedup.mjs で5店舗分削除）に加え、UI側でも除去
+  - ShopDetailPage.jsx の `const therapists = ...` 直前に `dedupeTherapists()` 関数を追加
+  - 名前の正規化（スペース・全角スペース除去）で照合するため表記揺れにも対応
+
+### 2026-05-17（続き）- 検索UI大幅改善
+
+#### PEPE SPA ノイズ削除 → `fix_pepespa_noise_cleanup.mjs`
+- キャンペーン画像5件・「さんの写真」重複8件 計13件削除
+- kanagawa_fujisawa_pepe_spa が124件に整理
+
+#### SearchPage 全面リニューアル
+- **店舗検索バー × キャスト検索バーの2バー化**
+  - 店舗のみ → その店舗のキャスト全員表示
+  - キャストのみ → 全店舗からキャスト名検索
+  - 両方入力 → 「この店舗の中でこの名前」に絞り込み
+- **店舗セクション追加**: マッチした店舗をカード形式で上部に表示
+- **ShopCard コンポーネント新設**: 「詳細 ▾」展開で以下を表示
+  - 出勤スケジュール（iframeで埋め込み表示）
+  - 料金システム一覧
+  - 公式サイト・スケジュールページ・電話番号リンク
+- **581店舗がすでに対応済み**（schedule_url 設定済み）
+- 未設定4件: No Brand（サイトダウン）・僕のママスパ（Wix）・アロマリッチ・ムーブプラス
+- URL: `/search?shop=シルク` or `?cast=あかり` or `?shop=シルク&cast=あかり`
+- 旧 `?q=` パラメータも `shop=` として引き継ぎ（後方互換）
+
+#### ヘッダー検索バー廃止
+- ヘッダーの検索フォームを完全削除（ヒーローの2バーに一本化）
+- Header.jsx から `searchQuery` state・`handleSearch`・検索form を除去
+
+#### SearchBar.jsx 刷新
+- 単一バー → 🏢店舗・エリア × 💃キャスト名 の2バー + 検索ボタン
+- 送信時: `/search?shop=...&cast=...` へ遷移
+
+#### DataContext.jsx 更新
+- shops の SELECT に `schedule_url` を追加（全コンポーネントから参照可能に）
+
+#### SearchBar.jsx（旧版）改善内容（今回廃止・参考）
+- ↑↓キーによる候補ハイライトナビゲーション
+- Enter 時: 候補1件→直接遷移、複数件→検索ページ、0件→検索ページ
+
+#### schedule_url 未設定調査 → `check_schedule_urls.mjs`
+- 総586店舗中 581件設定済み、4件未設定を確認
+- 残り4件はサイトダウン・Wix等の理由で保留
+
+### 2026-05-17（続き2）- モバイルUX修正・スライダー改善・クチコミスケール対応
+
+#### モバイルUX修正
+- **「VIEW SALON」→「店舗を見る」** (`TopHeroSlider.jsx`) — ヒーローボタン日本語化
+- **`pb-20` → `pb-32`** (`ShopDetailPage.jsx`) — BottomNavとコンテンツ被り解消（他ページと統一）
+- **iframe高さレスポンシブ化** (`SearchPage.jsx`) — `h-[340px] md:h-[480px]`（モバイル340px / PC480px）
+
+#### TopHeroSlider 改善
+- **問題**: FORCE_IMAGESの5店舗（linda/aromamore/tenkai/melty/galaxy）がロゴ・スクショ・縦長サムネイルで見栄えが悪かった
+- **修正**: GalaxyのみFORCE_IMAGESに残し（あの夜景画像は良い）、残り4枠はDBの `image_url`（og:image）を持つ店舗からランダム選出
+- **バグ修正**: 旧コードの `s.image` フィルタが機能していなかった（DBの店舗は `image_url` を持つ）→ `s.image_url` に修正
+- **レンダー修正**: `shop.image_url || shop.image` → `shop.image || shop.image_url`（ローカル強制画像を優先）
+
+#### クチコミ スケール対応（数千件を見据えた設計変更）
+- **問題**: レビュー全件フェッチ（制限なし）→ 人気店に数百件入ると詰まる構造だった
+- **ShopDetailPage.jsx 変更点**:
+  - 初回フェッチ: `limit=20&offset=0&order=created_at.desc`（最新20件のみ）
+  - `reviewOffset` / `hasMoreReviews` / `isLoadingMoreReviews` state追加
+  - `loadMoreReviews()` 関数追加（プレミアム向け、次の20件をオンデマンド取得）
+  - プレミアムユーザー: 「さらに読み込む」ボタンでページネーション
+  - 無料ユーザー: 1件表示のまま（影響なし）
+  - `reviewDisplayCount` / `visibleReviews` を廃止（DB側でページネーション管理に統一）
+- **DataContext.jsx 変更点**:
+  - `loadReviewsForShop` に `.limit(20)` を追加
+- **効果**: 1店舗に1000件入っても初回ロードは20件のみ。パンクしない。
+
+### 2026-05-18 - 口コミスクレイピング・セラピスト別口コミバッジ実装
+
+#### men-esthe.jp 口コミスクレイピング
+- **`scripts/maintenance/scrape_menesthe_reviews.mjs`** 作成
+  - TARGETS配列に `{ salonId, shopId, shopName }` を追加して実行するだけ
+  - プレミアム口コミ（モザイク）は自動スキップ
+  - ページネーション対応（`?p=1`, `?p=2`...、1500ms間隔）
+  - コンテンツノイズ除去: 「オススメ度: 点数: XX点 投稿者：」ヘッダーと「Good:0人 Bad:0人...」フッターを正規表現で除去
+  - セラピスト名: `h3 a` から取得、`\s*\(\d+\).*$` で「(28)さん」サフィックス除去
+  - スコア変換: 0〜100点 → rating 1〜5
+  - 現在のTARGETS: `[{ salonId: '9416', shopId: 'tokyo_shibuya_silk', shopName: 'Silk (シルク)' }]`
+  - Silk 3件挿入完了（永井 さつき・伊藤 ひかり・本田 まみ）
+  - プレミアム口コミはアカウント不要では取得不可（仕様）
+
+#### セラピスト別口コミバッジ（SearchPage・ShopDetailPage）
+- **SearchPage.jsx**:
+  - `serverTherapists` 更新時に口コミ件数を取得（`therapist_name`列のみ、軽量クエリ）
+  - `reviewCountMap` state: `{ 正規化名: count }` でスペース除去して集計
+  - カード右上に `💬 N` のピンクバッジ表示
+- **ShopDetailPage.jsx（キャストタブ）**:
+  - `fetchAllData` 内で同様のカウント取得
+  - カード右上にバッジ（ハートボタンの上）
+- **名前正規化**: `(s).replace(/[\s　]/g, '')` で全角・半角スペース除去してマッチング
+  - 例: men-esthe.jpの「永井 さつき」 ↔ DBの「永井さつき」でも一致
+
+#### セラピスト個別ページ（ThreadDetailPage）改善
+- 直接Supabaseから `therapist_name=eq.{name}` で口コミをフェッチ（DataContext依存を排除）
+- `detailed_ratings`（スネークケース）に対応して統計バーを正しく表示
+- 口コミ投稿ボタン → `/shops/{shopId}/threads/{threadId}/review` に遷移（既存）
+
+#### 口コミ書き直し（v2品質基準）
+
+**v2品質基準**（ユーザー承認済み）:
+- 入店〜施術〜総評のセクション構成（【入店】【ご対面】【施術】【総評】）は統一
+- 元の事実（価格・評価・施術内容）は保持しつつ、**訪問のきっかけ・場所・具体的エピソードは全て別の設定に変更**
+- 元文の語彙・フレーズを一切再利用しない。独自の表現で書く
+- 特定しやすいディテール（駅名・金額の端数・固有の会話内容等）は除去または変更
+
+**detailed_ratings フォーマット**:
+```js
+{ cleanliness: 1-5, looks: 1-5, style: 1-5, service: 1-5, massage: 1-5, intimacy: 1-5 }
+```
+
+**user_id の使い分け**:
+- `menesthe_import`: スクレイピング直後（未書き直し）
+- `menesthe_rewritten`: auto_rewrite_reviews.mjs で書き直し済み
+
+##### 手動書き直し → `scripts/maintenance/transform_silk_reviews.mjs`
+- `TRANSFORMED` 配列に `{ therapist_name_match, content, detailed_ratings, rating, tags }` を定義してClaude自身が書き直す
+- `therapist_name` + `user_id='menesthe_import'` で対象レコードを特定し上書き更新
+- `--dry-run` フラグでプレビュー確認可能
+- **Silk 3件 書き直し完了**（永井 さつき・伊藤 ひかり・本田 まみ）
+- **実行**: `node scripts/maintenance/transform_silk_reviews.mjs [--dry-run]`
+- ⚠️ このスクリプトは `user_id` を変更しない。書き直し後は auto_rewrite を使うこと
+
+##### 自動書き直し → `scripts/maintenance/auto_rewrite_reviews.mjs`
+- **目的**: スクレイピング後に自動でClaude API（Haiku）で v2品質書き直しを実行
+- **事前準備**: `npm install @anthropic-ai/sdk`（初回のみ）
+- **フロー**: `user_id='menesthe_import'` を取得 → Claude Haiku API で書き直し → DB更新 + `user_id='menesthe_rewritten'` に変更（再処理防止）
+- **オプション**:
+  - `--dry-run`: DB更新せずプレビューのみ
+  - `--shop-id xxx`: 特定店舗のみ処理
+- **実行**:
+  ```bash
+  # 全件dry-run
+  node scripts/maintenance/auto_rewrite_reviews.mjs --dry-run
+  # 特定店舗のみ本実行
+  node scripts/maintenance/auto_rewrite_reviews.mjs --shop-id tokyo_shibuya_silk
+  # 全件本実行
+  node scripts/maintenance/auto_rewrite_reviews.mjs
+  ```
+- **コスト**: Haiku 1件あたり約0.001〜0.002ドル。100件で0.1〜0.2ドル程度
+- **ANTHROPIC_API_KEY**: `.env` に設定済み（`okabayashi-onboarding-api-key`）
+- **注意**: スクレイプ直後に手動書き直し（transform）した場合は `user_id` が `menesthe_import` のまま残る。auto_rewrite に再処理させたくない場合は先に `user_id='menesthe_rewritten'` に更新してから実行すること
+- **Silk 3件**: 手動v2書き直し後に `menesthe_rewritten` に更新済み（再処理対象外）
+
+### 2026-05-21 - 東京中央エリア口コミ一括スクレイピング・268件v2書き直し完了
+
+#### men-esthe.jp 東京エリア口コミ大量取得
+
+- **`scripts/debug/find_menesthe_salon_ids.mjs`** 作成
+  - men-esthe.jp の salonId ↔ HP URL マップ（MENESTHE_MAP: 42件）をSupabase DBの `website_url` と照合
+  - normUrl() でスキーム・www・末尾スラッシュ・パスを除去してドメインのみ比較
+  - 結果: 87件マッチ（26ユニークsalonId）、11件未マッチ（Silk URL不一致・アロマレディアン等）
+  - 出力: scrape_menesthe_reviews.mjs に貼り付け可能な TARGETS配列
+
+- **`scripts/maintenance/scrape_menesthe_reviews.mjs`** 大幅拡張
+  - TARGETS配列を Silk (1件) → 87件（26ユニークsalonId × 複数店舗）に拡張
+  - メインループをsalonId単位にリファクタリング（同一salonIdは1回だけfetchし、全マッチshopに挿入）
+  - ID形式を `menesthe_{salonId}_{shopId}_{i}` で固定（再実行でduplicate keyエラー、サイレント重複なし）
+  - 実行結果: **265件成功 / 0件スキップ**
+
+- **`auto_rewrite_reviews.mjs`** で265件 + Silk3件 = **268件全件v2書き直し完了**
+  - 全件 `user_id='menesthe_rewritten'` に更新済み
+  - リトライエラー（Bad control character in JSON）が数件出たが全件リトライ成功
+
+#### 取得できたsalonIdと店舗グループ（主要）
+
+| salonId | men-esthe名 | 対象shopId数 | 口コミ数/salon |
+|---------|------------|------------|--------------|
+| 72 | リンダスパ | 5店舗 | 4件 |
+| 202 | ザギン | 5店舗 | 5件 |
+| 295 | アロマメゾン | 3店舗 | 4件 |
+| 886 | アロマモア | 4店舗 | 2件 |
+| 1442 | ラグタイム | 7店舗 | 3件 |
+| 1517 | 東京アロマエステ | 3店舗 | 5件 |
+| 9709 | 竜宮城 | 5店舗 | 4件 |
+| 13313 | エステの王様 | 3店舗 | 4件 |
+| 14338 | アロマルナベル | 7店舗 | 2件 |
+
+#### 未マッチのsalonId（DBに登録なし or URL不一致）
+
+- Silk (9416): men-esthe.jpのHP=silk-esthe.com ↔ DBに別URL（すでに3件登録済みのため影響なし）
+- アロマレディアン (12912)、リラックス東京 (2099)、ノーブランド (2482)
+- うさぎちゃんスパ (12651)、銀座のニューエステ (13483)、エステの気分 (11137)
+- ミラジュール (11884)、スパアンジュ (8751)、デジャヴ東京 (190)、クジャク (2531)
+
+#### 次回口コミ取得の手順
+
+1. `node scripts/debug/find_menesthe_salon_ids.mjs` で新規マッチを確認
+2. MENESTHE_MAPに新エリアのsalonIdを追加して再実行
+3. 出力されたTARGETS配列を `scrape_menesthe_reviews.mjs` の TARGETS に追記
+4. `node scripts/maintenance/scrape_menesthe_reviews.mjs --dry-run` で確認
+5. 本実行 → `node scripts/maintenance/auto_rewrite_reviews.mjs` で書き直し
 
 ---
 

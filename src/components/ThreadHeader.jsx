@@ -7,12 +7,12 @@ import { useParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const ratingLabels = {
-  cleanliness: '清潔さ',
-  appearance: '容姿',
+  looks: 'ルックス',
   style: 'スタイル',
   service: '接客',
-  skill: '技術',
-  intensity: '際どさ',
+  massage: '技術',
+  intimacy: '密着度',
+  cleanliness: '清潔感',
 };
 
 export default function ThreadHeader() {
