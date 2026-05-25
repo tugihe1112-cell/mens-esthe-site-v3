@@ -4,6 +4,7 @@ import { useShopData } from '../contexts/DataContext.jsx';
 import Header from '../components/Header.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import { getDisplayName } from '../utils/shopHelpers';
 
 export default function BrandPage() {
   const { brandId } = useParams(); // URLパラメータはID (例: g_52b5309f)
@@ -87,9 +88,9 @@ export default function BrandPage() {
       <main className="max-w-7xl mx-auto px-4 py-12 -mt-10 md:-mt-20 relative z-30">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {brandShops.map((shop, idx) => (
-            <Link 
-              key={shop.id} 
-              to={`/shops/${shop.id}`}
+            <Link
+              key={shop.id}
+              to={`/search?shop=${encodeURIComponent(shop.name)}`}
               className="group bg-slate-900 rounded-3xl overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-900/20 hover:-translate-y-2 flex flex-col animate-in fade-in slide-in-from-bottom-8 duration-500"
               style={{ animationDelay: `${idx * 100}ms` }}
             >
@@ -108,7 +109,7 @@ export default function BrandPage() {
                 <div className="absolute top-0 right-0 w-20 h-20 bg-pink-500/10 blur-2xl rounded-full pointer-events-none group-hover:bg-pink-500/20 transition"></div>
                 
                 <h2 className="text-lg md:text-xl font-black text-white mb-2 group-hover:text-pink-400 transition leading-tight z-10">
-                  {shop.name}
+                  {getDisplayName(shop.name)}
                 </h2>
                 <div className="flex items-center gap-3 text-sm text-slate-400 mb-4 z-10">
                   <span className="text-yellow-400 font-bold flex items-center gap-1">★ {shop.rating || 'New'}</span>

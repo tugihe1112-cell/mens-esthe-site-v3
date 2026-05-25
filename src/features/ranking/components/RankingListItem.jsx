@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import LazyImage from '../../../components/LazyImage';
 
 export const RankingListItem = ({ item, rank, delay }) => {
-  const linkPath = item.type === 'shop' 
-    ? `/shops/${item.id}` 
+  const linkPath = item.type === 'shop'
+    ? `/search?shop=${encodeURIComponent(item.name)}`
     : `/shops/${item.shopId}/threads/${item.id}`;
 
   return (

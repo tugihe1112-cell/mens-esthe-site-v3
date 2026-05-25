@@ -20,13 +20,13 @@ export const reviewSchema = z.object({
   }),
   tags: z.array(z.string()),
   story: z.object({
-    entrance: z.string().min(10, { message: '入店の感想を10文字以上書いてください' }),
+    entrance: z.string().min(1, { message: '入店の感想を入力してください' }),
     meeting: z.string().optional(),
     session: z.string().optional(),
     afterglow: z.string().optional(),
-    exit: z.string().min(10, { message: '総評を10文字以上書いてください' }),
+    exit: z.string().min(1, { message: '総評を入力してください' }),
   }).refine((data) => {
-    // 文字数合計チェックなどのロジックがあればここに追加
-    return true;
-  }),
+    const total = Object.values(data).filter(Boolean).join('').length;
+    return total >= 700;
+  }, { message: '口コミは合計700文字以上必要です' }),
 });

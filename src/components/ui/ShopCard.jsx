@@ -6,12 +6,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import RatingDisplay from "./RatingDisplay";
 import { useShopData } from '../contexts/DataContext.jsx';
+import { getDisplayName } from '../../utils/shopHelpers';
 
 export default function ShopCard({ shop }) {
   const { getTherapistsByShopId } = useShopData();
   return (
     <Link
-      to={`/shops/${shop.id}`}
+      to={`/search?shop=${encodeURIComponent(shop.name)}`}
       className="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden hover:border-pink-500 transition-all duration-300 group"
     >
       {/* 店舗画像 */}
@@ -31,7 +32,7 @@ export default function ShopCard({ shop }) {
       <div className="p-4">
         {/* 店舗名 */}
         <h3 className="text-xl font-bold mb-2 group-hover:text-pink-400 transition line-clamp-1">
-          {shop.name}
+          {getDisplayName(shop.name)}
         </h3>
 
         {/* 場所 */}

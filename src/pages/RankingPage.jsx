@@ -8,9 +8,9 @@ import SeoHead from '../components/SeoHead.jsx';
 
 // --- Tab Config ---
 const PERIOD_TABS = [
-  { id: 'monthly', label: 'MONTHLY', sub: '月間ランキング' },
-  { id: 'weekly', label: 'WEEKLY', sub: '週間ランキング' },
-  { id: 'newcomer', label: 'NEWCOMER', sub: '新人ランキング' }
+  { id: 'monthly', label: '月間', sub: 'MONTHLY' },
+  { id: 'weekly', label: '週間', sub: 'WEEKLY' },
+  { id: 'newcomer', label: '新人', sub: 'NEWCOMER' }
 ];
 
 const AREA_OPTIONS = [
@@ -46,8 +46,9 @@ export default function RankingPage() {
     });
   }, [allRankingData, selectedArea, shops]);
 
+  const [showAll, setShowAll] = useState(false);
   const top3 = filteredRankingData.slice(0, 3);
-  const others = filteredRankingData.slice(3, 50); // TOP 50まで
+  const others = filteredRankingData.slice(3, showAll ? undefined : 50);
 
   // --- Loading State ---
   if (loading) {
@@ -162,13 +163,23 @@ export default function RankingPage() {
             {/* 4th ~ List */}
             <div className="space-y-4 max-w-3xl mx-auto pb-10">
               {others.map((item, index) => (
-                <RankingListItem 
-                  key={item.key || item.id} 
-                  item={item} 
-                  rank={index + 4} 
-                  delay={(index * 50) + 300} 
+                <RankingListItem
+                  key={item.key || item.id}
+                  item={item}
+                  rank={index + 4}
+                  delay={(index * 50) + 300}
                 />
               ))}
+              {!showAll && filteredRankingData.length > 53 && (
+                <div className="pt-6 text-center">
+                  <button
+                    onClick={() => setShowAll(true)}
+                    className="px-8 py-3 rounded-full bg-slate-800 border border-white/10 text-sm font-bold text-white hover:bg-slate-700 transition active:scale-95 shadow-lg"
+                  >
+                    もっと見る（残り{filteredRankingData.length - 53}件）
+                  </button>
+                </div>
+              )}
             </div>
           </>
         ) : (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LazyImage from './LazyImage';
+import { getDisplayName } from '../utils/shopHelpers';
 
 export default function BrandResultCard({ summary, shops }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -63,14 +64,14 @@ export default function BrandResultCard({ summary, shops }) {
             {shops.map((shop) => (
               <Link 
                 key={shop.id} 
-                to={`/shops/${shop.id}`}
+                to={`/search?shop=${encodeURIComponent(shop.name)}`}
                 className="flex items-center gap-4 p-3 rounded-xl bg-slate-800/50 border border-white/5 hover:border-pink-500/50 hover:bg-slate-800 transition group"
               >
                 <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                   <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-white font-bold text-sm truncate group-hover:text-pink-400 transition">{shop.name}</h3>
+                  <h3 className="text-white font-bold text-sm truncate group-hover:text-pink-400 transition">{getDisplayName(shop.name)}</h3>
                   <p className="text-slate-500 text-xs truncate">📍 {shop.prefecture} {shop.city}</p>
                 </div>
               </Link>

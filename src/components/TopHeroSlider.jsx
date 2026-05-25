@@ -4,18 +4,15 @@ import { Autoplay, Pagination, Navigation, EffectFade, A11y, Keyboard } from 'sw
 import { Link } from 'react-router-dom';
 import { useShopData } from '../contexts/DataContext.jsx';
 import LikeButton from './LikeButton.jsx';
+import { getDisplayName } from '../utils/shopHelpers';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
 
-// ★復活: 指定画像の定義
+// Galaxy だけローカル画像を維持（他は DB の image_url を使用）
 const FORCE_IMAGES = {
-  "linda": "/images/shops/linda.jpg",
-  "aromamore": "/images/shops/aromamore.jpg",
-  "tenkai": "/images/shops/tenkai.jpg",
-  "melty": "/images/shops/melty.jpg",
-  "galaxy": "/images/shops/galaxy.jpg"
+  "galaxy": "/images/shops/galaxy.jpg",
 };
 
 export default function TopHeroSlider() {
@@ -25,29 +22,21 @@ export default function TopHeroSlider() {
   const heroShops = useMemo(() => {
     if (!shops || shops.length === 0) return [];
 
-    // 1. FORCE_IMAGES のキー（linda, galaxy等）を含む店舗を探して、画像を強制適用する
+    // 1. FORCE_IMAGES のキーに一致する店舗を強制画像付きで追加
     const forcedShops = Object.keys(FORCE_IMAGES).map(key => {
-      // ID または 名前にキーが含まれる店舗を探す
-      // ★修正: s.id を String() で囲んで数値IDによるクラッシュを防止
       const found = shops.find(s => String(s.id).includes(key) || (s.name && s.name.toLowerCase().includes(key)));
-      if (found) {
-        return { ...found, image: FORCE_IMAGES[key] }; // 画像を上書き
-      }
+      if (found) return { ...found, image: FORCE_IMAGES[key] };
       return null;
     }).filter(Boolean);
 
-    // 2. 指定店舗だけでは数が足りない場合（5枚未満）、他の画像持ち店舗で埋める
-    if (forcedShops.length < 5) {
-      const existingIds = forcedShops.map(s => s.id);
-      const others = shops
-        .filter(s => s.image && !existingIds.includes(s.id)) // まだ選ばれていない店舗
-        .sort(() => 0.5 - Math.random()) // ランダム
-        .slice(0, 5 - forcedShops.length);
-      
-      return [...forcedShops, ...others];
-    }
+    // 2. 残りは image_url がある店舗からランダムに補充（5枚になるまで）
+    const existingIds = forcedShops.map(s => s.id);
+    const candidates = shops
+      .filter(s => s.image_url && !existingIds.includes(s.id))
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 5 - forcedShops.length);
 
-    return forcedShops;
+    return [...forcedShops, ...candidates];
   }, [shops]);
 
   if (loading || heroShops.length === 0) return null;
@@ -75,7 +64,7 @@ export default function TopHeroSlider() {
             <div className="relative w-full h-full bg-slate-950">
               {/* 背景画像 (Ken Burns Effect) */}
               <div className="absolute inset-0 animate-ken-burns">
-                <img src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
+                <img src={shop.image || shop.image_url} alt={shop.name} className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
               </div>
               
               {/* グラデーションオーバーレイ */}
@@ -92,7 +81,7 @@ export default function TopHeroSlider() {
                 </div>
                 
                 <h3 className="text-4xl md:text-7xl font-black text-white mb-6 leading-tight max-w-3xl drop-shadow-2xl animate-fade-in-up">
-                    {shop.name}
+                    {getDisplayName(shop.name)}
                 </h3>
                 
                 <div className="flex flex-wrap items-center gap-2 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
@@ -101,8 +90,8 @@ export default function TopHeroSlider() {
                 </div>
                 
                 <div className="flex items-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                  <Link to={`/shops/${shop.id}`} className="bg-white text-slate-900 font-black px-8 md:px-12 py-4 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)] active:scale-95 flex items-center gap-2">
-                      <span>VIEW SALON</span>
+                  <Link to={`/search?shop=${encodeURIComponent(shop.name)}`} className="bg-white text-slate-900 font-black px-8 md:px-12 py-4 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)] active:scale-95 flex items-center gap-2">
+                      <span>店舗を見る</span>
                   </Link>
                   <LikeButton id={shop.id} className="w-14 h-14 bg-white/10 backdrop-blur-md rounded-xl p-3.5 text-white border border-white/20 hover:bg-white/20 transition active:scale-95" />
                 </div>

@@ -2,11 +2,14 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SITE_TITLE = "メンエスガイド";
+const SITE_URL = typeof window !== 'undefined' ? window.location.origin : 'https://mens-esthe-guide.vercel.app';
+const DEFAULT_OG_IMAGE = 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1200&auto=format&fit=crop';
 
-export default function SeoHead({ title, description, path }) {
+export default function SeoHead({ title, description, path, image }) {
   const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
   const pageDesc = description || "厳選されたメンズエステ店舗とセラピストを検索できるポータルサイトです。";
-  const url = path ? `https://your-domain.com${path}` : "https://your-domain.com";
+  const url = path ? `${SITE_URL}${path}` : SITE_URL;
+  const ogImage = image || DEFAULT_OG_IMAGE;
 
   return (
     <Helmet>
@@ -16,9 +19,14 @@ export default function SeoHead({ title, description, path }) {
       <meta property="og:description" content={pageDesc} />
       <meta property="og:url" content={url} />
       <meta property="og:type" content="website" />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:site_name" content={SITE_TITLE} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={pageDesc} />
+      <meta name="twitter:image" content={ogImage} />
     </Helmet>
   );
 }

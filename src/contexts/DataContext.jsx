@@ -17,10 +17,10 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const { data: shopsData, error } = await supabase.from('shops').select('id, group_id, name, raw_data, website_url, phone_number, business_hours, price_system, image_url');
+        const { data: shopsData, error } = await supabase.from('shops').select('id, group_id, name, raw_data, website_url, schedule_url, phone_number, business_hours, price_system, image_url');
         if (error) throw error;
         if (shopsData) {
-          setShops(shopsData.map(d => ({ ...d.raw_data, id: d.id, group_id: d.group_id, name: d.name, image_url: d.image_url, website_url: d.website_url, phone_number: d.phone_number, business_hours: d.business_hours, price_system: d.price_system })));
+          setShops(shopsData.map(d => ({ ...d.raw_data, id: d.id, group_id: d.group_id, name: d.name, image_url: d.image_url, website_url: d.website_url, schedule_url: d.schedule_url, phone_number: d.phone_number, business_hours: d.business_hours, price_system: d.price_system })));
         }
       } catch (error) {
         console.error('❌ Failed to fetch initial data:', error);
@@ -85,7 +85,7 @@ export const DataProvider = ({ children }) => {
     if (!shopId || loadedReviewShopIds.has(shopId)) return;
     const brandIds = getBrandShopIds(shopId);
     try {
-      const { data, error } = await supabase.from('reviews').select('*').in('shop_id', brandIds).order('created_at', { ascending: false });
+      const { data, error } = await supabase.from('reviews').select('*').in('shop_id', brandIds).order('created_at', { ascending: false }).limit(20);
       if (error) throw error;
       if (data) {
         const formattedReviews = data.map(r => ({
@@ -115,11 +115,18 @@ export const DataProvider = ({ children }) => {
     setReviews(prev => [newReview, ...prev]);
     try {
       await supabase.from('reviews').insert([{
-        id: newReview.id || String(Date.now()),
-        shop_id: newReview.shopId || newReview.shop_id || 'unknown',
-        user_name: newReview.userName || newReview.reviewerName || '名無しさん',
+        id: newReview.id || `r_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        shop_id: newReview.shop_id || newReview.shopId || 'unknown',
+        shop_name: newReview.shop_name || newReview.shopName || null,
+        therapist_id: newReview.therapist_id || newReview.therapistId || null,
+        therapist_name: newReview.therapist_name || newReview.therapistName || null,
+        user_id: newReview.user_id || newReview.userId || 'anonymous',
+        user_name: newReview.user_name || newReview.userName || newReview.user || '名無しさん',
         rating: newReview.rating || newReview.score || 5,
-        content: newReview.content || newReview.text || ''
+        course: newReview.course || null,
+        detailed_ratings: newReview.detailed_ratings || newReview.detailedRatings || null,
+        tags: newReview.tags || null,
+        content: newReview.content || newReview.text || '',
       }]);
     } catch (e) { console.error(e); }
   }, []);

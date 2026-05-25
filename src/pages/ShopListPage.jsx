@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useShopData } from "../contexts/DataContext.jsx";
-import { useSearch } from "../hooks/useSearch"; 
+import { useSearch } from "../hooks/useSearch";
+import { getDisplayName } from "../utils/shopHelpers";
 import LazyImage from "../components/LazyImage.jsx";
 import { ListSkeleton } from "../components/Skeleton.jsx"; 
 import BrandResultCard from "../components/BrandResultCard"; 
@@ -20,18 +21,59 @@ export default function ShopListPage() {
   // 検索フック
   const { query, setQuery, result: rawResult, mode, summary, isSearching } = useSearch(shops, initialQuery);
 
-  // ★ 店舗名での重複排除ロジック
+  // ★ 重複排除ロジック（店舗名 + group_id + 表示名）
   const result = React.useMemo(() => {
     if (!rawResult) return [];
-    const seen = new Set();
+
+    // 検索ワードを配列化（重複排除の判定に使う）
+    const terms = (query || '').toLowerCase().replace(/　/g, ' ').split(/\s+/).filter(Boolean);
+
+    const seenNames = new Set();        // 元の店舗名（完全一致）
+    const seenDisplayNames = new Set(); // 表示名（サフィックス除去後）
+    const seenGroups = new Map();       // group_id → 既に表示した店舗の area がマッチしているか
+
     return rawResult.filter(shop => {
-      // 空白（全角・半角）を消して小文字化し、完全に一致する店舗名を弾く
+      // 1. 元の店舗名の完全重複を除外
       const normalizedName = (shop.name || '').replace(/[\s　]+/g, '').toLowerCase();
-      if (seen.has(normalizedName)) return false;
-      seen.add(normalizedName);
+      if (seenNames.has(normalizedName)) return false;
+      seenNames.add(normalizedName);
+
+      // 2. 同一 group_id の複数ヒット → area がマッチする店舗を優先
+      if (shop.group_id && terms.length > 0) {
+        const areaStr = (shop.area || '').toLowerCase();
+        const areaMatches = terms.some(t => areaStr.includes(t));
+
+        if (seenGroups.has(shop.group_id)) {
+          const prevAreaMatched = seenGroups.get(shop.group_id);
+          if (prevAreaMatched) {
+            return false;
+          } else if (areaMatches) {
+            seenGroups.set(shop.group_id, true);
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          seenGroups.set(shop.group_id, areaMatches);
+        }
+      }
+
+      // 3. 表示名での重複排除（group_id が異なっても同じ見た目になる場合を防ぐ）
+      // area が検索ワードにマッチする店舗は除外しない（「川口」で Lynx 川口店を正しく出す）
+      if (terms.length > 0) {
+        const displayName = getDisplayName(shop.name || '').replace(/[\s　]+/g, '').toLowerCase();
+        const areaStr = (shop.area || '').toLowerCase();
+        const areaMatches = terms.some(t => areaStr.includes(t));
+
+        if (seenDisplayNames.has(displayName) && !areaMatches) {
+          return false;
+        }
+        seenDisplayNames.add(displayName);
+      }
+
       return true;
     });
-  }, [rawResult]);
+  }, [rawResult, query]);
 
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
 
@@ -142,7 +184,7 @@ export default function ShopListPage() {
                 {visibleShops.map((shop) => (
                   <Link
                     key={shop.id}
-                    to={`/shops/${shop.id}`}
+                    to={`/search?shop=${encodeURIComponent(shop.name)}`}
                     className="group bg-slate-900 rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 hover:shadow-2xl hover:shadow-pink-900/10 transition-all duration-300 transform hover:-translate-y-1 active:scale-[0.98]"
                   >
                     <div className="h-48 relative overflow-hidden">
@@ -162,7 +204,7 @@ export default function ShopListPage() {
 
                       <div className="absolute bottom-0 left-0 p-4 w-full">
                         <h3 className="text-lg font-black text-white shadow-black drop-shadow-md truncate leading-tight">
-                          {shop.name}
+                          {getDisplayName(shop.name)}
                         </h3>
                       </div>
                     </div>

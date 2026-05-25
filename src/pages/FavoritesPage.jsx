@@ -4,6 +4,7 @@ import { useShopData } from '../contexts/DataContext.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
+import { getDisplayName } from '../utils/shopHelpers';
 
 export default function FavoritesPage() {
   const { favorites, favTherapists } = useAppContext();
@@ -120,7 +121,7 @@ export default function FavoritesPage() {
                 {favShopList.map(shop => (
                   <Link 
                     key={shop.id} 
-                    to={`/shops/${shop.id}`} 
+                    to={`/search?shop=${encodeURIComponent(shop.name)}`}
                     className="flex items-center gap-5 bg-slate-900/50 p-4 rounded-3xl border border-white/5 hover:border-blue-500/50 hover:bg-slate-900 transition-all duration-300 group shadow-lg"
                   >
                     <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 border border-white/5 shadow-inner">
@@ -130,7 +131,7 @@ export default function FavoritesPage() {
                       <div className="flex items-center gap-2 mb-1">
                           <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">{shop.area}</span>
                       </div>
-                      <h3 className="text-lg font-black text-white truncate group-hover:text-blue-400 transition">{shop.name}</h3>
+                      <h3 className="text-lg font-black text-white truncate group-hover:text-blue-400 transition">{getDisplayName(shop.name)}</h3>
                       <p className="text-xs text-slate-500 mt-1 truncate">{shop.access || 'アクセス情報なし'}</p>
                     </div>
                     <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 group-hover:bg-blue-600 group-hover:text-white transition">

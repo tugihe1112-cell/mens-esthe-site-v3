@@ -1,6 +1,6 @@
-import ShibuyaCards from "../components/ShibuyaCards.jsx";
 
 import React, { useMemo } from 'react';
+import { getDisplayName } from '../utils/shopHelpers';
 import { Link } from 'react-router-dom';
 import { useShopData } from '../contexts/DataContext.jsx';
 import SearchBar from '../components/SearchBar.jsx';
@@ -90,7 +90,9 @@ export default function HomePage() {
       });
   }, [shops]);
 
-  const recommendedShops = shops ? shops.slice(0, 8) : [];
+  const recommendedShops = shops
+    ? [...shops].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)).slice(0, 8)
+    : [];
 
   if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">読み込み中...</div>;
 
@@ -118,6 +120,56 @@ export default function HomePage() {
 
       <div className="max-w-7xl mx-auto px-4 mt-20 space-y-24">
 
+        {/* 1.5. サイトの使い方 */}
+        <section>
+          <div className="flex items-center gap-3 mb-8 px-2">
+            <span className="w-1.5 h-6 bg-pink-500 rounded-full"></span>
+            <h3 className="text-xl font-black text-white">このサイトの使い方</h3>
+          </div>
+
+          {/* Write-to-Read メインバナー */}
+          <div className="mb-6 rounded-3xl bg-gradient-to-br from-purple-900/60 to-slate-900 border border-purple-500/20 p-6 md:p-8">
+            <div className="flex items-start gap-4 mb-5">
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-2xl shrink-0">📖</div>
+              <div>
+                <h4 className="text-white font-black text-lg leading-tight">口コミを書くと、みんなの口コミが読める</h4>
+                <p className="text-slate-400 text-sm mt-1">このサイトはWrite-to-Read方式。体験を投稿すると、管理者が審査して<span className="text-purple-300 font-bold">閲覧日数</span>を付与します。その期間中は全ての口コミが読み放題になります。</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { step: '1', icon: '✍️', label: '口コミを投稿', desc: '700文字以上の体験談' },
+                { step: '2', icon: '✅', label: '管理者が審査', desc: '内容に応じて日数を付与' },
+                { step: '3', icon: '🔓', label: '全文が読める', desc: '付与された日数だけ閲覧可' },
+              ].map(s => (
+                <div key={s.step} className="bg-white/5 rounded-2xl p-3 text-center border border-white/5">
+                  <div className="text-2xl mb-1">{s.icon}</div>
+                  <p className="text-white text-xs font-black">{s.label}</p>
+                  <p className="text-slate-500 text-[10px] mt-0.5">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 機能一覧 */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { icon: '🔍', title: 'キャスト検索', desc: '全国のセラピストを名前・店舗で検索。タグや評価でも絞り込める。', link: '/search' },
+              { icon: '💬', title: '口コミを書く', desc: '体験談を投稿するだけ。リストにいない新人セラピストにも書ける。', link: '/post-review' },
+              { icon: '📋', title: '掲示板', desc: '情報交換やおすすめ質問など、ユーザー同士で自由に書き込める。', link: '/board' },
+              { icon: '⭐', title: 'ランキング', desc: '口コミ評価・いいね数などからセラピストや店舗をランキング表示。', link: '/ranking' },
+            ].map(f => (
+              <Link key={f.title} to={f.link}
+                className="group rounded-2xl bg-slate-900/60 border border-white/5 hover:border-pink-500/30 p-4 transition-all duration-200 hover:-translate-y-0.5">
+                <div className="text-2xl mb-2">{f.icon}</div>
+                <h4 className="text-white font-black text-sm">{f.title}</h4>
+                <p className="text-slate-500 text-[11px] mt-1 leading-relaxed">{f.desc}</p>
+                <span className="text-pink-400 text-[11px] font-bold mt-2 block group-hover:translate-x-1 transition-transform">使ってみる →</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* 2. エリアから探す */}
         <section>
           <div className="flex items-center justify-between mb-6 px-2">
@@ -126,7 +178,7 @@ export default function HomePage() {
               エリアから探す
             </h3>
           </div>
-          <PrefectureSelector />
+          <PrefectureSelector shops={shops} />
         </section>
 
         {/* 3. 人気エリアランキング (詳細エリア優先) */}
@@ -176,6 +228,36 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* 新人セラピスト・注目口コミ・掲示板 バナー */}
+        <section className="px-2 mb-6">
+          <div className="grid grid-cols-3 gap-3">
+            <Link to="/new-therapists" className="group relative rounded-2xl overflow-hidden border border-pink-500/20 bg-gradient-to-br from-pink-900/40 to-slate-900 hover:border-pink-500/50 transition-all duration-300 hover:-translate-y-1 p-4 flex flex-col justify-between min-h-[90px]">
+              <div>
+                <span className="text-xl">✨</span>
+                <h3 className="text-sm font-black text-white mt-1">新人キャスト</h3>
+                <p className="text-[10px] text-slate-400 mt-0.5">新しく登録されたキャスト</p>
+              </div>
+              <span className="text-pink-400 text-xs font-bold group-hover:translate-x-1 transition-transform">一覧を見る →</span>
+            </Link>
+            <Link to="/popular-reviews" className="group relative rounded-2xl overflow-hidden border border-purple-500/20 bg-gradient-to-br from-purple-900/40 to-slate-900 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-1 p-4 flex flex-col justify-between min-h-[90px]">
+              <div>
+                <span className="text-xl">💬</span>
+                <h3 className="text-sm font-black text-white mt-1">みんなの口コミ</h3>
+                <p className="text-[10px] text-slate-400 mt-0.5">注目の体験レポート</p>
+              </div>
+              <span className="text-purple-400 text-xs font-bold group-hover:translate-x-1 transition-transform">口コミを見る →</span>
+            </Link>
+            <Link to="/board" className="group relative rounded-2xl overflow-hidden border border-blue-500/20 bg-gradient-to-br from-blue-900/40 to-slate-900 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-1 p-4 flex flex-col justify-between min-h-[90px]">
+              <div>
+                <span className="text-xl">📋</span>
+                <h3 className="text-sm font-black text-white mt-1">掲示板</h3>
+                <p className="text-[10px] text-slate-400 mt-0.5">自由に質問・情報交換</p>
+              </div>
+              <span className="text-blue-400 text-xs font-bold group-hover:translate-x-1 transition-transform">掲示板へ →</span>
+            </Link>
+          </div>
+        </section>
+
         {/* 4. 新着店舗 */}
         <section>
           <div className="flex items-center justify-between mb-6 px-2">
@@ -189,7 +271,7 @@ export default function HomePage() {
             {recommendedShops.map((shop) => (
               <Link 
                 key={shop.id} 
-                to={`/shops/${shop.id}`}
+                to={`/search?shop=${encodeURIComponent(shop.name)}`}
                 className="snap-center flex-shrink-0 w-[160px] md:w-[240px] group"
               >
                 <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 relative shadow-lg mb-3 bg-slate-900">
@@ -201,7 +283,7 @@ export default function HomePage() {
                   </div>
 
                   <div className="absolute bottom-3 left-3 right-3">
-                    <h4 className="text-white font-black text-sm md:text-lg leading-tight truncate w-full drop-shadow-md">{shop.name}</h4>
+                    <h4 className="text-white font-black text-sm md:text-lg leading-tight truncate w-full drop-shadow-md">{getDisplayName(shop.name)}</h4>
                     <p className="text-[10px] text-slate-400 truncate">{shop.prefecture || '東京'} {shop.city}</p>
                   </div>
                 </div>
@@ -216,14 +298,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ★復旧した渋谷の店舗カード一覧 */}
-        <section className="mb-12">
-          <div className="bg-slate-900 border border-white/10 rounded-[2rem] p-6 shadow-2xl">
-            <ShibuyaCards />
-          </div>
-        </section>
-
-        {/* 5. ランキングセクション & 6. 履歴 */}
+{/* 5. ランキングセクション & 6. 履歴 */}
         <RankingSection />
         <RecentlyViewed />
         

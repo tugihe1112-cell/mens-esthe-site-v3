@@ -39,8 +39,8 @@ export const PodiumCard = ({ rank, item }) => {
   }[rank];
 
   // リンク先の生成 (店舗 or セラピスト)
-  const linkPath = item.type === 'shop' 
-    ? `/shops/${item.id}` 
+  const linkPath = item.type === 'shop'
+    ? `/search?shop=${encodeURIComponent(item.name)}`
     : `/shops/${item.shopId}/threads/${item.id}`;
 
   return (

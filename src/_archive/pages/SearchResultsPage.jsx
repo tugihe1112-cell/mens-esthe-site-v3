@@ -7,6 +7,7 @@ import { useShopData } from '../contexts/DataContext.jsx'; // 👈 新データ
 import LazyImage from '../components/LazyImage.jsx';
 import LikeButton from '../components/LikeButton.jsx';
 import { ListSkeleton } from '../components/Skeleton.jsx';
+import { getDisplayName } from '../utils/shopHelpers';
 
 export default function SearchResultsPage() {
   const [searchParams] = useSearchParams();
@@ -89,7 +90,7 @@ export default function SearchResultsPage() {
                           <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
                         </div>
                         <div className="p-5">
-                          <h3 className="font-bold text-lg mb-1 group-hover:text-blue-400 transition">{shop.name}</h3>
+                          <h3 className="font-bold text-lg mb-1 group-hover:text-blue-400 transition">{getDisplayName(shop.name)}</h3>
                           <p className="text-xs text-slate-500">📍 {shop.prefecture} {shop.city}</p>
                         </div>
                       </Link>

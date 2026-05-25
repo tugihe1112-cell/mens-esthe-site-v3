@@ -17,6 +17,7 @@ export const useReviewForm = () => {
     defaultValues: {
       shopId: '',
       therapistId: null,
+      therapistName: '',
       ratings: { cleanliness: 3, looks: 3, style: 3, service: 3, massage: 3, intimacy: 3 },
       tags: [],
       story: { entrance: '', meeting: '', session: '', afterglow: '', exit: '' },
@@ -46,17 +47,15 @@ export const useReviewForm = () => {
       const totalScore = (Object.values(data.ratings).reduce((a, b) => a + b, 0) / 6).toFixed(1);
 
       const submitData = {
-        id: `local_${Date.now()}`,
         shop_id: data.shopId,
-        therapistId: data.therapistId,
-        tags: data.tags,
+        therapist_id: data.therapistId || null,
+        therapist_name: data.therapistName || null,
+        user_name: user?.name || user?.email || '名無しさん',
+        user_id: user?.id || 'anonymous',
         rating: parseFloat(totalScore),
-        detailedRatings: data.ratings,
+        detailed_ratings: data.ratings,
+        tags: data.tags,
         content: combinedContent,
-        user: user?.name || 'Guest',
-        createdAt: new Date().toISOString(),
-        date: new Date().toISOString(),
-        isLocal: true
       };
 
       if (addReview) {

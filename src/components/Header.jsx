@@ -36,21 +36,11 @@ export default function Header() {
 
   // --- モバイルメニュー制御 ---
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
   // ページ遷移時にメニューを閉じる
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setMobileMenuOpen(false);
-      setSearchQuery("");
-    }
-  };
 
   const handleLogout = () => {
     logout();
@@ -89,25 +79,10 @@ export default function Header() {
               </h1>
             </Link>
 
-            {/* PC用 検索バー */}
-            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm relative mx-8 group">
-              <div className="absolute inset-0 bg-pink-500/20 rounded-full blur-md opacity-0 group-focus-within:opacity-100 transition duration-500"></div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="店名・キャスト名で検索..."
-                className="w-full bg-black/40 backdrop-blur-md text-white px-5 py-2.5 pr-12 rounded-full border border-white/20 focus:border-pink-500/50 focus:bg-black/60 focus:outline-none transition-all text-sm relative z-10 placeholder-slate-300 font-bold"
-              />
-              <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              </button>
-            </form>
-
             {/* PC用 ナビゲーション (日本語化 & 視認性強化) */}
             <nav className="hidden lg:flex items-center gap-6">
               <Link to="/search" className="text-sm font-bold text-white hover:text-pink-400 transition relative group drop-shadow-md">
-                店舗検索
+                キャスト検索
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all group-hover:w-full"></span>
               </Link>
               <Link to="/ranking" className="text-sm font-bold text-white hover:text-pink-400 transition relative group drop-shadow-md">
@@ -154,25 +129,13 @@ export default function Header() {
           mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
         }`}>
           
-          {/* モバイル検索 */}
-          <form onSubmit={handleSearch} className="mb-8 relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="キーワード検索..."
-              className="w-full bg-white/5 text-white px-5 py-4 rounded-2xl border border-white/10 focus:border-pink-500 focus:outline-none text-lg font-bold"
-            />
-            <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50">🔍</button>
-          </form>
-
           {/* モバイルナビゲーション */}
           <nav className="flex flex-col gap-6">
             <Link to="/" className="text-xl font-bold text-white hover:text-pink-500 transition flex items-center gap-3 border-b border-white/5 pb-4">
               <span className="text-2xl">🏠</span> ホーム
             </Link>
             <Link to="/search" className="text-xl font-bold text-white hover:text-pink-500 transition flex items-center gap-3 border-b border-white/5 pb-4">
-              <span className="text-2xl">🔍</span> 店舗・キャスト検索
+              <span className="text-2xl">🔍</span> キャスト検索
             </Link>
             <Link to="/ranking" className="text-xl font-bold text-white hover:text-pink-500 transition flex items-center gap-3 border-b border-white/5 pb-4">
               <span className="text-2xl">📊</span> ランキング

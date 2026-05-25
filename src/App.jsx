@@ -30,6 +30,14 @@ import MyReviewsPage from './pages/MyReviewsPage';
 import RequestReviewPage from './pages/RequestReviewPage';
 import NotFoundPage from './pages/NotFoundPage';
 
+import NewTherapistsPage from './pages/NewTherapistsPage';
+import PopularReviewsPage from './pages/PopularReviewsPage';
+import BoardPage from './pages/BoardPage';
+import BoardDetailPage from './pages/BoardDetailPage';
+import ChatListPage from './pages/ChatListPage';
+import ChatRoomPage from './pages/ChatRoomPage';
+import AdminPage from './pages/AdminPage';
+
 // 🌟 法律関連の3ページをすべてインポート！
 import LegalPage from './pages/LegalPage';
 import TermsPage from './pages/TermsPage';
@@ -68,6 +76,13 @@ export default function App() {
                   <Route path="/area-search" element={<AreaSearchPage />} />
                   <Route path="/shops" element={<ShopListPage />} />
                   <Route path="/ranking" element={<RankingPage />} />
+                  <Route path="/new-therapists" element={<NewTherapistsPage />} />
+                  <Route path="/popular-reviews" element={<PopularReviewsPage />} />
+                  <Route path="/board" element={<BoardPage />} />
+                  <Route path="/board/:postId" element={<BoardDetailPage />} />
+                  <Route path="/chat" element={<ChatListPage />} />
+                  <Route path="/chat/:roomId" element={<ChatRoomPage />} />
+                  <Route path="/admin" element={<AdminPage />} />
                   
                   {/* 詳細ページ */}
                   <Route path="/shops/:shopId" element={<ShopDetailPage />} />

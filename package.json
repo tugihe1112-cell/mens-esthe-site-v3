@@ -14,6 +14,7 @@
     "sync": "node scripts/sync_all_data.cjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.96.0",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@supabase/supabase-js": "^2.103.3",

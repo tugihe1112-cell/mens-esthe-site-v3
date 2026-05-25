@@ -5,7 +5,9 @@ import { useAppContext } from '../context/AppContext.tsx';
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed.js';
 import LazyImage from '../components/LazyImage.jsx';
 import ModernReviewCard from '../components/ModernReviewCard.jsx';
+import ReviewListWithRestriction from '../components/ReviewListWithRestriction.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import { getDisplayName } from '../utils/shopHelpers';
 
 export default function ThreadDetailPage() {
   const { shopId, threadId } = useParams();
@@ -16,6 +18,7 @@ export default function ThreadDetailPage() {
 
   const [cloudShop, setCloudShop] = React.useState(null);
   const [cloudTherapist, setCloudTherapist] = React.useState(null);
+  const [cloudTherapistReviews, setCloudTherapistReviews] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true); // 🔥これがないと即エラーになる
 
   React.useEffect(() => {
@@ -44,8 +47,42 @@ export default function ThreadDetailPage() {
           tData = await tRes.json();
         }
 
+        let therapistName = null;
         if (tData && tData.length > 0 && isMounted) {
           setCloudTherapist(tData[0]);
+          therapistName = tData[0].name;
+        }
+
+        // 4. 店舗の口コミを取得し、クライアント側でセラピスト名を正規化マッチング
+        if (therapistName) {
+          const normName = therapistName.replace(/[\s　]/g, '');
+          const shopForReview = shopData?.[0];
+          const groupId = shopForReview?.group_id;
+
+          // group_idがあれば系列店全店、なければ単店舗
+          let reviewShopIds = [shopId];
+          if (groupId) {
+            const grpRes = await fetch(`${url}/rest/v1/shops?group_id=eq.${groupId}&select=id`, { headers });
+            const grpData = await grpRes.json();
+            if (Array.isArray(grpData) && grpData.length > 0) reviewShopIds = grpData.map(s => s.id);
+          }
+
+          const reviewQuery = reviewShopIds.length > 1
+            ? `shop_id=in.(${reviewShopIds.join(',')})&`
+            : `shop_id=eq.${shopId}&`;
+
+          const rRes = await fetch(
+            `${url}/rest/v1/reviews?${reviewQuery}order=created_at.desc&select=*`,
+            { headers }
+          );
+          const rData = await rRes.json();
+          if (Array.isArray(rData) && isMounted) {
+            // スペース除去して正規化マッチング
+            const matched = rData.filter(r =>
+              r.therapist_name && r.therapist_name.replace(/[\s　]/g, '') === normName
+            );
+            setCloudTherapistReviews(matched);
+          }
         }
       } catch(e) {
         console.error(e);
@@ -92,25 +129,28 @@ export default function ThreadDetailPage() {
     }
   }, [uniqueKey, therapist, shop, addToHistory]);
 
+  // 直接取得した口コミを優先、なければDataContextのreviewsからフォールバック
   const therapistReviews = useMemo(() => {
+    if (cloudTherapistReviews.length > 0) return cloudTherapistReviews;
     if (!shop || !therapist || !reviews) return [];
-    return reviews.filter(r => 
-      (r.therapistId === threadId) || 
-      (r.threadId === threadId) || 
+    return reviews.filter(r =>
+      (r.therapistId === threadId) ||
+      (r.threadId === threadId) ||
       (r.therapist_id === threadId) ||
-      (r.therapistName === therapist.name && (r.shopId === shopId || r.shop_id === shopId || r.group_id === shop.group_id))
+      (r.therapist_name === therapist.name) ||
+      (r.therapistName === therapist.name)
     );
-  }, [reviews, threadId, therapist?.name, shopId, shop?.group_id]);
+  }, [cloudTherapistReviews, reviews, threadId, therapist?.name, shopId, shop?.group_id]);
 
   const stats = useMemo(() => {
     if (therapistReviews.length === 0) return null;
     const sum = therapistReviews.reduce((acc, r) => {
-      const d = r.detailedRatings || {}; 
+      const d = r.detailed_ratings || r.detailedRatings || {};
       return {
-        looks: acc.looks + Number(d.looks || r.rating),
-        style: acc.style + Number(d.style || r.rating),
-        technique: acc.technique + Number(d.massage || d.technique || r.rating),
-        service: acc.service + Number(d.service || d.intimacy || r.rating)
+        looks: acc.looks + Number(d.looks || r.rating || 3),
+        style: acc.style + Number(d.style || r.rating || 3),
+        technique: acc.technique + Number(d.massage || d.technique || r.rating || 3),
+        service: acc.service + Number(d.service || d.intimacy || r.rating || 3)
       };
     }, { looks: 0, style: 0, technique: 0, service: 0 });
 
@@ -177,9 +217,9 @@ export default function ThreadDetailPage() {
 
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 z-20">
           <div className="max-w-2xl mx-auto">
-             <Link to={`/shops/${shop.id}`} className="inline-flex items-center gap-2 mb-4 group/shop">
+             <Link to={`/search?shop=${encodeURIComponent(shop.name)}`} className="inline-flex items-center gap-2 mb-4 group/shop">
                <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-xs border border-white/10 group-hover/shop:bg-pink-600 transition">🏢</div>
-               <span className="text-sm font-bold text-slate-300 group-hover/shop:text-white transition">{shop.name}</span>
+               <span className="text-sm font-bold text-slate-300 group-hover/shop:text-white transition">{getDisplayName(shop.name)}</span>
              </Link>
              <h1 className="text-5xl md:text-7xl font-black text-white mb-4 tracking-tighter drop-shadow-2xl leading-none">{therapist.name}</h1>
              <div className="flex flex-wrap gap-2 mb-6">
@@ -221,10 +261,10 @@ export default function ThreadDetailPage() {
           {stats ? (
              <div className="space-y-4">
                {[ 
-                 { label: 'LOOKS', val: stats.looks, col: 'bg-pink-500' }, 
-                 { label: 'STYLE', val: stats.style, col: 'bg-purple-500' }, 
-                 { label: 'TECHNIQUE', val: stats.technique, col: 'bg-blue-500' }, 
-                 { label: 'SERVICE', val: stats.service, col: 'bg-yellow-500' } 
+                 { label: 'ルックス', val: stats.looks, col: 'bg-pink-500' },
+                 { label: 'スタイル', val: stats.style, col: 'bg-purple-500' },
+                 { label: '技術', val: stats.technique, col: 'bg-blue-500' },
+                 { label: '接客', val: stats.service, col: 'bg-yellow-500' } 
                ].map((item) => (
                  <div key={item.label} className="flex items-center gap-3">
                    <span className="text-[10px] font-bold w-16 text-slate-400">{item.label}</span>
@@ -240,26 +280,38 @@ export default function ThreadDetailPage() {
           )}
         </section>
 
-        {/* --- 🔥 クチコミ投稿ボタン --- */}
-        <div className="flex justify-center pb-4">
-          <button 
-            onClick={handlePostReview}
-            className="w-full max-w-sm bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-4 px-8 rounded-full shadow-lg shadow-pink-600/30 transform hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3"
-          >
-            <span className="text-xl">✍️</span>
-            クチコミを投稿する
-          </button>
-        </div>
-
-        {/* --- クチコミリスト --- */}
-        {therapistReviews.length > 0 && (
-          <section className="space-y-6">
-            <h3 className="text-lg font-black text-white flex items-center gap-2 px-2">
-              <span className="text-pink-500">💬</span> REVIEWS <span className="text-slate-500 text-sm ml-2">({therapistReviews.length})</span>
+        {/* --- クチコミセクション --- */}
+        <section className="space-y-4">
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-lg font-black text-white flex items-center gap-2">
+              <span className="text-pink-500">💬</span>
+              クチコミ
+              {therapistReviews.length > 0 && (
+                <span className="text-slate-500 text-sm font-bold">({therapistReviews.length})</span>
+              )}
             </h3>
+            <button
+              onClick={handlePostReview}
+              className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-2 px-5 rounded-full shadow-lg shadow-pink-600/30 active:scale-95 transition-all duration-300 flex items-center gap-2 text-sm"
+            >
+              <span>✍️</span> 書く
+            </button>
+          </div>
+
+          {therapistReviews.length > 0 ? (
             <ReviewListWithRestriction reviews={therapistReviews} />
-          </section>
-        )}
+          ) : (
+            <div className="text-center py-10 text-slate-500 text-sm bg-slate-900/30 rounded-2xl border border-dashed border-slate-800">
+              <p className="mb-4">まだクチコミがありません</p>
+              <button
+                onClick={handlePostReview}
+                className="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-black py-3 px-8 rounded-full shadow-lg shadow-pink-600/30 active:scale-95 transition-all duration-300 flex items-center gap-2 mx-auto"
+              >
+                <span>✍️</span> 最初のクチコミを書く
+              </button>
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

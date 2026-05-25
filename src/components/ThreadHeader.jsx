@@ -49,7 +49,7 @@ export default function ThreadHeader() {
     <section className="bg-slate-800 p-6 rounded-lg shadow-lg mb-6">
       <h1 className="text-3xl font-bold text-pink-400 mb-2">{threadData.therapistName}</h1>
       <p className="text-gray-400 mb-4">
-        <Link to={`/shops/${shopId}`} className="hover:underline">{threadData.shopName}</Link>
+        <Link to={`/search?shop=${encodeURIComponent(threadData.shopName)}`} className="hover:underline">{threadData.shopName}</Link>
         <span className="mx-2">/</span>
         口コミ件数: {threadData.postCount}件
       </p>

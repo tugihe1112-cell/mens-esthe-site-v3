@@ -3,8 +3,26 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-05-21 （東京中央エリア口コミ一括スクレイピング・268件v2書き直し完了）**
+> **最終更新: 2026-05-25 （店舗サムネイル全面刷新 489件・口コミ投稿「リストにいないセラピスト」機能追加）**
 > 作業がひと段落するたびに、Claudeがこのファイルを自動更新する。
+
+---
+
+## ⚠️ 公開前にやること（リリースチェックリスト）
+
+- [ ] **メール送信元を本番用に変更**
+  - サイト専用メルアドを取得（例: `noreply@mens-esthe.jp`）
+  - Resend ダッシュボード → Domains → `mens-esthe.jp` を追加・DNS認証
+  - `api/notify-credit.js` の `from:` を `'メンズエステ情報 <noreply@mens-esthe.jp>'` に変更
+  - 現在は `onboarding@resend.dev`（テスト用）のまま
+
+- [x] **Vercel 環境変数を設定済み**（2026-05-24）
+  - `RESEND_API_KEY` — Resend API キー（Production & Preview）
+  - `SUPABASE_SERVICE_ROLE_KEY` — Supabase サービスロールキー（Production & Preview）
+  - `VITE_PUBLIC_SITE_URL` — `https://mens-esthe-site-beta.vercel.app`（本番ドメイン取得後に更新）
+  - `VITE_SUPABASE_ANON_KEY` — Supabase 匿名キー（All Environments、Mar 28 設定済み）
+  - `VITE_SUPABASE_URL` — Supabase URL（All Environments、Mar 28 設定済み）
+  - ⚠️ `VITE_PUBLIC_SITE_URL` は本番ドメイン確定後に `https://mens-esthe.jp` 等に更新すること
 
 ---
 
@@ -787,6 +805,17 @@ const isNoise = (name) => {
 { cleanliness: 1-5, looks: 1-5, style: 1-5, service: 1-5, massage: 1-5, intimacy: 1-5 }
 ```
 
+**tags フォーマット（⚠️ UIの選択肢と完全一致させること）**:
+- 口コミ内容から判断して2〜5個選ぶ
+- **以下のリスト外のタグは絶対に使わない**（`会話上手`・`リピート確定`・`テクニシャン`・`素人系`・`癒し系` などはUI非存在）
+
+```
+■体型: スレンダー・グラマー・巨乳・美脚・小柄・高身長
+■雰囲気: 可愛い系・美人系・清楚系・ギャル系・お姉さん系
+■年代: 10代・20代前半・20代後半・30代・40代
+■属性: 色白・健康的・ベテラン・外国人
+```
+
 **user_id の使い分け**:
 - `menesthe_import`: スクレイピング直後（未書き直し）
 - `menesthe_rewritten`: auto_rewrite_reviews.mjs で書き直し済み
@@ -869,6 +898,123 @@ const isNoise = (name) => {
 4. `node scripts/maintenance/scrape_menesthe_reviews.mjs --dry-run` で確認
 5. 本実行 → `node scripts/maintenance/auto_rewrite_reviews.mjs` で書き直し
 
+### 2026-05-22 - mens-est.jp東京口コミスクレイピング・376件v2書き直し完了
+
+#### mens-est.jp（メンエスじゃぱん）スクレイピング
+
+- **`scripts/maintenance/scrape_mensest_reviews.mjs`** 作成（men-esthe.jp とは別サイト）
+  - サイト: `https://mens-est.jp`（SSRサイト、cheerio互換、ペイウォールなし）
+  - 店舗個別ページ: `https://mens-est.jp/salon/{salonSlug}/review/`
+  - セラピスト名: `.review-item` 内の `.therapist-name` 等から取得
+  - スコア変換: サイト固有の評価 → rating 1〜5
+  - ページネーション対応
+  - **108件挿入成功**
+
+- **reviews テーブル NOT NULL 制約（重要）**
+  - `therapist_id`: 実際のFKではないがNOT NULL → `mensest_${shopSlug}_${therapistName.replace(/\s+/g, '_')}` で生成
+  - `user_name`: NOT NULL → `'mensest_user'` のプレースホルダー
+  - `user_id`: NOT NULL → スクレイプ直後は `'menesthe_import'`（auto_rewriteのターゲット）
+  - men-esthe.jp側は `menesthe_therapist_${id}` パターン。mens-est.jpは `mensest_${shopSlug}_${name}` パターン
+  - ID形式: `mensest_${shopSlug}_${reviewId}`（再実行でduplicate keyエラー防止）
+
+- **`auto_rewrite_reviews.mjs`** で376件全件v2書き直し
+  - 処理対象: men-esthe.jp既存268件 + mens-est.jp新規108件 = 376件
+  - 初回: 成功366件、失敗10件（ネットワークエラー・タイムアウト）
+  - 再実行: 残り10件も全件成功 → **最終: 成功376件 / 失敗0件**
+  - Anthropic API（Haiku）クレジット残高不足エラー → $25チャージ後に解消
+  - コスト実績: 376件で概算$0.40〜$0.75
+
+#### mens-est.jp スクレイピングパターン
+
+- サイト構造: SSR（cheerioで取得可）
+- TARGETS配列に `{ shopSlug, shopId, shopName }` を定義
+- `therapist_id` は `mensest_${shopSlug}_${therapistName.replace(/\s+/g, '_')}` で生成（DB未登録でもOK）
+- `user_name` は `'mensest_user'` で統一
+
+#### auto_rewrite 失敗時の対処
+
+- 失敗レコードは `user_id='menesthe_import'` のまま残る
+- `node scripts/maintenance/auto_rewrite_reviews.mjs` を再実行するだけで自動ピックアップ
+- ネットワークエラー（`fetch failed`、タイムアウト、`Bad control character in JSON`）は再実行で解消することが多い
+
+#### auto_rewrite 重要注意事項（2026-05-22 追記）
+
+- **RLS問題**: `VITE_SUPABASE_ANON_KEY` ではUPDATEが無効化されサイレントに無視される。`SUPABASE_SERVICE_ROLE_KEY` を`.env`に設定し、スクリプト内で使用すること
+- **タグはUIの選択肢と完全一致必須**: `会話上手`・`リピート確定`・`テクニシャン`・`清楚`・`癒し系`・`清潔感`・`密着度が高い`・`素人` 等はUI非存在。スクリプト内にバリデーション（`ALLOWED_TAGS`）を実装済み
+
+**UIの正式タグ一覧（全20個・2026-05-22 スクリーンショット確認済み）**:
+- 体型（6）: スレンダー・グラマー・巨乳・美脚・小柄・高身長
+- 雰囲気（5）: 可愛い系・美人系・清楚系・ギャル系・お姉さん系
+- 年代（5）: 10代・20代前半・20代後半・30代・40代
+- 属性（4）: 色白・健康的・ベテラン・外国人
+- **Haikuのタグ破損**: `高身læng`・`高身next` 等のUnicode破損タグが稀に出るがバリデーションで自動除去される
+- **訪問パターンの類似に注意**: 「流れでそのまま訪問」等、語彙だけ変えてパターンを残すのは元サイトと照合されやすい。プロンプトに「訪問の動機ごと変える」旨を明記済み（2026-05-22）。再実行が必要な場合は `reset_for_rewrite.mjs` でuser_idをリセットしてから `auto_rewrite_reviews.mjs` を実行する
+
+### 2026-05-23（続き2）- DB重複整理・SearchPage機能追加
+
+#### DB重複セラピスト 全件調査・削除
+
+- **原因パターン**:
+  1. `salon_blanca_鈴川ありさ`（初期一括登録、IDが雑）＋`..._salon_blanca_鈴川ありさ`（shop名二重）＋`..._鈴川ありさ`（再登録）
+  2. `♦︎`付きID（tokyopla系: `_小日向ちい♦︎` vs `_小日向ちい`）
+  3. UUIDと構造IDの混在（aroma_levante等）
+  4. ランダムサフィックス（belle_lily: `_桜井まゆ_ewww2` vs `_桜井まゆ_x98l6`）
+  5. スペースあり・なしのID揺れ（kawasaki_rere: `_若宮_ひかる` vs `_若宮ひかる_12`）
+
+- **調査スクリプト**: `scripts/debug/check_all_duplicates.mjs`
+  - 全セラピスト（45,217件）を `shop_id × name` でグループ化して重複検出
+  - 同一店舗内で同名複数 = 重複（別店舗への同一人物登録は重複ではない）
+  - 結果: 108店舗に重複、余分なレコード4,380件
+
+- **削除スクリプト**: `scripts/maintenance/fix_all_duplicates.mjs`
+  - 優先ロジック: 写真あり優先 → IDスコア低い（シンプル）優先 → created_at新しい優先
+  - `idScore()`: UUID・shop名二重・♦︎・数字サフィックス・URLエンコードにペナルティ
+  - 50件ずつバッチ削除
+  - **実行結果: 4,380件削除完了**
+
+- **SALON BLANCA個別対応**: `fix_blanca_duplicates.mjs` + `fix_blanca_numbered.mjs`
+  - 「鈴川ありさ2」など番号付き重複も追加削除（9件）
+
+#### SearchPage キャスト絞り込み・ソート機能追加
+
+- **キャスト結果内の名前絞り込みバー**（`SearchPage.jsx`）
+  - `castNameFilter` state + 🔍 アイコン付き入力欄
+  - キャスト一覧が表示されているときのみ出現
+  - ✕ボタンでクリア
+
+- **並び替えボタン（4種）**
+  - デフォルト / 五十音順（`localeCompare('ja')`）/ 💬 口コミ多い順 / ⭐ 評価が高い順
+  - `ratingMap: { 正規化名: avgRating }` を reviews.rating の平均で計算
+  - 既存の `reviewCountMap` useEffect を拡張して rating も同時取得
+
+- **実装詳細**:
+  - `sortedFilteredTherapists` useMemo: tagフィルター済み → 名前フィルター → ソート
+  - `visibleTherapists` は `sortedFilteredTherapists.slice(0, displayCount)` に変更
+  - `castNameFilter` / `castSortOrder` 変更時に `displayCount` をリセット
+
+#### SearchPage キャスト名検索の正規化対応
+
+- **問題**: `ilike '%西園寺未来%'` はDB上の「西園寺 未来」（スペースあり）にマッチしない
+- **対応**: スペースあり / スペースなし / 全角スペース の3パターン全対応
+
+- **実装ロジック** (`SearchPage.jsx` の DB fetch useEffect):
+  ```
+  normName = s => s.replace(/[\s　]/g, '').toLowerCase()
+  normCq = normName(castQuery)
+  cqParts = castQuery.split(/[\s　]+/)
+  ```
+  - スペースあり（「西園寺 未来」）→ 各パーツをAND ilike → DBの「西園寺未来」にマッチ ✓
+  - スペースなし（「西園寺未来」）→ 前半N文字をprefixに広めにDB取得 → クライアント側 normName 照合 ✓
+  - 店舗＋キャスト同時検索時: 店舗の全キャスト取得 → クライアント側 normName 照合
+
+- **対応パターン一覧**:
+  | 検索入力 | DBの名前 | 結果 |
+  |---------|---------|------|
+  | `西園寺未来` | `西園寺未来` | ✅ |
+  | `西園寺未来` | `西園寺 未来` | ✅ prefix取得→クライアント照合 |
+  | `西園寺 未来` | `西園寺未来` | ✅ AND ilike |
+  | `西園寺　未来` | `西園寺未来` | ✅ 全角スペースも分割 |
+
 ---
 
 ## .env ファイル（要確認）
@@ -879,6 +1025,212 @@ VITE_SUPABASE_ANON_KEY=eyJxxx...
 ```
 
 プロジェクトルートに配置。Gitには含まれていない（.gitignore済み）。
+
+### 2026-05-23 - 手動口コミ投稿・UI統一・SearchPage改善
+
+#### AI口コミ全削除
+- `user_id='menesthe_rewritten'` の376件を全削除 → `delete_rewritten_reviews.mjs`
+
+#### Silk 手動口コミ6件投稿（owner_manual）
+- Q&A形式でユーザーにインタビューし、口コミを代筆
+- 挿入スクリプト: `insert_mori_karen_review.mjs` 他6本
+- 投稿完了セラピスト: 森かれん・白石せいな・吉岡えみ・浜崎あん・小嶋あかり・木田まりあ
+- `user_id='owner_manual'` で管理
+- **注意**: セラピスト名はDBのkanji表記と一致させること（ひらがなでIDを作るとtherapist_name_matchがずれる）
+
+#### UI改善（ThreadDetailPage・ModernReviewCard）
+- 評価ラベルを英語→日本語に変更（Cleanliness→清潔感 等）
+- タグデザインをグレー→カラフルグラデーション（ピンク/パープル系）に変更
+
+#### SearchPage タグフィルター修正
+- `tagCounts` と `filteredTherapists` がセラピストプロフィールのタグ（`t.types||t.tags`）を参照していたため常に(0)になっていたバグを修正
+- `reviewTagMap: { 正規化名: Set<tag> }` をreviewsテーブルから構築してフィルタリングに使用
+
+#### 店舗リンク SearchPage スタイルに統一
+- **方針**: 全ての店舗リンクを `/shops/:id` → `/search?shop=店舗名` に変更
+- SearchPageは `searchParams.get('shop')` で店舗名を取得し `s.name.includes()` でマッチング
+- **変更ファイル（10件）**:
+  - `src/components/ui/ShopCard.jsx`
+  - `src/pages/Home.jsx`（新着店舗スライダー）
+  - `src/components/TopHeroSlider.jsx`（「店舗を見る」ボタン）
+  - `src/features/ranking/components/RankingListItem.jsx`（shop typeのみ）
+  - `src/features/ranking/components/PodiumCard.jsx`（shop typeのみ）
+  - `src/pages/BrandPage.jsx`
+  - `src/pages/ShopListPage.jsx`
+  - `src/pages/FavoritesPage.jsx`
+  - `src/components/BrandResultCard.jsx`
+  - `src/pages/ThreadDetailPage.jsx` / `src/components/ThreadHeader.jsx`
+- SearchPage内のShopCard（ローカルコンポーネント）は同ページに留まるためリンクを無効化（divとspanに変更）
+- セラピスト→店舗（threads系）のリンクは `/shops/:shopId/threads/:threadId` のまま維持
+
+### 2026-05-23（続き）- men-esthe.jp機能実装・管理ページ・口コミ700文字制限
+
+#### 実装した機能一覧（men-esthe.jp参考）
+
+| 機能 | ページ/ファイル | 状態 |
+|------|--------------|------|
+| 新人セラピスト一覧 | `/new-therapists` → `NewTherapistsPage.jsx` | ✅ |
+| みんなの口コミ | `/popular-reviews` → `PopularReviewsPage.jsx` | ✅ |
+| 口コミいいね | `ReviewLikeButton.jsx` + `review_likes` テーブル | ✅ |
+| 閲覧日数システム | `user_credits` テーブル（手動付与に変更） | ✅ |
+| Write-to-Read | `ModernReviewCard.jsx` の 🔒 ロック表示 | ✅ |
+| 感謝バッジ | `ThanksBadgeButton.jsx` + `user_badges` テーブル | ✅ |
+| 掲示板 | `/board` → `BoardPage.jsx` / `BoardDetailPage.jsx` | ✅ |
+| チャット(DM) | `/chat` → `ChatListPage.jsx` / `ChatRoomPage.jsx` | ✅ |
+| 管理ページ | `/admin` → `AdminPage.jsx` | ✅ |
+
+#### 口コミ投稿 700文字制限
+- `src/features/reviews/schema/reviewSchema.js`: story全セクション合計700文字以上のrefine追加
+- `src/pages/PostReviewPage.jsx`: Step3にリアルタイム文字カウンター追加（プログレスバー付き）
+- 自動クレジット付与トリガー（`on_review_insert_grant_credits`）は削除済み
+
+#### クレジット付与フロー（手動運用）
+1. ユーザーが `/post-review` で口コミ投稿（700文字以上必須）
+2. 管理者（tugihe1112@gmail.com）が `/admin` で口コミを読む
+3. 内容を評価して「閲覧日数を付与」ボタンで手動付与（3/7/15/25日のプリセット）
+4. `user_credits` テーブルに加算される（既存日数に積み上げ）
+5. ユーザーは次回訪問時から口コミが読めるようになる
+
+#### 管理ページ仕様（`/admin`）
+- アクセス制限: `ADMIN_EMAILS` 配列に含まれるメールのみ（現在: `tugihe1112@gmail.com` / `master@mens-esthe.jp`）
+- タブ: ユーザー口コミ（実ユーザーのみ）/ 全口コミ / 付与済みクレジット一覧
+- 付与済みには ✓ バッジ表示、追加付与も可能
+- 口コミ削除機能あり
+- 追加管理者は `AdminPage.jsx` の `ADMIN_EMAILS` 配列に追記する
+
+#### DMチャット機能
+- `chat_rooms` テーブル: user1_id, user2_id でユニークルーム
+- `chat_messages` テーブル: Realtime購読（`supabase.channel()`）でリアルタイム受信
+- `ModernReviewCard` に 💬 DM ボタン追加（実ユーザーの口コミのみ表示）
+- DM開始: 既存ルームがあれば遷移、なければ新規作成
+
+#### ホームページ バナー更新
+- 2カラム → 3カラムに変更: 新人キャスト / みんなの口コミ / 掲示板
+
+#### SQLマイグレーション実行済み
+- `supabase_migrations/01_review_likes.sql`: review_likes テーブル
+- `supabase_migrations/02_user_credits.sql`: user_credits テーブル（トリガーは後に削除）
+- `supabase_migrations/03_user_badges_board.sql`: user_badges + posts + replies テーブル
+- チャット用SQL（chat_rooms + chat_messages）: 手動で実行済み
+- トリガー削除SQL: `DROP TRIGGER IF EXISTS on_review_insert_grant_credits ON reviews;` 実行済み
+
+### 2026-05-24 - クレジット付与メール通知実装
+
+#### 実装内容
+
+管理画面（`/admin`）からクレジットを付与した際に、ユーザーへメール通知を自動送信する仕組みを追加。
+
+| ファイル | 変更内容 |
+|---------|---------|
+| `api/notify-credit.js` | Vercel サーバーレス関数（新規作成） |
+| `src/pages/AdminPage.jsx` | `GrantModal.grant()` にメール通知コール追加 |
+| `vercel.json` | SPA rewrite ルール追加 |
+
+#### フロー
+
+1. 管理者が `/admin` → 口コミ展開 → 「閲覧日数を付与」ボタン
+2. 日数を選択 → 「N日付与する」クリック
+3. DB更新成功 → `/api/notify-credit` を POST（失敗してもDB付与は完了扱い）
+4. API: Supabase Admin で `auth.users` からユーザーのメールアドレスを取得
+5. Resend API でメール送信
+6. モーダルに送信ステータス表示（📧送信中 → ✅完了 or ⚠️失敗）→ 1.5秒後に閉じる
+
+#### メール内容
+
+- 件名: `【閲覧権限付与】N日間の閲覧権限をお渡しします 🎉`
+- ダークテーマ HTML メール（ピンク/パープルグラデーション）
+- 付与日数・累計日数・有効期限を大きく表示
+- 「みんなの口コミを読む」CTA ボタン
+
+#### 必要な環境変数（Vercel ダッシュボードで設定）
+
+| 変数名 | 説明 |
+|--------|------|
+| `SUPABASE_SERVICE_ROLE_KEY` | auth.users 参照に必要（すでに `.env` に設定済み） |
+| `VITE_SUPABASE_URL` | Supabase プロジェクト URL |
+| `VITE_PUBLIC_SITE_URL` | サイトURL（メール内リンク用） |
+| `RESEND_API_KEY` | **Resend で取得が必要**（下記参照） |
+
+#### Resend セットアップ手順
+
+1. https://resend.com にアクセス → 無料登録（月3,000件まで無料）
+2. 「API Keys」→「Create API Key」→ キーをコピー
+3. Vercel ダッシュボード → プロジェクト → Settings → Environment Variables → `RESEND_API_KEY` を追加
+4. 「Domains」で `mens-esthe.jp` を追加・DNS認証（送信元が `noreply@mens-esthe.jp` になる）
+5. DNS認証前のテストは `onboarding@resend.dev` を from アドレスに変更して動作確認可能
+
+**`RESEND_API_KEY` がない場合**: メール送信はスキップされ `skipped: no_resend_key` が返る（付与処理は正常完了）
+
+#### 注意事項
+
+- メール送信失敗 → DB付与は完了済み。失敗してもユーザーのクレジットはちゃんと加算される
+- `api/notify-credit.js` は `@supabase/supabase-js` を使用（既にインストール済み）
+- Vercel の serverless function は `api/` ディレクトリに置くだけで自動検出
+
+### 2026-05-25 - 店舗サムネイル全面刷新・口コミ投稿「リストにいないセラピスト」機能
+
+#### 店舗サムネイル全面刷新（Supabase Storage スクショ → og:image）
+
+これまで Supabase Storage に保存されていた店舗サムネイル（スクリーンショット画像）を、各店舗公式サイトの og:image / apple-touch-icon / logo に置き換えた。
+
+**フェーズ1: 通常fetch** → `scripts/maintenance/fix_shop_storage_images.mjs`
+- 対象: `image_url` が Supabase Storage URL になっている全店舗
+- og:image → twitter:image → apple-touch-icon → logo/background-image の優先順位で自動検出
+- `website_url` 単位でグループ化（同一URLの複数店舗は1回のfetchで処理）
+- **結果: 371件更新、142件失敗**（Cloudflare保護・JS描画サイト）
+
+**フェーズ2: Chrome経由** → `scripts/maintenance/fix_shop_images_chrome.mjs`
+- 142件の失敗分をClaude in Chromeで各サイトを開いてog:imageを手動収集
+- `URL_IMAGE_MAP`（website_url → image_url）をハードコードしたバッチ更新スクリプト
+- **結果: 118件更新、24件はマップ未登録のまま（元のStorage画像を維持）**
+
+**合計: 489件のサムネイルを刷新**
+
+#### 口コミ投稿「リストにいないセラピスト」機能（`/post-review`）
+
+新人セラピストなどDBに未登録の名前で口コミを書けるよう、選択肢にない場合の入力フローを追加。
+
+**変更ファイル:**
+
+| ファイル | 変更内容 |
+|---------|---------|
+| `src/features/reviews/hooks/useReviewForm.js` | `therapistName: ''` をdefaultValuesに追加、submitDataに `therapist_name` を含める |
+| `src/pages/PostReviewPage.jsx` | Step1_Selectに「✏️ リストにいない」ボタン + 自由入力欄、Step4_Confirmにセラピスト名表示 |
+
+**UXフロー（Step1）:**
+1. セラピスト一覧カードが表示される
+2. 「✏️ リストにいない」ボタンをタップ → `customMode` ON
+3. テキスト入力欄が出現 → セラピスト名を手入力
+4. 以降は通常の口コミ投稿フローと同じ（Step2→Step3→Step4→送信）
+
+**実装詳細:**
+- `customMode` は `useState` でローカル管理（フォームフィールドではない）
+- `therapistId` は null のまま、`therapistName` に入力した名前を格納
+- `selectTherapist(t)` 実行時は `therapistName` にも `t.name` をセット（既存選択でも therapist_name がDBに保存される）
+- 送信後のリダイレクト: therapistId がある場合 → ThreadDetailPage、ない場合（カスタム名）→ SearchPage
+- **バグ修正**: 従来は therapist_name が submitData に含まれておらず、DB の `therapist_name` カラムが null になっていた。今回の変更で既存フローでも正しく保存される
+
+#### SearchPageキャスト一覧への「リストにいない」カード追加
+
+PostReviewPage の導線が分かりにくいため、SearchPage のキャスト一覧グリッド先頭に「✏️ リストにいない」カードを追加。
+
+**表示条件**: `shopQuery` が設定されていて `matchingShops.length === 1`（特定の1店舗が選択されているとき）のみ表示
+
+**リンク先**: `/post-review?shopId={matchingShops[0].id}&customMode=true`
+
+**PostReviewPage 対応変更**:
+- `useSearchParams` を追加インポート
+- `qsShopId`（クエリストリングのshopId）・`initCustomMode`（customMode=trueフラグ）を取得
+- `effectiveShopId = paramShopId || qsShopId` で path params と query params を統合
+- `Step1_Select` に `initCustomMode` prop を追加 → `useState(initCustomMode || false)` でカスタムモード初期値を制御
+- **結果**: SearchPage から遷移するとSALON BLANCAが自動選択済み＋テキスト入力欄がONの状態でStep1が表示される
+
+#### PostReviewPage カスタムモードUX改善
+
+「リストにいない」選択時、セラピストカード一覧を非表示にして名前入力欄だけを表示するよう変更。
+
+- `customMode` ON → カードグリッド全体を隠す・名前入力欄のみ表示・「← リストから選ぶ」で戻れる
+- `customMode` OFF → 通常のカードグリッド表示（指名なし・セラピスト一覧・リストにいないボタン）
 
 ---
 
