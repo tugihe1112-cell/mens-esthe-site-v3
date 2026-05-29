@@ -157,7 +157,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'メンズエステ情報 <onboarding@resend.dev>',
+        from: 'メンエスマップ <noreply@mens-esthe-map.jp>',
         to: userEmail,
         subject: `【閲覧権限付与】${days}日間の閲覧権限をお渡しします 🎉`,
         html,
