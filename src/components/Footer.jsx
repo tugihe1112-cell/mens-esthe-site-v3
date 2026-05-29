@@ -25,6 +25,7 @@ export default function Footer() {
               <li><Link to="/" className="text-slate-400 hover:text-pink-400 transition">ホーム</Link></li>
               <li><Link to="/search" className="text-slate-400 hover:text-pink-400 transition">キャスト検索</Link></li>
               <li><Link to="/premium" className="text-slate-400 hover:text-yellow-400 transition flex items-center gap-1"><span className="text-yellow-500">👑</span> プレミアム登録</Link></li>
+              <li><Link to="/contact" className="text-slate-400 hover:text-pink-400 transition">お問い合わせ</Link></li>
             </ul>
           </div>
 
@@ -42,7 +43,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-white/5 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-500 font-bold tracking-wider">
-            &copy; {new Date().getFullYear()} MEN'S ESTHE. All rights reserved.
+            &copy; {new Date().getFullYear()} メンエスマップ. All rights reserved.
           </p>
           <div className="text-[10px] text-slate-600 font-bold border border-slate-800 px-3 py-1 rounded">
             18歳未満の方のアクセスを固く禁じます

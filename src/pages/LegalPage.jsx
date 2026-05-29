@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 
@@ -39,7 +39,12 @@ export default function LegalPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] p-6 gap-2 md:gap-4 hover:bg-white/5 transition">
               <dt className="text-slate-400 font-bold">お問い合わせ</dt>
-              <dd className="text-white font-medium">サイト内のお問い合わせフォームよりご連絡ください。</dd>
+              <dd className="text-white font-medium">
+                <Link to="/contact" className="text-pink-300 hover:text-pink-200 underline underline-offset-4">
+                  お問い合わせフォーム
+                </Link>
+                よりご連絡ください。
+              </dd>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] p-6 gap-2 md:gap-4 hover:bg-white/5 transition">
               <dt className="text-slate-400 font-bold">販売価格・支払時期等</dt>

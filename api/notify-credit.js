@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       })
     : '不明';
 
-  const siteUrl = process.env.VITE_PUBLIC_SITE_URL || 'https://mens-esthe.jp';
+  const siteUrl = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
   // ── ③ メール本文（HTML） ──
   const html = `
@@ -64,7 +64,7 @@ export default async function handler(req, res) {
           <tr>
             <td style="text-align:center;padding-bottom:32px;">
               <div style="display:inline-block;background:linear-gradient(135deg,#ec4899,#a855f7);border-radius:12px;padding:10px 20px;">
-                <span style="color:#fff;font-size:14px;font-weight:900;letter-spacing:0.05em;">💆 メンズエステ情報</span>
+                <span style="color:#fff;font-size:14px;font-weight:900;letter-spacing:0.05em;">メンエスマップ</span>
               </div>
             </td>
           </tr>
@@ -128,7 +128,7 @@ export default async function handler(req, res) {
           <tr>
             <td style="padding-top:24px;text-align:center;">
               <p style="margin:0;font-size:11px;color:#334155;">
-                このメールはメンズエステ情報サイトから自動送信されています。<br>
+                このメールはメンエスマップから自動送信されています。<br>
                 <a href="${siteUrl}" style="color:#475569;text-decoration:none;">${siteUrl}</a>
               </p>
             </td>

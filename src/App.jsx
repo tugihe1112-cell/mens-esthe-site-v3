@@ -10,6 +10,7 @@ import PremiumPage from './pages/PremiumPage';
 import ScrollToTop from './components/ScrollToTop';
 import BottomNav from './components/BottomNav';
 import ErrorBoundary from './components/ErrorBoundary';
+import Footer from './components/Footer';
 
 // Pages
 import Home from './pages/Home';
@@ -42,6 +43,7 @@ import AdminPage from './pages/AdminPage';
 import LegalPage from './pages/LegalPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
+import ContactPage from './pages/ContactPage';
 import PrefecturePage from './pages/PrefecturePage';
 
 const Layout = ({ children }) => {
@@ -55,6 +57,7 @@ const Layout = ({ children }) => {
       <main className="flex-grow">
         {children}
       </main>
+      {!shouldHideNav && <Footer />}
       {!shouldHideNav && <BottomNav />}
     </div>
   );
@@ -112,6 +115,7 @@ export default function App() {
                   <Route path="/legal" element={<LegalPage />} />
                   <Route path="/terms" element={<TermsPage />} />       {/* 🌟 ルートを追加！ */}
                   <Route path="/privacy" element={<PrivacyPage />} />   {/* 🌟 ルートを追加！ */}
+                  <Route path="/contact" element={<ContactPage />} />
                   <Route path="/404" element={<NotFoundPage />} />
                   <Route path="*" element={<Navigate to="/404" replace />} />
                 </Routes>
