@@ -720,7 +720,7 @@ export default function SearchPage() {
                 <>
                   <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
                     {/* リストにいないセラピストの口コミカード（店舗指定時のみ） */}
-                    {shopQuery && matchingShops.length === 1 && (
+                    {shopQuery && matchingShops.length >= 1 && (
                       <Link
                         to={`/post-review?shopId=${matchingShops[0].id}&customMode=true`}
                         className="group relative block bg-slate-900/60 rounded-[1.5rem] overflow-hidden border border-dashed border-purple-500/30 hover:border-purple-500/70 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-900/20 hover:-translate-y-1"
