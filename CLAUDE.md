@@ -3,18 +3,35 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-05-29 （公開前セキュリティ・UX修正5件）**
+> **最終更新: 2026-05-30 （公開後チェック・お問い合わせフォーム実装・sitemap/robots本番URL化）**
 > 作業がひと段落するたびに、Claudeがこのファイルを自動更新する。
+
+---
+
+## 外部サービス アカウント情報
+
+| サービス | ID/メール | 備考 |
+|---------|----------|------|
+| ムームードメイン | tugihe1112@gmail.com | mens-esthe-map.jp 登録 |
+| Supabase | tugihe1112@gmail.com | mens-esthe-db プロジェクト |
+| Vercel | tugihe1112@gmail.com | mens-esthe-site プロジェクト |
+| Resend | tugihe1112@gmail.com | メール送信 |
+
+※パスワードはiCloudキーチェーンで管理すること
 
 ---
 
 ## ⚠️ 公開前にやること（リリースチェックリスト）
 
-- [ ] **メール送信元を本番用に変更**
-  - サイト専用メルアドを取得（例: `noreply@mens-esthe.jp`）
-  - Resend ダッシュボード → Domains → `mens-esthe.jp` を追加・DNS認証
-  - `api/notify-credit.js` の `from:` を `'メンズエステ情報 <noreply@mens-esthe.jp>'` に変更
-  - 現在は `onboarding@resend.dev`（テスト用）のまま
+- [x] **メール送信元を本番用に変更**（2026-05-29）
+  - Resend ダッシュボード → Domains → `mens-esthe-map.jp` を追加・DNS認証済み（Verified）
+  - `api/notify-credit.js` の `from:` を `'メンエスマップ <noreply@mens-esthe-map.jp>'` に変更済み
+
+- [x] **DNS反映後の作業（mens-esthe-map.jp）**（2026-05-30）
+  - `https://www.mens-esthe-map.jp` HTTP 200確認済み
+  - 裸ドメイン `https://mens-esthe-map.jp` → `https://www.mens-esthe-map.jp/` に307リダイレクト確認済み
+  - Vercel 環境変数 `VITE_PUBLIC_SITE_URL` を `https://www.mens-esthe-map.jp` に更新済み
+  - `public/sitemap.xml` のドメインを `https://www.mens-esthe-map.jp` に更新済み
 
 - [x] **Vercel 環境変数を設定済み**（2026-05-24）
   - `RESEND_API_KEY` — Resend API キー（Production & Preview）
@@ -28,9 +45,14 @@
   - `supabase_migrations/04_rls_policies.sql` を Supabase SQL Editor で実行・Success確認済み
   - 対象: `reviews` / `user_credits` / `shops` / `therapists` / `review_likes` / `user_badges` / `chat_messages`
 
-- [ ] **お問い合わせフォームの実装**
-  - 特定商取引法ページ（`/legal`）に「サイト内のお問い合わせフォームよりご連絡ください」と記載があるが、フォームが未実装
-  - 法的必須。最低限メールアドレスへの直接リンクでも可
+- [x] **お問い合わせフォームの実装**（2026-05-30）
+  - `api/contact.js` 新規作成（Resend経由、送信先 `CONTACT_TO_EMAIL` or `tugihe1112@gmail.com`）
+  - `src/pages/ContactPage.jsx` 新規作成（カテゴリ: 掲載情報の修正 / 口コミ・投稿について / 有料プランについて / その他）
+  - `/contact` ルート追加（`App.jsx`）
+  - `LegalPage.jsx` のお問い合わせ文言を `/contact` へのリンクに変更
+  - `Footer.jsx` にお問い合わせリンク追加・コピーライトを「メンエスマップ」に変更
+  - honeypot・文字数制限・メール形式チェックあり
+  - ⚠️ **まだgit pushしていない（ローカル確認済み）**
 
 ---
 
@@ -1423,3 +1445,89 @@ PostReviewPage の導線が分かりにくいため、SearchPage のキャスト
 - 画像URLがSupabase Storage（`azuetkuzzmshqfbrhqmf.supabase.co/storage/...`）になっていれば正常
 - `therapist-images` バケットに画像アップロード済みの場合は `upsert: true` で上書き可
 - **クレジット付与は `/api/admin-grant-credit.js` 経由のみ**（2026-05-29以降。直接 REST API PATCH は廃止）
+
+---
+
+### 2026-05-29（続き）- サイト名決定・ドメイン取得・DNS設定・モバイルUI全面改善
+
+#### サイト名決定
+- **メンエスマップ**（英語ロゴ表記: Mens Esthe.Map）に決定
+- 更新ファイル: `index.html` / `src/components/SeoHead.jsx` / `public/manifest.json` / `CLAUDE.md`
+
+#### ドメイン取得
+- **mens-esthe-map.jp** をムームードメインで取得（990円/年）
+- アカウント: tugihe1112@gmail.com（パスワードはiCloudキーチェーン）
+
+#### Vercel × ムームードメイン DNS設定
+- Vercel → mens-esthe-site → Domains → Add Existing で `mens-esthe-map.jp` を追加
+- ムームードメイン → ドメイン操作 → ムームーDNS → カスタム設定 → 設定2 で以下を登録：
+
+| No | サブドメイン | 種別 | 内容 |
+|----|------------|------|------|
+| 1 | （空白） | A | `216.198.79.1` |
+| 2 | www | CNAME | `f42a7fce174242fa.vercel-dns-017.com` |
+
+- DNS反映待ち（数分〜数時間）。反映後 `https://mens-esthe-map.jp` で開けるようになる
+- 反映確認後: Vercel環境変数 `VITE_PUBLIC_SITE_URL` を `https://mens-esthe-map.jp` に更新、`sitemap.xml` のドメインも更新
+
+#### モバイルUI全面改善
+- **ハンバーガーメニュー廃止** → 現代アプリの標準（Instagram・メルカリ等に準拠）
+- **BottomNav 4→5タブ化**: ホーム / キャスト / 投稿 / ランキング / マイページ（未ログイン時はログイン）
+- **ヘッダー（モバイル）**: ロゴ + 未ログイン時のみ「ログイン」（枠線）「会員登録」（ピンク）ピル型ボタン
+- **TopHeroSlider**: モバイル上部余白を `pt-4` → `pt-20` に変更（ヘッダーと被り解消）
+- **SearchPage**: 空クエリ時は🔍プロンプト表示のみ（DBへの無駄なリクエストなし）
+- **SearchPage**: `sticky top-0` → `sticky top-20` + `pt-20` でヘッダーのz-index被り解消
+
+#### Vercel デプロイ
+- `.npmrc` に `legacy-peer-deps=true` 追加（`react-helmet-async` のpeer dep競合を解消）
+- `git push origin main` → Vercel自動デプロイ → Ready確認済み（commit: 28f5717）
+
+### 2026-05-29（続き2）- Resendドメイン認証・メール本番設定
+
+#### Resend ドメイン認証完了
+- Resend → Domains → `mens-esthe-map.jp` を追加（Tokyo ap-northeast-1）
+- ムームードメインのカスタムDNSに以下の3レコードを追加：
+  - TXT `resend._domainkey` : DKIM公開鍵
+  - MX `send` : `feedback-smtp.ap-northeast-1.amazonses.com`（Priority: 10）
+  - TXT `send` : `v=spf1 include:amazonses.com ~all`
+- 約24分でVerified（緑）になった
+
+#### メール送信元を本番用に変更
+- `api/notify-credit.js` の `from:` を変更
+  - 変更前: `'メンズエステ情報 <onboarding@resend.dev>'`
+  - 変更後: `'メンエスマップ <noreply@mens-esthe-map.jp>'`
+- commit: 984d5f5 → Vercel自動デプロイ完了
+
+#### Vercel 環境変数更新
+- `VITE_PUBLIC_SITE_URL` を `https://mens-esthe-site-beta.vercel.app` → `https://www.mens-esthe-map.jp` に更新
+- Redeployして反映済み
+
+### 2026-05-30 - 公開後チェック・お問い合わせフォーム実装（Codex）
+
+#### 公開後チェック
+- `https://www.mens-esthe-map.jp` HTTP 200確認済み
+- 裸ドメイン `https://mens-esthe-map.jp` → `https://www.mens-esthe-map.jp/` に307リダイレクト確認済み
+
+#### sitemap.xml / robots.txt 本番URL化
+- 全URLを `https://www.mens-esthe-map.jp` に変更
+- `lastmod` を `2026-05-30` に更新
+- `/contact` を sitemap に追加
+- `robots.txt` の Sitemap URL も本番URLに更新
+
+#### お問い合わせフォーム実装（api/contact.js + ContactPage.jsx）
+- `api/contact.js` 新規作成（Vercelサーバーレス関数）
+  - Resend経由でメール送信、`from: noreply@mens-esthe-map.jp`
+  - 送信先: `CONTACT_TO_EMAIL` 環境変数、未設定なら `tugihe1112@gmail.com`
+  - honeypot（`company`フィールド）・文字数制限・メール形式チェックあり
+- `src/pages/ContactPage.jsx` 新規作成（`/contact`）
+  - カテゴリ: 掲載情報の修正 / 口コミ・投稿について / 有料プランについて / その他
+- `App.jsx`: `/contact` ルート追加、FooterをLayout全体に表示
+- `LegalPage.jsx`: お問い合わせ文言を `/contact` へのリンクに変更
+- `Footer.jsx`: お問い合わせリンク追加、コピーライトを「メンエスマップ」に変更
+- `SeoHead.jsx` / `api/notify-credit.js`: フォールバックURLを `https://www.mens-esthe-map.jp` に統一
+
+#### 確認済み
+- `npm run build` 成功
+- `node --check api/contact.js` / `api/notify-credit.js` 成功
+- ローカル `/contact` 表示確認済み
+- ⚠️ **まだgit pushしていない。`git add . && git commit && git push origin main` が必要**
