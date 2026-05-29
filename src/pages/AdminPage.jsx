@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { supabase } from '../lib/supabase.js';
 import LazyImage from '../components/LazyImage.jsx';
 
 const ADMIN_EMAILS = ['tugihe1112@gmail.com', 'master@mens-esthe.jp'];
@@ -30,45 +31,23 @@ function GrantModal({ review, onClose, onGrant }) {
     if (!review?.user_id) return;
     setIsLoading(true);
     try {
-      const getRes = await fetch(
-        `${url}/rest/v1/user_credits?user_id=eq.${review.user_id}&select=credits_days,expires_at,total_reviews_posted`,
-        { headers }
-      );
-      const existing = await getRes.json();
-      const current = Array.isArray(existing) && existing.length > 0 ? existing[0] : null;
-      const newDays = (current?.credits_days || 0) + days;
-      const baseExpiry = current?.expires_at && new Date(current.expires_at) > new Date()
-        ? new Date(current.expires_at) : new Date();
-      const newExpiry = new Date(baseExpiry.getTime() + days * 86400000);
+      // ── ① 管理者の JWT を取得（サーバーサイド検証に使う）──
+      const { data: { session } } = await supabase.auth.getSession();
+      const jwt = session?.access_token;
+      if (!jwt) throw new Error('ログインセッションが見つかりません。再ログインしてください。');
 
-      if (current) {
-        await fetch(`${url}/rest/v1/user_credits?user_id=eq.${review.user_id}`, {
-          method: 'PATCH',
-          headers: jsonHeaders,
-          body: JSON.stringify({
-            credits_days: newDays,
-            expires_at: newExpiry.toISOString(),
-            total_reviews_posted: (current.total_reviews_posted || 0) + 1,
-            updated_at: new Date().toISOString(),
-          }),
-        });
-      } else {
-        await fetch(`${url}/rest/v1/user_credits`, {
-          method: 'POST',
-          headers: { ...jsonHeaders, Prefer: 'return=minimal' },
-          body: JSON.stringify({
-            user_id: review.user_id,
-            credits_days: days,
-            expires_at: newExpiry.toISOString(),
-            total_reviews_posted: 1,
-            updated_at: new Date().toISOString(),
-          }),
-        });
-      }
+      // ── ② サーバーサイド API でクレジット付与（admin-grant-credit.js が管理者メールを検証）──
+      const grantRes = await fetch('/api/admin-grant-credit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${jwt}` },
+        body: JSON.stringify({ target_user_id: review.user_id, days }),
+      });
+      const grantData = await grantRes.json();
+      if (!grantRes.ok) throw new Error(grantData.error || '付与に失敗しました');
 
       onGrant(review.id, days);
 
-      // ── メール通知（非同期・失敗しても付与は完了扱い）──
+      // ── ③ メール通知（非同期・失敗しても付与は完了扱い）──
       setEmailStatus('sending');
       try {
         const emailRes = await fetch('/api/notify-credit', {
@@ -77,8 +56,8 @@ function GrantModal({ review, onClose, onGrant }) {
           body: JSON.stringify({
             user_id: review.user_id,
             days,
-            credits_days: newDays,
-            expires_at: newExpiry.toISOString(),
+            credits_days: grantData.credits_days,
+            expires_at: grantData.expires_at,
           }),
         });
         const emailData = await emailRes.json();
@@ -91,7 +70,7 @@ function GrantModal({ review, onClose, onGrant }) {
       await new Promise(r => setTimeout(r, 1500));
       onClose();
     } catch (e) {
-      alert('付与に失敗しました');
+      alert(e.message || '付与に失敗しました');
     } finally {
       setIsLoading(false);
     }

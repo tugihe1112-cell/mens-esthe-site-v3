@@ -56,9 +56,9 @@ export default function Header() {
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out ${
           isVisible ? 'translate-y-0' : '-translate-y-full'
         } ${
-          isScrolled
-            ? 'bg-slate-900/95 backdrop-blur-xl shadow-lg border-b border-white/10 py-3' // スクロール時: 濃い背景
-            : isTransparentPage && !mobileMenuOpen 
+          isScrolled || mobileMenuOpen
+            ? 'bg-slate-950 backdrop-blur-xl shadow-lg border-b border-white/10 py-3' // スクロール時・メニュー開放時: 完全不透明
+            : isTransparentPage
               ? 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-6' // 透明時: 黒グラデーションで文字を見やすく
               : 'bg-slate-900/80 backdrop-blur-md py-4'
         }`}
@@ -67,14 +67,14 @@ export default function Header() {
           <div className="flex items-center justify-between gap-4">
 
             {/* ロゴエリア */}
-            <Link to="/" className="flex items-center gap-2.5 group relative z-50">
+            <Link to="/" className="flex items-center gap-2 group relative z-50 shrink-0">
               <div className="relative">
                 <div className="absolute inset-0 bg-pink-500 rounded-xl blur opacity-40 group-hover:opacity-60 transition"></div>
-                <div className="relative bg-gradient-to-br from-pink-600 to-rose-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition duration-300">
-                  <span className="text-xl">💎</span>
+                <div className="relative bg-gradient-to-br from-pink-600 to-rose-600 text-white w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition duration-300">
+                  <span className="text-base md:text-xl">💎</span>
                 </div>
               </div>
-              <h1 className={`font-black text-xl tracking-tighter transition duration-300 ${isScrolled || !isTransparentPage ? 'text-white' : 'text-white drop-shadow-md'}`}>
+              <h1 className={`font-black text-base md:text-xl tracking-tighter whitespace-nowrap transition duration-300 ${isScrolled || !isTransparentPage ? 'text-white' : 'text-white drop-shadow-md'}`}>
                 Mens Esthe<span className="text-pink-500">.Map</span>
               </h1>
             </Link>
@@ -109,64 +109,25 @@ export default function Header() {
               )}
             </nav>
 
-            {/* モバイル用 ハンバーガーボタン */}
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-              className="lg:hidden p-2 text-white relative z-50 w-10 h-10 flex items-center justify-center bg-black/20 rounded-full backdrop-blur-sm border border-white/10"
-            >
-              <div className="space-y-1.5">
-                <span className={`block w-5 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-                <span className={`block w-5 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
-                <span className={`block w-5 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
-              </div>
-            </button>
-
-          </div>
-        </div>
-
-        {/* モバイルメニュー (日本語化) */}
-        <div className={`fixed inset-0 bg-slate-950/95 backdrop-blur-xl z-40 transition-all duration-500 lg:hidden flex flex-col pt-24 px-6 ${
-          mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
-        }`}>
-          
-          {/* モバイルナビゲーション */}
-          <nav className="flex flex-col gap-6">
-            <Link to="/" className="text-xl font-bold text-white hover:text-pink-500 transition flex items-center gap-3 border-b border-white/5 pb-4">
-              <span className="text-2xl">🏠</span> ホーム
-            </Link>
-            <Link to="/search" className="text-xl font-bold text-white hover:text-pink-500 transition flex items-center gap-3 border-b border-white/5 pb-4">
-              <span className="text-2xl">🔍</span> キャスト検索
-            </Link>
-            <Link to="/ranking" className="text-xl font-bold text-white hover:text-pink-500 transition flex items-center gap-3 border-b border-white/5 pb-4">
-              <span className="text-2xl">📊</span> ランキング
-            </Link>
-
-            {currentUser || authUser ? (
-              <>
-                <Link to="/mypage" className="text-xl font-bold text-pink-400 hover:text-pink-300 transition flex items-center gap-3 pt-2">
-                  <span className="text-2xl">👤</span> マイページ
-                </Link>
-                <button onClick={handleLogout} className="text-left text-lg font-bold text-slate-400 hover:text-white mt-4 pl-1">
-                  → ログアウト
-                </button>
-              </>
-            ) : (
-              <div className="grid grid-cols-2 gap-4 mt-2">
-                <Link to="/login" className="text-center py-3 rounded-xl border border-white/20 text-white font-bold hover:bg-white/10 transition">
+            {/* モバイル用 認証ボタン */}
+            {!(currentUser || authUser) && (
+              <div className="lg:hidden flex items-center gap-2 shrink-0">
+                <Link to="/login"
+                  className="text-[11px] font-bold text-white border border-white/25 px-3 py-1.5 rounded-full whitespace-nowrap hover:bg-white/10 transition">
                   ログイン
                 </Link>
-                <Link to="/register" className="text-center py-3 rounded-xl bg-pink-600 text-white font-bold hover:bg-pink-500 transition shadow-lg shadow-pink-900/30">
+                <Link to="/register"
+                  className="text-[11px] font-bold text-white bg-pink-600 px-3 py-1.5 rounded-full whitespace-nowrap hover:bg-pink-500 transition">
                   会員登録
                 </Link>
               </div>
             )}
-          </nav>
 
-          <div className="absolute bottom-10 left-0 w-full text-center">
-            <p className="text-slate-600 text-xs font-bold tracking-[0.3em]">MENS ESTHE MAP</p>
           </div>
         </div>
+
       </header>
+
     </>
   );
 }

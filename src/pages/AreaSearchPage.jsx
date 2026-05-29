@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LazyImage from '../components/LazyImage.jsx';
+import SeoHead from '../components/SeoHead.jsx';
 
 // エリア定義データ (VIP Night City Guide)
 const AREAS = [
@@ -79,7 +80,11 @@ const AREAS = [
 export default function AreaSearchPage() {
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200">
-      
+      <SeoHead
+        title="エリアから探す"
+        description="新宿・渋谷・銀座など東京の各エリアからメンズエステ店舗を探せます。"
+        path="/area-search"
+      />
       {/* Header */}
       <div className="pt-24 px-4 pb-8 max-w-7xl mx-auto">
         <div className="text-center mb-10 animate-in slide-in-from-top-4 duration-700">

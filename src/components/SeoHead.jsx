@@ -1,8 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
-const SITE_TITLE = "メンエスガイド";
-const SITE_URL = typeof window !== 'undefined' ? window.location.origin : 'https://mens-esthe-guide.vercel.app';
+const SITE_TITLE = "メンエスマップ";
+const SITE_URL = import.meta.env.VITE_PUBLIC_SITE_URL || 'https://mens-esthe-site-beta.vercel.app';
 const DEFAULT_OG_IMAGE = 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1200&auto=format&fit=crop';
 
 export default function SeoHead({ title, description, path, image }) {
@@ -27,6 +27,7 @@ export default function SeoHead({ title, description, path, image }) {
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={pageDesc} />
       <meta name="twitter:image" content={ogImage} />
+      <link rel="canonical" href={url} />
     </Helmet>
   );
 }

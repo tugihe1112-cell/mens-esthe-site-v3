@@ -180,9 +180,20 @@ export default function RankingSection() {
          ))}
          
          {topTherapists.length === 0 && (
-           <div className="text-center py-12 text-slate-500 bg-slate-900/20 rounded-3xl border border-dashed border-slate-800">
-             <p className="mb-2">🙇‍♂️</p>
-             まだ集計データがありません
+           <div className="relative overflow-hidden rounded-3xl border border-pink-500/20 bg-gradient-to-br from-pink-950/40 to-purple-950/40 p-8 text-center">
+             <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-purple-500/5 pointer-events-none" />
+             <p className="text-pink-400 font-black tracking-widest text-xs uppercase mb-3">口コミ募集中</p>
+             <h3 className="text-white font-black text-xl mb-2">ランキングを一緒に作ろう</h3>
+             <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+               体験談を投稿すると<span className="text-pink-400 font-bold">閲覧権が得られます</span>。<br/>
+               あなたの口コミがランキングを動かします。
+             </p>
+             <Link
+               to="/post-review"
+               className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-black px-8 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-pink-900/40 text-sm"
+             >
+               口コミを書く
+             </Link>
            </div>
          )}
       </div>

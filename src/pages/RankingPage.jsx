@@ -3,8 +3,10 @@ import { useShopData } from '../contexts/DataContext.jsx';
 import { useRankingData } from '../features/ranking/hooks/useRankingData';
 import { PodiumCard } from '../features/ranking/components/PodiumCard';
 import { RankingListItem } from '../features/ranking/components/RankingListItem';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import { RankingListSkeleton } from '../components/ui/Skeleton.jsx';
 
 // --- Tab Config ---
 const PERIOD_TABS = [
@@ -50,27 +52,8 @@ export default function RankingPage() {
   const top3 = filteredRankingData.slice(0, 3);
   const others = filteredRankingData.slice(3, showAll ? undefined : 50);
 
-  // --- Loading State ---
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
-        <div className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-slate-400 font-bold tracking-widest text-xs animate-pulse">LOADING DATA...</p>
-      </div>
-    );
-  }
-
-  // --- Error State ---
-  if (error) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-red-400">
-        <p>データの読み込みに失敗しました。</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 overflow-hidden relative font-sans">
+    <div className="min-h-screen bg-slate-950 pb-28 md:pb-16 text-slate-200 overflow-hidden relative font-sans">
       <SeoHead title={`${selectedArea}のエステランキング`} description={`メンズエステの人気ランキング。${selectedArea}エリアのセラピスト・店舗の評判をチェック。`} />
       <Header />
 
@@ -97,8 +80,10 @@ export default function RankingPage() {
       <div className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-white/5 shadow-2xl mb-12">
         <div className="max-w-4xl mx-auto px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-4">
           
-          {/* Period Tabs */}
-          <div className="flex w-full md:w-auto overflow-x-auto hide-scrollbar">
+          {/* Period Tabs（右端フェードでスワイプ感を示唆） */}
+          <div className="relative w-full md:w-auto">
+            <div className="flex overflow-x-auto hide-scrollbar">
+
              {PERIOD_TABS.map((tab) => {
                const isActive = activeTab === tab.id;
                return (
@@ -121,6 +106,9 @@ export default function RankingPage() {
                  </button>
                );
              })}
+            </div>
+            {/* 右端フェード（スワイプ感示唆、md以上では非表示） */}
+            <div className="md:hidden absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-slate-950/90 to-transparent pointer-events-none" />
           </div>
 
           {/* Area Selector */}
@@ -140,7 +128,17 @@ export default function RankingPage() {
 
       <div className="max-w-4xl mx-auto px-4 relative z-10">
         
-        {filteredRankingData.length > 0 ? (
+        {loading ? (
+          /* スケルトン: 表彰台3枠 + リスト5行 */
+          <>
+            <div className="grid grid-cols-3 gap-2 md:gap-6 items-end mb-16 px-1 min-h-[320px]">
+              <div className="order-1 h-52 bg-slate-800 animate-pulse rounded-3xl" />
+              <div className="order-2 h-72 bg-slate-800 animate-pulse rounded-3xl pb-8" />
+              <div className="order-3 h-44 bg-slate-800 animate-pulse rounded-3xl" />
+            </div>
+            <RankingListSkeleton count={5} />
+          </>
+        ) : filteredRankingData.length > 0 ? (
           <>
             {/* 👑 TOP 3 Podium */}
             <div className="grid grid-cols-3 gap-2 md:gap-6 items-end mb-16 px-1 relative min-h-[320px]">
@@ -183,15 +181,30 @@ export default function RankingPage() {
             </div>
           </>
         ) : (
-          <div className="text-center py-32 bg-slate-900/30 rounded-3xl border border-dashed border-slate-800 animate-in fade-in zoom-in-95 duration-500">
-              <div className="w-20 h-20 bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/5">
-                <span className="text-4xl opacity-50 grayscale">📉</span>
-              </div>
-              <p className="text-slate-500 font-bold tracking-widest text-xs uppercase mb-2">No Data Available</p>
-              <p className="text-slate-600 text-xs">
-                 条件に一致するランキングデータはありません。<br/>
-                 別のエリアを選択してみてください。
-              </p>
+          <div className="relative overflow-hidden rounded-3xl border border-pink-500/20 bg-gradient-to-br from-pink-950/40 to-purple-950/40 p-12 text-center animate-in fade-in zoom-in-95 duration-500">
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-purple-500/5 pointer-events-none" />
+            <p className="text-pink-400 font-black tracking-widest text-xs uppercase mb-4">口コミ募集中</p>
+            <h2 className="text-white font-black text-2xl md:text-3xl mb-3">
+              {selectedArea === '全国' ? 'ランキングを一緒に作ろう' : `${selectedArea}のランキングを作ろう`}
+            </h2>
+            <p className="text-slate-400 text-sm md:text-base mb-8 leading-relaxed max-w-md mx-auto">
+              体験談を投稿すると<span className="text-pink-400 font-bold">口コミ閲覧権が得られます</span>。<br/>
+              あなたの投稿がこのランキングを動かします。
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                to="/post-review"
+                className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-black px-10 py-4 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-pink-900/40"
+              >
+                口コミを書く
+              </Link>
+              <Link
+                to="/popular-reviews"
+                className="inline-block bg-slate-800 hover:bg-slate-700 text-white font-bold px-10 py-4 rounded-xl transition-all border border-white/10"
+              >
+                みんなの口コミを見る
+              </Link>
+            </div>
           </div>
         )}
 

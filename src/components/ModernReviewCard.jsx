@@ -271,16 +271,16 @@ export default function ModernReviewCard({ review }) {
               <div className="text-[15px] text-slate-200 leading-relaxed line-clamp-2 blur-[3px] select-none pointer-events-none">
                 {(review.content || "").slice(0, 60)}
               </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-transparent rounded-xl">
-                <div className="text-center px-4 py-3 bg-slate-900/90 rounded-2xl border border-white/10 backdrop-blur shadow-xl">
-                  <p className="text-2xl mb-1">🔒</p>
-                  <p className="text-white font-black text-sm mb-1">口コミを書いて続きを読む</p>
-                  <p className="text-slate-400 text-[11px] mb-3">口コミを1件投稿すると最大25日間閲覧できます</p>
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-slate-900/98 via-slate-900/80 to-transparent rounded-xl">
+                <div className="text-center px-5 py-4 bg-gradient-to-br from-purple-950/90 to-slate-900/90 rounded-2xl border border-purple-500/30 backdrop-blur shadow-xl max-w-[260px]">
+                  <p className="text-purple-300 font-black text-[10px] tracking-widest uppercase mb-2">閲覧制限中</p>
+                  <p className="text-white font-black text-sm mb-1 leading-tight">体験談を投稿すると<br/>この口コミが読めます</p>
+                  <p className="text-slate-400 text-[11px] mb-3">詳しい口コミを1件書くと<span className="text-purple-300 font-bold">最大25日間</span>読み放題になります</p>
                   <a
                     href="/post-review"
-                    className="inline-block bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-black px-5 py-2 rounded-full hover:opacity-90 transition shadow-lg"
+                    className="inline-block bg-pink-600 hover:bg-pink-500 text-white text-xs font-black px-6 py-2.5 rounded-xl transition-all hover:scale-105 shadow-lg shadow-pink-900/50"
                   >
-                    ✍️ 口コミを書く
+                    口コミを書く →
                   </a>
                 </div>
               </div>

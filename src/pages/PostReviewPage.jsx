@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { FormProvider, useFormContext, Controller } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
@@ -18,6 +18,54 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
   const selectedTherapistId = watch('therapistId');
   const therapistName = watch('therapistName');
   const [customMode, setCustomMode] = useState(initCustomMode || false);
+
+  // コンボボックス用 state
+  const selectedShopName = useMemo(() => shops.find(s => s.id === selectedShopId)?.name || '', [shops, selectedShopId]);
+  const [shopInput, setShopInput] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const comboRef = useRef(null);
+
+  // 選択済みの場合は入力欄を初期化
+  useEffect(() => {
+    if (selectedShopName) setShopInput(selectedShopName);
+  }, [selectedShopName]);
+
+  // 外クリックで候補を閉じる
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (comboRef.current && !comboRef.current.contains(e.target)) setShowSuggestions(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const suggestions = useMemo(() => {
+    const q = shopInput.trim().toLowerCase();
+    if (!q) return shops.slice(0, 20); // 未入力時は先頭20件
+    return shops.filter(s => s.name.toLowerCase().includes(q)).slice(0, 20);
+  }, [shops, shopInput]);
+
+  const handleShopSelect = (shop) => {
+    setValue('shopId', shop.id);
+    setSelectedShopId(shop.id);
+    setShopInput(shop.name);
+    setShowSuggestions(false);
+    setValue('therapistId', null);
+    setValue('therapistName', '');
+    setCustomMode(false);
+  };
+
+  const handleShopInputChange = (e) => {
+    setShopInput(e.target.value);
+    setShowSuggestions(true);
+    // 入力が変わったら選択をクリア
+    if (selectedShopId) {
+      setValue('shopId', '');
+      setSelectedShopId('');
+      setValue('therapistId', null);
+      setValue('therapistName', '');
+    }
+  };
 
   const selectTherapist = (t) => {
     setValue('therapistId', t.id);
@@ -48,27 +96,55 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
 
       <div className="bg-slate-900/50 p-6 rounded-[2rem] border border-white/5 shadow-xl">
         <label className="block text-[10px] font-bold text-slate-500 mb-3 uppercase tracking-widest pl-1">STORE</label>
-        <div className="relative">
-          <select
-            {...register('shopId')}
-            value={selectedShopId || ''}
-            disabled={!!paramShopId}
-            style={paramShopId ? { opacity: 1, backgroundColor: 'rgba(0,0,0,0.5)', cursor: 'not-allowed' } : {}}
-            onChange={(e) => {
-              const newId = e.target.value;
-              setValue('shopId', newId);
-              setSelectedShopId(newId);
-              setValue('therapistId', null);
-              setValue('therapistName', '');
-              setCustomMode(false);
-            }}
-            className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white font-bold appearance-none focus:border-pink-500 transition outline-none"
-          >
-            <option value="">店舗を選択</option>
-            {shops.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-          </select>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">▼</div>
-        </div>
+
+        {paramShopId ? (
+          /* URLから来た場合は固定表示 */
+          <div className="w-full bg-black/30 border border-white/10 rounded-xl p-4 text-white font-bold opacity-80 cursor-not-allowed">
+            {selectedShopName || '店舗が選択されています'}
+          </div>
+        ) : (
+          /* コンボボックス */
+          <div className="relative" ref={comboRef}>
+            <input
+              type="text"
+              value={shopInput}
+              onChange={handleShopInputChange}
+              onFocus={() => setShowSuggestions(true)}
+              placeholder="店舗名を入力して検索..."
+              autoComplete="off"
+              className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white font-bold focus:border-pink-500 transition outline-none placeholder:text-slate-600"
+            />
+            {/* 選択済みチェックマーク */}
+            {selectedShopId && (
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-pink-400 text-sm font-bold">✓</div>
+            )}
+            {/* クリアボタン（入力中・未選択時） */}
+            {shopInput && !selectedShopId && (
+              <button
+                type="button"
+                onClick={() => { setShopInput(''); setShowSuggestions(false); }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-lg leading-none"
+              >×</button>
+            )}
+
+            {/* 候補ドロップダウン */}
+            {showSuggestions && suggestions.length > 0 && (
+              <ul className="absolute z-50 top-full mt-1 w-full bg-slate-800 border border-white/10 rounded-xl shadow-2xl max-h-64 overflow-y-auto">
+                {suggestions.map(shop => (
+                  <li key={shop.id}>
+                    <button
+                      type="button"
+                      onMouseDown={() => handleShopSelect(shop)}
+                      className="w-full text-left px-4 py-3 text-sm text-white hover:bg-pink-600/30 transition truncate border-b border-white/5 last:border-0"
+                    >
+                      {shop.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
 
       {selectedShopId && (
@@ -103,45 +179,82 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
               </button>
             </div>
           ) : (
-            /* 通常モード: セラピストカード一覧 */
-            <div className="grid grid-cols-3 gap-3">
-              {/* 指名なし */}
-              <button
-                type="button"
-                onClick={selectNone}
-                className={`p-4 rounded-2xl border flex flex-col items-center justify-center gap-2 transition active:scale-95 ${isNoneSelected ? 'bg-pink-600 border-pink-500 text-white shadow-lg shadow-pink-900/30' : 'bg-black/20 border-white/5 text-slate-500 hover:bg-white/5'}`}
-              >
-                <span className="text-xl">😶</span>
-                <span className="text-[10px] font-bold">指名なし</span>
-              </button>
-
-              {/* DBにいるセラピスト */}
-              {shopTherapists.map(t => (
-                <button
-                  type="button"
-                  key={t.id}
-                  onClick={() => selectTherapist(t)}
-                  className={`p-2 rounded-2xl border flex flex-col items-center gap-2 transition active:scale-95 ${selectedTherapistId == t.id ? 'bg-pink-600 border-pink-500 text-white shadow-lg shadow-pink-900/30' : 'bg-black/20 border-white/5 text-slate-400 hover:bg-white/5'}`}
-                >
-                  <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-800 border border-white/10">
-                    <LazyImage src={t.image_url || t.image} alt={t.name} className="w-full h-full object-cover" />
-                  </div>
-                  <span className="text-[10px] font-bold truncate w-full text-center">{t.name}</span>
-                </button>
-              ))}
-
-              {/* リストにいないセラピスト */}
-              <button
-                type="button"
-                onClick={enterCustomMode}
-                className="p-4 rounded-2xl border border-dashed border-white/20 bg-black/20 text-slate-500 flex flex-col items-center justify-center gap-2 transition active:scale-95 hover:border-purple-500/50 hover:text-purple-400"
-              >
-                <span className="text-xl">✏️</span>
-                <span className="text-[10px] font-bold leading-tight text-center">リストに{'\n'}いない</span>
-              </button>
-            </div>
+            /* 通常モード: 検索バー + セラピストカード一覧 */
+            <TherapistGrid
+              shopTherapists={shopTherapists}
+              selectedTherapistId={selectedTherapistId}
+              selectTherapist={selectTherapist}
+              enterCustomMode={enterCustomMode}
+            />
           )}
         </div>
+      )}
+    </div>
+  );
+};
+
+/* セラピスト検索グリッド（検索バー + カード一覧） */
+const TherapistGrid = ({ shopTherapists, selectedTherapistId, selectTherapist, enterCustomMode }) => {
+  const [filter, setFilter] = useState('');
+
+  const filtered = useMemo(() => {
+    const q = filter.trim().toLowerCase().replace(/[\s　]/g, '');
+    if (!q) return shopTherapists;
+    return shopTherapists.filter(t =>
+      t.name.toLowerCase().replace(/[\s　]/g, '').includes(q)
+    );
+  }, [shopTherapists, filter]);
+
+  return (
+    <div>
+      {/* 検索バー */}
+      <div className="relative mb-4">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">🔍</span>
+        <input
+          type="text"
+          value={filter}
+          onChange={e => setFilter(e.target.value)}
+          placeholder="セラピスト名で絞り込み..."
+          className="w-full bg-black/30 border border-white/10 rounded-xl pl-8 pr-8 py-2.5 text-white text-sm outline-none focus:border-pink-500 transition placeholder:text-slate-600"
+        />
+        {filter && (
+          <button
+            type="button"
+            onClick={() => setFilter('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-lg leading-none"
+          >×</button>
+        )}
+      </div>
+
+      {/* カードグリッド */}
+      <div className="grid grid-cols-3 gap-3">
+        {filtered.map(t => (
+          <button
+            type="button"
+            key={t.id}
+            onClick={() => selectTherapist(t)}
+            className={`p-2 rounded-2xl border flex flex-col items-center gap-2 transition active:scale-95 ${selectedTherapistId == t.id ? 'bg-pink-600 border-pink-500 text-white shadow-lg shadow-pink-900/30' : 'bg-black/20 border-white/5 text-slate-400 hover:bg-white/5'}`}
+          >
+            <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-800 border border-white/10">
+              <LazyImage src={t.image_url || t.image} alt={t.name} className="w-full h-full object-cover" />
+            </div>
+            <span className="text-[10px] font-bold truncate w-full text-center">{t.name}</span>
+          </button>
+        ))}
+
+        {/* リストにいないセラピスト */}
+        <button
+          type="button"
+          onClick={enterCustomMode}
+          className="p-4 rounded-2xl border border-dashed border-white/20 bg-black/20 text-slate-500 flex flex-col items-center justify-center gap-2 transition active:scale-95 hover:border-purple-500/50 hover:text-purple-400"
+        >
+          <span className="text-xl">✏️</span>
+          <span className="text-[10px] font-bold leading-tight text-center">リストに{'\n'}いない</span>
+        </button>
+      </div>
+
+      {filtered.length === 0 && filter && (
+        <p className="text-center text-slate-500 text-sm py-4">「{filter}」に一致するセラピストが見つかりません</p>
       )}
     </div>
   );

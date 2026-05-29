@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation, EffectFade, A11y, Keyboard } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation, EffectCoverflow, A11y, Keyboard } from 'swiper/modules';
 import { Link } from 'react-router-dom';
 import { useShopData } from '../contexts/DataContext.jsx';
 import LikeButton from './LikeButton.jsx';
@@ -8,107 +8,193 @@ import { getDisplayName } from '../utils/shopHelpers';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import 'swiper/css/effect-fade';
+import 'swiper/css/effect-coverflow';
 
-// Galaxy だけローカル画像を維持（他は DB の image_url を使用）
-const FORCE_IMAGES = {
-  "galaxy": "/images/shops/galaxy.jpg",
+// men-esthe.jp 口コミ数TOP5店舗（実際の口コミページ数で算出・2026-05-26確定）
+const HERO_SHOP_IDS = [
+  'tokyo_minato_azabujuban_linda_spa',                   // LINDA SPA（口コミ数1位: 84ページ）
+  'tokyo_chuo_ginza_aroma_maison',                       // Aroma Maison（口コミ数2位: 66ページ）
+  'tokyo_chuo_ginza_aromamore',                          // AROMA more（口コミ数3位: 54ページ）
+  'tokyo_shinjuku_kabukicho_aromacharm',                 // AromaCharm（口コミ数4位: 48ページ）
+  'tokyo_chiyoda_iidabashi_tokyo_aroma_este',            // 東京アロマエステ（口コミ数5位: 34ページ）
+];
+
+// スライドショー専用の画像上書き（店舗サムネイルとは別）
+// type: 'cover' = 写真（全面表示）, 'logo' = ロゴ（contain＋背景色）
+const HERO_IMAGE_OVERRIDES = {
+  'tokyo_minato_azabujuban_linda_spa':        { url: 'https://linda-spa.com/wp-content/themes/linda2/img/logo.png',  type: 'logo' },
+  'tokyo_shinjuku_kabukicho_aromacharm':      { url: 'https://aromacharm.net/images_shop/logo.png',                  type: 'logo' },
+  'tokyo_chiyoda_iidabashi_tokyo_aroma_este': { url: 'https://tokyoaroma.jp/wp-content/uploads/2023/12/girl-2554687_1280-1.jpg', type: 'cover' },
 };
 
 export default function TopHeroSlider() {
   const { shops, loading } = useShopData();
   const [activeProgress, setActiveProgress] = useState(0);
 
-  const heroShops = useMemo(() => {
+  // 固定の人気店舗5件（image_urlがない場合はランダムで補完）
+  const heroItems = useMemo(() => {
     if (!shops || shops.length === 0) return [];
-
-    // 1. FORCE_IMAGES のキーに一致する店舗を強制画像付きで追加
-    const forcedShops = Object.keys(FORCE_IMAGES).map(key => {
-      const found = shops.find(s => String(s.id).includes(key) || (s.name && s.name.toLowerCase().includes(key)));
-      if (found) return { ...found, image: FORCE_IMAGES[key] };
-      return null;
-    }).filter(Boolean);
-
-    // 2. 残りは image_url がある店舗からランダムに補充（5枚になるまで）
-    const existingIds = forcedShops.map(s => s.id);
-    const candidates = shops
-      .filter(s => s.image_url && !existingIds.includes(s.id))
+    const shopMap = Object.fromEntries(shops.map(s => [s.id, s]));
+    const fixed = HERO_SHOP_IDS
+      .map(id => {
+        const shop = shopMap[id];
+        if (!shop) return null;
+        // スライドショー専用画像があれば上書き（店舗サムネイルは変えない）
+        const override = HERO_IMAGE_OVERRIDES[id];
+        const heroImage = override ? override.url : shop.image_url;
+        const heroImageType = override ? override.type : 'cover';
+        return { ...shop, heroImage, heroImageType };
+      })
+      .filter(s => s && s.heroImage);
+    if (fixed.length >= 5) return fixed.slice(0, 5);
+    // 不足分をランダムで補完
+    const usedIds = new Set(fixed.map(s => s.id));
+    const fallback = [...shops]
+      .filter(s => s.image_url && !usedIds.has(s.id))
       .sort(() => 0.5 - Math.random())
-      .slice(0, 5 - forcedShops.length);
-
-    return [...forcedShops, ...candidates];
+      .slice(0, 5 - fixed.length)
+      .map(s => ({ ...s, heroImage: s.image_url, heroImageType: 'cover' }));
+    return [...fixed, ...fallback];
   }, [shops]);
 
-  if (loading || heroShops.length === 0) return null;
+  if (loading || heroItems.length === 0) return null;
 
   return (
-    <div className="relative w-full overflow-hidden bg-slate-950 group/slider">
+    <div className="relative w-full bg-slate-950 pt-20 md:pt-10 pb-4 md:pb-10" style={{ overflow: 'hidden', isolation: 'isolate' }}>
+      {/* 背景グロー */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(236,72,153,0.07) 0%, transparent 70%)' }} />
+
       {/* 進行バー */}
-      <div className="absolute top-0 left-0 w-full h-1 z-[60] bg-white/10">
-        <div className="h-full bg-pink-500 shadow-[0_0_15px_#ec4899] transition-all duration-100 linear" style={{ width: `${(1 - activeProgress) * 100}%` }} />
+      <div className="absolute bottom-0 left-0 w-full h-0.5 z-[60] bg-white/10">
+        <div className="h-full bg-pink-500 shadow-[0_0_12px_#ec4899] transition-all duration-100 linear" style={{ width: `${(1 - activeProgress) * 100}%` }} />
       </div>
 
-      <Swiper 
-        modules={[Autoplay, Pagination, Navigation, EffectFade, A11y, Keyboard]} 
-        effect="fade" 
-        fadeEffect={{ crossFade: true }} 
-        speed={1500} 
-        loop={true} 
-        navigation={true} 
-        autoplay={{ delay: 5000, disableOnInteraction: false }} 
-        onAutoplayTimeLeft={(s, time, progress) => setActiveProgress(progress)} 
-        className="h-[450px] md:h-[650px]"
+      <Swiper
+        modules={[Autoplay, Navigation, EffectCoverflow, A11y, Keyboard]}
+        effect="coverflow"
+        coverflowEffect={{
+          rotate: 10,
+          stretch: -30,
+          depth: 260,
+          modifier: 1.2,
+          slideShadows: false,
+        }}
+        centeredSlides={true}
+        slidesPerView={1.3}
+        breakpoints={{
+          640:  { slidesPerView: 1.6 },
+          1024: { slidesPerView: 2.2 },
+        }}
+        speed={650}
+        loop={true}
+        navigation={true}
+        autoplay={{ delay: 4500, disableOnInteraction: false }}
+        onAutoplayTimeLeft={(s, time, progress) => setActiveProgress(progress)}
+        className="w-full hero-coverflow"
+        style={{ paddingTop: '20px', paddingBottom: '20px' }}
       >
-        {heroShops.map((shop, index) => (
-          <SwiperSlide key={shop.id}>
-            <div className="relative w-full h-full bg-slate-950">
-              {/* 背景画像 (Ken Burns Effect) */}
-              <div className="absolute inset-0 animate-ken-burns">
-                <img src={shop.image || shop.image_url} alt={shop.name} className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
-              </div>
-              
-              {/* グラデーションオーバーレイ */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-transparent" />
+        {heroItems.map((shop, index) => (
+          <SwiperSlide key={shop.id} style={{ height: 'clamp(200px, 38vh, 440px)' }}>
+            {({ isActive }) => (
+              <div
+                className="w-full h-full rounded-2xl p-[2px]"
+                style={{
+                  background: isActive ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)',
+                  boxShadow: isActive
+                    ? '0 0 30px rgba(255,255,255,0.15), 0 20px 60px rgba(0,0,0,0.6)'
+                    : '0 8px 32px rgba(0,0,0,0.4)',
+                  transition: 'background 0.6s ease, box-shadow 0.6s ease',
+                }}
+              >
+              <div
+                className="relative w-full h-full rounded-[14px] overflow-hidden"
+              >
+                {/* 店舗画像 */}
+                {shop.heroImageType === 'logo' ? (
+                  <div className="w-full h-full flex items-center justify-center bg-slate-900">
+                    <img
+                      src={shop.heroImage}
+                      alt={shop.name}
+                      className="w-3/4 max-h-1/2 object-contain"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={shop.heroImage}
+                    alt={shop.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                )}
 
-              {/* コンテンツ */}
-              <div className="absolute inset-0 p-8 md:p-24 flex flex-col justify-center md:justify-end items-start pl-16 md:pl-24">
-                <div className="overflow-hidden mb-2">
-                    <h2 className="text-pink-500 font-bold tracking-widest text-sm md:text-base uppercase animate-slide-up flex items-center gap-2">
-                        <span className="w-8 h-[2px] bg-pink-500 inline-block shadow-[0_0_10px_#ec4899]"></span>
-                        PREMIUM SELECTION {index + 1} / {heroShops.length}
-                    </h2>
-                </div>
-                
-                <h3 className="text-4xl md:text-7xl font-black text-white mb-6 leading-tight max-w-3xl drop-shadow-2xl animate-fade-in-up">
-                    {getDisplayName(shop.name)}
-                </h3>
-                
-                <div className="flex flex-wrap items-center gap-2 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                    <span className="bg-white/10 backdrop-blur px-3 py-1 rounded text-xs text-white border border-white/20">📍 {shop.prefecture} {shop.city}</span>
-                    {shop.rating > 0 && <span className="bg-pink-600 px-3 py-1 rounded text-xs text-white font-bold shadow-lg shadow-pink-900/50">★ {shop.rating}</span>}
-                </div>
-                
-                <div className="flex items-center gap-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                  <Link to={`/search?shop=${encodeURIComponent(shop.name)}`} className="bg-white text-slate-900 font-black px-8 md:px-12 py-4 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(255,255,255,0.3)] active:scale-95 flex items-center gap-2">
-                      <span>店舗を見る</span>
-                  </Link>
-                  <LikeButton id={shop.id} className="w-14 h-14 bg-white/10 backdrop-blur-md rounded-xl p-3.5 text-white border border-white/20 hover:bg-white/20 transition active:scale-95" />
-                </div>
+                {/* 非アクティブは暗く＋ぼかし */}
+                <div
+                  className="absolute inset-0 bg-slate-950 transition-opacity duration-500"
+                  style={{ opacity: isActive ? 0 : 0.55 }}
+                />
+
+                {/* 下グラデ（アクティブ時だけ強く） */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
+                {/* アクティブ時コンテンツ */}
+                {isActive && (
+                  <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end items-start">
+                    <p className="text-pink-400 font-bold tracking-widest text-xs mb-2 flex items-center gap-2">
+                      <span className="w-5 h-[2px] bg-pink-400 inline-block" />
+                      口コミ人気 No.{index + 1}
+                    </p>
+                    <h3 className="text-2xl md:text-4xl font-black text-white mb-3 leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]">
+                      {getDisplayName(shop.name)}
+                    </h3>
+                    <div className="flex flex-wrap items-center gap-2 mb-5">
+                      <span className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white border border-white/20">📍 {shop.prefecture} {shop.city}</span>
+                      {shop.rating > 0 && <span className="bg-pink-600/90 px-3 py-1 rounded-full text-xs text-white font-bold">★ {shop.rating}</span>}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Link to={`/search?shop=${encodeURIComponent(shop.name)}`} className="bg-white text-slate-900 font-black px-6 py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 text-sm">
+                        店舗を見る
+                      </Link>
+                      <LikeButton id={shop.id} className="w-11 h-11 bg-black/40 backdrop-blur-md rounded-xl p-2.5 text-white border border-white/20 hover:bg-white/20 transition active:scale-95" />
+                    </div>
+                  </div>
+                )}
+
+                {/* 非アクティブ時：店舗名だけ薄く */}
+                {!isActive && (
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <p className="text-white/50 text-sm font-bold truncate">{getDisplayName(shop.name)}</p>
+                  </div>
+                )}
               </div>
-            </div>
+              </div>
+            )}
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {/* ドットインジケーター */}
+      <div className="flex justify-center gap-1.5 mt-4">
+        {heroItems.map((_, i) => (
+          <span key={i} className={`block h-1.5 rounded-full transition-all duration-500 ${
+            i === Math.round((1 - activeProgress) * (heroItems.length - 1)) ? 'w-6 bg-pink-500' : 'w-1.5 bg-white/20'
+          }`} />
+        ))}
+      </div>
+
       <style>{`
-        @keyframes ken-burns { from { transform: scale(1); } to { transform: scale(1.15); } }
-        @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-ken-burns { animation: ken-burns 20s ease-out infinite alternate; }
-        .animate-slide-up { animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-fade-in-up { animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
-        .swiper-button-next, .swiper-button-prev { color: white !important; background: rgba(0,0,0,0.3); width: 50px !important; height: 50px !important; border-radius: 50%; }
+        .hero-coverflow .swiper-slide {
+          transition: transform 0.65s ease, filter 0.65s ease, opacity 0.65s ease;
+          filter: blur(1.5px) brightness(0.75);
+          opacity: 0.7;
+        }
+        .hero-coverflow .swiper-slide-active {
+          filter: blur(0px) brightness(1);
+          opacity: 1;
+        }
+        .swiper-button-next, .swiper-button-prev { color: white !important; background: rgba(15,23,42,0.7) !important; backdrop-filter: blur(10px); width: 40px !important; height: 40px !important; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); top: 46% !important; }
         .swiper-button-next:hover, .swiper-button-prev:hover { background: #ec4899 !important; border-color: #ec4899; }
+        .swiper-button-next::after, .swiper-button-prev::after { font-size: 13px !important; font-weight: 900; }
       `}</style>
     </div>
   );

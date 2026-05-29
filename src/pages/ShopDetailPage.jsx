@@ -198,7 +198,7 @@ export default function ShopDetailPage() {
   };
 
   return (
-    <div className="bg-slate-950 min-h-screen pb-32 text-slate-200 font-sans relative">
+    <div className="bg-slate-950 min-h-screen pb-28 md:pb-16 text-slate-200 font-sans relative">
       <SeoHead title={shop.name} description={seoDesc} path={`/shops/${shop.id}`} />
 
       {/* 1. Cinematic Hero Header */}

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://mens-esthe-site-beta.vercel.app/sitemap.xml

@@ -1,9 +1,9 @@
-# mens-esthe-site — Claude引き継ぎドキュメント
+# mens-esthe-site（サイト名: メンエスマップ） — Claude引き継ぎドキュメント
 
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-05-25 （店舗サムネイル全面刷新 489件・口コミ投稿「リストにいないセラピスト」機能追加）**
+> **最終更新: 2026-05-29 （公開前セキュリティ・UX修正5件）**
 > 作業がひと段落するたびに、Claudeがこのファイルを自動更新する。
 
 ---
@@ -23,6 +23,14 @@
   - `VITE_SUPABASE_ANON_KEY` — Supabase 匿名キー（All Environments、Mar 28 設定済み）
   - `VITE_SUPABASE_URL` — Supabase URL（All Environments、Mar 28 設定済み）
   - ⚠️ `VITE_PUBLIC_SITE_URL` は本番ドメイン確定後に `https://mens-esthe.jp` 等に更新すること
+
+- [x] **RLS ポリシーを Supabase に適用済み**（2026-05-29）
+  - `supabase_migrations/04_rls_policies.sql` を Supabase SQL Editor で実行・Success確認済み
+  - 対象: `reviews` / `user_credits` / `shops` / `therapists` / `review_likes` / `user_badges` / `chat_messages`
+
+- [ ] **お問い合わせフォームの実装**
+  - 特定商取引法ページ（`/legal`）に「サイト内のお問い合わせフォームよりご連絡ください」と記載があるが、フォームが未実装
+  - 法的必須。最低限メールアドレスへの直接リンクでも可
 
 ---
 
@@ -1167,6 +1175,141 @@ VITE_SUPABASE_ANON_KEY=eyJxxx...
 - `api/notify-credit.js` は `@supabase/supabase-js` を使用（既にインストール済み）
 - Vercel の serverless function は `api/` ディレクトリに置くだけで自動検出
 
+### 2026-05-28（続き2）- スケルトンUI・口コミ投稿UX改善
+
+#### スケルトンUI実装（ローディング体験改善）
+
+- **`src/components/ui/Skeleton.jsx`** 新規作成
+  - `TherapistCardSkeleton` / `ShopCardSkeleton` / `RankingRowSkeleton` / `ReviewCardSkeleton`
+  - `HeroSkeleton` / `TherapistGridSkeleton` / `ShopGridSkeleton` / `RankingListSkeleton`
+  - 共通 `Pulse` コンポーネント（`bg-slate-800 animate-pulse rounded-xl`）
+
+- **`Home.jsx`**: 全画面「読み込み中...」ブロックを削除 → ヘッダー・検索バー・W2R帯を即時表示
+  - 注目セラピスト横スクロール: loading中は6枚の縦長スケルトン
+  - 新着店舗横スクロール: loading中は5枚の縦長スケルトン
+
+- **`RankingPage.jsx`**: 全画面スピナーを削除 → 即時表示
+  - loading中は表彰台3枠スケルトン + `RankingListSkeleton`（5行）
+
+- **`SearchPage.jsx`**: 検索中の `opacity-40` フェードをスケルトン8枚に差し替え
+
+#### 口コミ投稿ページ UX改善（`PostReviewPage.jsx`）
+
+- **店舗選択をコンボボックスに変更**
+  - `<select>` 586件ドロップダウン → テキスト入力 + フィルタリング候補ドロップダウン
+  - フォーカス時に先頭20件表示、入力すると最大20件に絞り込み
+  - 選択済み: ✓ チェックマーク表示。外クリックで候補閉じる
+  - URLパラメータ経由（SearchPage「リストにいない」から来た場合）は固定表示を維持
+
+- **セラピスト選択に検索バーを追加**（`TherapistGrid` コンポーネント新設）
+  - 検索欄で名前をリアルタイム絞り込み（スペース・全角スペース正規化対応）
+  - 「指名なし」カードを削除
+  - 「リストにいない」はグリッド末尾に配置
+  - 0件ヒット時は「〇〇に一致するセラピストが見つかりません」と表示
+
+#### 方針確認（コンサル提案への反論）
+- 「ランキング文言の弱め方」→ 現状の積極CTAを維持（弱めると逆効果）
+- 「ブランド統一」→ サイト名未決定のため延期
+- 実際の優先2項目: スケルトンUI（完了）・canonical確認
+
+### 2026-05-28 - コンサル提案対応（UI/UX全面改善）
+
+#### Pepe Spa 東京5店舗 完了
+- 調布・八王子・町田・蒲田・下北沢 各43名登録（`fix_all_spacer_images.mjs` 流用）
+- 重複「白雪 める」6件削除
+- **585/586店舗コンプリート**（残り1件はno-brand.jpサイトダウン）
+
+#### ランキング空表示を「口コミ募集中」CTAに差し替え
+- `RankingSection.jsx`: 「まだ集計データがありません」→ 紫グラデーションバナー＋「口コミを書く」
+- `RankingPage.jsx`: 「📉 No Data Available」→ エリア名入り「〇〇のランキングを作ろう」＋2ボタン
+
+#### ファーストビュー再設計（検索中心）
+- `Home.jsx` ヒーロー内テキスト: 「極上の癒やしを、あなたに。」→「店舗・セラピスト名で口コミ検索」
+- ヒーロー直下にWrite-to-Read帯を独立配置（紫グラデーション）
+- 「このサイトの使い方」のSTEPバナーを削除→4機能ショートカットカードのみに簡略化
+
+#### Write-to-Read 訴求の多点配置
+- `SearchPage.jsx`: 検索結果12枚目の後にグリッド全幅W2R帯を挿入
+- `ModernReviewCard.jsx`: ロック時の訴求文を強化（「体験談を投稿するとこの口コミが読めます」）
+
+#### CTA 2本柱整理（探す・投稿する）
+- `BottomNav.jsx`: 「ランキング」→「投稿する」（鉛筆アイコン、常時ピンク背景強調）
+- 構成: ホーム / キャスト / **投稿する** / マイページ
+
+#### 注目セラピスト 分散ロジック改善（`Home.jsx`）
+- Before: 60件ランダム→20件（大手店舗が統計的に多出現）
+- After: 300件取得 → 店舗ごと最大2名 → 都道府県ごとラウンドロビン → 20名
+- `shops` を dependency に追加（データロード後に実行）
+
+#### エリアSEOページ（`/area/:pref`）新規作成
+- `src/pages/PrefecturePage.jsx` 作成
+- 対応スラグ: tokyo/osaka/aichi/kanagawa/saitama/chiba/hyogo/kyoto/fukuoka/miyagi/shizuoka/shiga/hiroshima/hokkaido
+- noindex: 店舗数5件未満のページ
+- パンくず・エリア別店舗一覧・他都道府県内部リンク
+- `App.jsx` に `/area/:pref` ルート追加
+
+#### 絵文字整理（`Home.jsx`）
+- セクションヘッダーの装飾絵文字（🏙️）を削除
+- 機能カードアイコン・ランク表示は維持
+
+---
+
+### 2026-05-27 - SEO対応（robots.txt・sitemap.xml・canonical・SeoHead）
+
+#### robots.txt 作成（`public/robots.txt`）
+- `Disallow: /admin` でクロール除外
+- `Sitemap:` にVercelドメインを明記
+
+#### sitemap.xml ドメイン更新（`public/sitemap.xml`）
+- `your-domain.com` → `mens-esthe-site-beta.vercel.app` に全置換
+- 本番ドメイン確定後に再度更新が必要
+
+#### canonical タグ追加（`src/components/SeoHead.jsx`）
+- `<link rel="canonical" href={url} />` を追加
+- `SITE_URL` を `VITE_PUBLIC_SITE_URL` 環境変数から取得するよう修正（旧: `window.location.origin`）
+
+#### SeoHead を主要ページに追加
+- `Home.jsx`: title="メンズエステ検索・口コミ", path="/"
+- `SearchPage.jsx`: title="キャスト検索", path="/search"
+- `AreaSearchPage.jsx`: title="エリアから探す", path="/area-search"
+
+---
+
+### 2026-05-26 - ホームUI大幅改善（men-esthe.jp参考）
+
+#### TopHeroSlider → セラピスト写真スライダーに刷新（`TopHeroSlider.jsx`）
+- 店舗サムネイル表示 → **セラピスト写真**表示に変更
+- Supabaseから`therapists`テーブルのimage_url持ちを100件取得→シャッフル→6枚選出
+- noimage/spacer除外フィルタ付き
+- `object-top`で顔が見えるように上寄せ
+- 「✨ 注目セラピスト」バッジ（左上）追加
+- オーバーレイを下方向グラデーションのみに変更（写真をより明るく見せる）
+- 店舗名・都道府県を下部に表示、「店舗を見る」ボタンでSearchPageに遷移
+
+#### Home.jsx — 3点追加
+
+**① 「このサイトの使い方」セクション**（ヒーロー直下）
+- Write-to-Readシステムの説明バナー（STEP 1-2-3フロー）
+- 4機能カード: キャスト検索 / 口コミを書く / 掲示板 / ランキング
+
+**② 「注目セラピスト」横スクロールセクション**
+- Supabaseからimage_urlありセラピストを60件取得→シャッフル→20枚表示
+- 縦長カード（aspect-[3/4]）、顔が見えるよう`object-top`
+- タップでSearchPageの該当店舗＋キャスト名に遷移
+
+**③ PC用2カラムサイドバー（`lg:block`）**
+- メインコンテンツ右側に280px（xl:320px）のサイドバー
+- 「注目店舗」: image_url持ちの店舗からランダム6件をリスト形式（`sidebarShops` useMemo固定）
+- 口コミ投稿バナー（紫）
+- みんなの口コミへのリンク（ピンク）
+- 掲示板へのリンク（青）
+- `sticky top-4` で画面スクロールに追随
+
+#### デザイン修正（`TopHeroSlider.jsx`・`Home.jsx`）
+- スライダー外枠フレーム化: `rounded-3xl overflow-hidden border border-white/10 + pink glow shadow`
+- 親要素に`px-4 md:px-8 pt-4`でフレームが見えるよう余白
+- 新着店舗カード: 画像（rounded-t-2xl）＋テキスト（bg-slate-900 rounded-b-2xl）で分離→白テキスト問題解消
+
 ### 2026-05-25 - 店舗サムネイル全面刷新・口コミ投稿「リストにいないセラピスト」機能
 
 #### 店舗サムネイル全面刷新（Supabase Storage スクショ → og:image）
@@ -1234,9 +1377,49 @@ PostReviewPage の導線が分かりにくいため、SearchPage のキャスト
 
 ---
 
+### 2026-05-29 - 公開前セキュリティ・UX修正5件
+
+#### package.json 整理
+- `puppeteer` / `cheerio` / `express` / `cors` / `dotenv` / `fs-extra` / `axios` を `devDependencies` に移動
+- これらはスクリプト専用ライブラリ。`dependencies` のままだと Vercel がビルド時にインストール・バンドルしようとする（特に `puppeteer` はChrome本体を DL するためビルド失敗の原因になる）
+
+#### Safe Area 対応（iPhone ホームバー被り修正）
+- `index.html`: `viewport-fit=cover` を viewport meta に追加
+- `BottomNav.jsx`: `mb-6` を `style={{ marginBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}` に変更
+- 非iPhoneでは `0px` なので見た目の変化なし。iPhoneでは34px上にずれてホームバーと重ならなくなる
+
+#### 未ログイン時ログインガード
+- `BottomNav.jsx`: `useAuth` / `useNavigate` をインポート。「投稿する」NavLink に `onClick` ガードを追加
+  - `user` が null の場合: `/login` にリダイレクト（`state: { redirect: '/post-review' }` を渡す）
+  - `user` がいる場合: 通常の `/post-review` 遷移
+- `LoginPage.jsx`: `useLocation` を追加。ログイン成功後に `location.state?.redirect || '/mypage'` へ遷移するよう変更
+
+#### /admin セキュリティ強化
+
+**問題**: クレジット付与が「フロントエンドから anon key で直接 Supabase REST API を PATCH」していた。anon key はJSソースに露出しているため、誰でも同じリクエストを送れる状態。
+
+**対応**:
+- `api/admin-grant-credit.js` 新規作成（Vercel サーバーレス関数）
+  - リクエストの `Authorization: Bearer {JWT}` を `supabaseAdmin.auth.getUser(token)` で検証
+  - メールが `ADMIN_EMAILS` に含まれない場合は 403 を返す
+  - 検証を通過した場合のみ `SUPABASE_SERVICE_ROLE_KEY`（RLSバイパス）でクレジット付与
+- `AdminPage.jsx` `GrantModal.grant()` を改修
+  - `supabase.auth.getSession()` で管理者自身の JWT を取得
+  - `/api/admin-grant-credit` に JWT を付けて POST（直接 PATCH は廃止）
+  - `import { supabase } from '../lib/supabase.js'` を追加
+
+#### RLS ポリシー（Supabase 手動適用が必要）
+- `supabase_migrations/04_rls_policies.sql` 作成
+- 対象テーブル: `reviews` / `user_credits` / `shops` / `therapists` / `review_likes` / `user_badges` / `chat_messages`
+- **重要**: `user_credits` の `FOR ALL USING (false)` は Service Role をバイパスするため、`api/admin-grant-credit.js` の動作には影響しない
+- ⚠️ **まだ Supabase ダッシュボードで実行していない。公開前に要実行**
+
+---
+
 ## 注意事項
 
 - **JS描画サイト**はcheerioでは取得不可。Claude in Chromeブラウザ経由が必要
 - サンドボックス（Claude側のbash）は外部ネットワーク不可。スクリプトはユーザーのターミナルで実行
 - 画像URLがSupabase Storage（`azuetkuzzmshqfbrhqmf.supabase.co/storage/...`）になっていれば正常
 - `therapist-images` バケットに画像アップロード済みの場合は `upsert: true` で上書き可
+- **クレジット付与は `/api/admin-grant-credit.js` 経由のみ**（2026-05-29以降。直接 REST API PATCH は廃止）

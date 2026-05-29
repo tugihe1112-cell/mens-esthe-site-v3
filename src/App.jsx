@@ -42,6 +42,7 @@ import AdminPage from './pages/AdminPage';
 import LegalPage from './pages/LegalPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
+import PrefecturePage from './pages/PrefecturePage';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -74,6 +75,7 @@ export default function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/search" element={<SearchPage />} />
                   <Route path="/area-search" element={<AreaSearchPage />} />
+                  <Route path="/area/:pref" element={<PrefecturePage />} />
                   <Route path="/shops" element={<ShopListPage />} />
                   <Route path="/ranking" element={<RankingPage />} />
                   <Route path="/new-therapists" element={<NewTherapistsPage />} />

@@ -3,7 +3,9 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { supabase } from '../lib/supabase';
 import LazyImage from '../components/LazyImage.jsx';
+import { TherapistCardSkeleton } from '../components/ui/Skeleton.jsx';
 import Header from '../components/Header.jsx';
+import SeoHead from '../components/SeoHead.jsx';
 
 // ─── ファジー店舗検索ユーティリティ ────────────────────────────
 // 1. 小文字カタカナ → 大文字カタカナ正規化
@@ -267,12 +269,8 @@ export default function SearchPage() {
         let data = [];
 
         if (!sq && !cq) {
-          // 両方空 → 最新キャスト300件
-          const { data: d } = await supabase
-            .from('therapists')
-            .select('id, shop_id, name, image_url, raw_data')
-            .limit(300);
-          data = d || [];
+          // 両方空 → 何も表示しない（プロンプトUIを出す）
+          data = [];
 
         } else if (sq && !cq) {
           // 店舗のみ → マッチ店舗のキャスト全員
@@ -474,15 +472,20 @@ export default function SearchPage() {
     if (shopQuery) parts.push(`店舗「${shopQuery}」`);
     if (castQuery) parts.push(`キャスト「${castQuery}」`);
     if (selectedTags.length) parts.push(`タグ: ${selectedTags.join('・')}`);
-    return parts.length ? parts.join(' × ') : 'すべてのキャスト';
+    return parts.length ? parts.join(' × ') : 'キャスト検索';
   }, [shopQuery, castQuery, selectedTags]);
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
+    <div className="min-h-screen bg-slate-950 pt-20 pb-28 md:pb-16 text-slate-200 font-sans">
+      <SeoHead
+        title="キャスト検索"
+        description="全国のメンズエステのキャスト・セラピストを名前や店舗で検索。出勤情報や口コミも確認できます。"
+        path="/search"
+      />
       <Header />
 
       {/* ===== Sticky 検索エリア ===== */}
-      <div className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-white/5 shadow-2xl">
+      <div className="sticky top-20 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-white/5 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 py-4 space-y-3">
 
           {/* 2つの検索バー */}
@@ -543,7 +546,9 @@ export default function SearchPage() {
               <p className="text-[10px] text-pink-400 font-bold">
                 {isLoading
                   ? '検索中...'
-                  : `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length}件`}
+                  : (!shopQuery.trim() && !castQuery.trim())
+                    ? 'キャスト名または店舗名を入力'
+                    : `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length}件`}
               </p>
             </div>
             {(shopInput || castInput || selectedTags.length > 0) && (
@@ -697,8 +702,21 @@ export default function SearchPage() {
               </div>
             )}
 
-            <div className={`transition-opacity duration-200 ${isLoading ? 'opacity-40' : 'opacity-100'}`}>
-              {visibleTherapists.length > 0 ? (
+            <div>
+              {/* クエリ未入力時のプロンプト */}
+              {!shopQuery.trim() && !castQuery.trim() && !isLoading && (
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                  <div className="text-5xl mb-5">🔍</div>
+                  <p className="text-white font-black text-lg mb-2">キャスト名か店舗名を入力してください</p>
+                  <p className="text-slate-500 text-sm">例:「あかり」「シルク」「銀座」</p>
+                </div>
+              )}
+
+              {isLoading ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+                  {Array.from({ length: 8 }).map((_, i) => <TherapistCardSkeleton key={i} />)}
+                </div>
+              ) : visibleTherapists.length > 0 ? (
                 <>
                   <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
                     {/* リストにいないセラピストの口コミカード（店舗指定時のみ） */}
@@ -718,11 +736,24 @@ export default function SearchPage() {
                         </div>
                       </Link>
                     )}
-                    {visibleTherapists.map(t => {
+                    {visibleTherapists.map((t, idx) => {
                       const shop = shopById[t.shop_id];
                       return (
+                        <React.Fragment key={t.id}>
+                        {/* 12枚目の後にW2R帯を挿入 */}
+                        {idx === 11 && (
+                          <Link
+                            to="/post-review"
+                            className="col-span-2 md:col-span-3 lg:col-span-4 flex items-center justify-between gap-4 bg-gradient-to-r from-purple-900/70 to-pink-900/50 border border-purple-500/30 rounded-2xl px-5 py-4 hover:border-purple-400/50 transition-all group"
+                          >
+                            <div>
+                              <p className="text-white font-black text-sm">口コミを書くと、みんなの口コミが読み放題になります</p>
+                              <p className="text-purple-300 text-xs mt-0.5">体験談（700文字以上）を投稿 → 管理者審査 → 閲覧権付与</p>
+                            </div>
+                            <span className="shrink-0 text-white bg-pink-600 group-hover:bg-pink-500 font-black text-xs px-4 py-2 rounded-xl transition whitespace-nowrap">口コミを書く →</span>
+                          </Link>
+                        )}
                         <Link
-                          key={t.id}
                           to={`/shops/${t.shop_id}/threads/${t.id}`}
                           className="group relative block bg-slate-900 rounded-[1.5rem] overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-900/20 hover:-translate-y-1"
                         >
@@ -753,6 +784,7 @@ export default function SearchPage() {
                             </div>
                           </div>
                         </Link>
+                        </React.Fragment>
                       );
                     })}
                   </div>

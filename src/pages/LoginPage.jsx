@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext"; // 👈 Supabaseの本物認証パイプ
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.redirect || '/mypage';
   const { signIn } = useAuth(); // 👈 本物のログイン関数
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,8 +30,8 @@ export default function LoginPage() {
         throw signInError;
       }
 
-      // ログイン成功したらマイページへ飛ばす
-      navigate("/mypage");
+      // ログイン成功したらリダイレクト先（または/mypage）へ
+      navigate(redirectTo);
     } catch (err) {
       console.error("Login Error:", err);
       // エラーメッセージの日本語化
