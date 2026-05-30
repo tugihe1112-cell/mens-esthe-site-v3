@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import SeoHead from '../components/SeoHead.jsx';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const { signUp } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,17 +25,15 @@ export default function RegisterPage() {
 
     setIsLoading(true);
     try {
-      const { error: signUpError } = await signUp(email, password);
-      if (signUpError) throw signUpError;
-      // 確認メールをResend APIで送信
-      const r = await fetch('/api/send-confirmation', {
+      // サーバーサイドでユーザー作成 + 確認メール送信を一括実行
+      const r = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, password }),
       });
       const result = await r.json();
       if (!r.ok) {
-        setError(`メール送信エラー(${r.status}): ${result.error || JSON.stringify(result)}`);
+        setError(result.error || '登録に失敗しました');
         setIsLoading(false);
         return;
       }
@@ -47,6 +43,7 @@ export default function RegisterPage() {
         setError("このメールアドレスはすでに登録されています");
       } else {
         setError(err.message || "登録に失敗しました。もう一度お試しください");
+        setIsLoading(false);
       }
     } finally {
       setIsLoading(false);

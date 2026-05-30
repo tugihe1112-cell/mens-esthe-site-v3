@@ -3,7 +3,7 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-05-30 （公開後チェック・写真衝突バグ全店舗修正・http画像716件移行）**
+> **最終更新: 2026-05-31 （SEO対応全ページ・サインアップ確認メール実装・RegisterPage本物auth化）**
 > 作業がひと段落するたびに、Claudeがこのファイルを自動更新する。
 
 ---
@@ -16,8 +16,8 @@
 | Supabase | tugihe1112@gmail.com | mens-esthe-db プロジェクト |
 | Vercel | tugihe1112@gmail.com | mens-esthe-site プロジェクト |
 | Resend | tugihe1112@gmail.com | メール送信 |
-| Resend SMTP用APIキー | `re_dQbJc5MF_2uanmWpT3xejLQ5RiyZmRV8M` | Full access・Supabase SMTP設定用 |
-| Supabase Auth Hook Secret | `v1,whsec_eIua8euaVbUH8hn08m7Xs+QIzwlfLp5B7K81GaO5UfJ03aeyZg7U4aqr6wzpF9Qgw/HjIDrSHf4kMjUN` | Send Email Hook・Vercel環境変数 `SUPABASE_HOOK_SECRET` に設定 |
+| Resend SMTP用APIキー | ~~`re_dQbJc5MF_2uanmWpT3xejLQ5RiyZmRV8M`~~ | **削除済み**（GitHub露出のため無効化） |
+| Supabase Auth Hook Secret | `v1,whsec_eIua8euaVbUH8hn08m7Xs+QIzwlfLp5B7K81GaO5UfJ03aeyZg7U4aqr6wzpF9Qgw/HjIDrSHf4kMjUN` | Send Email Hook登録済み（現在は未使用） |
 
 ※パスワードはiCloudキーチェーンで管理すること
 
@@ -54,7 +54,23 @@
   - `LegalPage.jsx` のお問い合わせ文言を `/contact` へのリンクに変更
   - `Footer.jsx` にお問い合わせリンク追加・コピーライトを「メンエスマップ」に変更
   - honeypot・文字数制限・メール形式チェックあり
-  - ⚠️ **まだgit pushしていない（ローカル確認済み）**
+  - git push済み（commit: 726197f）→ Vercelデプロイ完了
+
+- [x] **SEO対応（2026-05-31）**
+  - SeoHead全ページ追加（noindex対応・privateページ含む）
+  - JSON-LD構造化データ（HealthAndBeautyBusiness）をShopDetailPageに追加
+  - sitemap.xmlに /area/:pref 14都道府県ページ等を追加（494URL）
+  - meta description をページ別に改善
+  - OG画像（1200×630）を自前ブランド画像に変更
+
+- [x] **サインアップ確認メール実装（2026-05-31）**
+  - RegisterPage: `mockLogin`（ダミー）→ Supabase `signUp()` に修正
+  - 確認メール送信方式: フロント → `/api/send-confirmation` → Resend API直接送信
+  - `api/send-confirmation.js`: Supabase Admin `generateLink()` で確認リンク生成 → Resend APIで送信
+  - `src/pages/AuthConfirmPage.jsx`: `/auth/confirm` で確認トークン処理
+  - ⚠️ **現方式のデメリット**: API呼び出し失敗時にアカウントが未確認のまま残る・エンドポイントが認証なしで外部から叩ける
+  - 試みたが動かなかった方式: Supabase SMTP（Resend）・Supabase Auth Hook（HTTPS）
+  - 根本原因: Supabase無料プランでHTTP Auth HookがVercelエンドポイントを呼ばない（原因不明）
 
 ---
 
