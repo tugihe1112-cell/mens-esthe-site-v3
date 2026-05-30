@@ -5,35 +5,49 @@
  */
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
-const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const { email } = req.body || {};
   if (!email) return res.status(400).json({ error: 'email required' });
 
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
+  const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
+
+  console.log('[send-confirmation] called for:', email);
+  console.log('[send-confirmation] RESEND_API_KEY exists:', !!RESEND_API_KEY);
+  console.log('[send-confirmation] SUPABASE_URL exists:', !!SUPABASE_URL);
+  console.log('[send-confirmation] SERVICE_ROLE_KEY exists:', !!SERVICE_ROLE_KEY);
+
   try {
-    // Supabase Admin で確認リンクを生成
-    const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
-      auth: { autoRefreshToken: false, persistSession: false }
-    });
+    // Step1: 確認リンク生成
+    let confirmUrl = `${SITE_URL}/`;
+    try {
+      const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+        auth: { autoRefreshToken: false, persistSession: false }
+      });
+      const { data, error } = await admin.auth.admin.generateLink({
+        type: 'signup',
+        email,
+        options: { redirectTo: `${SITE_URL}/` }
+      });
+      if (error) {
+        console.error('[send-confirmation] generateLink error:', error.message);
+      } else {
+        confirmUrl = data.properties?.action_link || confirmUrl;
+        console.log('[send-confirmation] confirmUrl generated:', !!confirmUrl);
+      }
+    } catch (genErr) {
+      console.error('[send-confirmation] generateLink threw:', genErr.message);
+    }
 
-    const { data, error } = await admin.auth.admin.generateLink({
-      type: 'signup',
-      email,
-      options: { redirectTo: `${SITE_URL}/` }
-    });
+    // Step2: Resendでメール送信
+    if (!RESEND_API_KEY) {
+      return res.status(500).json({ error: 'RESEND_API_KEY not set' });
+    }
 
-    if (error) throw error;
-
-    const confirmUrl = data.properties?.action_link;
-    if (!confirmUrl) throw new Error('No action_link returned');
-
-    // Resend でメール送信
     const html = `
 <!DOCTYPE html>
 <html>
@@ -51,13 +65,12 @@ export default async function handler(req, res) {
         メールアドレスを確認する
       </a>
     </div>
-    <p style="color:#5a4a7a;font-size:12px;line-height:1.6;margin:0;">
-      このリンクは24時間有効です。心当たりのない場合は無視してください。
-    </p>
+    <p style="color:#5a4a7a;font-size:12px;line-height:1.6;margin:0;">このリンクは24時間有効です。</p>
   </div>
 </body>
 </html>`;
 
+    console.log('[send-confirmation] calling Resend API...');
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -73,11 +86,13 @@ export default async function handler(req, res) {
     });
 
     const result = await r.json();
-    if (!r.ok) throw new Error(result.message || 'Resend error');
+    console.log('[send-confirmation] Resend response:', r.status, JSON.stringify(result));
+
+    if (!r.ok) throw new Error(`Resend ${r.status}: ${result.message || JSON.stringify(result)}`);
 
     return res.status(200).json({ ok: true, id: result.id });
   } catch (err) {
-    console.error('send-confirmation error:', err.message);
+    console.error('[send-confirmation] error:', err.message);
     return res.status(500).json({ error: err.message });
   }
 }
