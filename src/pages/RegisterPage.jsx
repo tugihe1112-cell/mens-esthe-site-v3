@@ -30,11 +30,17 @@ export default function RegisterPage() {
       const { error: signUpError } = await signUp(email, password);
       if (signUpError) throw signUpError;
       // 確認メールをResend APIで送信
-      await fetch('/api/send-confirmation', {
+      const r = await fetch('/api/send-confirmation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
+      const result = await r.json();
+      if (!r.ok) {
+        setError(`メール送信エラー(${r.status}): ${result.error || JSON.stringify(result)}`);
+        setIsLoading(false);
+        return;
+      }
       setDone(true);
     } catch (err) {
       if (err.message?.includes("User already registered")) {
