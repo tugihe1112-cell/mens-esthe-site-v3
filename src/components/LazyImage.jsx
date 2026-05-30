@@ -15,10 +15,12 @@ function toWebP(src, width = 800) {
 }
 
 export default function LazyImage({ src, alt, className = '', fallback = NO_IMAGE_SVG, width = 800 }) {
+  const [useOptimized, setUseOptimized] = useState(true);
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    setUseOptimized(true);
     setError(false);
     setLoaded(false);
   }, [src]);
@@ -36,6 +38,7 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
   }
 
   const optimizedSrc = toWebP(src, width);
+  const activeSrc = useOptimized ? optimizedSrc : src;
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
@@ -43,16 +46,16 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
         <div className="absolute inset-0 bg-slate-700 animate-pulse z-10" />
       )}
       <img
-        src={optimizedSrc}
+        src={activeSrc}
         alt={alt}
         loading="lazy"
         decoding="async"
         onLoad={() => setLoaded(true)}
         onError={() => {
-          // WebP変換URLが失敗したら元のURLで再試行
-          if (optimizedSrc !== src) {
-            // フォールバックとして元URLを使う
-            setError(false);
+          if (useOptimized && optimizedSrc !== src) {
+            // WebP変換URLが失敗 → 元URLで再試行
+            setUseOptimized(false);
+            setLoaded(false);
           } else {
             setError(true);
           }
