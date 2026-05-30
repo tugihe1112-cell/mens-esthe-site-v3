@@ -1,12 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+// エリアSEOページのリンク一覧
+const AREA_LINKS = [
+  { slug: 'tokyo',     label: '東京都' },
+  { slug: 'osaka',     label: '大阪府' },
+  { slug: 'aichi',     label: '愛知県' },
+  { slug: 'kanagawa',  label: '神奈川県' },
+  { slug: 'saitama',   label: '埼玉県' },
+  { slug: 'chiba',     label: '千葉県' },
+  { slug: 'hyogo',     label: '兵庫県' },
+  { slug: 'kyoto',     label: '京都府' },
+  { slug: 'fukuoka',   label: '福岡県' },
+  { slug: 'miyagi',    label: '宮城県' },
+  { slug: 'shizuoka',  label: '静岡県' },
+  { slug: 'hiroshima', label: '広島県' },
+  { slug: 'hokkaido',  label: '北海道' },
+];
+
 export default function Footer() {
   return (
     <footer className="bg-slate-950 border-t border-white/5 mt-20 relative z-10 pb-20 md:pb-0">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-          
+
           <div className="md:col-span-2">
             <h3 className="text-2xl font-black mb-4 tracking-tight">
               <span className="text-white">MEN'S</span>{" "}
@@ -18,7 +35,7 @@ export default function Footer() {
               厳選されたメンズエステ店舗とセラピストを検索できるポータルサイト。リアルなクチコミで、最高の体験を見つけましょう。
             </p>
           </div>
-          
+
           <div>
             <h4 className="text-white font-bold mb-4 tracking-widest text-xs">SERVICE</h4>
             <ul className="space-y-3 text-sm font-medium">
@@ -33,12 +50,27 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-4 tracking-widest text-xs">LEGAL</h4>
             <ul className="space-y-3 text-sm font-medium">
               <li><Link to="/legal" className="text-slate-400 hover:text-pink-400 transition">特定商取引法に基づく表記</Link></li>
-              {/* 🌟 準備中だったリンクを開通！ */}
               <li><Link to="/terms" className="text-slate-400 hover:text-pink-400 transition">利用規約</Link></li>
               <li><Link to="/privacy" className="text-slate-400 hover:text-pink-400 transition">プライバシーポリシー</Link></li>
             </ul>
           </div>
 
+        </div>
+
+        {/* エリア別リンク（内部リンク構造・SEO用） */}
+        <div className="border-t border-white/5 pt-8 mb-8">
+          <h4 className="text-white font-bold mb-4 tracking-widest text-xs">エリアから探す</h4>
+          <div className="flex flex-wrap gap-2">
+            {AREA_LINKS.map(({ slug, label }) => (
+              <Link
+                key={slug}
+                to={`/area/${slug}`}
+                className="text-xs text-slate-400 hover:text-pink-400 transition bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-full border border-white/5"
+              >
+                {label}のメンズエステ
+              </Link>
+            ))}
+          </div>
         </div>
 
         <div className="pt-8 border-t border-white/5 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-4">

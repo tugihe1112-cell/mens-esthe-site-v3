@@ -3,7 +3,7 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-05-31 （SEO対応全ページ・サインアップ確認メール実装・RegisterPage本物auth化）**
+> **最終更新: 2026-05-31 （動的OGP・WebP変換・キャッシュ/セキュリティヘッダー・フッターエリアリンク）**
 > 作業がひと段落するたびに、Claudeがこのファイルを自動更新する。
 
 ---
@@ -62,6 +62,14 @@
   - sitemap.xmlに /area/:pref 14都道府県ページ等を追加（494URL）
   - meta description をページ別に改善
   - OG画像（1200×630）を自前ブランド画像に変更
+
+- [x] **パフォーマンス・セキュリティ強化（2026-05-31）**
+  - `api/og.js`: 動的OGP画像生成（@vercel/og、店舗名・セラピスト名入り1200×630）
+  - `src/components/LazyImage.jsx`: Supabase Storage画像をWebP自動変換（/render/image/public/）・フォールバックバグ修正
+  - `vercel.json`: 静的アセットキャッシュ1年（immutable）+ セキュリティヘッダー5種追加（SecurityHeaders.com A評価）
+  - `tailwind.config.js`: システムフォント優先（Inter削除、iOS/Android/Windows対応）
+  - `index.html`: Supabase preconnect/dns-prefetch追加
+  - `Footer.jsx`: エリア別内部リンク13都道府県追加（SEOクロール効率化）
 
 - [x] **サインアップ確認メール実装（2026-05-31）**
   - 最終方式: `api/auth/signup.js`（Vercelサーバーレス）で `createUser` + `generateLink` + Resend送信を一括実行
