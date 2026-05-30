@@ -42,9 +42,8 @@ export default function MyReviewsPage() {
   }, [myReviews]);
 
   return (
-    <div
-      <SeoHead title="投稿した口コミ"
-        noindex /> className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200 relative overflow-hidden">
+      <SeoHead title="投稿した口コミ" noindex />
       <Header />
       
       {/* 背景装飾 */}

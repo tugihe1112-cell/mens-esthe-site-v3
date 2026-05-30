@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAppContext } from "../context/AppContext.tsx";
+import { useAuth } from "../contexts/AuthContext";
 import SeoHead from '../components/SeoHead.jsx';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const { mockLogin } = useAppContext();
+  const { signUp } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,8 +13,10 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [done, setDone] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -23,14 +25,25 @@ export default function RegisterPage() {
     if (password.length < 8) { setError("パスワードは8文字以上で設定してください"); return; }
     if (!agreeToTerms) { setError("利用規約に同意してください"); return; }
 
-    mockLogin(email, name);
-    navigate("/");
+    setIsLoading(true);
+    try {
+      const { error: signUpError } = await signUp(email, password);
+      if (signUpError) throw signUpError;
+      setDone(true);
+    } catch (err) {
+      if (err.message?.includes("User already registered")) {
+        setError("このメールアドレスはすでに登録されています");
+      } else {
+        setError(err.message || "登録に失敗しました。もう一度お試しください");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div
-      <SeoHead title="新規会員登録"
-        noindex /> className="min-h-screen flex items-center justify-center p-4 py-12 relative overflow-hidden bg-slate-950">
+    <div className="min-h-screen flex items-center justify-center p-4 py-12 relative overflow-hidden bg-slate-950">
+      <SeoHead title="新規会員登録" noindex />
       
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">
@@ -57,9 +70,19 @@ export default function RegisterPage() {
         {/* Glass Card */}
         <div className="bg-slate-900/40 backdrop-blur-2xl rounded-[2.5rem] p-8 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative">
           
+          {done ? (
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">📧</div>
+              <p className="text-white font-black text-lg mb-2">確認メールを送信しました</p>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                <span className="text-pink-400 font-bold">{email}</span> に届いたメールのリンクをタップすると登録が完了します。
+              </p>
+              <Link to="/login" className="mt-6 inline-block text-pink-400 font-bold text-sm hover:underline">ログインページへ →</Link>
+            </div>
+          ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-red-500/20 border border-red-500/50 text-red-200 rounded-xl p-3 text-sm font-bold text-center shadow-lg animate-shake">
+              <div className="bg-red-500/20 border border-red-500/50 text-red-200 rounded-xl p-3 text-sm font-bold text-center shadow-lg">
                 ⚠️ {error}
               </div>
             )}
@@ -94,10 +117,11 @@ export default function RegisterPage() {
               </label>
             </div>
 
-            <button type="submit" className="w-full py-4 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-black text-lg shadow-lg shadow-pink-900/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/10 mt-2">
-              CREATE ACCOUNT
+            <button type="submit" disabled={isLoading} className="w-full py-4 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-black text-lg shadow-lg shadow-pink-900/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/10 mt-2">
+              {isLoading ? "登録中..." : "CREATE ACCOUNT"}
             </button>
           </form>
+          )}
 
           <div className="mt-6 text-center pt-2 border-t border-white/5">
             <p className="text-sm text-slate-400 font-medium">

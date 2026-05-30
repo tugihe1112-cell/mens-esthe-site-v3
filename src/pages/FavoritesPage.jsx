@@ -32,9 +32,8 @@ export default function FavoritesPage() {
   }, [favTherapists, therapistById, shopById]);
 
   return (
-    <div
-      <SeoHead title="お気に入り"
-        noindex /> className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
+    <div className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
+      <SeoHead title="お気に入り" noindex />
       <Header />
       
       <div className="pt-24 px-4 max-w-5xl mx-auto">

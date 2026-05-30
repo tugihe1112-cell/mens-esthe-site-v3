@@ -89,9 +89,8 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
   const isNoneSelected = !selectedTherapistId && !customMode;
 
   return (
-    <div
-      <SeoHead title="口コミを投稿"
-        noindex /> className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+    <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+      <SeoHead title="口コミを投稿" noindex />
       <div className="text-center">
         <h2 className="text-2xl font-black text-white tracking-tight mb-2">TARGET</h2>
         <p className="text-slate-400 text-xs">誰のクチコミを書きますか？</p>

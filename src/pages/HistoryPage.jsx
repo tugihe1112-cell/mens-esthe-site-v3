@@ -16,9 +16,8 @@ export default function HistoryPage() {
   }));
 
   return (
-    <div
-      <SeoHead title="閲覧履歴"
-        noindex /> className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
+    <div className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
+      <SeoHead title="閲覧履歴" noindex />
       <Header />
       
       <div className="pt-24 px-4 max-w-3xl mx-auto">
