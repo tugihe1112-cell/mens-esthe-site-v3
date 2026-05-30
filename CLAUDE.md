@@ -1613,3 +1613,38 @@ PostReviewPage の導線が分かりにくいため、SearchPage のキャスト
   - 竜宮城（門前仲町・蒲田）: 一ノ木えま/影山まゆか・花尻はるな/鈴野ななか → nullに更新（8件）
 - 鬼灯（ほおずき）・Lunabelle等は衝突なし（タイムスタンプ系ファイル名で固有）
 - **教訓**: `_1.jpg`チェックは誤検知あり。実際の重複URLチェックで判定すること
+
+### 2026-05-31 - パフォーマンス・セキュリティ・SEO強化
+
+#### 動的OGP画像生成（`api/og.js`）
+- `@vercel/og`（Edge Runtime）で1200×630の動的OGP画像を生成
+- パラメータ: `?shop=店舗名&sub=サブテキスト&image=画像URL`
+- 店舗名・セラピスト名入り画像がSNSシェア時に自動表示される
+- `ShopDetailPage.jsx` / `SeoHead.jsx` でog:imageを動的URLに変更済み
+
+#### LazyImage WebPフォールバックバグ修正（`src/components/LazyImage.jsx`）
+- 旧: WebP URL失敗時に `setError(false)` → errorがすでにfalseなので再レンダーされない（無限ループ）
+- 修正: `useOptimized` stateを追加。WebP失敗 → `setUseOptimized(false)` で元URLに切り替え
+- Supabase Storage画像のみWebP変換（`/render/image/public/` + `?width=800&format=webp&quality=80`）
+- 外部CDN画像（caskan・re-db等）はそのまま（変換不可）
+
+#### vercel.json キャッシュ + セキュリティヘッダー
+- `/assets/` 配下・静的ファイル: `Cache-Control: public, max-age=31536000, immutable`（1年キャッシュ）
+- 全ページ: `X-Content-Type-Options` / `X-Frame-Options: DENY` / `X-XSS-Protection` / `Referrer-Policy` / `Permissions-Policy`
+- SecurityHeaders.com で **A評価** 確認済み
+- Missing: `Content-Security-Policy`（外部リソース多数のため設定複雑→保留）
+
+#### システムフォント最適化（`tailwind.config.js`）
+- `Inter`（未読み込み）を削除 → `system-ui / -apple-system / Hiragino Sans / Noto Sans JP / Yu Gothic` 優先に
+- iOS→SF Pro、Android→Roboto+NotoSans、Windows→Yu Gothic が自動適用
+- Webフォントのダウンロード不要 → LCP改善
+
+#### Supabase preconnect（`index.html`）
+- `<link rel="preconnect">` + `<link rel="dns-prefetch">` を追加
+- Supabaseへの初回接続を事前確立 → データ取得が数十ms速くなる
+
+#### フッターにエリア別内部リンク追加（`Footer.jsx`）
+- 13都道府県（tokyo/osaka/aichi/kanagawa/saitama/chiba/hyogo/kyoto/fukuoka/miyagi/shizuoka/hiroshima/hokkaido）
+- `{都道府県}のメンズエステ` テキスト + `/area/{slug}` へのリンク
+- ピル型タグデザイン（bg-slate-900 rounded-full）
+- 効果: クローラーがどのページからでも都道府県ページに到達できる → 地域キーワードのインデックス促進
