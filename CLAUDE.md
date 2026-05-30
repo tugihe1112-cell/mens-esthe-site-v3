@@ -64,13 +64,12 @@
   - OG画像（1200×630）を自前ブランド画像に変更
 
 - [x] **サインアップ確認メール実装（2026-05-31）**
-  - RegisterPage: `mockLogin`（ダミー）→ Supabase `signUp()` に修正
-  - 確認メール送信方式: フロント → `/api/send-confirmation` → Resend API直接送信
-  - `api/send-confirmation.js`: Supabase Admin `generateLink()` で確認リンク生成 → Resend APIで送信
+  - 最終方式: `api/auth/signup.js`（Vercelサーバーレス）で `createUser` + `generateLink` + Resend送信を一括実行
+  - RegisterPage: `supabase.signUp()` を廃止 → `/api/auth/signup` にPOSTするだけ
+  - 失敗時はユーザーを自動削除してロールバック
   - `src/pages/AuthConfirmPage.jsx`: `/auth/confirm` で確認トークン処理
-  - ⚠️ **現方式のデメリット**: API呼び出し失敗時にアカウントが未確認のまま残る・エンドポイントが認証なしで外部から叩ける
   - 試みたが動かなかった方式: Supabase SMTP（Resend）・Supabase Auth Hook（HTTPS）
-  - 根本原因: Supabase無料プランでHTTP Auth HookがVercelエンドポイントを呼ばない（原因不明）
+  - 根本原因: Supabase無料プランでHTTP Auth HookがVercelエンドポイントを呼ばない（無料プランはHTTP Hook非対応）
 
 ---
 
