@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 
 const SITE_TITLE = "メンエスマップ";
 const SITE_URL = import.meta.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
-const DEFAULT_OG_IMAGE = 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1200&auto=format&fit=crop';
+const DEFAULT_OG_IMAGE = `${SITE_URL}/images/og-image.jpg`;
 
 export default function SeoHead({ title, description, path, image }) {
   const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
