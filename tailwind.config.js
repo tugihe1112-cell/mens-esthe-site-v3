@@ -7,7 +7,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: [
+          'system-ui', '-apple-system', 'BlinkMacSystemFont',
+          'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+          'Noto Sans JP', 'Yu Gothic', 'Meiryo',
+          'sans-serif',
+        ],
       },
       colors: {
         slate: {
