@@ -479,7 +479,7 @@ export default function SearchPage() {
     <div className="min-h-screen bg-slate-950 pt-20 pb-28 md:pb-16 text-slate-200 font-sans">
       <SeoHead
         title="キャスト検索"
-        description="全国のメンズエステのキャスト・セラピストを名前や店舗で検索。出勤情報や口コミも確認できます。"
+        description="セラピスト名・店舗名でメンズエステを検索。出勤スケジュール・体験口コミ・料金を一括確認できます。全国580店舗以上対応。"
         path="/search"
       />
       <Header />

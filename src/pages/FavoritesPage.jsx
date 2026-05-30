@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
+import SeoHead from '../components/SeoHead.jsx';
 
 export default function FavoritesPage() {
   const { favorites, favTherapists } = useAppContext();
@@ -31,7 +32,9 @@ export default function FavoritesPage() {
   }, [favTherapists, therapistById, shopById]);
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
+    <div
+      <SeoHead title="お気に入り"
+        noindex /> className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
       <Header />
       
       <div className="pt-24 px-4 max-w-5xl mx-auto">

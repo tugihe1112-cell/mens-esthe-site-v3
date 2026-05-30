@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAppContext } from "../context/AppContext.tsx";
+import SeoHead from '../components/SeoHead.jsx';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -27,7 +28,9 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 py-12 relative overflow-hidden bg-slate-950">
+    <div
+      <SeoHead title="新規会員登録"
+        noindex /> className="min-h-screen flex items-center justify-center p-4 py-12 relative overflow-hidden bg-slate-950">
       
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">

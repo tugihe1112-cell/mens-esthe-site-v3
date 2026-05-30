@@ -10,6 +10,7 @@ import Header from '../components/Header.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import TagSelector from '../components/TagSelector.jsx';
 import { useShopData } from '../contexts/DataContext.jsx';
+import SeoHead from '../components/SeoHead.jsx';
 
 // --- Step Components ---
 
@@ -88,7 +89,9 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
   const isNoneSelected = !selectedTherapistId && !customMode;
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+    <div
+      <SeoHead title="口コミを投稿"
+        noindex /> className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
       <div className="text-center">
         <h2 className="text-2xl font-black text-white tracking-tight mb-2">TARGET</h2>
         <p className="text-slate-400 text-xs">誰のクチコミを書きますか？</p>

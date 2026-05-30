@@ -82,7 +82,7 @@ export default function AreaSearchPage() {
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200">
       <SeoHead
         title="エリアから探す"
-        description="新宿・渋谷・銀座など東京の各エリアからメンズエステ店舗を探せます。"
+        description="東京・大阪・愛知など全国各エリアのメンズエステ店舗を検索。エリア別に厳選店舗とセラピスト情報を掲載。"
         path="/area-search"
       />
       {/* Header */}

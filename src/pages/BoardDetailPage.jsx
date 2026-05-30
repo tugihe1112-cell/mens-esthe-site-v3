@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import SeoHead from '../components/SeoHead.jsx';
 
 function timeAgo(dateStr) {
   const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
@@ -71,6 +72,11 @@ export default function BoardDetailPage() {
 
   return (
     <>
+      <SeoHead
+        title={post.title}
+        description={post.content ? post.content.slice(0, 120) + '…' : '掲示板の投稿'}
+        path={`/board/${postId}`}
+      />
       <Header />
       <div className="min-h-screen bg-slate-950 text-white pb-32 pt-20">
         <div className="max-w-3xl mx-auto px-4 py-6">

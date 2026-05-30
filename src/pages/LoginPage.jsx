@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext"; // 👈 Supabaseの本物認証パイプ
+import SeoHead from '../components/SeoHead.jsx';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -58,7 +59,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-slate-950">
+    <div
+      <SeoHead title="ログイン"
+        noindex /> className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-slate-950">
       
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">

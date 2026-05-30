@@ -3,6 +3,7 @@ import { useShopData } from '../contexts/DataContext.jsx';
 import ModernReviewCard from '../components/ModernReviewCard.jsx';
 import { useNavigate, Link } from 'react-router-dom';
 import Header from '../components/Header.jsx';
+import SeoHead from '../components/SeoHead.jsx';
 
 export default function MyReviewsPage() {
   const navigate = useNavigate();
@@ -41,7 +42,9 @@ export default function MyReviewsPage() {
   }, [myReviews]);
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200 relative overflow-hidden">
+    <div
+      <SeoHead title="投稿した口コミ"
+        noindex /> className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200 relative overflow-hidden">
       <Header />
       
       {/* 背景装飾 */}

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { supabase } from "../lib/supabase";
 import Header from "../components/Header.jsx";
+import SeoHead from "../components/SeoHead.jsx";
 
 export default function PremiumPage() {
   const navigate = useNavigate();
@@ -53,6 +54,11 @@ export default function PremiumPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
+      <SeoHead
+        title="プレミアムプラン"
+        description="メンエスマップのプレミアムプランでセラピストの口コミ・体験談が読み放題。月額・年額プランで選べます。"
+        path="/premium"
+      />
       <Header />
       <div className="max-w-3xl mx-auto p-4 md:p-6 mt-10">
         <div className="bg-slate-900/50 backdrop-blur rounded-3xl p-8 md:p-12 border border-yellow-500/30 shadow-[0_0_50px_rgba(234,179,8,0.1)] text-center">

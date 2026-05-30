@@ -173,7 +173,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-slate-950 pb-28 md:pb-16 overflow-x-hidden font-sans text-slate-200">
       <SeoHead
         title="メンズエステ検索・口コミ"
-        description="全国のメンズエステ店舗・セラピストを検索できるポータルサイト。口コミ・料金・出勤情報を掲載。"
+        description="メンエスマップは全国580店舗以上のメンズエステを掲載。セラピスト別の口コミ・出勤スケジュール・料金を検索できるポータルサイトです。"
         path="/"
       />
       <Header />

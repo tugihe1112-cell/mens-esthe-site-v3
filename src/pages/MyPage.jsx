@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { User, LogOut } from "lucide-react";
 import Header from "../components/Header"; // 👈 ヘッダーをインポート！
+import SeoHead from '../components/SeoHead.jsx';
 
 export default function MyPage() {
   const { user, signOut } = useAuth();
@@ -40,6 +41,8 @@ export default function MyPage() {
 
   return (
     <>
+      <SeoHead title="マイページ"
+        noindex />
       <Header /> {/* 👈 ヘッダーを表示！ */}
       <div className="min-h-screen bg-slate-950 pt-24 pb-12 px-4">
         <div className="max-w-lg mx-auto space-y-6">

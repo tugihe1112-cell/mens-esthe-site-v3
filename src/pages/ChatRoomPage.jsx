@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { createClient } from '@supabase/supabase-js';
+import SeoHead from '../components/SeoHead.jsx';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -168,7 +169,9 @@ export default function ChatRoomPage() {
   const otherId = room ? (room.user1_id === user.id ? room.user2_id : room.user1_id) : null;
 
   return (
-    <div className="flex flex-col h-screen bg-slate-950 text-white">
+    <div
+      <SeoHead title="チャット"
+        noindex /> className="flex flex-col h-screen bg-slate-950 text-white">
       {/* ヘッダー */}
       <div className="flex-shrink-0 bg-slate-900/95 backdrop-blur border-b border-white/5 px-4 py-3 flex items-center gap-3">
         <button

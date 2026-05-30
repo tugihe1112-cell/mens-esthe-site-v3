@@ -3,7 +3,7 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-05-30 （公開後チェック・お問い合わせフォーム実装・sitemap/robots本番URL化）**
+> **最終更新: 2026-05-30 （公開後チェック・写真衝突バグ全店舗修正・http画像716件移行）**
 > 作業がひと段落するたびに、Claudeがこのファイルを自動更新する。
 
 ---
@@ -1530,4 +1530,61 @@ PostReviewPage の導線が分かりにくいため、SearchPage のキャスト
 - `npm run build` 成功
 - `node --check api/contact.js` / `api/notify-credit.js` 成功
 - ローカル `/contact` 表示確認済み
-- ⚠️ **まだgit pushしていない。`git add . && git commit && git push origin main` が必要**
+- git push済み（commit: 726197f）→ Vercelデプロイ完了
+
+#### Google Search Console 登録（2026-05-30）
+- `https://www.mens-esthe-map.jp` をURL プレフィックスで登録
+- HTMLタグ方式で所有権確認 → `index.html` に `google-site-verification` メタタグ追加（commit: 2cfd5d6）
+- sitemap.xml 送信完了（476ページ検出・正常処理確認済み）
+
+#### PWAアイコン追加（2026-05-30）
+- `public/images/icon-192.png` / `icon-512.png` を生成（ダークテーマ+ピンク/パープルグラデーション）
+- commit: f7e9715 → Vercelデプロイ完了
+
+#### http:// 画像URL問題の発見・修正（2026-05-30）
+- Silk (シルク) の31件が `http://www.ms-silk.tokyo/images/` を参照していた
+- HTTPSサイトからHTTP画像を読み込むと混在コンテンツとしてブラウザがブロック → 画像が表示されない
+- 同様の問題が他店舗にも存在する可能性あり → `check_http_images.mjs` で調査要
+
+#### Silk 写真衝突バグの発見・修正（2026-05-30）
+- **原因**: 過去に `fix_silk_images.mjs`（旧バージョン）が実行されており、Storage ファイル名を `therapistId.replace(/[^\w-]/g, '_')` で生成していた
+  - 日本語名が全てアンダースコアに変換され、同じ文字数の名前が同一ファイル名になって上書きされていた
+  - 例: `白石せいな`（5文字）と `篠宮ゆかり`（5文字）が同じ `silk_tokyo_shibuya_silk______.jpg` になっていた
+- **解決策**: 元サイトの画像URLのベースネーム（`ml_11_1_7123.JPG` 等）をStorage ファイル名に使用 → 衝突しない
+- `fix_silk_images_v2.mjs` で31件を正しいファイル名で再アップロード・DB更新完了
+- Silkスタッフページ: `http://www.ms-silk.tokyo/staff/`
+
+#### ⚠️ 写真衝突バグ 教訓
+- **Storage ファイル名には必ず元URLのベースネームを使う**（`therapistId` を使ってはいけない）
+- 日本語IDは `replace(/[^\w-]/g, '_')` で全てアンダースコアになり衝突する
+- 正しいパターン: `const storageFileName = \`prefix_\${imageUrl.split('/').pop().toLowerCase()}\``
+- URLのベースネームが全店舗で `1.jpg` になるCMSは staffId を使う（例: BQ-INS の `data/staff/{staffId}/1.jpg`）
+
+#### http:// 画像 全店舗一括修正（2026-05-30）
+- `check_http_images.mjs` で調査 → 20店舗・735件が http:// 参照
+- `fix_http_images_all.mjs` で一括修正 → 716件成功・19件失敗（退職者の404）
+- 失敗19件は退職者のため対応不要
+- ⚠️ URLのベースネームが全員 `1.jpg` になる店舗は別途対応が必要（BQ-INS等）
+
+#### BQ-INS 写真衝突バグ修正（2026-05-30）
+- 原因: `data/staff/{staffId}/1.jpg` パターンでベースネームが全員 `1.jpg` → Storage衝突
+- `fix_bqins_images.mjs` で staffId をファイル名に使用して再アップロード
+- 3店舗（自由が丘・中目黒・三軒茶屋）116件成功・25件マッチなし（退職者）
+- BQ-INS スタッフページ: `http://bqins.jp/therapist/`
+
+#### BECAUSE 「さんの写真」重複エントリ削除（2026-05-30）
+- `tokyo_dispatch_because` に「広瀬りおさんの写真」等の旧スクレイピング残骸13件が残存
+- 正しいエントリ（「広瀬りお」等）が別途存在するため13件削除
+
+#### SearchPage「リストにいない」カード 複数店舗対応（2026-05-30）
+- 複数店舗ヒット時（matchingShops.length > 1）はカードが非表示になっていたバグを修正
+- `matchingShops.length === 1` → `matchingShops.length >= 1` に変更（commit: cdc3e94）
+
+#### 写真衝突バグ 全店舗調査・修正（2026-05-30）
+- 調査方法: 同一shop内で同一image_urlを持つ異なる名前のセラピストを検出
+- `_1.jpg` パターンチェックは誤検知が多い → 実際のURL重複チェックが正確
+- **実際に衝突していた店舗: 4店舗**（当初の84店舗から大幅に絞り込み）
+  - QUEEN'S COLLECTION 4店舗: 「名称未設定」画像に7名が衝突 → image_url をnullに更新（35件）
+  - 竜宮城（門前仲町・蒲田）: 一ノ木えま/影山まゆか・花尻はるな/鈴野ななか → nullに更新（8件）
+- 鬼灯（ほおずき）・Lunabelle等は衝突なし（タイムスタンプ系ファイル名で固有）
+- **教訓**: `_1.jpg`チェックは誤検知あり。実際の重複URLチェックで判定すること

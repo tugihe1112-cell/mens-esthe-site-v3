@@ -1,69 +1,70 @@
 /**
- * Silk (シルク) セラピスト写真修正
- * alt="〇〇さんの写真" + background-image パターン
+ * Silk (シルク) セラピスト画像をSupabase Storageに移行
+ * http:// → Supabase Storage URL に変換
  */
-import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
+import fs from 'fs';
 
-const isDryRun = process.argv.includes('--dry-run');
 const env = fs.readFileSync('.env', 'utf-8');
-const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
-const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('VITE_SUPABASE_ANON_KEY'));
+const getEnv = k => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim();
 
-const BASE = 'http://www.ms-silk.tokyo';
-const SHOP_ID = 'tokyo_shibuya_silk';
+const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('SUPABASE_SERVICE_ROLE_KEY') || getEnv('VITE_SUPABASE_ANON_KEY'));
+const BUCKET = 'therapist-images';
+const DRY_RUN = process.argv.includes('--dry-run');
 
-// サイトからデータ取得
-const res = await fetch(`${BASE}/staff/`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-const html = await res.text();
+async function uploadImage(imageUrl) {
+  const res = await fetch(imageUrl, {
+    headers: {
+      'Referer': 'http://www.ms-silk.tokyo/',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+    }
+  });
+  if (!res.ok) throw new Error(`fetch failed: ${res.status}`);
+  const buffer = Buffer.from(await res.arrayBuffer());
+  // URLのファイル名をそのまま使う（衝突防止）
+  const baseName = imageUrl.split('/').pop().toLowerCase();
+  const storageFileName = `silk_${baseName}`;
 
-const sitePairs = [...html.matchAll(/style="background-image:\s*url\(([^)]+)\)"[^>]*alt="([^"]+)"/gi)]
-  .map(m => ({
-    img: BASE + m[1].replace(/['"]/g, ''),
-    // "〇〇さんの写真" → "〇〇"
-    name: m[2].trim().replace(/さんの写真$/, '').trim()
-  }));
+  const { error } = await supabase.storage.from(BUCKET).upload(storageFileName, buffer, {
+    contentType: `image/${ext === 'jpg' ? 'jpeg' : ext}`,
+    upsert: true,
+  });
+  if (error) throw new Error(`upload failed: ${error.message}`);
 
-console.log(`サイトから取得: ${sitePairs.length}名\n`);
-
-// DBのセラピスト取得
-const { data: therapists } = await supabase
-  .from('therapists')
-  .select('id, name, image_url')
-  .eq('shop_id', SHOP_ID);
-
-let updated = 0, notFound = 0, skipped = 0;
-
-for (const { name, img } of sitePairs) {
-  // DB名と照合（完全一致 or スペース除去）
-  const match = therapists?.find(t =>
-    t.name === name ||
-    t.name?.replace(/\s/g, '') === name.replace(/\s/g, '')
-  );
-
-  if (!match) {
-    console.log(`? DB未登録: ${name}`);
-    notFound++;
-    continue;
-  }
-
-  // spacer または null の場合のみ更新
-  const isSpacer = match.image_url?.includes('spacer');
-  if (match.image_url && !isSpacer) {
-    console.log(`= スキップ（既に写真あり）: ${name}`);
-    skipped++;
-    continue;
-  }
-
-  console.log(`${isDryRun ? '[DRY]' : '✅'} ${name} → ${img}`);
-  if (!isDryRun) {
-    const { error } = await supabase
-      .from('therapists')
-      .update({ image_url: img })
-      .eq('id', match.id);
-    if (error) console.error(`  ERROR: ${error.message}`);
-  }
-  updated++;
+  const { data: { publicUrl } } = supabase.storage.from(BUCKET).getPublicUrl(storageFileName);
+  return publicUrl;
 }
 
-console.log(`\n更新: ${updated}件, 未照合: ${notFound}件, スキップ: ${skipped}件`);
+async function main() {
+  console.log(DRY_RUN ? '=== DRY RUN ===' : '=== 本実行 ===');
+
+  const { data: all, error } = await supabase
+    .from('therapists')
+    .select('id, name, image_url')
+    .ilike('shop_id', '%silk%');
+
+  if (error) { console.error(error); return; }
+  const therapists = all.filter(t => t.image_url && t.image_url.startsWith('http://'));
+  console.log(`対象: ${therapists.length}件 (silk全体: ${all.length}件)`);
+
+  let ok = 0, fail = 0;
+  for (const t of therapists) {
+    try {
+      if (DRY_RUN) {
+        console.log(`[DRY] ${t.name} | ${t.image_url}`);
+        continue;
+      }
+      const newUrl = await uploadImage(t.image_url);
+      await supabase.from('therapists').update({ image_url: newUrl }).eq('id', t.id);
+      console.log(`✅ ${t.name}`);
+      ok++;
+      await new Promise(r => setTimeout(r, 300));
+    } catch (e) {
+      console.log(`❌ ${t.name}: ${e.message}`);
+      fail++;
+    }
+  }
+  console.log(`\n完了: ${ok}件成功 / ${fail}件失敗`);
+}
+
+main();

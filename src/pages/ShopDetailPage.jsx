@@ -199,7 +199,29 @@ export default function ShopDetailPage() {
 
   return (
     <div className="bg-slate-950 min-h-screen pb-28 md:pb-16 text-slate-200 font-sans relative">
-      <SeoHead title={shop.name} description={seoDesc} path={`/shops/${shop.id}`} />
+      <SeoHead title={shop.name} description={seoDesc} path={`/shops/${shop.id}`} image={shop.image_url || shop.image} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "HealthAndBeautyBusiness",
+        "name": shop.name,
+        "description": seoDesc,
+        "url": shop.website_url || shop.raw_data?.url || `https://www.mens-esthe-map.jp/shops/${shop.id}`,
+        "image": shop.image_url || shop.image || undefined,
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": shop.prefecture || shop.raw_data?.prefecture,
+          "addressLocality": shop.city || shop.raw_data?.city,
+          "addressCountry": "JP"
+        },
+        "telephone": shop.phone_number || shop.raw_data?.phone || undefined,
+        "aggregateRating": cloudReviews.length > 0 ? {
+          "@type": "AggregateRating",
+          "ratingValue": (cloudReviews.reduce((s, r) => s + (r.rating || 0), 0) / cloudReviews.length).toFixed(1),
+          "reviewCount": cloudReviews.length,
+          "bestRating": 5,
+          "worstRating": 1
+        } : undefined
+      }) }} />
 
       {/* 1. Cinematic Hero Header */}
       <div className="relative h-[45vh] md:h-[55vh] w-full overflow-hidden group">

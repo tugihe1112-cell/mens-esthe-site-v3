@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { supabase } from '../lib/supabase.js';
 import LazyImage from '../components/LazyImage.jsx';
+import SeoHead from '../components/SeoHead.jsx';
 
 const ADMIN_EMAILS = ['tugihe1112@gmail.com', 'master@mens-esthe.jp'];
 
@@ -77,7 +78,9 @@ function GrantModal({ review, onClose, onGrant }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
+    <div
+      <SeoHead title="管理画面"
+        noindex /> className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
         <h3 className="text-white font-black text-lg mb-1">閲覧日数を付与</h3>
         <p className="text-slate-400 text-sm mb-4">

@@ -3,6 +3,7 @@ import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
 import { Link, useNavigate } from 'react-router-dom';
 import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
+import SeoHead from '../components/SeoHead.jsx';
 
 export default function HistoryPage() {
   const { history, clearHistory } = useRecentlyViewed();
@@ -15,7 +16,9 @@ export default function HistoryPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
+    <div
+      <SeoHead title="閲覧履歴"
+        noindex /> className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
       <Header />
       
       <div className="pt-24 px-4 max-w-3xl mx-auto">

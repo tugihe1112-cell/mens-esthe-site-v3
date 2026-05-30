@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import SeoHead from '../components/SeoHead.jsx';
 
 function timeAgo(dateStr) {
   if (!dateStr) return '';
@@ -102,6 +103,8 @@ export default function ChatListPage() {
 
   return (
     <>
+      <SeoHead title="メッセージ"
+        noindex />
       <Header />
       <div className="min-h-screen bg-slate-950 text-white pb-32 pt-20">
         {/* バナー */}
