@@ -199,7 +199,12 @@ export default function ShopDetailPage() {
 
   return (
     <div className="bg-slate-950 min-h-screen pb-28 md:pb-16 text-slate-200 font-sans relative">
-      <SeoHead title={shop.name} description={seoDesc} path={`/shops/${shop.id}`} image={shop.image_url || shop.image} />
+      <SeoHead
+        title={shop.name}
+        description={seoDesc}
+        path={`/shops/${shop.id}`}
+        image={`/api/og?shop=${encodeURIComponent(shop.name)}&sub=${encodeURIComponent(seoDesc.slice(0, 40))}&image=${encodeURIComponent(shop.image_url || shop.image || '')}`}
+      />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "HealthAndBeautyBusiness",
