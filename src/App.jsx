@@ -45,6 +45,7 @@ import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import ContactPage from './pages/ContactPage';
 import PrefecturePage from './pages/PrefecturePage';
+import AuthConfirmPage from './pages/AuthConfirmPage';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -116,6 +117,7 @@ export default function App() {
                   <Route path="/terms" element={<TermsPage />} />       {/* 🌟 ルートを追加！ */}
                   <Route path="/privacy" element={<PrivacyPage />} />   {/* 🌟 ルートを追加！ */}
                   <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/auth/confirm" element={<AuthConfirmPage />} />
                   <Route path="/404" element={<NotFoundPage />} />
                   <Route path="*" element={<Navigate to="/404" replace />} />
                 </Routes>
