@@ -17,6 +17,7 @@
 | Vercel | tugihe1112@gmail.com | mens-esthe-site プロジェクト |
 | Resend | tugihe1112@gmail.com | メール送信 |
 | Resend SMTP用APIキー | `re_dQbJc5MF_2uanmWpT3xejLQ5RiyZmRV8M` | Full access・Supabase SMTP設定用 |
+| Supabase Auth Hook Secret | `v1,whsec_eIua8euaVbUH8hn08m7Xs+QIzwlfLp5B7K81GaO5UfJ03aeyZg7U4aqr6wzpF9Qgw/HjIDrSHf4kMjUN` | Send Email Hook・Vercel環境変数 `SUPABASE_HOOK_SECRET` に設定 |
 
 ※パスワードはiCloudキーチェーンで管理すること
 

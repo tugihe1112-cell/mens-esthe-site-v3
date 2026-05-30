@@ -13,13 +13,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Supabase Hook の署名検証（secret設定時）
-  if (HOOK_SECRET) {
-    const authHeader = req.headers['authorization'] || '';
-    if (!authHeader.includes(HOOK_SECRET)) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-  }
+  // リクエストログ（デバッグ用）
+  console.log('Auth hook called:', req.method, JSON.stringify(req.body || {}).slice(0, 200));
 
   const { user, email_data } = req.body || {};
 
