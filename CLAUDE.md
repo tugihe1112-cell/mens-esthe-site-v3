@@ -23,6 +23,38 @@
 
 ---
 
+## ⚠️ 未実装・今後やること（コンテンツが増えたタイミングで対応）
+
+- [ ] **Stripe決済実装（プレミアム課金）**
+  - 現状: PremiumPageの「登録する」ボタンはSupabaseのprofilesテーブルを直接`plan:'premium'`に書き換えるだけ。**誰でも無料でプレミアムになれる状態**
+  - 実装方法: Stripe Checkout（ホステッドページ）方式が最も簡単
+    1. Stripeアカウント作成 → 月額2,980円・年額29,800円の商品を作成
+    2. `api/create-checkout-session.js` 作成（Vercelサーバーレス）
+    3. `api/stripe-webhook.js` 作成（支払い完了時にDB更新）
+    4. `PremiumPage.jsx` のhandleSubscribeをAPIコールに変更
+    5. Vercel環境変数: `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `STRIPE_PRICE_ID_MONTHLY` / `STRIPE_PRICE_ID_YEARLY`
+  - 所要時間: 約2〜3時間（Stripeアカウント審査別）
+  - **コンテンツが充実してユーザーが定着してから実装すること**
+
+- [ ] **Google Analytics（GA4）設定**
+  - 現状: アクセス解析ツールが一切入っていない
+  - 実装: `index.html` に GA4 の gtag.js スクリプトを追加するだけ（30分）
+  - Googleアカウントで `analytics.google.com` にアクセス → プロパティ作成 → 測定IDを取得
+  - `index.html` に `<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX">` を追加
+  - **リリース直後に設定推奨。データは蓄積系なので早いほど良い**
+
+- [ ] **口コミ投稿時の管理者メール通知**
+  - 現状: ユーザーが口コミを投稿しても管理者に通知が来ない。管理画面を手動で確認する必要がある
+  - 実装: `api/notify-review.js` を作成し、PostReviewPageのonSubmit成功後にResend経由で`tugihe1112@gmail.com`に通知メール送信
+  - 所要時間: 約1時間
+
+- [ ] **favicon.ico 追加**
+  - 現状: `public/` に `favicon.ico` が存在しない（manifest.jsonにはPWAアイコンあり）
+  - 実装: `public/favicon.ico` を追加（16×16 or 32×32 px）
+  - ブラウザのタブにアイコンが表示されるようになる
+
+---
+
 ## ⚠️ 公開前にやること（リリースチェックリスト）
 
 - [x] **メール送信元を本番用に変更**（2026-05-29）
