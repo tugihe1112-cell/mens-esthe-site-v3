@@ -89,15 +89,15 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
   const isNoneSelected = !selectedTherapistId && !customMode;
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+    <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
       <SeoHead title="口コミを投稿" noindex />
-      <div className="text-center">
-        <h2 className="text-2xl font-black text-white tracking-tight mb-2">TARGET</h2>
-        <p className="text-slate-400 text-xs">誰のクチコミを書きますか？</p>
+      <div>
+        <h2 className="text-xl font-black text-white tracking-tight mb-1">店舗・セラピストを選択</h2>
+        <p className="text-slate-500 text-sm">口コミを書く店舗とセラピストを選んでください</p>
       </div>
 
-      <div className="bg-slate-900/50 p-6 rounded-[2rem] border border-white/5 shadow-xl">
-        <label className="block text-[10px] font-bold text-slate-500 mb-3 uppercase tracking-widest pl-1">STORE</label>
+      <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl">
+        <label className="block text-xs font-bold text-slate-400 mb-3 pl-1">店舗名</label>
 
         {paramShopId ? (
           /* URLから来た場合は固定表示 */
@@ -150,8 +150,8 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
       </div>
 
       {selectedShopId && (
-        <div className="bg-slate-900/50 p-6 rounded-[2rem] border border-white/5 shadow-xl animate-in fade-in duration-500">
-          <label className="block text-[10px] font-bold text-slate-500 mb-4 uppercase tracking-widest pl-1">THERAPIST</label>
+        <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl animate-in fade-in duration-500">
+          <label className="block text-xs font-bold text-slate-400 mb-4 pl-1">セラピスト</label>
 
           {customMode ? (
             /* カスタムモード: 入力欄のみ表示 */
@@ -286,11 +286,11 @@ const Step2_Rating = () => {
               {totalScore}
             </span>
          </div>
-         <h2 className="text-2xl font-black text-white tracking-tight mb-2">SCORING</h2>
-         <p className="text-slate-400 text-xs">スライダーを動かして採点してください</p>
+         <h2 className="text-xl font-black text-white tracking-tight mb-1">採点</h2>
+         <p className="text-slate-500 text-sm">スライダーを動かして採点してください</p>
       </div>
 
-      <div className="bg-slate-900/50 p-6 rounded-[2rem] border border-white/5 shadow-xl space-y-8">
+      <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl space-y-8">
         {RATING_CONFIG.map((item) => (
           <Controller
             key={item.id}
@@ -329,8 +329,8 @@ const Step3_Story = () => {
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
        <div className="text-center">
-        <h2 className="text-2xl font-black text-white tracking-tight mb-2">STORY</h2>
-        <p className="text-slate-400 text-xs">あなたの体験を日記のように記録しましょう</p>
+        <h2 className="text-xl font-black text-white tracking-tight mb-1">体験談を書く</h2>
+        <p className="text-slate-500 text-sm">あなたの体験を日記のように記録しましょう</p>
       </div>
 
       {/* 文字数カウンター */}
@@ -391,8 +391,8 @@ const Step4_Confirm = ({ isSubmitting }) => {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
       <div className="text-center">
-        <h2 className="text-2xl font-black text-white tracking-tight mb-2">CONFIRM</h2>
-        <p className="text-slate-400 text-xs">この内容で投稿しますか？</p>
+        <h2 className="text-xl font-black text-white tracking-tight mb-1">投稿内容の確認</h2>
+        <p className="text-slate-500 text-sm">この内容で投稿しますか？</p>
       </div>
 
       <div className="bg-slate-900/50 p-8 rounded-3xl text-center border border-white/10">
@@ -551,15 +551,15 @@ export default function PostReviewPage() {
           <div className="max-w-2xl mx-auto px-4">
               {/* Nav Header */}
               <div className="flex items-center justify-between mb-8">
-                <button 
+                <button
                   type="button"
-                  onClick={currentStep > 1 ? prevStep : () => navigate(-1)} 
+                  onClick={currentStep > 1 ? prevStep : () => navigate(-1)}
                   className="text-slate-400 hover:text-white text-xs font-bold flex items-center gap-1 transition"
                 >
-                  <span>←</span> {currentStep > 1 ? 'BACK' : 'CANCEL'}
+                  <span>←</span> {currentStep > 1 ? '戻る' : 'キャンセル'}
                 </button>
-                <span className="text-slate-600 font-black text-[10px] uppercase tracking-[0.2em]">
-                  Step {currentStep} / {TOTAL_STEPS}
+                <span className="text-slate-500 font-bold text-xs">
+                  {currentStep} / {TOTAL_STEPS} ステップ
                 </span>
               </div>
 
@@ -587,7 +587,7 @@ export default function PostReviewPage() {
                     onClick={nextStep}
                     className="pointer-events-auto w-full max-w-md py-4 rounded-2xl font-black text-lg shadow-xl bg-white text-slate-900 hover:bg-slate-200 transition-all transform active:scale-95 flex items-center justify-center gap-2"
                   >
-                    NEXT STEP <span>→</span>
+                    次へ進む <span>→</span>
                   </button>
                 </div>
               )}
