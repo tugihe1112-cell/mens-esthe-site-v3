@@ -3,7 +3,7 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-05-31 （動的OGP・WebP変換・キャッシュ/セキュリティヘッダー・フッターエリアリンク）**
+> **最終更新: 2026-06-01 （SearchPage/ShopDetail/Ranking UIバグ修正・口コミ投稿ページ日本語化）**
 > 作業がひと段落するたびに、Claudeがこのファイルを自動更新する。
 
 ---
@@ -1648,3 +1648,28 @@ PostReviewPage の導線が分かりにくいため、SearchPage のキャスト
 - `{都道府県}のメンズエステ` テキスト + `/area/{slug}` へのリンク
 - ピル型タグデザイン（bg-slate-900 rounded-full）
 - 効果: クローラーがどのページからでも都道府県ページに到達できる → 地域キーワードのインデックス促進
+
+### 2026-06-01 - UI/UXバグ修正・全体品質改善
+
+#### SearchPage 4点修正
+- sticky検索バー削除（`sticky top-20 z-40` → 通常フロー）：スクロール時についてまわる問題を解消
+- `body` 背景を `bg-gradient-to-br to-purple-900` → `bg-slate-950` に変更：半透明要素から紫が滲む問題を全ページ解消
+- ShopCard `bg-slate-900/60`（半透明）→ `bg-slate-900`（不透明）：曇りガラス状態を解消
+- ShopCard の行全体を `<Link>` に変更：タップしても何も起きない問題を解消、キャスト一覧へ遷移
+
+#### ShopDetailPage・RankingPage タブバー修正
+- `sticky top-0 z-40` → `sticky top-20 z-40`：固定ヘッダー（z-50）とタブバーが重なる問題を解消
+- 同時に `backdrop-blur-xl` も削除（不透明背景に統一）
+
+#### index.css モバイルボタン強制パディング削除
+- `@media (max-width: 768px) { button { padding: 0.75rem 1rem; } }` を削除
+- 全ボタンに強制パディングが適用されていた問題を解消（小型ピルボタン等のレイアウト崩れ防止）
+
+#### ThreadCard Link化（`src/components/ThreadCard.jsx`）
+- `div + onClick` → `<Link to="...">` に変更
+- モバイル長押しで「新しいタブで開く」が出るように改善
+
+#### 口コミ投稿ページ 日本語化（`src/pages/PostReviewPage.jsx`）
+- 全英語ラベルを日本語に統一: TARGET→店舗・セラピストを選択 / STORE→店舗名 / THERAPIST→セラピスト / SCORING→採点 / STORY→体験談を書く / CONFIRM→投稿内容の確認 / NEXT STEP→次へ進む / BACK→戻る / CANCEL→キャンセル / Step X/X→X/Xステップ
+- 半透明背景（`bg-slate-900/50`）→ 不透明（`bg-slate-900`）に統一
+- タイトルサイズを `text-2xl` → `text-xl` に調整（スッキリ感向上）
