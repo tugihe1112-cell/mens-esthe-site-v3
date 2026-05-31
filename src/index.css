@@ -318,11 +318,6 @@ a {
     font-size: 1.125rem;
   }
 
-  /* モバイルでのボタンサイズ */
-  button {
-    padding: 0.75rem 1rem;
-  }
-
   /* モバイルでのインプットサイズ */
   input,
   select,

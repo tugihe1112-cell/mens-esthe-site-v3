@@ -1,17 +1,11 @@
-// ==================================================
-// ThreadCard.jsx（完全版）
-// ==================================================
-
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function ThreadCard({ shopId, thread }) {
-  const navigate = useNavigate();
-
   return (
-    <div
-      className="bg-slate-800 rounded-lg p-4 border border-slate-700 cursor-pointer hover:scale-[1.02] transition-transform"
-      onClick={() => navigate(`/shops/${shopId}/threads/${thread.id}`)}
+    <Link
+      to={`/shops/${shopId}/threads/${thread.id}`}
+      className="block bg-slate-800 rounded-lg p-4 border border-slate-700 hover:scale-[1.02] transition-transform"
     >
       <div className="flex gap-4">
 
@@ -27,7 +21,7 @@ export default function ThreadCard({ shopId, thread }) {
           <h3 className="text-xl font-bold text-white">{thread.name}</h3>
 
           <p className="text-gray-300 text-sm mt-1">
-            平均評価： 
+            平均評価：
             <span className="text-yellow-400 font-bold">
               {thread.averageRating.toFixed(1)}
             </span>
@@ -56,6 +50,6 @@ export default function ThreadCard({ shopId, thread }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

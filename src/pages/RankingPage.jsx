@@ -77,7 +77,7 @@ export default function RankingPage() {
       </div>
 
       {/* 2. Control Bar (Area & Period) */}
-      <div className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-white/5 shadow-2xl mb-12">
+      <div className="sticky top-20 z-40 bg-slate-950 border-b border-white/5 shadow-2xl mb-12">
         <div className="max-w-4xl mx-auto px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-4">
           
           {/* Period Tabs（右端フェードでスワイプ感を示唆） */}

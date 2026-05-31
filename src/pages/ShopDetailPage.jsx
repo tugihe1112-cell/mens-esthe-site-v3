@@ -288,7 +288,7 @@ export default function ShopDetailPage() {
       </div>
 
       {/* 2. Sticky Tab Navigation */}
-      <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-white/5 shadow-lg">
+      <div className="sticky top-20 z-40 bg-slate-950 border-b border-white/5 shadow-lg">
         <div className="flex max-w-4xl mx-auto">
           {([
             { key: 'top', label: 'トップ' },
