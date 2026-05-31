@@ -59,10 +59,13 @@ function ShopCard({ shop }) {
     return [];
   }, [shop.price_system]);
 
+  // 店舗名をクリックするとキャスト一覧を表示（SearchPageのshop=パラメータに渡す）
+  const shopSearchUrl = `/search?shop=${encodeURIComponent(shop.name)}&shopId=${shop.id}`;
+
   return (
-    <div className="bg-slate-900/60 border border-white/5 rounded-2xl overflow-hidden transition-all">
+    <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden transition-all">
       {/* 上段: 基本情報 */}
-      <div className="flex items-center gap-3 p-4">
+      <Link to={shopSearchUrl} className="flex items-center gap-3 p-4 hover:bg-slate-800/50 transition-colors">
         <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-slate-800 block">
           {shop.image_url
             ? <img src={shop.image_url} alt={shop.name} className="w-full h-full object-cover" />
@@ -78,21 +81,23 @@ function ShopCard({ shop }) {
             <div className="text-xs text-slate-400 mt-0.5">🕐 {shop.business_hours}</div>
           )}
         </div>
-        {/* 詳細トグル */}
-        {(shop.price_system || shop.website_url || shop.schedule_url) && (
+        <span className="flex-shrink-0 text-slate-400 text-lg ml-1">›</span>
+      </Link>
+      {/* 詳細トグルボタン（別行） */}
+      {(shop.price_system || shop.website_url || shop.schedule_url) && (
+        <div className="px-4 pb-3 -mt-1">
           <button
             onClick={() => setOpen(v => !v)}
-            className="flex-shrink-0 text-xs text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-full transition font-bold"
+            className="text-xs text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-full transition font-bold"
           >
-            {open ? '閉じる' : '詳細 ▾'}
+            {open ? '閉じる ▴' : 'スケジュール・料金 ▾'}
           </button>
-        )}
-        <span className="flex-shrink-0 text-slate-600 text-lg ml-1">›</span>
-      </div>
+        </div>
+      )}
 
       {/* 展開パネル */}
       {open && (
-        <div className="border-t border-white/5 p-4 space-y-4 bg-slate-900/40">
+        <div className="border-t border-white/5 p-4 space-y-4 bg-slate-900">
 
           {/* ボタン群 */}
           <div className="flex flex-wrap gap-2">
@@ -484,8 +489,8 @@ export default function SearchPage() {
       />
       <Header />
 
-      {/* ===== Sticky 検索エリア ===== */}
-      <div className="sticky top-20 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-white/5 shadow-2xl">
+      {/* ===== 検索エリア ===== */}
+      <div className="bg-slate-950 border-b border-white/10 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-4 space-y-3">
 
           {/* 2つの検索バー */}
