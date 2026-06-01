@@ -527,11 +527,26 @@ export default function PostReviewPage() {
     const result = await submitReview(data);
     if (result.success) {
       toast.success('クチコミを投稿しました！');
+
+      // 管理者へメール通知（失敗しても投稿は成功扱い）
+      const shopName = shops.find(s => s.id === data.shopId)?.name || '';
+      fetch('/api/notify-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          shopName,
+          therapistName: data.therapistName || null,
+          userName: data.userName || null,
+          rating: data.rating || null,
+          content: Object.values(data.story || {}).filter(Boolean).join('\n\n'),
+        }),
+      }).catch(() => {}); // エラーは無視
+
       // 戻り先を動的に決定（カスタム名・指名なしは店舗ページへ）
       if (data.shopId && data.therapistId) {
         navigate(`/shops/${data.shopId}/threads/${data.therapistId}`);
       } else if (data.shopId) {
-        navigate(`/search?shop=${encodeURIComponent(shops.find(s => s.id === data.shopId)?.name || '')}`);
+        navigate(`/search?shop=${encodeURIComponent(shopName)}`);
       } else {
         navigate('/');
       }
