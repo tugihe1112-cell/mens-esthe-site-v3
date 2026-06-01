@@ -36,7 +36,7 @@
   - 所要時間: 約2〜3時間（Stripeアカウント審査別）
   - **コンテンツが充実してユーザーが定着してから実装すること**
 
-- [ ] **Google Analytics（GA4）設定**
+- [x] **Google Analytics（GA4）設定**
   - 現状: アクセス解析ツールが一切入っていない
   - 実装: `index.html` に GA4 の gtag.js スクリプトを追加するだけ（30分）
   - Googleアカウントで `analytics.google.com` にアクセス → プロパティ作成 → 測定IDを取得
