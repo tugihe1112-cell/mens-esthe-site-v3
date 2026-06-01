@@ -43,12 +43,12 @@
   - `index.html` に `<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX">` を追加
   - **リリース直後に設定推奨。データは蓄積系なので早いほど良い**
 
-- [ ] **口コミ投稿時の管理者メール通知**
+- [x] **口コミ投稿時の管理者メール通知**
   - 現状: ユーザーが口コミを投稿しても管理者に通知が来ない。管理画面を手動で確認する必要がある
   - 実装: `api/notify-review.js` を作成し、PostReviewPageのonSubmit成功後にResend経由で`tugihe1112@gmail.com`に通知メール送信
   - 所要時間: 約1時間
 
-- [ ] **favicon.ico 追加**
+- [x] **favicon.ico 追加**
   - 現状: `public/` に `favicon.ico` が存在しない（manifest.jsonにはPWAアイコンあり）
   - 実装: `public/favicon.ico` を追加（16×16 or 32×32 px）
   - ブラウザのタブにアイコンが表示されるようになる
