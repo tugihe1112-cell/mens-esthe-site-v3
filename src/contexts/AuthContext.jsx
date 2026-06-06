@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('plan, image_url')
+        .select('plan')
         .eq('id', userId)
         .single();
       

@@ -20,7 +20,23 @@ export const DataProvider = ({ children }) => {
         const { data: shopsData, error } = await supabase.from('shops').select('id, group_id, name, raw_data, website_url, schedule_url, phone_number, business_hours, price_system, image_url');
         if (error) throw error;
         if (shopsData) {
-          setShops(shopsData.map(d => ({ ...d.raw_data, id: d.id, group_id: d.group_id, name: d.name, image_url: d.image_url, website_url: d.website_url, schedule_url: d.schedule_url, phone_number: d.phone_number, business_hours: d.business_hours, price_system: d.price_system })));
+          setShops(shopsData.map(d => {
+            const raw = d.raw_data || {};
+            return {
+              ...raw,
+              // raw_data.area が文字列でない場合（オブジェクト等）はundefinedに正規化
+              area: typeof raw.area === 'string' ? raw.area : undefined,
+              id: d.id,
+              group_id: d.group_id,
+              name: d.name,
+              image_url: d.image_url,
+              website_url: d.website_url,
+              schedule_url: d.schedule_url,
+              phone_number: d.phone_number,
+              business_hours: d.business_hours,
+              price_system: d.price_system,
+            };
+          }));
         }
       } catch (error) {
         console.error('❌ Failed to fetch initial data:', error);
