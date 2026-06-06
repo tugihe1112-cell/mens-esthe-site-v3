@@ -5,6 +5,25 @@ const NO_IMAGE_SVG = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000
 
 const SUPABASE_STORAGE = 'azuetkuzzmshqfbrhqmf.supabase.co/storage';
 
+// 店舗サムネイルとして不適切なURL（ロゴ・アイコン・ファビコン系）
+const ICON_PATTERNS = [
+  'apple-touch-icon',
+  '/shop_icon/',
+  '/shop_logo/',
+  'favicon',
+  'h-logo',
+  'header_logo',
+  'visual-logo',
+  'cropped-logo',
+  'cropped-icon',
+  'cropped-favicon',
+];
+function isIconUrl(src) {
+  if (!src) return false;
+  const lower = src.toLowerCase();
+  return ICON_PATTERNS.some(p => lower.includes(p));
+}
+
 // Supabase Storage の画像URLをWebP変換URLに変換
 function toWebP(src, width = 800) {
   if (!src || !src.includes(SUPABASE_STORAGE)) return src;
@@ -25,7 +44,7 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
     setLoaded(false);
   }, [src]);
 
-  if (!src || error) {
+  if (!src || error || isIconUrl(src)) {
     return (
       <div className={`relative overflow-hidden ${className}`}>
         <img
