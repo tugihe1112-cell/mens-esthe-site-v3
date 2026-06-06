@@ -25,7 +25,17 @@ function normalizeForSearch(s) {
 }
 
 function bigramScore(normTarget, token) {
-  if (normTarget.includes(token)) return 1.0;
+  // 1. 語境界マッチを最優先（"reve" が "revere" の途中にヒットしないよう）
+  const esc = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const wordBoundary = new RegExp(
+    `(?:^|[\\s\\(\\)\\[\\]・／\\-])${esc}(?=[\\s\\(\\)\\[\\]・／\\-]|$)`
+  );
+  if (wordBoundary.test(normTarget)) return 1.0;
+
+  // 2. 部分文字列マッチはスコア0.5に抑制（0.7閾値を下回る → 単独ではマッチしない）
+  if (normTarget.includes(token)) return 0.5;
+
+  // 3. バイグラム類似度（タイポ許容）
   if (token.length < 3) return 0.0;
   const bigrams = new Set();
   for (let i = 0; i < token.length - 1; i++) bigrams.add(token.slice(i, i + 2));
