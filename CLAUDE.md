@@ -3,8 +3,94 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-06-01 （SearchPage/ShopDetail/Ranking UIバグ修正・口コミ投稿ページ日本語化）**
+> **最終更新: 2026-06-08 （パフォーマンス・セキュリティ修正）**
+>
+> ※ 2026-06-08: Code Splitting実装（App.jsx全ページをReact.lazy+Suspenseに変更）。初回ロード時のJS転送量を大幅削減。git push → Vercelデプロイ済み。
+> ※ 2026-06-08: Storage RLS設定（supabase_migrations/05_storage_rls.sql）。therapist-imagesバケットへのフロントエンドからの直接アップロード・削除をブロック。Supabase SQL Editorで実行済み（Success確認）。
+> ※ 2026-06-08: 不要ファイル整理。_archive/フォルダに旧バージョンファイルを移動。
+> ※ 2026-06-08: 千葉・埼玉 全エリアshop登録完了。千葉（千葉市・松戸・柏）13店舗・埼玉（大宮・浦和・川口蕨・越谷春日部・川越・所沢）29店舗 計42店舗登録。image_urlも同時設定（12件はChrome経由でlogo取得、4件はサイトダウンでnull）。スクリプト: process_chiba_saitama_shops.mjs + fix_chiba_saitama_images.mjs
+> ※ 2026-06-08: 千葉・埼玉 セラピスト登録完了。合計約913名登録。メインスクリプト685名 + Chrome取得分228名（rose15/eden53/neverland32/pink_lady25/madame_relax36/aroma_liberty21/magokoro42/bariano56/bijo_spa9）。bariano・bijo_spaは名前のみ（画像JS描画で取得不可）。未処理: lovers（React SPA）・saitama_omiya_ace（URL誤登録）
+>
+> ※ 2026-06-07: 大和エリア Offside(62名)・Queen Terrace(21名)・mahalo(9名) 登録完了。厚木エリア CODE:4030(51名)・Salon Delight(19名)・SixthSense(39名/名前のみ) 登録完了（計201名）。calme・anokono・chill等はshop登録のみ。スクリプト: process_yamato_atsugi_shops.mjs + fix_mahalo_yamato.mjs
+> ※ 2026-06-07: 藤沢エリア Navel(158名/名前のみ)・ALICE(40名/名前のみ)・Plumeria(13名/名前のみ)・辻堂(18名/名前のみ) 登録完了（計229名）。ROUGE・Irene・4JS店はshop登録のみ。スクリプト: process_fujisawa_shops.mjs + fix_plumeria_fujisawa.mjs
+> ※ 2026-06-07: 川崎エリア RiRe(52名)・Fromage(33名/名前のみ)・Mint Club(20名/名前のみ) 登録完了（計105名）。doigt de fee・DEEP ESSENTIAL・gold・chouchou・gentlemen-houseはshop登録のみ。スクリプト: process_kawasaki_shops.mjs + fix_fromage_kawasaki.mjs
+> ※ 2026-06-07: 新横浜エリア KingSpa(43名)・Perfume(17名)・Marine綱島(81名/名前のみ)・NOI(35名) 登録完了（計176名）。Natura・aikagi・aroma-rafeel・mtimeはshop登録のみ。スクリプト: process_shinyokohama_shops.mjs + fix_noi_shinyokohama.mjs
+> ※ 2026-06-07: 関内エリア9店舗 YURU SPA(73名)・AZALEA(18名)・Lynx横浜関内(93名) 登録完了（計184名）。姫のエステ・Selesa・Aroma Pult・CRESTはshop登録のみ。スクリプト: process_kannai_shops.mjs + fix_lynx_yokohama.mjs
+> ※ 2026-06-07: 横浜エリア9店舗 Guarigione(112名)・りらっくらぶ(37名)・TeTe(52名)・PLAY BOY CLUB(54名)・Loose.a.mood(15名/名前のみ)・THE BLANC(31名)・Y PRIME(36名) 登録完了（計337名）。honoka(6位)は神奈川県で登録済み。Chloe・M dotはJS描画のためshop登録のみ。スクリプト: process_yokohama_shops.mjs + fix_yokohama_blanc_yprime.mjs
+> ※ 2026-06-07: 武蔵小杉9店舗 Agu(53名)・Ho・O・Zu・Ki・SPA(98名)・エステ美人マダム(23名)・ROYCE(19名)・Revere Spa(31名/画像なし)・ラプソディースパ(71名)・Amateras(132名)・SUPERNOVA(72名)・Whiteスパ(116名) 登録完了（計615名）。doigt de fee(4位)は名前非公開のためスキップ。Revere Spaの画像はCloudflare保護で取得不可（名前のみ）。
+> ※ 2026-06-07: あざみ野9店舗 む・む・むSPA(65名)・Cuas(8名)・honoka(40名/画像なし)・AUDIENCE(67名)・KAHLUA MILK(34名)・su:(7名/画像なし)・iDOL(19名/画像なし) 登録完了。MOANA(5位)は溝の口で登録済み。LIEN(10位)は出張型スキップ。
+> ※ 2026-06-07: 溝の口7店舗 tan(100名)・Relaxia(49名)・MOANA(31名)・ACRO(36名)・ORION SPA(37名)・星の王子さま(24名)・Feel(67名/名前のみ) 登録完了（計344名）。doigt de fee(5位)はスキップ。エステ美人マダム(2位)・ラプソディースパ(7位)は武蔵小杉で登録済み。
+> ※ 2026-06-07: 登戸5店舗 Will Be(18名)・ねこのて(65名)・GREEN APPLE(129名)・Fantastic(30名)・moi SPA(9名) 登録完了（計251名）。doigt de feeは名前非公開のためスキップ。
+> ※ 2026-06-07: 荻窪 熟的(12名) 登録完了。Yorimichi荻窪ルームはサイトダウンのためスキップ。JJ荻窪は中野と同一サイトのためスキップ。CREST SPA荻窪は2026-05-07の4店舗一括登録に含まれている可能性あり（要確認: check_all_shops_status.mjs | grep crest）。
+> ※ 2026-06-06: Lucky Cat(90名)・ADAMAS(24名)・Garden SPA(110名)・エルドラド(118名)・必殺あきば娘(81名)登録完了。
+> ※ 2026-06-06: 錦糸町追加6店舗 High Time Spa(83名)・COCONA GRAN(103名)・Neo MIYABI(42名)・撫子(28名)・Aroma Fairy(78名)・LUXUE(49名) 登録完了（計383名）。
+> ※ 2026-06-06: 中野・高円寺6店舗 Salvador(32名)・Spaflame(54名)・JJ中野(17名)・Room one(17名)・マダムの楽園(31名)・Allie(47名) 登録完了（計198名）。
+> ※ 2026-06-06: 吉祥寺・三鷹8店舗 Yorimichi(130名)・moshimo(33名)・ROOKIE(20名)・まろん(51名)・エステ美人マダム(7名)・APEX(16名)・Aroma ELLA(30名)・Mspa(74名) 登録完了（計361名）。
+> ※ 2026-06-06: 葛西・浦安9店舗 GIRIGIRILAND(20名)・内緒のカノジョ(20名)・Oblige(38名)・LaMer(52名)・AROMA VENUS(20名)・NOBLE(45名)・Onikando(38名)・UBU彼女(43名)・PhiPhiLei(55名) 登録完了（計331名）。
 > 作業がひと段落するたびに、Claudeがこのファイルを自動更新する。
+
+---
+
+## ★ 全体の作業方針（必読）
+
+### 何をやっているか
+**ランキング・口コミサイトから人気店を探し、DBに未登録の店舗を登録していく作業。**
+
+参照サイト:
+- `https://mens-mg.com/` — エリア別ランキング（主力）
+- `https://men-esthe.jp/` — 口コミ・ランキング
+- `https://mens-est.jp/` — 口コミサイト
+
+### 1店舗あたりの登録手順
+1. ランキングサイトで未登録店舗を特定
+2. 公式サイトからセラピスト一覧をスクレイピング（cheerio or Claude in Chrome）
+3. `shops` テーブルに登録（**`image_url` = og:imageを必ず同時設定**）
+4. `therapists` テーブルにセラピスト一覧を登録（画像をSupabase Storageにアップロード）
+5. CLAUDE.mdの作業ログを更新
+
+### ⚠️ 鉄則：セラピスト登録なしで次のエリアに進まない
+- shopを登録したら**必ずその場でセラピストも登録**する
+- セラピスト未登録のまま別エリアに移動することは禁止
+- 取得できない場合（JS描画・非公開）は「名前のみ登録」または「スキップ理由をログに残す」こと
+
+### ⚠️ 鉄則：新エリア追加時は locations.js も必ず更新する
+新しい都道府県・エリアの店舗を登録したら、**必ず** `src/data/locations.js` を更新すること。
+UIのエリアドロップダウンはこのファイルがソースのため、更新しないと新しいエリアが表示されない。
+
+**更新箇所（2箇所）:**
+1. `WARDS` オブジェクト → 都道府県キーのリストに新エリア名を追加 + 新エリア単体のエントリも追加
+2. `PREF_CITY_MAP` オブジェクト → 都道府県キーのリストに新エリア名を追加
+
+**ルール:**
+- `shops.raw_data.area` に設定した値と `WARDS` のキー名を完全一致させること
+- 例: `area: '越谷・春日部'` → `WARDS["越谷・春日部"] = ["越谷・春日部", ...]` が必要
+
+### 都道府県別 完了状況（2026-06-08時点）
+
+| 都道府県 | 状態 | 備考 |
+|----------|------|------|
+| **東京都** | ✅ 完了 | 498/503店舗。残り5店舗はANAICHI（JS描画） |
+| **神奈川県** | ✅ スキャン完了 | 主要エリアはすべて登録済み。31店舗はshop登録のみ（セラピスト未処理・後回し） |
+| **大阪府** | ✅ 完了 | 40/40店舗 |
+| **愛知県** | ✅ 完了 | 24/24店舗 |
+| **埼玉県** | ✅ 完了 | 13/13店舗 |
+| **千葉県** | ✅ 完了 | 千葉・松戸・柏エリア登録済み。セラピスト約180名登録 |
+| **埼玉県** | ✅ 完了 | 大宮・浦和・川口蕨・越谷春日部・川越・所沢エリア登録済み。セラピスト約730名登録 |
+| **兵庫県** | ✅ 完了 | 7/7店舗 |
+| **福岡県** | ✅ 完了 | 6/6店舗 |
+| **宮城県** | ✅ 完了 | 7/7店舗 |
+| **京都府** | ✅ 完了 | 1/1店舗 |
+| **滋賀県** | ✅ 完了 | 1/1店舗 |
+| **静岡県** | ✅ 完了 | 1/1店舗（竜宮城 沼津店のみ） |
+| **広島県** | ❌ 未着手 | — |
+| **北海道** | ❌ 未着手 | — |
+| その他全都道府県 | ❌ 未着手 | mens-mg.comで人気店を確認してから着手 |
+
+### 次にやること
+未着手の都道府県を `https://mens-mg.com/` でランキングを確認 → 人気店TOP10前後を登録していく。
+優先度: 広島 → 北海道 → その他
+
+※ 千葉・埼玉はshop・セラピスト登録ともに完了（2026-06-08）。
 
 ---
 
@@ -194,6 +280,34 @@ const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('VITE_SUPABASE
 セラピスト画像は `therapist-images` バケットにアップロードしてからURLを保存。
 `process_marigold_mrscrystal.mjs` の `uploadImage()` 関数が標準実装。
 
+### ⚠️ 店舗画像（image_url）設定ルール【必須】
+
+**新規店舗登録時は必ず `shops.image_url` も同時に設定すること。**
+
+- サイトカードに表示される画像 = `shops.image_url`
+- 未設定だとカードがグレーの丸（プレースホルダー）になる
+- 取得優先順位: og:image → twitter:image → apple-touch-icon → ロゴ・背景画像
+- 取得方法: `website_url` に対して `fetch` + cheerio で `<meta property="og:image">` を抽出するだけ
+- 参考実装: `fix_missing_shop_images.mjs`（既存の一括修正スクリプト）
+
+```js
+// 店舗登録スクリプト内での標準パターン
+async function getOgImage(url) {
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+    const html = await res.text();
+    const $ = cheerio.load(html);
+    return $('meta[property="og:image"]').attr('content')
+        || $('meta[name="twitter:image"]').attr('content')
+        || $('link[rel="apple-touch-icon"]').attr('href')
+        || null;
+  } catch { return null; }
+}
+// shop登録時に image_url: await getOgImage(shop.website_url) を含める
+```
+
+**既登録でimage_urlなしの店舗**: 神奈川県全エリア（2026-06-07登録分）等を一括修正予定。
+
 ---
 
 ## 都道府県別 作業状況
@@ -244,7 +358,7 @@ const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('VITE_SUPABASE
 | 都道府県 | 状況 | 確認コマンド |
 |----------|------|-------------|
 | **大阪府** | 一部完了（俺の家・Mirajour）。他店舗要確認 | `node scripts/debug/check_osaka_therapist_status.mjs` |
-| **東京都** | 竜宮城・QUEEN'S COLLECTION・CREST SPA・GRACE・Lunabelle・Candy Spa・ゴールデン中野・らんぷ北千住・First新宿・Assouplir秋葉原・癒しの空間ANNEX・Tigger・Weal秋葉原・NO BRAND銀座 完了。他店舗未着手 | `node scripts/debug/check_all_shops_status.mjs` |
+| **東京都** | **全463店舗完了** ✅ | — |
 | **静岡県** | 竜宮城 沼津店完了。他店舗未着手 | `node scripts/debug/check_all_shops_status.mjs` |
 | **神奈川県** | Fromage: JS描画のためClaude in Chrome必要 | — |
 | その他全都道府県 | 未着手のものあり | `node scripts/debug/check_all_shops_status.mjs` |
@@ -1723,3 +1837,376 @@ PostReviewPage の導線が分かりにくいため、SearchPage のキャスト
 - 全英語ラベルを日本語に統一: TARGET→店舗・セラピストを選択 / STORE→店舗名 / THERAPIST→セラピスト / SCORING→採点 / STORY→体験談を書く / CONFIRM→投稿内容の確認 / NEXT STEP→次へ進む / BACK→戻る / CANCEL→キャンセル / Step X/X→X/Xステップ
 - 半透明背景（`bg-slate-900/50`）→ 不透明（`bg-slate-900`）に統一
 - タイトルサイズを `text-2xl` → `text-xl` に調整（スッキリ感向上）
+
+### 2026-06-02 - 銀座エリアランキング調査・銀座一兆・Ginza Rich 登録スクリプト作成
+
+#### 銀座エリアランキング調査（mens-mg.com）
+- 銀座エリアランキング確認:
+  1位 AROMA MAISON（✅登録済み）
+  2位 THE★GIN（✅登録済み）
+  3位 銀座一兆（❌未登録 → 今回対応）
+  4位 Ginza Rich（❌未登録 → 今回対応）
+- **アクティブな店舗を優先する方針**を確認（過去の口コミ蓄積より現在のアクティブ度を重視）
+
+#### 銀座一兆 登録スクリプト作成 → `scripts/maintenance/process_ginzaitcho.mjs`
+
+| 項目 | 内容 |
+|------|------|
+| shop_id | `tokyo_chuo_ginza_itcho` |
+| URL | https://ginza-itcho.com/ |
+| schedule_url | https://ginza-itcho.com/schedule.php |
+| セラピスト数 | 23名（姓のみ表記） |
+| 画像パターン | `/images_staff/{sid}/{filename}.jpeg`（プロフィールページから個別取得） |
+
+- 姉妹店: 池袋天花（ikebukuro-tenka.com）・恵比寿蘭丸（ebisu-ranmaru.com）・カシェット池袋（cachette-ikebukuro.com）← 今後登録予定
+- 実行: `node scripts/maintenance/process_ginzaitcho.mjs [--dry-run]`
+
+#### Ginza Rich 登録スクリプト作成 → `scripts/maintenance/process_ginzarich.mjs`
+
+| 項目 | 内容 |
+|------|------|
+| shop_id | `tokyo_chuo_ginza_rich` |
+| URL | https://ginza-rich.work/ |
+| ルーム | 銀座Room / 東銀座Room / 八重洲Room（1店舗として登録） |
+| セラピスト数 | 72名（フルネーム・画像URLをハードコード済み） |
+| 画像パターン | `sys_img/ginza-rich/cast/{castId}/4/{timestamp}_{filename}.jpg` |
+
+- Storage ファイル名: `ginzarich_{castId}.jpg`（castIdがユニークなため衝突なし）
+- 実行: `node scripts/maintenance/process_ginzarich.mjs [--dry-run]`
+
+#### 新パターン: Ginza Rich sys_img CDN
+- URL: `https://ginza-rich.work/sys_img/ginza-rich/cast/{id}/4/{timestamp}_{filename}.jpg`
+- Refererヘッダー付きでfetch可能（ホットリンク保護なし）
+- castIdがユニークなのでStorageファイル名に使用可
+
+### 2026-06-03 - 人気店DB未登録チェック・渋谷エリア4店舗登録
+
+#### 人気店DB未登録チェックスクリプト作成 → `scripts/debug/check_missing_popular_shops.mjs`
+- mens-mg.com の新宿・渋谷ランキング上位10店舗をDBと照合
+- キーワード検索 + website_url検索の2段階でチェック
+- 結果: 新宿・渋谷で未登録4店舗を特定（RioSPA・S活・CIEL SPA・mirrors spa）
+- ※ ANAICHIとAroma Jewelsはキーワード不一致で誤って「未登録」と表示されたが実際は登録済み
+
+#### 渋谷エリア4店舗 登録完了 → `scripts/maintenance/process_ciel_spa.mjs` / `process_riospa.mjs` / `process_skatsu_mirrors.mjs`
+
+| 店舗 | shop_id | 人数 | 画像パターン |
+|------|---------|------|------------|
+| CIEL SPA (シエルスパ) | `tokyo_shibuya_shibuya_ciel_spa` | 122名 | `ciel-spa.com/photos/{lid}/main_{lid}.jpg`（lid直接構築） |
+| RioSPA (リオスパ) | `tokyo_shibuya_shibuya_riospa` | 55名 | `riospa.tokyo/images/cast/{hash}.jpg`（プロフィールページから個別取得） |
+| S活 (エスかつ) | `tokyo_shibuya_shibuya_skatsu` | 52名 | `xn--s-vp9b.com/images/ml_11_1_{id}.jpg`（background-imageパターン） |
+| mirrors spa (ミラーズスパ) | `tokyo_shibuya_shibuya_mirrors_spa` | 57名 | `mirrorsspa.com/photos/{lid}/{timestamp}-{uuid}.jpg`（alt属性に名前） |
+
+#### 新パターン: S活 (punycode domain)
+- ドメイン: `www.xn--s-vp9b.com`（「s活」のpunycode）
+- 画像: `img[src="spacer300x450.png"]` + 親要素の `style="background-image: url(/images/ml_11_1_{id}.jpg)"`
+- 名前: `.name` クラスのテキスト（スペース含む → `replace(/\s+/g, '')` で正規化）
+
+#### 新パターン: mirrors spa
+- CMS: Panda系（`/photos/{lid}/main_{lid}.jpg` 形式だが実際はタイムスタンプ+UUID形式）
+- 実際のURL: `photos/{lid}/{timestamp}-{uuid}.jpg`
+- `img[src*="/photos/"][alt=名前]` で一括取得可能（altに名前が直接入っている）
+- Storage ファイル名: `mirrors_{lid}.jpg`（lidがユニーク）
+
+#### Chrome in Chrome 活用メモ（追記）
+- `mcp__Claude_in_Chrome__tabs_context_mcp` で先にタブ確認→tabIdを取得してから操作
+- `Control_Chrome` ツールとは別物。`Claude_in_Chrome` の方が安定
+
+### 2026-06-03（続き）- 池袋・五反田エリア調査・LOVE LAND/OTONATIC/Lynx登録
+
+#### 池袋・五反田 DB未登録チェック → `scripts/debug/check_ikebukuro_gotanda.mjs`
+- 池袋TOP10・五反田TOP10を照合 → 未登録6店舗を特定
+- 登録済みと判明: FioreSpa・フェアリーランド・エターナル・アネモネ・カシェット・五反田RELAX/ANNA/王様/THE HALF/A5 SPA/ラグタイム/Aroma ABC/レインズラプト/DAHLIA
+
+#### 池袋・五反田 6店舗 登録完了
+
+| 店舗 | shop_id | 人数 | スクリプト |
+|------|---------|------|---------|
+| LOVE LAND (ラブランド) | `tokyo_toshima_ikebukuro_loveland` | 48名 | `process_ikebukuro_shops.mjs` |
+| OTONATIC (オトナチック) | `tokyo_toshima_ikebukuro_otonatic` | 3名追加（既存38名） | 同上 |
+| Lynx (リンクス) 池袋店 | `tokyo_toshima_ikebukuro_lynx` | 16名追加（既存93名） | `process_lynx.mjs` |
+| Lynx (リンクス) 五反田店 | `tokyo_shinagawa_gotanda_lynx` | 76名追加（既存8名） | `process_lynx.mjs` |
+
+#### 新パターン: LOVE LAND (caskan.com CMS)
+- セラピストURL: `https://love-land.jp/therapist/{castId}`
+- 画像URL: `https://cdn2-caskan.com/caskan/img/cast_tmb/{timestamp}_{castId}.{ext}`（Tiggerと同パターン）
+- comingsoon（写真なし）: `https://cdn2-caskan.com/caskan/img/comingsoon.png`
+- Storage filename: `loveland_{castId}.jpg`
+
+#### 新パターン: OTONATIC (mens-esthe-salon.net)
+- セラピストURL: `https://www.mens-esthe-salon.net/therapist.cgi?cast={castId}`
+- 画像URL: `https://www.mens-esthe-salon.net/schedule/img/{castId}/1_t.jpg`（castIdから予測可能）
+- ノイズcastId: 189, 135, 31, 201, 202, 105, 106（コースバナー・割引枠）
+
+#### 新パターン: Lynx (esthe-lynx-*.com)
+- 池袋: `https://esthe-lynx-ikebukuro.com/therapist-list/`（JS lazy loading）
+- 五反田: `https://esthe-lynx-gotanda.com/therapist-list/`（画像はsrc属性で取得可能）
+- 池袋の画像: `data-src` 属性に `https://admin.esthe-lynx-ikebukuro.com/photos/{id}-{ts}.{ext}`
+- 五反田の画像: `src` 属性に `https://admin.esthe-lynx-gotanda.com/photos/{id}-{ts}.{ext}`
+- Storage filename: `lynxike_{therapistId}.jpg` / `lynxgot_{therapistId}.jpg`
+- グループ店舗: 池袋・新宿・高田馬場・赤羽・五反田・秋葉原・大宮・川口・松戸・船橋・千葉・横浜
+
+### 2026-06-03（続き2）- 麻布十番・六本木エリア調査・CAMERON/デジャヴ東京/Spa Lanikai登録
+
+#### 麻布十番・六本木 DB未登録チェック → `scripts/debug/check_roppongi_azabu.mjs`
+- TOP10中4店舗が未登録: CAMERON・デジャヴ東京・sweetrain・Spa Lanikai
+- sweetrain: セラピスト情報が非公開のためスキップ
+- デジャヴ東京: 175名が既存（以前のセッションで登録済み）、25名追加
+
+#### 麻布十番・六本木 3店舗 登録完了 → `scripts/maintenance/process_azabu_shops.mjs`
+
+| 店舗 | shop_id | 人数 | 画像パターン |
+|------|---------|------|------------|
+| CAMERON (キャメロン) | `tokyo_minato_azabujuban_cameron` | 85名 | `cameron-esthe.net/vars/imgs/profiles/{id}/prof_thumb_1_s.jpg` |
+| デジャヴ東京 | `tokyo_minato_nishiazabu_dejavu_tokyo` | 25名追加（175名既存） | `/photos/{lid}/raw_{lid}.jpeg`（LEON SPAと同パターン） |
+| Spa Lanikai | `tokyo_minato_azabujuban_spa_lanikai` | 72名 | `/photos/{lid}/raw_{lid}.jpeg` |
+
+#### 新パターン: CAMERON (cameron-esthe.net)
+- セラピスト一覧: `/model/`
+- 画像URL: `https://cameron-esthe.net/vars/imgs/profiles/{profileId}/prof_thumb_1_s.jpg`
+- 写真なし: `prof_thumb.jpg`（IDなしのデフォルト画像）
+- 名前・profileIdはページのimg src・altから取得
+
+### 2026-06-03（続き3）- 秋葉原・上野エリア調査・NEW+PLUS/G+Style/Beyond登録
+
+#### 秋葉原・上野 DB未登録チェック → `scripts/debug/check_akihabara_ueno.mjs`
+- 秋葉原TOP10: NEW+PLUS(1位)・G+Style(2位)・必殺あきば娘・AROMA AMOUR・Aroma TT・Raiseが未登録
+- 上野TOP10: Beyond(3位)・色気あるワイフ・Louis・ASOBI・ELECTRIC LODGEが未登録
+
+#### 秋葉原2店舗 登録完了 → `scripts/maintenance/process_akihabara_shops.mjs`
+
+| 店舗 | shop_id | 人数 | 画像パターン |
+|------|---------|------|------------|
+| NEW+PLUS (ニュープラス) | `tokyo_chiyoda_akihabara_new_plus` | 108名 | `oplus-bucket-prod.s3.amazonaws.com/uploads/therapist_image/image1/{imgId}/{uuid}.jpg` |
+| G+Style (ジースタイル) | `tokyo_chiyoda_akihabara_gstyle` | 33名 | `fstyle-bucket-prod.s3.amazonaws.com/uploads/therapist_image/image1/{imgId}/{uuid}.jpg` |
+
+#### 新パターン: o-plus.site / g-style-akihabara.site CMS
+- 両店とも同じCMSを使用（フォーム構造・S3バケット名が異なる）
+- セラピスト一覧: `/therapist`（JS lazy loading）
+- 画像: `img[data-src*="fstyle-bucket"]` または `img[data-src*="oplus-bucket"]`
+- `.item.clearfix` 要素から `.querySelector('h3')` で名前、`img[data-src]` で画像URL取得
+- urlId（URL内のID）とimgId（S3パス内のID）は別物→個別に取得が必要
+
+### 2026-06-03（続き4）- 秋葉原・上野 残り店舗登録
+
+#### 秋葉原・上野 追加登録完了 → `scripts/maintenance/process_ueno_shops.mjs`
+
+| 店舗 | shop_id | 人数 | 備考 |
+|------|---------|------|------|
+| ASOBI (アソビ) | `tokyo_taito_ueno_asobi` | 16名 | caskan.com CMS |
+| 必殺あきば娘 | `tokyo_chiyoda_akihabara_akibadoll` | shop登録のみ | JS描画でセラピスト取得不可 |
+| AROMA AMOUR | `tokyo_chiyoda_akihabara_aroma_amour` | 53名 | 以前のセッションで登録済み |
+
+#### 未登録のまま残っている店舗（Chrome/追加作業が必要）
+
+| 店舗 | ランキング | 理由 |
+|------|-----------|------|
+| Aroma TT | 秋葉原9位 | 80名以上、画像URL不明 |
+| 色気あるワイフ | 上野4位 | 大量、熟女系、Chrome必要 |
+| ELECTRIC LODGE | 上野9位 | ドライヘッドスパ専門（優先度低） |
+
+### 2026-06-05 - 秋葉原・上野 Raise/Louis/Beyond 登録
+
+#### 完了済み（前セッション引き継ぎ）
+- Raise (秋葉原10位) 17名 → `process_raise.mjs`（WordPress wp-content/uploads、Referer付き）
+
+#### 登録完了
+
+| 店舗 | shop_id | 人数 | スクリプト |
+|------|---------|------|-----------|
+| Louis (ルイス) | `tokyo_taito_ueno_louis` | 37名 | `process_louis.mjs` |
+| BEYOND (ビヨンド) | `tokyo_taito_ueno_beyond` | 20名 | `process_beyond.mjs` |
+
+#### 新パターン: imgsrv.jp CDN (Louis)
+- URL: `https://imgsrv.jp/shop/57/lady/{hash}.jpg`（hashはユニーク）
+- alt: `【上野メンズエステ Louis（ルイス）】名前`
+- nowprinting（写真なし）: `https://imgsrv.jp/shop/57/nowprinting/{hash}.jpg` → null扱い
+- Storage ファイル名: `louis_{hash}.jpg`
+- 公式URL: `https://ueno-louis.com/`（`louis-ueno.com` ではない）
+
+#### Beyond (ビヨンド) スクレイピングパターン
+- 公式URL: `https://uroom-esthe.com/`（`beyond-ueno.com` ではない）
+- WordPress lazy loading: `img[data-src*="wp-content"]` + alt=名前
+- 画像URL: `https://uroom-esthe.com/wp-content/uploads/{roman}_{date}_{n}_300_450.jpg`
+- Referer付きでStorage移行が必要
+- Storage ファイル名: `beyond_{roman}` （ローマ字部分、日付前まで）
+
+### 2026-06-06（続き2）- 錦糸町 追加6店舗登録
+
+#### 登録完了 → `scripts/maintenance/process_kinshicho_remaining.mjs`
+
+| 店舗 | shop_id | 人数 | 画像パターン |
+|------|---------|------|------------|
+| High Time Spa (ハイタイムスパ) | `tokyo_sumida_kinshicho_hightime_spa` | 83名 | `/photos/{lid}/moto_{lid}.jpg` |
+| COCONA GRAN (ここなグラン) | `tokyo_sumida_kinshicho_cocona_gran` | 103名 | `/photos/{lid}/moto_{lid}.jpg` |
+| Neo MIYABI (ネオ雅) | `tokyo_sumida_kinshicho_neo_miyabi` | 42名 | `/images/gals/{filename}` |
+| 撫子 (なでしこ) | `tokyo_sumida_kinshicho_nadeshiko` | 28名 | `/girl/{obfuscatedDir}/{obfuscatedFile}.jpg` |
+| Aroma Fairy (アロマフェアリー) | `tokyo_sumida_kinshicho_aroma_fairy` | 78名 | `/vars/imgs/profiles/{pid}/prof_thumb_1_s.jpg` |
+| LUXUE (ラグジュエ) | `tokyo_sumida_kinshicho_luxue` | 49名 | `/photos/{lid}/moto_{lid}.jpg` |
+
+#### 新パターン: 撫子 (k.owl-nadeshiko.com)
+- セラピストページ: `/staff.html`
+- 画像URL: `/girl/{ランダム6文字ディレクトリ}/{ランダム6文字ファイル}.jpg`（obfuscated）
+- 名前はalt属性ではなく親要素のtextContentから取得（最大5階層上まで探索）
+- `T.XXXcm`・`(年齢)` サフィックスを除去。`新人`・`S` プレフィックスも除去
+- Refererなしで取得可能
+
+#### 新パターン: Neo MIYABI (neo-miyabi.com)
+- セラピストページ: `/therapist/`
+- 画像: `img[src="spp.png"]`（プレースホルダー）+ 親要素の `style="background-image: url(/images/gals/{gId}_{timestamp}.{ext})"`
+- `img[alt*="セラピスト"]` のalt属性から名前取得。`Neo MIYABI ネオ雅 セラピスト ` プレフィックスを除去
+- 名前に `5/26初出勤` 等の日付サフィックスが混入 → スクリプト内でハードコード時に除去済み
+- schedule_url未設定（サイトに専用ページ確認できず）
+
+#### Aroma Fairy / COCONA GRAN / LUXUE / High Time Spa
+- Aroma Fairy: CAMERONと同パターン（`/vars/imgs/profiles/{pid}/prof_thumb_1_s.jpg`）
+- COCONA GRAN・LUXUE・High Time Spa: `/photos/{lid}/moto_{lid}.jpg`（Garden SPA・LEON SPA系と同一CMS）
+- schedule_url: COCONA GRAN=`/schedule`、LUXUE=`/schedule`、Aroma Fairy=`/schedules/`、High Time Spa=homepage
+
+---
+
+### 2026-06-06（続き3）- 中野・高円寺 6店舗登録
+
+#### 登録完了 → `scripts/maintenance/process_nakano_koenji_shops.mjs` + `fix_jj_roomone.mjs`
+
+| 店舗 | shop_id | 人数 | 画像パターン |
+|------|---------|------|------------|
+| Salvador (サルバドール) | `tokyo_nakano_nakano_salvador` | 32名 | `/data/staff/{sid}/stf_{hash}.jpg` (PREMIUM SPA CMS、動的取得) |
+| Spaflame (スパフレイム) | `tokyo_suginami_koenji_spaflame` | 54名 | `/image_girl/{gid}/01.jpg` |
+| JJ (ジェイジェイ) 中野店 | `tokyo_nakano_nakano_jj` | 17名 | `/images/gals/{castId}-7-{ts}.jpg` (動的取得) |
+| Room one (ルームワン) | `tokyo_suginami_koenji_room_one` | 17名 | `/koenji/gazou/{folder}/{file}.jpg` |
+| マダムの楽園 | `tokyo_suginami_koenji_madam_rakuen` | 31名 | `/images_staff/{sid}/01_{ts}.jpg` |
+| Allie (アリー) 高円寺店 | `tokyo_suginami_koenji_allie` | 47名 | `/therapist_img/{tid}_1.webp` |
+
+#### 新パターン: Spaflame (`/image_girl/{gid}/01.jpg`)
+- セラピスト一覧: `https://spa-flame.com/therapist/`
+- 画像: `img[src*="/image_girl/"]` の srcパターン。gidはURLの数字
+- 名前: 親要素テキストから「○○さん 42歳 身長...」→「さん」以前を抽出
+
+#### 新パターン: JJ (`/images/gals/{castId}-7-{timestamp}.jpg`)
+- セラピスト一覧: `https://www.spa-jj.tokyo/cast.html`
+- 名字のみ・年齢・スリーサイズが記載された熟女系サイト
+- 動的取得: castIdごとにURLを正規表現で抽出、名前は別途ハードコード
+
+#### 新パターン: Room one (`aroma-yuim.com` 独自フォルダ構成)
+- セラピスト一覧: `https://www.aroma-yuim.com/koenji/staff.html`
+- 画像: `/koenji/gazou/{フォルダ}/{ファイル名}.jpg`（フォルダ名がローマ字読み）
+- 一部画像は `/koenji/gazou/` 配下にないパスで404 → `fix_jj_roomone.mjs` で代替パスを試して修正
+
+#### 新パターン: Allie (`/therapist_img/{tid}_1.webp`)
+- セラピスト一覧: `https://allie-kichijoji.jp/therapist/`
+- 吉祥寺・高円寺の2エリア合算サイト。高円寺ランキング10位として登録
+- 画像: `img[src*="/therapist_img/"][alt]` → tidはsrcの数字部分
+
+---
+
+### 2026-06-06（続き4）- 吉祥寺・三鷹 8店舗登録
+
+#### 登録完了 → `scripts/maintenance/process_kichijoji_shops.mjs` + `fix_aroma_ella.mjs`
+
+| 店舗 | shop_id | 人数 | 画像パターン |
+|------|---------|------|------------|
+| Yorimichi (よりみち) | `tokyo_musashino_kichijoji_yorimichi` | 130名 | `/optImg/{id}/item/{itemId}/{hash}_640_0.jpg` (Mirajour CMS、動的取得) |
+| moshimo... (もしも) | `tokyo_musashino_kichijoji_moshimo` | 33名 | `/data/staff/{sid}/stf_{hash}.webp` (PREMIUM SPA CMS) |
+| ROOKIE (ルーキー) 三鷹 | `tokyo_mitaka_mitaka_rookie` | 20名 | `/upload/cast/thumb_{id}.jpg` |
+| まろん 吉祥寺ルーム | `tokyo_musashino_kichijoji_marron` | 51名 | caskan.com CDN (動的取得) |
+| エステ美人マダム 三鷹 | `tokyo_mitaka_mitaka_esthe_madamu` | 7名 | 名前のみ（画像非公開） |
+| APEX (エイペックス) | `tokyo_musashino_kichijoji_apex` | 16名 | caskan.com CDN (動的取得) |
+| Aroma ELLA (アロマエラ) | `tokyo_mitaka_mitaka_aroma_ella` | 30名 | S3バケット (`aromaella-bucket-prod.s3-ap-northeast-1.amazonaws.com`) |
+| Mspa (エムスパ) | `tokyo_musashino_kichijoji_mspa` | 74名 | `/data/staff/{sid}/stf_{hash}.jpg` (PREMIUM SPA CMS) |
+
+#### 新パターン: ROOKIE (`/upload/cast/thumb_{id}.jpg`)
+- セラピスト一覧: `https://rookie-esthe.com/cast/`
+- `img[alt*="ROOKIE "]` のaltから名前取得、srcからcastId取得
+- 三鷹・吉祥寺・武蔵小金井の複数ルームを1店舗として登録
+
+#### 新パターン: Aroma ELLA (S3バケット)
+- セラピスト一覧: `https://aroma-ella.com/therapist`
+- 画像: `img[src*="aromaella-bucket-prod.s3"]` → imgId（連番）でStorage保存
+- 名前はページテキストから順番通りに対応付け（Chromeで手動取得）
+- 動的取得スクリプトが失敗したため `fix_aroma_ella.mjs` でハードコード登録
+
+#### Mspa 注意事項
+- 同名セラピスト「るる」が2名（sid=48・sid=47）→「るる」「るる2」で区別
+- ノイズプレフィックス（「おすすめ」「スレンダ」「急上昇」「癒し系」等）をスクロール後のDOMから除去
+
+---
+
+### 2026-06-06 - 中野・三軒茶屋・錦糸町 4店舗登録
+
+#### 登録完了
+
+| 店舗 | shop_id | 人数 | 状態 |
+|------|---------|------|------|
+| Lucky Cat (ラッキーキャット) | `tokyo_nakano_nakano_lucky_cat` | 90名 | ✅ 完了 |
+| ADAMAS (アダマス) | `tokyo_nakano_nakano_adamas` | 24名 | ✅ 完了（画像修正済み） |
+| エルドラド | `tokyo_setagaya_sangenjaya_eldorado` | 118名 | ✅ 完了（画像修正済み） |
+| Garden SPA (ガーデンスパ) | `tokyo_sumida_kinshicho_garden_spa` | 110名 | ✅ 完了 |
+
+#### ADAMAS 画像修正（完了）
+- 原因: wp-content/uploadsのURLに年月フォルダ（`/2025/08/`等）が欠落していた（404）
+- Chrome in Chrome で a-adamas.com/cast/ から正しいURLを取得・`fix_adamas_images.mjs` で24名全員更新完了
+
+#### エルドラド 画像修正（完了）
+- caskan.com CDNはキャスト写真更新時にタイムスタンプが変わるため一部URLが404になっていた
+- Chrome in Chrome で `https://eldorado-esthe.com/therapist`（`/cast/` は404）から118名の最新URLを取得
+- `fix_eldorado_images.mjs` で37名null→写真付きに更新完了（スキップ81・更新37・エラー0）
+
+---
+
+### 2026-06-05（続き）- 新宿・高田馬場・荻窪 大量登録
+
+#### 登録完了
+
+| 店舗 | shop_id | 人数 | スクリプト |
+|------|---------|------|-----------|
+| CorCaroli (コルカロリ) | `tokyo_shinjuku_higashishinjuku_corcaroli` | 24名 | `process_shinjuku_shops.mjs` |
+| Aroma Jewels (アロマジュエルズ) | `tokyo_shinjuku_shinjuku_aroma_jewels` | 20名 | `process_shinjuku_shops.mjs` |
+| a l'aise SK 荻窪 | `tokyo_suginami_ogikubo_alaise_sk` | 40名 | `process_alaise_sk.mjs` |
+| a l'aise SK 高田馬場 | `tokyo_shinjuku_takadanobaba_alaise_sk` | 5名 | `process_alaise_sk.mjs` |
+| GRAND CHARIOT (グランシャリオ) | `tokyo_shinjuku_takadanobaba_grand_chariot` | 27名 | `process_grand_chariot.mjs` |
+| Ogi Spa (オギスパ) | `tokyo_suginami_ogikubo_ogi_spa` | 76名 | `process_ogispa.mjs` |
+| Aroma Mrs (アロマミセス) | `tokyo_shinjuku_takadanobaba_aroma_mrs` | 123名 | `process_aroma_mrs.mjs` |
+
+#### 未登録のまま残っている店舗
+
+**荻窪**: 熟的 (5位) は公式サイト不明のためスキップ
+**画像修正**: Casablanca 18名・R,s SPA 一部・メンエス大井町一部・Rose Aroma Spa 一部・Jewelry 一部 がホットリンク保護でnull登録 → fix スクリプト要
+
+#### 登録済み（高田馬場・荻窪・品川 追加分）
+
+| 店舗 | shop_id | 人数 | スクリプト |
+|------|---------|------|-----------|
+| R,s SPA | `tokyo_shinjuku_takadanobaba_rsspa` | 48名 | `process_takadanobaba_ogikubo_shops.mjs` |
+| 高田馬場ナースクリニック | `tokyo_shinjuku_takadanobaba_nurse_clinic` | 30名(null) | 同上 |
+| Casablanca | `tokyo_suginami_ogikubo_casablanca` | 18名(null) | 同上 |
+| Natural SPA | `tokyo_suginami_ogikubo_natural_spa` | 17名 | 同上 |
+| SPA LOUNGE | `tokyo_shinagawa_oimachi_spa_lounge` | 8名(null) | 同上 |
+| メンエス大井町 | `tokyo_shinagawa_oimachi_mensesthe` | 51名 | `process_shinagawa_shops.mjs` |
+| Rose Aroma Spa | `tokyo_shinagawa_oimachi_rose_aroma_spa` | 44名 | 同上 |
+| HANA SPA | `tokyo_shinagawa_oimachi_hana_spa` | 41名 | 同上 |
+| Mの扉 | `tokyo_shinagawa_shinagawa_m_door` | 3名(null) | 同上 |
+| SPA Secret House | `tokyo_shinagawa_oimachi_spa_secret_house` | 23名 | 同上 |
+| evergreen (エバーグリーン) | `tokyo_shinjuku_takadanobaba_evergreen` | 23名(null) | `process_ogikubo_remaining.mjs` |
+| SENZSPA (センズスパ) | `tokyo_suginami_asagaya_senzspa` | 29名 | 同上 |
+| Jewelry (ジュエリー) | `tokyo_suginami_ogikubo_jewelry` | 27名 | 同上 |
+
+#### 新パターン: Aroma Mrs (/therapist/up_img/{id}_1.jpg)
+- セラピストページ: `/therapist.php`（名前はinnerTextの日本語行・IDはリンクの順序と対応）
+- 画像URL: `/therapist/up_img/{id}_1.jpg`（idはセラピスト個別ページのクエリパラメータ）
+- 125名（退職者含む）、ID範囲: 2〜278
+
+#### 新パターン: Ogi Spa (/img/uploadfile/imgpc{timestamp}.{ext})
+- セラピストページ: `/therapist.html`
+- `img[src*="uploadfile"][alt]` で名前+画像URL一括取得
+- ファイル名がタイムスタンプ形式でユニーク（jfif拡張子も存在）
+- Storage key: `ogispa_{filename_without_ext}`
+
+#### a l'aise SK ルーム分け方法
+- 公式: `https://a-laise-sk.com/` / セラピスト: `/casts/`
+- 5ルーム（荻窪北口/荻窪南口/荻窪FC/中野/高田馬場）を1つの荻窪・1つの高田馬場として登録
+- ルーム特定: `/schedule/?works=YYYY-MM-DD` を10日分fetchして集計
+- 一部画像は旧UUID形式（404）→ null登録
+
+#### 新パターン: GRAND CHARIOT (スペーサー+background-image)
+- `img[alt*="さんの写真"]` + style="background-image: url(/images/ml_11_1_{id}.jpg)"
+- Storage key: `chariot_{id}`（idがユニーク）

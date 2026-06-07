@@ -1,0 +1,96 @@
+FILE COUNT
+    1904
+
+BIGGEST FILES
+     842 src/pages/SearchPage.jsx
+     757 src/data/locations.js
+     716 src/_archive/data_backup_final/src_data/locations.js
+     619 src/pages/ShopDetailPage.jsx
+     614 src/pages/PostReviewPage.jsx
+     602 src/pages/RequestReviewPage.jsx
+     519 src/pages/AdminPage.jsx
+     516 src/pages/Home.jsx
+     319 src/components/ModernReviewCard.jsx
+     318 src/pages/ThreadDetailPage.jsx
+     302 src/pages/ChatRoomPage.jsx
+     263 src/_archive/pages/NewReviewsPage.jsx
+     260 src/pages/ShopListPage.jsx
+     260 src/pages/PopularReviewsPage.jsx
+     249 src/pages/BoardPage.jsx
+     245 src/components/PrefectureSelector.jsx
+     243 src/_archive/pages/PostReviewForThreadPage.jsx
+     230 src/_archive/components/FilterPanel.jsx
+     216 src/contexts/DataContext.jsx
+     215 src/pages/RankingPage.jsx
+     212 src/components/TopSearch.jsx
+     202 src/components/RankingSection.jsx
+     201 src/components/TopHeroSlider.jsx
+     198 src/pages/NewTherapistsPage.jsx
+     191 src/_archive/pages/TagSearchPage.jsx
+     190 src/pages/PrefecturePage.jsx
+     183 src/_archive/components/SearchSection.jsx
+     178 src/pages/FavoritesPage.jsx
+     175 src/_archive/pages/AdminPendingPage.jsx
+     173 src/components/TagSearchModal.jsx
+
+ROUTES
+src/App.jsx:                <Routes>
+src/App.jsx:                  <Route path="/" element={<Home />} />
+src/App.jsx:                  <Route path="/search" element={<SearchPage />} />
+src/App.jsx:                  <Route path="/area-search" element={<AreaSearchPage />} />
+src/App.jsx:                  <Route path="/area/:pref" element={<PrefecturePage />} />
+src/App.jsx:                  <Route path="/shops" element={<ShopListPage />} />
+src/App.jsx:                  <Route path="/ranking" element={<RankingPage />} />
+src/App.jsx:                  <Route path="/new-therapists" element={<NewTherapistsPage />} />
+src/App.jsx:                  <Route path="/popular-reviews" element={<PopularReviewsPage />} />
+src/App.jsx:                  <Route path="/board" element={<BoardPage />} />
+src/App.jsx:                  <Route path="/board/:postId" element={<BoardDetailPage />} />
+src/App.jsx:                  <Route path="/chat" element={<ChatListPage />} />
+src/App.jsx:                  <Route path="/chat/:roomId" element={<ChatRoomPage />} />
+src/App.jsx:                  <Route path="/admin" element={<AdminPage />} />
+src/App.jsx:                  <Route path="/shops/:shopId" element={<ShopDetailPage />} />
+src/App.jsx:                  <Route path="/shops/:shopId/threads/:threadId" element={<ThreadDetailPage />} />
+src/App.jsx:                  <Route path="/brands/:brandId" element={<BrandPage />} />
+src/App.jsx:                  <Route path="/shops/:shopId/threads/:threadId/review" element={<PostReviewPage />} />
+src/App.jsx:                  <Route path="/shops/:shopId/review" element={<PostReviewPage />} />
+src/App.jsx:                  <Route path="/post-review" element={<PostReviewPage />} />
+src/App.jsx:                  <Route path="/request-review" element={<RequestReviewPage />} />
+src/App.jsx:                  <Route path="/mypage" element={<MyPage />} />
+src/App.jsx:                  <Route path="/my-reviews" element={<MyReviewsPage />} />
+src/App.jsx:                  <Route path="/history" element={<HistoryPage />} />
+src/App.jsx:                  <Route path="/favorites" element={<FavoritesPage />} />
+src/App.jsx:                  <Route path="/login" element={<LoginPage />} />
+src/App.jsx:                  <Route path="/register" element={<RegisterPage />} />
+src/App.jsx:                  <Route path="/premium" element={<PremiumPage />} />
+src/App.jsx:                  <Route path="/legal" element={<LegalPage />} />
+src/App.jsx:                  <Route path="/terms" element={<TermsPage />} />       {/* 🌟 ルートを追加！ */}
+src/App.jsx:                  <Route path="/privacy" element={<PrivacyPage />} />   {/* 🌟 ルートを追加！ */}
+src/App.jsx:                  <Route path="/contact" element={<ContactPage />} />
+src/App.jsx:                  <Route path="/auth/confirm" element={<AuthConfirmPage />} />
+src/App.jsx:                  <Route path="/404" element={<NotFoundPage />} />
+src/App.jsx:                  <Route path="*" element={<Navigate to="/404" replace />} />
+
+SUPABASE
+src/contexts/DataContext.jsx.bak_1777231157453:        const { data: shopsData, error } = await supabase.from('shops').select('id, group_id, name, raw_data, website_url, phone_number, business_hours, price_system, image_url');
+src/contexts/DataContext.jsx.bak_1777231157453:      const { data, error } = await supabase.from('therapists').select('*').in('shop_id', brandIds);
+src/contexts/DataContext.jsx.bak_1777231157453:      const { data, error } = await supabase.from('reviews').select('*').in('shop_id', brandIds).order('created_at', { ascending: false });
+src/contexts/DataContext.jsx.bak_1777231157453:      await supabase.from('reviews').insert([{
+src/contexts/DataContext.jsx:        const { data: shopsData, error } = await supabase.from('shops').select('id, group_id, name, raw_data, website_url, schedule_url, phone_number, business_hours, price_system, image_url');
+src/contexts/DataContext.jsx:      const { data, error } = await supabase.from('therapists').select('*').in('shop_id', brandIds);
+src/contexts/DataContext.jsx:      const { data, error } = await supabase.from('reviews').select('*').in('shop_id', brandIds).order('created_at', { ascending: false }).limit(20);
+src/contexts/DataContext.jsx:      await supabase.from('reviews').insert([{
+src/_archive/components/ShibuyaCards.jsx:        const { data, error } = await supabase.from('shops').select('*');
+
+CONTEXT
+src/contexts/AuthContext.jsx:import React, { createContext, useState, useEffect, useContext } from 'react';
+src/contexts/AuthContext.jsx:const AuthContext = createContext();
+src/contexts/DataContext.jsx.bak_1777231157453:import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+src/contexts/DataContext.jsx.bak_1777231157453:const ShopContext = createContext();
+src/contexts/DataContext.jsx:import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+src/contexts/DataContext.jsx:const ShopContext = createContext();
+src/contexts/DataContext.jsx.backup:import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+src/contexts/DataContext.jsx.backup:const ShopContext = createContext();
+src/context/ToastContext.jsx:import React, { createContext, useContext, useState, useCallback } from 'react';
+src/context/ToastContext.jsx:const ToastContext = createContext(null);
+src/context/AppContext.tsx:import React, { createContext, useContext, useState, useEffect } from 'react';
+src/context/AppContext.tsx:const AppContext = createContext();

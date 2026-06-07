@@ -1,0 +1,294 @@
+====================
+APP JSX
+====================
+import React from 'react';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import PropTypes from 'prop-types';
+
+import { AppProvider } from './context/AppContext';
+import { DataProvider } from './contexts/DataContext';
+
+import PremiumPage from './pages/PremiumPage';
+import ScrollToTop from './components/ScrollToTop';
+import BottomNav from './components/BottomNav';
+import ErrorBoundary from './components/ErrorBoundary';
+import Footer from './components/Footer';
+
+// Pages
+import Home from './pages/Home';
+import SearchPage from './pages/SearchPage';
+import AreaSearchPage from './pages/AreaSearchPage';
+import ShopListPage from './pages/ShopListPage';
+import RankingPage from './pages/RankingPage';
+import ShopDetailPage from './pages/ShopDetailPage';
+import ThreadDetailPage from './pages/ThreadDetailPage';
+import PostReviewPage from './pages/PostReviewPage';
+import BrandPage from './pages/BrandPage';
+import MyPage from './pages/MyPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import HistoryPage from './pages/HistoryPage';
+import FavoritesPage from './pages/FavoritesPage';
+import MyReviewsPage from './pages/MyReviewsPage';
+import RequestReviewPage from './pages/RequestReviewPage';
+import NotFoundPage from './pages/NotFoundPage';
+
+import NewTherapistsPage from './pages/NewTherapistsPage';
+import PopularReviewsPage from './pages/PopularReviewsPage';
+import BoardPage from './pages/BoardPage';
+import BoardDetailPage from './pages/BoardDetailPage';
+import ChatListPage from './pages/ChatListPage';
+import ChatRoomPage from './pages/ChatRoomPage';
+import AdminPage from './pages/AdminPage';
+
+// 🌟 法律関連の3ページをすべてインポート！
+import LegalPage from './pages/LegalPage';
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
+import ContactPage from './pages/ContactPage';
+import PrefecturePage from './pages/PrefecturePage';
+import AuthConfirmPage from './pages/AuthConfirmPage';
+
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const hideNavPaths = ['/login', '/register', '/404'];
+  const shouldHideNav = hideNavPaths.some(path => location.pathname === path);
+
+  return (
+    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-200">
+      <ScrollToTop />
+      <main className="flex-grow">
+        {children}
+      </main>
+      {!shouldHideNav && <Footer />}
+      {!shouldHideNav && <BottomNav />}
+    </div>
+  );
+};
+
+Layout.propTypes = { children: PropTypes.node.isRequired };
+
+export default function App() {
+  return (
+    <HelmetProvider>
+      <BrowserRouter>
+        <ErrorBoundary>
+          <AppProvider>
+            <DataProvider>
+              <Layout>
+                <Routes>
+                  {/* メインルート */}
+                  <Route path="/" element={<Home />} />
+                  <Route path="/search" element={<SearchPage />} />
+                  <Route path="/area-search" element={<AreaSearchPage />} />
+                  <Route path="/area/:pref" element={<PrefecturePage />} />
+                  <Route path="/shops" element={<ShopListPage />} />
+                  <Route path="/ranking" element={<RankingPage />} />
+                  <Route path="/new-therapists" element={<NewTherapistsPage />} />
+                  <Route path="/popular-reviews" element={<PopularReviewsPage />} />
+                  <Route path="/board" element={<BoardPage />} />
+                  <Route path="/board/:postId" element={<BoardDetailPage />} />
+                  <Route path="/chat" element={<ChatListPage />} />
+                  <Route path="/chat/:roomId" element={<ChatRoomPage />} />
+                  <Route path="/admin" element={<AdminPage />} />
+                  
+                  {/* 詳細ページ */}
+                  <Route path="/shops/:shopId" element={<ShopDetailPage />} />
+                  <Route path="/shops/:shopId/threads/:threadId" element={<ThreadDetailPage />} />
+                  <Route path="/brands/:brandId" element={<BrandPage />} />
+                  
+                  {/* クチコミ投稿関連 */}
+                  <Route path="/shops/:shopId/threads/:threadId/review" element={<PostReviewPage />} />
+                  <Route path="/shops/:shopId/review" element={<PostReviewPage />} />
+                  <Route path="/post-review" element={<PostReviewPage />} />
+                  <Route path="/request-review" element={<RequestReviewPage />} />
+                  
+                  {/* ユーザー機能 */}
+                  <Route path="/mypage" element={<MyPage />} />
+                  <Route path="/my-reviews" element={<MyReviewsPage />} />
+                  <Route path="/history" element={<HistoryPage />} />
+                  <Route path="/favorites" element={<FavoritesPage />} />
+                  
+                  {/* 認証 */}
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  
+                  {/* エラー・その他・法律ページ */}
+                  <Route path="/premium" element={<PremiumPage />} />
+                  <Route path="/legal" element={<LegalPage />} />
+                  <Route path="/terms" element={<TermsPage />} />       {/* 🌟 ルートを追加！ */}
+                  <Route path="/privacy" element={<PrivacyPage />} />   {/* 🌟 ルートを追加！ */}
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/auth/confirm" element={<AuthConfirmPage />} />
+                  <Route path="/404" element={<NotFoundPage />} />
+                  <Route path="*" element={<Navigate to="/404" replace />} />
+                </Routes>
+              </Layout>
+            </DataProvider>
+          </AppProvider>
+        </ErrorBoundary>
+      </BrowserRouter>
+    </HelmetProvider>
+  );
+}
+
+====================
+MAIN JSX
+====================
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { HelmetProvider } from 'react-helmet-async';
+import App from './App.jsx'
+import { AuthProvider } from './contexts/AuthContext.jsx'
+import { DataProvider } from './contexts/DataContext.jsx'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <HelmetProvider>
+      <DataProvider>
+        <AuthProvider>
+      <App />
+    </AuthProvider>
+      </DataProvider>
+    </HelmetProvider>
+  </React.StrictMode>,
+)
+
+====================
+SUPABASE CLIENT
+====================
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.warn('⚠️ Supabaseの接続情報が .env に設定されていません。');
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+====================
+API FILES
+====================
+api/admin-grant-credit.js
+api/auth-email-hook.js
+api/auth/signup.js
+api/contact.js
+api/notify-credit.js
+api/notify-review.js
+api/og.js
+api/send-confirmation.js
+
+====================
+PAGES
+====================
+src/pages/AdminPage.jsx
+src/pages/AreaSearchPage.jsx
+src/pages/AuthConfirmPage.jsx
+src/pages/BoardDetailPage.jsx
+src/pages/BoardPage.jsx
+src/pages/BrandPage.jsx
+src/pages/ChatListPage.jsx
+src/pages/ChatRoomPage.jsx
+src/pages/ContactPage.jsx
+src/pages/FavoritesPage.jsx
+src/pages/HistoryPage.jsx
+src/pages/Home.jsx
+src/pages/Home.jsx.backup
+src/pages/Home.jsx.simple.bak
+src/pages/LegalPage.jsx
+src/pages/LoginPage.jsx
+src/pages/LoginPage.jsx.backup_ui
+src/pages/MyPage.jsx
+src/pages/MyReviewsPage.jsx
+src/pages/NewTherapistsPage.jsx
+src/pages/NotFoundPage.jsx
+src/pages/PopularReviewsPage.jsx
+src/pages/PostReviewPage.jsx
+src/pages/PrefecturePage.jsx
+src/pages/PremiumPage.jsx
+src/pages/PremiumPage.jsx 
+src/pages/PrivacyPage.jsx
+src/pages/RankingPage.jsx
+src/pages/RegisterPage.jsx
+src/pages/RequestReviewPage.jsx
+src/pages/SearchPage.jsx
+src/pages/ShopDetailPage.jsx
+src/pages/ShopDetailPage.jsx.bak_1777329578714
+src/pages/ShopDetailPage.jsx.bak_1777410274868
+src/pages/ShopListPage.jsx
+src/pages/ShopListPage.jsx.backup
+src/pages/ShopListPage.jsx.backup2
+src/pages/ShopListPage.jsx.backup3
+src/pages/ShopListPage.jsx.backup4
+src/pages/ShopListPage.jsx.backup5
+src/pages/ShopListPage.jsx.bak
+src/pages/ShopListPage.jsx.bak2
+src/pages/ShopListPage.jsx.bak3
+src/pages/ShopListPage.jsx.bak4
+src/pages/ShopListPage.jsx.cleanup
+src/pages/ShopListPage.jsx.debug_backup
+src/pages/ShopListPage.jsx.final
+src/pages/ShopListPage.jsx.final2
+src/pages/ShopListPage.jsx.insert
+src/pages/ShopListPage.jsx.optgroup
+src/pages/ShopListPage.jsx.optgroup2
+src/pages/ShopListPage.jsx.removedup
+src/pages/ShopListPage.jsx.wardfix
+src/pages/ShopListPage.jsx.wardfix2
+src/pages/ShopListPage.jsx.wardfix3
+src/pages/TermsPage.jsx
+src/pages/ThreadDetailPage.jsx
+src/pages/ThreadDetailPage.jsx.bak
+
+====================
+COMPONENTS
+====================
+src/components/BottomNav.jsx
+src/components/BrandResultCard.jsx
+src/components/ErrorBoundary.jsx
+src/components/Footer.jsx
+src/components/Header.jsx
+src/components/LazyImage.jsx
+src/components/LikeButton.jsx
+src/components/ModernReviewCard.jsx
+src/components/PostSorter.jsx
+src/components/PrefectureSelector.jsx
+src/components/PrefectureSelector.jsx.bak_inline_1777319852206
+src/components/PrefectureSelector.jsx.bak_ui_1777319414168
+src/components/PrefectureSelector.jsx.bak_ui_v2_1777319637052
+src/components/RankingSection.jsx
+src/components/RecentlyViewed.jsx
+src/components/ReviewCard.jsx
+src/components/ReviewLikeButton.jsx
+src/components/ReviewListWithRestriction.jsx
+src/components/ScrollToTop.jsx
+src/components/SearchBar.jsx
+src/components/SeoHead.jsx
+src/components/ShopRating.jsx
+src/components/ShopTags.jsx
+src/components/Skeleton.jsx
+src/components/TagSearchModal.jsx
+src/components/TagSelector.jsx
+src/components/ThanksBadgeButton.jsx
+src/components/ThreadCard.jsx
+src/components/ThreadHeader.jsx
+src/components/ToastContainer.jsx
+src/components/TopHeroSlider.jsx
+src/components/TopSearch.jsx
+src/components/ui/Breadcrumb.jsx
+src/components/ui/CountUp.jsx
+src/components/ui/LoadingButton.jsx
+src/components/ui/LoadingSpinner.jsx
+src/components/ui/ProgressBar.jsx
+src/components/ui/RatingDisplay.jsx
+src/components/ui/RatingSlider.jsx
+src/components/ui/ShopCard.jsx
+src/components/ui/Skeleton.jsx
+src/components/ui/StarRating.tsx
+src/components/ui/Tag.jsx
+src/components/ui/TherapistCard.jsx
+src/components/ui/Toast.jsx

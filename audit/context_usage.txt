@@ -1,0 +1,12 @@
+src/contexts/AuthContext.jsx:import React, { createContext, useState, useEffect, useContext } from 'react';
+src/contexts/AuthContext.jsx:export const useAuth = () => useContext(AuthContext);
+src/contexts/DataContext.jsx.bak_1777231157453:import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+src/contexts/DataContext.jsx.bak_1777231157453:export const useShopData = () => useContext(ShopContext);
+src/contexts/DataContext.jsx:import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+src/contexts/DataContext.jsx:export const useShopData = () => useContext(ShopContext);
+src/contexts/DataContext.jsx.backup:import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+src/contexts/DataContext.jsx.backup:  return useContext(ShopContext);
+src/context/ToastContext.jsx:import React, { createContext, useContext, useState, useCallback } from 'react';
+src/context/ToastContext.jsx:  const context = useContext(ToastContext);
+src/context/AppContext.tsx:import React, { createContext, useContext, useState, useEffect } from 'react';
+src/context/AppContext.tsx:  return useContext(AppContext);
