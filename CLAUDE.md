@@ -6,6 +6,7 @@
 > **最終更新: 2026-06-08 （パフォーマンス・セキュリティ修正）**
 >
 > ※ 2026-06-08: Code Splitting実装（App.jsx全ページをReact.lazy+Suspenseに変更）。初回ロード時のJS転送量を大幅削減。git push → Vercelデプロイ済み。
+> ※ 2026-06-08: Code Splitting導入後にサイト全壊（"Something went wrong"）。原因: vercel.jsonのrewriteルール `/((?!api/).*)` が `/assets/` チャンクもindex.htmlに転送していた。`/((?!api/|assets/).*)` に修正して解決。
 > ※ 2026-06-08: Storage RLS設定（supabase_migrations/05_storage_rls.sql）。therapist-imagesバケットへのフロントエンドからの直接アップロード・削除をブロック。Supabase SQL Editorで実行済み（Success確認）。
 > ※ 2026-06-08: 不要ファイル整理。_archive/フォルダに旧バージョンファイルを移動。
 > ※ 2026-06-08: 千葉・埼玉 全エリアshop登録完了。千葉（千葉市・松戸・柏）13店舗・埼玉（大宮・浦和・川口蕨・越谷春日部・川越・所沢）29店舗 計42店舗登録。image_urlも同時設定（12件はChrome経由でlogo取得、4件はサイトダウンでnull）。スクリプト: process_chiba_saitama_shops.mjs + fix_chiba_saitama_images.mjs
