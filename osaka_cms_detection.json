@@ -1,0 +1,816 @@
+{
+  "byType": {
+    "premium_spa": [
+      "BELLO SAVON ～ベロサボン～",
+      "アヌSPA"
+    ],
+    "UNKNOWN(/cast/)": [
+      "BESTSTAR ～ベストスター～",
+      "絶頂SPA"
+    ],
+    "AMEBLO_BLOG": [
+      "bulan ～ブラン～",
+      "Hestia ～エスティア～",
+      "Piady ～ピアディ～"
+    ],
+    "wcms": [
+      "MOTEJO ～モテジョ～",
+      "天雅 -TENGA-",
+      "ALYO ～アルヨ～日本橋ルーム",
+      "煌めきSPA",
+      "Amore SPA ～アモーレスパ～",
+      "Oil Madrid ～オイルマドリード～",
+      "SARISARI ～サリサリ～",
+      "Femme Fatale ～ファムファタール～ 谷九ルーム",
+      "BELCHIC ～ベルシック～",
+      "LANCOM ～ランコム～",
+      "Pershia ～ペルシア～"
+    ],
+    "wordpress": [
+      "Mrs.AUBE SPA ～ミセスオーブスパ～ 天六ルーム",
+      "Mrs.Mure SPA ～ミセスミュールスパ～ 京橋ルーム",
+      "Aroma one ～アロマワン～",
+      "Naniwajoshi ～なにわ女子～",
+      "VISCONTI ～ヴィスコンティ～",
+      "メンズエステ大阪",
+      "Mrs.Bell＆Rose SPA ～ミセス ベル＆ローズ～",
+      "Mrs.C’est la vie ～ミセスセラヴィ～ 堺東ルーム",
+      "Royal Madam ～ロイヤルマダム～",
+      "YOLU SPA ～ヨルスパ～ 堺東店",
+      "aqua SPA ～アクアスパ～",
+      "FANTASY ～ファンタジー～",
+      "ぷちどり～む",
+      "堺筋本町倶楽部",
+      "祇園 the.Mrs ～ギオンザミセス～ 堺筋本町ルーム",
+      "Relafull ～リラフル～ 長堀橋店",
+      "Seven Luck Spa ～セブンラックスパ～",
+      "Alivie ～アリビエ～",
+      "Chackmate ～チェックメイト～",
+      "Mrs. Flower SPA 新大阪ルーム",
+      "Mrs.OnlyOne ～ミセスオンリーワン～",
+      "彼女ん家",
+      "極SPA -kiwamiSpa-",
+      "FIRST CLASS ～ファーストクラス～ 谷九ルーム",
+      "One Class ～ワンクラス～",
+      "ワイフスパ ～2度ご堪能いただけます～",
+      "Eden Spa ～エデンスパ～",
+      "Luana SPA ～ルアナスパ～",
+      "Mrs.AMAN SPA ～ミセスアマンスパ～",
+      "小悪魔Alice ～アリス～",
+      "秘宝殿 梅田ルーム"
+    ],
+    "NOT_FOUND": [
+      "Mrs.Mermaid ～ミセスマーメイド～ 京橋ルーム",
+      "Reluman ～リラマン～",
+      "DIABLO ～ディアブロ～",
+      "FLYING SPA ～フライングスパ～"
+    ],
+    "estama": [
+      "athena ～アテナ～",
+      "belle femme ～ベルファーム～",
+      "LUXEAZ ～ルクシーズ～",
+      "Pinky ring ～ピンキーリング～",
+      "濃密Candy ～濃密キャンディー～",
+      "余白 -yohaku-",
+      "もくきん堂",
+      "ぽっちゃりエステ つつみ",
+      "Aroma Fenice ～アロマフェニーチェ～",
+      "Richesse Spa ～リシェスパ～",
+      "ばする～む"
+    ],
+    "LIVEDOOR_BLOG": [
+      "おねいも ～お姉さんと妹のお部屋～",
+      "当たりSPA",
+      "綺麗なサロン",
+      "Wife Therapy ～ワイフセラピー～"
+    ],
+    "rookie_cms": [
+      "艶華 ～えんか～",
+      "Relaxation Hug ～リラクゼーションハグ～",
+      "癒刻 ～ゆこく～",
+      "Aroma Rose ～アロマローズ～",
+      "C’est la 美 Osaka～セラヴィオオサカ～",
+      "SPA Mona ～スパモナ～",
+      "新感覚Mエステ",
+      "打上花火 梅田ルーム"
+    ],
+    "UNKNOWN(/staff/)": [
+      "dandy lab ～ダンディーラボ～",
+      "マダムスパ",
+      "Deep Chill ～ディープチル～"
+    ],
+    "moto_photos": [
+      "Mrs.美witch",
+      "Preseine ～プリセーヌ～",
+      "REST ～レスト～",
+      "Mrs.Emmy",
+      "ハマるSPA"
+    ],
+    "UNKNOWN(/staff.html)": [
+      "オーダーメイドエステ"
+    ],
+    "UNKNOWN(/therapist/)": [
+      "Elin ～エリン～",
+      "Feliz ～フェリス～"
+    ],
+    "BLOG": [
+      "Flower ～フラワー～",
+      "FREEDOM ～フリーダム～",
+      "Relaxgarden ～リラックスガーデン～",
+      "アロマ・デ・バンビ",
+      "focus ～フォーカス～ 谷九ルーム"
+    ],
+    "images_staff": [
+      "4h ～フォーエイチ～",
+      "ヒルガオ"
+    ],
+    "JS_RENDER?": [
+      "Mrs.Two Heart ～ミセストゥーハート～",
+      "みるくSPA"
+    ],
+    "FETCH_ERROR": [
+      "MUFUFU HITOHADA center ～ムフフヒトハダセンター～"
+    ]
+  },
+  "details": [
+    {
+      "id": "osaka_kyobashi_bellosavonベロサボン",
+      "name": "BELLO SAVON ～ベロサボン～",
+      "url": "https://bellosavon.com/",
+      "cms": "premium_spa",
+      "staffUrl": "https://bellosavon.com"
+    },
+    {
+      "id": "osaka_kyobashi_beststarベストスター",
+      "name": "BESTSTAR ～ベストスター～",
+      "url": "https://beststar-osaka.com/",
+      "cms": "UNKNOWN(/cast/)",
+      "staffUrl": "https://beststar-osaka.com/cast/"
+    },
+    {
+      "id": "osaka_kyobashi_bulanブラン",
+      "name": "bulan ～ブラン～",
+      "url": "https://ameblo.jp/bulan-room/",
+      "cms": "AMEBLO_BLOG",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_kyobashi_motejoモテジョ",
+      "name": "MOTEJO ～モテジョ～",
+      "url": "https://motejo.net/",
+      "cms": "wcms",
+      "staffUrl": "https://motejo.net"
+    },
+    {
+      "id": "osaka_kyobashi_mrs.aubespaミセスオ",
+      "name": "Mrs.AUBE SPA ～ミセスオーブスパ～ 天六ルーム",
+      "url": "https://www.aube-spa.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://www.aube-spa.com"
+    },
+    {
+      "id": "osaka_kyobashi_mrs.mermaidミセスマ",
+      "name": "Mrs.Mermaid ～ミセスマーメイド～ 京橋ルーム",
+      "url": "https://www.mrsmermaid.net/",
+      "cms": "NOT_FOUND",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_kyobashi_mrs.murespaミセスミ",
+      "name": "Mrs.Mure SPA ～ミセスミュールスパ～ 京橋ルーム",
+      "url": "https://mure-spa.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://mure-spa.com"
+    },
+    {
+      "id": "osaka_kyobashi_relumanリラマン",
+      "name": "Reluman ～リラマン～",
+      "url": "https://reluman-osaka.com/",
+      "cms": "NOT_FOUND",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_kyobashi_天雅tenga",
+      "name": "天雅 -TENGA-",
+      "url": "https://tenga-osaka.com/",
+      "cms": "wcms",
+      "staffUrl": "https://tenga-osaka.com"
+    },
+    {
+      "id": "osaka_nippombashi_alyoアルヨ日本橋ルーム",
+      "name": "ALYO ～アルヨ～日本橋ルーム",
+      "url": "https://alyo.net/",
+      "cms": "wcms",
+      "staffUrl": "https://alyo.net"
+    },
+    {
+      "id": "osaka_nippombashi_aromaoneアロマワン",
+      "name": "Aroma one ～アロマワン～",
+      "url": "https://esthe-aromaone.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://esthe-aromaone.com"
+    },
+    {
+      "id": "osaka_nippombashi_athenaアテナ",
+      "name": "athena ～アテナ～",
+      "url": "https://athena-osaka.com/",
+      "cms": "estama",
+      "staffUrl": "https://athena-osaka.com"
+    },
+    {
+      "id": "osaka_nippombashi_bellefemmeベルファー",
+      "name": "belle femme ～ベルファーム～",
+      "url": "https://osaka-bellefemme.com/top",
+      "cms": "estama",
+      "staffUrl": "https://osaka-bellefemme.com"
+    },
+    {
+      "id": "osaka_nippombashi_diabloディアブロ",
+      "name": "DIABLO ～ディアブロ～",
+      "url": "https://www.diablo-osaka.com/",
+      "cms": "NOT_FOUND",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_nippombashi_luxeazルクシーズ",
+      "name": "LUXEAZ ～ルクシーズ～",
+      "url": "https://luxeaz-esthe.com/top",
+      "cms": "estama",
+      "staffUrl": "https://luxeaz-esthe.com/cast/"
+    },
+    {
+      "id": "osaka_nippombashi_naniwajoshiなにわ女",
+      "name": "Naniwajoshi ～なにわ女子～",
+      "url": "https://naniwajoshi.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://naniwajoshi.com"
+    },
+    {
+      "id": "osaka_nippombashi_pinkyringピンキーリン",
+      "name": "Pinky ring ～ピンキーリング～",
+      "url": "https://pinkyring-osaka.com/top",
+      "cms": "estama",
+      "staffUrl": "https://pinkyring-osaka.com/cast/"
+    },
+    {
+      "id": "osaka_nippombashi_viscontiヴィスコンティ",
+      "name": "VISCONTI ～ヴィスコンティ～",
+      "url": "http://www.menseste.jp/",
+      "cms": "wordpress",
+      "staffUrl": "http://www.menseste.jp"
+    },
+    {
+      "id": "osaka_nippombashi_おねいもお姉さんと妹のお部屋",
+      "name": "おねいも ～お姉さんと妹のお部屋～",
+      "url": "https://oneimo.net/",
+      "cms": "LIVEDOOR_BLOG",
+      "staffUrl": "https://oneimo.net"
+    },
+    {
+      "id": "osaka_nippombashi_メンズエステ大阪",
+      "name": "メンズエステ大阪",
+      "url": "https://esthe-osaka.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://esthe-osaka.com"
+    },
+    {
+      "id": "osaka_nippombashi_当たりspa",
+      "name": "当たりSPA",
+      "url": "https://atarispa.com/",
+      "cms": "LIVEDOOR_BLOG",
+      "staffUrl": "https://atarispa.com"
+    },
+    {
+      "id": "osaka_nippombashi_濃密candy濃密キャンディー",
+      "name": "濃密Candy ～濃密キャンディー～",
+      "url": "https://candy-esthe.com/",
+      "cms": "estama",
+      "staffUrl": "https://candy-esthe.com/staff.html"
+    },
+    {
+      "id": "osaka_nippombashi_煌めきspa",
+      "name": "煌めきSPA",
+      "url": "https://kiramekispa.com/",
+      "cms": "wcms",
+      "staffUrl": "https://kiramekispa.com"
+    },
+    {
+      "id": "osaka_nippombashi_艶華えんか",
+      "name": "艶華 ～えんか～",
+      "url": "https://enka-es.com/top",
+      "cms": "rookie_cms",
+      "staffUrl": "https://enka-es.com/cast/"
+    },
+    {
+      "id": "osaka_sakaihigashi_amorespaアモーレスパ",
+      "name": "Amore SPA ～アモーレスパ～",
+      "url": "https://amore-spa.com/",
+      "cms": "wcms",
+      "staffUrl": "https://amore-spa.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_dandylabダンディーラボ",
+      "name": "dandy lab ～ダンディーラボ～",
+      "url": "https://www.dandy-lab.com/",
+      "cms": "UNKNOWN(/staff/)",
+      "staffUrl": "https://www.dandy-lab.com/staff/"
+    },
+    {
+      "id": "osaka_sakaihigashi_hestiaエスティア",
+      "name": "Hestia ～エスティア～",
+      "url": "https://www.relaxation-hestia.com/",
+      "cms": "AMEBLO_BLOG",
+      "staffUrl": "https://www.relaxation-hestia.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_mrs.bellrosespa",
+      "name": "Mrs.Bell＆Rose SPA ～ミセス ベル＆ローズ～",
+      "url": "https://bellrose-osaka.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://bellrose-osaka.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_mrs.c’estlavieミ",
+      "name": "Mrs.C’est la vie ～ミセスセラヴィ～ 堺東ルーム",
+      "url": "https://mrs-cest-la-vie.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://mrs-cest-la-vie.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_mrs.美witch",
+      "name": "Mrs.美witch",
+      "url": "https://mrs-b-witch.com/",
+      "cms": "moto_photos",
+      "staffUrl": "https://mrs-b-witch.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_oilmadridオイルマドリ",
+      "name": "Oil Madrid ～オイルマドリード～",
+      "url": "https://oilmadrid.com/",
+      "cms": "wcms",
+      "staffUrl": "https://oilmadrid.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_preseineプリセーヌ",
+      "name": "Preseine ～プリセーヌ～",
+      "url": "https://www.esthe-sakai.jp/",
+      "cms": "moto_photos",
+      "staffUrl": "https://www.esthe-sakai.jp"
+    },
+    {
+      "id": "osaka_sakaihigashi_relaxationhugリラ",
+      "name": "Relaxation Hug ～リラクゼーションハグ～",
+      "url": "https://riraku-hug.com/",
+      "cms": "rookie_cms",
+      "staffUrl": "https://riraku-hug.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_restレスト",
+      "name": "REST ～レスト～",
+      "url": "https://salon-rest.com/",
+      "cms": "moto_photos",
+      "staffUrl": "https://salon-rest.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_royalmadamロイヤルマ",
+      "name": "Royal Madam ～ロイヤルマダム～",
+      "url": "https://royal-madam.com/top",
+      "cms": "wordpress",
+      "staffUrl": "https://royal-madam.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_yoluspaヨルスパ堺東店",
+      "name": "YOLU SPA ～ヨルスパ～ 堺東店",
+      "url": "https://yoluosaka-spa.com/top",
+      "cms": "wordpress",
+      "staffUrl": "https://yoluosaka-spa.com"
+    },
+    {
+      "id": "osaka_sakaihigashi_オーダーメイドエステ",
+      "name": "オーダーメイドエステ",
+      "url": "https://aromaesthe.biz/",
+      "cms": "UNKNOWN(/staff.html)",
+      "staffUrl": "https://aromaesthe.biz/staff.html"
+    },
+    {
+      "id": "osaka_sakaihigashi_癒刻ゆこく",
+      "name": "癒刻 ～ゆこく～",
+      "url": "https://yukoku-esthe.com/",
+      "cms": "rookie_cms",
+      "staffUrl": "https://yukoku-esthe.com"
+    },
+    {
+      "id": "osaka_sakaihonmachi_aquaspaアクアスパ",
+      "name": "aqua SPA ～アクアスパ～",
+      "url": "https://aquaspa-osaka.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://aquaspa-osaka.com"
+    },
+    {
+      "id": "osaka_sakaihonmachi_elinエリン",
+      "name": "Elin ～エリン～",
+      "url": "http://www.osakaelin.com/",
+      "cms": "UNKNOWN(/therapist/)",
+      "staffUrl": "http://www.osakaelin.com/therapist/"
+    },
+    {
+      "id": "osaka_sakaihonmachi_fantasyファンタジー",
+      "name": "FANTASY ～ファンタジー～",
+      "url": "https://fantasy-spa.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://fantasy-spa.com"
+    },
+    {
+      "id": "osaka_sakaihonmachi_felizフェリス",
+      "name": "Feliz ～フェリス～",
+      "url": "https://www.osakafeliz.com/",
+      "cms": "UNKNOWN(/therapist/)",
+      "staffUrl": "https://www.osakafeliz.com/therapist/"
+    },
+    {
+      "id": "osaka_sakaihonmachi_flyingspaフライングス",
+      "name": "FLYING SPA ～フライングスパ～",
+      "url": "https://flyingspa.jp/",
+      "cms": "NOT_FOUND",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_sakaihonmachi_piadyピアディ",
+      "name": "Piady ～ピアディ～",
+      "url": "https://www.piady-osaka.com/",
+      "cms": "AMEBLO_BLOG",
+      "staffUrl": "https://www.piady-osaka.com"
+    },
+    {
+      "id": "osaka_sakaihonmachi_ぷちどりむ",
+      "name": "ぷちどり～む",
+      "url": "https://petitpetit-dream.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://petitpetit-dream.com"
+    },
+    {
+      "id": "osaka_sakaihonmachi_余白yohaku",
+      "name": "余白 -yohaku-",
+      "url": "https://osaka-yohaku.com/",
+      "cms": "estama",
+      "staffUrl": "https://osaka-yohaku.com"
+    },
+    {
+      "id": "osaka_sakaihonmachi_堺筋本町倶楽部",
+      "name": "堺筋本町倶楽部",
+      "url": "https://sakahon-club.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://sakahon-club.com"
+    },
+    {
+      "id": "osaka_sakaihonmachi_祇園the.mrsギオンザミセ",
+      "name": "祇園 the.Mrs ～ギオンザミセス～ 堺筋本町ルーム",
+      "url": "https://gion-mrs.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://gion-mrs.com"
+    },
+    {
+      "id": "osaka_sakaihonmachi_綺麗なサロン",
+      "name": "綺麗なサロン",
+      "url": "https://kirei1212.livedoor.blog/",
+      "cms": "LIVEDOOR_BLOG",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_shinsaibashi_flowerフラワー",
+      "name": "Flower ～フラワー～",
+      "url": "https://flower-osaka.jimdofree.com/",
+      "cms": "BLOG",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_shinsaibashi_freedomフリーダム",
+      "name": "FREEDOM ～フリーダム～",
+      "url": "https://ainakondou.wordpress.com/",
+      "cms": "BLOG",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_shinsaibashi_relafullリラフル長堀橋",
+      "name": "Relafull ～リラフル～ 長堀橋店",
+      "url": "http://relafull.jp/",
+      "cms": "wordpress",
+      "staffUrl": "http://relafull.jp"
+    },
+    {
+      "id": "osaka_shinsaibashi_relaxgardenリラック",
+      "name": "Relaxgarden ～リラックスガーデン～",
+      "url": "https://relaxgarden.jimdofree.com/",
+      "cms": "BLOG",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_shinsaibashi_sarisariサリサリ",
+      "name": "SARISARI ～サリサリ～",
+      "url": "https://sarisari.jp/",
+      "cms": "wcms",
+      "staffUrl": "https://sarisari.jp"
+    },
+    {
+      "id": "osaka_shinsaibashi_sevenluckspaセブン",
+      "name": "Seven Luck Spa ～セブンラックスパ～",
+      "url": "https://seven-luck-spa.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://seven-luck-spa.com"
+    },
+    {
+      "id": "osaka_shinsaibashi_アロマデバンビ",
+      "name": "アロマ・デ・バンビ",
+      "url": "https://aromadebnmbi.jimdofree.com/",
+      "cms": "BLOG",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_shinsaibashi_マダムスパ",
+      "name": "マダムスパ",
+      "url": "http://www.madam-spa.net/",
+      "cms": "UNKNOWN(/staff/)",
+      "staffUrl": "http://www.madam-spa.net/staff/"
+    },
+    {
+      "id": "osaka_shinsosaka_4hフォーエイチ",
+      "name": "4h ～フォーエイチ～",
+      "url": "https://four-h.net/",
+      "cms": "images_staff",
+      "staffUrl": "https://four-h.net"
+    },
+    {
+      "id": "osaka_shinsosaka_alivieアリビエ",
+      "name": "Alivie ～アリビエ～",
+      "url": "https://www.osaka-alivie.com/?noCache=1735196467573",
+      "cms": "wordpress",
+      "staffUrl": "https://www.osaka-alivie.com/?noCache=1735196467573"
+    },
+    {
+      "id": "osaka_shinsosaka_chackmateチェックメイ",
+      "name": "Chackmate ～チェックメイト～",
+      "url": "https://o-checkmate.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://o-checkmate.com"
+    },
+    {
+      "id": "osaka_shinsosaka_mrs.emmy",
+      "name": "Mrs.Emmy",
+      "url": "https://salon-emmy.com/",
+      "cms": "moto_photos",
+      "staffUrl": "https://salon-emmy.com"
+    },
+    {
+      "id": "osaka_shinsosaka_mrs.flowerspa新大",
+      "name": "Mrs. Flower SPA 新大阪ルーム",
+      "url": "https://mrs-flowerspa.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://mrs-flowerspa.com"
+    },
+    {
+      "id": "osaka_shinsosaka_mrs.onlyoneミセスオ",
+      "name": "Mrs.OnlyOne ～ミセスオンリーワン～",
+      "url": "https://www.mrs-onlyone.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://www.mrs-onlyone.com"
+    },
+    {
+      "id": "osaka_shinsosaka_mrs.twoheartミセス",
+      "name": "Mrs.Two Heart ～ミセストゥーハート～",
+      "url": "https://mrs-two-heart.com/",
+      "cms": "JS_RENDER?",
+      "staffUrl": "https://mrs-two-heart.com/therapist.php"
+    },
+    {
+      "id": "osaka_shinsosaka_ヒルガオ",
+      "name": "ヒルガオ",
+      "url": "https://hirugaosaka.com/",
+      "cms": "images_staff",
+      "staffUrl": "https://hirugaosaka.com"
+    },
+    {
+      "id": "osaka_shinsosaka_みるくspa",
+      "name": "みるくSPA",
+      "url": "https://milk-spa.com/",
+      "cms": "JS_RENDER?",
+      "staffUrl": "https://milk-spa.com/therapist/"
+    },
+    {
+      "id": "osaka_shinsosaka_もくきん堂",
+      "name": "もくきん堂",
+      "url": "http://www.osaka-mkd.com/",
+      "cms": "estama",
+      "staffUrl": "http://www.osaka-mkd.com"
+    },
+    {
+      "id": "osaka_shinsosaka_彼女ん家",
+      "name": "彼女ん家",
+      "url": "https://kanojonti.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://kanojonti.com"
+    },
+    {
+      "id": "osaka_shinsosaka_極spakiwamispa",
+      "name": "極SPA -kiwamiSpa-",
+      "url": "https://kiwami-spa.net/",
+      "cms": "wordpress",
+      "staffUrl": "https://kiwami-spa.net"
+    },
+    {
+      "id": "osaka_shinsosaka_絶頂spa",
+      "name": "絶頂SPA",
+      "url": "https://zechoo-spa.com/top",
+      "cms": "UNKNOWN(/cast/)",
+      "staffUrl": "https://zechoo-spa.com/cast/"
+    },
+    {
+      "id": "osaka_tanimachi_aromaroseアロマローズ",
+      "name": "Aroma Rose ～アロマローズ～",
+      "url": "https://aroma-rose-mens.net/",
+      "cms": "rookie_cms",
+      "staffUrl": "https://aroma-rose-mens.net"
+    },
+    {
+      "id": "osaka_tanimachi_c’estla美osakaセラ",
+      "name": "C’est la 美 Osaka～セラヴィオオサカ～",
+      "url": "https://cestlavieosaka.com/top",
+      "cms": "rookie_cms",
+      "staffUrl": "https://cestlavieosaka.com/cast/"
+    },
+    {
+      "id": "osaka_tanimachi_femmefataleファムフ",
+      "name": "Femme Fatale ～ファムファタール～ 谷九ルーム",
+      "url": "https://femmefatale-osaka.com/",
+      "cms": "wcms",
+      "staffUrl": "https://femmefatale-osaka.com"
+    },
+    {
+      "id": "osaka_tanimachi_firstclassファースト",
+      "name": "FIRST CLASS ～ファーストクラス～ 谷九ルーム",
+      "url": "https://firstclass-osaka.net/",
+      "cms": "wordpress",
+      "staffUrl": "https://firstclass-osaka.net"
+    },
+    {
+      "id": "osaka_tanimachi_focusフォーカス谷九ルーム",
+      "name": "focus ～フォーカス～ 谷九ルーム",
+      "url": "https://focus-osaka.jimdofree.com/",
+      "cms": "BLOG",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_tanimachi_oneclassワンクラス",
+      "name": "One Class ～ワンクラス～",
+      "url": "https://osakaoneclass.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://osakaoneclass.com"
+    },
+    {
+      "id": "osaka_tanimachi_spamonaスパモナ",
+      "name": "SPA Mona ～スパモナ～",
+      "url": "https://menesthe-higashiosak-mona.com/",
+      "cms": "rookie_cms",
+      "staffUrl": "https://menesthe-higashiosak-mona.com"
+    },
+    {
+      "id": "osaka_tanimachi_wifetherapyワイフセ",
+      "name": "Wife Therapy ～ワイフセラピー～",
+      "url": "http://blog.livedoor.jp/wifetherapy/",
+      "cms": "LIVEDOOR_BLOG",
+      "staffUrl": null
+    },
+    {
+      "id": "osaka_tanimachi_アヌspa",
+      "name": "アヌSPA",
+      "url": "https://anuspa.club/",
+      "cms": "premium_spa",
+      "staffUrl": "https://anuspa.club"
+    },
+    {
+      "id": "osaka_tanimachi_ぽっちゃりエステつつみ",
+      "name": "ぽっちゃりエステ つつみ",
+      "url": "https://27359.b7.estama.jp/",
+      "cms": "estama",
+      "staffUrl": "https://27359.b7.estama.jp"
+    },
+    {
+      "id": "osaka_tanimachi_ワイフスパ2度ご堪能いただけま",
+      "name": "ワイフスパ ～2度ご堪能いただけます～",
+      "url": "https://touch-wife.com/",
+      "cms": "wordpress",
+      "staffUrl": "https://touch-wife.com"
+    },
+    {
+      "id": "osaka_tanimachi_新感覚mエステ",
+      "name": "新感覚Mエステ",
+      "url": "https://www.shinkankaku.com/top",
+      "cms": "rookie_cms",
+      "staffUrl": "https://www.shinkankaku.com/cast/"
+    },
+    {
+      "id": "osaka_umeda_aromafeniceアロマフ",
+      "name": "Aroma Fenice ～アロマフェニーチェ～",
+      "url": "https://fenice-osaka.com/top",
+      "cms": "estama",
+      "staffUrl": "https://fenice-osaka.com/cast/"
+    },
+    {
+      "id": "osaka_umeda_belchicベルシック",
+      "name": "BELCHIC ～ベルシック～",
+      "url": "https://belchic.net/",
+      "cms": "wcms",
+      "staffUrl": "https://belchic.net"
+    },
+    {
+      "id": "osaka_umeda_deepchillディープチル",
+      "name": "Deep Chill ～ディープチル～",
+      "url": "http://www.deep-chill.info/",
+      "cms": "UNKNOWN(/staff/)",
+      "staffUrl": "http://www.deep-chill.info/staff/"
+    },
+    {
+      "id": "osaka_umeda_edenspaエデンスパ",
+      "name": "Eden Spa ～エデンスパ～",
+      "url": "https://eden-spa.jp/",
+      "cms": "wordpress",
+      "staffUrl": "https://eden-spa.jp"
+    },
+    {
+      "id": "osaka_umeda_lancomランコム",
+      "name": "LANCOM ～ランコム～",
+      "url": "https://lancom.jp/",
+      "cms": "wcms",
+      "staffUrl": "https://lancom.jp"
+    },
+    {
+      "id": "osaka_umeda_luanaspaルアナスパ",
+      "name": "Luana SPA ～ルアナスパ～",
+      "url": "https://luanaspa.net/",
+      "cms": "wordpress",
+      "staffUrl": "https://luanaspa.net"
+    },
+    {
+      "id": "osaka_umeda_mrs.amanspaミセスア",
+      "name": "Mrs.AMAN SPA ～ミセスアマンスパ～",
+      "url": "https://mrs-amanspa.com/home",
+      "cms": "wordpress",
+      "staffUrl": "https://mrs-amanspa.com/home"
+    },
+    {
+      "id": "osaka_umeda_mufufuhitohadac",
+      "name": "MUFUFU HITOHADA center ～ムフフヒトハダセンター～",
+      "url": "https://mufufu-hitohada-center.com/",
+      "cms": "FETCH_ERROR",
+      "staffUrl": "https://mufufu-hitohada-center.com"
+    },
+    {
+      "id": "osaka_umeda_pershiaペルシア",
+      "name": "Pershia ～ペルシア～",
+      "url": "https://pershia.jp/",
+      "cms": "wcms",
+      "staffUrl": "https://pershia.jp"
+    },
+    {
+      "id": "osaka_umeda_richessespaリシェス",
+      "name": "Richesse Spa ～リシェスパ～",
+      "url": "https://richesse-spa.com/top",
+      "cms": "estama",
+      "staffUrl": "https://richesse-spa.com/cast/"
+    },
+    {
+      "id": "osaka_umeda_ばするむ",
+      "name": "ばする～む",
+      "url": "https://bath-room.jp/top",
+      "cms": "estama",
+      "staffUrl": "https://bath-room.jp/cast/"
+    },
+    {
+      "id": "osaka_umeda_ハマるspa",
+      "name": "ハマるSPA",
+      "url": "https://hamaru-spa.com/",
+      "cms": "moto_photos",
+      "staffUrl": "https://hamaru-spa.com"
+    },
+    {
+      "id": "osaka_umeda_小悪魔aliceアリス",
+      "name": "小悪魔Alice ～アリス～",
+      "url": "https://koakuma-alice.com/top",
+      "cms": "wordpress",
+      "staffUrl": "https://koakuma-alice.com"
+    },
+    {
+      "id": "osaka_umeda_打上花火梅田ルーム",
+      "name": "打上花火 梅田ルーム",
+      "url": "https://uchiagemenseste.jp/top",
+      "cms": "rookie_cms",
+      "staffUrl": "https://uchiagemenseste.jp/cast/"
+    },
+    {
+      "id": "osaka_umeda_秘宝殿梅田ルーム",
+      "name": "秘宝殿 梅田ルーム",
+      "url": "https://hihouden.net/",
+      "cms": "wordpress",
+      "staffUrl": "https://hihouden.net"
+    }
+  ]
+}

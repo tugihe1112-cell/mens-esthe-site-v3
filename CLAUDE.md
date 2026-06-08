@@ -9,7 +9,7 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
-### 2026-06-08（現在のセッション）
+### 2026-06-09（現在のセッション）
 
 | 状態 | 作業内容 | メモ |
 |------|----------|------|
@@ -18,13 +18,44 @@
 | ✅ | 不要ファイル整理 | _archive/に移動 |
 | ✅ | 奈良・和歌山・京都 shop登録 | 計29店舗 |
 | ✅ | 奈良・和歌山・京都 セラピスト登録 | 計734名 |
-| 🔄 | **大阪 未登録shop登録** | **今ここ。84店舗未登録。process_osaka_missing_shops.mjs 実行待ち** |
-| ⏳ | 大阪 未登録shopのセラピスト登録 | shop登録後に実施 |
+| ✅ | **大阪 未登録shop登録** | 97店舗登録完了。process_osaka_missing_shops.mjs 本実行済み |
+| ✅ | 大阪 locations.js修正 | 「日本橋・難波」「京橋」「谷町」をWARDS・PREF_CITY_MAPに追加済み |
+| ✅ | **大阪 未登録shopのセラピスト登録** | **cheerio取得分ほぼ完了。登録合計 1096名+α** |
+| ✅ | **大阪 Chrome対応6店舗** | BELLO SAVON(32)・アヌSPA(18)・Mrs.Two Heart(4)・みるくSPA(55)・Alivie(16)・dandy lab(13) 計138名 |
+| ✅ | **広島県 8店舗 shop登録** | hiroshima_hiroshima_* 7店舗 + hiroshima_fukuyama_* 1店舗 |
+| ✅ | **広島県 セラピスト登録** | 計329名（nina:77・人妻さん:11・Queen:47・RESORT:8・ENEL:44・CREA:60・Aroma Mia:19・福山研究所:63） |
+| ⏳ | 他都道府県 locations.js整合チェック | 大阪と同様のエリア名不一致が他都道府県でも起きている可能性あり |
 | ⏳ | 兵庫 追加店舗チェック | 大阪完了後 |
-| ⏳ | 広島・北海道 | 優先度高 |
+| ⏳ | **北海道** | 次の優先エリア |
 
 ---
 
+> **最終更新: 2026-06-09（広島県 完全完了）**
+>
+> ※ 2026-06-09: 大阪Chrome対応6店舗のセラピスト登録完了。計138名:
+> - `process_bello_savon_chrome.mjs`: BELLO SAVON 32名（THE PREMIUM SPA CMS、data/staff/{sid}/stf_{hash}.webp）
+> - `process_anuspa_chrome.mjs`: アヌSPA 18名（同CMS、.jpg）
+> - `process_mrs_two_heart_chrome.mjs`: Mrs.Two Heart 4名（/pic/girl/{uid}/{storeId}{ts}.jpg）
+> - `process_milkspa_chrome.mjs`: みるくSPAα 55名（/images/cast/{shopHash}/{imgHash}.{ext}）※milk-spa.comはダウン、実サイトはmilkspa-a.com
+> - `process_alivie_chrome.mjs`: Alivie 16名（WordPress wp-content/uploads）
+> - `process_dandylab_chrome.mjs`: dandy lab 13名（/prof/{id}/top.jpg）
+>
+> ※ 2026-06-09: 大阪97店舗のセラピスト登録をcheerio取得で完了。スクリプト4本を使用:
+> - `process_osaka_cast_shops.mjs`: /cast/ページ型18店舗 661名
+> - `process_osaka_remaining_photos.mjs`: photos/athena/もくきん/ぽっちゃり/Aromaone 310名（Aromaoneは87件名前修正 `fix_aromaone_bellefemme.mjs`）
+> - `fix_aromaone_bellefemme.mjs`: belle femme 48名追加
+> - `fix_osaka_remaining4.mjs`: マダムスパ28名・DeepChill19名・BESTSTAR(Oil&Me)23名・絶頂SPA7名 計77名
+> - `fix_osaka_names_madamspa_deepchill.mjs`: マダムスパ「セラピスト」サフィックス28件修正、DeepChill【ランク】サフィックス19件修正
+> - wcms(11店舗)・images_staff(2店舗)はPhase1で登録済みだったためスキップ
+> - ノイズ削除: Aroma one「店舗Ｘアカウント」「ゲリラ割2000円OFF」2件
+> - 残り Chrome対応6店舗: BELLO SAVON・アヌSPA・Mrs.Two Heart・みるくSPA・Alivie・dandy lab
+> - 取得不可（画像非公開/廃業）: 濃密Candy・余白・オーダーメイドエステ・Elin(廃業)・Feliz(廃業)
+>
+> **最終更新: 2026-06-08 15:xx（エリア名不一致バグ発見・修正済み）**
+>
+> ※ 2026-06-08（引き継ぎ）: `process_osaka_missing_shops.mjs` のエリア名と `locations.js` の不一致を発見。「日本橋・難波」「京橋」「谷町」が `locations.js` に存在しなかった。`locations.js` に3エリアを追加してgit push済み（commit: 2f84956）。Vercelデプロイ後に全97店舗がUIに表示される。
+> ※ 2026-06-08: 大阪97店舗の `image_url` はshop登録時にog:imageを自動取得（約60件✓、約37件null）。null分は後で `fix_missing_shop_images.mjs` で補完予定。
+>
 > **最終更新: 2026-06-08 （パフォーマンス・セキュリティ修正）**
 >
 > ※ 2026-06-08: Code Splitting実装（App.jsx全ページをReact.lazy+Suspenseに変更）。初回ロード時のJS転送量を大幅削減。git push → Vercelデプロイ済み。
@@ -107,13 +138,13 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 | **静岡県** | ✅ 完了 | 1/1店舗（竜宮城 沼津店のみ） |
 | **奈良県** | ✅ 完了 | 9店舗（2026-06-08登録）セラピスト161名登録（NAROMA・AROMA CLINIC NARAは取得困難でスキップ） |
 | **和歌山県** | ✅ 完了 | 9店舗（2026-06-08登録）セラピスト200名登録（キューピット・Melty Aromaはサイトダウンでスキップ） |
-| **広島県** | ❌ 未着手 | — |
+| **広島県** | ✅ 完了 | 8店舗。セラピスト計329名（nina:77・人妻さん:11・Queen:47・RESORT:8・ENEL:44・CREA:60・Aroma Mia:19・福山研究所:63） |
 | **北海道** | ❌ 未着手 | — |
 | その他全都道府県 | ❌ 未着手 | mens-mg.comで人気店を確認してから着手 |
 
 ### 次にやること
 未着手の都道府県を `https://mens-mg.com/` でランキングを確認 → 人気店TOP10前後を登録していく。
-優先度: 広島 → 北海道 → その他
+優先度: 北海道 → その他
 
 ※ 千葉・埼玉はshop・セラピスト登録ともに完了（2026-06-08）。
 

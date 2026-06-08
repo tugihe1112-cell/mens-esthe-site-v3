@@ -410,6 +410,16 @@ export const WARDS = {
   "和歌山": [
     "和歌山"
   ],
+  "広島県": [
+    "広島",
+    "福山"
+  ],
+  "広島": [
+    "広島"
+  ],
+  "福山": [
+    "福山"
+  ],
   "東京都": [
     "--- 城東 ---",
     "墨田区",
@@ -648,6 +658,14 @@ export const REGIONS = [
     ]
   },
   {
+    "id": "chugoku",
+    "name": "中国",
+    "color": "bg-orange-500",
+    "prefs": [
+      "広島県"
+    ]
+  },
+  {
     "id": "hokkaido",
     "name": "北海道",
     "color": "bg-cyan-500",
@@ -819,7 +837,11 @@ export const PREF_CITY_MAP = {
   "宮城県": [
     "仙台"
   ],
-  "北海道": []
+  "北海道": [],
+  "広島県": [
+    "広島",
+    "福山"
+  ]
 };
 
 export const LOCATION_DATA = WARDS;
