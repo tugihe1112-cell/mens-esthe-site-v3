@@ -9,7 +9,7 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
-### 2026-06-09（現在のセッション）
+### 2026-06-11（現在のセッション）
 
 | 状態 | 作業内容 | メモ |
 |------|----------|------|
@@ -28,10 +28,27 @@
 | ⏳ | 兵庫 追加店舗チェック | 大阪完了後 |
 | ✅ | **北海道 locations.js更新** | WARDS + PREF_CITY_MAP に「札幌」追加済み |
 | ✅ | **北海道 スクリプト作成・実行完了** | 9店舗・計295名登録完了 |
+| ✅ | **茨城県 locations.js更新** | WARDS + PREF_CITY_MAP に「水戸」「つくば」「守谷」追加済み |
+| ✅ | **茨城県 18店舗 shop登録** | 水戸10・つくば7・守谷1 計18店舗 |
+| ✅ | **茨城県 セラピスト登録** | 計2205名（水戸704・つくば1213・守谷288）。Rizは403スキップ |
 
 ---
 
-> **最終更新: 2026-06-10（北海道 完全完了）**
+> **最終更新: 2026-06-11（茨城県 完全完了）**
+>
+> ※ 2026-06-11: 茨城県 水戸・つくば・守谷エリア 完全完了:
+> - 水戸(10店舗): マダムスパ(88)・Melt Rich(28)・美女SPA(255)・AROMA QUEEN(151)・QUEENDOM(33)・エステの虎(100)・まなもち(31)・eMpress(13)・NEVER LAND(5)・Riz(0/403スキップ) 計704名
+> - つくば(7店舗): TIARA(77)・Marvelous(360)・美女SPA(302)・L&spa(12)・SHOWTIME(248)・COLORS(39)・神の手(175) 計1213名
+> - 守谷(1店舗): 美女SPA(288) 計288名
+> - 合計: 2205名（18店舗）
+> - URL修正: エステの虎→esthenotora.com・まなもち→minato-esthe.com・eMpress→empress-official.com・NEVER LAND→neverlandmito.com・QUEENDOM→queendom-mito.com・AROMA QUEEN→aromaqueen.menes-jp.com
+> - 画像: shop image_url は全店舗 null → fix_missing_shop_images.mjs で後補完推奨
+> - NEVER LAND: microcms-assets.io CDN（Next.jsサイト）、5名全員写真あり
+> - エステの虎: /photos/{lid}/{ts}-{name}TOP.jpg パターン、now-printing=null
+>
+> **残作業:**
+> - Belleliser（札幌4位）: 未調査。URL: https://asabu.belleliser.com/
+> - 茨城県 shop image_url 一括補完（fix_missing_shop_images.mjs）
 >
 > ※ 2026-06-10: 北海道 札幌エリア 9店舗・計295名登録完了:
 > - `process_sapporo_shops.mjs`: 9店舗 登録済み
@@ -153,6 +170,7 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 | **和歌山県** | ✅ 完了 | 9店舗（2026-06-08登録）セラピスト200名登録（キューピット・Melty Aromaはサイトダウンでスキップ） |
 | **広島県** | ✅ 完了 | 8店舗。セラピスト計329名（nina:77・人妻さん:11・Queen:47・RESORT:8・ENEL:44・CREA:60・Aroma Mia:19・福山研究所:63） |
 | **北海道** | ✅ 完了 | 9店舗・計295名。Belleliser(4位)は未調査のため未登録 |
+| **茨城県** | ✅ 完了 | 18店舗・計2205名（水戸10・つくば7・守谷1）。Riz(403スキップ)。shop image_url未設定 |
 | その他全都道府県 | ❌ 未着手 | mens-mg.comで人気店を確認してから着手 |
 
 ### 次にやること
