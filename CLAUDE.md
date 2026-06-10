@@ -26,10 +26,35 @@
 | ✅ | **広島県 セラピスト登録** | 計329名（nina:77・人妻さん:11・Queen:47・RESORT:8・ENEL:44・CREA:60・Aroma Mia:19・福山研究所:63） |
 | ⏳ | 他都道府県 locations.js整合チェック | 大阪と同様のエリア名不一致が他都道府県でも起きている可能性あり |
 | ⏳ | 兵庫 追加店舗チェック | 大阪完了後 |
-| ⏳ | **北海道** | 次の優先エリア |
+| ✅ | **北海道 locations.js更新** | WARDS + PREF_CITY_MAP に「札幌」追加済み |
+| ✅ | **北海道 スクリプト作成** | 4本作成済み → ユーザー側で実行すること |
 
 ---
 
+> **最終更新: 2026-06-10（北海道 スクリプト作成完了）**
+>
+> ※ 2026-06-10: 北海道 札幌エリア スクリプト4本作成:
+> - `process_sapporo_shops.mjs`: 9店舗 shop登録（image_url・schedule_url含む）
+> - `process_sapporo_therapists.mjs`: LATTE(20)・Chocolat(51)・研究所(72)・コス×コス(17)・Flan(25)・ロリポップ(11)・マダムの手(19) 計215名
+> - `process_aromaria_sapporo.mjs`: Aromaria 45名（WordPress動的スクレイピング）
+> - `process_goddess_sapporo.mjs`: GODDESS BLESS 35名（プロフィールページ動的取得）
+>
+> **実行順序（ユーザーのターミナルで）:**
+> ```bash
+> node scripts/maintenance/process_sapporo_shops.mjs --dry-run  # 確認
+> node scripts/maintenance/process_sapporo_shops.mjs            # 本実行
+> node scripts/maintenance/process_sapporo_therapists.mjs --dry-run
+> node scripts/maintenance/process_sapporo_therapists.mjs
+> node scripts/maintenance/process_aromaria_sapporo.mjs --dry-run
+> node scripts/maintenance/process_aromaria_sapporo.mjs
+> node scripts/maintenance/process_goddess_sapporo.mjs --dry-run
+> node scripts/maintenance/process_goddess_sapporo.mjs
+> ```
+>
+> **各店舗のimage_url補完:** Aromaria・コス×コス・aroma Flan・ロリポップは null → fix_missing_shop_images.mjs で後補完可能
+>
+> **Belleliser（4位）:** 今セッションでは未調査。4位なのでいずれ追加推奨。URL: https://asabu.belleliser.com/
+>
 > **最終更新: 2026-06-09（広島県 完全完了）**
 >
 > ※ 2026-06-09: 大阪Chrome対応6店舗のセラピスト登録完了。計138名:
@@ -139,7 +164,7 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 | **奈良県** | ✅ 完了 | 9店舗（2026-06-08登録）セラピスト161名登録（NAROMA・AROMA CLINIC NARAは取得困難でスキップ） |
 | **和歌山県** | ✅ 完了 | 9店舗（2026-06-08登録）セラピスト200名登録（キューピット・Melty Aromaはサイトダウンでスキップ） |
 | **広島県** | ✅ 完了 | 8店舗。セラピスト計329名（nina:77・人妻さん:11・Queen:47・RESORT:8・ENEL:44・CREA:60・Aroma Mia:19・福山研究所:63） |
-| **北海道** | ❌ 未着手 | — |
+| **北海道** | ⏳ スクリプト作成済み・要実行 | 9店舗。LATTE/Chocolat/研究所/Aromaria/コス×コス/Flan/GODDESS/ロリポップ/マダム。Belleliser(4位)は未調査 |
 | その他全都道府県 | ❌ 未着手 | mens-mg.comで人気店を確認してから着手 |
 
 ### 次にやること
