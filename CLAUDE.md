@@ -27,33 +27,21 @@
 | ⏳ | 他都道府県 locations.js整合チェック | 大阪と同様のエリア名不一致が他都道府県でも起きている可能性あり |
 | ⏳ | 兵庫 追加店舗チェック | 大阪完了後 |
 | ✅ | **北海道 locations.js更新** | WARDS + PREF_CITY_MAP に「札幌」追加済み |
-| ✅ | **北海道 スクリプト作成** | 4本作成済み → ユーザー側で実行すること |
+| ✅ | **北海道 スクリプト作成・実行完了** | 9店舗・計295名登録完了 |
 
 ---
 
-> **最終更新: 2026-06-10（北海道 スクリプト作成完了）**
+> **最終更新: 2026-06-10（北海道 完全完了）**
 >
-> ※ 2026-06-10: 北海道 札幌エリア スクリプト4本作成:
-> - `process_sapporo_shops.mjs`: 9店舗 shop登録（image_url・schedule_url含む）
-> - `process_sapporo_therapists.mjs`: LATTE(20)・Chocolat(51)・研究所(72)・コス×コス(17)・Flan(25)・ロリポップ(11)・マダムの手(19) 計215名
-> - `process_aromaria_sapporo.mjs`: Aromaria 45名（WordPress動的スクレイピング）
-> - `process_goddess_sapporo.mjs`: GODDESS BLESS 35名（プロフィールページ動的取得）
+> ※ 2026-06-10: 北海道 札幌エリア 9店舗・計295名登録完了:
+> - `process_sapporo_shops.mjs`: 9店舗 登録済み
+> - `process_sapporo_therapists.mjs`: LATTE(20)・Chocolat(51)・研究所(67)・コス×コス(17)・Flan(25)・ロリポップ(11)・マダムの手(19) 計210名
+> - `process_aromaria_sapporo.mjs`: Aromaria 45名（43名画像あり、ゆめ・すず名前のみ）
+> - `process_goddess_sapporo.mjs`: GODDESS BLESS 35名（全員画像あり）
 >
-> **実行順序（ユーザーのターミナルで）:**
-> ```bash
-> node scripts/maintenance/process_sapporo_shops.mjs --dry-run  # 確認
-> node scripts/maintenance/process_sapporo_shops.mjs            # 本実行
-> node scripts/maintenance/process_sapporo_therapists.mjs --dry-run
-> node scripts/maintenance/process_sapporo_therapists.mjs
-> node scripts/maintenance/process_aromaria_sapporo.mjs --dry-run
-> node scripts/maintenance/process_aromaria_sapporo.mjs
-> node scripts/maintenance/process_goddess_sapporo.mjs --dry-run
-> node scripts/maintenance/process_goddess_sapporo.mjs
-> ```
->
-> **各店舗のimage_url補完:** Aromaria・コス×コス・aroma Flan・ロリポップは null → fix_missing_shop_images.mjs で後補完可能
->
-> **Belleliser（4位）:** 今セッションでは未調査。4位なのでいずれ追加推奨。URL: https://asabu.belleliser.com/
+> **残作業:**
+> - Aromaria・コス×コス・aroma Flan・ロリポップの shop image_url は null → fix_missing_shop_images.mjs で後補完可能
+> - **Belleliser（4位）:** 未調査。4位なのでいずれ追加推奨。URL: https://asabu.belleliser.com/
 >
 > **最終更新: 2026-06-09（広島県 完全完了）**
 >
@@ -164,7 +152,7 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 | **奈良県** | ✅ 完了 | 9店舗（2026-06-08登録）セラピスト161名登録（NAROMA・AROMA CLINIC NARAは取得困難でスキップ） |
 | **和歌山県** | ✅ 完了 | 9店舗（2026-06-08登録）セラピスト200名登録（キューピット・Melty Aromaはサイトダウンでスキップ） |
 | **広島県** | ✅ 完了 | 8店舗。セラピスト計329名（nina:77・人妻さん:11・Queen:47・RESORT:8・ENEL:44・CREA:60・Aroma Mia:19・福山研究所:63） |
-| **北海道** | ⏳ スクリプト作成済み・要実行 | 9店舗。LATTE/Chocolat/研究所/Aromaria/コス×コス/Flan/GODDESS/ロリポップ/マダム。Belleliser(4位)は未調査 |
+| **北海道** | ✅ 完了 | 9店舗・計295名。Belleliser(4位)は未調査のため未登録 |
 | その他全都道府県 | ❌ 未着手 | mens-mg.comで人気店を確認してから着手 |
 
 ### 次にやること
