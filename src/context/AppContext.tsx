@@ -8,6 +8,7 @@ export const AppProvider = ({ children }) => {
   // ------------------------------------------------
   const [user, setUser] = useState(() => {
     try {
+      if (typeof window === 'undefined') return null;
       const saved = localStorage.getItem('mens_esthe_user');
       return saved ? JSON.parse(saved) : null;
     } catch (e) { return null; }
@@ -28,6 +29,7 @@ export const AppProvider = ({ children }) => {
   // ------------------------------------------------
   const [favorites, setFavorites] = useState(() => {
     try {
+      if (typeof window === 'undefined') return [];
       const saved = localStorage.getItem('mens_esthe_favorites');
       return saved ? JSON.parse(saved) : [];
     } catch (e) { return []; }
@@ -48,6 +50,7 @@ export const AppProvider = ({ children }) => {
   // ------------------------------------------------
   const [favTherapists, setFavTherapists] = useState(() => {
     try {
+      if (typeof window === 'undefined') return [];
       const saved = localStorage.getItem('mens_esthe_fav_therapists');
       return saved ? JSON.parse(saved) : [];
     } catch (e) { return []; }
@@ -75,6 +78,7 @@ export const AppProvider = ({ children }) => {
     // これにより、画面上で「投稿できた感」を演出できる
     try {
       // 既存のローカルクチコミを取得
+      if (typeof window === 'undefined') return false;
       const localReviews = JSON.parse(localStorage.getItem('mens_esthe_local_reviews') || '[]');
       
       // 新しいクチコミを追加（IDなどを付与）

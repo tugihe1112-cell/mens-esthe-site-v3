@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useShopData } from '../contexts/DataContext.jsx';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from '../compat/router';
 import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';

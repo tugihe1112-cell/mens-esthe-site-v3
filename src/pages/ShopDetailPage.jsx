@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useAuth } from '../contexts/AuthContext.jsx'; 
@@ -45,8 +45,8 @@ export default function ShopDetailPage() {
     const fetchAllData = async () => {
       setIsFetching(true);
       try {
-        const url = import.meta.env.VITE_SUPABASE_URL;
-        const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        const url = process.env.VITE_SUPABASE_URL;
+        const key = process.env.VITE_SUPABASE_ANON_KEY;
         if (!url || !key) return;
         const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
 
@@ -127,8 +127,8 @@ export default function ShopDetailPage() {
     if (isLoadingMoreReviews || !hasMoreReviews) return;
     setIsLoadingMoreReviews(true);
     try {
-      const url = import.meta.env.VITE_SUPABASE_URL;
-      const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const url = process.env.VITE_SUPABASE_URL;
+      const key = process.env.VITE_SUPABASE_ANON_KEY;
       const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
       const shop = cloudShop;
       if (!shop) return;

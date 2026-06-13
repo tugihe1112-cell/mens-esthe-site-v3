@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../compat/router';
 import TagSelector from './TagSelector';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { AVAILABLE_TAGS } from '../data/constants';

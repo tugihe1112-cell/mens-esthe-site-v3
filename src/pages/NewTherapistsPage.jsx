@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 
@@ -32,8 +32,8 @@ export default function NewTherapistsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_ANON_KEY;
   const headers = { apikey: key, Authorization: `Bearer ${key}` };
 
   // 店舗情報を一括取得してMapに

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import LazyImage from './LazyImage.jsx';
 

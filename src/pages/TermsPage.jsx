@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 

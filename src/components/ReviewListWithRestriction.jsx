@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext';
 import ModernReviewCard from './ModernReviewCard';
 

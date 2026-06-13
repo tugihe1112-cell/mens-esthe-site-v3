@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import ReviewLikeButton from '../components/ReviewLikeButton.jsx';
@@ -44,8 +44,8 @@ export default function PopularReviewsPage() {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [sortBy, setSortBy] = useState('new'); // 'new' | 'rating'
 
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_ANON_KEY;
   const headers = { apikey: key, Authorization: `Bearer ${key}` };
 
   // 店舗・セラピスト情報を取得

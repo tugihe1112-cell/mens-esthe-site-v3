@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import LazyImage from './LazyImage';
 import { getDisplayName } from '../utils/shopHelpers';
 

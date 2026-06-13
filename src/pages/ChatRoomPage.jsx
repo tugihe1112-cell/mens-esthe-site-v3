@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { createClient } from '@supabase/supabase-js';
 import SeoHead from '../components/SeoHead.jsx';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 // Realtimeのためにsupabase clientを作成
 let _supabase = null;

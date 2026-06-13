@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { FormProvider, useFormContext, Controller } from 'react-hook-form';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from '../compat/router';
 import { Toaster, toast } from 'react-hot-toast';
 import { useReviewForm } from '../features/reviews/hooks/useReviewForm';
 import { STORY_SECTIONS } from '../features/reviews/schema/reviewSchema';
@@ -470,8 +470,8 @@ export default function PostReviewPage() {
       // 🚨 共有データ(Context)は文字列しか返さないバグがあるため無視！
       // 常にSupabaseから直接「写真・名前入り」の完全なオブジェクトを取得する
       try {
-        const url = import.meta.env.VITE_SUPABASE_URL;
-        const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        const url = process.env.VITE_SUPABASE_URL;
+        const key = process.env.VITE_SUPABASE_ANON_KEY;
         if (!url || !key) return;
         
         const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };

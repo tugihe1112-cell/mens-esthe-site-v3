@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed.js';
@@ -26,8 +26,8 @@ export default function ThreadDetailPage() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const url = import.meta.env.VITE_SUPABASE_URL;
-        const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        const url = process.env.VITE_SUPABASE_URL;
+        const key = process.env.VITE_SUPABASE_ANON_KEY;
         if (!url || !key) return;
         const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
 

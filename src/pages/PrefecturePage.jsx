@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';

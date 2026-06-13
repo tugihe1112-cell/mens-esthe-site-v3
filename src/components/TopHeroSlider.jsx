@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectCoverflow, A11y, Keyboard } from 'swiper/modules';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import LikeButton from './LikeButton.jsx';
 import { getDisplayName } from '../utils/shopHelpers';

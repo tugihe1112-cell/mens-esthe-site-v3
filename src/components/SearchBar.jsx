@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../compat/router';
 
 export default function SearchBar() {
   const [shopInput, setShopInput] = useState('');

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { supabase } from '../lib/supabase.js';
 import LazyImage from '../components/LazyImage.jsx';
@@ -7,8 +7,8 @@ import SeoHead from '../components/SeoHead.jsx';
 
 const ADMIN_EMAILS = ['tugihe1112@gmail.com', 'master@mens-esthe.jp'];
 
-const url = import.meta.env.VITE_SUPABASE_URL;
-const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const url = process.env.VITE_SUPABASE_URL;
+const key = process.env.VITE_SUPABASE_ANON_KEY;
 const headers = { apikey: key, Authorization: `Bearer ${key}` };
 const jsonHeaders = { ...headers, 'Content-Type': 'application/json' };
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import Header from '../components/Header.jsx';
 import LazyImage from '../components/LazyImage.jsx';

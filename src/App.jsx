@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from '../compat/router';
 import { HelmetProvider } from 'react-helmet-async';
 import PropTypes from 'prop-types';
 

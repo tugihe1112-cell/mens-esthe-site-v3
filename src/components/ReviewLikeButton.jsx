@@ -7,8 +7,8 @@ export default function ReviewLikeButton({ reviewId, initialLikeCount = 0 }) {
   const [count, setCount] = useState(initialLikeCount);
   const [isLoading, setIsLoading] = useState(false);
 
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_ANON_KEY;
 
   // 自分がいいねしているか確認
   useEffect(() => {

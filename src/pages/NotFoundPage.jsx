@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import SeoHead from '../components/SeoHead.jsx';
 
 export default function NotFoundPage() {

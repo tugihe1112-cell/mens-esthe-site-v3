@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useTransition } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { supabase } from '../lib/supabase';
 import LazyImage from '../components/LazyImage.jsx';

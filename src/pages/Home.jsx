@@ -1,7 +1,7 @@
 
 import React, { useMemo, useState, useEffect } from 'react';
 import { getDisplayName } from '../utils/shopHelpers';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import SearchBar from '../components/SearchBar.jsx';
 import TopHeroSlider from '../components/TopHeroSlider.jsx';

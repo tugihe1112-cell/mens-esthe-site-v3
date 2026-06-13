@@ -1,0 +1,268 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/area/[pref]",
+      "regex": "^/area/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPpref": "nxtPpref"
+      },
+      "namedRegex": "^/area/(?<nxtPpref>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/board/[postId]",
+      "regex": "^/board/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPpostId": "nxtPpostId"
+      },
+      "namedRegex": "^/board/(?<nxtPpostId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/brands/[brandId]",
+      "regex": "^/brands/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPbrandId": "nxtPbrandId"
+      },
+      "namedRegex": "^/brands/(?<nxtPbrandId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/chat/[roomId]",
+      "regex": "^/chat/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtProomId": "nxtProomId"
+      },
+      "namedRegex": "^/chat/(?<nxtProomId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/shops/[shopId]",
+      "regex": "^/shops/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPshopId": "nxtPshopId"
+      },
+      "namedRegex": "^/shops/(?<nxtPshopId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/shops/[shopId]/review",
+      "regex": "^/shops/([^/]+?)/review(?:/)?$",
+      "routeKeys": {
+        "nxtPshopId": "nxtPshopId"
+      },
+      "namedRegex": "^/shops/(?<nxtPshopId>[^/]+?)/review(?:/)?$"
+    },
+    {
+      "page": "/shops/[shopId]/threads/[threadId]",
+      "regex": "^/shops/([^/]+?)/threads/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPshopId": "nxtPshopId",
+        "nxtPthreadId": "nxtPthreadId"
+      },
+      "namedRegex": "^/shops/(?<nxtPshopId>[^/]+?)/threads/(?<nxtPthreadId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/shops/[shopId]/threads/[threadId]/review",
+      "regex": "^/shops/([^/]+?)/threads/([^/]+?)/review(?:/)?$",
+      "routeKeys": {
+        "nxtPshopId": "nxtPshopId",
+        "nxtPthreadId": "nxtPthreadId"
+      },
+      "namedRegex": "^/shops/(?<nxtPshopId>[^/]+?)/threads/(?<nxtPthreadId>[^/]+?)/review(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/404",
+      "regex": "^/404(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/404(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/area-search",
+      "regex": "^/area\\-search(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/area\\-search(?:/)?$"
+    },
+    {
+      "page": "/auth/confirm",
+      "regex": "^/auth/confirm(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/confirm(?:/)?$"
+    },
+    {
+      "page": "/board",
+      "regex": "^/board(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/board(?:/)?$"
+    },
+    {
+      "page": "/chat",
+      "regex": "^/chat(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/chat(?:/)?$"
+    },
+    {
+      "page": "/contact",
+      "regex": "^/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact(?:/)?$"
+    },
+    {
+      "page": "/favorites",
+      "regex": "^/favorites(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favorites(?:/)?$"
+    },
+    {
+      "page": "/history",
+      "regex": "^/history(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/history(?:/)?$"
+    },
+    {
+      "page": "/legal",
+      "regex": "^/legal(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/legal(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/my-reviews",
+      "regex": "^/my\\-reviews(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/my\\-reviews(?:/)?$"
+    },
+    {
+      "page": "/mypage",
+      "regex": "^/mypage(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/mypage(?:/)?$"
+    },
+    {
+      "page": "/new-therapists",
+      "regex": "^/new\\-therapists(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/new\\-therapists(?:/)?$"
+    },
+    {
+      "page": "/popular-reviews",
+      "regex": "^/popular\\-reviews(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/popular\\-reviews(?:/)?$"
+    },
+    {
+      "page": "/post-review",
+      "regex": "^/post\\-review(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/post\\-review(?:/)?$"
+    },
+    {
+      "page": "/premium",
+      "regex": "^/premium(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/premium(?:/)?$"
+    },
+    {
+      "page": "/privacy",
+      "regex": "^/privacy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/privacy(?:/)?$"
+    },
+    {
+      "page": "/ranking",
+      "regex": "^/ranking(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/ranking(?:/)?$"
+    },
+    {
+      "page": "/register",
+      "regex": "^/register(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/register(?:/)?$"
+    },
+    {
+      "page": "/request-review",
+      "regex": "^/request\\-review(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/request\\-review(?:/)?$"
+    },
+    {
+      "page": "/search",
+      "regex": "^/search(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/search(?:/)?$"
+    },
+    {
+      "page": "/shops",
+      "regex": "^/shops(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/shops(?:/)?$"
+    },
+    {
+      "page": "/terms",
+      "regex": "^/terms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/terms(?:/)?$"
+    }
+  ],
+  "dataRoutes": [
+    {
+      "page": "/shops/[shopId]/threads/[threadId]",
+      "routeKeys": {
+        "nxtPshopId": "nxtPshopId",
+        "nxtPthreadId": "nxtPthreadId"
+      },
+      "dataRouteRegex": "^/_next/data/F_EfLOT15WuVYN7PP\\-jKe/shops/([^/]+?)/threads/([^/]+?)\\.json$",
+      "namedDataRouteRegex": "^/_next/data/F_EfLOT15WuVYN7PP\\-jKe/shops/(?<nxtPshopId>[^/]+?)/threads/(?<nxtPthreadId>[^/]+?)\\.json$"
+    }
+  ],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

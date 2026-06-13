@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import SeoHead from '../components/SeoHead.jsx';
@@ -20,8 +20,8 @@ export default function BoardDetailPage() {
   const [replyContent, setReplyContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_ANON_KEY;
   const headers = { apikey: key, Authorization: `Bearer ${key}` };
 
   useEffect(() => {

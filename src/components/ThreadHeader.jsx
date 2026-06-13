@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import { useAppContext } from '../context/AppContext.tsx';
 import StarRating from './ui/StarRating'; // ★ {} と .tsx を削除
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link } from '../compat/router';
 import toast from 'react-hot-toast';
 
 const ratingLabels = {

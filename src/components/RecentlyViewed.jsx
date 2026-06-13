@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
 
 export default function RecentlyViewed() {

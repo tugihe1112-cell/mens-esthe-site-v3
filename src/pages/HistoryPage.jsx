@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from '../compat/router';
 import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';

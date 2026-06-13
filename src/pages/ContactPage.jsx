@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../compat/router';
 import { AlertCircle, CheckCircle2, Mail, Send } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';

@@ -66,8 +66,8 @@ const Icons = {
 // DMボタン: チャットルームを作成または既存ルームに遷移
 function DMButton({ toUserId, currentUser, navigate }) {
   const [isLoading, setIsLoading] = useState(false);
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_ANON_KEY;
   const headers = { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'return=representation' };
 
   const startDM = async () => {
@@ -129,8 +129,8 @@ export default function ModernReviewCard({ review }) {
   // 閲覧日数を取得（ログイン済みのみ）
   useEffect(() => {
     if (!user) { setCreditDays(0); return; }
-    const url = import.meta.env.VITE_SUPABASE_URL;
-    const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    const url = process.env.VITE_SUPABASE_URL;
+    const key = process.env.VITE_SUPABASE_ANON_KEY;
     fetch(`${url}/rest/v1/user_credits?user_id=eq.${user.id}&select=credits_days,expires_at`, {
       headers: { apikey: key, Authorization: `Bearer ${key}` }
     })

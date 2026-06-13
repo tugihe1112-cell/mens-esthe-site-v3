@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useShopData } from '../contexts/DataContext.jsx';
 import ModernReviewCard from '../components/ModernReviewCard.jsx';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../../../compat/router';
 import LazyImage from '../../../components/LazyImage';
 
 export const RankingListItem = ({ item, rank, delay }) => {

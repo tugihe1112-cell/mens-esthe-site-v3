@@ -3,7 +3,7 @@ import { useShopData } from '../contexts/DataContext.jsx';
 import { useRankingData } from '../features/ranking/hooks/useRankingData';
 import { PodiumCard } from '../features/ranking/components/PodiumCard';
 import { RankingListItem } from '../features/ranking/components/RankingListItem';
-import { Link } from 'react-router-dom';
+import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { RankingListSkeleton } from '../components/ui/Skeleton.jsx';

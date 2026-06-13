@@ -7,8 +7,8 @@ export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0
   const [count, setCount] = useState(initialCount);
   const [isLoading, setIsLoading] = useState(false);
 
-  const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const url = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_ANON_KEY;
 
   useEffect(() => {
     if (!user || !reviewId) return;

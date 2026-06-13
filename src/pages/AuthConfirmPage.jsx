@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from '../compat/router';
 import { supabase } from '../lib/supabase';
 
 export default function AuthConfirmPage() {
