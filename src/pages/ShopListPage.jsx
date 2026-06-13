@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from '../compat/router';
 import { useShopData } from "../contexts/DataContext.jsx";
 import { useSearch } from "../hooks/useSearch";
 import { getDisplayName } from "../utils/shopHelpers";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { supabase } from "../lib/supabase";
 import Header from "../components/Header.jsx";

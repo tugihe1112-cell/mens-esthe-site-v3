@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext";
 import { User, LogOut } from "lucide-react";
 import Header from "../components/Header"; // 👈 ヘッダーをインポート！

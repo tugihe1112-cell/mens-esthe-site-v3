@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext";
 import { useAppContext } from "../context/AppContext.tsx";
 

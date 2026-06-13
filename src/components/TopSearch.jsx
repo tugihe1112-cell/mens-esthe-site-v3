@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from '../compat/router';
 import { useAppContext } from "../context/AppContext.tsx";
 
 // === エリアグループ定義 (一覧ページと同じもの) ===

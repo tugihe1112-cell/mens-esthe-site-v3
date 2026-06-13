@@ -3,7 +3,7 @@
 // ========================================
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from '../../compat/router';
 import RatingDisplay from "./RatingDisplay";
 import { useShopData } from '../contexts/DataContext.jsx';
 import { getDisplayName } from '../../utils/shopHelpers';

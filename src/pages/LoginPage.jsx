@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext"; // 👈 Supabaseの本物認証パイプ
 import SeoHead from '../components/SeoHead.jsx';
 
