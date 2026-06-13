@@ -4,3 +4,7 @@ dist
 .env
 .vercel
 migrate_to_supabase.js
+
+# Next.js build output
+.next/
+out/

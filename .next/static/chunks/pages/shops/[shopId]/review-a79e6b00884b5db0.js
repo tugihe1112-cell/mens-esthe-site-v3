@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[30],{190:(_,s,e)=>{(window.__NEXT_P=window.__NEXT_P||[]).push(["/shops/[shopId]/review",function(){return e(8356)}])},8356:(_,s,e)=>{"use strict";e.r(s),e.d(s,{default:()=>u.A});var u=e(4764)}},_=>{_.O(0,[350,750,764,636,593,792],()=>_(_.s=190)),_N_E=_.O()}]);
