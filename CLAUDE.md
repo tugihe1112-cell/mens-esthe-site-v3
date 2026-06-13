@@ -21,10 +21,11 @@
 
 | 状態 | 作業内容 | メモ |
 |------|----------|------|
-| ✅ | **ホーム表示バグ3件修正** | Home.jsx: ①注目セラピスト同名重複排除（グループ店多重登録対策）②新着店舗をブランド単位で重複排除（group_id/店名ベース、Lynx連発解消）③「埼玉県 埼玉県」→県=市なら市を非表示。**未push** |
-| ✅ | **プレミアム無料化の穴 封鎖** | PremiumPage: profiles直接upsertでplan:'premium'化できた旧handleSubscribeを廃止→「準備中」アラートに変更。Stripe実装まで受付停止。**未push** |
-| ✅ | **セラピストページにJSON-LD追加** | ThreadDetailPage: HealthAndBeautyBusiness + AggregateRating + 公開口コミ（is_public/owner_manual）最大5件のReviewを構造化データ出力。**未push** |
-| ✅ | **P0実装: 口コミ1件目公開＋閲覧権自動付与＋登録ボーナス** | ①`06_p0_review_growth.sql`: reviews.is_public追加・セラピストごと最古1件をバックフィル公開・1件目自動公開トリガー・700字以上→7日自動付与トリガー（**⚠️Supabase SQL Editorで実行要**）②`api/auth/signup.js`: 登録時に閲覧権3日付与 ③ModernReviewCard: is_publicで全公開＋未ログインに登録CTA ④Home/SearchPage/PostReviewPageの文言を自動付与仕様に更新。vite build成功確認済み。**未push** |
+| ✅ | **ホーム表示バグ3件修正** | Home.jsx: ①注目セラピスト同名重複排除（グループ店多重登録対策）②新着店舗をブランド単位で重複排除（group_id/店名ベース、Lynx連発解消）③「埼玉県 埼玉県」→県=市なら市を非表示。pushed: d2256ee ✅ |
+| ✅ | **プレミアム無料化の穴 封鎖** | PremiumPage: profiles直接upsertでplan:'premium'化できた旧handleSubscribeを廃止→「準備中」アラートに変更。Stripe実装まで受付停止。pushed: d2256ee ✅ |
+| ✅ | **セラピストページにJSON-LD追加** | ThreadDetailPage: HealthAndBeautyBusiness + AggregateRating + 公開口コミ（is_public/owner_manual）最大5件のReviewを構造化データ出力。pushed: d2256ee ✅ |
+| ✅ | **P0実装: 口コミ1件目公開＋閲覧権自動付与＋登録ボーナス** | ①`06_p0_review_growth.sql`: reviews.is_public追加・セラピストごと最古1件をバックフィル公開・1件目自動公開トリガー・700字以上→7日自動付与トリガー（Supabase SQL Editor実行済み✅）②`api/auth/signup.js`: 登録時に閲覧権3日付与 ③ModernReviewCard: is_publicで全公開＋未ログインに登録CTA ④Home/SearchPage/PostReviewPageの文言を自動付与仕様に更新。vite build成功確認済み。pushed: d2256ee ✅ |
+| ✅ | **動的サイトマップ実装** | `api/sitemap.xml.js`: Service Role Keyで全店舗＋is_public口コミありセラピストページを動的生成（1時間キャッシュ）。`public/sitemap.xml`をsitemapindex形式に変換（→ /api/sitemap.xmlを参照）。`robots.txt`に両URL追記。push: ターミナルで `git add api/sitemap.xml.js public/sitemap.xml public/robots.txt && git commit -m "feat: dynamic sitemap" && git push` 要 |
 | ✅ | **サイト戦略診断（口コミNo.1化）** | 結論: 口コミ資産がほぼゼロ（手動6件のみ）＋W2R二重ゲート＋SPA全ロックでコールドスタートのデッドロック。P0=口コミ1件目公開・閲覧権自動付与・登録ボーナス / P1=SSR+構造化データ / P2=データ鮮度自動化・ホーム表示バグ（新着Lynx重複・「埼玉県 埼玉県」・注目セラピスト重複）/ P3=通知・Stripe穴塞ぎ・CPC |
 
 ### 2026-06-12
