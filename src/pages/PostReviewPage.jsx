@@ -526,7 +526,7 @@ export default function PostReviewPage() {
   const onSubmit = async (data) => {
     const result = await submitReview(data);
     if (result.success) {
-      toast.success('クチコミを投稿しました！');
+      toast.success('投稿ありがとうございます！7日間の閲覧権が付与されました🎉', { duration: 5000 });
 
       // 管理者へメール通知（失敗しても投稿は成功扱い）
       const shopName = shops.find(s => s.id === data.shopId)?.name || '';

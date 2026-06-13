@@ -5,14 +5,38 @@
 
 ---
 
+## ⚠️ Claude への絶対ルール（必読・厳守）
+
+1. **TaskCreate / TaskUpdate などのタスクリストツールは絶対に使わない。** UIにウィジェットが出てうるさい。進捗管理はこの CLAUDE.md だけで行う。
+2. **作業完了のたびに必ずこの CLAUDE.md を更新する。** 作業ログテーブルの状態を ⏳→✅ に変え、メモ欄に結果を記録する。更新を忘れない。
+3. **Chromeは常に使っていい。** JS描画サイト・ダウンサイト問わず積極的に Claude in Chrome を活用する。
+
+---
+
 ## 🔄 現在の作業ログ（セッション日誌）
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
-### 2026-06-11（現在のセッション）
+### 2026-06-13
 
 | 状態 | 作業内容 | メモ |
 |------|----------|------|
+| ✅ | **ホーム表示バグ3件修正** | Home.jsx: ①注目セラピスト同名重複排除（グループ店多重登録対策）②新着店舗をブランド単位で重複排除（group_id/店名ベース、Lynx連発解消）③「埼玉県 埼玉県」→県=市なら市を非表示。**未push** |
+| ✅ | **プレミアム無料化の穴 封鎖** | PremiumPage: profiles直接upsertでplan:'premium'化できた旧handleSubscribeを廃止→「準備中」アラートに変更。Stripe実装まで受付停止。**未push** |
+| ✅ | **セラピストページにJSON-LD追加** | ThreadDetailPage: HealthAndBeautyBusiness + AggregateRating + 公開口コミ（is_public/owner_manual）最大5件のReviewを構造化データ出力。**未push** |
+| ✅ | **P0実装: 口コミ1件目公開＋閲覧権自動付与＋登録ボーナス** | ①`06_p0_review_growth.sql`: reviews.is_public追加・セラピストごと最古1件をバックフィル公開・1件目自動公開トリガー・700字以上→7日自動付与トリガー（**⚠️Supabase SQL Editorで実行要**）②`api/auth/signup.js`: 登録時に閲覧権3日付与 ③ModernReviewCard: is_publicで全公開＋未ログインに登録CTA ④Home/SearchPage/PostReviewPageの文言を自動付与仕様に更新。vite build成功確認済み。**未push** |
+| ✅ | **サイト戦略診断（口コミNo.1化）** | 結論: 口コミ資産がほぼゼロ（手動6件のみ）＋W2R二重ゲート＋SPA全ロックでコールドスタートのデッドロック。P0=口コミ1件目公開・閲覧権自動付与・登録ボーナス / P1=SSR+構造化データ / P2=データ鮮度自動化・ホーム表示バグ（新着Lynx重複・「埼玉県 埼玉県」・注目セラピスト重複）/ P3=通知・Stripe穴塞ぎ・CPC |
+
+### 2026-06-12
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ✅ | **全73店舗 写真衝突バグ一括修正** | ノイズ115件削除・衝突Storage URL 2422件をnull化。衝突チェック0件確認済み |
+| ✅ | **Lynx全14店舗 店舗画像再取得** | --forceで全店舗og:image再取得。新宿店の壊れたimage_urlも修正 |
+| ✅ | **小悪魔スパトウキョウ 写真衝突修正** | 393名のStorage URLをUUID-basedファイル名で再登録。65名は新規入店者（別途Chrome対応要） |
+| ✅ | **小悪魔スパトウキョウ 新規入店者 写真登録** | fix_koakuma_new_therapists.mjs: nullだった16名中14名を写真付与。こはる・はるは退職（ライブサイト不在）で2名未マッチ |
+| ✅ | **被り写真バグ — 小悪魔スパ修正** | fix_koakuma_duplicate_images.mjs: 51件null化。もも/櫻井もも・もか/百瀬もか・かな/みかな(suffix誤マッチ) + Fucolleデフォルト画像を共有していた39名 |
+| ✅ | **被り写真バグ — 全店舗スキャン** | check_duplicate_images.mjs: Storage URL 13250件確認。他店舗での被りは0件 ✅ |
 | ✅ | Code Splitting実装 | App.jsx全ページをlazy化 |
 | ✅ | Storage RLS設定 | therapist-images バケット保護 |
 | ✅ | 不要ファイル整理 | _archive/に移動 |
@@ -31,10 +55,76 @@
 | ✅ | **茨城県 locations.js更新** | WARDS + PREF_CITY_MAP に「水戸」「つくば」「守谷」追加済み |
 | ✅ | **茨城県 18店舗 shop登録** | 水戸10・つくば7・守谷1 計18店舗 |
 | ✅ | **茨城県 セラピスト登録** | 計2205名（水戸704・つくば1213・守谷288）。Rizは403スキップ |
+| ✅ | **栃木県 locations.js更新** | WARDS + PREF_CITY_MAP に「宇都宮」「小山」追加済み |
+| ✅ | **栃木県 宇都宮・小山 shop登録** | 宇都宮+小山 計20店舗登録完了 |
+| ✅ | **栃木県 小山エリア セラピスト登録** | 10店舗・計1061名（platina:37・lastscene:27・goukakenran:81・iyashi_spa:41・finale:356・aroma_priere:24・azure_spa:36・kyunkyu_spa:153・showtime:286・luangea:20） |
+| ✅ | **栃木県 宇都宮エリア shop・セラピスト登録** | YGD SPA(21)・セラドルコレクション(20)・AQUA SPA(56)・THE美セス(shop only)・KAWA-SPA(60)・ぼくのエステ小山ルーム(5/名前のみ) 計162名 |
+| ✅ | **群馬県 locations.js更新** | WARDS + PREF_CITY_MAP に「前橋」「高崎」追加済み |
+| ✅ | **群馬県 前橋・高崎 shop登録** | 前橋10店舗・高崎8店舗 計18店舗登録完了 |
+| ✅ | **群馬県 セラピスト登録** | 前橋219名・高崎332名 計551名。スキップ: cutie_honey(Fucolle撤退)・decorte_spa(サイトダウン) |
+| ✅ | **群馬県 伊勢崎・太田 locations.js更新** | WARDS + PREF_CITY_MAP に「伊勢崎」「太田」追加済み |
+| ✅ | **群馬県 伊勢崎・太田 shop登録** | 伊勢崎9店舗・太田9店舗 計18店舗登録完了 |
+| ✅ | **群馬県 伊勢崎・太田 セラピスト登録** | 伊勢崎247名・太田153名 計400名。スキップ: CoCoRu(therapistページなし)・ましゅまろPLAS(peraichi JS)・HotLand(サイトダウン) |
+| ✅ | **null shop画像 一括補完** | fix_missing_shop_images.mjs: 18件自動更新。fix_warned_shop_images.mjs: Chrome手動取得8件追加更新（Revere Spa・iDOL・Chloe・doigt de fee・ROUGE・And Spa・BESTSTAR・AROMA PRESIDENT）。計26件更新 |
+| ✅ | **全店舗 shop画像 不正画像一括修正** | fix_bad_shop_images.mjs --area=all: 3パスで計400件超更新。isBadCandidate強化（noimage/credit/link_XXX/外部バナー等）。fix_specific_bad_images.mjs: MITSUBACHI・R,s SPA・Chocolate・GRAND CHARIOT・AROMA TIAMO等手動修正。fix_chrome_found_images.mjs: Chrome確認で厚木アロマギルド・彼女ん家・みるくSPA（website_url修正含む）3件更新 |
+| ✅ | **サイトダウン店舗 画像取得不可確認** | Eren×5・ビコーズ・DeepChill・FLYING SPA（閉店）・AROMA CASTLE・Pattaya Resort・今日子の姉妹・Anela Spa・キューピット・Karlovy・ZEPHYR・Melty Aroma・RESORT・Riz・昼顔・HotLand・天界のスパ中目黒・bulan・Room one の計22件はサイトダウン/閉店/SSL切れで画像取得不可。null継続 |
 
 ---
 
-> **最終更新: 2026-06-11（茨城県 完全完了）**
+> **最終更新: 2026-06-12（被り写真バグ 発見・対処スクリプト作成）**
+>
+> ※ 2026-06-12: **被り写真バグ（intra-shop duplicate image_url）** を発見:
+> - **定義**: 同一 shop_id 内で、異なる名前の複数セラピストが同じ image_url を持つ状態
+> - **発生原因**: fix_koakuma_photo_collision.mjs や fix_koakuma_new_therapists.mjs の suffix matching が誤って複数の DB 名を同一 UUID にマッチさせた
+> - **症状**: 店舗ページで複数セラピストが同じ顔写真を表示する
+> - **対処**: 同shop_id内で重複する image_url を null に戻す（noimage表示が正しい挙動）
+> - **スクリプト**:
+>   - `scripts/maintenance/fix_koakuma_duplicate_images.mjs` — 小悪魔スパ専用修正
+>   - `scripts/debug/check_duplicate_images.mjs` — 全店舗スキャン（Storage URL のみ対象）
+> - **残作業**: 上記2スクリプトを順番に実行すること。他店舗でも同様の被りが存在する可能性あり
+> - **予防策**: suffix matching は名前の全体長が2文字以上の場合のみ使用。誤マッチが疑われる場合は null のままにして手動確認を優先する
+
+> **最終更新: 2026-06-12（全写真衝突バグ修正完了）**
+>
+> ※ 2026-06-12: 写真衝突バグ全73店舗 一括修正完了:
+> - `check_photo_collisions.mjs` で73店舗・2469名の衝突を検出
+> - `fix_koakuma_photo_collision.mjs`: 小悪魔スパ 393名を正しいUUID-basedファイル名で再登録
+> - `fix_all_collision_nulls.mjs`: ノイズ115件削除 + 衝突Storage URL 2422件をnull化
+> - `fix_lynx_shop_images.mjs --force`: Lynx全14店舗のog:imageを再取得（新宿店の壊れたURLも修正）
+> - 衝突チェック最終結果: ✅ 0件
+> - 残作業: 小悪魔スパ 65名の新規入店者はChrome in Chromeで再取得要
+> - **2度と起きないための鉄則**: StorageファイルネームはセラピストID/日本語名を使わず、元画像URLのベースネーム（uuid.jpg等）を使うこと
+>
+> **最終更新: 2026-06-12（群馬県 伊勢崎・太田 完全完了）**
+>
+> ※ 2026-06-12: 群馬県 伊勢崎・太田エリア 完全完了:
+> - 伊勢崎(9店舗): RAVIORA(53)・愛猫(14)・G/relax!(17/名前のみ)・Anela(2/名前のみ)・秘密のとびら(72)・ぼくのエステ(63/名前のみ)・みやび(26/名前のみ)・CoCoRu(shop only)・ましゅまろPLAS(スキップ/peraichi JS) 計247名
+> - 太田(9店舗): RAVIORA(53)・RIG(10/名前のみ)・LUCIALL(1)・ぼくがバナナ(18/名前のみ)・VIRGO(33)・NoA(17/名前のみ)・Carnet(11)・AROMA PRESIDENT(10)・HotLand(shop only/サイトダウン) 計153名
+> - 合計: 400名（18店舗）
+> - epr.jp CMS(RIG・ぼくがバナナ): CloudFront CDN CORS制限 → 名前のみ登録
+> - caskan.com CDN(G/relax!): CORS制限 → 名前のみ登録
+> - boku-este.jp画像: wp-content fetch完全ブロック → 名前のみ登録
+> - VIRGO・Carnetノイズ: キャンペーン・割引6+5件を登録後に削除済み
+>
+> ※ 2026-06-12: 群馬県 前橋・高崎エリア 完全完了:
+> - 前橋(8店舗): awadachi(24)・boku_no_esthe(3)・first_spa(19)・kami_no_tsue(81)・luna(4)・madame_spa(4)・red_ribbon(63)・rydeen(21) 計219名
+> - 高崎(8店舗): irokoi_club(69)・kami_no_tsue(85)・luana_spa(92)・muchimuchi_spa(12)・my_precious(18)・pompom(16)・yurikago(23)・zero(17) 計332名
+> - スキップ: cutie_honey(maebasicutie0915.com → Fucolle撤退)・decorte_spa(decorte-spa.site ダウン)
+> - shop_id修正: boku_este→boku_no_esthe・god_cane→kami_no_tsue (therapists PATCH済み)
+> - 泡勃: HTTP wp-content/uploads画像 → canvas.drawImage→toBlob→Storage Upload で対処
+>
+> ※ 2026-06-11: 栃木県 宇都宮エリア 完全完了:
+> - YGD SPA(21名): /photos/{lid}/{timestamp}-{filename}.jpeg パターン、Storage移行済み
+> - セラドルコレクション(20名): WordPress wp-content、.jp→.jpg修正対応、Storage移行済み
+> - AQUA SPA(56名): /photos/{lid}/raw_{lid}.jpg (LEON SPA系)、Storage移行済み
+> - THE美セス: 出張型(宇都宮・久喜・古河等マルチエリア)、セラピスト非公開 → shop登録のみ
+> - KAWA-SPA(60名): caskan.com CDN、CORS制限でStorage移行不可 → CDN URL直接使用
+> - ぼくのエステ 小山ルーム(5名): 小山エリア出勤セラピストのみ登録、ホットリンク保護で名前のみ
+> - cuncunspa.com: SSL証明書エラー(サイトダウン) → スキップ
+> - マダムスパ宇都宮ルーム: 水戸として既登録(madame-esthe.com)のためスキップ
+>
+> ※ 2026-06-11: 栃木県 小山エリア 完全完了:
+> - 小山(10店舗): 豪華絢爛(81)・癒しのスパ(41)・Finale(356)・Aroma Priere(24)・Azure Spa(36)・キュンキュンスパ(153)・SHOWTIME小山(286)・Lu.Angea(20)・PLATINA(37)・lastscene(27) 計1061名
 >
 > ※ 2026-06-11: 茨城県 水戸・つくば・守谷エリア 完全完了:
 > - 水戸(10店舗): マダムスパ(88)・Melt Rich(28)・美女SPA(255)・AROMA QUEEN(151)・QUEENDOM(33)・エステの虎(100)・まなもち(31)・eMpress(13)・NEVER LAND(5)・Riz(0/403スキップ) 計704名
@@ -149,7 +239,7 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 - `shops.raw_data.area` に設定した値と `WARDS` のキー名を完全一致させること
 - 例: `area: '越谷・春日部'` → `WARDS["越谷・春日部"] = ["越谷・春日部", ...]` が必要
 
-### 都道府県別 完了状況（2026-06-08時点）
+### 都道府県別 完了状況（2026-06-12時点）
 
 | 都道府県 | 状態 | 備考 |
 |----------|------|------|
@@ -171,11 +261,43 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 | **広島県** | ✅ 完了 | 8店舗。セラピスト計329名（nina:77・人妻さん:11・Queen:47・RESORT:8・ENEL:44・CREA:60・Aroma Mia:19・福山研究所:63） |
 | **北海道** | ✅ 完了 | 9店舗・計295名。Belleliser(4位)は未調査のため未登録 |
 | **茨城県** | ✅ 完了 | 18店舗・計2205名（水戸10・つくば7・守谷1）。Riz(403スキップ)。shop image_url未設定 |
-| その他全都道府県 | ❌ 未着手 | mens-mg.comで人気店を確認してから着手 |
+| **栃木県** | ✅ 完了 | 宇都宮+小山 計20+追加店舗。小山1061名・宇都宮162名登録完了 |
+| **群馬県** | ✅ 完了 | 前橋10+高崎8+伊勢崎9+太田9=36店舗。551+400=951名。cutie_honey(Fucolle撤退)・decorte_spa(ダウン)・HotLand(ダウン)・CoCoRu・ましゅまろPLASスキップ |
+| **静岡県（浜松・静岡市）** | ❌ 未着手 | 沼津（竜宮城）のみ登録済み。浜松・静岡市エリアは未着手 |
+| **新潟県** | ❌ 未着手 | — |
+| **石川県（金沢）** | ❌ 未着手 | — |
+| **岡山県** | ❌ 未着手 | — |
+| **熊本県** | ❌ 未着手 | — |
+| **沖縄県** | ❌ 未着手 | — |
+| **長野県** | ❌ 未着手 | — |
+| **岐阜県** | ❌ 未着手 | — |
+| **三重県** | ❌ 未着手 | — |
+| **その他全都道府県** | ❌ 未着手 | mens-mg.comで人気店を確認してから着手 |
 
-### 次にやること
-未着手の都道府県を `https://mens-mg.com/` でランキングを確認 → 人気店TOP10前後を登録していく。
-優先度: 北海道 → その他
+### 🚀 次にやること（新チャット引き継ぎ用）
+
+**大都市圏（東京・大阪・名古屋・横浜・福岡・仙台・札幌）は完了済み。**
+**関東内陸3県（茨城・栃木・群馬）も完了済み（2026-06-12）。**
+
+次は未着手都道府県を `https://mens-mg.com/` でランキング確認 → 人気店を登録していく。
+
+**推奨優先順位（人口・メンエス市場規模順）:**
+1. **静岡県** — 浜松・静岡市エリア（`https://mens-mg.com/shizuoka/`）
+2. **新潟県** — 新潟市（`https://mens-mg.com/niigata/`）
+3. **石川県** — 金沢（`https://mens-mg.com/ishikawa/`）
+4. **岡山県** — 岡山市（`https://mens-mg.com/okayama/`）
+5. **熊本県** — 熊本市（`https://mens-mg.com/kumamoto/`）
+6. **沖縄県** — 那覇（`https://mens-mg.com/okinawa/`）
+
+**1都道府県あたりの手順（必ず守ること）:**
+1. `https://mens-mg.com/[県名]/` でランキングTOP10〜15を確認
+2. DBに未登録の店舗を特定（`check_all_shops_status.mjs` 参照）
+3. `src/data/locations.js` を更新（WARDS + PREF_CITY_MAP に新エリア追加）
+4. shop登録スクリプト作成・実行（`image_url` = og:image を必ず同時設定）
+5. セラピスト登録（cheerio → Storage upload → DB insert）
+6. CLAUDE.md の作業ログ・都道府県別テーブルを更新
+
+**⚠️ 鉄則：shopを登録したらその場でセラピストも必ず登録する（次エリア移動禁止）**
 
 ※ 千葉・埼玉はshop・セラピスト登録ともに完了（2026-06-08）。
 

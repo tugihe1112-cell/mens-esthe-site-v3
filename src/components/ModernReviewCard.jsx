@@ -147,8 +147,8 @@ export default function ModernReviewCard({ review }) {
       .catch(() => setCreditDays(0));
   }, [user]);
 
-  // 閲覧権限: プレミアム OR 閲覧日数あり OR owner_manual口コミは常時公開
-  const canReadFull = isPremium || (creditDays !== null && creditDays > 0) || review.user_id === 'owner_manual';
+  // 閲覧権限: プレミアム OR 閲覧日数あり OR owner_manual口コミ OR 公開口コミ（各セラピストの1件目）
+  const canReadFull = isPremium || (creditDays !== null && creditDays > 0) || review.user_id === 'owner_manual' || review.is_public === true;
 
   const scores = [
     { label: "ルックス", value: review.detailedRatings?.looks || 0, icon: <Icons.Eye /> },
@@ -275,13 +275,21 @@ export default function ModernReviewCard({ review }) {
                 <div className="text-center px-5 py-4 bg-gradient-to-br from-purple-950/90 to-slate-900/90 rounded-2xl border border-purple-500/30 backdrop-blur shadow-xl max-w-[260px]">
                   <p className="text-purple-300 font-black text-[10px] tracking-widest uppercase mb-2">閲覧制限中</p>
                   <p className="text-white font-black text-sm mb-1 leading-tight">体験談を投稿すると<br/>この口コミが読めます</p>
-                  <p className="text-slate-400 text-[11px] mb-3">詳しい口コミを1件書くと<span className="text-purple-300 font-bold">最大25日間</span>読み放題になります</p>
+                  <p className="text-slate-400 text-[11px] mb-3">体験談を1件投稿すると<span className="text-purple-300 font-bold">7日間読み放題</span>（即時自動付与）</p>
                   <a
                     href="/post-review"
                     className="inline-block bg-pink-600 hover:bg-pink-500 text-white text-xs font-black px-6 py-2.5 rounded-xl transition-all hover:scale-105 shadow-lg shadow-pink-900/50"
                   >
                     口コミを書く →
                   </a>
+                  {!user && (
+                    <a
+                      href="/register"
+                      className="block mt-2 text-[11px] font-bold text-purple-300 hover:text-purple-200 hover:underline"
+                    >
+                      無料登録で3日間読み放題 →
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

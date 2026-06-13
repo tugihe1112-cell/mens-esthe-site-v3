@@ -19,37 +19,15 @@ export default function PremiumPage() {
   };
 
   // 🌟 【本物仕様】決済ボタンを押した時の処理
+  // ⚠️ 決済（Stripe）実装までプレミアム登録は受付停止
+  // 旧実装は profiles を直接 plan:'premium' に書き換えており、誰でも無料でプレミアム化できる穴だった
   const handleSubscribe = async () => {
     if (!isLoggedIn) {
       alert("プレミアム登録にはログインが必要です！");
       navigate('/login');
       return;
     }
-
-    setIsLoading(true);
-    try {
-      // 🌟 ここでSupabaseの「自分のプロフィール」をpremiumに上書きする！
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({ 
-          id: user.id, 
-          plan: 'premium', 
-          updated_at: new Date() 
-        });
-
-      if (error) throw error;
-
-      alert("🎉 プレミアム会員にアップグレードしました！すべてのクチコミが読み放題です！");
-      
-      // 画面をリロードして、システム全体に「この人はプレミアムだ！」と再認識させる
-      window.location.reload(); 
-      
-    } catch (error) {
-      console.error("アップグレードエラー:", error);
-      alert("エラーが発生しました。もう一度お試しください。");
-    } finally {
-      setIsLoading(false);
-    }
+    alert("プレミアムプランは現在準備中です。\n口コミを投稿すると7日間、新規登録で3日間の閲覧権が無料で付与されます！");
   };
 
   return (
@@ -100,7 +78,7 @@ export default function PremiumPage() {
               disabled={isLoading || isPremium} 
               className="w-full max-w-md mx-auto px-12 py-4 rounded-xl bg-gradient-to-r from-yellow-600 to-yellow-500 text-slate-900 text-lg font-black transition-all hover:scale-105 shadow-lg shadow-yellow-600/30 disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2"
             >
-              {isLoading ? "処理中..." : isPremium ? "👑 既にプレミアム会員です" : `${plans[selectedPlan].name}に登録する`}
+              {isLoading ? "処理中..." : isPremium ? "👑 既にプレミアム会員です" : `${plans[selectedPlan].name}（準備中）`}
             </button>
             
             {!isLoggedIn && (

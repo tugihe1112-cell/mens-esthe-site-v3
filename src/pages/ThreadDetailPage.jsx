@@ -191,11 +191,45 @@ export default function ThreadDetailPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
-      <SeoHead 
-        title={`${therapist.name} | ${shop.name}`} 
+      <SeoHead
+        title={`${therapist.name} | ${shop.name}`}
         description={seoDesc}
         path={`/shops/${shopId}/threads/${threadId}`}
       />
+
+      {/* 構造化データ: セラピスト口コミ（公開分のみ）→ 検索結果に★リッチリザルト */}
+      {therapistReviews.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "HealthAndBeautyBusiness",
+          "name": `${getDisplayName(shop.name)} ${therapist.name}`,
+          "url": `https://www.mens-esthe-map.jp/shops/${shopId}/threads/${threadId}`,
+          "image": therapist.image_url || therapist.image || undefined,
+          "address": {
+            "@type": "PostalAddress",
+            "addressRegion": shop.prefecture || undefined,
+            "addressLocality": shop.city || undefined,
+            "addressCountry": "JP"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": (therapistReviews.reduce((s, r) => s + Number(r.rating || 0), 0) / therapistReviews.length).toFixed(1),
+            "reviewCount": therapistReviews.length,
+            "bestRating": 5,
+            "worstRating": 1
+          },
+          "review": therapistReviews
+            .filter(r => r.is_public === true || r.user_id === 'owner_manual')
+            .slice(0, 5)
+            .map(r => ({
+              "@type": "Review",
+              "author": { "@type": "Person", "name": r.user_name || r.userName || "匿名" },
+              "datePublished": (r.created_at || r.timestamp || '').slice(0, 10) || undefined,
+              "reviewRating": { "@type": "Rating", "ratingValue": Number(r.rating || 0), "bestRating": 5, "worstRating": 1 },
+              "reviewBody": (r.content || '').slice(0, 1500)
+            }))
+        }) }} />
+      )}
 
       {/* --- 全画面写真エリア --- */}
       <div className={`relative w-full group overflow-hidden ${therapist.image ? 'h-[70vh] md:h-[80vh]' : 'h-[45vh] bg-slate-900'}`}>

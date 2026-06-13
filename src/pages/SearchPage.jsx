@@ -763,7 +763,7 @@ export default function SearchPage() {
                           >
                             <div>
                               <p className="text-white font-black text-sm">口コミを書くと、みんなの口コミが読み放題になります</p>
-                              <p className="text-purple-300 text-xs mt-0.5">体験談（700文字以上）を投稿 → 管理者審査 → 閲覧権付与</p>
+                              <p className="text-purple-300 text-xs mt-0.5">体験談（700文字以上）を投稿 → 7日間の閲覧権を即時自動付与</p>
                             </div>
                             <span className="shrink-0 text-white bg-pink-600 group-hover:bg-pink-500 font-black text-xs px-4 py-2 rounded-xl transition whitespace-nowrap">口コミを書く →</span>
                           </Link>

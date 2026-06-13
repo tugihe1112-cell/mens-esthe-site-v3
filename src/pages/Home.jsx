@@ -93,9 +93,19 @@ export default function HomePage() {
           pool.push(...shuffled.slice(0, 2).map(t => ({ ...t, _pref: pref })));
         }
 
+        // 同一人物の重複排除（グループ店舗に同名で多重登録されているため名前で一意化）
+        const seenNames = new Set();
+        const uniquePool = [];
+        for (const t of pool) {
+          const key = (t.name || '').replace(/[\s　]/g, '');
+          if (!key || seenNames.has(key)) continue;
+          seenNames.add(key);
+          uniquePool.push(t);
+        }
+
         // 都道府県ごとにグループ化してラウンドロビン抽出（地域分散）
         const byPref = {};
-        for (const t of pool) {
+        for (const t of uniquePool) {
           if (!byPref[t._pref]) byPref[t._pref] = [];
           byPref[t._pref].push(t);
         }
@@ -156,9 +166,23 @@ export default function HomePage() {
       });
   }, [shops]);
 
-  const recommendedShops = shops
-    ? [...shops].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)).slice(0, 8)
-    : [];
+  // 新着店舗: ブランド（group_id / 店名ベース）で重複排除して1ブランド1枠
+  const recommendedShops = useMemo(() => {
+    if (!shops || shops.length === 0) return [];
+    const sorted = [...shops].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+    const seen = new Set();
+    const out = [];
+    for (const s of sorted) {
+      const brandKey = (s.group_id && !String(s.group_id).startsWith('g_solo'))
+        ? s.group_id
+        : (s.name || '').replace(/[（(].*?[)）]/g, '').replace(/[\s　]/g, '').toLowerCase();
+      if (!brandKey || seen.has(brandKey)) continue;
+      seen.add(brandKey);
+      out.push(s);
+      if (out.length >= 8) break;
+    }
+    return out;
+  }, [shops]);
 
   // サイドバー用: image_urlがある店舗からランダム6件（マウント時固定）
   const sidebarShops = useMemo(() => {
@@ -206,7 +230,7 @@ export default function HomePage() {
               口コミを投稿すると、みんなの口コミが読み放題になります
             </p>
             <p className="text-purple-300 text-xs mt-1">
-              詳しい体験談（700文字以上）を書くと管理者が審査・閲覧日数を付与
+              詳しい体験談（700文字以上）を書くと7日間読み放題を即時付与・新規登録で3日間無料
             </p>
           </div>
           <Link
@@ -417,7 +441,7 @@ export default function HomePage() {
                 </div>
                 <div className="bg-slate-900 rounded-b-2xl px-3 py-2.5 border-t border-white/5">
                   <h4 className="text-white font-black text-sm leading-tight truncate">{getDisplayName(shop.name)}</h4>
-                  <p className="text-[10px] text-slate-400 truncate mt-0.5">{shop.prefecture || '東京'} {shop.city}</p>
+                  <p className="text-[10px] text-slate-400 truncate mt-0.5">{shop.prefecture || '東京'}{shop.city && shop.city !== shop.prefecture ? ` ${shop.city}` : ''}</p>
                 </div>
               </Link>
             ))}
@@ -476,7 +500,7 @@ export default function HomePage() {
           >
             <div className="text-2xl mb-2">✍️</div>
             <h4 className="text-white font-black text-sm leading-tight">口コミを書いて<br />閲覧権限をゲット</h4>
-            <p className="text-slate-400 text-[11px] mt-2 leading-relaxed">700文字以上の体験談を投稿すると、管理者が審査してみんなの口コミが読める日数を付与します。</p>
+            <p className="text-slate-400 text-[11px] mt-2 leading-relaxed">700文字以上の体験談を投稿すると、その場で7日間の閲覧権が自動付与されます。新規登録だけでも3日間無料。</p>
             <span className="block mt-3 text-purple-300 text-xs font-black">口コミを投稿する →</span>
           </Link>
 

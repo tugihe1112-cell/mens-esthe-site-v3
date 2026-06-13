@@ -46,6 +46,21 @@ export default async function handler(req, res) {
 
     userId = userData.user.id;
 
+    // Step1.5: 新規登録ボーナス（閲覧権3日）
+    // 失敗しても登録自体は続行。メール送信失敗時のユーザー削除で cascade 削除される
+    try {
+      const { error: bonusError } = await admin.from('user_credits').insert({
+        user_id: userId,
+        credits_days: 3,
+        expires_at: new Date(Date.now() + 3 * 86_400_000).toISOString(),
+        total_reviews_posted: 0,
+        updated_at: new Date().toISOString(),
+      });
+      if (bonusError) console.error('[signup bonus] ', bonusError.message);
+    } catch (e) {
+      console.error('[signup bonus] ', e.message);
+    }
+
     // Step2: 確認リンク生成
     const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
       type: 'signup',
