@@ -54,7 +54,7 @@ const TOKYO_GROUPS = [
   };
   
 export default function PrefectureSelector({ shops = [] }) {
-  const [activeRegion, setActiveRegion] = useState('kanto'); // デフォルト: 関東
+  const [activeRegion, setActiveRegion] = useState(null); // 全地方を同列表示
   const [activePref, setActivePref] = useState(null);
   const [activeCity, setActiveCity] = useState(null);
 
