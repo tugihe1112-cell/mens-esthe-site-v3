@@ -21,6 +21,8 @@
 
 | 状態 | 作業内容 | メモ |
 |------|----------|------|
+| ✅ | **長野県 locations.js更新** | WARDS + PREF_CITY_MAP + REGIONS(chubu) に「長野」「松本」「上田」追加済み |
+| ✅ | **長野県 shop＋セラピスト登録** | `process_nagano.mjs` 実行済み。6店舗・137名登録完了。ふたりきりSPA(17/全員画像✅)/長野PRIME(48/全員画像✅)/LunaFemme上田(18/全員画像✅)/ゆめはな(24/名前のみ)/AromaCream(27/全員画像✅)/Yurara(3/全員画像✅)。ふたりきりSPAの日本語ファイル名4名は`fix_futarikiri_images.mjs`で修正済み。ふたりきりSPA og:image null継続 |
 | ✅ | **岡山県 locations.js更新** | WARDS + PREF_CITY_MAP + REGIONS(chugoku) に「岡山」「倉敷」追加済み |
 | ✅ | **岡山県 shop＋セラピスト登録** | `process_okayama.mjs` 実行済み。10店舗・533名登録完了。画像null（VIAURA/Roman/Topsecret/GARDEN/MrsMarvel/バズるSpa — Chrome補完要） |
 | ✅ | **熊本県 locations.js更新** | WARDS + PREF_CITY_MAP + REGIONS(kyushu) に「熊本」追加済み |
@@ -294,7 +296,7 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 | **岡山県** | ✅ 完了 | 10店舗・533名（2026-06-15）画像null多（Chrome補完要） |
 | **熊本県** | ✅ 完了 | 9店舗・212名（2026-06-15）Sweeeety/Flower/蜜/NonfictionSpa/palette/LeMarge画像付き |
 | **沖縄県** | ✅ 完了 | 13店舗・350名（那覇9+沖縄市3+うるま市1）。more more 29名名前のみ。Daysnavi系shop og:image null |
-| **長野県** | ❌ 未着手 | — |
+| **長野県** | ✅ 完了 | 6店舗・137名（長野PRIME48/LunaFemme18/ゆめはな24/AromaCream27/ふたりきりSPA17/Yurara3）。ふたりきりSPA og:image null |
 | **岐阜県** | ❌ 未着手 | — |
 | **三重県** | ❌ 未着手 | — |
 | **その他全都道府県** | ❌ 未着手 | mens-mg.comで人気店を確認してから着手 |
