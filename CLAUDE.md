@@ -17,6 +17,29 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
+### 2026-06-15
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ✅ | **岡山県 locations.js更新** | WARDS + PREF_CITY_MAP + REGIONS(chugoku) に「岡山」「倉敷」追加済み |
+| ✅ | **岡山県 shop＋セラピスト登録** | `process_okayama.mjs` 実行済み。10店舗・533名登録完了。画像null（VIAURA/Roman/Topsecret/GARDEN/MrsMarvel/バズるSpa — Chrome補完要） |
+| ✅ | **熊本県 locations.js更新** | WARDS + PREF_CITY_MAP + REGIONS(kyushu) に「熊本」追加済み |
+| ✅ | **熊本県 shop＋セラピスト登録** | `process_kumamoto.mjs` 実行済み。9店舗・212名登録完了。Sweeeety(35)/Flower(40)/蜜(20)/NonfictionSpa(21)/M&R(26名のみ)/Estela(11名のみ)/Aby(4名のみ)/palette(23)/LeMarge(16) |
+| ✅ | **沖縄県 locations.js更新** | WARDS + PREF_CITY_MAP + REGIONS(kyushu) に「那覇」「沖縄市」「うるま市」追加済み |
+| ✅ | **沖縄県 shop＋セラピスト登録** | `process_okinawa.mjs` 実行済み。13店舗・350名登録完了。CLUB ULTRA(1名null)/C-CLOVE(1名null)/more more(29名名前のみ)/Daysnavi系og:image null（Chrome補完要） |
+
+### 2026-06-14
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ✅ | **静岡県 locations.js更新** | WARDS + PREF_CITY_MAP に「静岡市」「浜松」追加済み |
+| ✅ | **静岡県 静岡市・浜松 shop＋セラピスト登録** | `process_shizuoka_hamamatsu.mjs` 実行済み。19店舗登録完了。4店舗は要修正 |
+| ✅ | **静岡県 4店舗 修正完了** | ①Fruit in the room 10名登録 ②ミセス美オーラ 95名登録（全員画像✅） ③POMPOM blue 68名画像付与+shop og:image修正 ④ゆりかご 40名画像付与。全員✅エラー0 |
+| ✅ | **新潟県 locations.js更新** | WARDS + PREF_CITY_MAP + REGIONS(chubu) に「新潟」「長岡」追加済み |
+| ✅ | **新潟県 shop＋セラピスト登録** | `process_niigata_v2.mjs` 実行済み。14店舗・232名登録完了。img-system 55名中54名画像null（要Chrome補完）・Madonna Grace 18名画像null（要Chrome補完） |
+| ✅ | **石川県 locations.js更新** | WARDS + PREF_CITY_MAP + REGIONS(chubu) に「金沢」追加済み |
+| ✅ | **石川県 金沢 shop＋セラピスト登録** | `process_ishikawa.mjs` 実行済み。9店舗・331名登録完了。LOHAS81名全員画像✅。shop og:image 6店舗null（fix_missing_shop_images.mjsで後補完）|
+
 ### 2026-06-13
 
 | 状態 | 作業内容 | メモ |
@@ -25,7 +48,7 @@
 | ✅ | **プレミアム無料化の穴 封鎖** | PremiumPage: profiles直接upsertでplan:'premium'化できた旧handleSubscribeを廃止→「準備中」アラートに変更。Stripe実装まで受付停止。pushed: d2256ee ✅ |
 | ✅ | **セラピストページにJSON-LD追加** | ThreadDetailPage: HealthAndBeautyBusiness + AggregateRating + 公開口コミ（is_public/owner_manual）最大5件のReviewを構造化データ出力。pushed: d2256ee ✅ |
 | ✅ | **P0実装: 口コミ1件目公開＋閲覧権自動付与＋登録ボーナス** | ①`06_p0_review_growth.sql`: reviews.is_public追加・セラピストごと最古1件をバックフィル公開・1件目自動公開トリガー・700字以上→7日自動付与トリガー（Supabase SQL Editor実行済み✅）②`api/auth/signup.js`: 登録時に閲覧権3日付与 ③ModernReviewCard: is_publicで全公開＋未ログインに登録CTA ④Home/SearchPage/PostReviewPageの文言を自動付与仕様に更新。vite build成功確認済み。pushed: d2256ee ✅ |
-| ✅ | **Next.js移行 完全完了・ビルド成功** | `nextjs-migration`ブランチでNext.js 15 Pages Router移行完了。ビルド成功（33ページ）。`/shops/[shopId]/threads/[threadId]` がSSR(ƒ Dynamic)として動作。pushed: 42bfa3d。Vercel プレビューデプロイ確認待ち。復元: `git checkout main`でいつでも戻れる。 |
+| ✅ | **Next.js移行 本番デプロイ完了** | `nextjs-migration`ブランチでNext.js 15 Pages Router移行完了→mainにマージ済み（dc3fa96）。SSR確認済み（`__NEXT_DATA__`でサーバーサイドデータ埋め込み確認）。www.mens-esthe-map.jpで本番稼働中。react-router-dom直接importを全compat shimに置き換え完了。 |
 | ✅ | **動的サイトマップ実装** | `api/sitemap.xml.js`: Service Role Keyで全店舗＋is_public口コミありセラピストページを動的生成（1時間キャッシュ）。`public/sitemap.xml`をsitemapindex形式に変換（→ /api/sitemap.xmlを参照）。`robots.txt`に両URL追記。pushed: ccb6e7f ✅ |
 | ✅ | **サイト戦略診断（口コミNo.1化）** | 結論: 口コミ資産がほぼゼロ（手動6件のみ）＋W2R二重ゲート＋SPA全ロックでコールドスタートのデッドロック。P0=口コミ1件目公開・閲覧権自動付与・登録ボーナス / P1=SSR+構造化データ / P2=データ鮮度自動化・ホーム表示バグ（新着Lynx重複・「埼玉県 埼玉県」・注目セラピスト重複）/ P3=通知・Stripe穴塞ぎ・CPC |
 
@@ -265,12 +288,12 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 | **茨城県** | ✅ 完了 | 18店舗・計2205名（水戸10・つくば7・守谷1）。Riz(403スキップ)。shop image_url未設定 |
 | **栃木県** | ✅ 完了 | 宇都宮+小山 計20+追加店舗。小山1061名・宇都宮162名登録完了 |
 | **群馬県** | ✅ 完了 | 前橋10+高崎8+伊勢崎9+太田9=36店舗。551+400=951名。cutie_honey(Fucolle撤退)・decorte_spa(ダウン)・HotLand(ダウン)・CoCoRu・ましゅまろPLASスキップ |
-| **静岡県（浜松・静岡市）** | ❌ 未着手 | 沼津（竜宮城）のみ登録済み。浜松・静岡市エリアは未着手 |
-| **新潟県** | ❌ 未着手 | — |
-| **石川県（金沢）** | ❌ 未着手 | — |
-| **岡山県** | ❌ 未着手 | — |
-| **熊本県** | ❌ 未着手 | — |
-| **沖縄県** | ❌ 未着手 | — |
+| **静岡県（浜松・静岡市）** | ✅ 完了 | 19店舗登録完了。Fruit in the room(10名)・ミセス美オーラ(95名)・POMPOM blue(68名)・ゆりかご(40名) 全員画像付き。計約223名+α |
+| **新潟県** | ✅ 完了 | 14店舗・232名（新潟13+長岡1）。img-system 54名・Madonna Grace 18名は画像null（Chrome補完要） |
+| **石川県（金沢）** | ✅ 完了 | 9店舗・331名（2026-06-14）shop og:image 6件null→後補完推奨 |
+| **岡山県** | ✅ 完了 | 10店舗・533名（2026-06-15）画像null多（Chrome補完要） |
+| **熊本県** | ✅ 完了 | 9店舗・212名（2026-06-15）Sweeeety/Flower/蜜/NonfictionSpa/palette/LeMarge画像付き |
+| **沖縄県** | ✅ 完了 | 13店舗・350名（那覇9+沖縄市3+うるま市1）。more more 29名名前のみ。Daysnavi系shop og:image null |
 | **長野県** | ❌ 未着手 | — |
 | **岐阜県** | ❌ 未着手 | — |
 | **三重県** | ❌ 未着手 | — |
@@ -284,8 +307,7 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 次は未着手都道府県を `https://mens-mg.com/` でランキング確認 → 人気店を登録していく。
 
 **推奨優先順位（人口・メンエス市場規模順）:**
-1. **静岡県** — 浜松・静岡市エリア（`https://mens-mg.com/shizuoka/`）
-2. **新潟県** — 新潟市（`https://mens-mg.com/niigata/`）
+1. **新潟県** — 新潟市（`https://mens-mg.com/niigata/`）
 3. **石川県** — 金沢（`https://mens-mg.com/ishikawa/`）
 4. **岡山県** — 岡山市（`https://mens-mg.com/okayama/`）
 5. **熊本県** — 熊本市（`https://mens-mg.com/kumamoto/`）
