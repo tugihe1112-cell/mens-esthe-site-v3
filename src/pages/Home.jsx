@@ -1,5 +1,6 @@
 
 import React, { useMemo, useState, useEffect } from 'react';
+import Head from 'next/head';
 import { getDisplayName } from '../utils/shopHelpers';
 import { Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
@@ -57,7 +58,7 @@ const RANK_STYLES = [
   { size: 'col-span-1 row-span-1', color: 'from-red-600 to-orange-900', tag: '🔥 注目' },        // 5位
 ];
 
-export default function HomePage() {
+export default function HomePage({ initialHero = [] }) {
   const { shops, loading } = useShopData();
   const [featuredTherapists, setFeaturedTherapists] = useState([]);
 
@@ -200,11 +201,17 @@ export default function HomePage() {
         description="メンエスマップは全国580店舗以上のメンズエステを掲載。セラピスト別の口コミ・出勤スケジュール・料金を検索できるポータルサイトです。"
         path="/"
       />
+      {/* LCP対策: 先頭ヒーロー画像を最優先で先読み（初期HTMLのheadに埋め込む） */}
+      {initialHero?.[0]?.heroImage && (
+        <Head>
+          <link rel="preload" as="image" href={initialHero[0].heroImage} fetchPriority="high" />
+        </Head>
+      )}
       <Header />
       
       {/* 1. ヒーローセクション */}
       <div className="relative">
-        <TopHeroSlider />
+        <TopHeroSlider initialHero={initialHero} />
         {/* 検索カードをスライダーに食い込ませて常にファーストビュー内に */}
         <div className="relative z-30 -mt-2 md:mt-6 px-3 md:px-4 max-w-4xl mx-auto animate-in slide-in-from-bottom-8 duration-700">
           <div className="bg-slate-900/80 backdrop-blur-2xl border border-white/10 p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">

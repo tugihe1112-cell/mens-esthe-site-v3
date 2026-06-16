@@ -5,47 +5,46 @@ import { Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import LikeButton from './LikeButton.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
+import { HERO_SHOP_IDS, toHeroItem } from '../data/heroShops';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-coverflow';
 
-// men-esthe.jp 口コミ数TOP5店舗（実際の口コミページ数で算出・2026-05-26確定）
-const HERO_SHOP_IDS = [
-  'tokyo_minato_azabujuban_linda_spa',                   // LINDA SPA（口コミ数1位: 84ページ）
-  'tokyo_chuo_ginza_aroma_maison',                       // Aroma Maison（口コミ数2位: 66ページ）
-  'tokyo_chuo_ginza_aromamore',                          // AROMA more（口コミ数3位: 54ページ）
-  'tokyo_shinjuku_kabukicho_aromacharm',                 // AromaCharm（口コミ数4位: 48ページ）
-  'tokyo_chiyoda_iidabashi_tokyo_aroma_este',            // 東京アロマエステ（口コミ数5位: 34ページ）
-];
+// 本番スライドと同じ高さ。CLS防止のプレースホルダと共有する。
+const HERO_SLIDE_HEIGHT = 'clamp(200px, 38vh, 440px)';
 
-// スライドショー専用の画像上書き（店舗サムネイルとは別）
-// type: 'cover' = 写真（全面表示）, 'logo' = ロゴ（contain＋背景色）
-const HERO_IMAGE_OVERRIDES = {
-  'tokyo_minato_azabujuban_linda_spa':        { url: 'https://linda-spa.com/wp-content/themes/linda2/img/logo.png',  type: 'logo' },
-  'tokyo_shinjuku_kabukicho_aromacharm':      { url: 'https://aromacharm.net/images_shop/logo.png',                  type: 'logo' },
-  'tokyo_chiyoda_iidabashi_tokyo_aroma_este': { url: 'https://tokyoaroma.jp/wp-content/uploads/2023/12/girl-2554687_1280-1.jpg', type: 'cover' },
-};
+// データ取得待ちの間に出す、本番と同じ縦寸法の骨組み。
+// 以前は loading 中に return null していたため、データ到着時にヒーローが
+// ゼロ高さ→フル高さで出現し下のコンテンツを押し下げていた（CLS 0.572の主因）。
+// 高さを先に確保することでレイアウトシフトを消す。
+function HeroPlaceholder() {
+  return (
+    <div style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+      <div
+        className="mx-auto w-[88%] sm:w-[62%] lg:w-[45%] rounded-2xl bg-slate-800/60 animate-pulse"
+        style={{ height: HERO_SLIDE_HEIGHT }}
+      />
+      <div className="flex justify-center gap-1.5 mt-4">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <span key={i} className="block h-1.5 w-1.5 rounded-full bg-white/15" />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-export default function TopHeroSlider() {
-  const { shops, loading } = useShopData();
+export default function TopHeroSlider({ initialHero = [] }) {
+  const { shops } = useShopData();
   const [activeProgress, setActiveProgress] = useState(0);
 
-  // 固定の人気店舗5件（image_urlがない場合はランダムで補完）
+  // クライアントで全shopが読めたら固定5件（不足分はランダム補完）で組み直す。
+  // 読み込み完了までは getStaticProps から渡された initialHero を使い、
+  // CSRのデータ取得待ち（LCP/CLSの元凶）を排除する。
   const heroItems = useMemo(() => {
-    if (!shops || shops.length === 0) return [];
+    if (!shops || shops.length === 0) return initialHero || [];
     const shopMap = Object.fromEntries(shops.map(s => [s.id, s]));
-    const fixed = HERO_SHOP_IDS
-      .map(id => {
-        const shop = shopMap[id];
-        if (!shop) return null;
-        // スライドショー専用画像があれば上書き（店舗サムネイルは変えない）
-        const override = HERO_IMAGE_OVERRIDES[id];
-        const heroImage = override ? override.url : shop.image_url;
-        const heroImageType = override ? override.type : 'cover';
-        return { ...shop, heroImage, heroImageType };
-      })
-      .filter(s => s && s.heroImage);
+    const fixed = HERO_SHOP_IDS.map(id => toHeroItem(shopMap[id])).filter(Boolean);
     if (fixed.length >= 5) return fixed.slice(0, 5);
     // 不足分をランダムで補完
     const usedIds = new Set(fixed.map(s => s.id));
@@ -55,9 +54,11 @@ export default function TopHeroSlider() {
       .slice(0, 5 - fixed.length)
       .map(s => ({ ...s, heroImage: s.image_url, heroImageType: 'cover' }));
     return [...fixed, ...fallback];
-  }, [shops]);
+  }, [shops, initialHero]);
 
-  if (loading || heroItems.length === 0) return null;
+  // shops未ロード時は initialHero（SSR埋め込み）を使う。
+  // → サーバー描画とhydration初回が一致し、ヒーロー画像が初期HTMLに乗る。
+  const items = heroItems.length ? heroItems : (initialHero || []);
 
   return (
     <div className="relative w-full bg-slate-950 pt-20 md:pt-10 pb-4 md:pb-10" style={{ overflow: 'hidden', isolation: 'isolate' }}>
@@ -69,6 +70,10 @@ export default function TopHeroSlider() {
         <div className="h-full bg-pink-500 shadow-[0_0_12px_#ec4899] transition-all duration-100 linear" style={{ width: `${(1 - activeProgress) * 100}%` }} />
       </div>
 
+      {items.length === 0 ? (
+        <HeroPlaceholder />
+      ) : (
+      <>
       <Swiper
         modules={[Autoplay, Navigation, EffectCoverflow, A11y, Keyboard]}
         effect="coverflow"
@@ -93,7 +98,7 @@ export default function TopHeroSlider() {
         className="w-full hero-coverflow"
         style={{ paddingTop: '20px', paddingBottom: '20px' }}
       >
-        {heroItems.map((shop, index) => (
+        {items.map((shop, index) => (
           <SwiperSlide key={shop.id} style={{ height: 'clamp(200px, 38vh, 440px)' }}>
             {({ isActive }) => (
               <div
@@ -109,7 +114,7 @@ export default function TopHeroSlider() {
               <div
                 className="relative w-full h-full rounded-[14px] overflow-hidden"
               >
-                {/* 店舗画像 */}
+                {/* 店舗画像（先頭スライドは preload 済み・lazy にしない） */}
                 {shop.heroImageType === 'logo' ? (
                   <div className="w-full h-full flex items-center justify-center bg-slate-900">
                     <img
@@ -123,6 +128,7 @@ export default function TopHeroSlider() {
                   <img
                     src={shop.heroImage}
                     alt={shop.name}
+                    fetchPriority={index === 0 ? 'high' : undefined}
                     className="w-full h-full object-cover"
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />
@@ -175,12 +181,14 @@ export default function TopHeroSlider() {
 
       {/* ドットインジケーター */}
       <div className="flex justify-center gap-1.5 mt-4">
-        {heroItems.map((_, i) => (
+        {items.map((_, i) => (
           <span key={i} className={`block h-1.5 rounded-full transition-all duration-500 ${
-            i === Math.round((1 - activeProgress) * (heroItems.length - 1)) ? 'w-6 bg-pink-500' : 'w-1.5 bg-white/20'
+            i === Math.round((1 - activeProgress) * (items.length - 1)) ? 'w-6 bg-pink-500' : 'w-1.5 bg-white/20'
           }`} />
         ))}
       </div>
+      </>
+      )}
 
       <style>{`
         .hero-coverflow .swiper-slide {
