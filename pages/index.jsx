@@ -2,8 +2,9 @@
 // ⚠️ Next.jsは .jsx を .js より優先して解決するため、トップページは必ずこの index.jsx 側に
 //    getStaticProps を直接定義すること。index.js 側に書いても無視される（過去にそれで本番未反映になった）。
 //
-// ISR(getStaticProps + revalidate)でヒーロー店舗をサーバー側で事前取得し、画像URLを初期HTMLに埋め込む。
+// SSR(getServerSideProps)でヒーロー店舗をサーバー側で事前取得し、画像URLを初期HTMLに埋め込む。
 // これによりCSRのデータ取得待ち（LCP 14.6s/CLSの主因）を排除する。
+// ※ISR(getStaticProps)はVercel永続キャッシュが古い版を配信し続ける問題があったためSSR+Cache-Controlに変更。
 import React from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Home from '../src/pages/Home';
@@ -13,7 +14,10 @@ export default function IndexPage({ initialHero }) {
   return <Home initialHero={initialHero} />;
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps({ res }) {
+  // ISR(getStaticProps)の永続キャッシュが古い版を配信し続ける問題を回避するためSSR化。
+  // CDNには短時間だけキャッシュさせて速度も確保（s-maxage=60 + stale-while-revalidate）。
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
   let initialHero = [];
   try {
     // 公開データ（shops）はRLSで匿名read可。クライアントと同じanon keyで取得。
@@ -31,8 +35,5 @@ export async function getStaticProps() {
     console.error('getStaticProps hero fetch failed:', e);
   }
 
-  return {
-    props: { initialHero },
-    revalidate: 60, // ISRキャッシュ滞留対策で短縮（デプロイ反映を速める）。固定5店舗なので頻繁再生成でも安価
-  };
+  return { props: { initialHero } };
 }
