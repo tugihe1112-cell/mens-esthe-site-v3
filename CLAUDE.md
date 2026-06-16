@@ -28,6 +28,7 @@
 | ✅ | 共用ロジック集約 | 新規`src/data/heroShops.js`（`HERO_SHOP_IDS`/`HERO_IMAGE_OVERRIDES`/`shapeShopRow`/`toHeroItem`/`buildInitialHero`）をサーバー・クライアント両方から使用しSSR/hydration一致を担保。`shapeShopRow`はDataContextの整形と同一に保つこと。 |
 | ⚠️ | next/imageは入れない方針を維持 | `unoptimized:true`＋多数CDN（remotePatterns未登録）＋既存LazyImageのSupabase WebP変換を壊さないため。Geminiも提案撤回済み。 |
 | 🐛→✅ | **真因: `index.jsx`が`index.js`をshadowしていた** | デプロイ後も本番が `gsp-not-found`／`initialHero`無しだった原因。Next.jsは**`.jsx`を`.js`より優先**解決するため、旧re-exportの `pages/index.jsx` が生き続け、getStaticPropsを入れた `pages/index.js` は**ビルドで無視**されていた。対処: 実装を`index.jsx`へ移植（getStaticPropsを直接定義）、`index.js`は`index.jsx`への再エクスポートに変更し無害化。**bashの`rm`はmount権限で不可** → 重複ファイル `pages/index.js` は削除済み。**解決済み**: push後に本番が `"gsp":true`＋`initialHero`埋め込みになったのを`curl`で確認。キャッシュ問題ではなかった（`x-vercel-cache:HIT`は副次）。コミット: cc9eb90(初版/shadowで無効) → 70f5858(実装をindex.jsxへ移植=本番反映) → 6341656(重複index.js削除)。 |
+| ✅ | **CLS/LCP微調整（緑化狙い）** | PSI実測(モバイルPerf80/LCP2.9s/CLS0.165)で犯人を名指し特定し追加修正。①**CLS0.165は全部ヒーロー先頭スライドのSwiper初期化シフト**（SSRのフレックス配置→JS初期化でコレオフロー配置へガクッと移動）→`TopHeroSlider`を`mounted`ゲートでクライアント描画のみに（SSRではSwiperを描画せず`HeroPlaceholder`で高さ確保。マウント後はlayout effectで初期化済み状態が初回ペイント＝シフト計上されない）。②**LCP要素はヒーロー画像でなく検索見出し`<h2>`**でrender delay1430ms=検索カードの`animate-in`(opacity0→700msフェード)が主因→`Home.jsx`からアニメ3クラス(`animate-in slide-in-from-bottom-8 duration-700`)削除しh2を即ペイント。next lint通過。**要・再デプロイ＆再計測。** |
 
 ### 2026-06-15
 

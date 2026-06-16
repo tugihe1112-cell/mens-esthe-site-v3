@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectCoverflow, A11y, Keyboard } from 'swiper/modules';
 import { Link } from '../compat/router';
@@ -37,6 +37,12 @@ function HeroPlaceholder() {
 export default function TopHeroSlider({ initialHero = [] }) {
   const { shops } = useShopData();
   const [activeProgress, setActiveProgress] = useState(0);
+  // Swiperはクライアントマウント後にのみ描画する。
+  // SSRでSwiperを描画すると、初期化時にスライドがフレックス配置→コレオフロー配置へ
+  // ガクッと動いてCLSが出る（PSIで先頭スライドに0.165計上）。マウント後に描画すれば
+  // Swiperはlayout effectで初期化され、初回ペイントが確定配置になりシフトしない。
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   // クライアントで全shopが読めたら固定5件（不足分はランダム補完）で組み直す。
   // 読み込み完了までは getStaticProps から渡された initialHero を使い、
@@ -59,18 +65,21 @@ export default function TopHeroSlider({ initialHero = [] }) {
   // shops未ロード時は initialHero（SSR埋め込み）を使う。
   // → サーバー描画とhydration初回が一致し、ヒーロー画像が初期HTMLに乗る。
   const items = heroItems.length ? heroItems : (initialHero || []);
+  const showSlider = mounted && items.length > 0;
 
   return (
     <div className="relative w-full bg-slate-950 pt-20 md:pt-10 pb-4 md:pb-10" style={{ overflow: 'hidden', isolation: 'isolate' }}>
       {/* 背景グロー */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(236,72,153,0.07) 0%, transparent 70%)' }} />
 
-      {/* 進行バー */}
-      <div className="absolute bottom-0 left-0 w-full h-0.5 z-[60] bg-white/10">
-        <div className="h-full bg-pink-500 shadow-[0_0_12px_#ec4899] transition-all duration-100 linear" style={{ width: `${(1 - activeProgress) * 100}%` }} />
-      </div>
+      {/* 進行バー（スライダー表示時のみ） */}
+      {showSlider && (
+        <div className="absolute bottom-0 left-0 w-full h-0.5 z-[60] bg-white/10">
+          <div className="h-full bg-pink-500 shadow-[0_0_12px_#ec4899] transition-all duration-100 linear" style={{ width: `${(1 - activeProgress) * 100}%` }} />
+        </div>
+      )}
 
-      {items.length === 0 ? (
+      {!showSlider ? (
         <HeroPlaceholder />
       ) : (
       <>

@@ -213,7 +213,7 @@ export default function HomePage({ initialHero = [] }) {
       <div className="relative">
         <TopHeroSlider initialHero={initialHero} />
         {/* 検索カードをスライダーに食い込ませて常にファーストビュー内に */}
-        <div className="relative z-30 -mt-2 md:mt-6 px-3 md:px-4 max-w-4xl mx-auto animate-in slide-in-from-bottom-8 duration-700">
+        <div className="relative z-30 -mt-2 md:mt-6 px-3 md:px-4 max-w-4xl mx-auto">
           <div className="bg-slate-900/80 backdrop-blur-2xl border border-white/10 p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
             <div className="text-center mb-3 md:mb-6">
               <h2 className="text-xl md:text-3xl font-black text-white mb-1 md:mb-2 drop-shadow-lg tracking-tight">
