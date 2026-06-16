@@ -21,13 +21,13 @@
 
 | 状態 | 作業内容 | メモ |
 |------|----------|------|
-| ✅ | **ホームLCP/CLS改善（ヒーローSSR化）** | Geminiコンサルのv2指示書を3点補正して実装。詳細は下記。next lint通過・`buildInitialHero`をnodeで単体検証済み。**未確認: Vercel Preview再デプロイ後のLighthouse再計測（LCP要素の確定含む）はユーザー側で要実施。** |
+| ✅ | **ホームLCP/CLS改善（ヒーローSSR化）** | Geminiコンサルのv2指示書を3点補正して実装。詳細は下記。next lint通過・`buildInitialHero`をnodeで単体検証済み。**本番反映を確認済み**（`curl`で `"gsp":true` ＋ `initialHero` への実データ埋め込みを確認）。**残: Lighthouse実数の再計測（モバイル・シークレット）でCLS/LCP改善幅とLCP要素を確定するのみ。** |
 | ✅ | ①ホームISR化（LCP本丸） | `pages/index.js` を再export→`getStaticProps`+`revalidate:3600`に変更。ヒーロー5店舗(`HERO_SHOP_IDS`)を**anon key**でサーバー事前取得し`initialHero`をpropで渡す→初期HTMLに画像URL埋め込み。CSRのデータ取得待ち（LCP14.6sの主因）を排除。※`threads/[threadId].jsx`はservice role使用だがshopsは公開RLSなのでanonで取得可。 |
 | ✅ | ②CLS撲滅（return null廃止） | `TopHeroSlider.jsx`: `if(loading\|\|...) return null`を廃止。`initialHero`をDataContext未ロード時のフォールバックに使い`loading`ではgateしない。データ無し時は本番と同じ高さ(`clamp(200px,38vh,440px)`+padding+dots)の`HeroPlaceholder`を描画→ゼロ高さ→フル出現の押し下げ（CLS0.572主因）を解消。 |
 | ✅ | ③LCP画像preload | `Home.jsx`に`import Head from 'next/head'`、`initialHero`prop受け取り、先頭ヒーロー画像を`<link rel=preload as=image fetchPriority=high>`でhead先読み。先頭スライド`<img>`に`fetchPriority="high"`付与（lazyにしない）。 |
 | ✅ | 共用ロジック集約 | 新規`src/data/heroShops.js`（`HERO_SHOP_IDS`/`HERO_IMAGE_OVERRIDES`/`shapeShopRow`/`toHeroItem`/`buildInitialHero`）をサーバー・クライアント両方から使用しSSR/hydration一致を担保。`shapeShopRow`はDataContextの整形と同一に保つこと。 |
 | ⚠️ | next/imageは入れない方針を維持 | `unoptimized:true`＋多数CDN（remotePatterns未登録）＋既存LazyImageのSupabase WebP変換を壊さないため。Geminiも提案撤回済み。 |
-| 🐛→✅ | **真因: `index.jsx`が`index.js`をshadowしていた** | デプロイ後も本番が `gsp-not-found`／`initialHero`無しだった原因。Next.jsは**`.jsx`を`.js`より優先**解決するため、旧re-exportの `pages/index.jsx` が生き続け、getStaticPropsを入れた `pages/index.js` は**ビルドで無視**されていた。対処: 実装を`index.jsx`へ移植（getStaticPropsを直接定義）、`index.js`は`index.jsx`への再エクスポートに変更し無害化。**bashの`rm`はmount権限で不可** → 重複ファイル `pages/index.js` はuser側で削除推奨。**要・再デプロイ（commit→push）。** キャッシュ問題ではなかった（`x-vercel-cache:HIT`は副次）。 |
+| 🐛→✅ | **真因: `index.jsx`が`index.js`をshadowしていた** | デプロイ後も本番が `gsp-not-found`／`initialHero`無しだった原因。Next.jsは**`.jsx`を`.js`より優先**解決するため、旧re-exportの `pages/index.jsx` が生き続け、getStaticPropsを入れた `pages/index.js` は**ビルドで無視**されていた。対処: 実装を`index.jsx`へ移植（getStaticPropsを直接定義）、`index.js`は`index.jsx`への再エクスポートに変更し無害化。**bashの`rm`はmount権限で不可** → 重複ファイル `pages/index.js` は削除済み。**解決済み**: push後に本番が `"gsp":true`＋`initialHero`埋め込みになったのを`curl`で確認。キャッシュ問題ではなかった（`x-vercel-cache:HIT`は副次）。コミット: cc9eb90(初版/shadowで無効) → 70f5858(実装をindex.jsxへ移植=本番反映) → 6341656(重複index.js削除)。 |
 
 ### 2026-06-15
 
