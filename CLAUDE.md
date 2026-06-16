@@ -27,6 +27,7 @@
 | ✅ | ③LCP画像preload | `Home.jsx`に`import Head from 'next/head'`、`initialHero`prop受け取り、先頭ヒーロー画像を`<link rel=preload as=image fetchPriority=high>`でhead先読み。先頭スライド`<img>`に`fetchPriority="high"`付与（lazyにしない）。 |
 | ✅ | 共用ロジック集約 | 新規`src/data/heroShops.js`（`HERO_SHOP_IDS`/`HERO_IMAGE_OVERRIDES`/`shapeShopRow`/`toHeroItem`/`buildInitialHero`）をサーバー・クライアント両方から使用しSSR/hydration一致を担保。`shapeShopRow`はDataContextの整形と同一に保つこと。 |
 | ⚠️ | next/imageは入れない方針を維持 | `unoptimized:true`＋多数CDN（remotePatterns未登録）＋既存LazyImageのSupabase WebP変換を壊さないため。Geminiも提案撤回済み。 |
+| 🐛→✅ | **真因: `index.jsx`が`index.js`をshadowしていた** | デプロイ後も本番が `gsp-not-found`／`initialHero`無しだった原因。Next.jsは**`.jsx`を`.js`より優先**解決するため、旧re-exportの `pages/index.jsx` が生き続け、getStaticPropsを入れた `pages/index.js` は**ビルドで無視**されていた。対処: 実装を`index.jsx`へ移植（getStaticPropsを直接定義）、`index.js`は`index.jsx`への再エクスポートに変更し無害化。**bashの`rm`はmount権限で不可** → 重複ファイル `pages/index.js` はuser側で削除推奨。**要・再デプロイ（commit→push）。** キャッシュ問題ではなかった（`x-vercel-cache:HIT`は副次）。 |
 
 ### 2026-06-15
 
