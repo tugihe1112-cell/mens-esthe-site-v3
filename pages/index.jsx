@@ -33,6 +33,6 @@ export async function getStaticProps() {
 
   return {
     props: { initialHero },
-    revalidate: 3600, // 1時間ごとに再生成（固定5店舗なので頻繁な更新は不要）
+    revalidate: 60, // ISRキャッシュ滞留対策で短縮（デプロイ反映を速める）。固定5店舗なので頻繁再生成でも安価
   };
 }

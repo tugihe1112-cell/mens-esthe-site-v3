@@ -191,10 +191,8 @@ export default function TopHeroSlider({ initialHero = [] }) {
       )}
 
       <style>{`
-        /* Swiper初期化が終わるまでスライダー全体を不可視に（高さは確保済み）。
-           初期化時の フレックス配置→コレオフロー配置 の再配置による視覚的シフト(=CLS 0.165)を防ぐ。
-           初期化後に .swiper-initialized が付与され表示＝その時点で確定配置なのでシフトが計上されない。 */
-        .hero-coverflow:not(.swiper-initialized) { visibility: hidden; }
+        /* ↓ ヒーローのCLS対策(visibility:hidden until init)は src/index.css に移設済み。
+           インライン<style>はReact19がSSR HTMLに出力せず初回ペイントに効かないため。 */
         .hero-coverflow .swiper-slide {
           transition: transform 0.65s ease, filter 0.65s ease, opacity 0.65s ease;
           filter: blur(1.5px) brightness(0.75);
