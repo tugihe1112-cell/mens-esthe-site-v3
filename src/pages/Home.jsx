@@ -268,7 +268,7 @@ export default function HomePage({ initialHero = [] }) {
                 className="group rounded-2xl bg-slate-900/60 border border-white/5 hover:border-pink-500/30 p-4 transition-all duration-200 hover:-translate-y-0.5">
                 <div className="text-2xl mb-2">{f.icon}</div>
                 <h4 className="text-white font-black text-sm">{f.title}</h4>
-                <p className="text-slate-500 text-[11px] mt-1 leading-relaxed">{f.desc}</p>
+                <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">{f.desc}</p>
                 <span className="text-pink-400 text-[11px] font-bold mt-2 block group-hover:translate-x-1 transition-transform">使ってみる →</span>
               </Link>
             ))}
@@ -294,7 +294,7 @@ export default function HomePage({ initialHero = [] }) {
                 人気エリア
               </h3>
             </div>
-            <span className="text-xs text-slate-500 font-bold">店舗数ランキング</span>
+            <span className="text-xs text-slate-400 font-bold">店舗数ランキング</span>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[200px]">
@@ -369,7 +369,7 @@ export default function HomePage({ initialHero = [] }) {
             <h3 className="text-xl md:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
               <span className="text-2xl">💃</span> 注目セラピスト
             </h3>
-            <Link to="/search" className="text-xs text-slate-500 font-bold hover:text-white transition">もっと見る</Link>
+            <Link to="/search" className="text-xs text-slate-400 font-bold hover:text-white transition">もっと見る</Link>
           </div>
           {loading || featuredTherapists.length === 0 ? (
             /* スケルトン: 横スクロール */
@@ -416,7 +416,7 @@ export default function HomePage({ initialHero = [] }) {
               <h3 className="text-xl md:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
                 <span className="text-2xl">✨</span> 新着店舗
               </h3>
-              <Link to="/shops" className="text-xs text-slate-500 font-bold hover:text-white transition">もっと見る</Link>
+              <Link to="/shops" className="text-xs text-slate-400 font-bold hover:text-white transition">もっと見る</Link>
           </div>
 
           {loading ? (
@@ -474,7 +474,7 @@ export default function HomePage({ initialHero = [] }) {
         {/* 注目店舗バナー */}
         <div className="sticky top-4 space-y-8">
           <div>
-            <h4 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 px-1">注目店舗</h4>
+            <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 px-1">注目店舗</h4>
             <div className="space-y-3">
               {sidebarShops.map(shop => (
                   <Link
@@ -492,7 +492,7 @@ export default function HomePage({ initialHero = [] }) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-white font-black text-xs leading-tight truncate">{getDisplayName(shop.name)}</p>
-                      <p className="text-slate-500 text-[10px] mt-0.5 truncate">{shop.prefecture} {shop.city}</p>
+                      <p className="text-slate-400 text-[10px] mt-0.5 truncate">{shop.prefecture} {shop.city}</p>
                       <span className="text-pink-400 text-[10px] font-bold mt-1 block group-hover:translate-x-0.5 transition-transform">詳しく見る →</span>
                     </div>
                   </Link>
