@@ -2,6 +2,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import { getDisplayName } from '../utils/shopHelpers';
+import { optimizeImageUrl } from '../utils/imageUrl';
 import { Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import SearchBar from '../components/SearchBar.jsx';
@@ -392,10 +393,15 @@ export default function HomePage({ initialHero = [] }) {
                   >
                     <div className="aspect-[3/4] rounded-2xl overflow-hidden relative bg-slate-900">
                       <img
-                        src={t.image_url}
+                        src={optimizeImageUrl(t.image_url, 300)}
                         alt={t.name}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover object-top transition duration-700 group-hover:scale-110"
-                        onError={(e) => { e.target.style.display = 'none'; }}
+                        onError={(e) => {
+                          if (e.currentTarget.dataset.fb !== '1' && t.image_url) { e.currentTarget.dataset.fb = '1'; e.currentTarget.src = t.image_url; }
+                          else { e.currentTarget.style.display = 'none'; }
+                        }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                       <div className="absolute bottom-2 left-2 right-2">
@@ -484,10 +490,15 @@ export default function HomePage({ initialHero = [] }) {
                   >
                     <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-800">
                       <img
-                        src={shop.image_url}
+                        src={optimizeImageUrl(shop.image_url, 128)}
                         alt={shop.name}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                        onError={(e) => { e.target.style.display = 'none'; }}
+                        onError={(e) => {
+                          if (e.currentTarget.dataset.fb !== '1' && shop.image_url) { e.currentTarget.dataset.fb = '1'; e.currentTarget.src = shop.image_url; }
+                          else { e.currentTarget.style.display = 'none'; }
+                        }}
                       />
                     </div>
                     <div className="flex-1 min-w-0">

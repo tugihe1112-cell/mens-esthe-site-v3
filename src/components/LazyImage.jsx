@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { optimizeImageUrl } from '../utils/imageUrl';
 
 // 画像なし用のインライン SVG（外部リクエスト不要）
 const NO_IMAGE_SVG = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><rect width='300' height='400' fill='%231e293b'/><circle cx='150' cy='155' r='55' fill='%23334155'/><ellipse cx='150' cy='310' rx='90' ry='65' fill='%23334155'/><text x='150' y='370' text-anchor='middle' font-size='13' fill='%2394a3b8' font-family='sans-serif'>NO IMAGE</text></svg>`;
-
-const SUPABASE_STORAGE = 'azuetkuzzmshqfbrhqmf.supabase.co/storage';
 
 // 店舗サムネイルとして不適切なURL（ロゴ・アイコン・ファビコン系）
 const ICON_PATTERNS = [
@@ -22,15 +21,6 @@ function isIconUrl(src) {
   if (!src) return false;
   const lower = src.toLowerCase();
   return ICON_PATTERNS.some(p => lower.includes(p));
-}
-
-// Supabase Storage の画像URLをWebP変換URLに変換
-function toWebP(src, width = 800) {
-  if (!src || !src.includes(SUPABASE_STORAGE)) return src;
-  // /object/public/ → /render/image/public/ に変換してWebPパラメータを付与
-  return src
-    .replace('/storage/v1/object/public/', '/storage/v1/render/image/public/')
-    + `?width=${width}&format=webp&quality=80`;
 }
 
 export default function LazyImage({ src, alt, className = '', fallback = NO_IMAGE_SVG, width = 800 }) {
@@ -56,7 +46,7 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
     );
   }
 
-  const optimizedSrc = toWebP(src, width);
+  const optimizedSrc = optimizeImageUrl(src, width);
   const activeSrc = useOptimized ? optimizedSrc : src;
 
   return (
@@ -72,7 +62,7 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
         onLoad={() => setLoaded(true)}
         onError={() => {
           if (useOptimized && optimizedSrc !== src) {
-            // WebP変換URLが失敗 → 元URLで再試行
+            // 最適化URL（wsrv等）が失敗 → 元URLで再試行
             setUseOptimized(false);
             setLoaded(false);
           } else {
