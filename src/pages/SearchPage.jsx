@@ -6,6 +6,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import { TherapistCardSkeleton } from '../components/ui/Skeleton.jsx';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import { trackEvent } from '../utils/analytics';
 
 // ─── ファジー店舗検索ユーティリティ ────────────────────────────
 // 1. 小文字カタカナ → 大文字カタカナ正規化
@@ -113,18 +114,21 @@ function ShopCard({ shop }) {
           <div className="flex flex-wrap gap-2">
             {shop.website_url && (
               <a href={shop.website_url} target="_blank" rel="noreferrer"
+                onClick={() => trackEvent('click_outbound', { link_type: 'official', shop_id: shop.id, shop_name: shop.name })}
                 className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-full transition border border-white/10">
                 🌐 公式サイト
               </a>
             )}
             {shop.schedule_url && (
               <a href={shop.schedule_url} target="_blank" rel="noreferrer"
+                onClick={() => trackEvent('click_outbound', { link_type: 'schedule', shop_id: shop.id, shop_name: shop.name })}
                 className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-full transition border border-white/10">
                 ↗ 別タブで開く
               </a>
             )}
             {shop.phone_number && (
               <a href={`tel:${shop.phone_number}`}
+                onClick={() => trackEvent('click_outbound', { link_type: 'phone', shop_id: shop.id, shop_name: shop.name })}
                 className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-full transition border border-white/10">
                 📞 {shop.phone_number}
               </a>

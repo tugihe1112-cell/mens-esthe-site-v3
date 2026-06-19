@@ -13,6 +13,8 @@ import ScrollToTop from '../src/components/ScrollToTop.jsx';
 import BottomNav from '../src/components/BottomNav.jsx';
 import Footer from '../src/components/Footer.jsx';
 import { useRouter } from 'next/router';
+import Script from 'next/script';
+import { GA_ID } from '../src/utils/analytics';
 import '../src/index.css';
 
 const HIDE_NAV_PATHS = ['/login', '/register', '/404'];
@@ -32,7 +34,16 @@ function Layout({ children }) {
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <HelmetProvider>
+    <>
+      {/* GA4: 旧Viteのindex.htmlにしか無く未計測だったため、Next.jsで正式ロード（SPA遷移はGA4拡張計測が捕捉） */}
+      <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+      <Script id="ga4-init" strategy="afterInteractive">{`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${GA_ID}');
+      `}</Script>
+      <HelmetProvider>
       <ErrorBoundary>
         <DataProvider>
           <AuthProvider>
@@ -45,5 +56,6 @@ export default function MyApp({ Component, pageProps }) {
         </DataProvider>
       </ErrorBoundary>
     </HelmetProvider>
+    </>
   );
 }

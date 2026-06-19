@@ -7,6 +7,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import ModernReviewCard from '../components/ModernReviewCard.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
+import { trackEvent } from '../utils/analytics';
 
 const INITIAL_DISPLAY_COUNT = 12;
 const LOAD_MORE_COUNT = 12;
@@ -404,7 +405,7 @@ export default function ShopDetailPage() {
                   <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
                     <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">TEL</dt>
                     <dd className="text-sm md:text-base font-bold text-white tracking-widest">
-                       <a href={`tel:${shop.phone_number || shop.raw_data?.phone}`} className="hover:text-pink-400 transition">{shop.phone_number || shop.raw_data?.phone}</a>
+                       <a href={`tel:${shop.phone_number || shop.raw_data?.phone}`} onClick={() => trackEvent('click_outbound', { link_type: 'phone', shop_id: shop.id, shop_name: shop.name })} className="hover:text-pink-400 transition">{shop.phone_number || shop.raw_data?.phone}</a>
                     </dd>
                   </div>
                 )}
@@ -417,7 +418,7 @@ export default function ShopDetailPage() {
               </dl>
               
               <div className="mt-8">
-                 <a href={shop.url || shop.website_url || shop.raw_data?.url || shop.raw_data?.websiteUrl || '#'} target="_blank" rel="noreferrer" className="block w-full bg-white text-slate-900 hover:bg-slate-200 py-4 rounded-xl text-sm font-black text-center transition shadow-lg tracking-widest uppercase">
+                 <a href={shop.url || shop.website_url || shop.raw_data?.url || shop.raw_data?.websiteUrl || '#'} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_outbound', { link_type: 'official', shop_id: shop.id, shop_name: shop.name })} className="block w-full bg-white text-slate-900 hover:bg-slate-200 py-4 rounded-xl text-sm font-black text-center transition shadow-lg tracking-widest uppercase">
                    Official Website ↗
                  </a>
               </div>
