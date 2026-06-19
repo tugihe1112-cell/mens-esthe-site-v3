@@ -34,6 +34,7 @@
 | 🐛→✅ | **GA4が本番で未計測だった重大バグを発見・修正** | gtagは旧Viteの`index.html`にしか無く、Next.js移行後は`_document`/`_app`に無い＝**本番で一切計測されていなかった**（`curl`で`G-EQ2V44DN4X`が生HTMLに無いことを確認。GA4の"143イベント"は旧Vite時代の残存データで現在の流入ではない）。新規`src/utils/analytics.js`(`GA_ID`/`trackEvent`)＋`pages/_app.jsx`に`next/script`(afterInteractive)でgtagを正式ロード。SPA遷移はGA4拡張計測が捕捉。**検証はGA4リアルタイムで（next/scriptは生HTMLに出ないのでcurl不可）。** |
 | ✅ | **送客コンバージョン計測(click_outbound)実装** | `SearchPage`(公式/出勤/電話)・`ShopDetailPage`(電話/公式サイト)の外部リンクに`trackEvent('click_outbound',{link_type,shop_id,shop_name})`を付与。**GA4 UIで`click_outbound`をキーイベント(コンバージョン)に登録すること。** 将来のBtoB営業＝「店舗へ何件送客したか」の実績の弾になる。 |
 | 📌戦略 | **マネタイズはPhase3に封印（コンサル判断）** | 別AIの収益化計画（リワード広告/サブスク/純広告）をレビュー。143イベント/週＝トラフィック前夜で**時期尚早**。広告ゲートは①W2Rに2枚目のゲートを足しフライホイール停止②レビューを隠す＝Googleに索引されずSEO本末転倒③この量では数円。正しい順序は`Content→Traffic→Engagement→Monetization`で、今は中身(Content)が空。**今の唯一の仕事＝フライホイールを1回転**。次手: GSC需要マップ→表示回数のある人気ページに**本物の**口コミを集中→索引→初オーガニック口コミ。純広告(店舗トップ枠 月5-10万)はトラフィック証明後の本命として正しい（計画も後ろに置いてた）。GA4送客イベント①②(canonical整理)は採用、構造化データ③は本物レビューのあるページ限定、④マネタイズUIは封印。 |
+| 🐛→✅ | **検索カードが開かないバグ修正（ファネル直結）** | `/search`でエリア検索中に店舗カードを押しても無反応だった。原因: `ShopCard`は`/search?shop=店名`へのLinkだが、`shopInput`(検索state)はマウント時にしかURLから読まず、同一`/search`内ではremountされない→URLは変わるがstate据置→キャスト再取得されず無反応。修正: `ShopCard`に`onSelect`prop追加、クリック時に`setShopInput(店名)`+`setCastInput('')`でstate更新（既存のstate→URL→fetchフローに乗る）。Linkも維持し新規タブ可。**この不具合はユーザーが店舗→キャスト→口コミに到達できない＝フライホイールの行き止まりだった。** |
 
 ### 2026-06-15
 

@@ -57,7 +57,7 @@ function shopFuzzyMatch(shop, query) {
 // ─────────────────────────────────────────────────────────────
 
 // 店舗情報カード（検索結果用）
-function ShopCard({ shop }) {
+function ShopCard({ shop, onSelect }) {
   const [open, setOpen] = React.useState(false);
 
   // price_system を整形
@@ -76,7 +76,7 @@ function ShopCard({ shop }) {
   return (
     <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden transition-all">
       {/* 上段: 基本情報 */}
-      <Link to={shopSearchUrl} className="flex items-center gap-3 p-4 hover:bg-slate-800/50 transition-colors">
+      <Link to={shopSearchUrl} onClick={() => onSelect && onSelect(shop)} className="flex items-center gap-3 p-4 hover:bg-slate-800/50 transition-colors">
         <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-slate-800 block">
           {shop.image_url
             ? <img src={shop.image_url} alt={shop.name} className="w-full h-full object-cover" />
@@ -657,7 +657,11 @@ export default function SearchPage() {
               </h2>
               <div className="space-y-3">
                 {matchingShops.map(shop => (
-                  <ShopCard key={shop.id} shop={shop} />
+                  <ShopCard key={shop.id} shop={shop} onSelect={(s) => {
+                    setShopInput(s.name);
+                    setCastInput('');
+                    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }} />
                 ))}
               </div>
             </section>
