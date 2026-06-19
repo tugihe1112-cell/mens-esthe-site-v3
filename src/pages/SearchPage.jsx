@@ -221,8 +221,8 @@ export default function SearchPage() {
   const [castNameFilter, setCastNameFilter] = useState('');
   const [castSortOrder, setCastSortOrder] = useState('default'); // 'default' | 'aiueo' | 'reviews' | 'rating'
 
-  const shopQuery = useDebounce(shopInput);
-  const castQuery = useDebounce(castInput);
+  const shopQuery = useDebounce(shopInput, 150);
+  const castQuery = useDebounce(castInput, 150);
 
   // --- DBフェッチ ---
   const [serverTherapists, setServerTherapists] = useState([]);
@@ -660,6 +660,8 @@ export default function SearchPage() {
                   <ShopCard key={shop.id} shop={shop} onSelect={(s) => {
                     setShopInput(s.name);
                     setCastInput('');
+                    setServerTherapists([]);   // 古い結果を即クリア
+                    setIsFetchingDB(true);     // 押した瞬間にスケルトン表示（debounce待ちの空白をなくす）
                     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
                   }} />
                 ))}
@@ -781,7 +783,7 @@ export default function SearchPage() {
                           className="group relative block bg-slate-900 rounded-[1.5rem] overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-900/20 hover:-translate-y-1"
                         >
                           <div className="aspect-[3/4] overflow-hidden relative">
-                            <LazyImage src={t.image_url || t.image} alt={t.name} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
+                            <LazyImage src={t.image_url || t.image} alt={t.name} width={400} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90 group-hover:opacity-60 transition duration-500"></div>
                             {(() => {
                               const cnt = reviewCountMap[(t.name || '').replace(/[\s　]/g, '')];
