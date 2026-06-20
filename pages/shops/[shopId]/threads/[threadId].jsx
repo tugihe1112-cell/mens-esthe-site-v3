@@ -127,6 +127,13 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
     <>
       {/* SSRで確実にHeadを出力（react-helmet-asyncのサーバー描画を補完） */}
       <Head>
+        {/* 公開口コミ0件の薄いセラピストページは noindex,follow。
+            目的: 45,000の空ページをGoogleに索引させずクロール予算と品質評価を守る
+            （GSCの「クロール済-未登録144」「検出-未登録453」の主因）。
+            口コミが1件でも付けば索引対象に自動復帰＝コンテンツ戦略と一致。 */}
+        {ssrTherapist && ssrPublicReviews.length === 0 && (
+          <meta name="robots" content="noindex,follow" />
+        )}
         <title>{title}</title>
         <meta name="description" content={description} />
         {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
