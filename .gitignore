@@ -8,3 +8,8 @@ migrate_to_supabase.js
 # Next.js build output
 .next/
 out/
+
+# GCPサービスアカウント鍵（絶対にcommitしない）
+.gcp-metrics-key.json
+*-key.json
+scripts/metrics/cron.log

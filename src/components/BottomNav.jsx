@@ -1,10 +1,9 @@
 import React from 'react';
-import { NavLink, useNavigate } from '../compat/router';
+import { NavLink } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 export default function BottomNav() {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const navItems = [
     {
       path: '/',
@@ -72,12 +71,6 @@ export default function BottomNav() {
             <NavLink
               key={item.path}
               to={item.path}
-              onClick={(e) => {
-                if (item.highlight && !user) {
-                  e.preventDefault();
-                  navigate('/login', { state: { redirect: '/post-review' } });
-                }
-              }}
               className={({ isActive }) => `
                 relative flex flex-col items-center justify-center w-full h-full cursor-pointer group select-none active:scale-90 transition-transform duration-200
                 ${item.highlight ? 'text-pink-400' : isActive ? 'text-pink-400' : 'text-slate-500 hover:text-slate-300'}

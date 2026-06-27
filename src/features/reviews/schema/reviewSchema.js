@@ -27,6 +27,6 @@ export const reviewSchema = z.object({
     exit: z.string().min(1, { message: '総評を入力してください' }),
   }).refine((data) => {
     const total = Object.values(data).filter(Boolean).join('').length;
-    return total >= 700;
-  }, { message: '口コミは合計700文字以上必要です' }),
+    return total >= 200;
+  }, { message: '口コミは合計200文字以上必要です' }),
 });

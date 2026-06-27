@@ -317,7 +317,16 @@ const Step2_Rating = () => {
   );
 };
 
-const MIN_CHARS = 700;
+const MIN_CHARS = 200;   // 投稿の最低ライン（崖を下げて投稿率UP）
+const BONUS_CHARS = 700; // これ以上で閲覧日数ボーナス（7日）。長文を誘導
+
+// セクション別の書き出しヒント（空白恐怖の解消）
+const STORY_HINTS = {
+  entrance: ['立地・行きやすさ', '内装・清潔感', '香り・音・第一印象'],
+  meeting: ['写真との差', '見た目の印象', '会話・気遣い'],
+  session: ['技術の丁寧さ', '強弱・時間配分', '要望への対応'],
+  exit: ['満足度', 'どんな人向き', 'また行きたいか'],
+};
 
 const Step3_Story = () => {
   const { register, watch, formState: { errors } } = useFormContext();
@@ -333,12 +342,12 @@ const Step3_Story = () => {
         <p className="text-slate-500 text-sm">あなたの体験を日記のように記録しましょう</p>
       </div>
 
-      {/* 文字数カウンター */}
+      {/* 文字数カウンター（200で投稿OK・700で閲覧日数ボーナス） */}
       <div className="bg-slate-900/60 rounded-2xl p-4 border border-white/5">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs text-slate-400 font-bold">合計文字数</span>
           <span className={`text-sm font-black ${totalChars >= MIN_CHARS ? 'text-emerald-400' : 'text-slate-300'}`}>
-            {totalChars} <span className="text-slate-600 font-normal">/ {MIN_CHARS}文字以上</span>
+            {totalChars} <span className="text-slate-600 font-normal">/ {MIN_CHARS}文字で投稿OK</span>
           </span>
         </div>
         <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
@@ -347,8 +356,12 @@ const Step3_Story = () => {
             style={{ width: `${pct}%` }}
           />
         </div>
-        {remaining > 0 && (
-          <p className="text-[11px] text-slate-500 mt-1.5">あと {remaining} 文字書くと投稿できます</p>
+        {totalChars < MIN_CHARS ? (
+          <p className="text-[11px] text-slate-500 mt-1.5">あと {remaining} 文字で投稿できます</p>
+        ) : totalChars < BONUS_CHARS ? (
+          <p className="text-[11px] text-amber-400/90 mt-1.5">✅ 投稿OK！ あと {BONUS_CHARS - totalChars} 文字で<span className="font-bold">閲覧7日間</span>に（今は3日間）</p>
+        ) : (
+          <p className="text-[11px] text-emerald-400 mt-1.5">🎉 閲覧7日間ぶんの濃さ！ ありがとうございます</p>
         )}
       </div>
 
@@ -372,6 +385,14 @@ const Step3_Story = () => {
                   rows={2}
                 />
               </div>
+              {STORY_HINTS[section.id] && (
+                <div className="flex flex-wrap gap-1.5 mt-2 pl-1">
+                  <span className="text-[10px] text-slate-600 self-center">💡 例:</span>
+                  {STORY_HINTS[section.id].map(h => (
+                    <span key={h} className="text-[10px] text-slate-500 bg-white/5 border border-white/5 rounded-full px-2 py-0.5">{h}</span>
+                  ))}
+                </div>
+              )}
               {errors.story?.[section.id] && (
                 <p className="text-red-400 text-xs mt-1 ml-1">{errors.story[section.id].message}</p>
               )}
@@ -438,7 +459,7 @@ export default function PostReviewPage() {
   const initCustomMode = searchParams.get('customMode') === 'true';
   const effectiveShopId = paramShopId || qsShopId;
 
-  const { methods, isSubmitting, submitReview } = useReviewForm();
+  const { methods, isSubmitting, submitReview, user } = useReviewForm();
   const { shops, getTherapistsByShopId } = useShopData();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedShopId, setSelectedShopId] = useState(null);
@@ -455,6 +476,21 @@ export default function PostReviewPage() {
       }
     }
   }, [effectiveShopId, paramThreadId, shops, methods]);
+
+  // 下書き復元（公開時ログインの往復から戻ってきた時）
+  useEffect(() => {
+    let draft = null;
+    try { draft = sessionStorage.getItem('reviewDraft'); } catch {}
+    if (!draft) return;
+    try {
+      const data = JSON.parse(draft);
+      methods.reset(data);
+      if (data.shopId) setSelectedShopId(data.shopId);
+      setCurrentStep(4); // 確認ステップへ
+      toast.success('下書きを復元しました。投稿を完了してください', { duration: 4000 });
+    } catch { /* 壊れた下書きは無視 */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 初回マウントのみ
 
   // Shop Data Logic
   const [shopTherapists, setShopTherapists] = useState([]);
@@ -499,8 +535,8 @@ export default function PostReviewPage() {
       case 3: {
         const story = methods.getValues('story') || {};
         const totalChars = Object.values(story).filter(Boolean).join('').length;
-        if (totalChars < 700) {
-          toast.error(`あと${700 - totalChars}文字書いてください（合計700文字以上必要）`);
+        if (totalChars < MIN_CHARS) {
+          toast.error(`あと${MIN_CHARS - totalChars}文字書いてください（合計${MIN_CHARS}文字以上で投稿OK）`);
           return false;
         }
         isValid = await methods.trigger('story');
@@ -524,9 +560,19 @@ export default function PostReviewPage() {
   const prevStep = () => setCurrentStep((p) => Math.max(1, p - 1));
 
   const onSubmit = async (data) => {
+    // 未ログインなら下書きを保存してログインへ（書いてから公開時ログイン）
+    if (!user) {
+      try { sessionStorage.setItem('reviewDraft', JSON.stringify(data)); } catch { /* noop */ }
+      toast('ログイン / 無料登録で投稿が完了します 🔑', { duration: 4000 });
+      navigate('/login', { state: { redirect: '/post-review' } });
+      return;
+    }
     const result = await submitReview(data);
     if (result.success) {
-      toast.success('投稿ありがとうございます！7日間の閲覧権が付与されました🎉', { duration: 5000 });
+      try { sessionStorage.removeItem('reviewDraft'); } catch { /* noop */ }
+      const len = Object.values(data.story || {}).filter(Boolean).join('').length;
+      const grantedDays = len >= 700 ? 7 : 3;
+      toast.success(`投稿ありがとうございます！${grantedDays}日間の閲覧権が付与されました🎉`, { duration: 5000 });
 
       // 管理者へメール通知（失敗しても投稿は成功扱い）
       const shopName = shops.find(s => s.id === data.shopId)?.name || '';

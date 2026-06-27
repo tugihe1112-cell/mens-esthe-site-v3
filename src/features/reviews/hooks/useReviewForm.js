@@ -72,5 +72,5 @@ export const useReviewForm = () => {
     }
   };
 
-  return { methods, isSubmitting, submitReview };
+  return { methods, isSubmitting, submitReview, user };
 };

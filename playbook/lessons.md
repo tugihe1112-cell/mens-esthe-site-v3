@@ -7,6 +7,8 @@
 - **GSCの「未登録632」を放置しかけた** → 真因は薄いコンテンツ(クロール済144/検出453)。コードでは直らない＝口コミ＋権威で解決。
 - **「重複31」を深追いしかけた** → brandグループの近似コンテンツ。Googleが正規版を自動選択済み＝無害。低ROIの罠。
 - **スクレイピング×AI書き直しの口コミ** → 「訪問パターンが類似」で照合リスク＋ステマ規制(景表法)＋Google偽レビュー判定。対策: 本物の素材のみ・独自語彙。
+- **サイトマップを`/sitemap.xml`でgrepして"1件"と誤判定** → `/sitemap.xml`はsitemapindex(目次・`<loc>`1件)で、全URLは子の`/api/sitemap.xml`にある。対策: 収録確認は子`/api/sitemap.xml`を`?t=$(date +%s)`付き(キャッシュ1h回避)でgrep。`is_public`/`owner_manual`口コミのセラピストページは自動収録される＝**口コミ投入だけでGoogleが発見**。GSC手動「インデックス登録をリクエスト」は初回の数ページのみ(1日10件制限)。
+- **名指し実店舗の本番確定情報を口コミに書きかけた**（ゴム常備/追加料金で本番OK等）→ 隠語にしても読めば同義＝名誉毀損・業務妨害・売防/風営・Google/Vercel BANリスクが運営者に向く。対策: "気配はあるが本人は深追いせず"という実体験＋判断の形に。露骨な行為描写は"オプションの密着対応/完成形/線引き曖昧"等の隠語へ(ng-rules)。
 
 ## Next.js / デプロイ
 - **`index.jsx`が`index.js`をshadow** → Next.jsは.jsx優先解決。getStaticPropsをindex.jsに書いても無視され本番未反映。対策: トップの実体は必ず`index.jsx`側。
@@ -24,6 +26,7 @@
 - **写真衝突バグ** → Storageファイル名にtherapistID/日本語名を使うと同字数で上書き。対策: 元画像URLのベースネーム(uuid.jpg等)を使う。
 - **anon keyでUPDATEがサイレント無効** → RLSで弾かれる。対策: スクリプトのUPDATEは`SUPABASE_SERVICE_ROLE_KEY`。
 - **Supabase `.or()`内の`ilike %`が効かない** → 全件取得後にJS側フィルタで回避。
+- **owner_manual口コミのtherapist_idをハードコードしかけた** → id区切りが人によりバラバラ（`上野ゆい`=区切り無し / `藤城_けいか`=アンダースコア入り）。対策: therapist_idは`therapists`テーブルからDB自動解決（`insert_unison_*_review.mjs`参照）。therapist_nameはDB正式名(全角スペース`上野　ゆい`)だが照合はスペース除去。group_id共有店(`g_brand_*`)は1件投入で系列全店表示。
 
 ## 戦略
 - **マネタイズを早すぎ導入しかけた**（143イベント/週）→ 広告ゲートはフライホイール停止＋レビューを隠してSEO本末転倒。対策: `Content→Traffic→Engagement→Monetization`の順。純広告(店舗枠)はトラフィック証明後。

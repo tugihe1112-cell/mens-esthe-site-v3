@@ -266,31 +266,39 @@ export default function ModernReviewCard({ review }) {
               )}
             </>
           ) : (
-            /* ロック表示: 書かないと読めない */
+            /* ロック表示: 冒頭を少し読ませてから焦らす（メータード） */
             <div className="relative">
-              <div className="text-[15px] text-slate-200 leading-relaxed line-clamp-2 blur-[3px] select-none pointer-events-none">
-                {(review.content || "").slice(0, 60)}
+              {/* チラ見せ（冒頭をクリアに表示し、下にいくほどフェード） */}
+              <div
+                className="text-[15px] text-slate-300 leading-relaxed line-clamp-3 select-none pointer-events-none"
+                style={{
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
+                  maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
+                }}
+                onCopy={e => e.preventDefault()}
+                onContextMenu={e => e.preventDefault()}
+              >
+                {(review.content || "").replace(/[【】]/g, ' ').slice(0, 140)}
               </div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-slate-900/98 via-slate-900/80 to-transparent rounded-xl">
-                <div className="text-center px-5 py-4 bg-gradient-to-br from-purple-950/90 to-slate-900/90 rounded-2xl border border-purple-500/30 backdrop-blur shadow-xl max-w-[260px]">
-                  <p className="text-purple-300 font-black text-[10px] tracking-widest uppercase mb-2">閲覧制限中</p>
-                  <p className="text-white font-black text-sm mb-1 leading-tight">体験談を投稿すると<br/>この口コミが読めます</p>
-                  <p className="text-slate-400 text-[11px] mb-3">体験談を1件投稿すると<span className="text-purple-300 font-bold">7日間読み放題</span>（即時自動付与）</p>
-                  <a
-                    href="/post-review"
-                    className="inline-block bg-pink-600 hover:bg-pink-500 text-white text-xs font-black px-6 py-2.5 rounded-xl transition-all hover:scale-105 shadow-lg shadow-pink-900/50"
+              {/* 焦らしCTA */}
+              <div className="mt-1 text-center px-5 py-4 bg-gradient-to-br from-purple-950/90 to-slate-900/90 rounded-2xl border border-purple-500/30 shadow-xl">
+                <p className="text-purple-300 font-black text-[10px] tracking-widest uppercase mb-2">続きは限定公開</p>
+                <p className="text-white font-black text-sm mb-1 leading-tight">体験談を投稿すると<br/>この続きが読めます</p>
+                <p className="text-slate-400 text-[11px] mb-3">1件投稿で<span className="text-purple-300 font-bold">最大7日間読み放題</span>（即時自動付与）</p>
+                <Link
+                  to="/post-review"
+                  className="inline-block bg-pink-600 hover:bg-pink-500 text-white text-xs font-black px-6 py-2.5 rounded-xl transition-all hover:scale-105 shadow-lg shadow-pink-900/50"
+                >
+                  口コミを書く →
+                </Link>
+                {!user && (
+                  <Link
+                    to="/register"
+                    className="block mt-2 text-[11px] font-bold text-purple-300 hover:text-purple-200 hover:underline"
                   >
-                    口コミを書く →
-                  </a>
-                  {!user && (
-                    <a
-                      href="/register"
-                      className="block mt-2 text-[11px] font-bold text-purple-300 hover:text-purple-200 hover:underline"
-                    >
-                      無料登録で3日間読み放題 →
-                    </a>
-                  )}
-                </div>
+                    無料登録で3日間読み放題 →
+                  </Link>
+                )}
               </div>
             </div>
           )}
