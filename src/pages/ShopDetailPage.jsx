@@ -192,7 +192,13 @@ export default function ShopDetailPage() {
   if (isFetching && !shop) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white font-bold tracking-widest animate-pulse">LOADING...</div>;
   if (!shop) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Shop not found</div>;
 
-  const seoDesc = `${shop.name}（${shop.prefecture} ${shop.city}）の店舗情報。在籍セラピスト${therapists.length}名。`;
+  // Tier 2-3: 件数入りタイトル/descriptionでCTR改善（SSRラッパーと同じ形式で揃える）
+  const reviewCount = cloudReviews.length;
+  const avgRating = reviewCount > 0 ? (cloudReviews.reduce((s, r) => s + (r.rating || 0), 0) / reviewCount).toFixed(1) : null;
+  const seoTitle = reviewCount > 0 ? `${shop.name}の口コミ${reviewCount}件・セラピスト評判` : shop.name;
+  const seoDesc = reviewCount > 0
+    ? `${shop.name}の口コミ${reviewCount}件（平均★${avgRating}）。${shop.prefecture}${shop.city}の在籍セラピスト${therapists.length}名の評判・体験談をチェック。`
+    : `${shop.name}（${shop.prefecture} ${shop.city}）の店舗情報。在籍セラピスト${therapists.length}名。`;
 
   const handlePostReview = () => {
     navigate(`/shops/${shop.id}/review`);
@@ -201,7 +207,7 @@ export default function ShopDetailPage() {
   return (
     <div className="bg-slate-950 min-h-screen pb-28 md:pb-16 text-slate-200 font-sans relative">
       <SeoHead
-        title={shop.name}
+        title={seoTitle}
         description={seoDesc}
         path={`/shops/${shop.id}`}
         image={`/api/og?shop=${encodeURIComponent(shop.name)}&sub=${encodeURIComponent(seoDesc.slice(0, 40))}&image=${encodeURIComponent(shop.image_url || shop.image || '')}`}
