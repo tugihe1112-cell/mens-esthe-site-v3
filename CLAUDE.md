@@ -25,6 +25,15 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
+### 2026-07-02
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ✅ | **Tier 1-2：口コミ投入スクリプト汎用化 完了** | `scripts/maintenance/insert_owner_review.mjs` 新設＝店ごとの`insert_xxx_review.mjs`を一本化。**入力=JSONファイル**（単一or配列・複数店一括可／テンプレ`_owner_review_template.json`）。機能: therapist_id自動解決（ilike＋スペース除去一致・DB正式名/id区切りの揺れ吸収）／therapist未登録なら**name-only登録**も同時／**重複チェック**（id明示 or 本文SHA1ハッシュで決定的生成＝再実行で重複挿入なし）／**タグ検証**（UI正式21タグ以外は自動除去）／字数判定（700+/200+/未満）／`rating`省略時は詳細平均／`--dry-run`。service role必須。露骨/本番断定のng置換は人間が事前に。`node scripts/maintenance/insert_owner_review.mjs <json> [--dry-run]`。node --check通過。 |
+| ✅ | **Tier 1-1：週次機会スキャン 完了** | `scripts/metrics/weekly_opportunity_scan.mjs` 新設。GSC APIから**機会スコア＝表示×(目標CTR6%−現CTR)** 順に「次に口コミを書くべきページTOP N」を出力。`fetch_metrics.mjs`の`.gcp-metrics-key.json`/`GSC_SITE_URL`流用（追加設定なし・Mac側で実行）。既定は`/shops/`系（口コミ投入で直接効く）、`--all`で全ページ、`--top=N`。出たshop_idを`insert_owner_review.mjs`のJSONに入れる＝週次ルーチン。node --check通過。 |
+| ⏳ | **ロードマップ実装：進行中（順に消化）** | `SITE_GRADEUP_ROADMAP_2026-07.md`を上から実装中。**Tier 0**は大半がダッシュボード操作（0-1ダウングレード・0-4 GSCインデックス・0-5クロール影響=okabayashi側／0-2 07SQLは履歴上実行済・要確認／0-3ゲスト投稿フローはWave2実装済でテストにログイン要）。**Tier 1-1/1-2 完了**（上記）。**次: Tier 2**（2-3タイトルCTR→2-4構造化データ→2-2内部リンク口コミハブ→2-1エリアページ強化の順で着手予定）。判断軸=「口コミ付きページの数/順位/CTRを直接動かすか」。 |
+| ✅ | **グレードアップ戦略ロードマップ作成** | `SITE_GRADEUP_ROADMAP_2026-07.md`（リポジトリ直下）を新規作成。コンサル文書＝実装は別セッション。Tier 0（残タスク回収: Pro→Freeダウングレード・07 SQL実行・ゲスト投稿フローテスト・GSCインデックスリクエスト・6/30停止のクロール影響確認）→ Tier 1（口コミ投入の週次ルーチン化・挿入スクリプト汎用化 `insert_owner_review.mjs` 案・7/13答え合わせプロトコル）→ Tier 2（エリアページ強化・内部リンク口コミハブ化・タイトルCTR改善・構造化データ・被リンク獲得）→ Tier 3（UGC自走: 投稿CTA・週次リテンションメール・退店検知）→ Tier 4（静的ヒーロー化・外形監視・CI）→ Tier 5（マネタイズ弾込めのみ、封印維持）。任意項目にCLAUDE.mdダイエット・孤立881削除・ステマ規制表記整備など。 |
+
 ### 2026-06-30
 
 | 状態 | 作業内容 | メモ |

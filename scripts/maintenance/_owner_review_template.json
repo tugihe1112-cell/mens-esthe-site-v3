@@ -1,0 +1,12 @@
+[
+  {
+    "shop_id": "kanagawa_sagamihara_unison_spa",
+    "therapist_name": "上野ゆい",
+    "rating": 2,
+    "course": "最短＋オプション計2万",
+    "detailed_ratings": { "cleanliness": 3, "looks": 2, "style": 2, "service": 3, "massage": 2, "intimacy": 2 },
+    "tags": ["グラマー", "巨乳", "20代前半"],
+    "user_name": "常連",
+    "content": "ここに700字以上の本物体験談を入れる。ng-rules準拠で露骨表現・名指し本番断定は事前に置換済みにすること。tagsはUIの正式タグ（スレンダー/グラマー/巨乳/美脚/小柄/高身長・可愛い系/美人系/清楚系/ギャル系/お姉さん系・10代/20代前半/20代後半/30代/40代・色白/健康的/ベテラン/外国人/新人）から2〜5個。therapist_nameはヒントでOK（DBの正式名にilikeで自動解決される）。ratingは省略すると詳細評価の平均、idは省略すると本文ハッシュで自動生成される（再実行しても重複挿入されない）。"
+  }
+]
