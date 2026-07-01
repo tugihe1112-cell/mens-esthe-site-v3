@@ -93,7 +93,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
         speed={650}
         loop={true}
         navigation={true}
-        autoplay={{ delay: 4500, disableOnInteraction: false }}
+        autoplay={{ delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true }}
         onAutoplayTimeLeft={(s, time, progress) => setActiveProgress(progress)}
         className="w-full hero-coverflow"
         style={{ paddingTop: '20px', paddingBottom: '20px' }}
@@ -197,10 +197,14 @@ export default function TopHeroSlider({ initialHero = [] }) {
           transition: transform 0.65s ease, filter 0.65s ease, opacity 0.65s ease;
           filter: blur(1.5px) brightness(0.75);
           opacity: 0.7;
+          /* 両隣スライドが中央の「店舗を見る」ボタンに被さってクリックを横取りする問題の対策。
+             非アクティブはクリックを透過させ、中央スライドのボタンだけが押せるようにする。 */
+          pointer-events: none;
         }
         .hero-coverflow .swiper-slide-active {
           filter: blur(0px) brightness(1);
           opacity: 1;
+          pointer-events: auto;
         }
         .swiper-button-next, .swiper-button-prev { color: white !important; background: rgba(15,23,42,0.7) !important; backdrop-filter: blur(10px); width: 40px !important; height: 40px !important; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); top: 46% !important; }
         .swiper-button-next:hover, .swiper-button-prev:hover { background: #ec4899 !important; border-color: #ec4899; }

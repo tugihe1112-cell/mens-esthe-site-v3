@@ -25,6 +25,16 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
+### 2026-06-30
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ✅ | **🚨 Supabase制限 → Cloudflare R2へ画像移行（完了・要ダウングレード）** | **症状**: Supabaseが「Services restricted」で全API 402＝サイト全停止。**原因確定**: Usage の **Storage Size 2.328GB / 1GB（233%・超過1.33GB）**。DB 80MB・Egress 0.03GBは無関係＝画像（therapist-images等）だけが原因。**重要な発見**: 制限中は service role でも **DB read / Storage list / download すべて402**（`scripts/debug/check_restricted_access.mjs`で確認）＝「無料R2移行を今やる」も画像DL不可で手詰まり。**判断（ユーザー選択A）**: Pro $25を1ヶ月だけ課金→制限即解除（数分）→R2移行→Supabase Storage空に→**Freeに戻す**＝実質$25一度きり。Bの「7/20リセット待ち（無料・3週間ダウン）」はSEO索引が落ちるので却下。**Pro化→全API ✅復活を確認済み**。 |
+| ✅ | **R2セットアップ完了・移行スクリプト用意済み** | **Cloudflare R2**: バケット `mens-esthe-images`（APAC・Standard）、Public Development URL有効化（`pub-1eb6e3f48a044dd9b5841a8f4be21a89.r2.dev`）、Account ID `16ee4f3b15c8958b4e861478b76dce76`。APIトークン（Object Read&Write）→ `.env`に `R2_*` 5項目。`npm i -D @aws-sdk/client-s3`。**移行スクリプト**: `scripts/maintenance/migrate_images_to_r2.mjs`。3フェーズ=①コピー(Supabase→R2)→②`--update-db`(image_urlをR2に張替え)→③`--delete-supabase`(Supabaseから削除)。**安全設計**: ②③とも「R2に実在するファイルだけ」対象＝コピー未完は触らない＝消失事故ゼロ。再実行で続きから（R2をListして既存スキップ）。SDKは動的importで`--dry-run`はSDK無しでも動く。**規模(dry-run実測)**: ユニークファイル **13,339** / DB行 15,563 / バケット内訳 `therapist-images` 13,316・`shop-logos` 21・`shops` 2（3バケットとも自動対応）。約2.3GB＝①コピーは20〜40分。**フロント**: `src/utils/imageUrl.js` は変更不要（R2 URLは「その他外部」枝で自動 wsrv.nl 経由＝リサイズ+WebP。むしろ今 "Unavailable in plan" で死んでるSupabase画像変換がwsrvで復活）。 |
+| ✅ | **移行実行完了（①②③）** | **①コピー**: 13,339ファイル全部R2へ（Gateway Timeout4件は再実行で回収・失敗0）。**②`--update-db`**: therapists+shops の image_url **15,563行**をR2 URLへ張替え（失敗0）。**③`--delete-supabase`**: Supabaseから **13,334件削除**。**⚠️③でバグ発見・修正**: 当初③はDBの「Supabaseを指す行」から削除対象を出す設計→②で全URLをR2に変えた後は対象0になり削除されなかった。→ **③を「Supabaseバケットを`listBuckets`+`list`で直接列挙し、R2に実在する物だけ`remove`」に書き換え**（`deletePhase()`・DB非依存）。**孤立ファイル881件は保護（未削除）**: R2に無い＝どのDB行からも参照されない死にファイル（`shop-logos`古ロゴ290・`therapist-images`古写真588・`shops`3。過去の再アップ/衝突修正/null化の残骸）。3バケットは therapists/shops の image_url からしか参照されないので害なし。**R2配信を目視確認済み**（R2直URL＋本番サイトで写真表示OK＝wsrv経由で配信）。 |
+| ⏳ | **残り：Usage確認 → Pro→Freeダウングレード** | Supabase → Usage の **Storage が1GB以下**になったのを確認（削除で約2.3GB→約200MB見込み・反映に最大1時間）→ **Supabase を Pro→Free にダウングレード**（次回請求7/20前に。これで実質$25の一度きりで完了）。孤立881件も消せば更にスッキリ（任意）。 |
+| ✅ | **恒久対策：新規アップロードもR2に向ける改修 完了** | 共有ヘルパー **`scripts/lib/r2Upload.mjs`** を新設（`uploadImage(imageUrl, storageKey, referer, logicalBucket='therapist-images')` ＋ `uploadBuffer()`）。旧Supabase版と同じシグネチャで、R2にPut→R2公開URLを返す。**今後の新規登録スクリプトは自前uploadImageを書かず `import { uploadImage } from '../lib/r2Upload.mjs'` を使う**（詳細は下記「画像アップロードパターン」節）。既存スクリプトは触らない（画像移行済み）。検証: `node scripts/debug/test_r2_upload.mjs`。**これでSupabase Storageは二度と増えない＝1GB超過の再発なし。** |
+
 ### 2026-06-22
 
 | 状態 | 作業内容 | メモ |
@@ -385,6 +395,10 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 | Resend | tugihe1112@gmail.com | メール送信 |
 | Resend SMTP用APIキー | ~~`re_dQbJc5MF_2uanmWpT3xejLQ5RiyZmRV8M`~~ | **削除済み**（GitHub露出のため無効化） |
 | Supabase Auth Hook Secret | `v1,whsec_eIua8euaVbUH8hn08m7Xs+QIzwlfLp5B7K81GaO5UfJ03aeyZg7U4aqr6wzpF9Qgw/HjIDrSHf4kMjUN` | Send Email Hook登録済み（現在は未使用） |
+| Cloudflare R2 | tugihe1112@gmail.com | 画像ストレージ（Supabase Storage超過の移行先）。バケット `mens-esthe-images`（Asia-Pacific/APAC・Standard） |
+| R2 Account ID | `16ee4f3b15c8958b4e861478b76dce76` | S3エンドポイント = `https://16ee4f3b15c8958b4e861478b76dce76.r2.cloudflarestorage.com` |
+| R2 公開URL（`R2_PUBLIC_BASE`） | `https://pub-1eb6e3f48a044dd9b5841a8f4be21a89.r2.dev` | 画像配信のベースURL。フロントは wsrv.nl 経由でキャッシュ＆WebP化（imageUrl.jsの「その他外部」枝で自動処理＝コード変更不要） |
+| R2 APIキー（Access Key ID / Secret） | **`.env` に保管（gitignore済み・mdには書かない）** | ⚠️ CLAUDE.mdはcommittedなので秘密は書かない（Resendキー GitHub露出の二の舞回避）。紛失時は Cloudflare → R2 → Manage R2 API Tokens で再発行。`.env`キー名: `R2_ACCOUNT_ID` / `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` / `R2_BUCKET` / `R2_PUBLIC_BASE` |
 
 ※パスワードはiCloudキーチェーンで管理すること
 
@@ -556,10 +570,23 @@ const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('VITE_SUPABASE
 - `--dry-run` フラグ対応が基本（DB変更なしで動作確認）
 - 実行: `node scripts/maintenance/xxx.mjs [--dry-run]`
 
-### 画像アップロードパターン
+### 画像アップロードパターン【2026-06-30改定：R2必須】
 
-セラピスト画像は `therapist-images` バケットにアップロードしてからURLを保存。
-`process_marigold_mrscrystal.mjs` の `uploadImage()` 関数が標準実装。
+**🚨 新規の登録スクリプトは、Supabase Storageにアップする自前 `uploadImage()` を書くな。必ず共有ヘルパーを使え：**
+
+```js
+import { uploadImage } from '../lib/r2Upload.mjs';   // scripts/maintenance/ からの相対パス
+// シグネチャは旧版と同じ。返り値(R2公開URL)をそのまま image_url に保存すればOK
+const imageUrl = await uploadImage(srcImageUrl, storageKey, referer);
+// 例: storageKey='prime_1234.jpg' → 'https://pub-xxxx.r2.dev/therapist-images/prime_1234.jpg'
+```
+
+- **理由**: 旧来はSupabase Storageに上げていたが、2026-06に**1GB無料枠を超過してサイト全停止**。全画像をR2へ移行済み。今後もSupabase Storageに上げると再発するので、**新規は必ずR2**（`scripts/lib/r2Upload.mjs`）。
+- `storageKey` は従来どおり**元画像URLのベースネーム推奨**（日本語IDは使わない＝衝突回避。過去の教訓）。
+- 生バッファ版は `uploadBuffer(buf, storageKey, contentType)`（canvas加工画像など）。
+- 動作確認: `node scripts/debug/test_r2_upload.mjs`（出たURLが表示されればOK）。
+- フロントの `src/utils/imageUrl.js` は変更不要（R2 URLは自動で wsrv.nl 経由＝リサイズ+WebP）。
+- 旧参考実装 `process_marigold_mrscrystal.mjs` の自前 `uploadImage()` は**Supabase版なので今後は使わない**。
 
 ### ⚠️ 店舗画像（image_url）設定ルール【必須】
 
