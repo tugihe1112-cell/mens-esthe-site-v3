@@ -1,5 +1,8 @@
 {
   "installCommand": "npm install --legacy-peer-deps",
+  "crons": [
+    { "path": "/api/cron/retention-email", "schedule": "0 9 * * 1" }
+  ],
   "headers": [
     {
       "source": "/_next/static/(.*)",

@@ -13,7 +13,7 @@ import ThreadDetailPage from '../../../../src/pages/ThreadDetailPage.jsx';
 // ────────────────────────────────────────────────────────────
 // SSR: サーバー側でSupabaseから公開データを取得
 // ────────────────────────────────────────────────────────────
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, req }) {
   const { shopId, threadId } = params;
 
   const supabase = createClient(
@@ -84,6 +84,13 @@ export async function getServerSideProps({ params }) {
       seenT.add(rr.therapist_id);
       ssrRelated.push({ therapistId: rr.therapist_id, therapistName: rr.therapist_name || '', shopId: rr.shop_id });
       if (ssrRelated.length >= 8) break;
+    }
+
+    // Tier 3-2: 閲覧カウント（bot除外・人間のアクセスのみ）→ 週次リテンションメールの集計元
+    const ua = (req?.headers['user-agent'] || '').toLowerCase();
+    const isBot = /bot|crawl|spider|slurp|bing|google|yandex|baidu|duckduck|facebookexternalhit|embedly/.test(ua);
+    if (!isBot && publicReviews.length) {
+      try { await supabase.rpc('increment_review_views', { ids: publicReviews.map((r) => r.id) }); } catch (e) { /* 集計は失敗しても表示に影響させない */ }
     }
 
     return {
