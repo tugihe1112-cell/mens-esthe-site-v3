@@ -67,17 +67,37 @@ export async function getServerSideProps({ params }) {
       avgRating = (publicReviews.reduce((s, r) => s + (r.rating || 3), 0) / publicReviews.length).toFixed(1);
     }
 
+    // Tier 2-2: 同じ店(group)で口コミがある他のセラピスト（相互リンク＝口コミページ間のPageRank流通）
+    const { data: relatedRevs } = await supabase
+      .from('reviews')
+      .select('therapist_id, therapist_name, shop_id, created_at')
+      .in('shop_id', reviewShopIds)
+      .or('is_public.eq.true,user_id.eq.owner_manual')
+      .not('therapist_id', 'is', null)
+      .neq('therapist_id', threadId)
+      .order('created_at', { ascending: false })
+      .limit(60);
+    const seenT = new Set();
+    const ssrRelated = [];
+    for (const rr of (relatedRevs || [])) {
+      if (!rr.therapist_id || seenT.has(rr.therapist_id)) continue;
+      seenT.add(rr.therapist_id);
+      ssrRelated.push({ therapistId: rr.therapist_id, therapistName: rr.therapist_name || '', shopId: rr.shop_id });
+      if (ssrRelated.length >= 8) break;
+    }
+
     return {
       props: {
         ssrShop: shopData || null,
         ssrTherapist: therapistData || null,
         ssrPublicReviews: publicReviews,
         ssrAvgRating: avgRating,
+        ssrRelated,
       },
     };
   } catch (e) {
     console.error('[SSR ThreadDetail]', e.message);
-    return { props: { ssrShop: null, ssrTherapist: null, ssrPublicReviews: [], ssrAvgRating: null } };
+    return { props: { ssrShop: null, ssrTherapist: null, ssrPublicReviews: [], ssrAvgRating: null, ssrRelated: [] } };
   }
 }
 
@@ -85,7 +105,7 @@ export async function getServerSideProps({ params }) {
 // ページコンポーネント：SSRデータをHeadタグ + JSON-LDに使用
 // 既存の ThreadDetailPage をそのままレンダリング（クライアント動作を維持）
 // ────────────────────────────────────────────────────────────
-export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicReviews, ssrAvgRating }) {
+export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicReviews, ssrAvgRating, ssrRelated = [] }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
   const shopName = ssrShop?.name || '';
@@ -168,6 +188,26 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
 
       {/* 既存コンポーネントをそのまま使用（クライアント側の全機能を維持） */}
       <ThreadDetailPage />
+
+      {/* Tier 2-2: 同じ店で口コミがある他のセラピストへの相互リンク（SSR・口コミページ間の内部リンク） */}
+      {ssrRelated.length > 0 && (
+        <nav aria-label="同じ店で口コミがあるセラピスト" className="max-w-3xl mx-auto px-4 pb-28 -mt-6">
+          <div className="rounded-2xl border border-white/10 bg-slate-900 p-4">
+            <h2 className="text-sm font-black text-white mb-3">この店で口コミがある他のセラピスト</h2>
+            <div className="flex flex-wrap gap-2">
+              {ssrRelated.map((t, i) => (
+                <a
+                  key={i}
+                  href={`/shops/${t.shopId}/threads/${t.therapistId}`}
+                  className="text-xs text-pink-300 bg-slate-800 hover:bg-slate-700 border border-white/10 rounded-full px-3 py-1.5 transition"
+                >
+                  {t.therapistName} ›
+                </a>
+              ))}
+            </div>
+          </div>
+        </nav>
+      )}
     </>
   );
 }
