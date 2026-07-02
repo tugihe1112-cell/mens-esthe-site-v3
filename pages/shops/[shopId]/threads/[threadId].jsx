@@ -123,6 +123,16 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
     })),
   } : null;
 
+  // Tier 2-4: パンくず構造化データ（Home > 店舗 > セラピスト）
+  const breadcrumbLd = ssrShop ? {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'メンエスマップ', item: SITE },
+      { '@type': 'ListItem', position: 2, name: shopName, item: `${SITE}/shops/${ssrShop.id}` },
+      ...(ssrTherapist ? [{ '@type': 'ListItem', position: 3, name: therapistName, item: canonicalUrl }] : []),
+    ],
+  } : null;
+
   return (
     <>
       {/* SSRで確実にHeadを出力（react-helmet-asyncのサーバー描画を補完） */}
@@ -146,6 +156,12 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+        )}
+        {breadcrumbLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
           />
         )}
       </Head>

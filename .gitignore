@@ -13,3 +13,6 @@ out/
 .gcp-metrics-key.json
 *-key.json
 scripts/metrics/cron.log
+
+# 一時生成物（移行エラーログ等）
+r2_copy_errors.json

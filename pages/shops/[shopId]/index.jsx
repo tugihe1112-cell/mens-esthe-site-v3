@@ -72,6 +72,16 @@ export default function ShopDetailSSRPage({ ssrShop, ssrReviewCount, ssrAvgRatin
         <meta property="og:description" content={description} />
         {ssrShop?.image_url && <meta property="og:image" content={ssrShop.image_url} />}
         {canonical && <meta property="og:url" content={canonical} />}
+        {/* Tier 2-4: パンくず構造化データ（Home > 店舗） */}
+        {ssrShop && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'メンエスマップ', item: SITE },
+              { '@type': 'ListItem', position: 2, name: shopName, item: canonical },
+            ],
+          }) }} />
+        )}
       </Head>
       <ShopDetailPage />
     </>
