@@ -55,7 +55,7 @@ export default function PrefecturePage() {
   }, [prefShops]);
 
   const isIndexable = prefShops.length >= MIN_SHOPS_FOR_INDEX;
-  const title = prefName ? `${prefName}のメンズエステ | 店舗・口コミ検索` : 'エリア別メンズエステ';
+  const title = prefName ? `${prefName}のメンズエステ${prefShops.length}店舗・口コミ` : 'エリア別メンズエステ';
   const description = prefName
     ? `${prefName}のメンズエステ${prefShops.length}店舗を掲載。セラピスト情報・口コミ・料金・出勤スケジュールを検索できます。`
     : '';
