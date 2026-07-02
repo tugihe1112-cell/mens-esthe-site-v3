@@ -10,8 +10,8 @@ import { createClient } from '@supabase/supabase-js';
 import Home from '../src/pages/Home';
 import { HERO_SHOP_IDS, buildInitialHero } from '../src/data/heroShops';
 
-export default function IndexPage({ initialHero }) {
-  return <Home initialHero={initialHero} />;
+export default function IndexPage({ initialHero, latestReviews }) {
+  return <Home initialHero={initialHero} latestReviews={latestReviews} />;
 }
 
 export async function getServerSideProps({ res }) {
@@ -19,6 +19,7 @@ export async function getServerSideProps({ res }) {
   // CDNには短時間だけキャッシュさせて速度も確保（s-maxage=60 + stale-while-revalidate）。
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
   let initialHero = [];
+  let latestReviews = [];
   try {
     // 公開データ（shops）はRLSで匿名read可。クライアントと同じanon keyで取得。
     const supabase = createClient(
@@ -30,10 +31,33 @@ export async function getServerSideProps({ res }) {
       .select('id, group_id, name, raw_data, image_url')
       .in('id', HERO_SHOP_IDS);
     initialHero = buildInitialHero(data);
+
+    // Tier 2-2: 最新の本物口コミ（is_public）をSSRで取得 → ホームから口コミページへ直リンク（クローラー発見の最短経路）
+    const { data: revs } = await supabase
+      .from('reviews')
+      .select('shop_id, therapist_id, therapist_name, rating, content, created_at')
+      .eq('is_public', true)
+      .not('therapist_id', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(8);
+    const shopIds = [...new Set((revs || []).map((r) => r.shop_id).filter(Boolean))];
+    let shopNameById = {};
+    if (shopIds.length) {
+      const { data: shopRows } = await supabase.from('shops').select('id, name').in('id', shopIds);
+      shopNameById = Object.fromEntries((shopRows || []).map((s) => [s.id, s.name]));
+    }
+    latestReviews = (revs || []).map((r) => ({
+      shopId: r.shop_id,
+      therapistId: r.therapist_id,
+      therapistName: r.therapist_name || '',
+      shopName: shopNameById[r.shop_id] || '',
+      rating: r.rating || null,
+      snippet: (r.content || '').replace(/\s+/g, '').slice(0, 64),
+    }));
   } catch (e) {
     // 取得失敗時は空配列で返す → クライアント側で従来通り補完（ビルドは落とさない）
-    console.error('getStaticProps hero fetch failed:', e);
+    console.error('getServerSideProps home fetch failed:', e);
   }
 
-  return { props: { initialHero } };
+  return { props: { initialHero, latestReviews } };
 }

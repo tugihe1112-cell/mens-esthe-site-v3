@@ -59,7 +59,7 @@ const RANK_STYLES = [
   { size: 'col-span-1 row-span-1', color: 'from-red-600 to-orange-900', tag: '🔥 注目' },        // 5位
 ];
 
-export default function HomePage({ initialHero = [] }) {
+export default function HomePage({ initialHero = [], latestReviews = [] }) {
   const { shops, loading } = useShopData();
   const [featuredTherapists, setFeaturedTherapists] = useState([]);
 
@@ -363,6 +363,32 @@ export default function HomePage({ initialHero = [] }) {
             </Link>
           </div>
         </section>
+
+        {/* Tier 2-2: 最新の本物口コミ（SSR）＝ホームから口コミページへ直リンク→クローラー最短発見 */}
+        {latestReviews.length > 0 && (
+          <section className="px-2 mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-2xl">📝</span>
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">最新の口コミ</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {latestReviews.map((r, i) => (
+                <Link
+                  key={i}
+                  to={`/shops/${r.shopId}/threads/${r.therapistId}`}
+                  className="block rounded-2xl border border-white/10 bg-slate-900 hover:border-pink-500/40 transition-all duration-300 hover:-translate-y-0.5 p-4"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-black text-white truncate">{r.therapistName}</span>
+                    {r.rating != null && <span className="text-xs font-bold text-pink-400 shrink-0 ml-2">★ {Number(r.rating).toFixed(1)}</span>}
+                  </div>
+                  <div className="text-[11px] text-slate-500 mb-1.5 truncate">{r.shopName}</div>
+                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">{r.snippet}…</p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* 3.5. 注目セラピスト */}
         <section>
