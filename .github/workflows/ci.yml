@@ -1,0 +1,33 @@
+# Tier 4-3: 最低限のCI。push/PR毎に `next build` を回して、壊れたままのデプロイを防ぐ。
+# （これまで手動で叩いていた `npm run build` の自動化）
+name: CI (build)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install deps
+        run: npm install --legacy-peer-deps
+
+      - name: Next build
+        run: npm run build
+        env:
+          # ビルドは getServerSideProps を実行しない（＝実データ不要）ためダミーでよい。
+          # モジュール読込時に process.env を参照する箇所のフォールバック回避用。
+          VITE_SUPABASE_URL: https://placeholder.supabase.co
+          VITE_SUPABASE_ANON_KEY: placeholder-anon-key
+          SUPABASE_SERVICE_ROLE_KEY: placeholder-service-key
+          VITE_PUBLIC_SITE_URL: https://www.mens-esthe-map.jp
