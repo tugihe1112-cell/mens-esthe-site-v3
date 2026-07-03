@@ -199,6 +199,9 @@ export default function ModernReviewCard({ review }) {
                   <span className="w-4 h-4 rounded-full bg-slate-600 flex items-center justify-center text-[8px]">👤</span>
                   <span className="font-normal">{review.userName || '匿名'}</span>
                 </div>
+                {review.user_id === 'owner_manual' && (
+                  <span className="text-[9px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/25 rounded px-1.5 py-0.5">運営取材レポート</span>
+                )}
                 <span className="text-[10px] text-slate-600">•</span>
                 <span className="text-[10px] text-slate-500 font-mono">{dateStr}</span>
               </div>

@@ -14,5 +14,6 @@ out/
 *-key.json
 scripts/metrics/cron.log
 
-# 一時生成物（移行エラーログ等）
+# 一時生成物（移行エラーログ・一時分析スクリプト等）
 r2_copy_errors.json
+outputs_gsc_analyze.py
