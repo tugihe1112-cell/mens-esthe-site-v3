@@ -333,8 +333,10 @@ const Step3_Story = () => {
   const { register, watch, formState: { errors } } = useFormContext();
   const story = watch('story') || {};
   const totalChars = Object.values(story).filter(Boolean).join('').length;
-  const remaining = Math.max(0, MIN_CHARS - totalChars);
-  const pct = Math.min(100, (totalChars / MIN_CHARS) * 100);
+  const pct = Math.min(100, (totalChars / BONUS_CHARS) * 100); // 700字をゴールにした達成率
+  const reached200 = totalChars >= MIN_CHARS;
+  const reached700 = totalChars >= BONUS_CHARS;
+  const meterColor = reached700 ? 'bg-emerald-500' : reached200 ? 'bg-amber-500' : 'bg-gradient-to-r from-pink-500 to-purple-500';
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
@@ -343,27 +345,28 @@ const Step3_Story = () => {
         <p className="text-slate-500 text-sm">あなたの体験を日記のように記録しましょう</p>
       </div>
 
-      {/* 文字数カウンター（200で投稿OK・700で閲覧日数ボーナス） */}
+      {/* 達成メーター（0→200字=3日→700字=7日の2段ゴール。しきい値通過でマイルストーンが点灯） */}
       <div className="bg-slate-900/60 rounded-2xl p-4 border border-white/5">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-baseline justify-between mb-2">
           <span className="text-xs text-slate-400 font-bold">合計文字数</span>
-          <span className={`text-sm font-black ${totalChars >= MIN_CHARS ? 'text-emerald-400' : 'text-slate-300'}`}>
-            {totalChars} <span className="text-slate-600 font-normal">/ {MIN_CHARS}文字で投稿OK</span>
+          <span className={`text-lg font-black ${reached700 ? 'text-emerald-400' : reached200 ? 'text-amber-400' : 'text-white'}`}>
+            {totalChars}<span className="text-xs text-slate-500 font-bold"> 文字</span>
           </span>
         </div>
-        <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-          <div
-            className={`h-full rounded-full transition-all duration-300 ${totalChars >= MIN_CHARS ? 'bg-emerald-500' : 'bg-gradient-to-r from-pink-500 to-purple-500'}`}
-            style={{ width: `${pct}%` }}
-          />
+        {/* 2段メーター（200と700にマイルストーン線） */}
+        <div className="relative h-2.5 bg-slate-800 rounded-full overflow-hidden">
+          <div className={`h-full rounded-full transition-all duration-300 ${meterColor}`} style={{ width: `${pct}%` }} />
+          <div className="absolute top-0 bottom-0 w-0.5 bg-slate-950/70" style={{ left: `${(MIN_CHARS / BONUS_CHARS) * 100}%` }} />
         </div>
-        {totalChars < MIN_CHARS ? (
-          <p className="text-[11px] text-slate-500 mt-1.5">あと {remaining} 文字で投稿できます</p>
-        ) : totalChars < BONUS_CHARS ? (
-          <p className="text-[11px] text-amber-400/90 mt-1.5">✅ 投稿OK！ あと {BONUS_CHARS - totalChars} 文字で<span className="font-bold">閲覧7日間</span>に（今は3日間）</p>
-        ) : (
-          <p className="text-[11px] text-emerald-400 mt-1.5">🎉 閲覧7日間ぶんの濃さ！ ありがとうございます</p>
-        )}
+        {/* マイルストーン2つ（通過で色が点く＝完走のご褒美を可視化） */}
+        <div className="flex gap-2 mt-2">
+          <span className={`flex-1 text-center text-[11px] font-bold rounded-lg py-1 border transition ${reached200 ? 'bg-amber-500/15 text-amber-300 border-amber-500/40' : 'bg-white/5 text-slate-500 border-white/5'}`}>
+            {reached200 ? '✅ 200字・3日分確定！' : `200字で3日（あと${MIN_CHARS - totalChars}）`}
+          </span>
+          <span className={`flex-1 text-center text-[11px] font-bold rounded-lg py-1 border transition ${reached700 ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40' : 'bg-white/5 text-slate-500 border-white/5'}`}>
+            {reached700 ? '🎉 700字・7日分確定！' : `700字で7日（あと${Math.max(0, BONUS_CHARS - totalChars)}）`}
+          </span>
+        </div>
       </div>
 
       <div className="bg-slate-900/60 backdrop-blur-md rounded-[2rem] p-6 border border-white/5 shadow-2xl relative">
@@ -626,6 +629,7 @@ export default function PostReviewPage() {
                 </button>
                 <span className="text-slate-500 font-bold text-xs">
                   {currentStep} / {TOTAL_STEPS} ステップ
+                  {currentStep < TOTAL_STEPS && <span className="text-pink-400 ml-1.5">あと{TOTAL_STEPS - currentStep}ステップで完了</span>}
                 </span>
               </div>
 

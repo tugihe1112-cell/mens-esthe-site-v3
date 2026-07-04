@@ -150,6 +150,15 @@ export default function ThreadDetailPage() {
     }
   }, [uniqueKey, therapist, shop, addToHistory]);
 
+  // B-1: 追いCTA（読み終えた瞬間＝投稿動機の最高点）。スクロールで出す。
+  const [showStickyCta, setShowStickyCta] = React.useState(false);
+  useEffect(() => {
+    const onScroll = () => setShowStickyCta(window.scrollY > 450);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   // 直接取得した口コミを優先、なければDataContextのreviewsからフォールバック
   const therapistReviews = useMemo(() => {
     if (cloudTherapistReviews.length > 0) return cloudTherapistReviews;
@@ -348,18 +357,32 @@ export default function ThreadDetailPage() {
           {therapistReviews.length > 0 ? (
             <ReviewListWithRestriction reviews={therapistReviews} />
           ) : (
-            <div className="text-center py-10 text-slate-500 text-sm bg-slate-900/30 rounded-2xl border border-dashed border-slate-800">
-              <p className="mb-4">まだクチコミがありません</p>
+            <div className="text-center py-10 px-4 bg-slate-900/40 rounded-2xl border border-dashed border-purple-800/50">
+              <p className="text-white font-black text-base mb-1">まだ口コミがありません</p>
+              <p className="text-purple-300 text-xs font-bold mb-4">最初のレポを書くと<span className="text-white">即7日間読み放題</span>（先行者特典）</p>
               <button
                 onClick={handlePostReview}
-                className="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-black py-3 px-8 rounded-full shadow-lg shadow-pink-600/30 active:scale-95 transition-all duration-300 flex items-center gap-2 mx-auto"
+                className="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-black py-3 px-8 rounded-full shadow-lg shadow-pink-600/30 active:scale-95 transition-all duration-300 inline-flex items-center gap-2 mx-auto"
               >
-                <span>✍️</span> 最初のクチコミを書く
+                <span>✍️</span> 最初の口コミを書く
               </button>
             </div>
           )}
         </section>
       </div>
+
+      {/* B-1: 追いCTA（スクロールで出るsticky）＝口コミを読み終えた直後に投稿へ誘導 */}
+      {showStickyCta && (
+        <div className="fixed left-0 right-0 z-40 px-4 pointer-events-none" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 72px)' }}>
+          <button
+            onClick={handlePostReview}
+            className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-3.5 rounded-2xl shadow-2xl shadow-pink-900/50 active:scale-[0.98] transition text-sm"
+          >
+            <span>✍️</span>{therapist.name}の口コミを書く
+            <span className="text-[11px] font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">7日間読み放題</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
