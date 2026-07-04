@@ -9,6 +9,27 @@ import ReviewListWithRestriction from '../components/ReviewListWithRestriction.j
 import SeoHead from '../components/SeoHead.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 
+// ローディング中の骨組み（全画面テキスト→スケルトンで"個人サイト感"を除去）
+function ThreadSkeleton() {
+  return (
+    <div className="min-h-screen bg-slate-950 pb-32">
+      <div className="max-w-2xl mx-auto px-4 pt-20 space-y-6">
+        <div className="h-4 w-1/2 bg-slate-800 rounded animate-pulse" />
+        <div className="flex gap-4">
+          <div className="w-[40%] max-w-[200px] bg-slate-800 rounded-2xl animate-pulse" style={{ aspectRatio: '3 / 4', maxHeight: '320px' }} />
+          <div className="flex-1 space-y-3 py-4">
+            <div className="h-4 w-2/3 bg-slate-800 rounded animate-pulse" />
+            <div className="h-7 w-1/2 bg-slate-800 rounded animate-pulse" />
+            <div className="h-5 w-3/4 bg-slate-800 rounded animate-pulse" />
+          </div>
+        </div>
+        <div className="h-32 bg-slate-900 rounded-2xl animate-pulse" />
+        <div className="h-48 bg-slate-900 rounded-2xl animate-pulse" />
+      </div>
+    </div>
+  );
+}
+
 export default function ThreadDetailPage() {
   const { shopId, threadId } = useParams();
   const navigate = useNavigate();
@@ -144,34 +165,38 @@ export default function ThreadDetailPage() {
 
   const stats = useMemo(() => {
     if (therapistReviews.length === 0) return null;
-    const sum = therapistReviews.reduce((acc, r) => {
+    const keys = ['cleanliness', 'looks', 'style', 'service', 'massage', 'intimacy'];
+    const sums = Object.fromEntries(keys.map((k) => [k, 0]));
+    let ratingSum = 0;
+    for (const r of therapistReviews) {
       const d = r.detailed_ratings || r.detailedRatings || {};
-      return {
-        looks: acc.looks + Number(d.looks || r.rating || 3),
-        style: acc.style + Number(d.style || r.rating || 3),
-        technique: acc.technique + Number(d.massage || d.technique || r.rating || 3),
-        service: acc.service + Number(d.service || d.intimacy || r.rating || 3)
-      };
-    }, { looks: 0, style: 0, technique: 0, service: 0 });
-
+      for (const k of keys) sums[k] += Number(d[k] ?? r.rating ?? 3);
+      ratingSum += Number(r.rating || 0);
+    }
     const count = therapistReviews.length;
+    const avgOf = (k) => sums[k] / count;
     return {
-      looks: (sum.looks / count).toFixed(1),
-      style: (sum.style / count).toFixed(1),
-      technique: (sum.technique / count).toFixed(1),
-      service: (sum.service / count).toFixed(1),
-      count
+      count,
+      avg: (ratingSum / count).toFixed(1),
+      axes: [
+        { label: '清潔感', val: avgOf('cleanliness') },
+        { label: 'ルックス', val: avgOf('looks') },
+        { label: 'スタイル', val: avgOf('style') },
+        { label: '接客', val: avgOf('service') },
+        { label: 'マッサージ', val: avgOf('massage') },
+        { label: '密着', val: avgOf('intimacy') },
+      ],
     };
   }, [therapistReviews]);
 
   // 3. Hookの処理が終わったあとに、初めて Loading / Not Found の判定を行う！
-  if (!shopById || !therapistById) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading...</div>;
+  if (!shopById || !therapistById) return <ThreadSkeleton />;
 
   if (!shop || !therapist) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white gap-4">
-        <p>Therapist not found</p>
-        <button onClick={() => navigate(-1)} className="text-pink-400 underline">Back</button>
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white gap-4 px-6 text-center">
+        <p className="text-slate-300 font-bold">セラピストが見つかりませんでした</p>
+        <button onClick={() => navigate(-1)} className="text-pink-400 font-bold underline">前のページに戻る</button>
       </div>
     );
   }
@@ -184,10 +209,8 @@ export default function ThreadDetailPage() {
 
 
 
-  // 🔥 データが到着するまでは「読み込み中」画面を出してエラーを阻止する
-  if (isLoading) {
-    return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">データを読み込み中...</div>;
-  }
+  // データ到着までスケルトンを出してエラーを阻止する
+  if (isLoading) return <ThreadSkeleton />;
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
@@ -231,88 +254,78 @@ export default function ThreadDetailPage() {
         }) }} />
       )}
 
-      {/* --- 全画面写真エリア --- */}
-      <div className={`relative w-full group overflow-hidden ${therapist.image ? 'h-[70vh] md:h-[80vh]' : 'h-[45vh] bg-slate-900'}`}>
-        <div className="absolute top-0 left-0 w-full p-6 z-50 flex justify-between items-start">
-           <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white border border-white/10 hover:bg-black/40 transition active:scale-95">←</button>
-           <button onClick={() => toggleFavTherapist(uniqueKey)} className={`w-12 h-12 rounded-full backdrop-blur-xl flex items-center justify-center border transition shadow-xl active:scale-90 ${isFav ? 'bg-pink-600/80 border-pink-500 text-white shadow-pink-500/30' : 'bg-black/20 border-white/10 text-white hover:bg-white/10'}`}>
-             <span className="text-2xl">{isFav ? '❤️' : '🤍'}</span>
-           </button>
+      {/* --- ページ本体：コンパクトヘッダー＋評価サマリ＋口コミ（口コミ1件目をファーストビューに） --- */}
+      <div className="max-w-2xl mx-auto px-4 pt-20 relative z-30 space-y-6">
+        {/* 戻る＋お気に入り */}
+        <div className="flex items-center justify-between">
+          <button onClick={() => navigate(-1)} aria-label="戻る" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white border border-white/10 hover:bg-white/10 transition active:scale-95">←</button>
+          <button onClick={() => toggleFavTherapist(uniqueKey)} aria-label="お気に入り" className={`w-10 h-10 rounded-full flex items-center justify-center border transition active:scale-90 ${isFav ? 'bg-pink-600/80 border-pink-500 text-white' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'}`}>
+            <span className="text-xl">{isFav ? '❤️' : '🤍'}</span>
+          </button>
         </div>
 
-        {therapist.image ? (
-          <LazyImage src={therapist.image_url || therapist.image} alt={therapist.name} className="w-full h-full object-cover transition duration-[3s] group-hover:scale-105" />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center opacity-30">
-            <span className="text-4xl md:text-6xl font-black text-slate-500 tracking-widest">NO IMAGE</span>
+        {/* パンくず（JSON-LDのBreadcrumbListと視覚を一致） */}
+        <nav aria-label="パンくず" className="flex items-center gap-1.5 text-xs text-slate-400 flex-wrap">
+          <Link to="/" className="hover:text-white transition">ホーム</Link>
+          <span className="text-slate-600">›</span>
+          <Link to={`/shops/${shopId}`} className="hover:text-white transition truncate max-w-[45%]">{getDisplayName(shop.name)}</Link>
+          <span className="text-slate-600">›</span>
+          <span className="text-slate-200 font-bold truncate max-w-[35%]">{therapist.name}</span>
+        </nav>
+
+        {/* コンパクトヘッダー：写真左40% ＋ 名前/店舗/評価サマリ右 */}
+        <div className="flex gap-4">
+          <div className="w-[40%] max-w-[200px] shrink-0">
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-slate-900" style={{ aspectRatio: '3 / 4', maxHeight: '320px' }}>
+              {therapist.image ? (
+                <LazyImage src={therapist.image_url || therapist.image} alt={therapist.name} className="w-full h-full object-cover" />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-sm font-black text-slate-600 tracking-widest">写真なし</span>
+                </div>
+              )}
+            </div>
           </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-center">
+            <Link to={`/shops/${shopId}`} className="inline-flex items-center gap-1.5 mb-2 text-sm font-bold text-slate-400 hover:text-white transition min-w-0">
+              <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
+              <span className="truncate">{getDisplayName(shop.name)}</span>
+            </Link>
+            <h1 className="text-2xl md:text-3xl font-black text-white leading-tight mb-2 break-words">{therapist.name}</h1>
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {therapist.age && <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white">{therapist.age}歳</span>}
+              {therapist.T && <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white">身長{therapist.T}cm</span>}
+              {therapist.cup && <span className="px-2.5 py-0.5 rounded-full bg-pink-600/20 border border-pink-500/30 text-[11px] font-bold text-pink-300">{therapist.cup}カップ</span>}
+              {therapist.types?.[0] && <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-slate-200">{therapist.types[0]}</span>}
+            </div>
+            {stats ? (
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-black text-white">★ {stats.avg}</span>
+                <span className="text-xs text-slate-400 font-bold">（{stats.count}件の実体験レポ）</span>
+              </div>
+            ) : (
+              <div className="text-xs text-slate-500 font-bold">まだ評価がありません</div>
+            )}
+          </div>
+        </div>
+
+        {/* 評価サマリバー（6軸の平均） */}
+        {stats && (
+          <section className="bg-slate-900/60 rounded-2xl p-5 border border-white/10">
+            <h2 className="text-xs font-bold text-slate-400 mb-4">評価の内訳（{stats.count}件の平均）</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+              {stats.axes.map((a) => (
+                <div key={a.label} className="flex items-center gap-3">
+                  <span className="text-[11px] font-bold w-14 text-slate-400 shrink-0">{a.label}</span>
+                  <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-700 ease-out" style={{ width: `${Math.min((a.val / 5) * 100, 100)}%` }} />
+                  </div>
+                  <span className="text-xs font-bold text-white w-7 text-right">{a.val.toFixed(1)}</span>
+                </div>
+              ))}
+            </div>
+          </section>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-black/30"></div>
-
-        <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 z-20">
-          <div className="max-w-2xl mx-auto">
-             <Link to={`/search?shop=${encodeURIComponent(shop.name)}`} className="inline-flex items-center gap-2 mb-4 group/shop">
-               <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur flex items-center justify-center text-xs border border-white/10 group-hover/shop:bg-pink-600 transition">🏢</div>
-               <span className="text-sm font-bold text-slate-300 group-hover/shop:text-white transition">{getDisplayName(shop.name)}</span>
-             </Link>
-             <h1 className="text-5xl md:text-7xl font-black text-white mb-4 tracking-tighter drop-shadow-2xl leading-none">{therapist.name}</h1>
-             <div className="flex flex-wrap gap-2 mb-6">
-                {therapist.age && <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur border border-white/10 text-xs font-bold text-white">{therapist.age}歳</span>}
-                {therapist.T && <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur border border-white/10 text-xs font-bold text-white">T{therapist.T}</span>}
-             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-2xl mx-auto px-4 -mt-10 relative z-30 space-y-8">
-        {/* --- プロフィールデータ --- */}
-        <section className="bg-slate-900/60 backdrop-blur-2xl rounded-[2.5rem] p-8 border border-white/10 shadow-2xl relative overflow-hidden">
-          <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-             <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-               <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span> PROFILE DATA
-             </h3>
-             <div className="text-right">
-               <span className="text-2xl font-black text-white">{stats ? stats.count : 0}</span>
-               <span className="text-[10px] text-slate-500 font-bold ml-1 uppercase">Reviews</span>
-             </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 mb-8 text-center">
-             <div className="bg-black/20 rounded-2xl p-4 border border-white/5">
-                <div className="text-[9px] text-slate-500 font-bold uppercase mb-1">HEIGHT</div>
-                <div className="text-lg font-black text-white">T{therapist.T || '-'}</div>
-             </div>
-             <div className="bg-black/20 rounded-2xl p-4 border border-white/5">
-                <div className="text-[9px] text-slate-500 font-bold uppercase mb-1">SIZE</div>
-                <div className="text-lg font-black text-pink-400">{therapist.cup ? `(${therapist.cup})` : '-'}</div>
-             </div>
-             <div className="bg-black/20 rounded-2xl p-4 border border-white/5">
-                <div className="text-[9px] text-slate-500 font-bold uppercase mb-1">TYPE</div>
-                <div className="text-xs font-bold text-white pt-1 line-clamp-1">{therapist.types?.[0] || 'Model'}</div>
-             </div>
-          </div>
-
-          {stats ? (
-             <div className="space-y-4">
-               {[ 
-                 { label: 'ルックス', val: stats.looks, col: 'bg-pink-500' },
-                 { label: 'スタイル', val: stats.style, col: 'bg-purple-500' },
-                 { label: '技術', val: stats.technique, col: 'bg-blue-500' },
-                 { label: '接客', val: stats.service, col: 'bg-yellow-500' } 
-               ].map((item) => (
-                 <div key={item.label} className="flex items-center gap-3">
-                   <span className="text-[10px] font-bold w-16 text-slate-400">{item.label}</span>
-                   <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
-                     <div className={`${item.col} h-full rounded-full transition-all duration-1000 ease-out`} style={{ width: `${Math.min((item.val / 5) * 100, 100)}%` }}></div>
-                   </div>
-                   <span className="text-xs font-bold text-white w-8 text-right">{item.val}</span>
-                 </div>
-               ))}
-             </div>
-          ) : (
-             <div className="text-center py-6 text-slate-500 text-sm bg-slate-900/30 rounded-xl border border-dashed border-slate-800">No ratings yet</div>
-          )}
-        </section>
 
         {/* --- クチコミセクション --- */}
         <section className="space-y-4">
