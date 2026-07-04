@@ -52,6 +52,17 @@ const getBadgeStyle = (score) => {
   return "from-rose-600 to-red-700 shadow-rose-900/40";
 };
 
+// タグの系統別色分け（体型=ピンク・雰囲気=パープル・年代=ブルー・属性=スレート）
+const TAG_BODY = ['スレンダー', 'グラマー', '巨乳', '美脚', '小柄', '高身長'];
+const TAG_MOOD = ['可愛い系', '美人系', '清楚系', 'ギャル系', 'お姉さん系'];
+const TAG_AGE = ['10代', '20代前半', '20代後半', '30代', '40代'];
+const tagStyle = (tag) => {
+  if (TAG_BODY.includes(tag)) return 'bg-pink-500/15 text-pink-200 border-pink-500/40';
+  if (TAG_MOOD.includes(tag)) return 'bg-purple-500/15 text-purple-200 border-purple-500/40';
+  if (TAG_AGE.includes(tag)) return 'bg-blue-500/15 text-blue-200 border-blue-500/40';
+  return 'bg-slate-600/20 text-slate-300 border-slate-500/40'; // 属性・その他
+};
+
 // --- アイコン (Lucide互換) ---
 const Icons = {
   Eye: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
@@ -151,13 +162,17 @@ export default function ModernReviewCard({ review }) {
   // 閲覧権限: プレミアム OR 閲覧日数あり OR owner_manual口コミ OR 公開口コミ（各セラピストの1件目）
   const canReadFull = isPremium || (creditDays !== null && creditDays > 0) || review.user_id === 'owner_manual' || review.is_public === true;
 
+  // 6軸メトリクス（snake/camel両対応・DBは detailed_ratings）
+  const dr = review.detailedRatings || review.detailed_ratings || {};
   const scores = [
-    { label: "ルックス", value: review.detailedRatings?.looks || 0, icon: <Icons.Eye /> },
-    { label: "スタイル", value: review.detailedRatings?.style || 0, icon: <Icons.User /> },
-    { label: "愛嬌・接客", value: review.detailedRatings?.service || 0, icon: <Icons.Heart /> },
-    { label: "マッサージ", value: review.detailedRatings?.massage || 0, icon: <Icons.Hand /> },
-    { label: "密着度", value: review.detailedRatings?.intimacy || 0, icon: <Icons.Activity /> },
+    { label: "清潔感", value: Number(dr.cleanliness) || 0 },
+    { label: "ルックス", value: Number(dr.looks) || 0 },
+    { label: "スタイル", value: Number(dr.style) || 0 },
+    { label: "接客", value: Number(dr.service) || 0 },
+    { label: "マッサージ", value: Number(dr.massage) || 0 },
+    { label: "密着", value: Number(dr.intimacy) || 0 },
   ];
+  const hasScores = scores.some((s) => s.value > 0);
 
   // ウォーターマーク用テキスト（ログイン済みはメールの一部、未ログインはサイト名）
   const wmText = user?.email
@@ -187,11 +202,6 @@ export default function ModernReviewCard({ review }) {
                    {review.therapist_name || review.therapistName || "セラピスト"}
                  </h2>
                  </Link>
-                 {review.course && (
-                    <span className="bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] px-2 py-0.5 rounded font-bold whitespace-nowrap self-center transform translate-y-1">
-                      {review.course}
-                    </span>
-                 )}
               </div>
               
               {/* META: Reviewer (Tiny & Subdued) */}
@@ -214,26 +224,34 @@ export default function ModernReviewCard({ review }) {
             <span className="text-2xl font-black text-white leading-none">
               {Number(review.rating || 0).toFixed(1)}
             </span>
-            <div className="flex gap-0.5 mt-0.5">
-               {[1,2,3,4,5].map(i => (
-                 <span key={i} className={`text-[6px] ${i <= (review.rating || 0) ? "text-yellow-300" : "text-black/20"}`}>★</span>
-               ))}
-            </div>
+            <span className="text-[9px] font-bold text-white/70 mt-0.5">★ 総合</span>
           </div>
         </div>
 
-        {/* --- 2. METRICS (Compact) --- */}
-        {review.detailedRatings && (
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mb-6">
+        {/* --- 2. METRICS (6軸バー・色分けemerald/amber/rose維持) --- */}
+        {hasScores && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2 mb-6">
             {scores.map((score, i) => (
-              <div key={i} className="flex flex-col items-center justify-center bg-white/5 border border-white/5 rounded-lg py-2 transition-colors hover:bg-white/10 group/metric">
-                <span className="text-slate-500 mb-1 group-hover/metric:text-pink-400 transition-colors">{score.icon}</span>
-                <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">{score.label}</span>
-                <span className={`text-xs font-bold ${getScoreColor(score.value)}`}>
+              <div key={i} className="flex items-center gap-3">
+                <span className="text-[11px] font-bold w-14 text-slate-400 shrink-0">{score.label}</span>
+                <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
+                  <div className={`h-full rounded-full bg-gradient-to-r ${getBadgeStyle(score.value)} transition-all duration-700`} style={{ width: `${Math.min((score.value / 5) * 100, 100)}%` }} />
+                </div>
+                <span className={`text-xs font-bold w-7 text-right ${getScoreColor(score.value)}`}>
                   {Number(score.value).toFixed(1)}
                 </span>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* 来店情報（実体験の証拠を本文の直前に・信頼の即時演出） */}
+        {review.course && (
+          <div className="flex items-center gap-2 mb-3 text-[11px] bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+            <span className="text-slate-500 shrink-0">🧾</span>
+            <span className="font-bold text-slate-400 shrink-0">来店情報</span>
+            <span className="text-slate-200 font-bold">{review.course}</span>
+            {dateStr && <span className="text-slate-500 ml-auto shrink-0">{dateStr}</span>}
           </div>
         )}
 
@@ -286,7 +304,7 @@ export default function ModernReviewCard({ review }) {
               </div>
               {/* 焦らしCTA */}
               <div className="mt-1 text-center px-5 py-4 bg-gradient-to-br from-purple-950/90 to-slate-900/90 rounded-2xl border border-purple-500/30 shadow-xl">
-                <p className="text-purple-300 font-black text-[10px] tracking-widest uppercase mb-2">続きは限定公開</p>
+                <p className="text-purple-300 font-black text-[11px] tracking-widest mb-2">続き{Math.max(0, (review.content || '').length - 140)}文字は限定公開</p>
                 <p className="text-white font-black text-sm mb-1 leading-tight">体験談を投稿すると<br/>この続きが読めます</p>
                 <p className="text-slate-400 text-[11px] mb-3">1件投稿で<span className="text-purple-300 font-bold">最大7日間読み放題</span>（即時自動付与）</p>
                 <Link
@@ -314,7 +332,7 @@ export default function ModernReviewCard({ review }) {
         {review.tags?.length > 0 && (
           <div className="mt-5 pt-3 border-t border-white/5 flex flex-wrap gap-2">
               {review.tags.map((tag, i) => (
-                <span key={i} className="flex items-center gap-1 bg-gradient-to-r from-pink-600/30 to-purple-600/30 text-pink-200 border border-pink-500/40 px-3 py-1 rounded-full text-[11px] font-bold transition hover:from-pink-600/50 hover:to-purple-600/50 hover:border-pink-400/60">
+                <span key={i} className={`border px-3 py-1 rounded-full text-[11px] font-bold transition ${tagStyle(tag)}`}>
                   {tag}
                 </span>
               ))}
