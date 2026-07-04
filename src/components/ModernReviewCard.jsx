@@ -3,6 +3,7 @@ import { Link, useNavigate } from '../compat/router';
 import ReviewLikeButton from './ReviewLikeButton.jsx';
 import ThanksBadgeButton from './ThanksBadgeButton.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { trackEvent } from '../utils/analytics';
 
 // --- ウォーターマーク ---
 function Watermark({ text }) {
@@ -290,6 +291,7 @@ export default function ModernReviewCard({ review }) {
                 <p className="text-slate-400 text-[11px] mb-3">1件投稿で<span className="text-purple-300 font-bold">最大7日間読み放題</span>（即時自動付与）</p>
                 <Link
                   to="/post-review"
+                  onClick={() => trackEvent('click_paywall_cta', { target: 'post_review' })}
                   className="inline-block bg-pink-600 hover:bg-pink-500 text-white text-xs font-black px-6 py-2.5 rounded-xl transition-all hover:scale-105 shadow-lg shadow-pink-900/50"
                 >
                   口コミを書く →
@@ -297,6 +299,7 @@ export default function ModernReviewCard({ review }) {
                 {!user && (
                   <Link
                     to="/register"
+                    onClick={() => trackEvent('click_paywall_cta', { target: 'register' })}
                     className="block mt-2 text-[11px] font-bold text-purple-300 hover:text-purple-200 hover:underline"
                   >
                     無料登録で3日間読み放題 →

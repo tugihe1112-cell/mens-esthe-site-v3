@@ -11,6 +11,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import TagSelector from '../components/TagSelector.jsx';
 import { useShopData } from '../contexts/DataContext.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import { trackEvent } from '../utils/analytics';
 
 // --- Step Components ---
 
@@ -492,6 +493,9 @@ export default function PostReviewPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // 初回マウントのみ
 
+  // 測定: 投稿フロー開始（Step1到達）— A系改修の投稿ファネル比較用
+  useEffect(() => { trackEvent('begin_review'); }, []);
+
   // Shop Data Logic
   const [shopTherapists, setShopTherapists] = useState([]);
 
@@ -572,6 +576,7 @@ export default function PostReviewPage() {
       try { sessionStorage.removeItem('reviewDraft'); } catch { /* noop */ }
       const len = Object.values(data.story || {}).filter(Boolean).join('').length;
       const grantedDays = len >= 700 ? 7 : 3;
+      trackEvent('complete_review', { chars: len, granted_days: grantedDays });
       toast.success(`投稿ありがとうございます！${grantedDays}日間の閲覧権が付与されました🎉`, { duration: 5000 });
 
       // 管理者へメール通知（失敗しても投稿は成功扱い）
