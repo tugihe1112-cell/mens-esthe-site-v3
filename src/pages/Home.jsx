@@ -256,6 +256,41 @@ export default function HomePage({ initialHero = [], latestReviews = [] }) {
       {/* ===== メインカラム ===== */}
       <div className="flex-1 min-w-0 space-y-24">
 
+        {/* A-3: 口コミファースト＝独自資産の口コミを最上部・写真サムネ付きカードで主役化 */}
+        {latestReviews.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between mb-5 px-2">
+              <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">最新の本物口コミ</h3>
+              <Link to="/popular-reviews" className="text-xs font-bold text-pink-400 hover:text-pink-300 transition">もっと見る →</Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {latestReviews.map((r, i) => (
+                <Link
+                  key={i}
+                  to={`/shops/${r.shopId}/threads/${r.therapistId}`}
+                  className="flex gap-3 rounded-2xl border border-white/10 bg-slate-900 hover:border-pink-500/40 transition-all duration-300 hover:-translate-y-0.5 p-3"
+                >
+                  <div className="w-16 h-20 shrink-0 rounded-xl overflow-hidden bg-slate-800">
+                    {r.image ? (
+                      <LazyImage src={r.image} alt={r.therapistName} width={160} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-600">写真なし</div>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1 flex flex-col">
+                    <div className="flex items-center justify-between gap-2 mb-0.5">
+                      <span className="text-sm font-black text-white truncate">{r.therapistName}</span>
+                      {r.rating != null && <span className="text-[11px] font-black text-white bg-pink-600/90 rounded-md px-1.5 py-0.5 shrink-0">★ {Number(r.rating).toFixed(1)}</span>}
+                    </div>
+                    <div className="text-[11px] text-slate-500 mb-1 truncate">{r.shopName}</div>
+                    <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">{r.snippet}…</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* 1.5. 主要機能ショートカット */}
         <section>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -300,34 +335,27 @@ export default function HomePage({ initialHero = [], latestReviews = [] }) {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[200px]">
             {topAreas.map((area) => (
-              <Link 
-                key={area.name} 
+              <Link
+                key={area.name}
                 to={`/shops?q=${area.name}`}
-                className={`group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:z-10 hover:scale-[1.02] ${area.size}`}
+                className={`group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br ${area.color} ${area.size}`}
               >
-                <div className="absolute inset-0 w-full h-full">
-                  <LazyImage src={area.image_url || area.image} alt={area.name} className="w-full h-full object-cover transition duration-1000 group-hover:scale-110" />
-                </div>
-                
-                <div className={`absolute inset-0 bg-gradient-to-br ${area.color} mix-blend-multiply opacity-60 group-hover:opacity-40 transition duration-500`}></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
-
+                {/* Unsplashの外国夜景を廃止＝1.1MBのLCP負債除去＋誠実さ。タイポグラフィタイルに */}
+                <div className="absolute inset-0 bg-slate-950/35 group-hover:bg-slate-950/15 transition duration-300" />
                 <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
-                  <div className="transform translate-y-2 group-hover:translate-y-0 transition duration-300">
-                    <div className="flex flex-wrap gap-1 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
-                      {area.tags.map(tag => (
-                        <span key={tag} className="text-[9px] font-bold bg-white/20 backdrop-blur px-2 py-0.5 rounded text-white border border-white/10">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-black text-white leading-none tracking-tight mb-1">
-                      {area.name}
-                    </h2>
-                    <p className="text-xs md:text-sm font-bold text-slate-300 group-hover:text-white transition">
-                      {area.sub}
-                    </p>
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {area.tags.map(tag => (
+                      <span key={tag} className="text-[10px] font-bold bg-black/25 backdrop-blur px-2 py-0.5 rounded text-white border border-white/10">
+                        {tag}
+                      </span>
+                    ))}
                   </div>
+                  <h2 className="text-2xl md:text-3xl font-black text-white leading-none tracking-tight mb-1">
+                    {area.name}
+                  </h2>
+                  <p className="text-xs md:text-sm font-bold text-white/80 group-hover:text-white transition">
+                    {area.sub}
+                  </p>
                 </div>
               </Link>
             ))}
@@ -363,32 +391,6 @@ export default function HomePage({ initialHero = [], latestReviews = [] }) {
             </Link>
           </div>
         </section>
-
-        {/* Tier 2-2: 最新の本物口コミ（SSR）＝ホームから口コミページへ直リンク→クローラー最短発見 */}
-        {latestReviews.length > 0 && (
-          <section className="px-2 mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl">📝</span>
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">最新の口コミ</h3>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {latestReviews.map((r, i) => (
-                <Link
-                  key={i}
-                  to={`/shops/${r.shopId}/threads/${r.therapistId}`}
-                  className="block rounded-2xl border border-white/10 bg-slate-900 hover:border-pink-500/40 transition-all duration-300 hover:-translate-y-0.5 p-4"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-black text-white truncate">{r.therapistName}</span>
-                    {r.rating != null && <span className="text-xs font-bold text-pink-400 shrink-0 ml-2">★ {Number(r.rating).toFixed(1)}</span>}
-                  </div>
-                  <div className="text-[11px] text-slate-500 mb-1.5 truncate">{r.shopName}</div>
-                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">{r.snippet}…</p>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
 
         {/* 3.5. 注目セラピスト */}
         <section>

@@ -46,12 +46,20 @@ export async function getServerSideProps({ res }) {
       const { data: shopRows } = await supabase.from('shops').select('id, name').in('id', shopIds);
       shopNameById = Object.fromEntries((shopRows || []).map((s) => [s.id, s.name]));
     }
+    // セラピスト写真（A-3: 口コミカードのサムネ用）
+    const therapistIds = [...new Set((revs || []).map((r) => r.therapist_id).filter(Boolean))];
+    let imgById = {};
+    if (therapistIds.length) {
+      const { data: tRows } = await supabase.from('therapists').select('id, image_url').in('id', therapistIds);
+      imgById = Object.fromEntries((tRows || []).map((t) => [t.id, t.image_url]));
+    }
     latestReviews = (revs || []).map((r) => ({
       shopId: r.shop_id,
       therapistId: r.therapist_id,
       therapistName: r.therapist_name || '',
       shopName: shopNameById[r.shop_id] || '',
       rating: r.rating || null,
+      image: imgById[r.therapist_id] || null,
       snippet: (r.content || '').replace(/\s+/g, '').slice(0, 64),
     }));
   } catch (e) {
