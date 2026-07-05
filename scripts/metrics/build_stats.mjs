@@ -105,7 +105,8 @@ function bandPrice(pairs, target, lo, hi) {
   return inBand[0].price;
 }
 
-const prefOf = (s) => s.prefecture || s.raw_data?.prefecture || null;
+// prefecture はDBの独立列ではなく raw_data 内にのみ存在
+const prefOf = (s) => s.raw_data?.prefecture || null;
 const areaOf = (s) => {
   const a = s.raw_data?.area;
   if (Array.isArray(a)) return a[0] || null;
@@ -116,7 +117,7 @@ const areaOf = (s) => {
 async function main() {
   console.log(`\n📊 統計集計 (${AS_OF})  ${DRY ? '[DRY-RUN]' : ''}\n`);
 
-  const shops = await fetchAll('shops', 'id, name, prefecture, raw_data, price_system');
+  const shops = await fetchAll('shops', 'id, name, raw_data, price_system');
   const therapists = await fetchAll('therapists', 'id, shop_id');
   console.log(`  店舗: ${shops.length}件 / セラピスト: ${therapists.length}件\n`);
 
