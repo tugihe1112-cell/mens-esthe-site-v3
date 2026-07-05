@@ -26,6 +26,7 @@
 - **写真衝突バグ** → Storageファイル名にtherapistID/日本語名を使うと同字数で上書き。対策: 元画像URLのベースネーム(uuid.jpg等)を使う。
 - **anon keyでUPDATEがサイレント無効** → RLSで弾かれる。対策: スクリプトのUPDATEは`SUPABASE_SERVICE_ROLE_KEY`。
 - **Supabase `.or()`内の`ilike %`が効かない** → 全件取得後にJS側フィルタで回避。
+- **`shops.prefecture`列が存在しないのにselectした** → 都道府県はDBの独立列ではなく`raw_data.prefecture`内のみ（`raw_data.area`は配列 or 文字列）。集計スクリプトが`column shops.prefecture does not exist`で失敗。対策: `prefOf = (s) => s.raw_data?.prefecture`。ShopDetailPageの`shop.prefecture || shop.raw_data?.prefecture`は前者が常にundefinedで後者にフォールバックしていただけ。
 - **owner_manual口コミのtherapist_idをハードコードしかけた** → id区切りが人によりバラバラ（`上野ゆい`=区切り無し / `藤城_けいか`=アンダースコア入り）。対策: therapist_idは`therapists`テーブルからDB自動解決（`insert_unison_*_review.mjs`参照）。therapist_nameはDB正式名(全角スペース`上野　ゆい`)だが照合はスペース除去。group_id共有店(`g_brand_*`)は1件投入で系列全店表示。
 
 ## 戦略
