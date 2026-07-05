@@ -2,23 +2,325 @@
   "generatedAt": "2026-07-05",
   "asOf": "2026年7月",
   "coverage": {
-    "totalShops": 0,
-    "totalTherapists": 0,
-    "priceSampleShops": 0
+    "totalShops": 1098,
+    "totalTherapists": 60999,
+    "priceSampleShops": 487
   },
-  "prefectureShopCounts": [],
-  "areaDensity": [],
+  "prefectureShopCounts": [
+    {
+      "prefecture": "東京都",
+      "count": 506
+    },
+    {
+      "prefecture": "大阪府",
+      "count": 139
+    },
+    {
+      "prefecture": "神奈川県",
+      "count": 114
+    },
+    {
+      "prefecture": "埼玉県",
+      "count": 44
+    },
+    {
+      "prefecture": "群馬県",
+      "count": 36
+    },
+    {
+      "prefecture": "千葉県",
+      "count": 32
+    },
+    {
+      "prefecture": "栃木県",
+      "count": 29
+    },
+    {
+      "prefecture": "愛知県",
+      "count": 24
+    },
+    {
+      "prefecture": "静岡県",
+      "count": 20
+    },
+    {
+      "prefecture": "茨城県",
+      "count": 18
+    },
+    {
+      "prefecture": "新潟県",
+      "count": 14
+    },
+    {
+      "prefecture": "沖縄県",
+      "count": 13
+    },
+    {
+      "prefecture": "京都府",
+      "count": 13
+    },
+    {
+      "prefecture": "岡山県",
+      "count": 10
+    },
+    {
+      "prefecture": "石川県",
+      "count": 9
+    },
+    {
+      "prefecture": "熊本県",
+      "count": 9
+    },
+    {
+      "prefecture": "兵庫県",
+      "count": 9
+    },
+    {
+      "prefecture": "奈良県",
+      "count": 9
+    },
+    {
+      "prefecture": "和歌山県",
+      "count": 9
+    },
+    {
+      "prefecture": "北海道",
+      "count": 9
+    },
+    {
+      "prefecture": "広島県",
+      "count": 8
+    },
+    {
+      "prefecture": "宮城県",
+      "count": 7
+    },
+    {
+      "prefecture": "長野県",
+      "count": 6
+    },
+    {
+      "prefecture": "福岡県",
+      "count": 6
+    }
+  ],
+  "areaDensity": [
+    {
+      "area": "恵比寿",
+      "prefecture": "東京都",
+      "count": 35
+    },
+    {
+      "area": "梅田",
+      "prefecture": "大阪府",
+      "count": 34
+    },
+    {
+      "area": "池袋",
+      "prefecture": "東京都",
+      "count": 23
+    },
+    {
+      "area": "宇都宮",
+      "prefecture": "栃木県",
+      "count": 18
+    },
+    {
+      "area": "堺筋本町",
+      "prefecture": "大阪府",
+      "count": 17
+    },
+    {
+      "area": "武蔵小杉",
+      "prefecture": "神奈川県",
+      "count": 17
+    },
+    {
+      "area": "銀座",
+      "prefecture": "東京都",
+      "count": 17
+    },
+    {
+      "area": "秋葉原",
+      "prefecture": "東京都",
+      "count": 17
+    },
+    {
+      "area": "五反田",
+      "prefecture": "東京都",
+      "count": 16
+    },
+    {
+      "area": "堺東",
+      "prefecture": "大阪府",
+      "count": 16
+    },
+    {
+      "area": "代々木・原宿",
+      "prefecture": "東京都",
+      "count": 16
+    },
+    {
+      "area": "麻布十番",
+      "prefecture": "東京都",
+      "count": 15
+    },
+    {
+      "area": "日本橋・難波",
+      "prefecture": "大阪府",
+      "count": 15
+    },
+    {
+      "area": "新大阪",
+      "prefecture": "大阪府",
+      "count": 15
+    },
+    {
+      "area": "東新宿",
+      "prefecture": "東京都",
+      "count": 14
+    },
+    {
+      "area": "新潟",
+      "prefecture": "新潟県",
+      "count": 13
+    },
+    {
+      "area": "高田馬場",
+      "prefecture": "東京都",
+      "count": 13
+    },
+    {
+      "area": "品川",
+      "prefecture": "東京都",
+      "count": 12
+    },
+    {
+      "area": "新宿御苑",
+      "prefecture": "東京都",
+      "count": 12
+    },
+    {
+      "area": "谷町",
+      "prefecture": "大阪府",
+      "count": 12
+    }
+  ],
   "nationalPrice": {
-    "n60": 0,
-    "n90": 0,
-    "median60": null,
-    "median90": null
+    "n60": 291,
+    "n90": 388,
+    "median60": 14000,
+    "median90": 18000
   },
-  "priceByPrefecture": [],
+  "priceByPrefecture": [
+    {
+      "prefecture": "千葉県",
+      "n60": 5,
+      "n90": 11,
+      "median60": null,
+      "median90": 16000
+    },
+    {
+      "prefecture": "埼玉県",
+      "n60": 4,
+      "n90": 12,
+      "median60": null,
+      "median90": 16000
+    },
+    {
+      "prefecture": "愛知県",
+      "n60": 8,
+      "n90": 12,
+      "median60": null,
+      "median90": 15500
+    },
+    {
+      "prefecture": "東京都",
+      "n60": 216,
+      "n90": 304,
+      "median60": 14000,
+      "median90": 18000
+    },
+    {
+      "prefecture": "神奈川県",
+      "n60": 19,
+      "n90": 19,
+      "median60": 12000,
+      "median90": 16000
+    },
+    {
+      "prefecture": "大阪府",
+      "n60": 25,
+      "n90": 18,
+      "median60": 10000,
+      "median90": 13500
+    }
+  ],
   "therapistStats": {
-    "total": 0,
-    "shopsWithTherapists": 0,
-    "medianPerShop": null,
-    "topShops": []
+    "total": 60999,
+    "shopsWithTherapists": 1025,
+    "medianPerShop": 43,
+    "topShops": [
+      {
+        "shopId": "shizuoka_shizuoka_eden",
+        "count": 387,
+        "name": "Eden (エデン)",
+        "prefecture": "静岡県"
+      },
+      {
+        "shopId": "ibaraki_tsukuba_tsukuba_marvelous",
+        "count": 360,
+        "name": "Marvelous (マーベラス)",
+        "prefecture": "茨城県"
+      },
+      {
+        "shopId": "tochigi_oyama_oyama_finale",
+        "count": 356,
+        "name": "Finale (フィナーレ)",
+        "prefecture": "栃木県"
+      },
+      {
+        "shopId": "shizuoka_shizuoka_terrace",
+        "count": 323,
+        "name": "Terrace (テラス)",
+        "prefecture": "静岡県"
+      },
+      {
+        "shopId": "ibaraki_tsukuba_tsukuba_bijo_spa",
+        "count": 302,
+        "name": "美女SPA (つくば店)",
+        "prefecture": "茨城県"
+      },
+      {
+        "shopId": "tokyo_setagaya_shimokitazawa_jd_spa",
+        "count": 289,
+        "name": "JDスパ (女子大生エステ) 下北沢",
+        "prefecture": "東京都"
+      },
+      {
+        "shopId": "ibaraki_moriya_moriya_bijo_spa",
+        "count": 288,
+        "name": "美女SPA (守谷店)",
+        "prefecture": "茨城県"
+      },
+      {
+        "shopId": "tochigi_oyama_oyama_showtime",
+        "count": 286,
+        "name": "SHOWTIME 小山店",
+        "prefecture": "栃木県"
+      },
+      {
+        "shopId": "tokyo_sumida_kinshicho_wife_collection",
+        "count": 280,
+        "name": "ワイフコレクション",
+        "prefecture": "東京都"
+      },
+      {
+        "shopId": "tokyo_shinagawa_gotanda_lynx",
+        "count": 270,
+        "name": "Lynx (リンクス) 五反田店",
+        "prefecture": "東京都"
+      }
+    ]
   }
 }
