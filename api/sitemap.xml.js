@@ -17,6 +17,7 @@ const STATIC_PAGES = [
   { path: '/search',          priority: '0.8' },
   { path: '/area-search',     priority: '0.8' },
   { path: '/shops',           priority: '0.9' },
+  { path: '/stats',           priority: '0.8' },
   { path: '/ranking',         priority: '0.9' },
   { path: '/popular-reviews', priority: '0.7' },
   { path: '/new-therapists',  priority: '0.7' },

@@ -571,6 +571,17 @@ export default function HomePage({ initialHero = [], latestReviews = [] }) {
             <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">情報交換・おすすめ・質問など</p>
             <span className="block mt-3 text-blue-300 text-xs font-black">掲示板を見る →</span>
           </Link>
+
+          {/* メンズエステ統計2026 */}
+          <Link
+            to="/stats"
+            className="block rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 border border-emerald-500/20 hover:border-emerald-500/50 p-5 transition-all duration-200 hover:-translate-y-0.5"
+          >
+            <div className="text-2xl mb-2">📊</div>
+            <h4 className="text-white font-black text-sm">メンズエステ統計2026</h4>
+            <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">全国の店舗数・料金相場・激戦区ランキング</p>
+            <span className="block mt-3 text-emerald-300 text-xs font-black">統計を見る →</span>
+          </Link>
         </div>
       </aside>
 

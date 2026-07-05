@@ -41,6 +41,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm font-medium">
               <li><Link to="/" className="text-slate-400 hover:text-pink-400 transition">ホーム</Link></li>
               <li><Link to="/search" className="text-slate-400 hover:text-pink-400 transition">キャスト検索</Link></li>
+              <li><Link to="/stats" className="text-slate-400 hover:text-pink-400 transition">メンズエステ統計2026</Link></li>
               <li><Link to="/premium" className="text-slate-400 hover:text-yellow-400 transition flex items-center gap-1"><span className="text-yellow-500">👑</span> プレミアム登録</Link></li>
               <li><Link to="/contact" className="text-slate-400 hover:text-pink-400 transition">お問い合わせ</Link></li>
             </ul>

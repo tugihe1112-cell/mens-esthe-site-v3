@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-07-05",
+  "asOf": "2026年7月",
+  "coverage": {
+    "totalShops": 0,
+    "totalTherapists": 0,
+    "priceSampleShops": 0
+  },
+  "prefectureShopCounts": [],
+  "areaDensity": [],
+  "nationalPrice": {
+    "n60": 0,
+    "n90": 0,
+    "median60": null,
+    "median90": null
+  },
+  "priceByPrefecture": [],
+  "therapistStats": {
+    "total": 0,
+    "shopsWithTherapists": 0,
+    "medianPerShop": null,
+    "topShops": []
+  }
+}
