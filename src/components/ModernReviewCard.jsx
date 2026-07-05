@@ -134,7 +134,8 @@ export default function ModernReviewCard({ review }) {
   const { user, userPlan } = useAuth();
   const navigate = useNavigate();
   const [creditDays, setCreditDays] = useState(null);
-  const dateStr = review.timestamp ? new Date(review.timestamp).toLocaleDateString('ja-JP') : review.date || '日付不明';
+  // 来店時期データが無い口コミは日付を出さない（「日付不明」で信頼を損なわない）
+  const dateStr = review.timestamp ? new Date(review.timestamp).toLocaleDateString('ja-JP') : (review.date || null);
 
   const isPremium = userPlan === 'premium' || userPlan === 'vip';
 
@@ -213,8 +214,12 @@ export default function ModernReviewCard({ review }) {
                 {review.user_id === 'owner_manual' && (
                   <span className="text-[9px] font-bold text-amber-300 bg-amber-500/10 border border-amber-500/25 rounded px-1.5 py-0.5">運営取材レポート</span>
                 )}
-                <span className="text-[10px] text-slate-600">•</span>
-                <span className="text-[10px] text-slate-500 font-mono">{dateStr}</span>
+                {dateStr && (
+                  <>
+                    <span className="text-[10px] text-slate-600">•</span>
+                    <span className="text-[10px] text-slate-500 font-mono">{dateStr}</span>
+                  </>
+                )}
               </div>
             </div>
           </div>

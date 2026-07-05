@@ -455,6 +455,28 @@ const Step4_Confirm = ({ isSubmitting }) => {
 
 const TOTAL_STEPS = 4;
 
+// ゲスト投稿の下書き保存（sessionStorage→localStorageに変更）
+// 新規登録のメール確認で別タブに遷移しても下書きが生き残るようにlocalStorageを使う。
+// 保存日時を値に持たせ、24時間を過ぎた下書きは破棄する。
+const DRAFT_KEY = 'reviewDraft';
+const DRAFT_TTL = 24 * 60 * 60 * 1000; // 24h
+function saveDraft(data) {
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ savedAt: Date.now(), data })); } catch { /* noop */ }
+}
+function loadDraft() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (!obj || !obj.savedAt || (Date.now() - obj.savedAt) > DRAFT_TTL) { localStorage.removeItem(DRAFT_KEY); return null; }
+    return obj.data || null;
+  } catch { return null; }
+}
+function clearDraft() {
+  try { localStorage.removeItem(DRAFT_KEY); } catch { /* noop */ }
+  try { sessionStorage.removeItem(DRAFT_KEY); } catch { /* 旧sessionStorage版の掃除 */ }
+}
+
 export default function PostReviewPage() {
   const navigate = useNavigate();
   const { shopId: paramShopId, threadId: paramThreadId } = useParams();
@@ -467,6 +489,7 @@ export default function PostReviewPage() {
   const { shops, getTherapistsByShopId } = useShopData();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedShopId, setSelectedShopId] = useState(null);
+  const [completed, setCompleted] = useState(null); // B-3: 投稿後体験 { grantedDays, reviewLink, chars }
 
   // ★ URLパラメータによる初期化 (Data Loadingを待機)
   useEffect(() => {
@@ -481,18 +504,14 @@ export default function PostReviewPage() {
     }
   }, [effectiveShopId, paramThreadId, shops, methods]);
 
-  // 下書き復元（公開時ログインの往復から戻ってきた時）
+  // 下書き復元（公開時ログインの往復から戻ってきた時・別タブのメール確認を跨いでも生存）
   useEffect(() => {
-    let draft = null;
-    try { draft = sessionStorage.getItem('reviewDraft'); } catch {}
-    if (!draft) return;
-    try {
-      const data = JSON.parse(draft);
-      methods.reset(data);
-      if (data.shopId) setSelectedShopId(data.shopId);
-      setCurrentStep(4); // 確認ステップへ
-      toast.success('下書きを復元しました。投稿を完了してください', { duration: 4000 });
-    } catch { /* 壊れた下書きは無視 */ }
+    const data = loadDraft();
+    if (!data) return;
+    methods.reset(data);
+    if (data.shopId) setSelectedShopId(data.shopId);
+    setCurrentStep(4); // 確認ステップへ
+    toast.success('下書きを復元しました。投稿を完了してください', { duration: 4000 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // 初回マウントのみ
 
@@ -569,18 +588,17 @@ export default function PostReviewPage() {
   const onSubmit = async (data) => {
     // 未ログインなら下書きを保存してログインへ（書いてから公開時ログイン）
     if (!user) {
-      try { sessionStorage.setItem('reviewDraft', JSON.stringify(data)); } catch { /* noop */ }
+      saveDraft(data);
       toast('ログイン / 無料登録で投稿が完了します 🔑', { duration: 4000 });
       navigate('/login', { state: { redirect: '/post-review' } });
       return;
     }
     const result = await submitReview(data);
     if (result.success) {
-      try { sessionStorage.removeItem('reviewDraft'); } catch { /* noop */ }
+      clearDraft();
       const len = Object.values(data.story || {}).filter(Boolean).join('').length;
       const grantedDays = len >= 700 ? 7 : 3;
       trackEvent('complete_review', { chars: len, granted_days: grantedDays });
-      toast.success(`投稿ありがとうございます！${grantedDays}日間の閲覧権が付与されました🎉`, { duration: 5000 });
 
       // 管理者へメール通知（失敗しても投稿は成功扱い）
       const shopName = shops.find(s => s.id === data.shopId)?.name || '';
@@ -596,18 +614,70 @@ export default function PostReviewPage() {
         }),
       }).catch(() => {}); // エラーは無視
 
-      // 戻り先を動的に決定（カスタム名・指名なしは店舗ページへ）
-      if (data.shopId && data.therapistId) {
-        navigate(`/shops/${data.shopId}/threads/${data.therapistId}`);
-      } else if (data.shopId) {
-        navigate(`/search?shop=${encodeURIComponent(shopName)}`);
-      } else {
-        navigate('/');
-      }
+      // B-3 投稿後体験: 即リダイレクトせず完了画面を表示（付与日数・自分の口コミへのリンク・通知の案内）
+      const reviewLink = (data.shopId && data.therapistId)
+        ? `/shops/${data.shopId}/threads/${data.therapistId}`
+        : (data.shopId ? `/search?shop=${encodeURIComponent(shopName)}` : '/');
+      setCompleted({ grantedDays, reviewLink, chars: len });
+      window.scrollTo(0, 0);
     } else {
       toast.error('投稿に失敗しました');
     }
   };
+
+  // B-3: 投稿完了画面（付与日数・自分の口コミへのリンク・週次通知の案内）
+  if (completed) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-200 font-sans">
+        <Toaster position="top-center" />
+        <Header />
+        <div className="pt-24 pb-32 px-4">
+          <div className="max-w-md mx-auto text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-3xl mb-5 shadow-xl shadow-pink-900/40">🎉</div>
+            <h1 className="text-2xl font-black text-white mb-2">投稿ありがとうございます！</h1>
+            <p className="text-slate-400 text-sm mb-6">あなたの体験談が投稿されました。</p>
+
+            {/* 付与された閲覧日数 */}
+            <div className="bg-gradient-to-br from-purple-900/50 to-slate-900 border border-purple-500/25 rounded-2xl p-6 mb-4">
+              <div className="text-[11px] font-bold text-purple-300 tracking-widest mb-1">閲覧権が付与されました</div>
+              <div className="text-4xl font-black text-white leading-none mb-1">{completed.grantedDays}<span className="text-lg ml-1">日間</span></div>
+              <p className="text-[11px] text-slate-400 mt-2">
+                {completed.chars >= 700
+                  ? '700文字以上の投稿で7日間の閲覧権を付与しました。'
+                  : `200文字以上で3日間を付与。あと${Math.max(0, 700 - completed.chars)}文字書くと次回は7日間になります。`}
+              </p>
+            </div>
+
+            {/* 週次メール通知の案内（B-3・リテンション） */}
+            <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-4 mb-6 text-left flex items-start gap-3">
+              <span className="text-xl shrink-0">📬</span>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                あなたの口コミが読まれると、<b className="text-slate-200">「今週◯回読まれました」</b>と週次メールでお知らせします。誰かの役に立った実感が届きます。
+              </p>
+            </div>
+
+            {/* 自分の口コミへのリンク＋回遊 */}
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={() => navigate(completed.reviewLink)}
+                className="w-full py-3.5 rounded-2xl font-black text-white bg-gradient-to-r from-pink-600 to-purple-600 shadow-lg hover:scale-[1.02] transition active:scale-95"
+              >
+                投稿した口コミを見る →
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/popular-reviews')}
+                className="w-full py-3 rounded-2xl font-bold text-slate-200 bg-slate-900 border border-white/10 hover:border-pink-500/40 transition"
+              >
+                みんなの口コミを読む
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <FormProvider {...methods}>
