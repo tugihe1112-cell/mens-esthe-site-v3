@@ -35,16 +35,21 @@ export async function getServerSideProps({ res }) {
     // Tier 2-2: 最新の本物口コミ（is_public）をSSRで取得 → ホームから口コミページへ直リンク（クローラー発見の最短経路）
     const { data: revs } = await supabase
       .from('reviews')
-      .select('shop_id, therapist_id, therapist_name, rating, content, created_at')
+      .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at')
       .eq('is_public', true)
       .not('therapist_id', 'is', null)
       .order('created_at', { ascending: false })
       .limit(8);
     const shopIds = [...new Set((revs || []).map((r) => r.shop_id).filter(Boolean))];
-    let shopNameById = {};
+    let shopNameById = {}, shopLocById = {};
     if (shopIds.length) {
-      const { data: shopRows } = await supabase.from('shops').select('id, name').in('id', shopIds);
+      const { data: shopRows } = await supabase.from('shops').select('id, name, raw_data').in('id', shopIds);
       shopNameById = Object.fromEntries((shopRows || []).map((s) => [s.id, s.name]));
+      shopLocById = Object.fromEntries((shopRows || []).map((s) => {
+        const rd = s.raw_data || {};
+        const area = Array.isArray(rd.area) ? rd.area[0] : (rd.area || null);
+        return [s.id, { prefecture: rd.prefecture || null, area: area || null }];
+      }));
     }
     // セラピスト写真（A-3: 口コミカードのサムネ用）
     const therapistIds = [...new Set((revs || []).map((r) => r.therapist_id).filter(Boolean))];
@@ -53,11 +58,16 @@ export async function getServerSideProps({ res }) {
       const { data: tRows } = await supabase.from('therapists').select('id, image_url').in('id', therapistIds);
       imgById = Object.fromEntries((tRows || []).map((t) => [t.id, t.image_url]));
     }
+    // ⚠️ 本文全文はSSRに載せない（ホームと本命セラピストページの重複コンテンツ回避）。
+    //    SSRにはティーザー(snippet)のみ。展開時の300字はクライアントがidでフェッチする。
     latestReviews = (revs || []).map((r) => ({
+      id: r.id,
       shopId: r.shop_id,
       therapistId: r.therapist_id,
       therapistName: r.therapist_name || '',
       shopName: shopNameById[r.shop_id] || '',
+      prefecture: shopLocById[r.shop_id]?.prefecture || null,
+      area: shopLocById[r.shop_id]?.area || null,
       rating: r.rating || null,
       image: imgById[r.therapist_id] || null,
       snippet: (r.content || '').replace(/\s+/g, '').slice(0, 64),

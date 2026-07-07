@@ -10,6 +10,7 @@ import TopHeroSlider from '../components/TopHeroSlider.jsx';
 import RankingSection from '../components/RankingSection.jsx';
 import RecentlyViewed from '../components/RecentlyViewed.jsx';
 import LazyImage from '../components/LazyImage.jsx';
+import HomeReviewCard from '../components/HomeReviewCard.jsx';
 import Header from '../components/Header.jsx';
 import PrefectureSelector from '../components/PrefectureSelector.jsx';
 import SeoHead from '../components/SeoHead.jsx';
@@ -265,27 +266,7 @@ export default function HomePage({ initialHero = [], latestReviews = [] }) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {latestReviews.map((r, i) => (
-                <Link
-                  key={i}
-                  to={`/shops/${r.shopId}/threads/${r.therapistId}`}
-                  className="flex gap-3 rounded-2xl border border-white/10 bg-slate-900 hover:border-pink-500/40 transition-all duration-300 hover:-translate-y-0.5 p-3"
-                >
-                  <div className="w-16 h-20 shrink-0 rounded-xl overflow-hidden bg-slate-800">
-                    {r.image ? (
-                      <LazyImage src={r.image} alt={r.therapistName} width={160} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-slate-600">写真なし</div>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1 flex flex-col">
-                    <div className="flex items-center justify-between gap-2 mb-0.5">
-                      <span className="text-sm font-black text-white truncate">{r.therapistName}</span>
-                      {r.rating != null && <span className="text-[11px] font-black text-white bg-pink-600/90 rounded-md px-1.5 py-0.5 shrink-0">★ {Number(r.rating).toFixed(1)}</span>}
-                    </div>
-                    <div className="text-[11px] text-slate-500 mb-1 truncate">{r.shopName}</div>
-                    <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">{r.snippet}…</p>
-                  </div>
-                </Link>
+                <HomeReviewCard key={r.id || i} r={r} />
               ))}
             </div>
           </section>
