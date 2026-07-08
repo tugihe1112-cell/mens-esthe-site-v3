@@ -14,7 +14,7 @@ export default function HomeReviewCard({ r }) {
   const [loading, setLoading] = useState(false);
 
   const threadLink = `/shops/${r.shopId}/threads/${r.therapistId}`;
-  const shopLink = `/search?shop=${encodeURIComponent(r.shopName || '')}`;
+  const shopLink = `/shops/${r.shopId}`; // 実店舗ページ（料金・出勤あり）へ。/search?shop= は表記揺れで空表示になるため使わない
   const loc = [r.prefecture, r.area].filter(Boolean).join('・');
 
   const handleExpand = async (e) => {
@@ -47,13 +47,17 @@ export default function HomeReviewCard({ r }) {
           {r.rating != null && <span className="text-[11px] font-black text-white bg-pink-600/90 rounded-md px-1.5 py-0.5 shrink-0">★ {Number(r.rating).toFixed(1)}</span>}
         </div>
 
-        {/* エリア＋店舗（店名だけだと場所が分からない問題の解消） */}
-        <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
-          {loc && (
-            <span className="text-[10px] font-bold text-pink-200 bg-pink-500/10 border border-pink-500/20 rounded-full px-2 py-0.5 shrink-0">📍 {loc}</span>
-          )}
-          <Link to={shopLink} className="text-[11px] text-slate-500 truncate hover:text-pink-300 transition">🏢 {r.shopName}</Link>
-        </div>
+        {/* エリアピル＋店舗名（店名だけだと場所が分からない問題の解消・店名を目立たせる） */}
+        {loc && (
+          <div className="mb-1">
+            <span className="text-[10px] font-bold text-pink-200 bg-pink-500/10 border border-pink-500/20 rounded-full px-2 py-0.5">📍 {loc}</span>
+          </div>
+        )}
+        <Link to={shopLink} className="inline-flex items-center gap-1 mb-1.5 min-w-0 text-xs font-bold text-slate-200 hover:text-pink-300 transition">
+          <span className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-[9px] shrink-0">🏢</span>
+          <span className="truncate">{r.shopName}</span>
+          <span className="text-[10px] text-slate-500 font-normal shrink-0">の店舗ページ ›</span>
+        </Link>
 
         {!expanded ? (
           <>
@@ -73,7 +77,7 @@ export default function HomeReviewCard({ r }) {
             </p>
             <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2">
               <Link to={threadLink} className="text-[11px] font-black text-pink-400 hover:text-pink-300 transition">全文を読む → セラピストページ</Link>
-              <Link to={shopLink} className="text-[11px] font-bold text-slate-300 hover:text-pink-300 transition">🏢 店舗を見る</Link>
+              <Link to={shopLink} className="text-[11px] font-bold text-slate-300 hover:text-pink-300 transition">🏢 店舗ページ（料金・出勤）</Link>
             </div>
           </>
         )}

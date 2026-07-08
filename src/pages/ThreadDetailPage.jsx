@@ -318,6 +318,21 @@ export default function ThreadDetailPage() {
           </div>
         </div>
 
+        {/* 店舗ページへの明示ボタン（料金・出勤・他セラピストを見たい人向け） */}
+        <Link
+          to={`/shops/${shopId}`}
+          className="flex items-center justify-between gap-3 rounded-2xl bg-slate-900/60 border border-white/10 hover:border-pink-500/40 px-4 py-3 transition group"
+        >
+          <span className="flex items-center gap-2 min-w-0">
+            <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm shrink-0">🏢</span>
+            <span className="min-w-0">
+              <span className="block text-sm font-bold text-white truncate">{getDisplayName(shop.name)}</span>
+              <span className="block text-[11px] text-slate-400">料金・出勤・在籍セラピストを見る</span>
+            </span>
+          </span>
+          <span className="text-pink-400 font-black shrink-0 group-hover:translate-x-0.5 transition-transform">›</span>
+        </Link>
+
         {/* 評価サマリバー（6軸の平均） */}
         {stats && (
           <section className="bg-slate-900/60 rounded-2xl p-5 border border-white/10">
