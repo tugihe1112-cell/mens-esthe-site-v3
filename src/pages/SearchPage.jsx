@@ -206,6 +206,7 @@ export default function SearchPage() {
   const { shops, shopById } = useShopData();
 
   // --- URLパラメータから初期値を取得（旧 ?q= も shopQuery に統合）---
+  const initShopId = searchParams.get('shopId') || '';
   const initShop = searchParams.get('shop') || searchParams.get('q') || '';
   const initCast = searchParams.get('cast') || '';
   const initTags = searchParams.get('tags') ? searchParams.get('tags').split(',') : [];
@@ -230,6 +231,15 @@ export default function SearchPage() {
   const [reviewCountMap, setReviewCountMap] = useState({}); // { normalizedName: count }
   const [reviewTagMap, setReviewTagMap] = useState({}); // { normalizedName: Set<tag> }
   const [ratingMap, setRatingMap] = useState({}); // { normalizedName: avgRating }
+
+  // shopId指定時はDBから正式な店舗名を解決してshopInputに反映
+  // （店名の表記揺れで空表示になる問題を回避＝リンクは shopId で飛ばすのが確実）
+  useEffect(() => {
+    if (initShopId && shopById && shopById[initShopId]?.name) {
+      setShopInput(shopById[initShopId].name);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initShopId, shopById]);
 
   // URLパラメータを同期
   useEffect(() => {

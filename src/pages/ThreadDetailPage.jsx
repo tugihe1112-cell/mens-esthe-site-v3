@@ -277,7 +277,7 @@ export default function ThreadDetailPage() {
         <nav aria-label="パンくず" className="flex items-center gap-1.5 text-xs text-slate-400 flex-wrap">
           <Link to="/" className="hover:text-white transition">ホーム</Link>
           <span className="text-slate-600">›</span>
-          <Link to={`/shops/${shopId}`} className="hover:text-white transition truncate max-w-[45%]">{getDisplayName(shop.name)}</Link>
+          <Link to={`/search?shopId=${shopId}`} className="hover:text-white transition truncate max-w-[45%]">{getDisplayName(shop.name)}</Link>
           <span className="text-slate-600">›</span>
           <span className="text-slate-200 font-bold truncate max-w-[35%]">{therapist.name}</span>
         </nav>
@@ -296,7 +296,7 @@ export default function ThreadDetailPage() {
             </div>
           </div>
           <div className="flex-1 min-w-0 flex flex-col justify-center">
-            <Link to={`/shops/${shopId}`} className="inline-flex items-center gap-1.5 mb-2 text-sm font-bold text-slate-400 hover:text-white transition min-w-0">
+            <Link to={`/search?shopId=${shopId}`} className="inline-flex items-center gap-1.5 mb-2 text-sm font-bold text-slate-400 hover:text-white transition min-w-0">
               <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
               <span className="truncate">{getDisplayName(shop.name)}</span>
             </Link>
@@ -320,7 +320,7 @@ export default function ThreadDetailPage() {
 
         {/* 店舗ページへの明示ボタン（料金・出勤・他セラピストを見たい人向け） */}
         <Link
-          to={`/shops/${shopId}`}
+          to={`/search?shopId=${shopId}`}
           className="flex items-center justify-between gap-3 rounded-2xl bg-slate-900/60 border border-white/10 hover:border-pink-500/40 px-4 py-3 transition group"
         >
           <span className="flex items-center gap-2 min-w-0">

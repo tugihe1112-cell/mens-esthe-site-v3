@@ -14,7 +14,7 @@ export default function HomeReviewCard({ r }) {
   const [loading, setLoading] = useState(false);
 
   const threadLink = `/shops/${r.shopId}/threads/${r.therapistId}`;
-  const shopLink = `/shops/${r.shopId}`; // 実店舗ページ（料金・出勤あり）へ。/search?shop= は表記揺れで空表示になるため使わない
+  const shopLink = `/search?shopId=${encodeURIComponent(r.shopId)}`; // タグ絞り込みバーがある店舗ページ(SearchPage)へ。shopIdで確実に解決
   const loc = [r.prefecture, r.area].filter(Boolean).join('・');
 
   const handleExpand = async (e) => {
