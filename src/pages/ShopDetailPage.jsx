@@ -237,11 +237,12 @@ export default function ShopDetailPage() {
 
       {/* 1. Cinematic Hero Header */}
       <div className="relative h-[45vh] md:h-[55vh] w-full overflow-hidden group">
-         <button 
-           onClick={() => navigate(-1)} 
-           className="absolute top-6 left-4 z-50 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white border border-white/10 hover:bg-black/60 transition active:scale-95"
+         <button
+           onClick={() => navigate(-1)}
+           aria-label="前のページに戻る"
+           className="absolute top-6 left-4 z-50 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-black/50 backdrop-blur-md text-white text-sm font-bold border border-white/15 hover:bg-black/70 transition active:scale-95"
          >
-           ←
+           <span className="text-base leading-none">←</span> 戻る
          </button>
 
          <div className="absolute inset-0">

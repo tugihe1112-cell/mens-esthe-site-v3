@@ -267,7 +267,9 @@ export default function ThreadDetailPage() {
       <div className="max-w-2xl mx-auto px-4 pt-20 relative z-30 space-y-6">
         {/* 戻る＋お気に入り */}
         <div className="flex items-center justify-between">
-          <button onClick={() => navigate(-1)} aria-label="戻る" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-white border border-white/10 hover:bg-white/10 transition active:scale-95">←</button>
+          <button onClick={() => navigate(-1)} aria-label="前のページに戻る" className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-white/10 text-white text-sm font-bold border border-white/15 hover:bg-white/20 transition active:scale-95">
+            <span className="text-base leading-none">←</span> 戻る
+          </button>
           <button onClick={() => toggleFavTherapist(uniqueKey)} aria-label="お気に入り" className={`w-10 h-10 rounded-full flex items-center justify-center border transition active:scale-90 ${isFav ? 'bg-pink-600/80 border-pink-500 text-white' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'}`}>
             <span className="text-xl">{isFav ? '❤️' : '🤍'}</span>
           </button>
