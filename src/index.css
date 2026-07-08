@@ -14,6 +14,34 @@ body {
   @apply bg-[#2b1a4f]/60 backdrop-blur-md rounded-xl shadow-lg;
 }
 
+/* ページ遷移中のトップ・プログレスバー（タップした瞬間に反応を見せる） */
+.route-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  z-index: 9999;
+  background: transparent;
+  overflow: hidden;
+  pointer-events: none;
+}
+.route-progress::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, #ec4899, #a855f7);
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.7);
+  animation: route-progress-slide 1s ease-in-out infinite;
+}
+@keyframes route-progress-slide {
+  0%   { left: -40%; }
+  100% { left: 100%; }
+}
+
 /* ===================================== */
 /* トーストアニメーション */
 /* ===================================== */
