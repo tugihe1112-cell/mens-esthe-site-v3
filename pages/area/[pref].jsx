@@ -16,7 +16,9 @@ const PREF_MAP = {
   shizuoka: '静岡県', shiga: '滋賀県', hiroshima: '広島県', hokkaido: '北海道',
 };
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, res }) {
+  // CDNキャッシュ（60秒）＝一度開かれたエリアページは次から即返る。副作用なし・全員共通HTMLなので安全。
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
   const pref = params.pref;
   const prefName = PREF_MAP[pref] || null;
   if (!prefName) return { props: { ssr: null } };
