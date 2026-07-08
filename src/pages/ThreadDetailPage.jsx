@@ -286,7 +286,7 @@ export default function ThreadDetailPage() {
         <div className="flex gap-4">
           <div className="w-[40%] max-w-[200px] shrink-0">
             <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-slate-900" style={{ aspectRatio: '3 / 4', maxHeight: '320px' }}>
-              {therapist.image ? (
+              {(therapist.image_url || therapist.image) ? (
                 <LazyImage src={therapist.image_url || therapist.image} alt={therapist.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -333,8 +333,8 @@ export default function ThreadDetailPage() {
           <span className="text-pink-400 font-black shrink-0 group-hover:translate-x-0.5 transition-transform">›</span>
         </Link>
 
-        {/* 評価サマリバー（6軸の平均） */}
-        {stats && (
+        {/* 評価サマリバー（6軸の平均）。口コミが1件のときは下の口コミカードと同じ内容になり重複するので、2件以上のときだけ表示 */}
+        {stats && stats.count >= 2 && (
           <section className="bg-slate-900/60 rounded-2xl p-5 border border-white/10">
             <h2 className="text-xs font-bold text-slate-400 mb-4">評価の内訳（{stats.count}件の平均）</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
