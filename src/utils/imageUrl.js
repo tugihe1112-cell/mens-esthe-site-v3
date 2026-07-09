@@ -26,6 +26,9 @@ export function optimizeImageUrl(src, width = 800) {
   // すでに wsrv 経由ならそのまま（二重プロキシ防止）
   if (src.includes('wsrv.nl') || src.includes('images.weserv.nl')) return src;
 
+  // 自社R2（Cloudflare CDN）は既に配信が速い → 無料のwsrvプロキシを挟むと逆に遅い/詰まるので直接配信
+  if (src.includes('.r2.dev') || src.includes('r2.cloudflarestorage.com')) return src;
+
   // その他の外部画像（http / https / プロトコル相対）→ weserv.nl でリサイズ+WebP化
   if (/^(https?:)?\/\//i.test(src)) {
     const abs = src.startsWith('//') ? `https:${src}` : src;
