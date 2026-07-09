@@ -30,22 +30,33 @@ function ThreadSkeleton() {
   );
 }
 
-export default function ThreadDetailPage() {
+export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, ssrReviews = [] }) {
   const { shopId, threadId } = useParams();
   const navigate = useNavigate();
   const { shopById, therapistById, reviews } = useShopData();
   const { favTherapists, toggleFavTherapist } = useAppContext();
   const { addToHistory } = useRecentlyViewed();
 
-  const [cloudShop, setCloudShop] = React.useState(null);
-  const [cloudTherapist, setCloudTherapist] = React.useState(null);
-  const [cloudTherapistReviews, setCloudTherapistReviews] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true); // 🔥これがないと即エラーになる
+  // SSRで取得済みのデータを初期値に（クライアントの取り直し待ちを排除＝即・完全描画、写真チラつき解消）
+  const [cloudShop, setCloudShop] = React.useState(ssrShop);
+  const [cloudTherapist, setCloudTherapist] = React.useState(ssrTherapist);
+  const [cloudTherapistReviews, setCloudTherapistReviews] = React.useState(ssrReviews || []);
+  const [isLoading, setIsLoading] = React.useState(!ssrTherapist); // SSRデータがあればローディング不要
+
+  // クライアント遷移（別セラピストへ）で再マウントされないため、新しいSSRデータが来たら即反映
+  React.useEffect(() => {
+    setCloudShop(ssrShop);
+    setCloudTherapist(ssrTherapist);
+    setCloudTherapistReviews(ssrReviews || []);
+    setIsLoading(!ssrTherapist);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [threadId]);
 
   React.useEffect(() => {
     let isMounted = true;
     const fetchData = async () => {
-      setIsLoading(true);
+      // SSRデータが無いときだけスケルトンを出す（SSRデータがあれば裏で静かに更新＝チラつかせない）
+      if (!ssrTherapist) setIsLoading(true);
       try {
         const url = process.env.VITE_SUPABASE_URL;
         const key = process.env.VITE_SUPABASE_ANON_KEY;

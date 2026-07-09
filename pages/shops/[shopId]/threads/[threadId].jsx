@@ -29,10 +29,10 @@ export async function getServerSideProps({ params, req }) {
       .eq('id', shopId)
       .single();
 
-    // 2. セラピスト取得
+    // 2. セラピスト取得（全カラム＝クライアントに初期値として渡し即・完全描画するため）
     const { data: therapistData } = await supabase
       .from('therapists')
-      .select('id, name, image_url, shop_id')
+      .select('*')
       .eq('id', threadId)
       .single();
 
@@ -49,7 +49,7 @@ export async function getServerSideProps({ params, req }) {
     const therapistName = therapistData?.name || threadId.split('_').pop();
     const { data: reviews } = await supabase
       .from('reviews')
-      .select('id, shop_id, therapist_name, therapist_id, rating, content, detailed_ratings, tags, created_at, is_public, user_id')
+      .select('id, shop_id, therapist_name, therapist_id, rating, content, detailed_ratings, tags, created_at, is_public, user_id, user_name, course')
       .in('shop_id', reviewShopIds)
       .or('is_public.eq.true,user_id.eq.owner_manual')
       .order('created_at', { ascending: false })
@@ -193,8 +193,9 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
         )}
       </Head>
 
-      {/* 既存コンポーネントをそのまま使用（クライアント側の全機能を維持） */}
-      <ThreadDetailPage />
+      {/* 既存コンポーネントをそのまま使用（クライアント側の全機能を維持）。
+          SSRで取得済みのデータを初期値として渡す＝クライアントの取り直し待ちを排除（二重取得の体感遅延・写真チラつきを解消）。 */}
+      <ThreadDetailPage ssrShop={ssrShop} ssrTherapist={ssrTherapist} ssrReviews={ssrPublicReviews} />
 
       {/* Tier 2-2: 同じ店で口コミがある他のセラピストへの相互リンク（SSR・口コミページ間の内部リンク） */}
       {ssrRelated.length > 0 && (
