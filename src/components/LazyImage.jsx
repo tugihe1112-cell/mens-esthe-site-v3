@@ -24,12 +24,10 @@ function isIconUrl(src) {
 }
 
 export default function LazyImage({ src, alt, className = '', fallback = NO_IMAGE_SVG, width = 800 }) {
-  const [useOptimized, setUseOptimized] = useState(true);
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    setUseOptimized(true);
     setError(false);
     setLoaded(false);
   }, [src]);
@@ -47,7 +45,6 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
   }
 
   const optimizedSrc = optimizeImageUrl(src, width);
-  const activeSrc = useOptimized ? optimizedSrc : src;
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
@@ -55,20 +52,13 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
         <div className="absolute inset-0 bg-slate-700 animate-pulse z-10" />
       )}
       <img
-        src={activeSrc}
+        src={optimizedSrc}
         alt={alt}
         loading="lazy"
         decoding="async"
         onLoad={() => setLoaded(true)}
-        onError={() => {
-          if (useOptimized && optimizedSrc !== src) {
-            // 最適化URL（wsrv等）が失敗 → 元URLで再試行
-            setUseOptimized(false);
-            setLoaded(false);
-          } else {
-            setError(true);
-          }
-        }}
+        // 失敗したら即NO IMAGE。以前は「元URLで再試行」していたが、wsrv失敗→死んでる元URLで再試行＝5秒×2段の待ちになっていたので廃止（フェイルファスト）。
+        onError={() => setError(true)}
         className={`w-full h-full object-cover transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
       />
     </div>
