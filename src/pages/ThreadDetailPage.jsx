@@ -183,6 +183,22 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
     );
   }, [cloudTherapistReviews, reviews, threadId, therapist?.name, shopId, shop?.group_id]);
 
+  // 閲覧カウント（クライアント発火・fire-and-forget）。
+  // gSSPから移したことでページをCDNキャッシュ可能に。botはJS非実行で自然除外。
+  const trackedThreadRef = React.useRef(null);
+  React.useEffect(() => {
+    if (trackedThreadRef.current === threadId) return;
+    const ids = (therapistReviews || []).map((r) => r.id).filter(Boolean);
+    if (ids.length === 0) return;
+    trackedThreadRef.current = threadId;
+    fetch('/api/track-view', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids }),
+      keepalive: true,
+    }).catch(() => {});
+  }, [therapistReviews, threadId]);
+
   const stats = useMemo(() => {
     if (therapistReviews.length === 0) return null;
     const keys = ['cleanliness', 'looks', 'style', 'service', 'massage', 'intimacy'];

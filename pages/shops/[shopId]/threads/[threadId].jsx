@@ -13,8 +13,12 @@ import ThreadDetailPage from '../../../../src/pages/ThreadDetailPage.jsx';
 // ────────────────────────────────────────────────────────────
 // SSR: サーバー側でSupabaseから公開データを取得
 // ────────────────────────────────────────────────────────────
-export async function getServerSideProps({ params, req }) {
+export async function getServerSideProps({ params, res }) {
   const { shopId, threadId } = params;
+
+  // CDNキャッシュ（60秒）＝一度開かれたセラピストページは次から即返る（体感速度・戻るも速く）。
+  // 閲覧カウントはgSSPから /api/track-view（クライアント発火）に移したので、キャッシュしても副作用なし。
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
 
   const supabase = createClient(
     process.env.VITE_SUPABASE_URL || '',
@@ -86,12 +90,8 @@ export async function getServerSideProps({ params, req }) {
       if (ssrRelated.length >= 8) break;
     }
 
-    // Tier 3-2: 閲覧カウント（bot除外・人間のアクセスのみ）→ 週次リテンションメールの集計元
-    const ua = (req?.headers['user-agent'] || '').toLowerCase();
-    const isBot = /bot|crawl|spider|slurp|bing|google|yandex|baidu|duckduck|facebookexternalhit|embedly/.test(ua);
-    if (!isBot && publicReviews.length) {
-      try { await supabase.rpc('increment_review_views', { ids: publicReviews.map((r) => r.id) }); } catch (e) { /* 集計は失敗しても表示に影響させない */ }
-    }
+    // 閲覧カウントは /api/track-view（クライアント発火・service role）に移設済み。
+    // → gSSPを副作用なしにしてCDNキャッシュ可能に。botはJS非実行で自然除外＝集計精度もむしろ改善。
 
     return {
       props: {
