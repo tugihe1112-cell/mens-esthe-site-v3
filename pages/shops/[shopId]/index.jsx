@@ -13,8 +13,9 @@ import ShopDetailPage from '../../../src/pages/ShopDetailPage';
 
 export async function getServerSideProps({ params, res }) {
   const { shopId } = params;
-  // CDNキャッシュ（60秒）＝一度誰かが開いたページは次から即返る。SSR HTMLは全員共通・ユーザー固有部分はクライアント描画なので安全。
-  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  // CDNキャッシュ＝一度誰かが開いたページは次から即返る。SSR HTMLは全員共通・ユーザー固有部分はクライアント描画なので安全。
+  // 低トラフィックでもヒット率を上げるため s-maxage=300 + SWR=1日（stale即答＋裏で再検証）。
+  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400');
   const supabase = createClient(
     process.env.VITE_SUPABASE_URL || '',
     process.env.SUPABASE_SERVICE_ROLE_KEY || ''

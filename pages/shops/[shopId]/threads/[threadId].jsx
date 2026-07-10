@@ -16,9 +16,10 @@ import ThreadDetailPage from '../../../../src/pages/ThreadDetailPage.jsx';
 export async function getServerSideProps({ params, res }) {
   const { shopId, threadId } = params;
 
-  // CDNキャッシュ（60秒）＝一度開かれたセラピストページは次から即返る（体感速度・戻るも速く）。
+  // CDNキャッシュ＝一度開かれたセラピストページは次から即返る（体感速度・戻るも速く）。
   // 閲覧カウントはgSSPから /api/track-view（クライアント発火）に移したので、キャッシュしても副作用なし。
-  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  // 低トラフィックでもヒット率を上げるため s-maxage=300 + SWR=1日。
+  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400');
 
   const supabase = createClient(
     process.env.VITE_SUPABASE_URL || '',

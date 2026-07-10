@@ -16,8 +16,8 @@ export default function IndexPage({ initialHero, latestReviews }) {
 
 export async function getServerSideProps({ res }) {
   // ISR(getStaticProps)の永続キャッシュが古い版を配信し続ける問題を回避するためSSR化。
-  // CDNには短時間だけキャッシュさせて速度も確保（s-maxage=60 + stale-while-revalidate）。
-  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  // 低トラフィックでもCDNヒット率を上げるため s-maxage=300 + SWR=1日（stale即答＋裏で再検証＝実質ISR）。
+  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400');
   let initialHero = [];
   let latestReviews = [];
   try {
@@ -26,38 +26,32 @@ export async function getServerSideProps({ res }) {
       process.env.VITE_SUPABASE_URL || '',
       process.env.VITE_SUPABASE_ANON_KEY || ''
     );
-    const { data } = await supabase
-      .from('shops')
-      .select('id, group_id, name, raw_data, image_url')
-      .in('id', HERO_SHOP_IDS);
+    // ①ヒーロー店舗 と ②最新口コミ は独立 → 並列（Vercel関数↔Supabaseの往復回数を削減）
+    const [{ data }, { data: revs }] = await Promise.all([
+      supabase.from('shops').select('id, group_id, name, raw_data, image_url').in('id', HERO_SHOP_IDS),
+      supabase.from('reviews')
+        .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at')
+        .eq('is_public', true)
+        .not('therapist_id', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(8),
+    ]);
     initialHero = buildInitialHero(data);
 
-    // Tier 2-2: 最新の本物口コミ（is_public）をSSRで取得 → ホームから口コミページへ直リンク（クローラー発見の最短経路）
-    const { data: revs } = await supabase
-      .from('reviews')
-      .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at')
-      .eq('is_public', true)
-      .not('therapist_id', 'is', null)
-      .order('created_at', { ascending: false })
-      .limit(8);
+    // ③店名/エリア解決 と ④セラピスト写真 は②に依存するがお互い独立 → 並列
     const shopIds = [...new Set((revs || []).map((r) => r.shop_id).filter(Boolean))];
-    let shopNameById = {}, shopLocById = {};
-    if (shopIds.length) {
-      const { data: shopRows } = await supabase.from('shops').select('id, name, raw_data').in('id', shopIds);
-      shopNameById = Object.fromEntries((shopRows || []).map((s) => [s.id, s.name]));
-      shopLocById = Object.fromEntries((shopRows || []).map((s) => {
-        const rd = s.raw_data || {};
-        const area = Array.isArray(rd.area) ? rd.area[0] : (rd.area || null);
-        return [s.id, { prefecture: rd.prefecture || null, area: area || null }];
-      }));
-    }
-    // セラピスト写真（A-3: 口コミカードのサムネ用）
     const therapistIds = [...new Set((revs || []).map((r) => r.therapist_id).filter(Boolean))];
-    let imgById = {};
-    if (therapistIds.length) {
-      const { data: tRows } = await supabase.from('therapists').select('id, image_url').in('id', therapistIds);
-      imgById = Object.fromEntries((tRows || []).map((t) => [t.id, t.image_url]));
-    }
+    const [{ data: shopRows } = {}, { data: tRows } = {}] = await Promise.all([
+      shopIds.length ? supabase.from('shops').select('id, name, raw_data').in('id', shopIds) : Promise.resolve({ data: [] }),
+      therapistIds.length ? supabase.from('therapists').select('id, image_url').in('id', therapistIds) : Promise.resolve({ data: [] }),
+    ]);
+    const shopNameById = Object.fromEntries((shopRows || []).map((s) => [s.id, s.name]));
+    const shopLocById = Object.fromEntries((shopRows || []).map((s) => {
+      const rd = s.raw_data || {};
+      const area = Array.isArray(rd.area) ? rd.area[0] : (rd.area || null);
+      return [s.id, { prefecture: rd.prefecture || null, area: area || null }];
+    }));
+    const imgById = Object.fromEntries((tRows || []).map((t) => [t.id, t.image_url]));
     // ⚠️ 本文全文はSSRに載せない（ホームと本命セラピストページの重複コンテンツ回避）。
     //    SSRにはティーザー(snippet)のみ。展開時の300字はクライアントがidでフェッチする。
     latestReviews = (revs || []).map((r) => ({
