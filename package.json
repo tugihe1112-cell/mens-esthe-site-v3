@@ -27,6 +27,7 @@
     "react-hook-form": "^7.71.1",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.1.5",
+    "sharp": "^0.35.3",
     "swiper": "^12.1.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
