@@ -26,10 +26,12 @@ function isIconUrl(src) {
 export default function LazyImage({ src, alt, className = '', fallback = NO_IMAGE_SVG, width = 800 }) {
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [retry, setRetry] = useState(0); // R2の一時エラー(429等)用の再試行カウンタ
 
   useEffect(() => {
     setError(false);
     setLoaded(false);
+    setRetry(0);
   }, [src]);
 
   if (!src || error || isIconUrl(src)) {
@@ -45,6 +47,9 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
   }
 
   const optimizedSrc = optimizeImageUrl(src, width);
+  const isR2 = optimizedSrc.includes('.r2.dev');
+  // 再試行時はキャッシュバスターを付けて確実に取り直す
+  const activeSrc = retry > 0 ? `${optimizedSrc}${optimizedSrc.includes('?') ? '&' : '?'}_r=${retry}` : optimizedSrc;
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
@@ -52,13 +57,20 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
         <div className="absolute inset-0 bg-slate-700 animate-pulse z-10" />
       )}
       <img
-        src={optimizedSrc}
+        src={activeSrc}
         alt={alt}
         loading="lazy"
         decoding="async"
         onLoad={() => setLoaded(true)}
-        // 失敗したら即NO IMAGE。以前は「元URLで再試行」していたが、wsrv失敗→死んでる元URLで再試行＝5秒×2段の待ちになっていたので廃止（フェイルファスト）。
-        onError={() => setError(true)}
+        onError={() => {
+          // R2(自社CDN)は一時的なレート制限(429)等で失敗することがある → 1回だけ間を置いて再試行し、
+          // 「本当は画像があるのに永続NO IMAGE」になるのを防ぐ。外部URL(wsrv経由)は死んでる確率が高いので即NO IMAGE(フェイルファスト)。
+          if (isR2 && retry < 1) {
+            setTimeout(() => setRetry((n) => n + 1), 900);
+          } else {
+            setError(true);
+          }
+        }}
         className={`w-full h-full object-cover transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
       />
     </div>

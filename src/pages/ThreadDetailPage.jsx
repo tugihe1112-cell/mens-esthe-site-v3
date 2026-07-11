@@ -62,20 +62,23 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
         const key = process.env.VITE_SUPABASE_ANON_KEY;
         if (!url || !key) return;
         const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
+        // id/名前は `,` や `&` を含みうるので必ずURLエンコードする（未エンコードだとクエリが壊れて取得できない）
+        const encShopId = encodeURIComponent(shopId);
+        const encThreadId = encodeURIComponent(threadId);
 
         // 1. ショップ取得
-        const shopRes = await fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers });
+        const shopRes = await fetch(`${url}/rest/v1/shops?id=eq.${encShopId}&select=*`, { headers });
         const shopData = await shopRes.json();
         if (shopData && shopData.length > 0 && isMounted) setCloudShop(shopData[0]);
 
         // 2. セラピスト取得 (IDで検索)
-        let tRes = await fetch(`${url}/rest/v1/therapists?id=eq.${threadId}&select=*`, { headers });
+        let tRes = await fetch(`${url}/rest/v1/therapists?id=eq.${encThreadId}&select=*`, { headers });
         let tData = await tRes.json();
 
         // 3. IDで見つからなければ、名前（URLの最後の部分）で検索
         if (!tData || tData.length === 0) {
           const extractedName = threadId.includes('_') ? threadId.split('_').pop() : threadId;
-          tRes = await fetch(`${url}/rest/v1/therapists?shop_id=eq.${shopId}&name=eq.${encodeURIComponent(extractedName)}&select=*`, { headers });
+          tRes = await fetch(`${url}/rest/v1/therapists?shop_id=eq.${encShopId}&name=eq.${encodeURIComponent(extractedName)}&select=*`, { headers });
           tData = await tRes.json();
         }
 
