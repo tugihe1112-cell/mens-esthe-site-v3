@@ -590,7 +590,8 @@ export default function PostReviewPage() {
     if (!user) {
       saveDraft(data);
       toast('ログイン / 無料登録で投稿が完了します 🔑', { duration: 4000 });
-      navigate('/login', { state: { redirect: '/post-review' } });
+      // ⚠️ compat useNavigate は state を渡せない（Next Pages Router）。redirectはクエリで渡す。
+      navigate('/login?redirect=%2Fpost-review');
       return;
     }
     const result = await submitReview(data);

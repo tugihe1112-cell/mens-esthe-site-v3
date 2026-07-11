@@ -6,7 +6,9 @@ import SeoHead from '../components/SeoHead.jsx';
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const redirectTo = location.state?.redirect || '/mypage';
+  // redirectはクエリ(?redirect=/post-review)で受け取る（compatはstateを渡せないため）。旧state経路もフォールバックで残す。
+  const redirectTo = new URLSearchParams(location.search || '').get('redirect')
+    || location.state?.redirect || '/mypage';
   const { signIn } = useAuth(); // 👈 本物のログイン関数
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

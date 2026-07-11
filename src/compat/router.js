@@ -14,6 +14,17 @@ import NextLink from 'next/link';
 export function useNavigate() {
   const router = useRouter();
   return (to, options = {}) => {
+    // react-router の navigate(-1) / navigate(1) 等（履歴移動）を Next.js に橋渡し。
+    // ※以前は数値をそのまま router.push(-1) に渡していて何も起きなかった（＝「戻る」ボタンが無反応だった）。
+    if (typeof to === 'number') {
+      if (typeof window === 'undefined') { router.back(); return; }
+      let hasNav = false;
+      try { hasNav = !!sessionStorage.getItem('hasInternalNav'); } catch { /* noop */ }
+      // 直リンク/新規タブ（アプリ内遷移なし=履歴に戻り先が無い）で navigate(-1) すると無反応になるため、ホームへフォールバック
+      if (to < 0 && !hasNav) { router.push('/'); return; }
+      window.history.go(to);
+      return;
+    }
     if (options?.replace) {
       router.replace(to);
     } else {

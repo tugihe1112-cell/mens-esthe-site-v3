@@ -26,7 +26,11 @@ function RouteProgress() {
   const [loading, setLoading] = React.useState(false);
   React.useEffect(() => {
     const start = () => setLoading(true);
-    const done = () => setLoading(false);
+    const done = () => {
+      setLoading(false);
+      // アプリ内でSPA遷移が1回でも起きたら印を付ける（戻るボタンのフォールバック判定に使う）
+      try { sessionStorage.setItem('hasInternalNav', '1'); } catch { /* noop */ }
+    };
     router.events.on('routeChangeStart', start);
     router.events.on('routeChangeComplete', done);
     router.events.on('routeChangeError', done);
