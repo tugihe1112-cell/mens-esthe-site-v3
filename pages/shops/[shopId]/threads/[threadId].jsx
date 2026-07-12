@@ -19,7 +19,8 @@ export async function getServerSideProps({ params, res }) {
   // CDNキャッシュ＝一度開かれたセラピストページは次から即返る（体感速度・戻るも速く）。
   // 閲覧カウントはgSSPから /api/track-view（クライアント発火）に移したので、キャッシュしても副作用なし。
   // 低トラフィックでもヒット率を上げるため s-maxage=300 + SWR=1日。
-  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400');
+  // ⚠️SWRを1日にするとデプロイ後に古いHTML→消えた古いJSチャンク404→真っ黒になる。stale窓は短く（最大2分）。
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
 
   const supabase = createClient(
     process.env.VITE_SUPABASE_URL || '',

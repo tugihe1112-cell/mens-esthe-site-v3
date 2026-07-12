@@ -11,6 +11,7 @@
 - **名指し実店舗の本番確定情報を口コミに書きかけた**（ゴム常備/追加料金で本番OK等）→ 隠語にしても読めば同義＝名誉毀損・業務妨害・売防/風営・Google/Vercel BANリスクが運営者に向く。対策: "気配はあるが本人は深追いせず"という実体験＋判断の形に。露骨な行為描写は"オプションの密着対応/完成形/線引き曖昧"等の隠語へ(ng-rules)。
 
 ## Next.js / デプロイ
+- **SSR HTMLに長い`stale-while-revalidate`(1日等)を付けたら個別ページが真っ黒に** → Next.jsはデプロイ毎にJSのビルドIDが変わり旧チャンクは消える。CDNが古いHTMLを配信すると、消えた旧JS(`_ssgManifest.js`/`[threadId]-xxxx.js`)を指して404→Reactが起動せず真っ黒(コンソールに`Refused to execute script MIME text/plain`)。対策: **SSRのCache-ControlのSWRは短く(数分)**。`s-maxage=60, stale-while-revalidate=120`程度。HTMLとJSはビルドID一致が必須なので、HTMLを長時間staleにしてはいけない。
 - **`index.jsx`が`index.js`をshadow** → Next.jsは.jsx優先解決。getStaticPropsをindex.jsに書いても無視され本番未反映。対策: トップの実体は必ず`index.jsx`側。
 - **ISRの永続キャッシュが旧版を配信し続ける** → revalidate:3600が焼き付き、何度デプロイしても古い版。対策: SSR(getServerSideProps)+`Cache-Control: s-maxage=60`でキャッシュ根絶。
 - **GA4がNext移行後ずっと未計測** → gtagが旧Viteの`index.html`にしか無く、`_app`/`_document`に無かった。対策: `_app.jsx`に`next/script`で設置。"143イベント"は旧Vite残存。

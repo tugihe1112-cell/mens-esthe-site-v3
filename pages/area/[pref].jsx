@@ -18,8 +18,8 @@ const PREF_MAP = {
 
 export async function getServerSideProps({ params, res }) {
   // CDNキャッシュ＝一度開かれたエリアページは次から即返る。副作用なし・全員共通HTMLなので安全。
-  // 低トラフィックでもヒット率を上げるため s-maxage=300 + SWR=1日。
-  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400');
+  // ⚠️SWRを1日にするとデプロイ後に古いHTML→消えた古いJSチャンク404→真っ黒になる。stale窓は短く（最大2分）。
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
   const pref = params.pref;
   const prefName = PREF_MAP[pref] || null;
   if (!prefName) return { props: { ssr: null } };

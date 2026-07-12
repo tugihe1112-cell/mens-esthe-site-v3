@@ -16,8 +16,9 @@ export default function IndexPage({ initialHero, latestReviews }) {
 
 export async function getServerSideProps({ res }) {
   // ISR(getStaticProps)の永続キャッシュが古い版を配信し続ける問題を回避するためSSR化。
-  // 低トラフィックでもCDNヒット率を上げるため s-maxage=300 + SWR=1日（stale即答＋裏で再検証＝実質ISR）。
-  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=86400');
+  // ⚠️SWRを1日にするとデプロイ後に古いHTMLが配信され、消えた古いJSチャンクを指して404→真っ黒になる（ビルドIDが毎回変わるため）。
+  //   頻繁にデプロイするので stale窓は短く。s-maxage=60 + SWR=120（最大でも2分・Vercelの旧アセット保持内）。
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
   let initialHero = [];
   let latestReviews = [];
   try {
