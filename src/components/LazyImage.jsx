@@ -63,10 +63,12 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
         decoding="async"
         onLoad={() => setLoaded(true)}
         onError={() => {
-          // R2(自社CDN)は一時的なレート制限(429)等で失敗することがある → 1回だけ間を置いて再試行し、
-          // 「本当は画像があるのに永続NO IMAGE」になるのを防ぐ。外部URL(wsrv経由)は死んでる確率が高いので即NO IMAGE(フェイルファスト)。
-          if (isR2 && retry < 1) {
-            setTimeout(() => setRetry((n) => n + 1), 900);
+          // R2(自社CDN)は一時的なレート制限(429/r2.dev開発URLの制限)で失敗することがある。
+          // お客さんはリロードしないので、こちらで最大3回・指数バックオフ(0.5→1→2秒)で自動再取得し、
+          // 「本当は画像があるのに永続NO IMAGE」を防ぐ。外部URL(wsrv経由)は死んでる確率が高いので即NO IMAGE。
+          if (isR2 && retry < 3) {
+            const delay = 500 * Math.pow(2, retry); // 500ms, 1000ms, 2000ms
+            setTimeout(() => setRetry((n) => n + 1), delay);
           } else {
             setError(true);
           }
