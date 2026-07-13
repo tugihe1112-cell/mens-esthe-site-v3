@@ -1,0 +1,10 @@
+# r2-images Worker — CLIでデプロイする場合の設定（ダッシュボード派なら不要）
+# 使い方: cd workers/r2-images && npx wrangler deploy
+name = "mens-esthe-images"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# R2バケットをWorkerにバインド（コード内 env.BUCKET でアクセス）
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "mens-esthe-images"

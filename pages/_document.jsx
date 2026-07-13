@@ -14,11 +14,12 @@ export default function Document() {
         {/* Supabase preconnect */}
         <link rel="preconnect" href="https://azuetkuzzmshqfbrhqmf.supabase.co" />
         <link rel="dns-prefetch" href="https://azuetkuzzmshqfbrhqmf.supabase.co" />
-        {/* 画像配信の接続を先に張る＝キャスト写真の初動を速く（wsrv.nl画像変換プロキシ・R2ストレージ） */}
-        <link rel="preconnect" href="https://wsrv.nl" crossOrigin="anonymous" />
+        {/* 画像配信の接続を先に張る＝キャスト写真の初動を速く。
+            R2はWorker(workers.dev)配信に移行。crossOriginは付けない（<img>は非CORS取得＝付けると接続が再利用されない）。 */}
+        <link rel="preconnect" href="https://mens-esthe-images.tugihe1112.workers.dev" />
+        <link rel="dns-prefetch" href="https://mens-esthe-images.tugihe1112.workers.dev" />
+        <link rel="preconnect" href="https://wsrv.nl" />
         <link rel="dns-prefetch" href="https://wsrv.nl" />
-        <link rel="preconnect" href="https://pub-1eb6e3f48a044dd9b5841a8f4be21a89.r2.dev" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://pub-1eb6e3f48a044dd9b5841a8f4be21a89.r2.dev" />
       </Head>
       <body>
         <Main />

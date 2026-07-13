@@ -7,6 +7,13 @@
 
 const SUPABASE_STORAGE = 'azuetkuzzmshqfbrhqmf.supabase.co/storage';
 
+// R2画像の配信元。
+//  - 旧: pub-xxx.r2.dev（開発URL・レート制限あり→429で「出たり出なかったり」）
+//  - 新: Cloudflare Worker（workers.dev・R2バインディング直読み・レート制限なし）
+// DBのimage_urlはr2.devのまま。ここでホスト部分だけWorkerに差し替える＝1行戻せば即ロールバック。
+const R2_DEV_HOST = 'pub-1eb6e3f48a044dd9b5841a8f4be21a89.r2.dev';
+const R2_WORKER_HOST = 'mens-esthe-images.tugihe1112.workers.dev';
+
 export function optimizeImageUrl(src, width = 800) {
   if (!src || typeof src !== 'string') return src;
   if (src.startsWith('data:')) return src; // インラインSVG等はそのまま
@@ -26,8 +33,10 @@ export function optimizeImageUrl(src, width = 800) {
   // すでに wsrv 経由ならそのまま（二重プロキシ防止）
   if (src.includes('wsrv.nl') || src.includes('images.weserv.nl')) return src;
 
-  // 自社R2（Cloudflare CDN）は既に配信が速い → 無料のwsrvプロキシを挟むと逆に遅い/詰まるので直接配信
-  if (src.includes('.r2.dev') || src.includes('r2.cloudflarestorage.com')) return src;
+  // 自社R2 → r2.dev(レート制限あり)をWorker(workers.dev・制限なし)に差し替えて直接配信。
+  // wsrvは挟まない（Worker側が既に速い・二重プロキシ回避）。
+  if (src.includes(R2_DEV_HOST)) return src.replace(R2_DEV_HOST, R2_WORKER_HOST);
+  if (src.includes('.workers.dev') || src.includes('.r2.dev') || src.includes('r2.cloudflarestorage.com')) return src;
 
   // その他の外部画像（http / https / プロトコル相対）→ weserv.nl でリサイズ+WebP化
   if (/^(https?:)?\/\//i.test(src)) {

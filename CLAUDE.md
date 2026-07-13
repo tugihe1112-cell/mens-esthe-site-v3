@@ -25,6 +25,12 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
+### 2026-07-13
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ⏳ | **🎯画像遅延の根治＝r2.dev卒業→Cloudflare Worker配信（fable批判レビュー→ドメイン購入不要の別解を採用）** | 「セラピスト写真が出たり出なかったり・時間経ちすぎ」の根本＝**r2.dev(Cloudflare開発URL)のレート制限(429)**。これまでLazyImageのリトライ(最大3回バックオフ)で対症してたが「遅すぎ」が残る＝band-aidの繰り返しが不満の正体。**fable第1案=R2カスタムドメイン(新規ドメイン購入$10/年)**。だが**fableに批判再検証させたら「ドメイン購入は過剰・この規模ではWorkers.devで¥0根治できる」**と別解。採用＝**Cloudflare Worker + R2バインディング**：r2.devの開発用制限を正規回避(公式サポート・無料枠10万req/日でPV規模に十分)。**Worker実装済み・デプロイ済み・動作確認OK**（`workers/r2-images/worker.js`＝GET/HEADのみ・キー先頭`therapist-images/`等の許可リスト・`Cache-Control immutable`付与。バインディング`BUCKET→mens-esthe-images`。URL=`https://mens-esthe-images.tugihe1112.workers.dev`。芹沢りお画像で表示確認済み）。**コード側3ファイル修正済み(要build→push)**: (1)`imageUrl.js`＝`pub-xxx.r2.dev`ホストを`mens-esthe-images.tugihe1112.workers.dev`に差し替え（**DBは触らない**＝`R2_DEV_HOST`定数1行戻せば即ロールバック）。(2)`LazyImage.jsx`＝isR2判定に`.workers.dev`追加＋**リトライを3回バックオフ→1回(600ms)に簡素化**（Workerは429無し）。(3)`_document.jsx`＝preconnectをworkerに差し替え＋`crossOrigin`除去(`<img>`は非CORS取得＝付けると接続再利用されない)。**ゼロリスク根拠**: mens-esthe-map.jp(ムームー・メール)不接触の別系統／DBのimage_urlはr2.devのまま(フロントでホスト置換)／r2.dev併存で途中で切れない。**ドメイン購入は不要**（トラフィックが1-2桁増えてCDNキャッシュが効く段階になってからで十分・そのとき`imageUrl.js`1行で移行可）。⚠️次: okabayashiが`npm run build`→`git push`→本番でキャスト一覧を通常リロード(ハードでなく)して「出たり出なかったり」が消えたか確認。DB置換script`switch_r2_domain.mjs`も用意済みだが**今回は使わない**(将来カスタムドメイン移行時用)。**教訓**: 根本原因(r2.dev)を放置して対症療法(リトライ)を繰り返すと同じ不満が再発する＝band-aidでなく根治を選ぶ。またfableの第1案も批判再検証で「過剰」と分かった＝コンサル結論も鵜呑みにせず1段疑う。 |
+
 ### 2026-07-07
 
 | 状態 | 作業内容 | メモ |

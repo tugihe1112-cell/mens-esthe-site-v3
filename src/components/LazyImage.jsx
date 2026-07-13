@@ -47,7 +47,7 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
   }
 
   const optimizedSrc = optimizeImageUrl(src, width);
-  const isR2 = optimizedSrc.includes('.r2.dev');
+  const isR2 = optimizedSrc.includes('.workers.dev') || optimizedSrc.includes('.r2.dev');
   // 再試行時はキャッシュバスターを付けて確実に取り直す
   const activeSrc = retry > 0 ? `${optimizedSrc}${optimizedSrc.includes('?') ? '&' : '?'}_r=${retry}` : optimizedSrc;
 
@@ -63,12 +63,11 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
         decoding="async"
         onLoad={() => setLoaded(true)}
         onError={() => {
-          // R2(自社CDN)は一時的なレート制限(429/r2.dev開発URLの制限)で失敗することがある。
-          // お客さんはリロードしないので、こちらで最大3回・指数バックオフ(0.5→1→2秒)で自動再取得し、
-          // 「本当は画像があるのに永続NO IMAGE」を防ぐ。外部URL(wsrv経由)は死んでる確率が高いので即NO IMAGE。
-          if (isR2 && retry < 3) {
-            const delay = 500 * Math.pow(2, retry); // 500ms, 1000ms, 2000ms
-            setTimeout(() => setRetry((n) => n + 1), delay);
+          // R2はWorker(workers.dev)配信に移行済み＝レート制限(429)が無くなったので、
+          // 以前の3回バックオフは不要。ネットワーク瞬断用に1回だけ静かに取り直す。
+          // 外部URL(wsrv経由)は死んでる確率が高いので即NO IMAGE。
+          if (isR2 && retry < 1) {
+            setTimeout(() => setRetry((n) => n + 1), 600);
           } else {
             setError(true);
           }
