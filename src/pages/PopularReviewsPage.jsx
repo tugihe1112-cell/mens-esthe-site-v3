@@ -167,7 +167,7 @@ export default function PopularReviewsPage() {
                         {/* セラピスト写真 */}
                         <div className="flex-shrink-0 w-16 h-20 rounded-xl overflow-hidden bg-slate-800 border border-white/5">
                           {therapist.image_url ? (
-                            <img src={therapist.image_url} alt={r.therapist_name} className="w-full h-full object-cover" loading="lazy" />
+                            <img src={therapist.image_url} alt={r.therapist_name} className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-2xl">👤</div>
                           )}

@@ -404,7 +404,6 @@ export default function HomePage({ initialHero = [], latestReviews = [] }) {
                       <img
                         src={optimizeImageUrl(t.image_url, 300)}
                         alt={t.name}
-                        loading="lazy"
                         decoding="async"
                         className="w-full h-full object-cover object-top transition duration-700 group-hover:scale-110"
                         onError={(e) => {
@@ -501,7 +500,6 @@ export default function HomePage({ initialHero = [], latestReviews = [] }) {
                       <img
                         src={optimizeImageUrl(shop.image_url, 128)}
                         alt={shop.name}
-                        loading="lazy"
                         decoding="async"
                         className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                         onError={(e) => {

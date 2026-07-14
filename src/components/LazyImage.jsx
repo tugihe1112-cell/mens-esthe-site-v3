@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { optimizeImageUrl } from '../utils/imageUrl';
 
 // 画像なし用のインライン SVG（外部リクエスト不要）
@@ -27,11 +27,23 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [retry, setRetry] = useState(0); // R2の一時エラー(429等)用の再試行カウンタ
+  const imgRef = useRef(null);
 
+  // src変化時のリセット。ただし**キャッシュ済み画像はonLoadが発火しない**ため、
+  // ここで`img.complete`を同期チェックして手動でloaded化する。
+  // これをしないと、SPA遷移(一覧→詳細)や再フィルタで既にキャッシュにある画像が
+  // onLoad不発→opacity-0のまま＝「ロード済みなのに透明で見えない」になる
+  // （＝ハードリロードだと出るがクリック遷移だと出ない、の正体）。
+  // リセットとcompleteチェックを同一effectで行うのが要点＝loadイベントとの巻き戻しレースを断つ。
   useEffect(() => {
     setError(false);
-    setLoaded(false);
     setRetry(0);
+    const img = imgRef.current;
+    if (img && img.complete && img.naturalWidth > 0) {
+      setLoaded(true);   // 既にキャッシュから読み込み完了
+    } else {
+      setLoaded(false);
+    }
   }, [src]);
 
   if (!src || error || isIconUrl(src)) {
@@ -57,9 +69,13 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
         <div className="absolute inset-0 bg-slate-700 animate-pulse z-10" />
       )}
       <img
+        ref={imgRef}
         src={activeSrc}
         alt={alt}
-        loading="lazy"
+        /* loading="lazy" は付けない。Next.jsのSPA遷移で挿入された画像に対し
+           ネイティブlazyのIntersectionObserverが発火し損ね、画面内なのに永久に読み込まない
+           （＝ハードリロードなら出るがクリック遷移だと出ない、の真犯人・Chromeで実証済み）。
+           画像は600px WebP(~20KB)・Worker配信(無制限)なので即読みで問題なし。 */
         decoding="async"
         onLoad={() => setLoaded(true)}
         onError={() => {
