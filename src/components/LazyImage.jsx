@@ -38,12 +38,17 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
   useEffect(() => {
     setError(false);
     setRetry(0);
+    setLoaded(false);
     const img = imgRef.current;
-    if (img && img.complete && img.naturalWidth > 0) {
-      setLoaded(true);   // 既にキャッシュから読み込み完了
-    } else {
-      setLoaded(false);
-    }
+    if (!img) return;
+    // Reactの合成onLoadはSPA遷移/キャッシュ済み画像で発火を取りこぼすことがある
+    // （＝ロード済みでも loaded=false のまま opacity-0 で透明）。
+    // ネイティブの load リスナーを img に直付けし、さらに「登録より前に既にcomplete」も同期で拾う。
+    // この2段構えで、①既にキャッシュ完了 ②これから完了 のどちらも確実に loaded 化する。
+    const onload = () => setLoaded(true);
+    img.addEventListener('load', onload);
+    if (img.complete && img.naturalWidth > 0) setLoaded(true);
+    return () => img.removeEventListener('load', onload);
   }, [src]);
 
   if (!src || error || isIconUrl(src)) {
