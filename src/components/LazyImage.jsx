@@ -70,8 +70,11 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
+      {/* スケルトンは画像の“裏”に敷く（z-10を付けない）。
+          画像はloadされ次第この上に描画され裏を隠す＝表示が`loaded`stateに一切依存しない。
+          onLoadの取りこぼし/再フェッチのレースで`loaded`がfalseのままでも、画像は必ず見える。 */}
       {!loaded && (
-        <div className="absolute inset-0 bg-slate-700 animate-pulse z-10" />
+        <div className="absolute inset-0 bg-slate-700 animate-pulse" />
       )}
       <img
         ref={imgRef}
@@ -93,7 +96,9 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
             setError(true);
           }
         }}
-        className={`w-full h-full object-cover transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        /* opacity で隠さない（loaded非依存）。relativeで裏のスケルトンより前面に。
+           軽いフェードは残す（透明→不透明でなく、描画時に自然表示）。 */
+        className="relative w-full h-full object-cover"
       />
     </div>
   );
