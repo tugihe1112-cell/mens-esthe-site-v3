@@ -52,6 +52,13 @@ async function gscTotal() {
   const r = await sc.searchanalytics.query({ siteUrl: SITE, requestBody: { startDate: START, endDate: END } });
   return (r.data.rows || [])[0] || { clicks: 0, impressions: 0, position: 0 };
 }
+// サニティチェック用：GSCが実際にデータを返した「日数」を数える。
+// 28日窓なのに数日分しか返らない＝GSCの集計遅延 or API部分レスポンス＝impressions総計が過少になる。
+// これを検知しないと、今回のような「1140→374(19日分欠け)」を"実勢の急落"と誤認する（偽アラート）。
+async function gscDailyDays() {
+  const r = await sc.searchanalytics.query({ siteUrl: SITE, requestBody: { startDate: START, endDate: END, dimensions: ['date'], rowLimit: 1000 } });
+  return (r.data.rows || []).length;
+}
 async function ga4ActiveUsers() {
   // ⚠️ bot/海外クローラー（US/Germany/India等・エンゲージ0%）を除外するため日本のみに絞る
   const r = await ga.properties.runReport({
@@ -67,13 +74,24 @@ async function ga4ActiveUsers() {
 }
 
 async function main() {
-  const [pages, total, g] = await Promise.all([gscByPage(), gscTotal(), ga4ActiveUsers()]);
+  const [pages, total, g, daysReturned] = await Promise.all([gscByPage(), gscTotal(), ga4ActiveUsers(), gscDailyDays()]);
   const cell = (path) => {
     const row = pages.find((r) => (r.keys?.[0] || '').includes(path));
     return row ? `${row.clicks}/${row.impressions}/${row.position.toFixed(1)}` : '0/0/-';
   };
   const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(5, 10); // JST(UTC+9) MM-DD
-  const newRow = `| ${today} | ${total.clicks} | ${total.impressions} | ${total.position.toFixed(1)} | ${g.users} | ${cell(TARGETS['unison相模原'])} | ${cell(TARGETS['こころ大阪'])} | ${cell(TARGETS['広島人妻'])} | 自動取得(GSC ${START}〜${END}/GA4=日本のみ eng${g.engRate})。施策/所感は毎朝タスクが追記 |`;
+
+  // サニティチェック：GSC返却日数が期待窓を4日以上下回ったら「部分データ」＝impressions過少として警告。
+  const expectedDays = Math.round((Date.parse(END) - Date.parse(START)) / 864e5) + 1;
+  const dataOk = daysReturned >= expectedDays - 4;
+  const sanity = dataOk
+    ? ''
+    : `⚠️GSC部分データ(返却${daysReturned}日/期待${expectedDays}日)=impressions過少・実勢として使わない。 `;
+  if (!dataOk) {
+    console.warn(`⚠️ GSCが${daysReturned}日分しか返していません(期待${expectedDays}日)。集計遅延かAPI部分レスポンス＝この日のimpressions総計は当てになりません。数日後に同一窓が上方修正される可能性大。`);
+  }
+
+  const newRow = `| ${today} | ${total.clicks} | ${total.impressions} | ${total.position.toFixed(1)} | ${g.users} | ${cell(TARGETS['unison相模原'])} | ${cell(TARGETS['こころ大阪'])} | ${cell(TARGETS['広島人妻'])} | ${sanity}自動取得(GSC ${START}〜${END}/返却${daysReturned}日/GA4=日本のみ eng${g.engRate})。施策/所感は毎朝タスクが追記 |`;
 
   let md = fs.readFileSync(MD, 'utf-8');
   if (md.includes(`| ${today} |`)) { console.log(`既に ${today} の行あり → スキップ:`, newRow); }

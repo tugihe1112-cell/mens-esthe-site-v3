@@ -11,6 +11,7 @@ import RankingSection from '../components/RankingSection.jsx';
 import RecentlyViewed from '../components/RecentlyViewed.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import HomeReviewCard from '../components/HomeReviewCard.jsx';
+import { trackEvent } from '../utils/analytics';
 import Header from '../components/Header.jsx';
 import PrefectureSelector from '../components/PrefectureSelector.jsx';
 import SeoHead from '../components/SeoHead.jsx';
@@ -264,10 +265,21 @@ export default function HomePage({ initialHero = [], latestReviews = [] }) {
               <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">最新の本物口コミ</h3>
               <Link to="/popular-reviews" className="text-xs font-bold text-pink-400 hover:text-pink-300 transition">もっと見る →</Link>
             </div>
+            {/* 雑誌型「大1＋小n」: 先頭をヒーロー（2カラムぶち抜き）、残りを小カード。写真なしは引用カードに自動転換。 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {latestReviews.map((r, i) => (
-                <HomeReviewCard key={r.id || i} r={r} />
+                <HomeReviewCard key={r.id || i} r={r} variant={i === 0 ? 'hero' : 'small'} position={i} />
               ))}
+              {/* 投稿の呼び水（グリッド最後のセル・破線） */}
+              <Link
+                to="/post-review"
+                onClick={() => trackEvent('select_home_review', { position: 'invite', variant: 'invite' })}
+                className="group flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10 hover:border-pink-500/50 transition-all duration-200 p-5 min-h-[128px]"
+              >
+                <div className="text-2xl mb-1.5 transition-transform group-hover:-translate-y-0.5">✍️</div>
+                <div className="text-sm font-black text-white leading-snug">あなたの体験談が<br />次にここに載ります</div>
+                <div className="text-[11px] font-bold text-pink-300 mt-1.5">1件書けば口コミ読み放題 →</div>
+              </Link>
             </div>
           </section>
         )}

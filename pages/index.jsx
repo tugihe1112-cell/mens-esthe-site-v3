@@ -31,7 +31,7 @@ export async function getServerSideProps({ res }) {
     const [{ data }, { data: revs }] = await Promise.all([
       supabase.from('shops').select('id, group_id, name, raw_data, image_url').in('id', HERO_SHOP_IDS),
       supabase.from('reviews')
-        .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at')
+        .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at, detailed_ratings, user_name, course')
         .eq('is_public', true)
         .not('therapist_id', 'is', null)
         .order('created_at', { ascending: false })
@@ -55,6 +55,8 @@ export async function getServerSideProps({ res }) {
     const imgById = Object.fromEntries((tRows || []).map((t) => [t.id, t.image_url]));
     // ⚠️ 本文全文はSSRに載せない（ホームと本命セラピストページの重複コンテンツ回避）。
     //    SSRにはティーザー(snippet)のみ。展開時の300字はクライアントがidでフェッチする。
+    // ペンネーム表示用: user_nameがシステム上のプレースホルダなら出さない（実在感を損なうため）
+    const PLACEHOLDER_NAMES = new Set(['owner_manual', 'mensest_user', 'menesthe_import', 'menesthe_rewritten', '匿名', '']);
     latestReviews = (revs || []).map((r) => ({
       id: r.id,
       shopId: r.shop_id,
@@ -65,7 +67,12 @@ export async function getServerSideProps({ res }) {
       area: shopLocById[r.shop_id]?.area || null,
       rating: r.rating || null,
       image: imgById[r.therapist_id] || null,
-      snippet: (r.content || '').replace(/\s+/g, '').slice(0, 64),
+      // ⚠️ 本文全文/300字はSSRに載せない（重複コンテンツ回避）。ティーザーのみ（ヒーロー3〜4行ぶん=120字）。
+      snippet: (r.content || '').replace(/\s+/g, '').slice(0, 120),
+      detailedRatings: r.detailed_ratings || null, // ヒーローの6軸ミニバー用
+      userName: PLACEHOLDER_NAMES.has(r.user_name) ? null : (r.user_name || null), // ペンネーム(by ルサンチマン)
+      course: r.course || null, // 🧾コースピル（空なら非表示）
+      createdAt: r.created_at || null, // 相対表記＋NEWドット
     }));
   } catch (e) {
     // 取得失敗時は空配列で返す → クライアント側で従来通り補完（ビルドは落とさない）

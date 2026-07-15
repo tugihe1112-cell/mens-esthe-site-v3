@@ -4,6 +4,7 @@ import ReviewLikeButton from './ReviewLikeButton.jsx';
 import ThanksBadgeButton from './ThanksBadgeButton.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { trackEvent } from '../utils/analytics';
+import { ratingTextClass, ratingGradientClass } from '../utils/ratingStyle';
 
 // --- ウォーターマーク ---
 function Watermark({ text }) {
@@ -37,20 +38,9 @@ function Watermark({ text }) {
   );
 }
 
-// --- ヘルパー関数 ---
-const getScoreColor = (score) => {
-  const num = Number(score);
-  if (num >= 4.0) return "text-emerald-400";
-  if (num >= 3.0) return "text-amber-400";
-  return "text-rose-400";
-};
-
-const getBadgeStyle = (score) => {
-  const num = Number(score);
-  if (num >= 4.0) return "from-emerald-600 to-teal-600 shadow-emerald-900/40";
-  if (num >= 3.0) return "from-amber-500 to-orange-600 shadow-amber-900/40";
-  return "from-rose-600 to-red-700 shadow-rose-900/40";
-};
+// --- ヘルパー関数（色ロジックは src/utils/ratingStyle.js に一本化＝HomeReviewCardと共有） ---
+const getScoreColor = (score) => ratingTextClass(score);
+const getBadgeStyle = (score) => ratingGradientClass(score);
 
 // タグの系統別色分け（体型=ピンク・雰囲気=パープル・年代=ブルー・属性=スレート）
 const TAG_BODY = ['スレンダー', 'グラマー', '巨乳', '美脚', '小柄', '高身長'];
