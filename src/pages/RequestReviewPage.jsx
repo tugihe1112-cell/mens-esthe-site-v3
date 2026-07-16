@@ -6,6 +6,7 @@ import React, { useState, useMemo } from "react";
 import { Link, useNavigate } from '../compat/router';
 import { useAppContext } from "../context/AppContext.tsx";
 import SeoHead from '../components/SeoHead.jsx';
+import Header from '../components/Header.jsx';
 
 export default function RequestReviewPage() {
   const navigate = useNavigate();
@@ -105,7 +106,8 @@ export default function RequestReviewPage() {
 
   if (!currentUser) {
     return (
-      <div className="max-w-3xl mx-auto p-6 text-white text-center">
+      <div className="max-w-3xl mx-auto p-6 pt-24 text-white text-center">
+        <Header />
         <div className="bg-slate-800 rounded-lg p-8 border border-slate-700">
           <p className="text-xl mb-4">ログインが必要です</p>
           <Link
@@ -226,7 +228,8 @@ export default function RequestReviewPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-6">
+    <div className="max-w-4xl mx-auto p-4 md:p-6 pt-24">
+      <Header />
       <SeoHead title="口コミリクエスト" noindex />
       {/* 進捗バー */}
       <div className="mb-8">

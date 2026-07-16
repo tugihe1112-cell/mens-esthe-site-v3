@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import ModernReviewCard from '../components/ModernReviewCard.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import { trackEvent } from '../utils/analytics';
 
@@ -206,6 +207,7 @@ export default function ShopDetailPage() {
 
   return (
     <div className="bg-slate-950 min-h-screen pb-28 md:pb-16 text-slate-200 font-sans relative">
+      <Header />
       <SeoHead
         title={seoTitle}
         description={seoDesc}
@@ -240,7 +242,8 @@ export default function ShopDetailPage() {
          <button
            onClick={() => navigate(-1)}
            aria-label="前のページに戻る"
-           className="absolute top-6 left-4 z-50 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-black/50 backdrop-blur-md text-white text-sm font-bold border border-white/15 hover:bg-black/70 transition active:scale-95"
+           /* 共通ヘッダー（ロゴ・左上）と重ならないよう top-20 でヘッダー下に配置 */
+           className="absolute top-20 left-4 z-40 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-black/50 backdrop-blur-md text-white text-sm font-bold border border-white/15 hover:bg-black/70 transition active:scale-95"
          >
            <span className="text-base leading-none">←</span> 戻る
          </button>

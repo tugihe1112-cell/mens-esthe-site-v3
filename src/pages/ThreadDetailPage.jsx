@@ -7,12 +7,14 @@ import LazyImage from '../components/LazyImage.jsx';
 import ModernReviewCard from '../components/ModernReviewCard.jsx';
 import ReviewListWithRestriction from '../components/ReviewListWithRestriction.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 
 // ローディング中の骨組み（全画面テキスト→スケルトンで"個人サイト感"を除去）
 function ThreadSkeleton() {
   return (
     <div className="min-h-screen bg-slate-950 pb-32">
+      <Header />
       <div className="max-w-2xl mx-auto px-4 pt-20 space-y-6">
         <div className="h-4 w-1/2 bg-slate-800 rounded animate-pulse" />
         <div className="flex gap-4">
@@ -234,6 +236,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
   if (!shop || !therapist) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white gap-4 px-6 text-center">
+        <Header />
         <p className="text-slate-300 font-bold">セラピストが見つかりませんでした</p>
         <button onClick={() => navigate(-1)} className="text-pink-400 font-bold underline">前のページに戻る</button>
       </div>
@@ -253,6 +256,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
+      <Header />
       <SeoHead
         title={`${therapist.name} | ${shop.name}`}
         description={seoDesc}

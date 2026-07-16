@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from '../compat/router';
 import SeoHead from '../components/SeoHead';
+import Header from '../components/Header.jsx';
 import stats from '../data/stats-2026-07.json';
 
 // 被リンク資産ページ「日本のメンズエステ統計 2026」
@@ -103,6 +104,7 @@ export default function StatsPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200">
+      <Header />
       <SeoHead
         title="【2026年版】メンズエステ統計｜店舗数・料金相場・激戦区ランキング"
         description={`全国${num(coverage.totalShops)}店舗・在籍${num(coverage.totalTherapists)}人のデータで見る、都道府県別の店舗数・料金相場（60分/90分の中央値）・エリア別店舗密度ランキング。メンエスマップ調べ（${asOf}時点）。`}
@@ -112,7 +114,7 @@ export default function StatsPage() {
       {/* JSON-LD Dataset（静的プリレンダHTMLに含める＝引用/検索向け） */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="max-w-3xl mx-auto px-4 pt-20 md:pt-12 pb-24 space-y-6">
+      <div className="max-w-3xl mx-auto px-4 pt-20 pb-24 space-y-6">
         {/* パンくず */}
         <nav className="text-xs text-slate-500">
           <Link to="/" className="hover:text-pink-400">ホーム</Link>
