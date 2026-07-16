@@ -61,9 +61,68 @@ const RANK_STYLES = [
   { size: 'col-span-1 row-span-1', color: 'from-red-600 to-orange-900', tag: '🔥 注目' },        // 5位
 ];
 
-export default function HomePage({ initialHero = [], latestReviews = [] }) {
+export default function HomePage({ initialHero = [], latestReviews = [], reviewPrefs = [] }) {
   const { shops, loading } = useShopData();
   const [featuredTherapists, setFeaturedTherapists] = useState([]);
+
+  // ── エリアチップフィルタ（在庫連動・ユーザー別の絞り込みはクライアント側のみ＝SSRは全国最新のまま＝CDNキャッシュ維持） ──
+  const [selectedPref, setSelectedPref] = useState(null); // null=全国
+  const [filtered, setFiltered] = useState(null);          // null=SSRの全国最新を表示
+  const [filtering, setFiltering] = useState(false);
+
+  const fetchReviewsByPref = async (pref) => {
+    const { data: sh } = await supabase.from('shops').select('id, name, raw_data').eq('raw_data->>prefecture', pref).limit(500);
+    const ids = (sh || []).map((s) => s.id);
+    if (!ids.length) return [];
+    const nameById = Object.fromEntries((sh || []).map((s) => [s.id, s.name]));
+    const locById = Object.fromEntries((sh || []).map((s) => {
+      const rd = s.raw_data || {}; const area = Array.isArray(rd.area) ? rd.area[0] : (rd.area || null);
+      return [s.id, { prefecture: rd.prefecture || null, area: area || null }];
+    }));
+    const { data: rv } = await supabase.from('reviews')
+      .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at, detailed_ratings, user_name, course')
+      .in('shop_id', ids).eq('is_public', true).not('therapist_id', 'is', null)
+      .order('created_at', { ascending: false }).limit(8);
+    const tIds = [...new Set((rv || []).map((r) => r.therapist_id).filter(Boolean))];
+    const { data: tr } = tIds.length ? await supabase.from('therapists').select('id, image_url').in('id', tIds) : { data: [] };
+    const imgById = Object.fromEntries((tr || []).map((t) => [t.id, t.image_url]));
+    const PH = new Set(['owner_manual', 'mensest_user', 'menesthe_import', 'menesthe_rewritten', '匿名', '']);
+    return (rv || []).map((r) => ({
+      id: r.id, shopId: r.shop_id, therapistId: r.therapist_id, therapistName: r.therapist_name || '',
+      shopName: nameById[r.shop_id] || '', prefecture: locById[r.shop_id]?.prefecture || null, area: locById[r.shop_id]?.area || null,
+      rating: r.rating || null, image: imgById[r.therapist_id] || null,
+      snippet: (r.content || '').replace(/\s+/g, '').slice(0, 120), // ティーザーのみ（全文は保持しない）
+      detailedRatings: r.detailed_ratings || null,
+      userName: PH.has(r.user_name) ? null : (r.user_name || null),
+      course: r.course || null, createdAt: r.created_at || null,
+    }));
+  };
+
+  const applyPref = async (pref) => {
+    setSelectedPref(pref);
+    try { localStorage.setItem('preferredReviewPref', pref || ''); } catch {}
+    trackEvent('select_review_area', { pref: pref || 'all' });
+    if (!pref) { setFiltered(null); return; } // 全国＝SSRに戻す
+    setFiltering(true);
+    try { setFiltered(await fetchReviewsByPref(pref)); } catch { setFiltered([]); }
+    setFiltering(false);
+  };
+
+  // 次回訪問時: 保存した好みをマウント後に自動適用（差し替えはフェードでCLSを抑制）
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('preferredReviewPref');
+      if (saved && (reviewPrefs || []).includes(saved)) applyPref(saved);
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 表示リスト: 絞り込み時はfiltered、全国はSSRのlatestReviews。3件未満は全国最新で補完（スカスカ回避）
+  const primaryList = filtered ?? latestReviews;
+  const topUp = (filtered && filtered.length < 3)
+    ? latestReviews.filter((r) => !filtered.some((f) => f.id === r.id)).slice(0, 4)
+    : [];
+  const chipCls = (active) => `text-xs font-bold rounded-full px-3 py-1.5 border transition ${active ? 'bg-pink-600 text-white border-pink-500' : 'bg-slate-900 text-slate-300 border-white/10 hover:border-pink-500/40'}`;
 
   // 注目セラピスト取得（店舗分散・地域分散ロジック）
   useEffect(() => {
@@ -261,25 +320,50 @@ export default function HomePage({ initialHero = [], latestReviews = [] }) {
         {/* A-3: 口コミファースト＝独自資産の口コミを最上部・写真サムネ付きカードで主役化 */}
         {latestReviews.length > 0 && (
           <section>
-            <div className="flex items-center justify-between mb-5 px-2">
+            <div className="flex items-center justify-between mb-3 px-2">
               <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">最新の本物口コミ</h3>
               <Link to="/popular-reviews" className="text-xs font-bold text-pink-400 hover:text-pink-300 transition">もっと見る →</Link>
             </div>
-            {/* 雑誌型「大1＋小n」: 先頭をヒーロー（2カラムぶち抜き）、残りを小カード。写真なしは引用カードに自動転換。 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {latestReviews.map((r, i) => (
-                <HomeReviewCard key={r.id || i} r={r} variant={i === 0 ? 'hero' : 'small'} position={i} />
-              ))}
-              {/* 投稿の呼び水（グリッド最後のセル・破線） */}
-              <Link
-                to="/post-review"
-                onClick={() => trackEvent('select_home_review', { position: 'invite', variant: 'invite' })}
-                className="group flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10 hover:border-pink-500/50 transition-all duration-200 p-5 min-h-[128px]"
-              >
-                <div className="text-2xl mb-1.5 transition-transform group-hover:-translate-y-0.5">✍️</div>
-                <div className="text-sm font-black text-white leading-snug">あなたの体験談が<br />次にここに載ります</div>
-                <div className="text-[11px] font-bold text-pink-300 mt-1.5">1件書けば口コミ読み放題 →</div>
-              </Link>
+
+            {/* エリアチップ（在庫連動＝口コミが実在する県のみ・0件は構造的に出さない） */}
+            {reviewPrefs.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4 px-2">
+                <button type="button" onClick={() => applyPref(null)} className={chipCls(selectedPref === null)}>全国</button>
+                {reviewPrefs.map((p) => (
+                  <button key={p} type="button" onClick={() => applyPref(p)} className={chipCls(selectedPref === p)}>{p}</button>
+                ))}
+              </div>
+            )}
+
+            {/* 差し替えはフェードでCLSを抑制 */}
+            <div className={`transition-opacity duration-300 ${filtering ? 'opacity-50' : 'opacity-100'}`}>
+              {/* 雑誌型「大1＋小n」: 先頭をヒーロー（2カラムぶち抜き）、残りを小カード。写真なしは引用カードに自動転換。 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {primaryList.map((r, i) => (
+                  <HomeReviewCard key={r.id || i} r={r} variant={i === 0 ? 'hero' : 'small'} position={i} pref={selectedPref || 'all'} />
+                ))}
+
+                {/* 絞り込み結果が3件未満＝全国の最新で補完（スカスカ回避） */}
+                {topUp.length > 0 && (
+                  <>
+                    <div className="md:col-span-2 text-xs font-bold text-slate-500 px-1 pt-2">＋ 全国の最新</div>
+                    {topUp.map((r, i) => (
+                      <HomeReviewCard key={`tu-${r.id || i}`} r={r} variant="small" position={100 + i} pref={selectedPref || 'all'} />
+                    ))}
+                  </>
+                )}
+
+                {/* 投稿の呼び水（グリッド最後のセル・破線） */}
+                <Link
+                  to="/post-review"
+                  onClick={() => trackEvent('select_home_review', { position: 'invite', variant: 'invite', pref: selectedPref || 'all' })}
+                  className="group flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10 hover:border-pink-500/50 transition-all duration-200 p-5 min-h-[128px]"
+                >
+                  <div className="text-2xl mb-1.5 transition-transform group-hover:-translate-y-0.5">✍️</div>
+                  <div className="text-sm font-black text-white leading-snug">あなたの体験談が<br />次にここに載ります</div>
+                  <div className="text-[11px] font-bold text-pink-300 mt-1.5">1件書けば口コミ読み放題 →</div>
+                </Link>
+              </div>
             </div>
           </section>
         )}

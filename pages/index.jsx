@@ -10,8 +10,8 @@ import { createClient } from '@supabase/supabase-js';
 import Home from '../src/pages/Home';
 import { HERO_SHOP_IDS, buildInitialHero } from '../src/data/heroShops';
 
-export default function IndexPage({ initialHero, latestReviews }) {
-  return <Home initialHero={initialHero} latestReviews={latestReviews} />;
+export default function IndexPage({ initialHero, latestReviews, reviewPrefs }) {
+  return <Home initialHero={initialHero} latestReviews={latestReviews} reviewPrefs={reviewPrefs} />;
 }
 
 export async function getServerSideProps({ res }) {
@@ -21,6 +21,7 @@ export async function getServerSideProps({ res }) {
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
   let initialHero = [];
   let latestReviews = [];
+  let reviewPrefs = [];
   try {
     // 公開データ（shops）はRLSで匿名read可。クライアントと同じanon keyで取得。
     const supabase = createClient(
@@ -28,7 +29,7 @@ export async function getServerSideProps({ res }) {
       process.env.VITE_SUPABASE_ANON_KEY || ''
     );
     // ①ヒーロー店舗 と ②最新口コミ は独立 → 並列（Vercel関数↔Supabaseの往復回数を削減）
-    const [{ data }, { data: revs }] = await Promise.all([
+    const [{ data }, { data: revs }, { data: prefRevs }] = await Promise.all([
       supabase.from('shops').select('id, group_id, name, raw_data, image_url').in('id', HERO_SHOP_IDS),
       supabase.from('reviews')
         .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at, detailed_ratings, user_name, course')
@@ -36,16 +37,22 @@ export async function getServerSideProps({ res }) {
         .not('therapist_id', 'is', null)
         .order('created_at', { ascending: false })
         .limit(8),
+      // エリアチップ用: 公開口コミが存在する店のshop_id（在庫連動＝0件の県はチップを出さない）
+      supabase.from('reviews').select('shop_id').eq('is_public', true).not('therapist_id', 'is', null).limit(500),
     ]);
     initialHero = buildInitialHero(data);
 
     // ③店名/エリア解決 と ④セラピスト写真 は②に依存するがお互い独立 → 並列
     const shopIds = [...new Set((revs || []).map((r) => r.shop_id).filter(Boolean))];
     const therapistIds = [...new Set((revs || []).map((r) => r.therapist_id).filter(Boolean))];
-    const [{ data: shopRows } = {}, { data: tRows } = {}] = await Promise.all([
+    const prefShopIds = [...new Set((prefRevs || []).map((r) => r.shop_id).filter(Boolean))];
+    const [{ data: shopRows } = {}, { data: tRows } = {}, { data: prefShops } = {}] = await Promise.all([
       shopIds.length ? supabase.from('shops').select('id, name, raw_data').in('id', shopIds) : Promise.resolve({ data: [] }),
       therapistIds.length ? supabase.from('therapists').select('id, image_url').in('id', therapistIds) : Promise.resolve({ data: [] }),
+      prefShopIds.length ? supabase.from('shops').select('raw_data').in('id', prefShopIds) : Promise.resolve({ data: [] }),
     ]);
+    // 公開口コミが実在する都道府県（在庫連動チップ用）＝0件の県は含まれない
+    reviewPrefs = [...new Set((prefShops || []).map((s) => s.raw_data?.prefecture).filter(Boolean))];
     const shopNameById = Object.fromEntries((shopRows || []).map((s) => [s.id, s.name]));
     const shopLocById = Object.fromEntries((shopRows || []).map((s) => {
       const rd = s.raw_data || {};
@@ -79,5 +86,5 @@ export async function getServerSideProps({ res }) {
     console.error('getServerSideProps home fetch failed:', e);
   }
 
-  return { props: { initialHero, latestReviews } };
+  return { props: { initialHero, latestReviews, reviewPrefs } };
 }
