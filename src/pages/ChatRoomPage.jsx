@@ -188,6 +188,10 @@ export default function ChatRoomPage() {
           </p>
           <p className="text-slate-500 text-[10px]">オンライン</p>
         </div>
+        {/* 💎ロゴ→トップ（全画面チャットなので共通Headerは重ねず、既存バーに導線を追加） */}
+        <Link to="/" aria-label="トップへ" className="shrink-0">
+          <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-600 to-rose-600 flex items-center justify-center text-base shadow">💎</span>
+        </Link>
       </div>
 
       {/* メッセージエリア */}
