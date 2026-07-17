@@ -45,7 +45,11 @@ export default function HomeReviewCard({ r, variant = 'small', position, pref })
   const loc = [r.prefecture, r.area].filter(Boolean).join('・');
   const dr = r.detailedRatings || null;
 
-  const onOpen = () => trackEvent('select_home_review', { position, therapist_id: r.therapistId, variant: isQuote ? 'quote' : variant, pref });
+  const onOpen = () => {
+    // パーソナライズ: クリックした県を記憶→次回訪問時にその県ブロックを先頭へ（UIなし・自動）
+    try { if (r.prefecture) localStorage.setItem('preferredReviewPref', r.prefecture); } catch {}
+    trackEvent('select_home_review', { position, therapist_id: r.therapistId, variant: isQuote ? 'quote' : variant, pref });
+  };
 
   const handleExpand = async (e) => {
     e.preventDefault();
