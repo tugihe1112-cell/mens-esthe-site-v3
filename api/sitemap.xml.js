@@ -54,19 +54,42 @@ export default async function handler(req, res) {
   );
 
   // ── 1. 全店舗 ID 取得 ──
-  const { data: shops } = await supabase
-    .from('shops')
-    .select('id')
-    .order('id')
-    .limit(5000);
+  // ⚠️ `.limit(5000)` だけでは足りない。Supabase(PostgREST)はサーバー側の max-rows
+  //    （既定1000）で頭打ちになるため、掲載1,098店のうち1,000店しかサイトマップに
+  //    載っていなかった（2026-08-05に本番の /api/sitemap.xml を実測して発覚：
+  //    <loc>合計1042 = 静的26 + 店舗1000 + セラピスト16）。
+  //    range() で1000件ずつページングして全件取り切る。
+  const PAGE = 1000;
+  const shops = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase
+      .from('shops')
+      .select('id')
+      .order('id')
+      .range(from, from + PAGE - 1);
+    if (error || !data || data.length === 0) break;
+    shops.push(...data);
+    if (data.length < PAGE) break;
+    if (shops.length >= 50000) break; // 暴走ガード
+  }
 
   // ── 2. 口コミ公開セラピストページ取得 ──
   //    is_public=true または user_id='owner_manual' の口コミを持つセラピスト
-  const { data: pubReviews } = await supabase
-    .from('reviews')
-    .select('shop_id, therapist_id')
-    .or('is_public.eq.true,user_id.eq.owner_manual')
-    .not('therapist_id', 'is', null);
+  //    こちらも同じ max-rows(1000) に当たるため range() でページングする。
+  const pubReviews = [];
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('shop_id, therapist_id')
+      .or('is_public.eq.true,user_id.eq.owner_manual')
+      .not('therapist_id', 'is', null)
+      .order('shop_id')
+      .range(from, from + PAGE - 1);
+    if (error || !data || data.length === 0) break;
+    pubReviews.push(...data);
+    if (data.length < PAGE) break;
+    if (pubReviews.length >= 100000) break; // 暴走ガード
+  }
 
   // shop_id + therapist_id でユニーク化
   const therapistPages = [];

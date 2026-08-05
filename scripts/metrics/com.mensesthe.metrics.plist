@@ -1,22 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.mensesthe.metrics — 日次のGSC/GA4取得（fetch_metrics.mjs）
+
+  2026-08-05 改訂の理由（cron.log の実測から）:
+    ・2026-07-22: ログ行が一切無い＝launchdが発火していない（Macが停止/スリープ）。
+      さらに 07-23 に2回実行された痕跡（追記＋「既に07-23の行あり→スキップ」）があり、
+      launchdが遅延catch-upで発火したことが分かる。しかしスクリプトは常に「今日」の行を
+      書くため、07-22の行は永久に欠けた。
+    ・2026-08-04: 発火はしたが `invalid_grant: Invalid JWT ... iat and exp` で失敗。
+      スリープ復帰直後でシステムクロックが未同期だったのが原因（2026-07-06の
+      `ENOTFOUND oauth2.googleapis.com` も同型＝復帰直後でDNS未確立）。
+    ＝「2回とも同じ原因(スリープでスキップ)」ではない。7/22は未発火、8/4は発火して失敗。
+
+  対策（システム設定は変更しない・plistとスクリプトのみ）:
+    1. StartCalendarInterval を配列にして 8:55 / 12:55 / 19:55 の3回に。
+       朝の回がスリープ等で落ちても、昼か夜のどれかがその日の行を埋める。
+       fetch_metrics.mjs は「既に今日の行があればスキップ」＝冪等なので重複しない。
+    2. 一過性エラー（DNS未確立・クロック未同期）はスクリプト側で最大約15分リトライする。
+    3. ProcessType=Background でスリープ復帰直後の輻輳を避け、
+       ThrottleInterval で連続再起動を抑える。
+
+  再登録（okabayashi が手元のターミナルで実行）:
+    cp scripts/metrics/com.mensesthe.metrics.plist ~/Library/LaunchAgents/
+    launchctl unload ~/Library/LaunchAgents/com.mensesthe.metrics.plist
+    launchctl load   ~/Library/LaunchAgents/com.mensesthe.metrics.plist
+    launchctl list | grep mensesthe
+-->
 <plist version="1.0">
 <dict>
   <key>Label</key>
   <string>com.mensesthe.metrics</string>
+
   <key>ProgramArguments</key>
   <array>
     <string>/bin/zsh</string>
     <string>-lc</string>
     <string>cd /Users/okabayashi/Downloads/mens-esthe-site &amp;&amp; node scripts/metrics/fetch_metrics.mjs</string>
   </array>
+
+  <!-- 朝が落ちても昼／夜が拾う。スクリプトは冪等なので重複追記されない。 -->
   <key>StartCalendarInterval</key>
-  <dict>
-    <key>Hour</key>
-    <integer>8</integer>
-    <key>Minute</key>
-    <integer>55</integer>
-  </dict>
+  <array>
+    <dict>
+      <key>Hour</key>
+      <integer>8</integer>
+      <key>Minute</key>
+      <integer>55</integer>
+    </dict>
+    <dict>
+      <key>Hour</key>
+      <integer>12</integer>
+      <key>Minute</key>
+      <integer>55</integer>
+    </dict>
+    <dict>
+      <key>Hour</key>
+      <integer>19</integer>
+      <key>Minute</key>
+      <integer>55</integer>
+    </dict>
+  </array>
+
+  <!-- スリープ復帰直後の輻輳を避ける（I/OとCPUを譲る） -->
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>LowPriorityIO</key>
+  <true/>
+
+  <!-- 異常終了時に暴走再起動しないよう最低間隔を空ける -->
+  <key>ThrottleInterval</key>
+  <integer>300</integer>
+
+  <!-- スクリプト側で最大約15分リトライするため、停止猶予に余裕を持たせる -->
+  <key>ExitTimeOut</key>
+  <integer>1800</integer>
+
   <key>StandardOutPath</key>
   <string>/Users/okabayashi/Downloads/mens-esthe-site/scripts/metrics/cron.log</string>
   <key>StandardErrorPath</key>

@@ -1,0 +1,37 @@
+# 外形監視 — 本番HTMLが指すJSチャンクが実在するかを15分おきに検証する。
+#
+# 目的: 2026年7月上旬に6日間放置された「個別ページが真っ黒」事故の再発を即検知する。
+#       あの事故はユーザーだけでなくGooglebotも踏み、インデックスを230→53に崩落させた
+#       （＝表示-92%の真因。lessons.md参照）。人間が気づくまで6日かかったのが致命傷だった。
+#
+# 通知: 失敗するとGitHub Actionsが「ワークフロー失敗」メールを送る
+#       （Settings → Notifications → Actions で受信設定を確認すること）。
+name: Monitor (chunk integrity)
+
+on:
+  schedule:
+    # 15分おき。GitHubのcronは混雑時に数分ずれることがあるが検知目的なら十分。
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # 手動実行も可能にしておく（事故対応中の再確認用）
+
+# 監視の重複実行を防ぐ（前の回が詰まっていたら新しい方を優先）
+concurrency:
+  group: monitor-chunk-integrity
+  cancel-in-progress: true
+
+jobs:
+  chunk-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 依存パッケージ不要（Node 22組み込みのfetchのみ使用）＝npm installを省いて高速・安定
+      - name: Check production chunk integrity
+        run: node scripts/monitoring/check_chunk_integrity.mjs
+        env:
+          BASE_URL: https://www.mens-esthe-map.jp

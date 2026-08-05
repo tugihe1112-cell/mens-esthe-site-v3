@@ -19,6 +19,30 @@ jobs:
           node-version: 22
           cache: npm
 
+      # ── ガード: SSRページに長い stale-while-revalidate を入れさせない ──
+      # 2026年7月上旬、SWR=1日にしたことでCDNが古いHTMLを配信し続け、
+      # そのHTMLが指す旧ビルドIDのJSが404 → 個別ページが6日間真っ黒になった。
+      # Googlebotも同じHTMLを踏み、インデックスが230→53に崩落（表示-92%の真因）。
+      # HTMLとJSはビルドID一致が必須なので、HTMLを長時間staleにしてはいけない。
+      # 許容は300秒(5分)まで。現行は全て stale-while-revalidate=120。
+      - name: Guard - no long stale-while-revalidate in pages/
+        run: |
+          set -uo pipefail
+          # pages/配下から stale-while-revalidate=<数値> を全部抜き出し、300超を探す
+          BAD=$(grep -rnoE 'stale-while-revalidate=[0-9]+' pages/ 2>/dev/null \
+                | awk -F'stale-while-revalidate=' '$2+0 > 300 {print}')
+          if [ -n "$BAD" ]; then
+            echo "::error::pages/ に stale-while-revalidate が300秒を超える箇所があります。"
+            echo "$BAD" | while IFS= read -r line; do echo "::error::  $line"; done
+            echo ""
+            echo "理由: Next.jsはデプロイ毎にビルドIDが変わり旧JSチャンクは消えます。"
+            echo "      CDNが古いHTMLを長時間配信すると、消えた旧JSを指して404になり"
+            echo "      Reactが起動せずページが真っ黒になります（2026-07の6日間の事故）。"
+            echo "対処: SSRのCache-Controlは 's-maxage=60, stale-while-revalidate=120' 程度にしてください。"
+            exit 1
+          fi
+          echo "✅ pages/ の stale-while-revalidate は全て300秒以下"
+
       - name: Install deps
         run: npm install --legacy-peer-deps
 

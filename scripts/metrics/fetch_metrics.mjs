@@ -81,20 +81,29 @@ async function main() {
   };
   const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(5, 10); // JST(UTC+9) MM-DD
 
-  // サニティチェック：GSC返却日数が期待窓を4日以上下回ったら「部分データ」＝impressions過少として警告。
+  // サニティチェック：GSC返却日数が26日未満なら「部分データ」＝impressions過少として警告。
+  // 窓は29日（END=2日前・START=30日前）。GSCの集計遅延やAPIの部分レスポンスで
+  // 日数が欠けると総計が過少になり、これを見逃すと「実勢の急落」と誤認する。
+  // 実例: 07-14の1140→07-15の374は19日分の欠落で、実勢崩壊ではなかった。
+  // 行頭に⚠️を立てて metrics-log に残す＝後から表を読み返す人が必ず気づく。
+  const MIN_DAYS = 26;
   const expectedDays = Math.round((Date.parse(END) - Date.parse(START)) / 864e5) + 1;
-  const dataOk = daysReturned >= expectedDays - 4;
+  const dataOk = daysReturned >= MIN_DAYS;
   const sanity = dataOk
     ? ''
-    : `⚠️GSC部分データ(返却${daysReturned}日/期待${expectedDays}日)=impressions過少・実勢として使わない。 `;
+    : `⚠️GSC部分データ(返却${daysReturned}日/期待${expectedDays}日・閾値${MIN_DAYS}日)=impressions過少・実勢として使わない。 `;
   if (!dataOk) {
-    console.warn(`⚠️ GSCが${daysReturned}日分しか返していません(期待${expectedDays}日)。集計遅延かAPI部分レスポンス＝この日のimpressions総計は当てになりません。数日後に同一窓が上方修正される可能性大。`);
+    console.warn(`⚠️ GSCが${daysReturned}日分しか返していません(期待${expectedDays}日/閾値${MIN_DAYS}日)。集計遅延かAPI部分レスポンス＝この日のimpressions総計は当てになりません。数日後に同一窓が上方修正される可能性大。`);
   }
 
-  const newRow = `| ${today} | ${total.clicks} | ${total.impressions} | ${total.position.toFixed(1)} | ${g.users} | ${cell(TARGETS['unison相模原'])} | ${cell(TARGETS['こころ大阪'])} | ${cell(TARGETS['広島人妻'])} | ${sanity}自動取得(GSC ${START}〜${END}/返却${daysReturned}日/GA4=日本のみ eng${g.engRate})。施策/所感は毎朝タスクが追記 |`;
+  // 行頭に⚠️を出す（表の1列目より前にマーカーを置くと崩れるため、日付セルの先頭に付ける）
+  const dateCell = dataOk ? today : `⚠️ ${today}`;
+  const newRow = `| ${dateCell} | ${total.clicks} | ${total.impressions} | ${total.position.toFixed(1)} | ${g.users} | ${cell(TARGETS['unison相模原'])} | ${cell(TARGETS['こころ大阪'])} | ${cell(TARGETS['広島人妻'])} | ${sanity}自動取得(GSC ${START}〜${END}/返却${daysReturned}日/GA4=日本のみ eng${g.engRate})。施策/所感は毎朝タスクが追記 |`;
 
   let md = fs.readFileSync(MD, 'utf-8');
-  if (md.includes(`| ${today} |`)) { console.log(`既に ${today} の行あり → スキップ:`, newRow); }
+  // 重複判定は⚠️プレフィックスを許容する（付いた日の翌日以降に二重追記されるのを防ぐ）
+  const alreadyLogged = new RegExp(`^\\|\\s*(?:⚠️\\s*)?${today}\\s*\\|`, 'm').test(md);
+  if (alreadyLogged) { console.log(`既に ${today} の行あり → スキップ:`, newRow); }
   else {
     // 最後の表データ行のすぐ下に挿入（空行を作らず表を連続させる）
     const lines = md.split('\n');
@@ -105,4 +114,34 @@ async function main() {
     console.log('✅ 追記:', newRow);
   }
 }
-main().catch((e) => { console.error('❌ 取得失敗:', e.message); process.exit(1); });
+// ── 起動直後の一過性エラーに対するリトライ ────────────────────────────
+// launchd が Mac のスリープ復帰直後に起動すると、まだ以下が整っていないことがある:
+//   ・DNS/ネットワーク未確立 → `getaddrinfo ENOTFOUND oauth2.googleapis.com`（2026-07-06の失敗）
+//   ・システムクロックが未同期 → `invalid_grant: Invalid JWT ... iat and exp`（2026-08-04の失敗）
+// どちらも数分待てば自然に解消する一過性の障害なので、そこで諦めず指数バックオフで粘る。
+// （2026-08-04はこれが無かったため1回の失敗でその日の記録が丸ごと欠けた）
+const TRANSIENT = /ENOTFOUND|EAI_AGAIN|ECONNRESET|ETIMEDOUT|ENETUNREACH|socket hang up|invalid_grant|Invalid JWT|reasonable timeframe|503|502|429/i;
+const RETRY_DELAYS_MS = [30e3, 60e3, 120e3, 240e3, 480e3]; // 30s,1m,2m,4m,8m ＝最大約15分粘る
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function runWithRetry() {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await main();
+      return;
+    } catch (e) {
+      const msg = e?.message || String(e);
+      const retriable = TRANSIENT.test(msg) && attempt < RETRY_DELAYS_MS.length;
+      if (!retriable) {
+        console.error('❌ 取得失敗:', msg);
+        process.exit(1);
+      }
+      const wait = RETRY_DELAYS_MS[attempt];
+      console.warn(`⏳ 一過性エラー(${attempt + 1}/${RETRY_DELAYS_MS.length}) → ${wait / 1000}秒後に再試行: ${msg}`);
+      await sleep(wait);
+    }
+  }
+}
+
+runWithRetry();
