@@ -17,9 +17,31 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const { data: shopsData, error } = await supabase.from('shops').select('id, group_id, name, raw_data, website_url, schedule_url, phone_number, business_hours, price_system, image_url');
-        if (error) throw error;
-        if (shopsData) {
+        // ⚠️ 全件取得は必ず range() でページングすること。
+        //    PostgREST はサーバー側の max-rows（既定1000）が優先されるため、
+        //    limit も range も付けない素の select は 1,000 行で頭打ちになり、
+        //    掲載1,098店のうち約98店がエラーも警告も出さずに欠落していた
+        //    （サイトマップで潰したのと同じバグ。api/sitemap.xml.js と同方式に揃える）。
+        //    .order('id') は range のページ境界で取りこぼし/重複を出さないために必須。
+        //    NOTE: price_system / business_hours / phone_number は初回selectから外して
+        //    軽量化したかったが、SearchPage の ShopCard（検索結果の「詳細▾」で料金・
+        //    営業時間・電話を出す）が DataContext の shops から直接読んでいるため外せない。
+        //    外すと検索結果の詳細パネルが無言で空になる。
+        const PAGE = 1000;
+        const shopsData = [];
+        for (let from = 0; ; from += PAGE) {
+          const { data, error } = await supabase
+            .from('shops')
+            .select('id, group_id, name, raw_data, website_url, schedule_url, phone_number, business_hours, price_system, image_url')
+            .order('id')
+            .range(from, from + PAGE - 1);
+          if (error) throw error;
+          if (!data || data.length === 0) break;
+          shopsData.push(...data);
+          if (data.length < PAGE) break;
+          if (shopsData.length >= 50000) break; // 暴走ガード
+        }
+        if (shopsData.length) {
           setShops(shopsData.map(d => {
             const raw = d.raw_data || {};
             return {
