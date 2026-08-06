@@ -272,6 +272,17 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
         </div>
       </div>
 
+      {/* 中立宣言＝このサイト唯一の差別化。Footerと同一文言で統一（表記を割らない） */}
+      <div className="mx-4 mt-3 max-w-4xl lg:mx-auto">
+        <p className="text-center sm:text-left text-[11px] md:text-xs text-slate-400 leading-relaxed px-1">
+          <span className="text-slate-200 font-bold">掲載店舗から広告費・掲載料を一切受け取っていません。</span>
+          だから★2の辛口もそのまま載せます。
+          <Link to="/stats" className="text-pink-400 hover:text-pink-300 underline ml-1 whitespace-nowrap">
+            掲載データを見る →
+          </Link>
+        </p>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 mt-16">
       <div className="flex flex-col lg:flex-row gap-10">
 
