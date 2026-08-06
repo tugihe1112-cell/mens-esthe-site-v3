@@ -3,41 +3,39 @@ import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import ReviewLikeButton from '../components/ReviewLikeButton.jsx';
+import LazyImage from '../components/LazyImage.jsx';
+import { ratingGradientClass } from '../utils/ratingStyle';
 
 const PAGE_SIZE = 20;
 
-function timeAgo(dateStr) {
-  const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
-  if (diff < 3600) return `${Math.floor(diff / 60)}分前`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}時間前`;
-  if (diff < 86400 * 7) return `${Math.floor(diff / 86400)}日前`;
-  return new Date(dateStr).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' });
+// 相対日付（HomeReviewCardと同じ表記ルール：7日以内はNEWドット）
+function relTime(iso) {
+  if (!iso) return null;
+  const t = new Date(iso).getTime();
+  if (isNaN(t)) return null;
+  const day = Math.floor((Date.now() - t) / 86400000);
+  if (day <= 0) return { label: '今日', isNew: true };
+  if (day < 7) return { label: `${day}日前`, isNew: true };
+  if (day < 30) return { label: `${Math.floor(day / 7)}週間前`, isNew: false };
+  if (day < 365) return { label: `${Math.floor(day / 30)}ヶ月前`, isNew: false };
+  return { label: `${Math.floor(day / 365)}年前`, isNew: false };
 }
 
-const ratingColor = (r) => {
-  if (r >= 4.5) return 'text-emerald-400';
-  if (r >= 3.5) return 'text-amber-400';
-  return 'text-rose-400';
-};
-
-const TAGS_COLORS = {
-  'スレンダー': 'from-pink-600/30 to-rose-600/30 border-pink-500/40 text-pink-200',
-  'グラマー': 'from-purple-600/30 to-pink-600/30 border-purple-500/40 text-purple-200',
-  '巨乳': 'from-rose-600/30 to-pink-600/30 border-rose-500/40 text-rose-200',
-  '美脚': 'from-fuchsia-600/30 to-purple-600/30 border-fuchsia-500/40 text-fuchsia-200',
-  '可愛い系': 'from-pink-600/30 to-purple-600/30 border-pink-500/40 text-pink-200',
-  '美人系': 'from-purple-600/30 to-indigo-600/30 border-purple-500/40 text-purple-200',
-  'default': 'from-slate-600/30 to-slate-700/30 border-slate-500/40 text-slate-300',
-};
-
-function getTagColor(tag) {
-  return TAGS_COLORS[tag] || TAGS_COLORS['default'];
+// PostgREST の in.(...) 値を安全に組み立てる（日本語ID・カンマ入り店名対策）
+function inList(values) {
+  return `(${values.map(v => `"${String(v).replace(/"/g, '\\"')}"`).join(',')})`;
 }
+
+const areaOf = (raw) => {
+  const a = raw?.area;
+  if (Array.isArray(a)) return a[0] || '';
+  return a || '';
+};
 
 export default function PopularReviewsPage() {
   const [reviews, setReviews] = useState([]);
   const [shopMap, setShopMap] = useState({});
-  const [therapistMap, setTherapistMap] = useState({});
+  const [therapistMap, setTherapistMap] = useState({}); // 正規化名 → therapist
   const [isLoading, setIsLoading] = useState(true);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -48,23 +46,60 @@ export default function PopularReviewsPage() {
   const key = process.env.VITE_SUPABASE_ANON_KEY;
   const headers = { apikey: key, Authorization: `Bearer ${key}` };
 
-  // 店舗・セラピスト情報を取得
-  useEffect(() => {
-    Promise.all([
-      fetch(`${url}/rest/v1/shops?select=id,name,raw_data`, { headers }).then(r => r.json()),
-      fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id`, { headers }).then(r => r.json()),
-    ]).then(([shops, therapists]) => {
-      const sm = {};
-      (shops || []).forEach(s => {
-        sm[s.id] = { name: s.name, prefecture: s.raw_data?.prefecture || '', city: s.raw_data?.city || '' };
-      });
-      setShopMap(sm);
+  const normName = (s) => (s || '').replace(/[\s　]/g, '');
 
-      const tm = {};
-      (therapists || []).forEach(t => { tm[t.name] = t; });
-      setTherapistMap(tm);
-    }).catch(() => {});
-  }, []);
+  /**
+   * ⚠️ 2026-08修正: 以前は shops / therapists を limit無しで全件取得していた。
+   * PostgREST の max-rows=1000 で先頭1000件しか返らず（在籍60,999人の大半が欠落）、
+   * 写真が👤・店舗名/エリアが空になるうえ、数MB級のJSONをモバイルに配っていた。
+   * → 表示中の口コミに含まれるIDだけを .in() で引く。
+   */
+  const hydrateMaps = useCallback(async (rows) => {
+    if (!rows || rows.length === 0) return;
+
+    const shopIds = [...new Set(rows.map(r => r.shop_id).filter(Boolean))];
+    const therapistIds = [...new Set(rows.map(r => r.therapist_id).filter(Boolean))];
+    const therapistNames = [...new Set(rows.map(r => r.therapist_name).filter(Boolean))];
+
+    try {
+      const reqs = [];
+      reqs.push(shopIds.length
+        ? fetch(`${url}/rest/v1/shops?select=id,name,raw_data&id=in.${encodeURIComponent(inList(shopIds))}`, { headers }).then(r => r.json())
+        : Promise.resolve([]));
+      // therapist は id 一致を優先、取りこぼしは名前一致でフォールバック（旧データのID揺れ対策）
+      reqs.push(therapistIds.length
+        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id&id=in.${encodeURIComponent(inList(therapistIds))}`, { headers }).then(r => r.json())
+        : Promise.resolve([]));
+      reqs.push(therapistNames.length
+        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id&name=in.${encodeURIComponent(inList(therapistNames))}&limit=200`, { headers }).then(r => r.json())
+        : Promise.resolve([]));
+
+      const [shops, tById, tByName] = await Promise.all(reqs);
+
+      if (Array.isArray(shops) && shops.length) {
+        setShopMap(prev => {
+          const next = { ...prev };
+          shops.forEach(s => {
+            next[s.id] = { name: s.name, prefecture: s.raw_data?.prefecture || '', area: areaOf(s.raw_data) };
+          });
+          return next;
+        });
+      }
+
+      const found = [...(Array.isArray(tById) ? tById : []), ...(Array.isArray(tByName) ? tByName : [])];
+      if (found.length) {
+        setTherapistMap(prev => {
+          const next = { ...prev };
+          found.forEach(t => {
+            const k = normName(t.name);
+            // 写真ありを優先（同名が複数店に登録されているため）
+            if (!next[k] || (!next[k].image_url && t.image_url)) next[k] = t;
+          });
+          return next;
+        });
+      }
+    } catch { /* マップ取得失敗はカードのフォールバック表示で吸収 */ }
+  }, [url, key]);
 
   const fetchReviews = useCallback(async (currentOffset, sort, isLoadMore = false) => {
     if (isLoadMore) setIsLoadingMore(true);
@@ -72,30 +107,32 @@ export default function PopularReviewsPage() {
 
     const order = sort === 'rating' ? 'rating.desc,created_at.desc' : 'created_at.desc';
     try {
+      // ⚠️ is_public=true 必須。以前は select=* かつ無フィルタで、非公開口コミの本文を
+      // クライアントに配り120字プレビューとして表示していた（W2Rゲートの穴）。
       const res = await fetch(
-        `${url}/rest/v1/reviews?select=*&order=${order}&limit=${PAGE_SIZE}&offset=${currentOffset}`,
+        `${url}/rest/v1/reviews?select=id,shop_id,therapist_id,therapist_name,rating,tags,content,course,user_name,created_at,like_count` +
+        `&is_public=eq.true&order=${order}&limit=${PAGE_SIZE}&offset=${currentOffset}`,
         { headers }
       );
       const data = await res.json();
       if (!Array.isArray(data)) return;
 
-      if (isLoadMore) {
-        setReviews(prev => [...prev, ...data]);
-      } else {
-        setReviews(data);
-      }
+      if (isLoadMore) setReviews(prev => [...prev, ...data]);
+      else setReviews(data);
       setHasMore(data.length === PAGE_SIZE);
+      hydrateMaps(data);
     } catch (e) {
       console.error(e);
     } finally {
       setIsLoading(false);
       setIsLoadingMore(false);
     }
-  }, [url, key]);
+  }, [url, key, hydrateMaps]);
 
   useEffect(() => {
     setOffset(0);
     fetchReviews(0, sortBy, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
 
   const loadMore = () => {
@@ -118,6 +155,7 @@ export default function PopularReviewsPage() {
               <h1 className="text-2xl md:text-3xl font-black tracking-tight">みんなの口コミ</h1>
             </div>
             <p className="text-slate-400 text-sm">全国のセラピストへのリアルな体験レポート</p>
+            <p className="text-slate-500 text-[11px] mt-1">掲載店舗から広告費・掲載料は受け取っていません。だから辛口もそのまま載ります。</p>
           </div>
         </div>
 
@@ -153,73 +191,94 @@ export default function PopularReviewsPage() {
               <div className="space-y-4">
                 {reviews.map(r => {
                   const shop = shopMap[r.shop_id] || {};
-                  const therapist = therapistMap[r.therapist_name] || {};
+                  const therapist = therapistMap[normName(r.therapist_name)] || {};
                   const tags = Array.isArray(r.tags) ? r.tags : [];
                   const content = r.content || '';
                   const preview = content.length > 120 ? content.slice(0, 120) + '…' : content;
+                  const rating = r.rating != null ? Number(r.rating) : null;
+                  const time = relTime(r.created_at);
+                  const loc = [shop.prefecture, shop.area].filter(Boolean).join('・');
+                  // (c) 各口コミ自身のセラピストページへ。旧実装は /search?shop=&cast= で
+                  //     「続きが読めない・内部リンクが本命に流れない」行き止まりだった。
+                  const threadLink = (r.shop_id && r.therapist_id)
+                    ? `/shops/${r.shop_id}/threads/${r.therapist_id}`
+                    : `/search?cast=${encodeURIComponent(r.therapist_name || '')}`;
+                  const shopLink = r.shop_id ? `/search?shopId=${encodeURIComponent(r.shop_id)}` : '/search';
 
                   return (
                     <div
                       key={r.id}
-                      className="bg-slate-900/80 border border-white/5 hover:border-pink-500/30 rounded-2xl p-4 transition-all duration-200"
+                      className="bg-slate-900 border border-white/10 hover:border-pink-500/40 rounded-2xl p-4 transition-all duration-200"
                     >
                       <div className="flex gap-3">
                         {/* セラピスト写真 */}
-                        <div className="flex-shrink-0 w-16 h-20 rounded-xl overflow-hidden bg-slate-800 border border-white/5">
+                        <Link to={threadLink} className="flex-shrink-0 w-16 h-20 rounded-xl overflow-hidden bg-slate-800 border border-white/5 block">
                           {therapist.image_url ? (
-                            <img src={therapist.image_url} alt={r.therapist_name} className="w-full h-full object-cover" />
+                            <LazyImage src={therapist.image_url} alt={r.therapist_name} width={160} className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-2xl">👤</div>
                           )}
-                        </div>
+                        </Link>
 
-                        {/* 内容 */}
                         <div className="flex-1 min-w-0">
-                          {/* 上段: 名前・評価 */}
-                          <div className="flex items-start justify-between gap-2 mb-1">
-                            <div>
-                              <Link
-                                to={`/search?shop=${encodeURIComponent(shop.name || '')}&cast=${encodeURIComponent(r.therapist_name || '')}`}
-                                className="text-white font-black text-base hover:text-pink-400 transition truncate block"
-                              >
-                                {r.therapist_name || '名前不明'}
+                          {/* 1行目: 🏢店舗名(主役) ＋ 📍エリアピル ＋ ★色バッジ（HomeReviewCardと同序列） */}
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0 flex flex-wrap items-center gap-x-2 gap-y-1">
+                              <Link to={shopLink} className="inline-flex items-center gap-1.5 min-w-0 font-black text-white text-sm hover:text-pink-300 transition">
+                                <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[9px] shrink-0">🏢</span>
+                                <span className="truncate">{shop.name || '店舗情報なし'}</span>
                               </Link>
-                              {shop.name && (
-                                <p className="text-slate-500 text-[10px] truncate">
-                                  📍 {shop.prefecture}{shop.city} | {shop.name}
-                                </p>
+                              {loc && (
+                                <span className="text-[10px] font-bold text-pink-200 bg-pink-500/10 border border-pink-500/20 rounded-full px-2 py-0.5 shrink-0">📍 {loc}</span>
                               )}
                             </div>
-                            <div className={`flex-shrink-0 text-xl font-black ${ratingColor(r.rating)}`}>
-                              {Number(r.rating).toFixed(1)}
-                            </div>
+                            {rating != null && (
+                              <span className={`inline-flex items-center text-[11px] font-black text-white bg-gradient-to-br ${ratingGradientClass(rating)} rounded-md px-1.5 py-0.5 shrink-0 shadow`}>
+                                ★ {rating.toFixed(1)}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* 2行目: セラピスト名 ＋ 相対日付 ＋ by ペンネーム ＋ 🧾course */}
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
+                            <Link to={threadLink} className="font-bold text-slate-200 text-xs truncate hover:text-pink-300 transition">
+                              {r.therapist_name || '名前不明'}
+                            </Link>
+                            {time && (
+                              <span className="inline-flex items-center gap-1 text-[10px] text-slate-500">
+                                {time.isNew && <span className="w-1.5 h-1.5 rounded-full bg-pink-500 shadow shadow-pink-500/50" />}
+                                {time.label}
+                              </span>
+                            )}
+                            {r.user_name && <span className="text-[10px] text-slate-400">by <span className="font-bold text-slate-300">{r.user_name}</span></span>}
+                            {r.course && (
+                              <span className="text-[10px] font-bold text-slate-300 bg-white/5 border border-white/10 rounded-full px-2 py-0.5">🧾 {r.course}</span>
+                            )}
                           </div>
 
                           {/* タグ */}
                           {tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mb-2">
+                            <div className="flex flex-wrap gap-1 mt-2">
                               {tags.slice(0, 4).map(tag => (
-                                <span
-                                  key={tag}
-                                  className={`bg-gradient-to-r ${getTagColor(tag)} border px-2 py-0.5 rounded-full text-[10px] font-bold`}
-                                >
+                                <span key={tag} className="bg-slate-800 border border-white/10 text-slate-300 px-2 py-0.5 rounded-full text-[10px] font-bold">
                                   {tag}
                                 </span>
                               ))}
                             </div>
                           )}
 
-                          {/* 口コミ本文プレビュー */}
+                          {/* 口コミ本文プレビュー（公開口コミのみ） */}
                           <p
-                            className="text-slate-400 text-xs leading-relaxed"
+                            className="text-slate-300/90 text-xs leading-relaxed mt-2"
                             style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                             onCopy={e => e.preventDefault()}
                             onContextMenu={e => e.preventDefault()}
                           >{preview}</p>
 
-                          {/* 下段: 投稿日 + いいね */}
                           <div className="flex items-center justify-between mt-2">
-                            <p className="text-slate-600 text-[10px]">{timeAgo(r.created_at)}</p>
+                            <Link to={threadLink} className="text-[11px] font-black text-pink-400 hover:text-pink-300 transition">
+                              全文を読む → セラピストページ
+                            </Link>
                             <ReviewLikeButton reviewId={r.id} initialLikeCount={r.like_count || 0} />
                           </div>
                         </div>
