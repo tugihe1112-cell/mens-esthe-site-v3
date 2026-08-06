@@ -3,6 +3,9 @@ import { Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import LazyImage from './LazyImage.jsx';
 
+// ランク入りに必要な最低口コミ件数（1件で1位＝ステマサイトのシグネチャを避ける）
+const MIN_REVIEWS_FOR_RANKING = 3;
+
 // 👑 カテゴリ定義
 const RANKING_CATEGORIES = [
   { id: 'total',    label: '総合' },
@@ -95,8 +98,13 @@ export default function RankingSection() {
 
     // 3. ソート（選択中のタブのスコアで並び替え）
     const sortKey = `avg_${rankingTab}`;
+    // ⚠️ 2026-08: ランク入りの最低口コミ件数を導入。
+    //   口コミ総数が十数件の段階では「1件・★5.0で全国1位」が成立してしまい、
+    //   偽レビューサイトの典型的シグネチャになる（非課金中立を掲げる本サイトには最も損な自己表現）。
+    //   /stats で「サンプル10店未満の料金帯は非掲載」としているのと同じ統計的良心を一覧UIにも適用する。
+    const qualified = ranking.filter(s => s.count >= MIN_REVIEWS_FOR_RANKING);
     // 点数が高い順、同じなら口コミ数が多い順
-    return ranking.sort((a, b) => b[sortKey] - a[sortKey] || b.count - a.count).slice(0, 5); // TOP5まで表示
+    return qualified.sort((a, b) => b[sortKey] - a[sortKey] || b.count - a.count).slice(0, 5); // TOP5まで表示
   }, [reviews, shops, rankingTab]);
 
   // データがない場合は表示しない（あるいはスケルトンを表示）
@@ -167,12 +175,19 @@ export default function RankingSection() {
                  <p className="text-xs text-slate-500 truncate mt-1">{item.shopName}</p>
                </div>
 
-               {/* スコア */}
+               {/* スコア（口コミ件数を必ず併記＝母数を隠さない） */}
                <div className="text-right hidden sm:block">
                  <div className="text-2xl font-black text-pink-500 leading-none">
                    {item[`avg_${rankingTab}`].toFixed(1)}
                  </div>
-                 <div className="text-[10px] text-slate-600 font-bold tracking-widest mt-1">SCORE</div>
+                 <div className="text-[10px] text-slate-500 font-bold mt-1">口コミ{item.count}件</div>
+               </div>
+               {/* モバイルは省スペースで1行に */}
+               <div className="text-right sm:hidden">
+                 <div className="text-lg font-black text-pink-500 leading-none">
+                   {item[`avg_${rankingTab}`].toFixed(1)}
+                 </div>
+                 <div className="text-[9px] text-slate-500 font-bold mt-0.5">{item.count}件</div>
                </div>
                
                <div className="text-slate-700 group-hover:text-pink-500 transition-colors px-2">›</div>

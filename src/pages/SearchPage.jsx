@@ -796,12 +796,26 @@ export default function SearchPage() {
                             <LazyImage src={t.image_url || t.image} alt={t.name} width={400} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90 group-hover:opacity-60 transition duration-500"></div>
                             {(() => {
-                              const cnt = reviewCountMap[(t.name || '').replace(/[\s　]/g, '')];
-                              return cnt > 0 ? (
-                                <div className="absolute top-2 right-2 bg-pink-500 text-white text-[11px] font-black px-2 py-1 rounded-full shadow-lg shadow-pink-500/50 flex items-center gap-1">
-                                  💬 {cnt}
+                              // 口コミがある人を視覚的に際立たせる＝「読むものがある人」に視線を集める。
+                              // ratingMapは既に算出済みだったがソートにしか使われておらず、★が一覧に出ていなかった。
+                              const key = (t.name || '').replace(/[\s　]/g, '');
+                              const cnt = reviewCountMap[key];
+                              if (!(cnt > 0)) return null;
+                              const avg = ratingMap[key];
+                              const avgColor = avg >= 4 ? 'text-emerald-300' : avg >= 3 ? 'text-amber-300' : 'text-rose-300';
+                              return (
+                                <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+                                  {avg > 0 && (
+                                    <div className="bg-black/70 backdrop-blur-sm border border-white/10 text-[11px] font-black px-2 py-1 rounded-full shadow-lg flex items-center gap-0.5">
+                                      <span className="text-yellow-400">★</span>
+                                      <span className={avgColor}>{avg.toFixed(1)}</span>
+                                    </div>
+                                  )}
+                                  <div className="bg-pink-500 text-white text-[11px] font-black px-2 py-1 rounded-full shadow-lg shadow-pink-500/50 flex items-center gap-1">
+                                    💬 {cnt}
+                                  </div>
                                 </div>
-                              ) : null;
+                              );
                             })()}
                             <div className="absolute bottom-0 left-0 w-full p-3">
                               <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10 group-hover:bg-white/10 transition duration-300">

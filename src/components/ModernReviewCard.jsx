@@ -272,7 +272,12 @@ export default function ModernReviewCard({ review }) {
               </div>
               {(review.content || "").length > 150 && (
                 <button
-                  onClick={() => setIsExpanded(!isExpanded)}
+                  onClick={() => {
+                    // 「読みたくなった瞬間」の量を可視化＝W2Rの入口の需要指標。
+                    // 従来は投稿ファネル側の計測しか無く、読む側は expand_home_review のみだった。
+                    if (!isExpanded) trackEvent('expand_review', { therapist_id: review.therapistId || review.therapist_id });
+                    setIsExpanded(!isExpanded);
+                  }}
                   className="mt-2 text-xs font-bold text-pink-400 hover:text-pink-300 hover:underline flex items-center gap-1 focus:outline-none"
                 >
                   {isExpanded ? "閉じる" : "続きを読む"}
