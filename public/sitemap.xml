@@ -2,6 +2,11 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://www.mens-esthe-map.jp/api/sitemap.xml</loc>
-    <lastmod>2026-06-13</lastmod>
+    <!-- ⚠️ <lastmod> は書かない。
+         ここは静的ファイルなので日付をハードコードすると更新されず、
+         「子サイトマップは更新なし」とGoogleに伝え続けることになる
+         （2026-06-13で固定されたまま2ヶ月放置され、GSCで子が7/13以降
+         読まれなくなっていた）。子(/api/sitemap.xml)側は各URLに当日の
+         lastmodを出しているので、親では出さない方が正しい。 -->
   </sitemap>
 </sitemapindex>
