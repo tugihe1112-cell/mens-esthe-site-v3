@@ -182,9 +182,15 @@ export default function ShopListPage() {
             {result.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
                 {visibleShops.map((shop) => (
+                  // 店舗ページへ直リンク。
+                  // ⚠️ 以前は /search?shop={名前} に飛ばしていたため、店舗一覧ページ自身が
+                  //    店舗ページに1本も繋がっておらず1,098店が孤立ページ化していた。
+                  //    /shops/{id} は getServerSideProps でid直fetchするので、
+                  //    /search?shop= を採用した理由だった「店名の表記揺れで空表示」の
+                  //    問題は起きない。
                   <Link
                     key={shop.id}
-                    to={`/search?shop=${encodeURIComponent(shop.name)}`}
+                    to={`/shops/${shop.id}`}
                     className="group bg-slate-900 rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 hover:shadow-2xl hover:shadow-pink-900/10 transition-all duration-300 transform hover:-translate-y-1 active:scale-[0.98]"
                   >
                     <div className="h-48 relative overflow-hidden">
