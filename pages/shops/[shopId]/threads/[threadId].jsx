@@ -53,13 +53,29 @@ export async function getServerSideProps({ params, res }) {
     }
 
     const therapistName = therapistData?.name || threadId.split('_').pop();
+
+    // ⚠️ 以前はここで「グループ全店の最新10件」を取ってから JS 側でセラピスト名を
+    //    フィルタしていた。系列（group_id）に公開口コミが11件以上たまると本人の
+    //    口コミが最新10件からこぼれ、publicReviews が 0 件になって
+    //    「口コミがあるのに noindex,follow が付く」時限爆弾になっていた。
+    //    → DB側でセラピスト名を先に絞る。表記揺れ（全角/半角スペース有無）は
+    //      DB名から候補を生成して .in() で吸収し、最後に従来どおり
+    //      スペース除去の正規化比較も通す（二重の保険）。
+    const nameVariants = Array.from(new Set([
+      therapistName,
+      (therapistName || '').replace(/[\s　]/g, ''),
+      (therapistName || '').replace(/[\s　]+/g, ' '),
+      (therapistName || '').replace(/[\s　]+/g, '　'),
+    ].filter(Boolean)));
+
     const { data: reviews } = await supabase
       .from('reviews')
       .select('id, shop_id, therapist_name, therapist_id, rating, content, detailed_ratings, tags, created_at, is_public, user_id, user_name, course')
       .in('shop_id', reviewShopIds)
+      .in('therapist_name', nameVariants)
       .or('is_public.eq.true,user_id.eq.owner_manual')
       .order('created_at', { ascending: false })
-      .limit(10);
+      .limit(200);
 
     // セラピスト名でフィルタ
     const normName = (therapistName || '').replace(/[\s　]/g, '');
