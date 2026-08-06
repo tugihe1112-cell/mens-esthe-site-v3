@@ -1,95 +1,72 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from '../compat/router';
-import { useAuth } from "../contexts/AuthContext.jsx";
-import { supabase } from "../lib/supabase";
+import React from "react";
+import { Link } from '../compat/router';
 import Header from "../components/Header.jsx";
 import SeoHead from "../components/SeoHead.jsx";
+import { trackEvent } from '../utils/analytics';
 
+/**
+ * プレミアムプラン（準備中）
+ *
+ * ⚠️ 2026-08: 価格表（¥2,980/月・¥29,800/年）を削除した。
+ *   決済は未実装で1件も課金していないうえ、戦略上の決定価格（¥980/月・¥9,800/年）と
+ *   矛盾する誤ったアンカーを訪問者に見せていたため。
+ *   いまの正しい導線は「口コミを書けば読み放題（W2R）」のみ。
+ *   noindex にして検索から到達させない（薄い準備中ページで索引を汚さない）。
+ */
 export default function PremiumPage() {
-  const navigate = useNavigate();
-  const { user, userPlan } = useAuth();
-  const isLoggedIn = !!user;
-  const isPremium = userPlan === "premium" || userPlan === "vip";
-  const [selectedPlan, setSelectedPlan] = useState("yearly");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const plans = {
-    monthly: { name: "月額プラン", price: 2980, period: "月", save: null },
-    yearly: { name: "年額プラン", price: 29800, period: "年", save: "6,960円お得" },
-  };
-
-  // 🌟 【本物仕様】決済ボタンを押した時の処理
-  // ⚠️ 決済（Stripe）実装までプレミアム登録は受付停止
-  // 旧実装は profiles を直接 plan:'premium' に書き換えており、誰でも無料でプレミアム化できる穴だった
-  const handleSubscribe = async () => {
-    if (!isLoggedIn) {
-      alert("プレミアム登録にはログインが必要です！");
-      navigate('/login');
-      return;
-    }
-    alert("プレミアムプランは現在準備中です。\n口コミを投稿すると7日間、新規登録で3日間の閲覧権が無料で付与されます！");
-  };
-
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
       <SeoHead
-        title="プレミアムプラン"
-        description="メンエスマップのプレミアムプランでセラピストの口コミ・体験談が読み放題。月額・年額プランで選べます。"
+        title="有料プランについて"
+        description="メンエスマップの有料プランは準備中です。いまは口コミを1件投稿すると、みんなの口コミが読み放題になります。"
         path="/premium"
+        noindex
       />
       <Header />
-      <div className="max-w-3xl mx-auto p-4 md:p-6 mt-10">
-        <div className="bg-slate-900/50 backdrop-blur rounded-3xl p-8 md:p-12 border border-yellow-500/30 shadow-[0_0_50px_rgba(234,179,8,0.1)] text-center">
-          
-          <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-yellow-500/20">
-            <span className="text-4xl">👑</span>
+      <div className="max-w-2xl mx-auto p-4 md:p-6 mt-10">
+        <div className="bg-slate-900/60 backdrop-blur rounded-3xl p-8 md:p-12 border border-white/10 text-center">
+
+          <div className="w-16 h-16 bg-slate-800 border border-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <span className="text-3xl">🛠️</span>
           </div>
-          <h1 className="text-3xl font-black text-white mb-4">プレミアム会員</h1>
-          <p className="text-slate-400 mb-8 font-bold">
-            過去のすべてのクチコミが読み放題。<br/>リアルな評価をチェックして、最高のキャストを見つけましょう。
+
+          <p className="text-slate-500 font-black text-[11px] tracking-widest mb-2">PREPARING</p>
+          <h1 className="text-2xl md:text-3xl font-black text-white mb-4">有料プランは現在準備中です</h1>
+
+          <p className="text-slate-400 mb-8 font-bold leading-relaxed text-sm">
+            いまは有料プランの受付をしていません。<br />
+            口コミを1件投稿していただければ、みんなの口コミが読み放題になります。
           </p>
 
-          <div className="flex flex-col md:flex-row justify-center gap-4 mb-10">
-            {Object.keys(plans).map(key => (
-              <button 
-                key={key}
-                onClick={() => setSelectedPlan(key)}
-                className={`p-6 rounded-2xl border-2 transition-all flex-1 ${
-                  selectedPlan === key 
-                    ? 'border-yellow-500 bg-yellow-500/10 shadow-[0_0_20px_rgba(234,179,8,0.2)]' 
-                    : 'border-white/5 bg-slate-800/50 hover:border-white/20'
-                }`}
-              >
-                <div className="text-white font-black text-lg mb-2">{plans[key].name}</div>
-                <div className="text-yellow-400 font-black text-2xl">¥{plans[key].price.toLocaleString()} <span className="text-sm text-slate-400">/ {plans[key].period}</span></div>
-                {plans[key].save && (
-                  <div className="mt-2 inline-block bg-pink-600 text-white text-[10px] px-2 py-1 rounded font-bold">
-                    {plans[key].save}
-                  </div>
-                )}
-              </button>
-            ))}
+          {/* W2R（いま使える唯一の解放手段） */}
+          <div className="bg-gradient-to-br from-purple-950/70 to-slate-900 border border-purple-500/25 rounded-2xl p-6 mb-8 text-left">
+            <h2 className="text-white font-black text-base mb-3">口コミを書けば読み放題</h2>
+            <ul className="space-y-2 text-sm text-slate-300 font-bold">
+              <li className="flex gap-2"><span className="text-purple-400">✓</span> 200文字以上の体験談で <span className="text-purple-300">3日間</span> の閲覧権を即時付与</li>
+              <li className="flex gap-2"><span className="text-purple-400">✓</span> 700文字以上なら <span className="text-purple-300">7日間</span> に延長</li>
+              <li className="flex gap-2"><span className="text-purple-400">✓</span> 新規登録だけでも <span className="text-purple-300">3日間</span> 無料</li>
+            </ul>
           </div>
 
-          <div className="text-center">
-            {/* 🌟 ボタンに onClick={handleSubscribe} を接続！ */}
-            <button 
-              onClick={handleSubscribe}
-              disabled={isLoading || isPremium} 
-              className="w-full max-w-md mx-auto px-12 py-4 rounded-xl bg-gradient-to-r from-yellow-600 to-yellow-500 text-slate-900 text-lg font-black transition-all hover:scale-105 shadow-lg shadow-yellow-600/30 disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2"
-            >
-              {isLoading ? "処理中..." : isPremium ? "👑 既にプレミアム会員です" : `${plans[selectedPlan].name}（準備中）`}
-            </button>
-            
-            {!isLoggedIn && (
-              <div className="mt-6">
-                <p className="text-pink-400 text-sm font-bold mb-2">※登録にはログインが必要です</p>
-                <button onClick={() => navigate('/login')} className="text-slate-400 hover:text-white underline text-sm font-bold">
-                  ログイン・新規登録はこちら →
-                </button>
-              </div>
-            )}
-          </div>
+          <Link
+            to="/post-review"
+            onClick={() => trackEvent('click_paywall_cta', { target: 'post_review' })}
+            className="inline-block w-full max-w-md mx-auto px-12 py-4 rounded-2xl bg-gradient-to-r from-pink-600 to-purple-600 text-white text-base font-black transition-all hover:scale-[1.02] active:scale-95 shadow-lg shadow-pink-900/40"
+          >
+            口コミを書く →
+          </Link>
+
+          <Link
+            to="/popular-reviews"
+            className="block mt-4 text-sm font-bold text-slate-400 hover:text-white transition underline"
+          >
+            先にみんなの口コミを見てみる
+          </Link>
+
+          <p className="mt-8 text-[11px] text-slate-500 leading-relaxed">
+            ※ メンエスマップは掲載店舗から広告費・掲載料を一切受け取っていません。<br />
+            有料プランを開始する際は、事前にサイト上でご案内します。
+          </p>
 
         </div>
       </div>

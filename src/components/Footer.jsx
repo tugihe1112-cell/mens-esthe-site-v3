@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from '../compat/router';
 import { AREA_LINKS } from '../data/areaLinks';
+import stats from '../data/stats-2026-07.json';
 
 export default function Footer() {
+  const totalShops = stats?.coverage?.totalShops || 0;
+  const totalTherapists = stats?.coverage?.totalTherapists || 0;
+
   return (
     <footer className="bg-slate-950 border-t border-white/5 mt-20 relative z-10 pb-20 md:pb-0">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -10,13 +14,21 @@ export default function Footer() {
 
           <div className="md:col-span-2">
             <h3 className="text-2xl font-black mb-4 tracking-tight">
-              <span className="text-white">MEN'S</span>{" "}
+              <span className="text-white">メンエス</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
-                ESTHE
+                マップ
               </span>
             </h3>
-            <p className="text-sm text-slate-400 leading-relaxed mb-6 max-w-sm">
-              厳選されたメンズエステ店舗とセラピストを検索できるポータルサイト。リアルなクチコミで、最高の体験を見つけましょう。
+            {/* 中立宣言＝このサイト唯一の差別化。Homeの帯と同じ文言で統一 */}
+            <p className="text-sm text-slate-300 leading-relaxed mb-4 max-w-sm font-bold">
+              掲載店舗から広告費・掲載料を一切受け取っていません。<br />
+              だから★2の辛口もそのまま載せます。
+            </p>
+            <p className="text-xs text-slate-500 leading-relaxed max-w-sm">
+              全国{totalShops.toLocaleString()}店舗・在籍{totalTherapists.toLocaleString()}人のメンズエステを掲載。セラピスト別の口コミ・出勤・料金を検索できます。
+              <Link to="/stats" className="text-slate-400 hover:text-pink-400 underline ml-1">
+                掲載データの詳細（メンズエステ統計2026）→
+              </Link>
             </p>
           </div>
 
@@ -26,7 +38,7 @@ export default function Footer() {
               <li><Link to="/" className="text-slate-400 hover:text-pink-400 transition">ホーム</Link></li>
               <li><Link to="/search" className="text-slate-400 hover:text-pink-400 transition">キャスト検索</Link></li>
               <li><Link to="/stats" className="text-slate-400 hover:text-pink-400 transition">メンズエステ統計2026</Link></li>
-              <li><Link to="/premium" className="text-slate-400 hover:text-yellow-400 transition flex items-center gap-1"><span className="text-yellow-500">👑</span> プレミアム登録</Link></li>
+              <li><Link to="/post-review" className="text-slate-400 hover:text-pink-400 transition">口コミを書く（読み放題）</Link></li>
               <li><Link to="/contact" className="text-slate-400 hover:text-pink-400 transition">お問い合わせ</Link></li>
             </ul>
           </div>
