@@ -3,30 +3,14 @@ import { useParams, Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
-import { Helmet } from 'react-helmet-async';
 import LazyImage from '../components/LazyImage.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
+import { PREF_SLUG_MAP } from '../data/areaLinks';
 
-// URL slug → 都道府県名
-const PREF_MAP = {
-  'tokyo':     '東京都',
-  'osaka':     '大阪府',
-  'aichi':     '愛知県',
-  'kanagawa':  '神奈川県',
-  'saitama':   '埼玉県',
-  'chiba':     '千葉県',
-  'hyogo':     '兵庫県',
-  'kyoto':     '京都府',
-  'fukuoka':   '福岡県',
-  'miyagi':    '宮城県',
-  'shizuoka':  '静岡県',
-  'shiga':     '滋賀県',
-  'hiroshima': '広島県',
-  'hokkaido':  '北海道',
-};
-
-// データ閾値: これ未満の店舗数はnoindex
-const MIN_SHOPS_FOR_INDEX = 5;
+// URL slug → 都道府県名（src/data/areaLinks.js に集約）
+// ⚠️ 以前はここに独自のリストを持っていたため ibaraki / tochigi / gunma が抜け、
+//    サイトマップが submit しているURLがHTTP200で「存在しません」を返す soft404 だった。
+const PREF_MAP = PREF_SLUG_MAP;
 
 export default function PrefecturePage() {
   const { pref } = useParams();
@@ -54,7 +38,6 @@ export default function PrefecturePage() {
     return Object.entries(groups).sort(([, a], [, b]) => b.length - a.length);
   }, [prefShops]);
 
-  const isIndexable = prefShops.length >= MIN_SHOPS_FOR_INDEX;
   const title = prefName ? `${prefName}のメンズエステ${prefShops.length}店舗・口コミ` : 'エリア別メンズエステ';
   const description = prefName
     ? `${prefName}のメンズエステ${prefShops.length}店舗を掲載。セラピスト情報・口コミ・料金・出勤スケジュールを検索できます。`
@@ -80,12 +63,12 @@ export default function PrefecturePage() {
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
       <SeoHead title={title} description={description} path={`/area/${pref}`} />
-      {/* noindex: データが少ないページはGoogleにインデックスさせない */}
-      {!isIndexable && (
-        <Helmet>
-          <meta name="robots" content="noindex, follow" />
-        </Helmet>
-      )}
+      {/* ⚠️ noindex はここ（クライアント）で出してはいけない。
+          判定が DataContext の shops 配列に依存していたため、Supabase が一時的に
+          落ちている最中に Googlebot が来ると prefShops=0 → 全エリアページに
+          noindex が入る事故になる（2026-06-30 に Storage 超過で全API 402 の実績あり）。
+          「データが取れなかった時は noindex しない」がフェイルセーフの正しい向きなので、
+          店舗数によるnoindex判定はSSR側（pages/area/[pref].jsx の shopCount < 5）に一本化した。 */}
       <Header />
 
       {/* ページヘッダー */}
