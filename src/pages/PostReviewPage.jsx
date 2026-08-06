@@ -311,7 +311,7 @@ const Step2_Rating = () => {
       </div>
 
       <div className="bg-slate-900/50 p-6 rounded-[2rem] border border-white/5 shadow-xl">
-        <label className="block text-[10px] font-bold text-slate-500 mb-4 uppercase tracking-widest pl-1">TAGS (Optional)</label>
+        <label className="block text-xs font-bold text-slate-400 mb-4 tracking-wide pl-1">タグ（任意）</label>
         <TagSelector selectedTags={tags} setSelectedTags={(newTags) => setValue('tags', newTags)} />
       </div>
     </div>
@@ -439,7 +439,7 @@ const Step4_Confirm = ({ isSubmitting }) => {
         {isSubmitting ? (
           <>
             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-            <span>Posting...</span>
+            <span>投稿中...</span>
           </>
         ) : (
           <>

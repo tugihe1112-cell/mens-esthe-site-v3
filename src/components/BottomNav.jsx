@@ -1,9 +1,23 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { NavLink } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
+// 投稿フロー（PostReviewPageを描画するルート）ではボトムドックを出さない。
+// 理由: 投稿ページの主CTA「次へ進む」も fixed bottom-0 z-50 で、_app.jsx の描画順により
+// ドックが上に重なり、フライホイールの唯一の入口でCTAが押せない/押しにくくなっていた。
+// フォーム記入中に他タブへ逃がす導線は不要なので、非表示が正解（_app.jsx は編集不可のため自己非表示）。
+const POST_REVIEW_ROUTES = [
+  '/post-review',
+  '/shops/[shopId]/review',
+  '/shops/[shopId]/threads/[threadId]/review',
+];
+
 export default function BottomNav() {
   const { user } = useAuth();
+  const router = useRouter();
+  const hideOnPostReview = POST_REVIEW_ROUTES.includes(router?.pathname);
+
   const navItems = [
     {
       path: '/',
@@ -53,6 +67,8 @@ export default function BottomNav() {
     },
   ];
 
+  if (hideOnPostReview) return null;
+
   return (
     <div className="fixed bottom-0 left-0 w-full z-50 md:hidden pointer-events-none">
       {/* 背景のグラデーションフェード（コンテンツが消える演出） */}
@@ -93,8 +109,8 @@ export default function BottomNav() {
                     {item.icon(isActive)}
                   </div>
 
-                  {/* ラベル */}
-                  <span className={`relative z-10 text-[8px] font-black tracking-tight transition-all duration-300 ${isActive || item.highlight ? 'text-white scale-105' : ''}`}>
+                  {/* ラベル: 10px（8pxは5タブで日本語が潰れて読めず操作性の実害があった） */}
+                  <span className={`relative z-10 text-[10px] leading-none font-black tracking-tight transition-all duration-300 ${isActive || item.highlight ? 'text-white scale-105' : ''}`}>
                     {item.label}
                   </span>
 
