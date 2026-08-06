@@ -9,11 +9,20 @@ import SeoHead from '../components/SeoHead.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import { trackEvent } from '../utils/analytics';
+import siteStats from '../data/stats-2026-07.json';
 
 const INITIAL_DISPLAY_COUNT = 12;
 const LOAD_MORE_COUNT = 12;
 
-export default function ShopDetailPage() {
+export default function ShopDetailPage({
+  ssrTherapistCount = 0,
+  ssrReviewedTherapists = [],
+  ssrNearbyShops = [],
+  ssrPrefecture = null,
+  ssrArea = null,
+  ssrReviewCount = 0,
+  ssrAvgRating = null,
+}) {
   const { shopId } = useParams();
   const navigate = useNavigate();
   const { shopById, getTherapistsByShopId, getReviewsByShopId, loadTherapistsForShop, loadReviewsForShop } = useShopData();
@@ -368,10 +377,27 @@ export default function ShopDetailPage() {
               </div>
 
               <dl className="space-y-6">
-                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                  <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">HOURS</dt>
-                  <dd className="text-sm md:text-base font-bold text-white">{shop.business_hours || shop.raw_data?.hours || '営業時間情報なし'}</dd>
-                </div>
+                {/* 在籍セラピスト数＝全1,098店が持つ固有の実データ。まずこれを出す */}
+                {ssrTherapistCount > 0 && (
+                  <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
+                    <dt className="text-[10px] md:text-xs font-bold text-slate-500 tracking-widest">在籍</dt>
+                    <dd className="text-sm md:text-base font-bold text-white">
+                      <span className="text-pink-400 text-lg md:text-xl">{ssrTherapistCount.toLocaleString()}</span> 人
+                      {ssrReviewCount > 0 && (
+                        <span className="text-slate-400 font-normal text-xs ml-3">
+                          口コミ {ssrReviewCount}件{ssrAvgRating ? `・平均★${ssrAvgRating}` : ''}
+                        </span>
+                      )}
+                    </dd>
+                  </div>
+                )}
+                {/* ⚠️「営業時間情報なし」は行き止まりなので、データがある時だけ出す */}
+                {(shop.business_hours || shop.raw_data?.hours) && (
+                  <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
+                    <dt className="text-[10px] md:text-xs font-bold text-slate-500 tracking-widest">営業時間</dt>
+                    <dd className="text-sm md:text-base font-bold text-white">{shop.business_hours || shop.raw_data?.hours}</dd>
+                  </div>
+                )}
                 <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
                   <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">PRICE</dt>
                   <dd className="text-sm md:text-base text-white w-full bg-slate-800/50 p-4 rounded-xl border border-white/5">{shop?.price_system ? (
@@ -407,7 +433,33 @@ export default function ShopDetailPage() {
     })()}
   </div>
 ) : (
-  <div className="text-slate-300">料金情報なし</div>
+  /* ⚠️「料金情報なし」だけでは行き止まり。掲載1,098店のうち料金が取れているのは487店で、
+     残りは公式サイトにしか無い。そこで /stats の実測相場（メンエスマップ調べ）を出し、
+     「相場感 → 公式で確認」という次の行動まで繋ぐ。 */
+  <div className="space-y-3">
+    <p className="text-slate-300 text-sm">この店舗の料金は未掲載です。</p>
+    <div className="rounded-xl bg-black/20 border border-white/5 p-3">
+      <p className="text-[10px] text-slate-500 font-bold tracking-wider mb-2">
+        全国のメンズエステ料金相場（メンエスマップ調べ・{siteStats?.coverage?.priceSampleShops || 0}店の実測中央値）
+      </p>
+      <div className="flex gap-4">
+        <div className="flex-1 flex justify-between items-center border-b border-white/5 pb-1">
+          <span className="text-slate-400 text-xs">60分</span>
+          <span className="text-white font-bold">¥{(siteStats?.nationalPrice?.median60 || 0).toLocaleString()}</span>
+        </div>
+        <div className="flex-1 flex justify-between items-center border-b border-white/5 pb-1">
+          <span className="text-slate-400 text-xs">90分</span>
+          <span className="text-white font-bold">¥{(siteStats?.nationalPrice?.median90 || 0).toLocaleString()}</span>
+        </div>
+      </div>
+      <Link to="/stats" className="inline-block mt-2 text-[11px] font-bold text-pink-400 hover:text-pink-300">
+        エリア別の相場を見る →
+      </Link>
+    </div>
+    {(shop.website_url || shop.url || shop?.raw_data?.url) && (
+      <p className="text-[11px] text-slate-500">最新の料金は公式サイトでご確認ください。</p>
+    )}
+  </div>
 )}
                 </dd>
                 </div>
@@ -433,6 +485,48 @@ export default function ShopDetailPage() {
                  </a>
               </div>
             </div>
+
+            {/* 口コミがあるセラピスト＝読ませる価値のある内部リンク（SSRで出力＝クローラーも辿れる） */}
+            {ssrReviewedTherapists.length > 0 && (
+              <div className="bg-slate-900/50 rounded-3xl p-6 md:p-8 border border-white/5">
+                <h3 className="text-sm font-black text-white mb-1">この店で口コミがあるセラピスト</h3>
+                <p className="text-[11px] text-slate-500 mb-4">実際に行った人の体験談が読めます</p>
+                <div className="flex flex-wrap gap-2">
+                  {ssrReviewedTherapists.map((t) => (
+                    <Link
+                      key={t.id}
+                      to={`/shops/${shop.id}/threads/${t.id}`}
+                      className="inline-flex items-center gap-2 bg-slate-800/70 hover:bg-slate-700 border border-white/10 hover:border-pink-500/40 rounded-full px-4 py-2 text-xs font-bold text-slate-200 hover:text-white transition"
+                    >
+                      {t.name}
+                      {t.rating != null && <span className="text-yellow-400">★{Number(t.rating).toFixed(1)}</span>}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 同エリアの他店＝比較したい人の回遊先＋クロール経路（孤立ページ化の解消） */}
+            {ssrNearbyShops.length > 0 && (
+              <div className="bg-slate-900/50 rounded-3xl p-6 md:p-8 border border-white/5">
+                <h3 className="text-sm font-black text-white mb-1">
+                  {ssrArea ? `${ssrArea}の他のメンズエステ` : `${ssrPrefecture || ''}の他のメンズエステ`}
+                </h3>
+                <p className="text-[11px] text-slate-500 mb-4">近くの店舗と比べてみる</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {ssrNearbyShops.map((s) => (
+                    <Link
+                      key={s.id}
+                      to={`/shops/${s.id}`}
+                      className="flex items-center justify-between bg-slate-800/50 hover:bg-slate-700/60 border border-white/5 hover:border-pink-500/30 rounded-xl px-4 py-3 text-xs font-bold text-slate-200 hover:text-white transition"
+                    >
+                      <span className="truncate">{getDisplayName(s.name)}</span>
+                      <span className="text-slate-600">›</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
