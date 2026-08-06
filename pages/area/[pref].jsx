@@ -9,12 +9,11 @@ import React from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import PrefecturePage from '../../src/pages/PrefecturePage';
+import { PREF_SLUG_MAP } from '../../src/data/areaLinks';
+import { getDisplayName } from '../../src/utils/shopHelpers';
 
-const PREF_MAP = {
-  tokyo: '東京都', osaka: '大阪府', aichi: '愛知県', kanagawa: '神奈川県', saitama: '埼玉県',
-  chiba: '千葉県', hyogo: '兵庫県', kyoto: '京都府', fukuoka: '福岡県', miyagi: '宮城県',
-  shizuoka: '静岡県', shiga: '滋賀県', hiroshima: '広島県', hokkaido: '北海道',
-};
+// 県リストは src/data/areaLinks.js に集約（4箇所に散らばって soft404 を生んだため）
+const PREF_MAP = PREF_SLUG_MAP;
 
 export async function getServerSideProps({ params, res }) {
   // CDNキャッシュ＝一度開かれたエリアページは次から即返る。副作用なし・全員共通HTMLなので安全。
@@ -106,6 +105,38 @@ export default function AreaSSRPage({ ssr }) {
       </Head>
 
       <PrefecturePage />
+
+      {/* 店舗ページへのクロール経路（SSR・最重要）
+          ⚠️ これまで1,098の店舗ページには内部リンクが1本も無く、サイトマップだけが
+             発見経路だった（＝孤立ページ化）。GSCの「クロール済み-インデックス未登録346件」
+             の正体。JSON-LDのItemListは同じURLを持っているのにHTMLのリンクが0本、という
+             状態を解消する。PrefecturePage側の店舗グリッドはクライアント描画なので
+             Googlebotには見えない＝ここをSSRで出すことに意味がある。 */}
+      {shopList.length > 0 && (
+        <section className={`max-w-5xl mx-auto px-4 -mt-4 ${latestReviews.length > 0 ? 'pb-6' : 'pb-28'}`}>
+          <div className="rounded-2xl border border-white/10 bg-slate-900 p-4">
+            <h2 className="text-base font-black text-white mb-3">{prefName}の掲載店舗</h2>
+            <ul className="flex flex-wrap gap-2">
+              {shopList.slice(0, 30).map((s) => (
+                <li key={s.id}>
+                  <a
+                    href={`/shops/${s.id}`}
+                    className="inline-block text-xs text-slate-300 hover:text-pink-300 bg-slate-800 hover:bg-slate-700 border border-white/10 rounded-full px-3 py-1.5 transition"
+                  >
+                    {getDisplayName(s.name)}
+                    {s.city ? <span className="text-slate-500 ml-1">({s.city})</span> : null}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {shopCount > 30 && (
+              <p className="text-[11px] text-slate-500 mt-3">
+                ほか{shopCount - 30}店舗を掲載中
+              </p>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Tier 2-1: エリアの最新の本物口コミ（SSR・エリアページに一次コンテンツ＋口コミページへの内部リンク） */}
       {latestReviews.length > 0 && (
