@@ -23,6 +23,13 @@ const STATIC_PAGES = [
   { path: '/new-therapists',  priority: '0.7' },
   { path: '/board',           priority: '0.6' },
   { path: '/contact',         priority: '0.5' },
+  // ⚠️ このリストは src/data/areaLinks.js の AREA_LINKS と一致させること
+  //    （＝PREF_SLUG_MAP から掲載数の少ない shiga を除いたもの）。
+  //    ここは Vercel のサーバーレス関数で Next のバンドル対象外のため、
+  //    src/ からの import はせず意図的にリテラルで持つ（import解決に失敗すると
+  //    サイトマップごと落ちる＝今まさに直している事故と同じ形になるため）。
+  //    県を増減したら areaLinks.js と両方直す。片方だけ直すと
+  //    「サイトマップには載るがページが存在しない」soft404 が再発する。
   ...['tokyo','osaka','aichi','kanagawa','saitama','chiba',
       'hyogo','kyoto','fukuoka','miyagi','shizuoka',
       'hiroshima','hokkaido','ibaraki','tochigi','gunma'].map(slug => ({
