@@ -52,13 +52,22 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
   }, [src]);
 
   if (!src || error || isIconUrl(src)) {
+    // 画像が無い店舗（2026-08時点で1,098店中133店＝元サイトの閉店/ダウンで再取得できない分）でも
+    // 「壊れている」ように見せない。店名の頭文字を大きく置いた識別可能なプレースホルダにする。
+    // ※ alt には店名/セラピスト名が入る前提（呼び出し側は全てそうしている）。
+    const label = (alt || '').replace(/[（(].*?[)）]/g, '').trim();
+    const initial = label ? Array.from(label)[0] : '·';
     return (
-      <div className={`relative overflow-hidden ${className}`}>
-        <img
-          src={fallback}
-          alt={alt}
-          className="w-full h-full object-cover opacity-100"
-        />
+      <div className={`relative overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center ${className}`}>
+        <div className="absolute inset-0 opacity-[0.07] bg-[radial-gradient(circle_at_30%_20%,#fff,transparent_55%)]" />
+        <span
+          aria-hidden="true"
+          className="relative font-black text-slate-600 select-none leading-none"
+          style={{ fontSize: 'clamp(28px, 38%, 96px)' }}
+        >
+          {initial}
+        </span>
+        <span className="sr-only">{alt || '画像なし'}</span>
       </div>
     );
   }
