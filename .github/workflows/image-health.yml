@@ -1,0 +1,44 @@
+# 画像健全性監視 — image_url の null率・配信の生死・前回比の急増を毎日測る。
+#
+# 目的: 「画像が出ない」が何度も再発し、そのたびに**発覚まで数週間かかっている**のを止める。
+#   ・2026-07-06 の外部URL→R2一括移行で shops 82件が null 化 → 発覚は 2026-08-06（1ヶ月放置）
+#   ・r2.dev のレート制限、Storageファイル名衝突、lazy/onLoadバグも同じ「気づけない」構図
+# 壊れを数値化して毎日記録し、閾値超え or 前回比の急増でワークフローを失敗させて通知する。
+#
+# 必要なSecrets: SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY
+#   （GitHub → Settings → Secrets and variables → Actions で登録）
+name: Monitor (image health)
+
+on:
+  schedule:
+    - cron: '0 23 * * *' # 毎日 08:00 JST（UTC 23:00）
+  workflow_dispatch:
+
+concurrency:
+  group: monitor-image-health
+  cancel-in-progress: true
+
+jobs:
+  image-health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # supabase-js のみ必要
+      - name: Install deps
+        run: npm install @supabase/supabase-js --no-save --no-audit --no-fund
+
+      - name: Check image health
+        run: node scripts/monitoring/check_image_health.mjs --sample=40
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # 閾値（必要ならここで調整）
+          SHOPS_NULL_MAX: '20'
+          DEAD_MAX: '5'
+          JUMP_MAX: '30'

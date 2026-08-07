@@ -28,7 +28,7 @@
  */
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
-import { uploadImage } from '../lib/r2Upload.mjs';
+import { uploadBuffer } from '../lib/r2Upload.mjs';
 
 const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
@@ -93,6 +93,35 @@ const sha1 = async (s) => {
   return createHash('sha1').update(s).digest('hex');
 };
 
+/**
+ * 画像を取ってR2へ。共有の uploadImage は UA が 'Mozilla/5.0' だけで多くのCDNに弾かれ、
+ * 初回実行では候補83件中29件が「R2アップ失敗」になった。ここでは
+ *   ①フルのブラウザUA ②Referer有り→無しの2段リトライ ③長めのタイムアウト
+ * で取得し、成功したバッファだけを uploadBuffer でR2に置く。
+ */
+const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36';
+async function fetchImageBuffer(imageUrl, referer) {
+  // 認証情報入りURL（例 https://user@host/...）は fetch が構築できないので除外
+  try { const u = new URL(imageUrl); if (u.username || u.password) return null; } catch { return null; }
+
+  const attempts = [
+    { 'User-Agent': UA, Accept: 'image/avif,image/webp,image/*,*/*;q=0.8', ...(referer ? { Referer: referer } : {}) },
+    { 'User-Agent': UA, Accept: 'image/*,*/*;q=0.8' }, // Referer無しで再試行（Referer拒否のサイト対策）
+  ];
+  for (const headers of attempts) {
+    try {
+      const res = await fetch(imageUrl, { headers, redirect: 'follow', signal: AbortSignal.timeout(25000) });
+      if (!res.ok) continue;
+      const ct = res.headers.get('content-type') || '';
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (buf.length < 512) continue; // 1x1やエラーページを除外
+      if (ct && !/^image\//i.test(ct)) continue;
+      return { buf, ct: ct || null };
+    } catch { /* 次の試行へ */ }
+  }
+  return null;
+}
+
 async function main() {
   const { data: shops, error } = await supabase
     .from('shops')
@@ -117,8 +146,10 @@ async function main() {
         if (!found) { ng++; console.log(`  -  ${shop.name}: 候補なし`); return; }
         if (!LIVE) { ok++; console.log(`  ✓  ${shop.name}: ${found.slice(0, 90)}`); return; }
 
+        const got = await fetchImageBuffer(found, shop.website_url);
+        if (!got) { ng++; console.log(`  ✗  ${shop.name}: 画像取得失敗 ${found.slice(0, 60)}`); return; }
         const key = `shop_${(await sha1(found)).slice(0, 16)}${(found.match(/\.(jpe?g|png|webp)/i) || ['.jpg'])[0]}`;
-        const newUrl = await uploadImage(found, key, shop.website_url, 'shop-logos');
+        const newUrl = await uploadBuffer(got.buf, key, got.ct, 'shop-logos');
         if (!newUrl) { ng++; console.log(`  ✗  ${shop.name}: R2アップ失敗`); return; }
         const { error: uErr } = await supabase.from('shops').update({ image_url: newUrl }).eq('id', shop.id);
         if (uErr) { ng++; console.log(`  ✗  ${shop.name}: DB更新失敗 ${uErr.message}`); return; }
