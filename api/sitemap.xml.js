@@ -37,6 +37,12 @@ const STATIC_PAGES = [
   })),
 ];
 
+// サイトマップに出してはいけないID（テスト/ダミーデータ）。
+// 2026-08-08にGSCのサイトマップ実物を確認して `/shops/test_shop/threads/test_therapist` の混入が発覚。
+// Googleに「中身のないテストページ」を送るのはインデックス品質の毀損なので必ず除外する。
+const EXCLUDED_ID_PATTERNS = [/^test_/i, /^demo_/i, /^sample_/i, /_test$/i];
+const isExcludedId = (id) => !id || EXCLUDED_ID_PATTERNS.some((re) => re.test(String(id)));
+
 function xmlEscape(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -104,6 +110,7 @@ export default async function handler(req, res) {
     const seen = new Set();
     for (const r of pubReviews) {
       if (!r.therapist_id || !r.shop_id) continue;
+      if (isExcludedId(r.shop_id) || isExcludedId(r.therapist_id)) continue; // テストデータ除外
       const key = `${r.shop_id}|${r.therapist_id}`;
       if (seen.has(key)) continue;
       seen.add(key);
@@ -118,7 +125,7 @@ export default async function handler(req, res) {
     <priority>${p.priority}</priority>
   </url>`).join('\n');
 
-  const shopXml = (shops || []).map(s => `  <url>
+  const shopXml = (shops || []).filter(s => !isExcludedId(s.id)).map(s => `  <url>
     <loc>${encodeUrl(`/shops/${s.id}`)}</loc>
     <lastmod>${TODAY}</lastmod>
     <priority>0.7</priority>
