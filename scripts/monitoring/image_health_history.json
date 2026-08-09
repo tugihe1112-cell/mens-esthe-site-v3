@@ -36,5 +36,24 @@
       "dead": 0,
       "deadPct": 0
     }
+  },
+  {
+    "at": "2026-08-09 23:21:01",
+    "shops": {
+      "total": 1098,
+      "nulls": 79,
+      "nullPct": 7.2,
+      "sampled": 35,
+      "dead": 1,
+      "deadPct": 2.9
+    },
+    "therapists": {
+      "total": 60999,
+      "nulls": 10221,
+      "nullPct": 16.8,
+      "sampled": 40,
+      "dead": 0,
+      "deadPct": 0
+    }
   }
 ]
