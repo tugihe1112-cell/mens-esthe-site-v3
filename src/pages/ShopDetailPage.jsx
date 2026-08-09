@@ -31,8 +31,10 @@ export default function ShopDetailPage({
   const { userPlan } = useAuth();
   const isPremiumUser = userPlan === 'premium' || userPlan === 'vip';
 
-  const [activeTab, setActiveTab] = useState('top');
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
+  // キャスト一覧の絞り込み・並び替え（SearchPageと同じ操作感に揃える）
+  const [castNameFilter, setCastNameFilter] = useState('');
+  const [castSortOrder, setCastSortOrder] = useState('default'); // default | aiueo | reviews
 
   // 🔒 ロック1：完全個室化ステート（※変数名は cloudShop のまま残して、後半のエラーを完全回避！）
   const [cloudShop, setCloudShop] = useState(null);
@@ -194,8 +196,24 @@ export default function ShopDetailPage({
     logoUrl = 'https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/menesgroup.png';
   }
 
-  const visibleTherapists = therapists.slice(0, displayCount);
-  const hasMore = displayCount < therapists.length;
+  // 名前で絞り込み → 並び替え → 表示件数で切る（SearchPageと同じ流れ）
+  const normName = (s) => (s || '').replace(/[\s　]/g, '');
+  const sortedTherapists = React.useMemo(() => {
+    let list = [...therapists];
+    if (castNameFilter.trim()) {
+      const f = normName(castNameFilter);
+      list = list.filter((t) => normName(t.name).includes(f));
+    }
+    if (castSortOrder === 'aiueo') {
+      list.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ja'));
+    } else if (castSortOrder === 'reviews') {
+      list.sort((a, b) => (therapistReviewCounts[normName(b.name)] || 0) - (therapistReviewCounts[normName(a.name)] || 0));
+    }
+    return list;
+  }, [therapists, castNameFilter, castSortOrder, therapistReviewCounts]);
+
+  const visibleTherapists = sortedTherapists.slice(0, displayCount);
+  const hasMore = displayCount < sortedTherapists.length;
   const handleLoadMore = () => setDisplayCount(prev => prev + LOAD_MORE_COUNT);
 
   // ✨ すべてのHook（useState, useEffect）が終わったので、ここで初めて安全に早期リターン！
@@ -307,39 +325,39 @@ export default function ShopDetailPage({
          </div>
       </div>
 
-      {/* 2. Sticky Tab Navigation */}
-      <div className="sticky top-20 z-40 bg-slate-950 border-b border-white/5 shadow-lg">
+      {/* 2. セクションナビ（旧タブUI）
+          ⚠️ 2026-08: タブ切替を廃止し1ページに全セクションを積む形へ。
+             理由: okabayashiの方針で「タブ型の店舗ページは使わない」＝SearchPage型（キャスト一覧が主役）に寄せる。
+             ただし内部リンク/canonical/JSON-LDは /shops/:id のまま維持する（7月の索引崩落から復旧させた
+             1,098ページへのクロール経路をここで切らないため）。ナビはアンカースクロールに変更。 */}
+      <div className="sticky top-20 z-40 bg-slate-950/95 backdrop-blur border-b border-white/5 shadow-lg">
         <div className="flex max-w-4xl mx-auto">
           {([
-            { key: 'top', label: 'トップ' },
             { key: 'cast', label: 'キャスト' },
             { key: 'review', label: '口コミ' },
+            { key: 'info', label: '店舗情報' },
             ...(cloudShop?.schedule_url ? [{ key: 'schedule', label: '出勤' }] : []),
-          ]).map((tab) => {
-            const isActive = activeTab === tab.key;
-            return (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`flex-1 py-4 text-xs md:text-sm font-black tracking-wider transition-all relative ${
-                  isActive ? 'text-white' : 'text-slate-500 hover:text-slate-300'
-                }`}
-              >
-                {tab.label}
-                {isActive && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-gradient-to-r from-pink-500 to-purple-500 shadow-[0_-2px_10px_rgba(236,72,153,0.5)]"></span>
-                )}
-              </button>
-            );
-          })}
+          ]).map((tab) => (
+            <a
+              key={tab.key}
+              href={`#sec-${tab.key}`}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById(`sec-${tab.key}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="flex-1 py-4 text-xs md:text-sm font-black tracking-wider text-slate-400 hover:text-white transition-all text-center"
+            >
+              {tab.label}
+            </a>
+          ))}
         </div>
       </div>
 
       {/* 3. Content Area */}
-      <div className="max-w-4xl mx-auto px-4 py-8 min-h-[50vh]">
+      <div className="max-w-4xl mx-auto px-4 py-8 min-h-[50vh] flex flex-col gap-12">
         
-        {activeTab === 'top' && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <section id="sec-info" className="scroll-mt-32 order-3">
+          <div className="space-y-8">
              <div className="md:hidden">
                 <button 
                   onClick={handlePostReview}
@@ -528,9 +546,9 @@ export default function ShopDetailPage({
               </div>
             )}
           </div>
-        )}
+        </section>
 
-        {activeTab === 'cast' && (
+        <section id="sec-cast" className="scroll-mt-32 order-1">
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
              <div className="flex items-center justify-between mb-6 px-1">
                <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
@@ -538,10 +556,48 @@ export default function ShopDetailPage({
                  THERAPISTS
                </h3>
                <span className="bg-white/10 px-2 py-0.5 rounded text-[10px] font-bold text-slate-300">
-                 Total {therapists.length}
+                 {castNameFilter ? `${sortedTherapists.length} / ` : ''}全{therapists.length}人
                </span>
              </div>
-             
+
+             {/* 絞り込み＋並び替え（SearchPageと同じ操作感） */}
+             {therapists.length > 6 && (
+               <div className="flex flex-col sm:flex-row gap-2 mb-5">
+                 <div className="relative flex-1">
+                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">🔍</span>
+                   <input
+                     type="text"
+                     value={castNameFilter}
+                     onChange={(e) => { setCastNameFilter(e.target.value); setDisplayCount(INITIAL_DISPLAY_COUNT); }}
+                     placeholder="セラピスト名で絞り込み"
+                     className="w-full bg-slate-900 border border-white/10 rounded-xl pl-9 pr-9 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-pink-500/50"
+                   />
+                   {castNameFilter && (
+                     <button onClick={() => setCastNameFilter('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white text-sm">✕</button>
+                   )}
+                 </div>
+                 <div className="flex gap-1.5">
+                   {[
+                     { key: 'default', label: '標準' },
+                     { key: 'aiueo', label: '五十音' },
+                     { key: 'reviews', label: '💬 口コミ順' },
+                   ].map((o) => (
+                     <button
+                       key={o.key}
+                       onClick={() => { setCastSortOrder(o.key); setDisplayCount(INITIAL_DISPLAY_COUNT); }}
+                       className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition whitespace-nowrap ${
+                         castSortOrder === o.key
+                           ? 'bg-pink-600 border-pink-500 text-white'
+                           : 'bg-slate-900 border-white/10 text-slate-400 hover:text-white'
+                       }`}
+                     >
+                       {o.label}
+                     </button>
+                   ))}
+                 </div>
+               </div>
+             )}
+
              {therapists.length > 0 ? (
                <>
                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -591,7 +647,7 @@ export default function ShopDetailPage({
                         onClick={handleLoadMore}
                         className="px-8 py-3 rounded-full bg-slate-800 text-slate-300 font-bold text-sm hover:bg-slate-700 hover:text-white transition border border-white/5"
                       >
-                        もっと見る (+{therapists.length - displayCount})
+                        もっと見る (+{sortedTherapists.length - displayCount})
                       </button>
                     </div>
                  )}
@@ -601,11 +657,16 @@ export default function ShopDetailPage({
                    在籍セラピスト情報はありません
                 </div>
              )}
+             {therapists.length > 0 && sortedTherapists.length === 0 && (
+               <div className="py-16 text-center text-slate-500 text-sm">
+                 「{castNameFilter}」に一致するセラピストが見つかりません
+               </div>
+             )}
           </div>
-        )}
+        </section>
 
-        {/* 🌟 REVIEWタブ */}
-        {activeTab === 'review' && (
+        {/* 口コミ */}
+        <section id="sec-review" className="scroll-mt-32 order-2">
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 relative">
             <div className="flex items-center justify-between mb-6 px-1">
                <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
@@ -675,10 +736,11 @@ export default function ShopDetailPage({
                </div>
             )}
           </div>
-        )}
+        </section>
 
-        {/* 📅 SCHEDULEタブ */}
-        {activeTab === 'schedule' && cloudShop?.schedule_url && (
+        {/* 出勤 */}
+        {cloudShop?.schedule_url && (
+        <section id="sec-schedule" className="scroll-mt-32 order-4">
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
@@ -716,6 +778,7 @@ export default function ShopDetailPage({
               </a>
             </div>
           </div>
+        </section>
         )}
 
       </div>
