@@ -43,6 +43,11 @@ jobs:
           fi
           echo "✅ pages/ の stale-while-revalidate は全て300秒以下"
 
+      # ── ガード: オーナー確定事項（playbook/decisions.md）に反する変更を止める ──
+      # 同じデザイン決定が3回覆されたため機械で止める。詳細は playbook/decisions.md 参照。
+      - name: Guard - owner design decisions
+        run: node scripts/ci/check_design_decisions.mjs
+
       - name: Install deps
         run: npm install --legacy-peer-deps
 

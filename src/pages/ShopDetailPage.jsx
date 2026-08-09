@@ -11,6 +11,14 @@ import { getDisplayName } from '../utils/shopHelpers';
 import { trackEvent } from '../utils/analytics';
 import siteStats from '../data/stats-2026-07.json';
 
+// 左サイドバーのタグ絞り込み（SearchPage と同一定義。表記を割らないため必ず揃える）
+const TAG_CATEGORIES = [
+  { title: "BODY TYPE", id: "body", tags: ["スレンダー", "グラマー", "巨乳", "美脚", "小柄", "高身長"] },
+  { title: "ATMOSPHERE", id: "vibe", tags: ["可愛い系", "美人系", "清楚系", "ギャル系", "お姉さん系"] },
+  { title: "AGE GROUP", id: "age", tags: ["10代", "20代前半", "20代後半", "30代", "40代"] },
+  { title: "ATTRIBUTES", id: "attr", tags: ["色白", "健康的", "ベテラン", "外国人", "新人"] }
+];
+
 const INITIAL_DISPLAY_COUNT = 12;
 const LOAD_MORE_COUNT = 12;
 
@@ -35,6 +43,10 @@ export default function ShopDetailPage({
   // キャスト一覧の絞り込み・並び替え（SearchPageと同じ操作感に揃える）
   const [castNameFilter, setCastNameFilter] = useState('');
   const [castSortOrder, setCastSortOrder] = useState('default'); // default | aiueo | reviews
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  // セラピスト名 → その人の口コミに付いたタグ集合
+  const [reviewTagMap, setReviewTagMap] = useState({});
 
   // 🔒 ロック1：完全個室化ステート（※変数名は cloudShop のまま残して、後半のエラーを完全回避！）
   const [cloudShop, setCloudShop] = useState(null);
@@ -99,8 +111,8 @@ export default function ShopDetailPage({
 
         // セラピスト別口コミ件数（therapist_name列のみ取得・軽量）
         const countFetchUrl = reviewShopIds.length > 1
-          ? `${url}/rest/v1/reviews?shop_id=in.(${reviewShopIds.join(',')})&select=therapist_name`
-          : `${url}/rest/v1/reviews?shop_id=eq.${shopId}&select=therapist_name`;
+          ? `${url}/rest/v1/reviews?shop_id=in.(${reviewShopIds.join(',')})&select=therapist_name,tags`
+          : `${url}/rest/v1/reviews?shop_id=eq.${shopId}&select=therapist_name,tags`;
 
         const [tData, rData, cData] = await Promise.all([
           tRes.json(),
@@ -118,11 +130,18 @@ export default function ShopDetailPage({
           if (Array.isArray(cData)) {
             const norm = (s) => (s || '').replace(/[\s　]/g, '');
             const counts = {};
+            const tagMap = {};
             cData.forEach(r => {
               const n = norm(r.therapist_name);
-              if (n) counts[n] = (counts[n] || 0) + 1;
+              if (!n) return;
+              counts[n] = (counts[n] || 0) + 1;
+              if (Array.isArray(r.tags)) {
+                if (!tagMap[n]) tagMap[n] = new Set();
+                r.tags.forEach(t => tagMap[n].add(t));
+              }
             });
             setTherapistReviewCounts(counts);
+            setReviewTagMap(tagMap);
           }
         }
       } catch (err) {
@@ -198,8 +217,24 @@ export default function ShopDetailPage({
 
   // 名前で絞り込み → 並び替え → 表示件数で切る（SearchPageと同じ流れ）
   const normName = (s) => (s || '').replace(/[\s　]/g, '');
+  const tagCounts = React.useMemo(() => {
+    const counts = {};
+    TAG_CATEGORIES.forEach(cat => cat.tags.forEach(t => { counts[t] = 0; }));
+    for (const t of therapists) {
+      const tags = reviewTagMap[normName(t.name)] || new Set();
+      for (const tag of tags) if (counts[tag] !== undefined) counts[tag]++;
+    }
+    return counts;
+  }, [therapists, reviewTagMap]);
+
   const sortedTherapists = React.useMemo(() => {
     let list = [...therapists];
+    if (selectedTags.length > 0) {
+      list = list.filter((t) => {
+        const tags = reviewTagMap[normName(t.name)] || new Set();
+        return selectedTags.every((sel) => tags.has(sel));
+      });
+    }
     if (castNameFilter.trim()) {
       const f = normName(castNameFilter);
       list = list.filter((t) => normName(t.name).includes(f));
@@ -210,7 +245,7 @@ export default function ShopDetailPage({
       list.sort((a, b) => (therapistReviewCounts[normName(b.name)] || 0) - (therapistReviewCounts[normName(a.name)] || 0));
     }
     return list;
-  }, [therapists, castNameFilter, castSortOrder, therapistReviewCounts]);
+  }, [therapists, castNameFilter, castSortOrder, therapistReviewCounts, selectedTags, reviewTagMap]);
 
   const visibleTherapists = sortedTherapists.slice(0, displayCount);
   const hasMore = displayCount < sortedTherapists.length;
@@ -374,7 +409,7 @@ export default function ShopDetailPage({
             {(shop.url || shop.websiteUrl || shop.website_url || shop?.raw_data?.url || shop?.raw_data?.website || cloudShop?.schedule_url) && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
                 {cloudShop?.schedule_url && (
-              <button onClick={() => setActiveTab('schedule')} className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg">
+              <button onClick={() => document.getElementById('sec-schedule')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg">
                 <span className="text-xl opacity-60 group-hover:opacity-100 transition">📅</span>
                 <div className="text-left flex-1">
                   <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Schedule</div>
@@ -549,7 +584,55 @@ export default function ShopDetailPage({
         </section>
 
         <section id="sec-cast" className="scroll-mt-32 order-1">
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+          {/* 左タグサイドバー＋右キャスト一覧＝SearchPageと同じレイアウト（オーナー確定デザイン） */}
+          <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-6">
+          <aside className={`${isFilterOpen ? 'block' : 'hidden'} lg:block space-y-4 lg:sticky lg:top-36 self-start`}>
+            <button onClick={() => setIsFilterOpen(false)} className="lg:hidden w-full text-center text-xs text-slate-500 mb-1">閉じる</button>
+            {TAG_CATEGORIES.map((category) => (
+              <div key={category.id} className="bg-slate-900/40 backdrop-blur rounded-2xl p-4 border border-white/5">
+                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
+                  {category.title}
+                </h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {category.tags.map((tag) => {
+                    const count = tagCounts[tag] || 0;
+                    const isSelected = selectedTags.includes(tag);
+                    return (
+                      <button
+                        key={tag}
+                        onClick={() => {
+                          setDisplayCount(INITIAL_DISPLAY_COUNT);
+                          if (isSelected) setSelectedTags((prev) => prev.filter((t) => t !== tag));
+                          else if (count > 0) setSelectedTags((prev) => [...prev, tag]);
+                        }}
+                        disabled={count === 0 && !isSelected}
+                        className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all border ${
+                          isSelected
+                            ? 'bg-pink-600 border-pink-500 text-white'
+                            : count === 0
+                              ? 'bg-transparent border-slate-800 text-slate-700 cursor-not-allowed'
+                              : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white'
+                        }`}
+                      >
+                        {tag} <span className="opacity-50">({count})</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+            {selectedTags.length > 0 && (
+              <button onClick={() => { setSelectedTags([]); setDisplayCount(INITIAL_DISPLAY_COUNT); }} className="w-full py-2 rounded-xl bg-slate-800 border border-white/10 text-xs font-bold text-slate-300 hover:text-white transition">
+                絞り込みを解除
+              </button>
+            )}
+          </aside>
+
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-w-0">
+             <button onClick={() => setIsFilterOpen((v) => !v)} className="lg:hidden w-full mb-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-xs font-bold text-slate-300">
+               🔎 タグで絞り込む{selectedTags.length > 0 ? `（${selectedTags.length}）` : ''}
+             </button>
              <div className="flex items-center justify-between mb-6 px-1">
                <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                  <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
@@ -659,9 +742,10 @@ export default function ShopDetailPage({
              )}
              {therapists.length > 0 && sortedTherapists.length === 0 && (
                <div className="py-16 text-center text-slate-500 text-sm">
-                 「{castNameFilter}」に一致するセラピストが見つかりません
+                 条件に一致するセラピストが見つかりません
                </div>
              )}
+          </div>
           </div>
         </section>
 
