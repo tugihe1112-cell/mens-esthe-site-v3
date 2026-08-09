@@ -28,19 +28,27 @@ export async function getServerSideProps({ params, res }) {
   );
 
   try {
-    // 1. 店舗取得
-    const { data: shopData } = await supabase
-      .from('shops')
-      .select('id, name, group_id, image_url, website_url, raw_data')
-      .eq('id', shopId)
-      .single();
+    // 1〜2. 店舗とセラピストは互いに依存しないので並列取得（TTFB短縮）
+    // ⚠️ single() は「0件」もエラーになり本物のDB障害と区別できないため maybeSingle() を使う。
+    const [shopRes, therapistRes] = await Promise.all([
+      supabase
+        .from('shops')
+        .select('id, name, group_id, image_url, website_url, raw_data')
+        .eq('id', shopId)
+        .maybeSingle(),
+      // セラピストは全カラム＝クライアントに初期値として渡し即・完全描画するため
+      supabase.from('therapists').select('*').eq('id', threadId).maybeSingle(),
+    ]);
+    const shopData = shopRes.data;
+    const therapistData = therapistRes.data;
 
-    // 2. セラピスト取得（全カラム＝クライアントに初期値として渡し即・完全描画するため）
-    const { data: therapistData } = await supabase
-      .from('therapists')
-      .select('*')
-      .eq('id', threadId)
-      .single();
+    // ── ソフト404の解消（店舗ページと同じ対処）──
+    // 存在しないセラピスト/店舗でも200で空ページを返していた。404にして「もう無い」と伝える。
+    // ⚠️ 404にするのは「クエリ成功かつ0件」のときだけ。DB障害時に404を返すと
+    //    実在ページを一斉に消滅扱いにしてしまう（6/30の全API停止の型）。
+    if (!shopRes.error && !therapistRes.error && (!shopData || !therapistData)) {
+      return { notFound: true };
+    }
 
     // 3. 公開口コミ取得（is_public=true または owner_manual）
     let reviewShopIds = [shopId];
@@ -113,7 +121,25 @@ export async function getServerSideProps({ params, res }) {
 
     return {
       props: {
-        ssrShop: shopData || null,
+        // ⚠️ raw_data を丸ごと渡さない（1店あたり約11.9KB・その96%が raw_data.threads＝古い重複セラピスト）。
+        //    渡すと __NEXT_DATA__ 経由でHTMLに焼き込まれ、口コミ本命ページのHTMLが3倍に膨れる。
+        //    ThreadDetailPage が shop から読むのは id/name/image_url と prefecture/city のみ。
+        //    prefecture/city は raw_data の中にあるのでここで平らに展開して渡す
+        //    （従来は raw_data のまま渡していたため shop.prefecture が undefined になり、
+        //      description が「（undefined undefined）」になっていた副次バグも同時に解消）。
+        ssrShop: shopData
+          ? {
+              id: shopData.id,
+              name: shopData.name,
+              group_id: shopData.group_id || null,
+              image_url: shopData.image_url || null,
+              website_url: shopData.website_url || null,
+              prefecture: shopData.raw_data?.prefecture || null,
+              city: shopData.raw_data?.city
+                || (Array.isArray(shopData.raw_data?.area) ? shopData.raw_data.area[0] : shopData.raw_data?.area)
+                || null,
+            }
+          : null,
         ssrTherapist: therapistData || null,
         ssrPublicReviews: publicReviews,
         ssrAvgRating: avgRating,
@@ -122,6 +148,11 @@ export async function getServerSideProps({ params, res }) {
     };
   } catch (e) {
     console.error('[SSR ThreadDetail]', e.message);
+    // ⚠️ DB障害時は404にしない。503＝「一時的に不可・後で来て」でURLを保持させる。
+    //    200で空ページを返すのが最悪（インデックス崩落の型）。
+    res.statusCode = 503;
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Retry-After', '120');
     return { props: { ssrShop: null, ssrTherapist: null, ssrPublicReviews: [], ssrAvgRating: null, ssrRelated: [] } };
   }
 }

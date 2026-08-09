@@ -1,0 +1,21 @@
+[
+  {
+    "at": "2026-08-07 08:47:35",
+    "shops": {
+      "total": 1098,
+      "nulls": 79,
+      "nullPct": 7.2,
+      "sampled": 5,
+      "dead": 0,
+      "deadPct": 0
+    },
+    "therapists": {
+      "total": 60999,
+      "nulls": 10221,
+      "nullPct": 16.8,
+      "sampled": 0,
+      "dead": 0,
+      "deadPct": 0
+    }
+  }
+]

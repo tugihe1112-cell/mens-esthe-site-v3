@@ -21,52 +21,96 @@ export async function getServerSideProps({ params, res }) {
     process.env.SUPABASE_SERVICE_ROLE_KEY || ''
   );
   try {
-    const { data: shop } = await supabase
-      .from('shops')
-      .select('id, name, group_id, image_url, website_url, raw_data')
-      .eq('id', shopId)
-      .single();
+    // ── 速度改善(2026-08-09): 直列6クエリ → 3ウェーブに並列化 ──
+    // 以前は shop → group → reviews → count → revT → nearby を全部 await で直列に回しており、
+    // 1本50〜150msでも合計600ms〜2.5秒のTTFBになっていた（実測: HTML受信完了 2,573ms）。
+    // 依存関係は「shop が要る／reviewShopIds が要る」の2段しかないので3ウェーブで足りる。
+
+    // ── wave 1: shop 本体と 在籍数（在籍数は shopId だけで引けるので同時に投げられる）
+    const [shopRes, therapistCountRes] = await Promise.all([
+      supabase
+        .from('shops')
+        .select('id, name, group_id, image_url, website_url, raw_data')
+        .eq('id', shopId)
+        // ⚠️ single() は「0件」もエラー扱いになり、本物のDB障害と区別できない。
+        //    404を出す判断をするので maybeSingle()（0件は data=null / error=null）にする。
+        .maybeSingle(),
+      supabase
+        .from('therapists')
+        .select('id', { count: 'exact', head: true })
+        .eq('shop_id', shopId),
+    ]);
+    const shop = shopRes.data;
+    const therapistCount = therapistCountRes.count;
+
+    // ── ソフト404の解消（2026-08-10・GSC「重複しています。ユーザーにより、正規ページとして
+    //    選択されていません」30件の原因）──
+    // 存在しない shopId（過去に削除した重複店・legacyの brand_<hash> 等）でも
+    // **HTTP 200 で「Shop not found」画面**を返しており、canonicalもnoindexも無かった。
+    // Googleから見ると「中身がほぼ同じ空ページが30枚」＝重複扱いでインデックス品質を汚す。
+    // 正しくは404（このURLはもう無い）を返す。/area/* で08-06に直したのと同じ型。
+    //
+    // ⚠️ 404にしてよいのは「クエリは成功したが0件だった」ときだけ。
+    //    DB障害（error あり）で404を返すと、6/30のような全API停止時に
+    //    実在する1,098ページを一斉に「消滅」とGoogleに宣言してしまう。
+    //    取れない時は消さない＝下の catch と同じ思想。
+    if (!shopRes.error && !shop) {
+      return { notFound: true };
+    }
+
+    const prefecture = shop?.raw_data?.prefecture || null;
+    const area = Array.isArray(shop?.raw_data?.area) ? shop.raw_data.area[0] : shop?.raw_data?.area || null;
+
+    // ── wave 2: 系列店ID と 同エリア他店（どちらも shop だけに依存＝並列可）
+    const [groupRes, nearRes] = await Promise.all([
+      shop?.group_id
+        ? supabase.from('shops').select('id').eq('group_id', shop.group_id)
+        : Promise.resolve({ data: null }),
+      prefecture
+        ? supabase
+            .from('shops')
+            .select('id, name, raw_data')
+            .eq('raw_data->>prefecture', prefecture)
+            .neq('id', shopId)
+            .limit(60)
+        : Promise.resolve({ data: null }),
+    ]);
 
     // 口コミ共有モデル: group_idがあれば系列全店のshop_idを対象にする
     let reviewShopIds = [shopId];
-    if (shop?.group_id) {
-      const { data: g } = await supabase.from('shops').select('id').eq('group_id', shop.group_id);
-      if (g?.length) reviewShopIds = g.map((s) => s.id);
-    }
+    if (groupRes.data?.length) reviewShopIds = groupRes.data.map((s) => s.id);
 
-    const { data: reviews } = await supabase
-      .from('reviews')
-      .select('rating, content, created_at')
-      .in('shop_id', reviewShopIds)
-      .or('is_public.eq.true,user_id.eq.owner_manual')
-      .order('created_at', { ascending: false })
-      .limit(50);
+    // ── wave 3: 口コミ2本（どちらも reviewShopIds に依存＝並列可）
+    const [reviewsRes, revTRes] = await Promise.all([
+      supabase
+        .from('reviews')
+        .select('rating, content, created_at')
+        .in('shop_id', reviewShopIds)
+        .or('is_public.eq.true,user_id.eq.owner_manual')
+        .order('created_at', { ascending: false })
+        .limit(50),
+      supabase
+        .from('reviews')
+        .select('therapist_id, therapist_name, rating')
+        .in('shop_id', reviewShopIds)
+        .or('is_public.eq.true,user_id.eq.owner_manual')
+        .not('therapist_id', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(60),
+    ]);
+    const reviews = reviewsRes.data;
+    const revT = revTRes.data;
 
     const count = reviews?.length || 0;
     const avg = count ? (reviews.reduce((s, r) => s + (r.rating || 3), 0) / count).toFixed(1) : null;
     const sample = count ? (reviews[0].content || '').replace(/\s+/g, '').slice(0, 70) : '';
 
-    // ── ここから「1,098ページ全部に固有の中身を持たせる」ための追加取得 ──
+    // ── ここから「1,098ページ全部に固有の中身を持たせる」ための整形 ──
     // 背景: 料金/営業時間は487店しか取れておらず、残りは「情報なし」の行き止まりだった。
     //       欠損を埋めることはできないので、"持っているデータ"（在籍数・口コミ付きセラピスト・同エリア他店）に置き換える。
-    const prefecture = shop?.raw_data?.prefecture || null;
-    const area = Array.isArray(shop?.raw_data?.area) ? shop.raw_data.area[0] : shop?.raw_data?.area || null;
-
-    // 在籍セラピスト数（全店にある固有データ）
-    const { count: therapistCount } = await supabase
-      .from('therapists')
-      .select('id', { count: 'exact', head: true })
-      .eq('shop_id', shopId);
+    // ※ 取得自体は上の wave1〜3 で並列に済ませている。ここは組み立てのみ。
 
     // 口コミがあるセラピスト（＝読ませる価値のある内部リンク先）
-    const { data: revT } = await supabase
-      .from('reviews')
-      .select('therapist_id, therapist_name, rating')
-      .in('shop_id', reviewShopIds)
-      .or('is_public.eq.true,user_id.eq.owner_manual')
-      .not('therapist_id', 'is', null)
-      .order('created_at', { ascending: false })
-      .limit(60);
     const seenT = new Set();
     const reviewedTherapists = [];
     for (const r of revT || []) {
@@ -78,13 +122,8 @@ export async function getServerSideProps({ params, res }) {
 
     // 同エリアの他店（回遊＋クロール経路。エリアが無ければ同県でフォールバック）
     let nearbyShops = [];
-    if (prefecture) {
-      const { data: near } = await supabase
-        .from('shops')
-        .select('id, name, raw_data')
-        .eq('raw_data->>prefecture', prefecture)
-        .neq('id', shopId)
-        .limit(60);
+    {
+      const near = nearRes.data;
       const sameArea = (near || []).filter((s) => {
         const a = Array.isArray(s.raw_data?.area) ? s.raw_data.area[0] : s.raw_data?.area;
         return area ? a === area : true;
@@ -94,9 +133,19 @@ export async function getServerSideProps({ params, res }) {
         .map((s) => ({ id: s.id, name: s.name }));
     }
 
+    // ⚠️ ssrShop に raw_data を載せない。
+    //    raw_data は1店あたり約11.9KBで、その96%が raw_data.threads（古い重複セラピスト）。
+    //    これを props に入れると __NEXT_DATA__ 経由でHTMLに丸ごと焼き込まれ、
+    //    実測でHTML 16KB中13KBがこのブロブだった（＝全店舗ページのHTMLが3倍に膨れていた）。
+    //    このラッパーが shop から使うのは id / name / image_url だけ。
+    //    prefecture・area は上で取り出して別propsで渡している。
+    const ssrShop = shop
+      ? { id: shop.id, name: shop.name, image_url: shop.image_url || null }
+      : null;
+
     return {
       props: {
-        ssrShop: shop || null,
+        ssrShop,
         ssrReviewCount: count,
         ssrAvgRating: avg,
         ssrSample: sample,
@@ -109,6 +158,12 @@ export async function getServerSideProps({ params, res }) {
     };
   } catch (e) {
     console.error('[SSR ShopDetail]', e.message);
+    // ⚠️ ここは「DBが落ちている」等の異常系。404は絶対に返さない（実在ページを消滅扱いにしてしまう）。
+    //    代わりに 503（一時的に利用不可）を返す＝Googleは「後でまた来る」と解釈しURLを保持する。
+    //    200で空ページを返すのが最悪（6/30の全API 402停止 → 空ページを配信 → インデックス崩落の型）。
+    res.statusCode = 503;
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Retry-After', '120');
     return {
       props: {
         ssrShop: null, ssrReviewCount: 0, ssrAvgRating: null, ssrSample: '',

@@ -15,32 +15,54 @@ export const DataProvider = ({ children }) => {
   const [loadedReviewShopIds, setLoadedReviewShopIds] = useState(new Set());
 
   useEffect(() => {
+    // ── フォールバック: ブラウザから直接Supabaseを叩く従来経路 ──
+    // ⚠️ 全件取得は必ず range() でページングすること。
+    //    PostgREST はサーバー側の max-rows（既定1000）が優先されるため、
+    //    limit も range も付けない素の select は 1,000 行で頭打ちになり、
+    //    掲載1,098店のうち約98店がエラーも警告も出さずに欠落していた
+    //    （サイトマップで潰したのと同じバグ。api/sitemap.xml.js と同方式に揃える）。
+    //    .order('id') は range のページ境界で取りこぼし/重複を出さないために必須。
+    //    NOTE: price_system / business_hours / phone_number は初回selectから外して
+    //    軽量化したかったが、SearchPage の ShopCard（検索結果の「詳細▾」で料金・
+    //    営業時間・電話を出す）が DataContext の shops から直接読んでいるため外せない。
+    //    外すと検索結果の詳細パネルが無言で空になる。
+    const fetchDirectFromSupabase = async () => {
+      const PAGE = 1000;
+      const out = [];
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await supabase
+          .from('shops')
+          .select('id, group_id, name, raw_data, website_url, schedule_url, phone_number, business_hours, price_system, image_url')
+          .order('id')
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        if (!data || data.length === 0) break;
+        out.push(...data);
+        if (data.length < PAGE) break;
+        if (out.length >= 50000) break; // 暴走ガード
+      }
+      return out;
+    };
+
     const fetchInitialData = async () => {
       try {
-        // ⚠️ 全件取得は必ず range() でページングすること。
-        //    PostgREST はサーバー側の max-rows（既定1000）が優先されるため、
-        //    limit も range も付けない素の select は 1,000 行で頭打ちになり、
-        //    掲載1,098店のうち約98店がエラーも警告も出さずに欠落していた
-        //    （サイトマップで潰したのと同じバグ。api/sitemap.xml.js と同方式に揃える）。
-        //    .order('id') は range のページ境界で取りこぼし/重複を出さないために必須。
-        //    NOTE: price_system / business_hours / phone_number は初回selectから外して
-        //    軽量化したかったが、SearchPage の ShopCard（検索結果の「詳細▾」で料金・
-        //    営業時間・電話を出す）が DataContext の shops から直接読んでいるため外せない。
-        //    外すと検索結果の詳細パネルが無言で空になる。
-        const PAGE = 1000;
-        const shopsData = [];
-        for (let from = 0; ; from += PAGE) {
-          const { data, error } = await supabase
-            .from('shops')
-            .select('id, group_id, name, raw_data, website_url, schedule_url, phone_number, business_hours, price_system, image_url')
-            .order('id')
-            .range(from, from + PAGE - 1);
-          if (error) throw error;
-          if (!data || data.length === 0) break;
-          shopsData.push(...data);
-          if (data.length < PAGE) break;
-          if (shopsData.length >= 50000) break; // 暴走ガード
+        // ── 速度改善(2026-08-09) ──
+        // まず /api/shops-lite（サーバー側で raw_data.threads を落としCDNキャッシュ済み）を試す。
+        // threads は raw_data の96%を占める古い重複セラピストデータで、
+        // 全ユーザーが全ページで推定12MBをDL+JSONパースしていた＝体感速度の主犯。
+        // API側が落ちた場合だけ従来どおりブラウザから直接Supabaseを叩く（機能は落とさない）。
+        let shopsData = [];
+        try {
+          const r = await fetch('/api/shops-lite');
+          if (!r.ok) throw new Error('shops-lite ' + r.status);
+          const j = await r.json();
+          if (!Array.isArray(j) || j.length === 0) throw new Error('shops-lite empty');
+          shopsData = j;
+        } catch (liteErr) {
+          console.warn('⚠️ /api/shops-lite 失敗 → 直接Supabaseにフォールバック:', liteErr.message);
+          shopsData = await fetchDirectFromSupabase();
         }
+
         if (shopsData.length) {
           setShops(shopsData.map(d => {
             const raw = d.raw_data || {};

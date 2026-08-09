@@ -243,7 +243,9 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
     );
   }
 
-  const seoDesc = `${shop.name}（${shop.prefecture} ${shop.city}）のセラピスト、${therapist.name}さんのプロフィールとクチコミ。年齢:${therapist.age}歳。`;
+  // 場所・年齢は欠損することがあるので、空なら丸ごと省く（「（undefined undefined）」「年齢:undefined歳」を出さない）
+  const shopPlace = [shop.prefecture, shop.city].filter(Boolean).join(' ');
+  const seoDesc = `${shop.name}${shopPlace ? `（${shopPlace}）` : ''}のセラピスト、${therapist.name}さんのプロフィールとクチコミ。${therapist.age ? `年齢:${therapist.age}歳。` : ''}`;
 
   const handlePostReview = () => {
     navigate(`/shops/${shopId}/threads/${threadId}/review`);

@@ -2,6 +2,13 @@ node_modules
 dist
 .DS_Store
 .env
+# ⚠️ .env のバックアップ・派生ファイルも必ず除外する。
+#    2026-08-10、鍵ローテーション時に作った .env.backup_1786092315 を `git add -A` が拾い、
+#    GitHubのプッシュ保護がAnthropic/Supabase/Resendの鍵を検出してpushを拒否した
+#    （＝公開はされていないが、`.env` だけの指定では防げないと判明した）。
+.env.*
+!.env.example
+.env.backup*
 .vercel
 migrate_to_supabase.js
 

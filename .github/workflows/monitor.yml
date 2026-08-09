@@ -35,3 +35,13 @@ jobs:
         run: node scripts/monitoring/check_chunk_integrity.mjs
         env:
           BASE_URL: https://www.mens-esthe-map.jp
+
+      # ソフト404（存在しないページが200を返す）と、その逆（実在ページを404にしてしまう）の両方を監視。
+      # 2026-08-10のGSC「重複・正規ページ未選択30件」は前者。08-06に /area/* で直したのと同じ型が
+      # /shops/* で再発していたため、機械で見張る。詳細は scripts/monitoring/check_http_status.mjs 参照。
+      # ※ chunk側が落ちても必ず実行する（両方の結果を一度に知りたいため）
+      - name: Check HTTP status (soft 404 / over-404 / noindex誤爆)
+        if: always()
+        run: node scripts/monitoring/check_http_status.mjs
+        env:
+          BASE_URL: https://www.mens-esthe-map.jp
