@@ -20,22 +20,31 @@
 
 const BASE = process.env.BASE_URL || 'https://www.mens-esthe-map.jp';
 
-// 実在しないURL（過去に削除された重複店・legacyのbrand_ハッシュ・明らかなダミー）
+// 実在しないURL（過去に削除された重複店・legacyの brand_<hash>・明らかなダミー）
 // → 404 が返るのが正しい
+// ⚠️ ここに入れてよいのは「DBに存在しないと確認済み」のURLだけ。
+//    実在URLを混ぜると監視が永久に赤くなり、最悪「実在ページを404にする」誤修正を誘発する。
 const MUST_404 = [
   '/shops/brand_59990861bb3800cabcb47ca6dd5d1b5f',
-  '/shops/tokyo_shinjuku_nishishinjuku_cor_caroli',
+  '/shops/brand_fcf5a2d6fa81aa575e071b85fcfc38a6',
   '/shops/__no_such_shop_monitor__',
   '/shops/kanagawa_sagamihara_unison_spa/threads/__no_such_therapist_monitor__',
 ];
 
 // 実在するURL → 200 が返るのが正しい（404化やDB障害の巻き添えを検知する安全網）
+// ⚠️ 下3件は GSC の「重複」リストに載っているが **実在する店舗**（系列店どうしで
+//    在籍セラピスト・口コミが同じために近似コンテンツと判定されているだけ）。
+//    ステータスの問題ではなくコンテンツ差別化の課題なので、**絶対に404にしない**。
+//    ここに置いて「うっかり消していないか」を見張る。
 const MUST_200 = [
   '/',
   '/shops/kanagawa_sagamihara_unison_spa',
   '/shops/hiroshima_hiroshima_hitozuma_san',
   '/area/tokyo',
   '/area/gunma',
+  '/shops/tokyo_shinjuku_nishishinjuku_cor_caroli',      // メンズエステ コル・カロリ 西新宿店
+  '/shops/tokyo_shinjuku_shinjuku_gyoen_platinum_tokyo', // PLATINUM TOKYO 新宿御苑店
+  '/shops/osaka_tanimachi_新感覚mエステ',                 // 新感覚Mエステ
 ];
 
 // index されるべきなのに noindex が付いていないか（8/6に直したエリアページの再発検知）
