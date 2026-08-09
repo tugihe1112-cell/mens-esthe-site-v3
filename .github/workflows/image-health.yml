@@ -22,8 +22,18 @@ jobs:
   image-health:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # 履歴JSONをコミットして戻すために書き込み権限が要る。
+    # （Settings → Actions → General → Workflow permissions が "Read and write" である必要あり。
+    #   読み取り専用のままでも下の commit step は continue-on-error で握りつぶすので、
+    #   監視自体が誤って赤くなることはない）
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          # 既定の浅いclone（depth=1）だと後段の `git pull --rebase` が
+          # "shallow update not allowed" で失敗することがあるため全履歴を取る。
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -42,3 +52,45 @@ jobs:
           SHOPS_NULL_MAX: '20'
           DEAD_MAX: '5'
           JUMP_MAX: '30'
+
+      # ── 履歴JSONをリポジトリに書き戻す ──
+      # これが無いと、スクリプトが書いた履歴はランナー破棄と共に消え、
+      # 前回比（JUMP_MAX）の基準が永久に更新されない＝じわじわ増える劣化を検知できない。
+      # 実際 2026-08-10 時点で履歴は 08-07 の1件だけで凍結していた（しかもローカル実行分）。
+      #
+      # ⚠️ **わざと `if: success()`（＝既定）にしている。**
+      #    異常検知で失敗した回の値をコミットすると、その悪化した値が翌日の「前回値」になり
+      #    jump が 0 に見えてアラートが自然消滅する（＝異常が新しい正常として黙認される）。
+      #    失敗時は履歴を進めないことで、人間が直すまでアラートを鳴らし続ける。
+      #
+      # ⚠️ `continue-on-error: true`＝書き戻しに失敗しても監視自体は赤くしない。
+      #    権限設定などの副次的な理由で監視が常時赤くなると、本当の異常を見落とす方が損。
+      - name: Commit history back
+        continue-on-error: true
+        run: |
+          set -eu
+          FILE=scripts/monitoring/image_health_history.json
+          if git diff --quiet -- "$FILE"; then
+            echo "履歴に変化なし（コミット不要）"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$FILE"
+          # [skip ci] を付けて ci.yml（next build）を無駄に回さない
+          git commit -m "chore(monitor): 画像健全性の履歴を更新 [skip ci]"
+          # 人間のpushと衝突しても壊れないよう rebase してから push
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main
+
+      # 毎回の結果をActionsの実行サマリーに残す（CIが走った痕跡＋その日の数値が一目で分かる）
+      - name: Write job summary
+        if: always()
+        run: |
+          {
+            echo "### 画像健全性チェック"
+            echo ""
+            echo '```json'
+            tail -c 1200 scripts/monitoring/image_health_history.json || echo "(履歴なし)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
