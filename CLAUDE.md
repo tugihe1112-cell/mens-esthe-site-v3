@@ -26,6 +26,12 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
+### 2026-08-12
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ✅ | **🚨【最重要】管理者パスワードが本番ログイン画面で公開されていた（`371523c`・修正＋本番検証完了）** | ChatGPT側のセキュリティ監査への回答として実物を検証中に発見。**`src/pages/LoginPage.jsx` に管理者アカウントのメールとパスワードが平文でハードコードされ、それを入力する「Fill Master ID」ボタンが本番のログイン画面に公開されていた**（`/login` を開いてボタンを押すだけで誰でも管理者としてログイン可能＝`/admin`でクレジット付与・口コミ削除ができた）。本番のJSチャンク`login-*.js`にパスワード文字列が含まれていることも実測で確認。**リスト化された他のどの指摘よりも深刻＝現に悪用可能な状態**だったため最優先で対処。**対処4点**: (a)`LoginPage.jsx`から`fillAccount`関数と「Quick Access / Fill Master ID」ブロックを削除。(b)`ADMIN_EMAILS`（`src/pages/AdminPage.jsx`・`api/admin-grant-credit.js`）から`master@mens-esthe.jp`を除去し`tugihe1112@gmail.com`のみに。(c)`supabase_migrations/10_remove_master_admin.sql`新設＝RLSの`reviews_admin_delete`・`user_badges_admin_write`から同アドレスを除去（**⚠️当初`user_badges_admin_all`と誤記しており、そのまま実行していたら`DROP IF EXISTS`が空振りして古いポリシーが残ったまま「成功」に見えるところだった**。実ファイルでポリシー名を確認して回避）。(d)アカウント自体は**Supabaseダッシュボードからの削除が`Failed to delete selected users: {}`で失敗**（他テーブルのFK参照が原因と推定）したため、SQLで`banned_until='infinity'`＋`auth.sessions`削除＝**ログイン恒久禁止**にした（メールアドレスが出鱈目で復旧メールが届かないため、パスワード変更でなくbanを選択）。**✅本番検証**: `/login`のボタンは「LOGIN」のみ・**JS8本すべてに認証情報の残存0件**・`banned_until=infinity`／`active_sessions=0`・ポリシー検索0件。**⚠️自分の誤りの訂正**: 「そのドメインの所有者が同じアドレスで登録すれば管理者になれる」と警告したが、**アカウントが存在する限りSupabaseは同一メールの二重登録を許さない**ため、その経路は元々塞がっていた（リスクを過大評価した）。ただし`ADMIN_EMAILS`から外す対処自体は正しい。**なお`handle_new_user`の`master@%`でVIP自動付与される件（ChatGPT指摘）は未修正だが、ユーザー3人に不審な登録は無く未悪用を確認済み＝P1**。 |
+
 ### 2026-08-11
 
 | 状態 | 作業内容 | メモ |
