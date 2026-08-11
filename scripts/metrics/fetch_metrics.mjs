@@ -101,18 +101,51 @@ async function main() {
   const newRow = `| ${dateCell} | ${total.clicks} | ${total.impressions} | ${total.position.toFixed(1)} | ${g.users} | ${cell(TARGETS['unison相模原'])} | ${cell(TARGETS['こころ大阪'])} | ${cell(TARGETS['広島人妻'])} | ${sanity}自動取得(GSC ${START}〜${END}/返却${daysReturned}日/GA4=日本のみ eng${g.engRate})。施策/所感は毎朝タスクが追記 |`;
 
   let md = fs.readFileSync(MD, 'utf-8');
+  const lines = md.split('\n');
   // 重複判定は⚠️プレフィックスを許容する（付いた日の翌日以降に二重追記されるのを防ぐ）
-  const alreadyLogged = new RegExp(`^\\|\\s*(?:⚠️\\s*)?${today}\\s*\\|`, 'm').test(md);
-  if (alreadyLogged) { console.log(`既に ${today} の行あり → スキップ:`, newRow); }
-  else {
-    // 最後の表データ行のすぐ下に挿入（空行を作らず表を連続させる）
-    const lines = md.split('\n');
+  const todayRe = new RegExp(`^\\|\\s*(?:⚠️\\s*)?${today}\\s*\\|`);
+  const idx = lines.findIndex((l) => todayRe.test(l));
+
+  // 数値セルが「未記入」かどうか（—／－／-／空／? を未記入とみなす）
+  const isBlank = (s) => /^\s*(?:[—－\-–]|\?|)\s*$/.test(s || '');
+
+  if (idx === -1) {
+    // ── 今日の行がまだ無い → 末尾に追記（通常ルート）
     let lastRow = -1;
     for (let i = 0; i < lines.length; i++) if (lines[i].startsWith('| ')) lastRow = i;
     lines.splice(lastRow + 1, 0, newRow);
     fs.writeFileSync(MD, lines.join('\n'));
     console.log('✅ 追記:', newRow);
+    return;
   }
+
+  // ── 今日の行が既にある場合 ──
+  // ⚠️ 2026-08-11の事故対策:
+  //    毎朝9時の日次ダイジェストタスクが、数値の取得前に「| 08-11 | — | — | … |」という
+  //    プレースホルダ行を先に書くことがある（launchdが8:55で失敗した日など）。
+  //    従来はここで無条件にスキップしていたため、**その後いくら実行しても
+  //    「既に今日の行あり」と判定され、本物の数値が永久に入らなかった**。
+  //    ＝欠測を恐れて空行を先に書く運用が、逆に本物のデータを締め出していた。
+  //    そこで「行はあるが数値が未記入」なら数値セルだけを埋める（所感列は消さない）。
+  const cells = lines[idx].split('|');
+  // cells = ['', 日付, click, 表示, 順位, GA4U, unison, こころ, 広島, 所感, '']
+  const numericBlank = [2, 3, 4, 5].every((i) => isBlank(cells[i]));
+
+  if (!numericBlank) {
+    console.log(`既に ${today} の行あり（数値も記入済み）→ スキップ:`, newRow);
+    return;
+  }
+
+  const newCells = newRow.split('|');
+  const oldNote = (cells[9] || '').trim();
+  for (let i = 1; i <= 8; i++) cells[i] = newCells[i]; // 日付〜本命3ページを差し替え
+  cells[9] = ` ${newCells[9].trim()}`
+    + (oldNote
+      ? ` ⚠️**数値は後から補填**（この行は数値が無い時点で作られた）。補填前の記述: ${oldNote}`
+      : '');
+  lines[idx] = cells.join('|');
+  fs.writeFileSync(MD, lines.join('\n'));
+  console.log(`🔧 ${today} の空行に数値を補填しました:`, lines[idx].slice(0, 120) + '…');
 }
 // ── 起動直後の一過性エラーに対するリトライ ────────────────────────────
 // launchd が Mac のスリープ復帰直後に起動すると、まだ以下が整っていないことがある:
