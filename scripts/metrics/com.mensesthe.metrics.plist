@@ -13,6 +13,14 @@
       `ENOTFOUND oauth2.googleapis.com` も同型＝復帰直後でDNS未確立）。
     ＝「2回とも同じ原因(スリープでスキップ)」ではない。7/22は未発火、8/4は発火して失敗。
 
+  2026-08-11 改訂の理由:
+    ・この日は 8:55 / 12:55 / 19:55 の**3スロット全てで cron.log に1行も書かれなかった**
+      ＝単発スロットの失敗ではなく **launchdジョブ自体が動いていない**（Macが終日オフ／
+      スリープ、または LaunchAgent が unload された状態）。多重化では救えない型。
+    ・`run_daily.sh`（堅牢版ラッパー）が作られていたが、この plist は
+      `node fetch_metrics.mjs` を直叩きするままで**繋がっておらず**、git 未追跡の孤立
+      ファイルだった＝改善が一切効いていなかった。
+
   対策（システム設定は変更しない・plistとスクリプトのみ）:
     1. StartCalendarInterval を配列にして 8:55 / 12:55 / 19:55 の3回に。
        朝の回がスリープ等で落ちても、昼か夜のどれかがその日の行を埋める。
@@ -20,24 +28,40 @@
     2. 一過性エラー（DNS未確立・クロック未同期）はスクリプト側で最大約15分リトライする。
     3. ProcessType=Background でスリープ復帰直後の輻輳を避け、
        ThrottleInterval で連続再起動を抑える。
+    4. **実行対象を run_daily.sh に変更**（2026-08-11）。node を絶対パスで探索するため
+       launchd の最小PATHでも落ちない／成功日スタンプで冪等／専用ログに実行の痕跡が残る。
+    5. **RunAtLoad を追加**（2026-08-11）。ログイン・再起動・再ロードのたびに1回走るので、
+       Macが終日オフだった翌日に「起動した瞬間」に取りに行ける＝全スロット未発火の救済。
+       run_daily.sh は成功日スタンプで冪等なので、何度ロードされても二重追記しない。
 
   再登録（okabayashi が手元のターミナルで実行）:
+    chmod +x scripts/metrics/run_daily.sh
     cp scripts/metrics/com.mensesthe.metrics.plist ~/Library/LaunchAgents/
     launchctl unload ~/Library/LaunchAgents/com.mensesthe.metrics.plist
     launchctl load   ~/Library/LaunchAgents/com.mensesthe.metrics.plist
     launchctl list | grep mensesthe
+
+  ログの見方（2026-08-11以降）:
+    ~/Library/Logs/mens-esthe-metrics.log … run_daily.sh の実行記録（trigger/node/結果）
+    scripts/metrics/cron.log             … 旧経路の記録。今後はほぼ増えない
 -->
 <plist version="1.0">
 <dict>
   <key>Label</key>
   <string>com.mensesthe.metrics</string>
 
+  <!-- run_daily.sh を直接起動する（zsh -lc のログインシェル依存をやめる）。
+       ラッパー側で node を絶対パス探索・成功日スタンプで冪等化・専用ログへ出力する。 -->
   <key>ProgramArguments</key>
   <array>
-    <string>/bin/zsh</string>
-    <string>-lc</string>
-    <string>cd /Users/okabayashi/Downloads/mens-esthe-site &amp;&amp; node scripts/metrics/fetch_metrics.mjs</string>
+    <string>/Users/okabayashi/Downloads/mens-esthe-site/scripts/metrics/run_daily.sh</string>
+    <string>launchd</string>
   </array>
+
+  <!-- ログイン/再起動/再ロードのたびに1回走らせる＝全スロット未発火だった日の救済。
+       run_daily.sh が成功日スタンプで冪等なので二重実行にはならない。 -->
+  <key>RunAtLoad</key>
+  <true/>
 
   <!-- 朝が落ちても昼／夜が拾う。スクリプトは冪等なので重複追記されない。 -->
   <key>StartCalendarInterval</key>
@@ -76,9 +100,12 @@
   <key>ExitTimeOut</key>
   <integer>1800</integer>
 
+  <!-- run_daily.sh は自前で ~/Library/Logs/mens-esthe-metrics.log にリダイレクトするが、
+       スクリプトが起動すらできなかった場合（実行権限なし等）の launchd 側エラーを
+       取りこぼさないよう、同じファイルを指しておく。 -->
   <key>StandardOutPath</key>
-  <string>/Users/okabayashi/Downloads/mens-esthe-site/scripts/metrics/cron.log</string>
+  <string>/Users/okabayashi/Library/Logs/mens-esthe-metrics.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/okabayashi/Downloads/mens-esthe-site/scripts/metrics/cron.log</string>
+  <string>/Users/okabayashi/Library/Logs/mens-esthe-metrics.log</string>
 </dict>
 </plist>
