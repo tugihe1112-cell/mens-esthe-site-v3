@@ -172,9 +172,14 @@ export const DataProvider = ({ children }) => {
   }, [loadedReviewShopIds, getBrandShopIds]);
 
   const addReview = useCallback(async (newReview) => {
-    setReviews(prev => [newReview, ...prev]);
-    try {
-      await supabase.from('reviews').insert([{
+    // ⚠️ 2026-08-12 修正: 以前は (a)INSERT前に楽観的に画面へ追加し (b)エラーを
+    //    `catch (e) { console.error(e) }` で握りつぶしていた。
+    //    そのため **保存に失敗しても呼び出し側は成功扱い**になり、ユーザーには
+    //    「投稿完了」画面が出るのに1件も保存されない、という最悪の壊れ方をしていた。
+    //    公開INSERTポリシー（anonでも書ける穴）を閉じると、セッション切れ等で
+    //    RLSに弾かれるケースが現実に発生するため、ここを直さずに閉じてはいけない。
+    //    → 先にINSERTし、成功したときだけ画面に反映する。失敗は必ず throw する。
+    const { error } = await supabase.from('reviews').insert([{
         id: newReview.id || `r_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
         shop_id: newReview.shop_id || newReview.shopId || 'unknown',
         shop_name: newReview.shop_name || newReview.shopName || null,
@@ -188,7 +193,24 @@ export const DataProvider = ({ children }) => {
         tags: newReview.tags || null,
         content: newReview.content || newReview.text || '',
       }]);
-    } catch (e) { console.error(e); }
+
+    if (error) {
+      console.error('[addReview] 保存に失敗:', error);
+      // RLSに弾かれた場合は原因が分かるメッセージにする（セッション切れが典型）
+      const isRls = /row-level security|violates row-level|42501/i.test(
+        `${error.message || ''} ${error.code || ''}`
+      );
+      const e = new Error(
+        isRls
+          ? 'ログインの有効期限が切れている可能性があります。再度ログインしてから投稿してください。'
+          : `口コミの保存に失敗しました（${error.message || '原因不明'}）`
+      );
+      e.cause = error;
+      throw e;
+    }
+
+    // 保存に成功したときだけ画面に反映する
+    setReviews(prev => [newReview, ...prev]);
   }, []);
 
   const shopById = useMemo(() => {

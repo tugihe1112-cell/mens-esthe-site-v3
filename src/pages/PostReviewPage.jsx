@@ -622,7 +622,11 @@ export default function PostReviewPage() {
       setCompleted({ grantedDays, reviewLink, chars: len });
       window.scrollTo(0, 0);
     } else {
-      toast.error('投稿に失敗しました');
+      // ⚠️ 2026-08-12: 以前は保存失敗が握りつぶされ、失敗しても完了画面が出ていた。
+      //    いまは addReview が throw するのでここに来る。原因を具体的に伝える
+      //    （典型はセッション切れでRLSに弾かれるケース）。下書きは消さないので書き直し不要。
+      const msg = result?.error?.message || '投稿に失敗しました';
+      toast.error(msg, { duration: 6000 });
     }
   };
 
