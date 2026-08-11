@@ -5,7 +5,9 @@ import { supabase } from '../lib/supabase.js';
 import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 
-const ADMIN_EMAILS = ['tugihe1112@gmail.com', 'master@mens-esthe.jp'];
+// ⚠️ 2026-08-12: 'master@mens-esthe.jp' を削除（詳細は api/admin-grant-credit.js のコメント参照）。
+//    所有していないドメインのアドレスを管理者リストに入れてはいけない。
+const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
 
 const url = process.env.VITE_SUPABASE_URL;
 const key = process.env.VITE_SUPABASE_ANON_KEY;

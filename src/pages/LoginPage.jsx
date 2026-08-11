@@ -48,17 +48,12 @@ export default function LoginPage() {
     }
   };
 
-  const fillAccount = (type) => {
-    // 💡 先ほどターミナルで作った「本物のマスターID」をセットします
-    if (type === 'admin') { 
-      setEmail('master@mens-esthe.jp'); 
-      setPassword('MasterPassword2026!'); 
-    } else {
-      setEmail('');
-      setPassword('');
-      setError('デモ用アカウントは無効化されています。ご自身のアカウントでログインしてください。');
-    }
-  };
+  // ⚠️ 2026-08-12 削除: ここに管理者のメールとパスワードを**平文でハードコード**し、
+  //    それを「Fill Master ID」ボタンから誰でも入力できる状態で本番配信していた。
+  //    パスワード文字列は配信中のJSチャンク（login-*.js）にそのまま含まれており、
+  //    ログインページを開いてボタンを押すだけで誰でも管理者になれた
+  //    （/admin へのアクセス・クレジット付与・口コミ削除が可能）。
+  //    テスト用の入力補助を本番に残してはいけない。復活させないこと。
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-slate-950">
@@ -141,14 +136,9 @@ export default function LoginPage() {
         </div>
 
         {/* Quick Login Helpers */}
-        <div className="mt-8 px-4 opacity-50 hover:opacity-100 transition duration-500">
-          <p className="text-center text-[10px] font-bold text-slate-500 mb-3 uppercase tracking-widest">Quick Access</p>
-          <div className="flex justify-center">
-            <button onClick={() => fillAccount('admin')} className="px-6 py-2 bg-slate-900/60 rounded-lg border border-white/5 hover:border-pink-500/50 transition text-[10px] font-bold text-slate-400 hover:text-white">
-              Fill Master ID
-            </button>
-          </div>
-        </div>
+        {/* ⚠️ 2026-08-12 削除: 「Quick Access / Fill Master ID」ボタン。
+            管理者の認証情報を平文で埋め込んで本番配信していた重大な脆弱性のため撤去。
+            開発用の入力補助が必要な場合も、本番バンドルに認証情報を含めてはいけない。 */}
 
       </div>
       <style>{`

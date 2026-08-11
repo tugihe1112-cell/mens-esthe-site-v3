@@ -50,12 +50,20 @@
   <key>Label</key>
   <string>com.mensesthe.metrics</string>
 
-  <!-- run_daily.sh を直接起動する（zsh -lc のログインシェル依存をやめる）。
-       ラッパー側で node を絶対パス探索・成功日スタンプで冪等化・専用ログへ出力する。 -->
+  <!-- ⚠️ 2026-08-11 再訂正: ここで `~/Downloads/.../run_daily.sh` を直接指定してはいけない。
+       macOSのTCCが ~/Downloads を保護しており、LaunchAgent は**その中の実行ファイルを
+       起動できない**（`Operation not permitted` → 終了コード126）。
+       パーミッションを -rwxr-xr-x にしても解決しない＝chmodの問題ではない。
+       実測: `launchctl list` が `-  126  com.mensesthe.metrics` を返し続け、
+             ログには `/bin/bash: .../run_daily.sh: Operation not permitted` だけが並んだ。
+       一方、**launchd が /bin/zsh（システムバイナリ）を起動し、その子プロセスの node が
+       ~/Downloads を読み書きするのは通る**（2026-08-06〜08-10 に実際に動いていた実績あり）。
+       よって「launchdが直接起動するのは常にシステムバイナリ」を守る。 -->
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/okabayashi/Downloads/mens-esthe-site/scripts/metrics/run_daily.sh</string>
-    <string>launchd</string>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>cd /Users/okabayashi/Downloads/mens-esthe-site &amp;&amp; node scripts/metrics/fetch_metrics.mjs</string>
   </array>
 
   <!-- ログイン/再起動/再ロードのたびに1回走らせる＝全スロット未発火だった日の救済。
@@ -100,12 +108,12 @@
   <key>ExitTimeOut</key>
   <integer>1800</integer>
 
-  <!-- run_daily.sh は自前で ~/Library/Logs/mens-esthe-metrics.log にリダイレクトするが、
-       スクリプトが起動すらできなかった場合（実行権限なし等）の launchd 側エラーを
-       取りこぼさないよう、同じファイルを指しておく。 -->
+  <!-- ログは従来どおり cron.log に集約する（node の子プロセスからは書けることが実証済み）。
+       ⚠️ ~/Library/Logs/ 側に出すと「launchdが起動できなかった」ことしか記録されず、
+          肝心の取得結果が別ファイルに分裂して追いにくくなる。 -->
   <key>StandardOutPath</key>
-  <string>/Users/okabayashi/Library/Logs/mens-esthe-metrics.log</string>
+  <string>/Users/okabayashi/Downloads/mens-esthe-site/scripts/metrics/cron.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/okabayashi/Library/Logs/mens-esthe-metrics.log</string>
+  <string>/Users/okabayashi/Downloads/mens-esthe-site/scripts/metrics/cron.log</string>
 </dict>
 </plist>

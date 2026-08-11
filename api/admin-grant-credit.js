@@ -8,7 +8,13 @@
  */
 import { createClient } from '@supabase/supabase-js';
 
-const ADMIN_EMAILS = ['tugihe1112@gmail.com', 'master@mens-esthe.jp'];
+// ⚠️ 2026-08-12: 'master@mens-esthe.jp' を削除した。
+//    理由1: このアカウントのパスワードがログイン画面にハードコードされ本番配信されていた。
+//    理由2: ドメイン `mens-esthe.jp` は当サイト（mens-esthe-map.jp）の所有ドメインではない。
+//           管理者判定がメール完全一致のため、**そのドメインの所有者が同名のメールボックスを
+//           作って新規登録すれば管理者になれてしまう**（アカウントを消すだけでは塞がらない）。
+//    管理者を増やす場合も、他人が取得しうるドメインのアドレスは絶対に入れないこと。
+const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
