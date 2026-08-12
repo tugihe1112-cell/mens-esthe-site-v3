@@ -1,3 +1,10 @@
+-- ⚠️⚠️ このファイルは実行しないこと（2026-08-12 廃止・12_ に置き換え）⚠️⚠️
+--   順序ミスがあった: profiles.plan と user_credits を本人が書き換えられる状態のまま
+--   has_review_access() を作っており、自己VIP化・自己クレジット付与で素通りされる。
+--   実際に本番を調べたところ user_credits_no_direct_write は PERMISSIVE で
+--   何も禁止しておらず、自己付与が可能だった。
+--   → supabase_migrations/12_lock_privileges_and_reviews_rls.sql を使うこと。
+--
 -- 11_reviews_select_update_rls.sql — reviews の SELECT / UPDATE を正しい権限に締め直す
 --
 -- 【なぜ必要か（2026-08-12）】

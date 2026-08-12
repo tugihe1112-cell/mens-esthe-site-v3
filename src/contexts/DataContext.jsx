@@ -183,7 +183,20 @@ export const DataProvider = ({ children }) => {
         id: newReview.id || `r_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
         shop_id: newReview.shop_id || newReview.shopId || 'unknown',
         shop_name: newReview.shop_name || newReview.shopName || null,
-        therapist_id: newReview.therapist_id || newReview.therapistId || null,
+        // ⚠️ 2026-08-12: reviews.therapist_id は **NOT NULL**（DBの列定義で確認）。
+        //    「リストにいない」セラピストを手入力した場合 therapistId は null なので、
+        //    そのまま送ると NOT NULL 違反で必ず INSERT が失敗していた。
+        //    （従来はエラーを握りつぶしていたため、失敗しても完了画面が出ていて気づけなかった）
+        //    既存の命名規約 `{shop_id}_{セラピスト名}` に合わせた合成IDを入れる。
+        //    こうするとセラピストページのURLとも整合し、後から本登録された時に紐づく。
+        therapist_id:
+          newReview.therapist_id
+          || newReview.therapistId
+          || (() => {
+            const shop = newReview.shop_id || newReview.shopId || 'unknown';
+            const name = (newReview.therapist_name || newReview.therapistName || '').trim();
+            return name ? `${shop}_${name.replace(/[\s　]/g, '')}` : `${shop}_unknown`;
+          })(),
         therapist_name: newReview.therapist_name || newReview.therapistName || null,
         user_id: newReview.user_id || newReview.userId || 'anonymous',
         user_name: newReview.user_name || newReview.userName || newReview.user || '名無しさん',
