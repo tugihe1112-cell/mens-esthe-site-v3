@@ -3,12 +3,21 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { reviewSchema } from '../schema/reviewSchema';
 import { useShopData } from '../../../contexts/DataContext';
-import { useAppContext } from '../../../context/AppContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
 
 export const useReviewForm = () => {
   const { addReview } = useShopData();
-  const { user } = useAppContext();
+  // ⚠️ 2026-08-12 重大バグ修正: ここは `useAppContext()` の user を見ていた。
+  //    AppContext の user は **localStorage(`mens_esthe_user`) ベースの旧実装**で、
+  //    LoginPage は Supabase Auth（useAuth().signIn）でログインするだけで
+  //    AppContext.login() を呼ばないため、**この user は永遠に null** だった。
+  //    結果、PostReviewPage の `if (!user)` が常に成立し、
+  //    ログイン済みでも投稿しようとするとログイン画面へ送られる **無限ループ**になっていた。
+  //    ＝**実ユーザーは一度も口コミを投稿できていない**（本番の reviews に
+  //      UUID形式の user_id が0件であることと一致）。W2Rが回らなかった真因。
+  //    認証は Supabase Auth に一本化する。
+  const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // フォームの状態管理 (React Hook Form)
@@ -50,8 +59,18 @@ export const useReviewForm = () => {
         shop_id: data.shopId,
         therapist_id: data.therapistId || null,
         therapist_name: data.therapistName || null,
-        user_name: user?.name || user?.email || '名無しさん',
-        user_id: user?.id || 'anonymous',
+        // ⚠️ 絶対にメールアドレスを表示名にしない。
+        //    旧実装は `user?.name || user?.email` で、Supabase の user は .name を持たないため
+        //    **投稿者名として本人のメールアドレスが公開される**ところだった（個人情報漏洩）。
+        //    表示名は user_metadata のみを見て、無ければ「名無しさん」にする。
+        user_name:
+          user?.user_metadata?.display_name
+          || user?.user_metadata?.name
+          || user?.user_metadata?.user_name
+          || '名無しさん',
+        // 未ログインならここには来ない（PostReviewPage 側でログインへ誘導）が、
+        // 万一 null のまま送るとRLSに弾かれるので明示的に空にしておく。
+        user_id: user?.id || null,
         rating: parseFloat(totalScore),
         detailed_ratings: data.ratings,
         tags: data.tags,
