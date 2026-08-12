@@ -148,6 +148,84 @@ CREATE POLICY "reviews_admin_read"
 DROP POLICY IF EXISTS "reviews_no_anon_update" ON public.reviews;
 REVOKE UPDATE ON public.reviews FROM anon, authenticated;
 
+-- ══════════════════════════════════════════════════════════════
+-- ⑦ 既存トリガー関数の是正
+--   (a) search_path 未固定（Supabase Advisor の警告対象）を修正
+--   (b) **手入力セラピスト（manual_*）を自動公開させない**
+-- ══════════════════════════════════════════════════════════════
+-- ⚠️ (b) が本質。現在の set_first_review_public() は「店舗＋therapist_name の1件目」なら
+--    無条件に is_public=true にする。手入力名は本人確認されていないため、
+--    **任意のセラピスト名を審査前に公開ページへ注入できる**（名誉毀損・スパムの経路）。
+--    加えて manual_* は therapists に存在しないので、公開された瞬間に
+--    ホーム・人気口コミ・関連リンクが **404 のセラピストページへリンク**を作る
+--    （これらは全て is_public で絞っているため、公開させなければ発生しない）。
+--    → 判定を therapist_name ではなく「公式 therapists 行が存在するか」で行う。
+CREATE OR REPLACE FUNCTION public.set_first_review_public()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+BEGIN
+  -- 公式セラピストとして実在する場合のみ、初回公開の対象にする
+  IF NEW.therapist_id IS NOT NULL
+     AND EXISTS (SELECT 1 FROM public.therapists t WHERE t.id = NEW.therapist_id)
+     AND NEW.therapist_name IS NOT NULL
+     AND NEW.therapist_name <> ''
+  THEN
+    IF NOT EXISTS (
+      SELECT 1 FROM public.reviews r
+      WHERE r.shop_id = NEW.shop_id
+        AND r.therapist_name = NEW.therapist_name
+    ) THEN
+      NEW.is_public := true;
+    END IF;
+  ELSE
+    -- manual_*（手入力）・指名なし・存在しないIDは必ず非公開。
+    -- 管理者が /admin で内容を確認してから公開する運用にする。
+    NEW.is_public := false;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+-- credits 付与トリガーも search_path を固定し完全修飾する（挙動は変更しない）
+CREATE OR REPLACE FUNCTION public.auto_grant_credits_on_review()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  len integer := length(coalesce(NEW.content, ''));
+  days_to_add integer := 0;
+BEGIN
+  -- user_id がUUID形式（実ユーザー）のみ対象
+  IF NEW.user_id ~ '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$' THEN
+    IF len >= 700 THEN
+      days_to_add := 7;
+    ELSIF len >= 200 THEN
+      days_to_add := 3;
+    END IF;
+
+    IF days_to_add > 0 THEN
+      INSERT INTO public.user_credits (user_id, credits_days, expires_at, total_reviews_posted, updated_at)
+      VALUES (NEW.user_id::uuid, days_to_add, now() + (days_to_add || ' days')::interval, 1, now())
+      ON CONFLICT (user_id) DO UPDATE SET
+        credits_days = public.user_credits.credits_days + days_to_add,
+        expires_at = greatest(coalesce(public.user_credits.expires_at, now()), now()) + (days_to_add || ' days')::interval,
+        total_reviews_posted = public.user_credits.total_reviews_posted + 1,
+        updated_at = now();
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+-- トリガー経由でのみ発火させる（直接呼び出しを塞ぐ）
+REVOKE EXECUTE ON FUNCTION public.set_first_review_public()      FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.auto_grant_credits_on_review() FROM PUBLIC, anon, authenticated;
+
 COMMIT;
 
 -- ══════════════════════════════════════════════════════════════

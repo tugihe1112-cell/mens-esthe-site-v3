@@ -40,7 +40,11 @@ const STATIC_PAGES = [
 // サイトマップに出してはいけないID（テスト/ダミーデータ）。
 // 2026-08-08にGSCのサイトマップ実物を確認して `/shops/test_shop/threads/test_therapist` の混入が発覚。
 // Googleに「中身のないテストページ」を送るのはインデックス品質の毀損なので必ず除外する。
-const EXCLUDED_ID_PATTERNS = [/^test_/i, /^demo_/i, /^sample_/i, /_test$/i];
+// ⚠️ `manual_` は「リストにいない」セラピストを手入力した口コミ用の合成IDで、
+//    therapists テーブルには存在しない。サイトマップに載せると
+//    /shops/*/threads/manual_* が 404 になり、2026-08-10に潰したソフト404を
+//    自分で作り直すことになる（今度は本物の404なのでより悪い）。必ず除外する。
+const EXCLUDED_ID_PATTERNS = [/^test_/i, /^demo_/i, /^sample_/i, /_test$/i, /^manual_/i];
 const isExcludedId = (id) => !id || EXCLUDED_ID_PATTERNS.some((re) => re.test(String(id)));
 
 function xmlEscape(str) {

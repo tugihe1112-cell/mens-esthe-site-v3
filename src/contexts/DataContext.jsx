@@ -179,24 +179,29 @@ export const DataProvider = ({ children }) => {
     //    公開INSERTポリシー（anonでも書ける穴）を閉じると、セッション切れ等で
     //    RLSに弾かれるケースが現実に発生するため、ここを直さずに閉じてはいけない。
     //    → 先にINSERTし、成功したときだけ画面に反映する。失敗は必ず throw する。
+    const reviewId = newReview.id || `r_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+
     const { error } = await supabase.from('reviews').insert([{
-        id: newReview.id || `r_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        id: reviewId,
         shop_id: newReview.shop_id || newReview.shopId || 'unknown',
         shop_name: newReview.shop_name || newReview.shopName || null,
         // ⚠️ 2026-08-12: reviews.therapist_id は **NOT NULL**（DBの列定義で確認）。
         //    「リストにいない」セラピストを手入力した場合 therapistId は null なので、
         //    そのまま送ると NOT NULL 違反で必ず INSERT が失敗していた。
         //    （従来はエラーを握りつぶしていたため、失敗しても完了画面が出ていて気づけなかった）
-        //    既存の命名規約 `{shop_id}_{セラピスト名}` に合わせた合成IDを入れる。
-        //    こうするとセラピストページのURLとも整合し、後から本登録された時に紐づく。
+        //    ⚠️ 当初 `{shop_id}_{名前}` という既存規約に合わせた合成IDにしたが撤回した。
+        //    本番60,999人で照合すると規約と完全一致するのは81.8%・同一合成IDの重複が943件あり、
+        //    **別人の既存セラピストページに誤って紐づく**危険があったため。
+        //    名前ベースは `manual_` を付けても衝突が残る（同店の同名別人／記号除去後の一致／
+        //    絵文字だけの入力で空になる／表記揺れの誤統合）。
+        //    → **レビュー単位の一意ID**にする。表示名は therapist_name に必ず保存し、
+        //      後日 /admin から正式な therapist_id へ紐付ける運用にする。
+        //    ⚠️ manual_* は therapists に存在しないためセラピストページは404になる。
+        //      DB側のトリガーで manual_* は is_public=false に固定し、
+        //      ホーム・人気口コミ・関連リンク・サイトマップ（いずれも is_public で絞る）に
+        //      出さないことで404リンクの生成を防ぐ（12_のSQLを参照）。
         therapist_id:
-          newReview.therapist_id
-          || newReview.therapistId
-          || (() => {
-            const shop = newReview.shop_id || newReview.shopId || 'unknown';
-            const name = (newReview.therapist_name || newReview.therapistName || '').trim();
-            return name ? `${shop}_${name.replace(/[\s　]/g, '')}` : `${shop}_unknown`;
-          })(),
+          newReview.therapist_id || newReview.therapistId || `manual_${reviewId}`,
         therapist_name: newReview.therapist_name || newReview.therapistName || null,
         user_id: newReview.user_id || newReview.userId || 'anonymous',
         user_name: newReview.user_name || newReview.userName || newReview.user || '名無しさん',
