@@ -85,7 +85,7 @@ export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0
     <button
       onClick={toggle}
       disabled={isLoading}
-      title="参考になった口コミに感謝バッジを送ると、投稿者が閲覧日数を追加獲得できます"
+      title="参考になった口コミに感謝バッジを送ると、参考になった口コミに感謝を伝えられます"
       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
         given
           ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'

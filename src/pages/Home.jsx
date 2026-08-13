@@ -341,7 +341,6 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
             {[
               { icon: '🔍', title: 'キャスト検索', desc: '名前・店舗・エリアで絞り込み検索', link: '/search' },
               { icon: '✍️', title: '口コミを書く', desc: '体験談を投稿して閲覧権を獲得', link: '/post-review' },
-              { icon: '📋', title: '掲示板', desc: 'ユーザー同士で情報交換', link: '/board' },
               { icon: '🏆', title: 'ランキング', desc: '口コミ評価が高いセラピスト', link: '/ranking' },
             ].map(f => (
               <Link key={f.title} to={f.link}
@@ -425,14 +424,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
               </div>
               <span className="text-purple-400 text-xs font-bold group-hover:translate-x-1 transition-transform">口コミを見る →</span>
             </Link>
-            <Link to="/board" className="group relative rounded-2xl overflow-hidden border border-blue-500/20 bg-gradient-to-br from-blue-900/40 to-slate-900 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-1 p-4 flex flex-col justify-between min-h-[90px]">
-              <div>
-                <span className="text-xl">📋</span>
-                <h3 className="text-sm font-black text-white mt-1">掲示板</h3>
-                <p className="text-[10px] text-slate-400 mt-0.5">自由に質問・情報交換</p>
-              </div>
-              <span className="text-blue-400 text-xs font-bold group-hover:translate-x-1 transition-transform">掲示板へ →</span>
-            </Link>
+            {/* ⚠️ 2026-08-12: 掲示板の導線を一時撤去（decisions.md D-006） */}
           </div>
         </section>
 
@@ -604,15 +596,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
           </Link>
 
           {/* 掲示板 */}
-          <Link
-            to="/board"
-            className="block rounded-2xl bg-gradient-to-br from-blue-900/40 to-slate-900 border border-blue-500/20 hover:border-blue-500/50 p-5 transition-all duration-200 hover:-translate-y-0.5"
-          >
-            <div className="text-2xl mb-2">📋</div>
-            <h4 className="text-white font-black text-sm">掲示板</h4>
-            <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">情報交換・おすすめ・質問など</p>
-            <span className="block mt-3 text-blue-300 text-xs font-black">掲示板を見る →</span>
-          </Link>
+          {/* ⚠️ 2026-08-12: 掲示板の導線を一時撤去（decisions.md D-006） */}
 
           {/* メンズエステ統計2026 */}
           <Link

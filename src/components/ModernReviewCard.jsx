@@ -384,18 +384,14 @@ export default function ModernReviewCard({ review }) {
           </div>
         )}
 
-      {/* いいね・感謝バッジ・DM */}
-      <div className="flex justify-between items-center mt-2">
-        {/* DM ボタン（他者の口コミのみ・ログイン済み） */}
-        {user && review.user_id && review.user_id !== user.id && review.user_id !== 'owner_manual' && review.user_id !== 'menesthe_rewritten' && review.user_id !== 'menesthe_import' ? (
-          <DMButton toUserId={review.user_id} currentUser={user} navigate={navigate} />
-        ) : (
-          <div />
-        )}
-        <div className="flex gap-2">
-          <ThanksBadgeButton reviewId={review.id} toUserId={review.user_id} initialCount={review.badge_count || 0} />
-          <ReviewLikeButton reviewId={review.id} initialLikeCount={review.like_count || 0} />
-        </div>
+      {/* いいね */}
+      {/* ⚠️ 2026-08-12: 感謝バッジ(ThanksBadgeButton)とDM(DMButton)の導線を一時的に外した。
+          オーナー確定事項 D-006「掲示板・チャット・感謝バッジは一時的に非表示」に従う。
+          DB側（RLS・権限・トリガー）の安全化は 12_ で実施済みなので、
+          再開したいときはこのブロックにボタンを戻すだけでよい。
+          ※ DMButton / ThanksBadgeButton のコードは残してある（削除すると再開が面倒なため）。 */}
+      <div className="flex justify-end items-center mt-2">
+        <ReviewLikeButton reviewId={review.id} initialLikeCount={review.like_count || 0} />
       </div>
 
       </div>

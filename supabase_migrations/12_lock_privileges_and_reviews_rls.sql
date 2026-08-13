@@ -305,11 +305,35 @@ CREATE POLICY "user_badges_read_own"
   TO authenticated
   USING ((SELECT auth.uid()) = from_user_id OR (SELECT auth.uid()) = to_user_id);
 
--- 自分名義でしか送れない
+-- 自分名義でしか送れない ＋ 受取人と対象口コミの整合まで検証する
+-- ⚠️ from_user_id = auth.uid() だけでは、RESTを直接叩いて
+--    「任意の review_id ＋ 任意の to_user_id ＋ 自分自身宛て」を作れてしまう。
+--    reviews は RLS 有効なのでポリシー内から直接参照すると評価が不安定になるため、
+--    SECURITY DEFINER のヘルパーに閉じ込めて判定する。
+CREATE OR REPLACE FUNCTION private.badge_target_valid(p_review_id text, p_to_user uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.reviews r
+    WHERE r.id = p_review_id
+      AND r.user_id = p_to_user::text   -- 受取人＝その口コミの投稿者であること
+  );
+$$;
+REVOKE ALL ON FUNCTION private.badge_target_valid(text, uuid) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION private.badge_target_valid(text, uuid) TO authenticated;
+
 CREATE POLICY "user_badges_own_insert"
   ON public.user_badges FOR INSERT
   TO authenticated
-  WITH CHECK ((SELECT auth.uid()) = from_user_id);
+  WITH CHECK (
+    (SELECT auth.uid()) = from_user_id
+    AND from_user_id <> to_user_id                       -- 自分宛ては不可
+    AND (SELECT private.badge_target_valid(review_id, to_user_id))
+  );
 
 CREATE POLICY "user_badges_own_delete"
   ON public.user_badges FOR DELETE
@@ -336,6 +360,23 @@ END;
 $$;
 
 REVOKE EXECUTE ON FUNCTION public.update_review_badge_count() FROM PUBLIC, anon, authenticated;
+
+-- 架空の review_id で行を量産されないよう外部キーを張る（本番の user_badges は0件）
+ALTER TABLE public.user_badges DROP CONSTRAINT IF EXISTS user_badges_review_id_fkey;
+ALTER TABLE public.user_badges
+  ADD CONSTRAINT user_badges_review_id_fkey
+  FOREIGN KEY (review_id) REFERENCES public.reviews(id) ON DELETE CASCADE;
+
+-- ⚠️ user_badge_counts は SECURITY DEFINER View で、View経由だと**RLSを迂回して**
+--    集計結果とユーザーUUIDを取得できる（Security Advisor でも ERROR）。
+--    バッジUIは D-006 で一時非表示にしたため、今回は権限を落として封じるのが最小対応。
+--    再開時は security_invoker = true の View として作り直すこと。
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_views WHERE schemaname='public' AND viewname='user_badge_counts') THEN
+    REVOKE ALL ON public.user_badge_counts FROM anon, authenticated;
+  END IF;
+END $$;
 
 -- ══════════════════════════════════════════════════════════════
 -- ⑦ 既存トリガー関数の是正
