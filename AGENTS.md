@@ -26,7 +26,8 @@
   - SSRでは公開状態で本文を描画し、認証確定後にユーザー状態だけを更新する
   - 生成HTMLに8月の統計本文とDataset JSON-LDが入ることを確認
 - 見送ったもの: 実装済みのプリセット・200/700字メーター・投稿完了画面の作り直し、流入検証前の店舗UI改修、投稿者0人では判断不能な複雑KPI
-- 検証: Supabase読み取り専用集計を2回実行してSHA-256一致、`npm run build`でコンパイル・30ページ生成成功、`stats.html`に統計本文・JSON-LDを確認（既知の`typescript`未導入によるESLint parser警告は継続）
+- 実装コミット `ccc8cfa` をmainへpushし、Vercel Production `dpl_9BYRxkTHAUYReyUZHXHRkiJCcnA6` へ自動デプロイ済み
+- 検証: Supabase読み取り専用集計を2回実行してSHA-256一致、`npm run build`でコンパイル・30ページ生成成功。本番`/stats`はHTTP 200・55,948 bytesで8月本文とDataset JSON-LDを確認。`/`・`/post-review`・`/popular-reviews`もHTTP 200（既知の`typescript`未導入によるESLint parser警告は継続）
 
 ---
 
