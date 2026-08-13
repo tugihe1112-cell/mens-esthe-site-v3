@@ -210,6 +210,68 @@ CREATE POLICY "shops_admin_delete"
   USING ((auth.jwt() ->> 'email') = 'tugihe1112@gmail.com');
 
 -- ══════════════════════════════════════════════════════════════
+-- ⑥-3 review_likes — 権限整理と、いいねカウントのトリガー是正
+-- ══════════════════════════════════════════════════════════════
+-- ⚠️ **これを入れないと、このマイグレーション自身がいいね機能を壊す。**
+--    `update_review_like_count()` は SECURITY INVOKER（既定）のまま
+--    `UPDATE public.reviews SET like_count = ...` を実行する。
+--    ⑥で authenticated から reviews の UPDATE 権限を剥奪するため、
+--    ユーザーが review_likes に INSERT すると AFTER トリガー内の UPDATE が権限エラーになり、
+--    **いいねのINSERTごとロールバックされる**（クライアントをJWT化しても直らない）。
+--    → 関数を SECURITY DEFINER にしてトリガー内の更新だけ通す。
+--
+-- ⚠️ もう一点、本番には弱いINSERTポリシーがある:
+--      review_likes_own_insert : WITH CHECK (auth.uid() IS NOT NULL)
+--    正しい所有者ポリシーと PERMISSIVE の OR で結合されるため、
+--    **ログインさえしていれば他人の user_id でいいねを挿入できる**。撤去する。
+REVOKE ALL ON public.review_likes FROM anon, authenticated;
+GRANT SELECT ON public.review_likes TO anon, authenticated;
+GRANT INSERT, DELETE ON public.review_likes TO authenticated;
+
+DROP POLICY IF EXISTS "誰でも閲覧可"                    ON public.review_likes;
+DROP POLICY IF EXISTS "ログイン済みユーザーがいいね"      ON public.review_likes;
+DROP POLICY IF EXISTS "自分のいいねを削除可"             ON public.review_likes;
+DROP POLICY IF EXISTS "review_likes_own_insert"        ON public.review_likes;
+DROP POLICY IF EXISTS "review_likes_public_read"       ON public.review_likes;
+DROP POLICY IF EXISTS "review_likes_own_delete"        ON public.review_likes;
+
+CREATE POLICY "review_likes_public_read"
+  ON public.review_likes FOR SELECT
+  USING (true);
+
+-- 自分名義でしか押せない（他人の user_id を指定した挿入を拒否）
+CREATE POLICY "review_likes_own_insert"
+  ON public.review_likes FOR INSERT
+  TO authenticated
+  WITH CHECK ((SELECT auth.uid()) = user_id);
+
+CREATE POLICY "review_likes_own_delete"
+  ON public.review_likes FOR DELETE
+  TO authenticated
+  USING ((SELECT auth.uid()) = user_id);
+
+-- カウント更新はトリガー内でのみ行う（呼び出し元の権限に依存させない）
+CREATE OR REPLACE FUNCTION public.update_review_like_count()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    UPDATE public.reviews SET like_count = coalesce(like_count, 0) + 1
+    WHERE id::text = NEW.review_id;
+  ELSIF TG_OP = 'DELETE' THEN
+    UPDATE public.reviews SET like_count = greatest(coalesce(like_count, 0) - 1, 0)
+    WHERE id::text = OLD.review_id;
+  END IF;
+  RETURN NULL;
+END;
+$$;
+
+REVOKE EXECUTE ON FUNCTION public.update_review_like_count() FROM PUBLIC, anon, authenticated;
+
+-- ══════════════════════════════════════════════════════════════
 -- ⑦ 既存トリガー関数の是正
 --   (a) search_path 未固定（Supabase Advisor の警告対象）を修正
 --   (b) **手入力セラピスト（manual_*）を自動公開させない**

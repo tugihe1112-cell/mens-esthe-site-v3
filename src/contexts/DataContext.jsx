@@ -273,21 +273,16 @@ export const DataProvider = ({ children }) => {
   }, [therapists, getBrandShopIds, shopById]);
 
   // 🌟【データ隠蔽セキュリティ】画面に渡す直前にダミー文字へすり替える！
-  const getReviewsByShopId = useCallback((shopId, isPremiumUser = false) => {
+  // ⚠️ 2026-08-12: ここに「2件目以降 かつ 無料会員 なら本文をプレミアム誘導文に差し替える」
+  //    旧処理が残っていた。ShopDetailPage の直接取得が成功する限り使われないが、
+  //    **直接取得が0件・失敗したときのフォールバック経路**では、
+  //    credits保有者や公開口コミまで再びロックされてしまう。
+  //    閲覧可否の正本はDBのRLS（reviews_public_read / own / entitled / admin）に一本化したので、
+  //    ここでは返ってきた口コミをそのまま渡す（本文の伏せ字は ModernReviewCard が判定する）。
+  //    第2引数 isPremiumUser は呼び出し側の互換のため残すが、もう使わない。
+  const getReviewsByShopId = useCallback((shopId) => {
     const brandIds = getBrandShopIds(shopId);
-    const shopReviews = reviews.filter(r => brandIds.includes(r.shop_id) || brandIds.includes(r.shopId));
-    
-    return shopReviews.map((r, index) => {
-      // 2件目以降 ＆ 無料会員 の場合は、中身を強制上書き
-      if (index > 0 && !isPremiumUser) {
-        return {
-          ...r,
-          text: '🔒 このクチコミはプレミアム会員限定です。登録してリアルな評価を確認しましょう！',
-          review_text: '🔒 このクチコミはプレミアム会員限定です。登録してリアルな評価を確認しましょう！'
-        };
-      }
-      return r;
-    });
+    return reviews.filter(r => brandIds.includes(r.shop_id) || brandIds.includes(r.shopId));
   }, [reviews, getBrandShopIds]);
 
   const value = {

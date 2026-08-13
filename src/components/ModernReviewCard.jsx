@@ -169,7 +169,17 @@ export default function ModernReviewCard({ review }) {
   }, [user]);
 
   // 閲覧権限: プレミアム OR 閲覧日数あり OR owner_manual口コミ OR 公開口コミ（各セラピストの1件目）
-  const canReadFull = isPremium || (creditDays !== null && creditDays > 0) || review.user_id === 'owner_manual' || review.is_public === true;
+  // ⚠️ 2026-08-12 追加: **投稿者本人**の条件が抜けていた。
+  //    DB側の reviews_own_read は本人へ非公開口コミを返すのに、UIがロックしていた。
+  //    影響例＝200字未満でcreditsが付かなかった自分の投稿・manual投稿・credits期限切れ後の自分の投稿。
+  //    「自分が書いたものが自分で読めない」は最も不合理なので必ず通す。
+  const isOwnReview = !!(user?.id && review.user_id && String(review.user_id) === String(user.id));
+  const canReadFull =
+    isOwnReview
+    || isPremium
+    || (creditDays !== null && creditDays > 0)
+    || review.user_id === 'owner_manual'
+    || review.is_public === true;
 
   // ── セラピストへのリンク可否（snake/camel 両対応・manual_ は非リンク）──
   const cardShopId = review.shop_id || review.shopId || '';

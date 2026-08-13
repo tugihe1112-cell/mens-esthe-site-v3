@@ -265,9 +265,24 @@ export default function AdminPage() {
   const fetchShops = async () => {
     setIsLoadingShops(true);
     try {
-      const res = await fetch(`${url}/rest/v1/shops?select=id,name,image_url,website_url,schedule_url,raw_data&order=name.asc&limit=1000`, { headers: await authHeaders() });
-      const data = await res.json();
-      if (Array.isArray(data)) setShops(data);
+      // ⚠️ 2026-08-12: limit=1000 だと PostgREST の max-rows と合わさって
+      //    1,099店中の一部が無言で欠落する（サイトマップ・DataContextで潰したのと同じバグ）。
+      //    range() で全件ページングする。
+      const PAGE = 1000;
+      const all = [];
+      for (let from = 0; ; from += PAGE) {
+        const res = await fetch(
+          `${url}/rest/v1/shops?select=id,name,image_url,website_url,schedule_url,raw_data&order=id.asc`,
+          { headers: await authHeaders({ Range: `${from}-${from + PAGE - 1}` }) }
+        );
+        if (!res.ok) break;
+        const data = await res.json();
+        if (!Array.isArray(data) || data.length === 0) break;
+        all.push(...data);
+        if (data.length < PAGE) break;
+        if (all.length >= 50000) break; // 暴走ガード
+      }
+      setShops(all);
     } finally {
       setIsLoadingShops(false);
     }
