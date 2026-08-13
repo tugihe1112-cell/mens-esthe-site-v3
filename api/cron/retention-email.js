@@ -7,15 +7,23 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
 export default async function handler(req, res) {
-  // Vercel Cron 認証（CRON_SECRET を設定していれば検証。未設定なら素通り）
+  // ⚠️ 2026-08-13 修正: 以前は `if (secret && ...)` で、**CRON_SECRET未設定なら無認証で素通り**する
+  //    fail-open だった。第三者がURLを叩くだけで一斉メール送信を起動でき、
+  //    送信コストだけでなくドメイン評判・迷惑メール判定・ユーザーへの誤送信に直結する。
+  //    → 未設定なら 500 で停止する fail-closed に変更。
   const secret = process.env.CRON_SECRET;
-  if (secret && req.headers.authorization !== `Bearer ${secret}`) {
+  if (!secret) {
+    console.error('[retention-email] CRON_SECRET が未設定のため実行を拒否しました');
+    return res.status(500).json({ error: 'CRON_SECRET is not configured' });
+  }
+  if (req.headers.authorization !== `Bearer ${secret}`) {
     return res.status(401).json({ error: 'unauthorized' });
   }
 
   // 週1（月曜UTC）だけ送信。Vercel Hobbyのcronが日次に丸められても二重送信しない安全ガード。
-  // 手動テストは ?force=1 で任意日に実行可。
-  const forceRun = req.query?.force === '1';
+  // ⚠️ `?force=1` は曜日ガードを外す抜け道なので、**本番では無効**にする
+  //    （認証は上で必須化したが、多層で守る）。手動テストはプレビュー環境で行う。
+  const forceRun = req.query?.force === '1' && process.env.VERCEL_ENV !== 'production';
   if (!forceRun && new Date().getUTCDay() !== 1) {
     return res.status(200).json({ ok: true, skipped: 'not monday' });
   }
