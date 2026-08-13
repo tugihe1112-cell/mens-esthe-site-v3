@@ -147,13 +147,18 @@ function ShopEditModal({ shop, onClose, onSave }) {
   const save = async () => {
     setIsSaving(true);
     try {
+      // ⚠️ PostgREST は RLS で対象行が0件でも 2xx を返しうる。res.ok だけでは成功確認にならないため
+      //    Prefer: return=representation を付け、**実際に更新された行が返ったか**を検証する。
       const res = await fetch(`${url}/rest/v1/shops?id=eq.${shop.id}`, {
         method: 'PATCH',
-        headers: await authHeaders({ 'Content-Type': 'application/json' }),
+        headers: await authHeaders({ 'Content-Type': 'application/json', Prefer: 'return=representation' }),
         body: JSON.stringify(form),
       });
-      // ⚠️ 以前はレスポンスを見ずに画面だけ更新していたため、RLSで拒否されても成功に見えた
       if (!res.ok) throw new Error(`保存に失敗しました (HTTP ${res.status})`);
+      const updated = await res.json();
+      if (!Array.isArray(updated) || updated.length === 0) {
+        throw new Error('更新対象がありませんでした（権限不足の可能性があります）');
+      }
       onSave({ ...shop, ...form });
       onClose();
     } catch (e) {
@@ -270,15 +275,22 @@ export default function AdminPage() {
 
   const deleteReview = async (reviewId) => {
     if (!window.confirm('この口コミを削除しますか？')) return;
-    const res = await fetch(`${url}/rest/v1/reviews?id=eq.${reviewId}`, { method: 'DELETE', headers: await authHeaders() });
+    // ⚠️ 0件削除でも2xxが返るため、返却行で実際に消えたことを確認する
+    const res = await fetch(`${url}/rest/v1/reviews?id=eq.${reviewId}`,
+      { method: 'DELETE', headers: await authHeaders({ Prefer: 'return=representation' }) });
     if (!res.ok) { alert(`削除に失敗しました (HTTP ${res.status})`); return; }
+    const removed = await res.json().catch(() => []);
+    if (!Array.isArray(removed) || removed.length === 0) { alert('削除対象がありませんでした（権限不足の可能性があります）'); return; }
     setReviews(prev => prev.filter(r => r.id !== reviewId));
   };
 
   const deleteShop = async (shopId) => {
     if (!window.confirm('この店舗を削除しますか？（元に戻せません）')) return;
-    const res = await fetch(`${url}/rest/v1/shops?id=eq.${shopId}`, { method: 'DELETE', headers: await authHeaders() });
+    const res = await fetch(`${url}/rest/v1/shops?id=eq.${shopId}`,
+      { method: 'DELETE', headers: await authHeaders({ Prefer: 'return=representation' }) });
     if (!res.ok) { alert(`削除に失敗しました (HTTP ${res.status})`); return; }
+    const removed = await res.json().catch(() => []);
+    if (!Array.isArray(removed) || removed.length === 0) { alert('削除対象がありませんでした（権限不足の可能性があります）'); return; }
     setShops(prev => prev.filter(s => s.id !== shopId));
   };
 

@@ -90,13 +90,21 @@ function DMButton({ toUserId, currentUser, navigate }) {
         return;
       }
       // 新規作成
+      // ⚠️ 2026-08-12: ここは削除済みのモジュール定数 `headers` を参照しており
+      //    ReferenceError になっていた（既存ルームが無い＝新規作成時のみ発生する回帰）。
       const createRes = await fetch(`${url}/rest/v1/chat_rooms`, {
         method: 'POST',
-        headers,
+        headers: await authHeaders({ 'Content-Type': 'application/json', Prefer: 'return=representation' }),
         body: JSON.stringify({ user1_id: uid, user2_id: tid }),
       });
-      const created = await createRes.json();
-      if (Array.isArray(created) && created[0]) {
+      // ⚠️ 2026-08-12: HTTPエラーと「0件しか返らない」を両方確認する
+      //    （PostgREST は RLS で弾かれても 2xx を返しうるため res.ok だけでは足りない）
+      if (!createRes.ok) throw new Error(`チャットを開始できませんでした (HTTP ${createRes.status})`);
+      const created = await createRes.json().catch(() => []);
+      if (!Array.isArray(created) || created.length === 0) {
+        throw new Error('チャットルームを作成できませんでした（権限不足の可能性があります）');
+      }
+      if (created[0]) {
         navigate(`/chat/${created[0].id}`);
       } else if (created?.id) {
         navigate(`/chat/${created.id}`);

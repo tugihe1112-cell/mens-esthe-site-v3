@@ -28,18 +28,26 @@ BEGIN;
 -- TRUNCATE / TRIGGER / REFERENCES まで）が付いている。
 -- 個別に REVOKE すると付け忘れが残るため、ALL を落としてから最小限を再付与する。
 -- ⚠️ service_role には触らない（SSR・サイトマップ・管理API・トリガーが依存している）。
+-- ⚠️ RLS は SELECT/INSERT/UPDATE/DELETE の**行**を制御するだけで、
+--    TRUNCATE / REFERENCES / TRIGGER といったテーブル全体の操作は保護しない。
+--    ポリシーを足すだけでは不十分で、テーブル権限そのものを落とす必要がある。
 REVOKE ALL ON public.reviews      FROM anon, authenticated;
 REVOKE ALL ON public.user_credits FROM anon, authenticated;
 REVOKE ALL ON public.profiles     FROM anon, authenticated;
+REVOKE ALL ON public.shops        FROM anon, authenticated;
 
--- 読み取りは全ロールに許可（実際に何行返るかは下のRLSが決める）
+-- 読み取りは必要なロールに許可（実際に何行返るかは下のRLSが決める）
 GRANT SELECT ON public.reviews      TO anon, authenticated;
+GRANT SELECT ON public.shops        TO anon, authenticated;
 GRANT SELECT ON public.user_credits TO authenticated;
 GRANT SELECT ON public.profiles     TO authenticated;
 
 -- 口コミの削除は管理者のみ（RLS reviews_admin_delete で本人確認）
 GRANT DELETE ON public.reviews TO authenticated;
--- INSERT は ③ で列単位に付与する。UPDATE はどのロールにも付けない。
+-- 店舗の編集・削除も管理者のみ（RLS shops_admin_update / shops_admin_delete で本人確認）
+GRANT UPDATE, DELETE ON public.shops TO authenticated;
+-- ⚠️ anon には書き込み権限を一切戻さない。
+-- INSERT（reviews）は ③ で列単位に付与する。reviews の UPDATE はどのロールにも付けない。
 
 -- ══════════════════════════════════════════════════════════════
 -- ① user_credits — 自己付与を完全に塞ぐ（付与は service role の管理APIのみ）
@@ -55,6 +63,13 @@ CREATE POLICY "user_credits_read_own"
   ON public.user_credits FOR SELECT
   TO authenticated
   USING ((SELECT auth.uid()) = user_id);
+
+-- 管理者は全件読める（/admin の付与済みクレジット一覧に必要）。
+-- ⚠️ これが無いと、AdminPage をJWT化しても管理者は**自分の分しか見えない**。
+CREATE POLICY "user_credits_admin_read"
+  ON public.user_credits FOR SELECT
+  TO authenticated
+  USING ((auth.jwt() ->> 'email') = 'tugihe1112@gmail.com');
 
 -- 書き込みはポリシーを一切作らない＝ RLS 有効下では anon/authenticated から書けない。
 -- 付与は api/admin-grant-credit.js（service role・管理者メール検証済み）が行う。
@@ -170,6 +185,29 @@ CREATE POLICY "reviews_admin_read"
 -- （view_count の加算は /api/track-view が service role で行うため影響なし）
 DROP POLICY IF EXISTS "reviews_no_anon_update" ON public.reviews;
 -- UPDATE 権限は冒頭⓪で剥奪済み・再付与しない
+
+-- ══════════════════════════════════════════════════════════════
+-- ⑥-2 shops — 管理者の編集・削除を有効にする
+-- ══════════════════════════════════════════════════════════════
+-- shops には shops_public_read（SELECT USING true）しか無く、書き込みポリシーが存在しない。
+-- つまり /admin の店舗編集・削除は **JWTを付けても対象行0件**で何も起きていなかった
+-- （しかもレスポンスを見ていなかったため成功に見えていた）。
+-- ⚠️ PostgREST は RLS で対象行が0件でも 2xx を返しうるので、
+--    クライアント側は `Prefer: return=representation` で**返却行が1件以上あること**を確認する。
+--    （テーブル権限は冒頭⓪で REVOKE ALL → SELECT / UPDATE / DELETE のみ再付与済み）
+
+DROP POLICY IF EXISTS "shops_admin_update" ON public.shops;
+CREATE POLICY "shops_admin_update"
+  ON public.shops FOR UPDATE
+  TO authenticated
+  USING ((auth.jwt() ->> 'email') = 'tugihe1112@gmail.com')
+  WITH CHECK ((auth.jwt() ->> 'email') = 'tugihe1112@gmail.com');
+
+DROP POLICY IF EXISTS "shops_admin_delete" ON public.shops;
+CREATE POLICY "shops_admin_delete"
+  ON public.shops FOR DELETE
+  TO authenticated
+  USING ((auth.jwt() ->> 'email') = 'tugihe1112@gmail.com');
 
 -- ══════════════════════════════════════════════════════════════
 -- ⑦ 既存トリガー関数の是正

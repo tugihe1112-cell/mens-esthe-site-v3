@@ -771,18 +771,20 @@ export default function ShopDetailPage({
 
             {reviews.length > 0 ? (
                <div className="space-y-4 relative">
-                 {reviews.map((review, idx) => {
-                   const shouldBlur = idx > 0 && !isPremiumUser;
+                 {/* ⚠️ 2026-08-12: 以前は `shouldBlur = idx > 0 && !isPremiumUser` で
+                     **2件目以降を一律ぼかし**ていた。isPremiumUser は premium/vip しか見ておらず、
+                     W2Rで閲覧権(credits)を得た人が対象外だった＝700字書いても読めない行き止まり。
+                     12_適用後はDBのRLS（reviews_public_read / own / entitled / admin）が
+                     「読める行だけ返す」正本になるため、**UI側の一律ぼかしは撤去**する。
+                     個々の口コミ内の本文ロックは ModernReviewCard 側が
+                     is_public / credits / plan / owner_manual を見て判定する。 */}
+                 {reviews.map((review, idx) => (
+                   <ModernReviewCard key={review.id || idx} review={review} />
+                 ))}
 
-                   return (
-                     <div key={review.id || idx} className={`transition-all duration-300 ${shouldBlur ? 'blur-[6px] opacity-40 select-none pointer-events-none' : ''}`}>
-                       <ModernReviewCard review={review} />
-                     </div>
-                   );
-                 })}
-
-                 {/* プレミアム: もっと見る */}
-                 {isPremiumUser && hasMoreReviews && (
+                 {/* さらに読み込む（プラン限定をやめ、続きがあれば誰でも押せる。
+                     読める行かどうかはDB側が決める） */}
+                 {hasMoreReviews && (
                    <button
                      onClick={loadMoreReviews}
                      disabled={isLoadingMoreReviews}
@@ -792,25 +794,10 @@ export default function ShopDetailPage({
                    </button>
                  )}
 
-                 {!isPremiumUser && reviews.length > 1 && (
-                   <div className="absolute inset-0 top-[20%] z-10 flex flex-col items-center justify-center p-6 text-center">
-                     <div className="bg-slate-900/95 backdrop-blur-xl p-8 rounded-3xl border border-yellow-500/30 shadow-[0_0_50px_rgba(234,179,8,0.1)] max-w-sm w-full mx-auto animate-in zoom-in duration-500">
-                        <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-yellow-500/20">
-                          <span className="text-3xl">👑</span>
-                        </div>
-                        <h4 className="text-xl font-black text-white mb-2">続きはプレミアム限定</h4>
-                        <p className="text-sm text-slate-400 mb-6 font-medium">
-                          過去のすべてのクチコミや、リアルな評価を読むにはプレミアム会員（月額500円）の登録が必要です。
-                        </p>
-                        <button 
-                          onClick={() => navigate('/premium')}
-                          className="w-full py-4 rounded-xl bg-gradient-to-r from-yellow-600 to-yellow-500 text-white font-black text-base shadow-lg shadow-yellow-600/30 hover:scale-105 transition-all"
-                        >
-                          プレミアムに登録する
-                        </button>
-                     </div>
-                   </div>
-                 )}
+                 {/* ⚠️ 2026-08-12撤去: 「続きはプレミアム限定（月額500円）」のオーバーレイ。
+                     ①credits保有者もブロックしていた ②表示価格が戦略決定（¥980）と矛盾
+                     ③課金は2026年内に開始しない決定（playbook/decisions.md D-004）。
+                     読める/読めないの判定はDBのRLSと ModernReviewCard に一本化する。 */}
                </div>
             ) : (
                <div className="py-20 text-center bg-slate-900/50 rounded-3xl border border-white/5 border-dashed">
