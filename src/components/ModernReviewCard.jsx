@@ -5,7 +5,6 @@ import ReviewLikeButton from './ReviewLikeButton.jsx';
 import ThanksBadgeButton from './ThanksBadgeButton.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { trackEvent } from '../utils/analytics';
-import { ratingTextClass, ratingGradientClass } from '../utils/ratingStyle';
 
 // --- ウォーターマーク ---
 function Watermark({ text }) {
@@ -38,10 +37,6 @@ function Watermark({ text }) {
     </div>
   );
 }
-
-// --- ヘルパー関数（色ロジックは src/utils/ratingStyle.js に一本化＝HomeReviewCardと共有） ---
-const getScoreColor = (score) => ratingTextClass(score);
-const getBadgeStyle = (score) => ratingGradientClass(score);
 
 // タグの系統別色分け（体型=ピンク・雰囲気=パープル・年代=ブルー・属性=スレート）
 const TAG_BODY = ['スレンダー', 'グラマー', '巨乳', '美脚', '小柄', '高身長'];
@@ -133,8 +128,21 @@ export default function ModernReviewCard({ review }) {
   const { user, userPlan } = useAuth();
   const navigate = useNavigate();
   const [creditDays, setCreditDays] = useState(null);
-  // 来店時期データが無い口コミは日付を出さない（「日付不明」で信頼を損なわない）
-  const dateStr = review.timestamp ? new Date(review.timestamp).toLocaleDateString('ja-JP') : (review.date || null);
+  // 来店時期と投稿日は別物。来店月が無いときに投稿日を「来店日」と誤表示しない。
+  const postedAt = review.created_at || review.createdAt || review.timestamp || review.date || null;
+  const postedDateValue = postedAt ? new Date(postedAt) : null;
+  const postedDate = postedDateValue && !Number.isNaN(postedDateValue.getTime())
+    ? postedDateValue.toLocaleDateString('ja-JP')
+    : null;
+  const visitMonthRaw = review.visit_month || review.visitMonth || null;
+  const visitMonth = visitMonthRaw
+    ? `${String(visitMonthRaw).replace(/来店$/, '')}来店`
+    : null;
+  const totalAmountRaw = review.total_amount ?? review.totalAmount ?? review.total_price ?? review.totalPrice;
+  const totalAmount = Number(totalAmountRaw);
+  const totalLabel = Number.isFinite(totalAmount) && totalAmount > 0
+    ? `総額 ¥${totalAmount.toLocaleString('ja-JP')}`
+    : null;
 
   const isPremium = userPlan === 'premium' || userPlan === 'vip';
 
@@ -199,6 +207,7 @@ export default function ModernReviewCard({ review }) {
     { label: "密着", value: Number(dr.intimacy) || 0 },
   ];
   const hasScores = scores.some((s) => s.value > 0);
+  const evidenceFacts = [visitMonth, review.course || null, totalLabel].filter(Boolean);
 
   // ウォーターマーク用テキスト（ログイン済みはメールの一部、未ログインはサイト名）
   const wmText = user?.email
@@ -206,97 +215,65 @@ export default function ModernReviewCard({ review }) {
     : 'mens-esthe.map';
 
   return (
-    <div className="group relative w-full max-w-2xl mx-auto mb-6 transition-all duration-300 hover:-translate-y-1">
-      {/* 背景 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-800/90 to-slate-900/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl" />
+    <article className="relative w-full max-w-3xl mx-auto mb-5">
+      <div className="absolute inset-0 bg-slate-900/95 rounded-2xl border border-white/10 shadow-lg" />
       {/* ウォーターマーク */}
       <Watermark text={wmText} />
 
-      <div className="relative p-6 z-10">
-        
-        {/* --- 1. HERO HEADER (Subject Focused) --- */}
-        <div className="flex justify-between items-start mb-5">
-          <div>
-            {/* SUBJECT: Therapist Name (Huge) */}
-            <div className="flex flex-col">
-              <div className="flex items-center gap-3">
-                 {/* ⚠️ 2026-08-12:
-                     ① 旧コードは review.shopId / review.therapistId（camelCase）しか見ておらず、
-                        REST から取得した行は snake_case なので `/shops/undefined/threads/undefined`
-                        になっていた。両対応にする。
-                     ② `manual_` は手入力セラピストの合成IDで therapists に存在しないため、
-                        リンクすると必ず404になる（2026-08-10に潰したソフト404の再生産）。
-                        リンクにせず名前だけ表示する。 */}
-                 {therapistLinkable ? (
-                   <Link
-                     to={`/shops/${cardShopId}/threads/${cardTherapistId}`}
-                     className="hover:opacity-70 transition-opacity cursor-pointer block"
-                   >
-                     <h2 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 tracking-tight leading-tight">
-                       {therapistLabel}
-                     </h2>
-                   </Link>
-                 ) : (
-                   <h2 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 tracking-tight leading-tight">
-                     {therapistLabel}
-                   </h2>
-                 )}
-              </div>
-              
-              {/* META: Reviewer (Tiny & Subdued) */}
-              <div className="flex items-center gap-2 mt-1 ml-1">
-                <div className="flex items-center gap-1.5 opacity-40 text-xs text-white">
-                  <span className="w-4 h-4 rounded-full bg-slate-600 flex items-center justify-center text-[8px]">👤</span>
-                  <span className="font-normal">{review.userName || review.user_name || '匿名'}</span>
-                </div>
-                {dateStr && (
-                  <>
-                    <span className="text-[10px] text-slate-600">•</span>
-                    <span className="text-[10px] text-slate-500 font-mono">{dateStr}</span>
-                  </>
-                )}
-              </div>
-            </div>
+      <div className="relative p-4 sm:p-5 z-10">
+        {/* 1. 証拠行: 来店月→コース→総額。無い項目は表示しない。 */}
+        {evidenceFacts.length > 0 && (
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pb-3 mb-3 border-b border-white/10 text-xs font-medium text-slate-300">
+            {evidenceFacts.map((fact, index) => (
+              <React.Fragment key={`${fact}-${index}`}>
+                {index > 0 && <span aria-hidden="true" className="text-slate-600">/</span>}
+                <span>{fact}</span>
+              </React.Fragment>
+            ))}
           </div>
+        )}
 
-          {/* RATING: Conclusion (Fixed Position) */}
-          <div className={`flex flex-col items-center justify-center w-20 h-14 rounded-2xl bg-gradient-to-br ${getBadgeStyle(review.rating)} shadow-lg transform group-hover:scale-105 transition-transform flex-shrink-0 ml-4`}>
-            <span className="text-2xl font-black text-white leading-none">
-              {Number(review.rating || 0).toFixed(1)}
-            </span>
-            <span className="text-[9px] font-bold text-white/70 mt-0.5">★ 総合</span>
-          </div>
+        {/* 2. 投稿種別・評価・投稿者 */}
+        <div className="flex flex-wrap items-center gap-2 mb-3 text-xs">
+          <span className="rounded-xl border border-pink-500/30 bg-pink-500/10 px-2.5 py-1 font-bold text-pink-200">実体験レポート</span>
+          <span className="font-black text-white">評価 {Number(review.rating || 0).toFixed(1)}</span>
+          <span className="text-slate-400">by {review.userName || review.user_name || '匿名'}</span>
+          {postedDate && <span className="ml-auto text-slate-400">{postedDate}投稿</span>}
         </div>
 
-        {/* --- 2. METRICS (6軸バー・色分けemerald/amber/rose維持) --- */}
+        {/* 対象名。RESTのsnake_caseとmanual IDの扱いを維持する。 */}
+        <div className="mb-4">
+          {therapistLinkable ? (
+            <Link
+              to={`/shops/${cardShopId}/threads/${cardTherapistId}`}
+              className="inline-flex min-h-11 items-center rounded-lg text-lg font-bold text-white hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500"
+            >
+              {therapistLabel}
+            </Link>
+          ) : (
+            <h2 className="text-lg font-bold text-white leading-tight">{therapistLabel}</h2>
+          )}
+        </div>
+
+        {/* 3. 6軸はモバイルも2行×3列で固定 */}
         {hasScores && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-2 mb-6">
+          <div className="grid grid-cols-3 gap-x-3 gap-y-3 mb-5 rounded-2xl bg-slate-950/60 p-3 border border-white/5">
             {scores.map((score, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <span className="text-[11px] font-bold w-14 text-slate-400 shrink-0">{score.label}</span>
-                <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full bg-gradient-to-r ${getBadgeStyle(score.value)} transition-all duration-700`} style={{ width: `${Math.min((score.value / 5) * 100, 100)}%` }} />
+              <div key={i} className="min-w-0">
+                <div className="mb-1 flex items-center justify-between gap-1 text-xs">
+                  <span className="truncate font-medium text-slate-400">{score.label}</span>
+                  <span className="font-bold text-slate-200">{Number(score.value).toFixed(1)}</span>
                 </div>
-                <span className={`text-xs font-bold w-7 text-right ${getScoreColor(score.value)}`}>
-                  {Number(score.value).toFixed(1)}
-                </span>
+                <div className="h-1.5 overflow-hidden rounded-full bg-slate-800">
+                  <div className="h-full rounded-full bg-pink-500" style={{ width: `${Math.min((score.value / 5) * 100, 100)}%` }} />
+                </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* 来店情報（実体験の証拠を本文の直前に・信頼の即時演出） */}
-        {review.course && (
-          <div className="flex items-center gap-2 mb-3 text-[11px] bg-white/5 border border-white/10 rounded-lg px-3 py-2">
-            <span className="text-slate-500 shrink-0">🧾</span>
-            <span className="font-bold text-slate-400 shrink-0">来店情報</span>
-            <span className="text-slate-200 font-bold">{review.course}</span>
-            {dateStr && <span className="text-slate-500 ml-auto shrink-0">{dateStr}</span>}
-          </div>
-        )}
-
-        {/* --- 3. CONTENT --- */}
-        <div className="relative pt-4 border-t border-white/5">
+        {/* 4. 本文 */}
+        <div className="relative pt-4 border-t border-white/10">
           {canReadFull ? (
             <>
               <div
@@ -326,7 +303,7 @@ export default function ModernReviewCard({ review }) {
                     if (!isExpanded) trackEvent('expand_review', { therapist_id: review.therapistId || review.therapist_id });
                     setIsExpanded(!isExpanded);
                   }}
-                  className="mt-2 text-xs font-bold text-pink-400 hover:text-pink-300 hover:underline flex items-center gap-1 focus:outline-none"
+                  className="mt-2 inline-flex min-h-11 items-center rounded-lg text-xs font-bold text-pink-400 hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500"
                 >
                   {isExpanded ? "閉じる" : "続きを読む"}
                 </button>
@@ -348,26 +325,17 @@ export default function ModernReviewCard({ review }) {
                 {(review.content || "").replace(/[【】]/g, ' ').slice(0, 140)}
               </div>
               {/* 焦らしCTA */}
-              <div className="mt-1 text-center px-5 py-4 bg-gradient-to-br from-purple-950/90 to-slate-900/90 rounded-2xl border border-purple-500/30 shadow-xl">
-                <p className="text-purple-300 font-black text-[11px] tracking-widest mb-2">続き{Math.max(0, (review.content || '').length - 140)}文字は限定公開</p>
+              <div className="mt-2 text-center px-5 py-4 bg-slate-950/90 rounded-2xl border border-pink-500/25">
+                <p className="text-pink-300 font-bold text-xs mb-2">続き{Math.max(0, (review.content || '').length - 140)}文字は限定公開</p>
                 <p className="text-white font-black text-sm mb-1 leading-tight">体験談を投稿すると<br/>この続きが読めます</p>
-                <p className="text-slate-400 text-[11px] mb-3">1件投稿で<span className="text-purple-300 font-bold">最大7日間読み放題</span>（即時自動付与）</p>
+                <p className="text-slate-400 text-xs mb-3">1件投稿で<span className="text-pink-300 font-bold">最大7日間読み放題</span>（即時自動付与）</p>
                 <Link
                   to="/post-review"
                   onClick={() => trackEvent('click_paywall_cta', { target: 'post_review' })}
-                  className="inline-block bg-pink-600 hover:bg-pink-500 text-white text-xs font-black px-6 py-2.5 rounded-xl transition-all hover:scale-105 shadow-lg shadow-pink-900/50"
+                  className="inline-flex min-h-11 items-center rounded-2xl bg-pink-600 px-6 py-2.5 text-xs font-black text-white shadow-lg shadow-pink-900/40 transition hover:bg-pink-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
                 >
-                  口コミを書く →
+                  体験談を投稿して続きを読む →
                 </Link>
-                {!user && (
-                  <Link
-                    to="/register"
-                    onClick={() => trackEvent('click_paywall_cta', { target: 'register' })}
-                    className="block mt-2 text-[11px] font-bold text-purple-300 hover:text-purple-200 hover:underline"
-                  >
-                    無料登録で3日間読み放題 →
-                  </Link>
-                )}
               </div>
             </div>
           )}
@@ -377,7 +345,7 @@ export default function ModernReviewCard({ review }) {
         {review.tags?.length > 0 && (
           <div className="mt-5 pt-3 border-t border-white/5 flex flex-wrap gap-2">
               {review.tags.map((tag, i) => (
-                <span key={i} className={`border px-3 py-1 rounded-full text-[11px] font-bold transition ${tagStyle(tag)}`}>
+                <span key={i} className={`border px-3 py-1 rounded-xl text-xs font-bold ${tagStyle(tag)}`}>
                   {tag}
                 </span>
               ))}
@@ -395,6 +363,6 @@ export default function ModernReviewCard({ review }) {
       </div>
 
       </div>
-    </div>
+    </article>
   );
 }

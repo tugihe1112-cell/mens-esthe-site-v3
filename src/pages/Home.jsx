@@ -17,6 +17,7 @@ import PrefectureSelector from '../components/PrefectureSelector.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { supabase } from '../lib/supabase';
 import { TherapistGridSkeleton, ShopGridSkeleton } from '../components/ui/Skeleton.jsx';
+import siteStats from '../data/stats-latest.json';
 
 // エリア名に対応する画像の定義
 const AREA_IMAGES = {
@@ -64,6 +65,9 @@ const RANK_STYLES = [
 export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
   const { shops, loading } = useShopData();
   const [featuredTherapists, setFeaturedTherapists] = useState([]);
+  const leadReview = useMemo(() => reviewsByPref
+    .flatMap((block) => block.reviews || [])
+    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))[0] || null, [reviewsByPref]);
 
   // ── 都道府県ブロック: SSR初期HTMLは全ユーザー共通。マウント後にlocalStorageの好みで一致県を先頭へ（UIなしの自動並べ替え） ──
   const [orderedPrefs, setOrderedPrefs] = useState(reviewsByPref);
@@ -251,75 +255,62 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
         </div>
       </div>
 
-      {/* Write-to-Read 帯 */}
-      <div className="mx-4 mt-6 max-w-4xl lg:mx-auto">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-900/80 to-pink-900/60 border border-purple-500/30 px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_left,rgba(168,85,247,0.15),transparent_60%)] pointer-events-none" />
-          <div className="relative text-center sm:text-left">
-            <p className="text-white font-black text-base md:text-lg leading-tight">
-              口コミを投稿すると、みんなの口コミが読み放題になります
-            </p>
-            <p className="text-purple-300 text-xs mt-1">
-              詳しい体験談（700文字以上）を書くと7日間読み放題を即時付与・新規登録で3日間無料
-            </p>
-          </div>
-          <Link
-            to="/post-review"
-            className="relative shrink-0 bg-white text-purple-900 font-black px-6 py-2.5 rounded-xl text-sm hover:bg-purple-50 transition-all hover:scale-105 active:scale-95 shadow-lg whitespace-nowrap"
-          >
-            口コミを書く →
-          </Link>
-        </div>
-      </div>
-
-      {/* 中立宣言＝このサイト唯一の差別化。Footerと同一文言で統一（表記を割らない） */}
-      <div className="mx-4 mt-3 max-w-4xl lg:mx-auto">
-        <p className="text-center sm:text-left text-[11px] md:text-xs text-slate-400 leading-relaxed px-1">
-          <span className="text-slate-200 font-bold">掲載店舗から広告費・掲載料を一切受け取っていません。</span>
-          だから★2の辛口もそのまま載せます。
-          <Link to="/stats" className="text-pink-400 hover:text-pink-300 underline ml-1 whitespace-nowrap">
-            掲載データを見る →
-          </Link>
-        </p>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 mt-16">
+      <div className="max-w-7xl mx-auto px-4 mt-8">
       <div className="flex flex-col lg:flex-row gap-10">
 
       {/* ===== メインカラム ===== */}
       <div className="flex-1 min-w-0 space-y-24">
 
-        {/* A-3: 口コミファースト＝都道府県ブロック型。スクロールだけで「県→その県の口コミ」が分かる（タップ不要） */}
+        {/* 検索直後に最新の実体験を1件提示。その後に中立性と地域別口コミを続ける。 */}
         {reviewsByPref.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-5 px-2">
-              <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">最新の本物口コミ</h3>
+              <div>
+                <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">最新の実体験口コミ</h3>
+                <p className="mt-1 text-xs font-medium text-slate-400">来店情報と評価を確認してから本文を読めます</p>
+              </div>
               <Link to="/popular-reviews" className="text-xs font-bold text-pink-400 hover:text-pink-300 transition">もっと見る →</Link>
+            </div>
+
+            {leadReview && (
+              <HomeReviewCard r={leadReview} variant="hero" position="latest_lead" pref={leadReview.prefecture} />
+            )}
+
+            {/* 中立宣言と母数。口コミを一度見せた直後に信頼の根拠を補う。 */}
+            <div className="my-6 rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-3 text-xs font-medium leading-relaxed text-slate-400">
+              <span className="font-bold text-slate-200">掲載店舗から広告費・掲載料を受け取っていません。</span>
+              <span className="ml-1">辛口の評価もそのまま掲載。</span>
+              <span className="ml-2 text-slate-300">掲載 {Number(siteStats.coverage?.totalShops || 0).toLocaleString()}店舗／在籍 {Number(siteStats.coverage?.totalTherapists || 0).toLocaleString()}人</span>
+              <Link to="/stats" className="ml-2 inline-flex min-h-11 items-center font-bold text-pink-400 hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">集計を見る →</Link>
             </div>
 
             {/* 並べ替え（好みの県を先頭へ）はフェードでCLSを抑制 */}
             <div className={`space-y-10 transition-opacity duration-300 ${reordering ? 'opacity-50' : 'opacity-100'}`}>
-              {orderedPrefs.map((block) => (
-                <div key={block.pref}>
-                  {/* 県見出し行 */}
-                  <div className="flex items-center justify-between mb-3 px-1">
-                    <h4 className="text-lg font-black text-white">📍 {block.pref}の口コミ</h4>
-                    <Link
-                      to={block.slug ? `/area/${block.slug}` : '/popular-reviews'}
-                      onClick={() => trackEvent('click_pref_more', { pref: block.pref })}
-                      className="text-xs text-slate-400 hover:text-white transition shrink-0 ml-2"
-                    >
-                      もっと見る →
-                    </Link>
+              {orderedPrefs.map((block) => {
+                const blockReviews = block.reviews.filter((review) => review.id !== leadReview?.id);
+                if (blockReviews.length === 0) return null;
+                return (
+                  <div key={block.pref}>
+                    {/* 県見出し行 */}
+                    <div className="flex items-center justify-between mb-3 px-1">
+                      <h4 className="text-lg font-black text-white">📍 {block.pref}の口コミ</h4>
+                      <Link
+                        to={block.slug ? `/area/${block.slug}` : '/popular-reviews'}
+                        onClick={() => trackEvent('click_pref_more', { pref: block.pref })}
+                        className="text-xs text-slate-400 hover:text-white transition shrink-0 ml-2"
+                      >
+                        もっと見る →
+                      </Link>
+                    </div>
+                    {/* その県の最新2件・2カラム（small/引用カード） */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {blockReviews.map((r, i) => (
+                        <HomeReviewCard key={r.id || i} r={r} variant="small" position={i} pref={block.pref} />
+                      ))}
+                    </div>
                   </div>
-                  {/* その県の最新2件・2カラム（small/引用カード） */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {block.reviews.map((r, i) => (
-                      <HomeReviewCard key={r.id || i} r={r} variant="small" position={i} pref={block.pref} />
-                    ))}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
 
               {/* 投稿の呼び水（末尾・破線・現行踏襲） */}
               <Link

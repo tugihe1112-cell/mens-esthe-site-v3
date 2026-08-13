@@ -17,7 +17,7 @@ function ThreadSkeleton() {
   return (
     <div className="min-h-screen bg-slate-950 pb-32">
       <Header />
-      <div className="max-w-2xl mx-auto px-4 pt-20 space-y-6">
+      <div className="max-w-3xl mx-auto px-4 pt-20 space-y-5">
         <div className="h-4 w-1/2 bg-slate-800 rounded animate-pulse" />
         <div className="flex gap-4">
           <div className="w-[40%] max-w-[200px] bg-slate-800 rounded-2xl animate-pulse" style={{ aspectRatio: '3 / 4', maxHeight: '320px' }} />
@@ -309,7 +309,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
       )}
 
       {/* --- ページ本体：コンパクトヘッダー＋評価サマリ＋口コミ（口コミ1件目をファーストビューに） --- */}
-      <div className="max-w-2xl mx-auto px-4 pt-20 relative z-30 space-y-6">
+      <div className="max-w-3xl mx-auto px-4 pt-20 relative z-30 space-y-5">
         {/* 戻る＋お気に入り */}
         <div className="flex items-center justify-between">
           <button onClick={() => navigate(-1)} aria-label="前のページに戻る" className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-white/10 text-white text-sm font-bold border border-white/15 hover:bg-white/20 transition active:scale-95">
@@ -332,7 +332,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
         {/* コンパクトヘッダー：写真左40% ＋ 名前/店舗/評価サマリ右 */}
         <div className="flex gap-4">
           <div className="w-[40%] max-w-[200px] shrink-0">
-            <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-slate-900" style={{ aspectRatio: '3 / 4', maxHeight: '320px' }}>
+            <div className="relative max-h-[220px] sm:max-h-[320px] rounded-2xl overflow-hidden border border-white/10 bg-slate-900" style={{ aspectRatio: '3 / 4' }}>
               {(therapist.image_url || therapist.image) ? (
                 <LazyImage src={therapist.image_url || therapist.image} alt={therapist.name} className="w-full h-full object-cover" />
               ) : (
@@ -343,7 +343,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
             </div>
           </div>
           <div className="flex-1 min-w-0 flex flex-col justify-center">
-            <Link to={`/search?shopId=${shopId}`} className="inline-flex items-center gap-1.5 mb-2 text-sm font-bold text-slate-400 hover:text-white transition min-w-0">
+            <Link to={`/search?shopId=${shopId}`} className="inline-flex min-h-11 items-center gap-1.5 mb-1 text-sm font-bold text-slate-400 hover:text-white transition min-w-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">
               <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
               <span className="truncate">{getDisplayName(shop.name)}</span>
             </Link>
@@ -365,33 +365,20 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
           </div>
         </div>
 
-        {/* 店舗ページへの明示ボタン（料金・出勤・他セラピストを見たい人向け） */}
-        <Link
-          to={`/search?shopId=${shopId}`}
-          className="flex items-center justify-between gap-3 rounded-2xl bg-slate-900/60 border border-white/10 hover:border-pink-500/40 px-4 py-3 transition group"
-        >
-          <span className="flex items-center gap-2 min-w-0">
-            <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm shrink-0">🏢</span>
-            <span className="min-w-0">
-              <span className="block text-sm font-bold text-white truncate">{getDisplayName(shop.name)}</span>
-              <span className="block text-[11px] text-slate-400">料金・出勤・在籍セラピストを見る</span>
-            </span>
-          </span>
-          <span className="text-pink-400 font-black shrink-0 group-hover:translate-x-0.5 transition-transform">›</span>
-        </Link>
-
         {/* 評価サマリバー（6軸の平均）。口コミが1件のときは下の口コミカードと同じ内容になり重複するので、2件以上のときだけ表示 */}
         {stats && stats.count >= 2 && (
-          <section className="bg-slate-900/60 rounded-2xl p-5 border border-white/10">
-            <h2 className="text-xs font-bold text-slate-400 mb-4">評価の内訳（{stats.count}件の平均）</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+          <section className="bg-slate-900/60 rounded-2xl p-4 border border-white/10">
+            <h2 className="text-xs font-bold text-slate-400 mb-3">評価の内訳（{stats.count}件の平均）</h2>
+            <div className="grid grid-cols-3 gap-x-3 gap-y-3">
               {stats.axes.map((a) => (
-                <div key={a.label} className="flex items-center gap-3">
-                  <span className="text-[11px] font-bold w-14 text-slate-400 shrink-0">{a.label}</span>
-                  <div className="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-700 ease-out" style={{ width: `${Math.min((a.val / 5) * 100, 100)}%` }} />
+                <div key={a.label} className="min-w-0">
+                  <div className="mb-1 flex items-center justify-between gap-1 text-xs">
+                    <span className="truncate font-medium text-slate-400">{a.label}</span>
+                    <span className="font-bold text-white">{a.val.toFixed(1)}</span>
                   </div>
-                  <span className="text-xs font-bold text-white w-7 text-right">{a.val.toFixed(1)}</span>
+                  <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full bg-pink-500" style={{ width: `${Math.min((a.val / 5) * 100, 100)}%` }} />
+                  </div>
                 </div>
               ))}
             </div>
@@ -421,7 +408,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
           ) : (
             <div className="text-center py-10 px-4 bg-slate-900/40 rounded-2xl border border-dashed border-purple-800/50">
               <p className="text-white font-black text-base mb-1">まだ口コミがありません</p>
-              <p className="text-purple-300 text-xs font-bold mb-4">最初のレポを書くと<span className="text-white">即7日間読み放題</span>（先行者特典）</p>
+              <p className="text-purple-300 text-xs font-bold mb-4"><span className="text-white">200字で3日間・700字で7日間</span>口コミが読み放題</p>
               <button
                 onClick={() => handlePostReview('empty_state')}
                 className="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-black py-3 px-8 rounded-full shadow-lg shadow-pink-600/30 active:scale-95 transition-all duration-300 inline-flex items-center gap-2 mx-auto"
@@ -441,7 +428,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
             className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-3.5 rounded-2xl shadow-2xl shadow-pink-900/50 active:scale-[0.98] transition text-sm"
           >
             <span>✍️</span>{therapist.name}の口コミを書く
-            <span className="text-[11px] font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">7日間読み放題</span>
+            <span className="text-[11px] font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">最大7日間</span>
           </button>
         </div>
       )}

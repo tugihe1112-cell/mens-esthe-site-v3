@@ -15,6 +15,18 @@ import { trackEvent } from '../utils/analytics';
 
 // --- Step Components ---
 
+// 店舗・セラピスト検索は、全角/半角・空白・カタカナ/ひらがなの揺れを吸収する。
+const normalizeSearchText = (value) => String(value || '')
+  .normalize('NFKC')
+  .toLowerCase()
+  .replace(/[ァ-ヶ]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0x60))
+  .replace(/[\s　・（）()\-ー]/g, '');
+
+const shopLocationLabel = (shop) => {
+  const area = Array.isArray(shop?.area) ? shop.area[0] : (shop?.area || shop?.city);
+  return [shop?.prefecture, area].filter(Boolean).join('・');
+};
+
 const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId, paramShopId, initCustomMode }) => {
   const { register, setValue, watch } = useFormContext();
   const selectedTherapistId = watch('therapistId');
@@ -23,6 +35,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
 
   // コンボボックス用 state
   const selectedShopName = useMemo(() => shops.find(s => s.id === selectedShopId)?.name || '', [shops, selectedShopId]);
+  const selectedShop = useMemo(() => shops.find(s => s.id === selectedShopId) || null, [shops, selectedShopId]);
   const [shopInput, setShopInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const comboRef = useRef(null);
@@ -42,9 +55,12 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
   }, []);
 
   const suggestions = useMemo(() => {
-    const q = shopInput.trim().toLowerCase();
+    const q = normalizeSearchText(shopInput);
     if (!q) return shops.slice(0, 20); // 未入力時は先頭20件
-    return shops.filter(s => s.name.toLowerCase().includes(q)).slice(0, 20);
+    return shops.filter((shop) => {
+      const location = shopLocationLabel(shop);
+      return normalizeSearchText(`${shop.name} ${location}`).includes(q);
+    }).slice(0, 20);
   }, [shops, shopInput]);
 
   const handleShopSelect = (shop) => {
@@ -96,6 +112,9 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
       <div>
         <h2 className="text-xl font-black text-white tracking-tight mb-1">店舗・セラピストを選択</h2>
         <p className="text-slate-500 text-sm">口コミを書く店舗とセラピストを選んでください</p>
+        <p className="mt-3 rounded-xl border border-pink-500/20 bg-pink-500/5 px-3 py-2 text-xs font-medium leading-relaxed text-slate-300">
+          200字で3日間、700字で7日間の閲覧権。選んだ対象は送信前に確認できます。
+        </p>
       </div>
 
       <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl">
@@ -103,8 +122,9 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
 
         {paramShopId ? (
           /* URLから来た場合は固定表示 */
-          <div className="w-full bg-black/30 border border-white/10 rounded-xl p-4 text-white font-bold opacity-80 cursor-not-allowed">
-            {selectedShopName || '店舗が選択されています'}
+          <div className="w-full bg-black/30 border border-white/10 rounded-xl p-4 cursor-not-allowed">
+            <span className="block text-white font-bold">{selectedShopName || '店舗が選択されています'}</span>
+            {shopLocationLabel(selectedShop) && <span className="mt-1 block text-xs font-medium text-slate-400">{shopLocationLabel(selectedShop)}</span>}
           </div>
         ) : (
           /* コンボボックス */
@@ -139,9 +159,10 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
                     <button
                       type="button"
                       onMouseDown={() => handleShopSelect(shop)}
-                      className="w-full text-left px-4 py-3 text-sm text-white hover:bg-pink-600/30 transition truncate border-b border-white/5 last:border-0"
+                      className="min-h-11 w-full border-b border-white/5 px-4 py-3 text-left text-white transition hover:bg-pink-600/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-pink-500 last:border-0"
                     >
-                      {shop.name}
+                      <span className="block truncate text-sm font-bold">{shop.name}</span>
+                      {shopLocationLabel(shop) && <span className="mt-0.5 block truncate text-xs font-medium text-slate-400">{shopLocationLabel(shop)}</span>}
                     </button>
                   </li>
                 ))}
@@ -202,10 +223,10 @@ const TherapistGrid = ({ shopTherapists, selectedTherapistId, selectTherapist, e
   const [filter, setFilter] = useState('');
 
   const filtered = useMemo(() => {
-    const q = filter.trim().toLowerCase().replace(/[\s　]/g, '');
+    const q = normalizeSearchText(filter);
     if (!q) return shopTherapists;
     return shopTherapists.filter(t =>
-      t.name.toLowerCase().replace(/[\s　]/g, '').includes(q)
+      normalizeSearchText(t.name).includes(q)
     );
   }, [shopTherapists, filter]);
 
