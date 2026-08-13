@@ -61,9 +61,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    // 🌟 userPlan もアプリ全体に配る
+    // SSRではセッションを判定できないため、公開状態(user=null / plan=free)で子要素を描画する。
+    // `!loading && children` で止めると全ページの初期HTMLが空になり、/stats の本文や
+    // JSON-LDまで検索エンジン・引用元に届かない。認証確定後は通常どおり状態更新する。
     <AuthContext.Provider value={{ user, userPlan, signUp, signIn, signOut, loading }}>
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 };

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Link } from '../compat/router';
 import SeoHead from '../components/SeoHead';
 import Header from '../components/Header.jsx';
-import stats from '../data/stats-2026-07.json';
+import stats from '../data/stats-latest.json';
 
 // 被リンク資産ページ「日本のメンズエステ統計 2026」
-// - src/data/stats-2026-07.json（build_stats.mjsが生成）を静的import＝DBアクセス不要・落ちない
+// - src/data/stats-latest.json（build_stats.mjsが生成）を静的import＝DBアクセス不要・落ちない
 // - グラフはCSSバー＋SVGで自前描画（依存追加なし）
 // - 引用コピーボタン／末尾に表（table）＝引用・スクレイプされやすい形
 // - 誇張禁止・掲載N店舗を必ず併記（景表法＋信頼）

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from '../compat/router';
 import { AREA_LINKS } from '../data/areaLinks';
-import stats from '../data/stats-2026-07.json';
+import stats from '../data/stats-latest.json';
 
 export default function Footer() {
   const totalShops = stats?.coverage?.totalShops || 0;

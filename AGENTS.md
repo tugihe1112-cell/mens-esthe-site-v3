@@ -3,8 +3,30 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-08-13 （13_セキュリティマイグレーション本番適用・厳密E2E・CRON_SECRET設定）**
+> **最終更新: 2026-08-14 （マーケティング提案の選別実装・口コミファネル計測・8月統計更新）**
 > 作業がひと段落するたびに、Codexがこのファイルを自動更新する。
+
+---
+
+## 2026-08-14 マーケティング施策の実装状況
+
+- `marketing_action_plan_slides.pdf` の提案を既存実装・現状KPIと突合し、低コストで今すぐ有効な部分だけ採用
+- 口コミ投稿ファネルの不足イベントをGA4へ追加
+  - `click_write_from_thread`（CTA位置も記録）
+  - `review_prefilled_open` / `review_shop_selected`
+  - `review_200_reached` / `review_700_reached`（1セッション1回）
+  - `review_submit` / `review_published`
+  - 既存の `begin_review` / `complete_review` は継続し、過去データとの比較を壊さない
+- 月次統計を固定月ファイルから `src/data/stats-latest.json` に変更
+  - `build_stats.mjs` がJSTの実行月・実行日を自動設定
+  - 同数順位のタイブレークを固定し、同じDB状態なら同一JSONになるよう再現性を確保
+  - 2026年8月版: shops 1,098／therapists 60,999／料金サンプル487店
+- `/stats` の静的HTMLが空だった問題も修正
+  - 原因は `AuthProvider` が認証確認完了まで全ページの子要素を描画していなかったこと
+  - SSRでは公開状態で本文を描画し、認証確定後にユーザー状態だけを更新する
+  - 生成HTMLに8月の統計本文とDataset JSON-LDが入ることを確認
+- 見送ったもの: 実装済みのプリセット・200/700字メーター・投稿完了画面の作り直し、流入検証前の店舗UI改修、投稿者0人では判断不能な複雑KPI
+- 検証: Supabase読み取り専用集計を2回実行してSHA-256一致、`npm run build`でコンパイル・30ページ生成成功、`stats.html`に統計本文・JSON-LDを確認（既知の`typescript`未導入によるESLint parser警告は継続）
 
 ---
 

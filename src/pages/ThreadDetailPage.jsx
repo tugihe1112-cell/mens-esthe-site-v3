@@ -10,6 +10,7 @@ import ReviewListWithRestriction from '../components/ReviewListWithRestriction.j
 import SeoHead from '../components/SeoHead.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
+import { trackEvent } from '../utils/analytics';
 
 // ローディング中の骨組み（全画面テキスト→スケルトンで"個人サイト感"を除去）
 function ThreadSkeleton() {
@@ -250,7 +251,12 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
   const shopPlace = [shop.prefecture, shop.city].filter(Boolean).join(' ');
   const seoDesc = `${shop.name}${shopPlace ? `（${shopPlace}）` : ''}のセラピスト、${therapist.name}さんのプロフィールとクチコミ。${therapist.age ? `年齢:${therapist.age}歳。` : ''}`;
 
-  const handlePostReview = () => {
+  const handlePostReview = (placement) => {
+    trackEvent('click_write_from_thread', {
+      shop_id: shopId,
+      therapist_id: threadId,
+      placement,
+    });
     navigate(`/shops/${shopId}/threads/${threadId}/review`);
   };
 
@@ -403,7 +409,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
               )}
             </h3>
             <button
-              onClick={handlePostReview}
+              onClick={() => handlePostReview('review_header')}
               className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-2 px-5 rounded-full shadow-lg shadow-pink-600/30 active:scale-95 transition-all duration-300 flex items-center gap-2 text-sm"
             >
               <span>✍️</span> 書く
@@ -417,7 +423,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
               <p className="text-white font-black text-base mb-1">まだ口コミがありません</p>
               <p className="text-purple-300 text-xs font-bold mb-4">最初のレポを書くと<span className="text-white">即7日間読み放題</span>（先行者特典）</p>
               <button
-                onClick={handlePostReview}
+                onClick={() => handlePostReview('empty_state')}
                 className="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-black py-3 px-8 rounded-full shadow-lg shadow-pink-600/30 active:scale-95 transition-all duration-300 inline-flex items-center gap-2 mx-auto"
               >
                 <span>✍️</span> 最初の口コミを書く
@@ -431,7 +437,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
       {showStickyCta && (
         <div className="fixed left-0 right-0 z-40 px-4 pointer-events-none" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 72px)' }}>
           <button
-            onClick={handlePostReview}
+            onClick={() => handlePostReview('sticky')}
             className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-3.5 rounded-2xl shadow-2xl shadow-pink-900/50 active:scale-[0.98] transition text-sm"
           >
             <span>✍️</span>{therapist.name}の口コミを書く

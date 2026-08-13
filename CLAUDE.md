@@ -26,6 +26,12 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
+### 2026-08-14
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ✅ | **マーケティング提案を選別して、口コミファネル計測と8月統計更新を実装** | `marketing_action_plan_slides.pdf`を全12ページ確認し、既存コードと突合。**採用**: ①セラピスト詳細の3つの投稿CTAに`click_write_from_thread`（位置別）、投稿画面に`review_prefilled_open`・`review_shop_selected`・`review_200_reached`・`review_700_reached`・`review_submit`・`review_published`を追加。200/700字到達はページ内のステップ往復を含め各1回。既存`begin_review`/`complete_review`は比較継続のため残した。②月次統計を固定名`stats-2026-07.json`から`stats-latest.json`へ移行し、実行月・日をJSTで自動設定。件数同率時の並び順も県名・エリア名・店舗IDで固定し、同一DB状態から2回生成したSHA-256が`c675a90f...7386f`で一致。2026年8月実測はshops 1,098／therapists 60,999／料金サンプル487店。③**ビルド生成物の確認で`/stats`の静的HTMLが空と判明**。`AuthProvider`が認証確認完了まで全ページの子要素を描画しないのが原因だったため、SSRは公開状態で描画し認証確定後にユーザー状態を更新するよう修正。生成`stats.html`は2,807→55,978 bytesとなり、8月本文・Dataset JSON-LDを確認。**見送り**: 既に存在するプリセット・200/700字メーター・投稿完了画面の再実装、流入検証前の店舗UI改修、投稿者0人で判断不能な複雑KPI。**検証**: `npm run build`はコンパイル・30ページ生成成功。既知の`typescript`未導入によるESLint parser警告のみ継続。 |
+
 ### 2026-08-13
 
 | 状態 | 作業内容 | メモ |

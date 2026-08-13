@@ -10,7 +10,7 @@ import SeoHead from '../components/SeoHead.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import { trackEvent } from '../utils/analytics';
-import siteStats from '../data/stats-2026-07.json';
+import siteStats from '../data/stats-latest.json';
 
 // 左サイドバーのタグ絞り込み（SearchPage と同一定義。表記を割らないため必ず揃える）
 const TAG_CATEGORIES = [

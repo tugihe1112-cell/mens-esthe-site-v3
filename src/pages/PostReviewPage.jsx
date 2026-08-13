@@ -55,6 +55,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
     setValue('therapistId', null);
     setValue('therapistName', '');
     setCustomMode(false);
+    trackEvent('review_shop_selected', { shop_id: shop.id, source: 'manual_search' });
   };
 
   const handleShopInputChange = (e) => {
@@ -329,7 +330,7 @@ const STORY_HINTS = {
   exit: ['満足度', 'どんな人向き', 'また行きたいか'],
 };
 
-const Step3_Story = () => {
+const Step3_Story = ({ onMilestone }) => {
   const { register, watch, formState: { errors } } = useFormContext();
   const story = watch('story') || {};
   const totalChars = Object.values(story).filter(Boolean).join('').length;
@@ -337,6 +338,11 @@ const Step3_Story = () => {
   const reached200 = totalChars >= MIN_CHARS;
   const reached700 = totalChars >= BONUS_CHARS;
   const meterColor = reached700 ? 'bg-emerald-500' : reached200 ? 'bg-amber-500' : 'bg-gradient-to-r from-pink-500 to-purple-500';
+
+  useEffect(() => {
+    if (reached200) onMilestone(200, totalChars);
+    if (reached700) onMilestone(700, totalChars);
+  }, [onMilestone, reached200, reached700, totalChars]);
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
@@ -490,6 +496,13 @@ export default function PostReviewPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedShopId, setSelectedShopId] = useState(null);
   const [completed, setCompleted] = useState(null); // B-3: 投稿後体験 { grantedDays, reviewLink, chars }
+  const prefilledOpenTrackedRef = useRef(false);
+  const milestoneTrackedRef = useRef({ 200: false, 700: false });
+  const handleMilestone = React.useCallback((threshold, chars) => {
+    if (milestoneTrackedRef.current[threshold]) return;
+    milestoneTrackedRef.current[threshold] = true;
+    trackEvent(`review_${threshold}_reached`, { chars });
+  }, []);
 
   // ★ URLパラメータによる初期化 (Data Loadingを待機)
   useEffect(() => {
@@ -500,6 +513,13 @@ export default function PostReviewPage() {
       if (paramThreadId) {
         methods.setValue('therapistId', paramThreadId);
         setCurrentStep(2);
+        if (!prefilledOpenTrackedRef.current) {
+          prefilledOpenTrackedRef.current = true;
+          trackEvent('review_prefilled_open', {
+            shop_id: effectiveShopId,
+            therapist_id: paramThreadId,
+          });
+        }
       }
     }
   }, [effectiveShopId, paramThreadId, shops, methods]);
@@ -516,7 +536,11 @@ export default function PostReviewPage() {
   }, []); // 初回マウントのみ
 
   // 測定: 投稿フロー開始（Step1到達）— A系改修の投稿ファネル比較用
-  useEffect(() => { trackEvent('begin_review'); }, []);
+  useEffect(() => {
+    trackEvent('begin_review', {
+      source: paramThreadId ? 'therapist_detail' : effectiveShopId ? 'shop_detail' : 'generic',
+    });
+  }, [effectiveShopId, paramThreadId]);
 
   // Shop Data Logic
   const [shopTherapists, setShopTherapists] = useState([]);
@@ -586,6 +610,13 @@ export default function PostReviewPage() {
   const prevStep = () => setCurrentStep((p) => Math.max(1, p - 1));
 
   const onSubmit = async (data) => {
+    const len = Object.values(data.story || {}).filter(Boolean).join('').length;
+    trackEvent('review_submit', {
+      chars: len,
+      source: paramThreadId ? 'therapist_detail' : effectiveShopId ? 'shop_detail' : 'generic',
+      authenticated: Boolean(user),
+    });
+
     // 未ログインなら下書きを保存してログインへ（書いてから公開時ログイン）
     if (!user) {
       saveDraft(data);
@@ -597,9 +628,14 @@ export default function PostReviewPage() {
     const result = await submitReview(data);
     if (result.success) {
       clearDraft();
-      const len = Object.values(data.story || {}).filter(Boolean).join('').length;
       const grantedDays = len >= 700 ? 7 : 3;
       trackEvent('complete_review', { chars: len, granted_days: grantedDays });
+      trackEvent('review_published', {
+        chars: len,
+        granted_days: grantedDays,
+        shop_id: data.shopId,
+        has_therapist: Boolean(data.therapistId || data.therapistName),
+      });
 
       // 管理者へメール通知（失敗しても投稿は成功扱い）
       const shopName = shops.find(s => s.id === data.shopId)?.name || '';
@@ -720,7 +756,7 @@ export default function PostReviewPage() {
                   />
                 )}
                 {currentStep === 2 && <Step2_Rating />}
-                {currentStep === 3 && <Step3_Story />}
+                {currentStep === 3 && <Step3_Story onMilestone={handleMilestone} />}
                 {currentStep === 4 && <Step4_Confirm isSubmitting={isSubmitting} />}
               </form>
               

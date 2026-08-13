@@ -1,13 +1,13 @@
 /**
  * build_stats.mjs — 「メンズエステ統計 2026」の集計スクリプト（被リンク資産）
  *
- * DBから機械集計できる一次データだけを集計し src/data/stats-2026-07.json を生成する。
+ * DBから機械集計できる一次データだけを集計し src/data/stats-latest.json を生成する。
  * ページ(pages/stats.jsx)はこのJSONを静的importするだけ＝DBアクセス不要・落ちない・高速。
  *
  * 前提: .env に VITE_SUPABASE_URL と SUPABASE_SERVICE_ROLE_KEY（RLSバイパスに必要・全件集計のため）
  * 実行:
  *   node scripts/metrics/build_stats.mjs --dry-run   # 集計内容とカバレッジだけ表示（書き込まない）
- *   node scripts/metrics/build_stats.mjs             # src/data/stats-2026-07.json に書き出し
+ *   node scripts/metrics/build_stats.mjs             # src/data/stats-latest.json に書き出し
  *
  * 方針（信頼が資産・誇張禁止）:
  *  - 料金はパースできた店舗のみ集計。**都道府県×コース帯でサンプル10店未満は非掲載**
@@ -23,8 +23,19 @@ import { createClient } from '@supabase/supabase-js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '../..');
-const OUT_PATH = path.join(ROOT, 'src/data/stats-2026-07.json');
-const AS_OF = '2026年7月';
+const OUT_PATH = path.join(ROOT, 'src/data/stats-latest.json');
+const now = new Date();
+const AS_OF = new Intl.DateTimeFormat('ja-JP', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: 'long',
+}).format(now);
+const GENERATED_AT = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).format(now);
 
 const DRY = process.argv.includes('--dry-run');
 
@@ -46,6 +57,7 @@ const median = (arr) => {
   const m = Math.floor(s.length / 2);
   return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2);
 };
+const compareText = (a, b) => (a === b ? 0 : a < b ? -1 : 1);
 
 // service roleでも1000件上限があるので range でページング
 async function fetchAll(table, columns) {
@@ -126,7 +138,7 @@ async function main() {
   for (const s of shops) { const p = prefOf(s); if (p) prefCount[p] = (prefCount[p] || 0) + 1; }
   const prefectureShopCounts = Object.entries(prefCount)
     .map(([prefecture, count]) => ({ prefecture, count }))
-    .sort((a, b) => b.count - a.count);
+    .sort((a, b) => (b.count - a.count) || compareText(a.prefecture, b.prefecture));
 
   // ── 2. エリア別 店舗密度 TOP20 ──
   const areaMap = {};
@@ -137,7 +149,11 @@ async function main() {
     if (!areaMap[key]) areaMap[key] = { area, prefecture: pref, count: 0 };
     areaMap[key].count += 1;
   }
-  const areaDensity = Object.values(areaMap).sort((a, b) => b.count - a.count).slice(0, 20);
+  const areaDensity = Object.values(areaMap)
+    .sort((a, b) => (b.count - a.count)
+      || compareText(a.prefecture, b.prefecture)
+      || compareText(a.area, b.area))
+    .slice(0, 20);
 
   // ── 3. 料金相場（都道府県別・60/90分帯の中央値・N>=10のみ） ──
   const priceByPrefMap = {}; // pref -> { p60:[], p90:[] }
@@ -163,7 +179,8 @@ async function main() {
       median90: v.p90.length >= MIN_SAMPLE ? median(v.p90) : null,
     }))
     .filter((r) => r.median60 != null || r.median90 != null)
-    .sort((a, b) => (b.median60 || b.median90 || 0) - (a.median60 || a.median90 || 0));
+    .sort((a, b) => ((b.median60 || b.median90 || 0) - (a.median60 || a.median90 || 0))
+      || compareText(a.prefecture, b.prefecture));
 
   // 全国中央値（サンプルが十分にある帯のみ）
   const all60 = [], all90 = [];
@@ -185,7 +202,7 @@ async function main() {
       name: shopById[shopId]?.name || shopId,
       prefecture: shopById[shopId] ? prefOf(shopById[shopId]) : null,
     }))
-    .sort((a, b) => b.count - a.count)
+    .sort((a, b) => (b.count - a.count) || compareText(a.shopId, b.shopId))
     .slice(0, 10);
   const therapistStats = {
     total: therapists.length,
@@ -195,7 +212,7 @@ async function main() {
   };
 
   const stats = {
-    generatedAt: new Date().toISOString().slice(0, 10),
+    generatedAt: GENERATED_AT,
     asOf: AS_OF,
     coverage: {
       totalShops: shops.length,
