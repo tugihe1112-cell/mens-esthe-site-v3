@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { authHeaders } from '../utils/supabaseRest';
 import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { useAppContext } from '../context/AppContext.tsx';
@@ -73,7 +74,9 @@ export default function ShopDetailPage({
         const url = process.env.VITE_SUPABASE_URL;
         const key = process.env.VITE_SUPABASE_ANON_KEY;
         if (!url || !key) return;
-        const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
+        // ⚠️ 2026-08-12: anonキー固定だと TO authenticated のRLSが発火せず、
+        //    12_適用後に本人・credits保有者・VIPへ非公開口コミが返らなくなる。
+        const headers = await authHeaders();
 
         // 1. 先に店舗データだけを取得してブランドIDを確定させる
         const shopRes = await fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers, cache: 'no-store' });
@@ -161,7 +164,8 @@ export default function ShopDetailPage({
     try {
       const url = process.env.VITE_SUPABASE_URL;
       const key = process.env.VITE_SUPABASE_ANON_KEY;
-      const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
+      // ⚠️ 追加読み込みも同様にセッションJWTを送る（anon固定だとRLSが発火しない）
+      const headers = await authHeaders();
       const shop = cloudShop;
       if (!shop) return;
 

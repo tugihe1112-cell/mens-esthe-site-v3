@@ -22,6 +22,26 @@
 BEGIN;
 
 -- ══════════════════════════════════════════════════════════════
+-- ⓪ テーブル権限を一度まっさらにしてから必要分だけ付け直す
+-- ══════════════════════════════════════════════════════════════
+-- Supabase の既定では anon / authenticated に ALL（SELECT/INSERT/UPDATE/DELETE に加えて
+-- TRUNCATE / TRIGGER / REFERENCES まで）が付いている。
+-- 個別に REVOKE すると付け忘れが残るため、ALL を落としてから最小限を再付与する。
+-- ⚠️ service_role には触らない（SSR・サイトマップ・管理API・トリガーが依存している）。
+REVOKE ALL ON public.reviews      FROM anon, authenticated;
+REVOKE ALL ON public.user_credits FROM anon, authenticated;
+REVOKE ALL ON public.profiles     FROM anon, authenticated;
+
+-- 読み取りは全ロールに許可（実際に何行返るかは下のRLSが決める）
+GRANT SELECT ON public.reviews      TO anon, authenticated;
+GRANT SELECT ON public.user_credits TO authenticated;
+GRANT SELECT ON public.profiles     TO authenticated;
+
+-- 口コミの削除は管理者のみ（RLS reviews_admin_delete で本人確認）
+GRANT DELETE ON public.reviews TO authenticated;
+-- INSERT は ③ で列単位に付与する。UPDATE はどのロールにも付けない。
+
+-- ══════════════════════════════════════════════════════════════
 -- ① user_credits — 自己付与を完全に塞ぐ（付与は service role の管理APIのみ）
 -- ══════════════════════════════════════════════════════════════
 DROP POLICY IF EXISTS "insert自分のみ"            ON public.user_credits;
@@ -39,7 +59,7 @@ CREATE POLICY "user_credits_read_own"
 -- 書き込みはポリシーを一切作らない＝ RLS 有効下では anon/authenticated から書けない。
 -- 付与は api/admin-grant-credit.js（service role・管理者メール検証済み）が行う。
 -- テーブル権限そのものも落としておく（RLSと二重の壁にする）
-REVOKE INSERT, UPDATE, DELETE ON public.user_credits FROM anon, authenticated;
+-- （テーブル権限は冒頭⓪で REVOKE ALL 済み。ここではポリシーのみ扱う）
 
 -- ══════════════════════════════════════════════════════════════
 -- ② profiles — 自己VIP化を塞ぐ
@@ -47,7 +67,7 @@ REVOKE INSERT, UPDATE, DELETE ON public.user_credits FROM anon, authenticated;
 -- クライアントからの profiles 更新は存在しないので、UPDATE 自体を許可しない。
 -- plan は handle_new_user（DB側）と管理APIだけが決める。
 DROP POLICY IF EXISTS "自分だけが更新できる" ON public.profiles;
-REVOKE INSERT, UPDATE, DELETE ON public.profiles FROM anon, authenticated;
+-- （テーブル権限は冒頭⓪で REVOKE ALL 済み）
 
 -- 「プロフィールは誰でも見れる」(SELECT USING true) は、email 列が入っているため
 -- メールアドレスが全公開になる。自分の分だけに絞る。
@@ -63,7 +83,7 @@ CREATE POLICY "profiles_read_own"
 -- is_public / view_count / like_count / badge_count / last_notified_views /
 -- created_at はDB側（default とトリガー）だけが決める。
 -- クライアントが指定できる列だけを列挙して GRANT する。
-REVOKE INSERT ON public.reviews FROM anon, authenticated;
+-- INSERT は冒頭⓪で剥奪済み。ここで許可列だけ付け直す。
 GRANT INSERT (
   id, shop_id, shop_name, therapist_id, therapist_name,
   user_id, user_name, rating, course, detailed_ratings, tags, content
@@ -131,8 +151,11 @@ CREATE POLICY "reviews_entitled_read"
   USING ((SELECT private.has_review_access()));
 
 -- 管理者は全件読める
--- ⚠️ AdminPage が anon キー固定でRESTを叩いている間はこのポリシーは発火しない。
---    AdminPage をユーザーJWT送信に直すまで、管理画面では公開分しか見えない。
+-- ⚠️ 前提: クライアントがユーザーJWTを送っていること。anonキー固定だと PostgREST 上は
+--    常に anon ロール扱いになり、この `TO authenticated` ポリシーは発火しない。
+--    そのため AdminPage / ShopDetailPage / ThreadDetailPage / ModernReviewCard /
+--    PopularReviewsPage を `src/utils/supabaseRest.js` の authHeaders() 経由に統一済み
+--    （2026-08-12・このマイグレーションと同じリリース）。
 CREATE POLICY "reviews_admin_read"
   ON public.reviews FOR SELECT
   TO authenticated
@@ -146,7 +169,7 @@ CREATE POLICY "reviews_admin_read"
 -- クライアントからの UPDATE は存在しないので、権限ごと落とす。
 -- （view_count の加算は /api/track-view が service role で行うため影響なし）
 DROP POLICY IF EXISTS "reviews_no_anon_update" ON public.reviews;
-REVOKE UPDATE ON public.reviews FROM anon, authenticated;
+-- UPDATE 権限は冒頭⓪で剥奪済み・再付与しない
 
 -- ══════════════════════════════════════════════════════════════
 -- ⑦ 既存トリガー関数の是正
@@ -160,31 +183,51 @@ REVOKE UPDATE ON public.reviews FROM anon, authenticated;
 --    ホーム・人気口コミ・関連リンクが **404 のセラピストページへリンク**を作る
 --    （これらは全て is_public で絞っているため、公開させなければ発生しない）。
 --    → 判定を therapist_name ではなく「公式 therapists 行が存在するか」で行う。
+-- ⚠️ 当初 `therapists.id = NEW.therapist_id` の存在確認だけにしていたが**穴があった**。
+--    認証ユーザーがRESTを直接叩き「店舗Aの shop_id ＋ 店舗Bに実在する therapist_id ＋
+--    任意の架空 therapist_name」を送ると存在確認を通過し、店舗A＋架空名の初回口コミとして
+--    自動公開できてしまう。所属店舗まで照合し、名前はクライアントを信用せずDB側で上書きする。
 CREATE OR REPLACE FUNCTION public.set_first_review_public()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = ''
 AS $$
+DECLARE
+  official_name text;
 BEGIN
-  -- 公式セラピストとして実在する場合のみ、初回公開の対象にする
-  IF NEW.therapist_id IS NOT NULL
-     AND EXISTS (SELECT 1 FROM public.therapists t WHERE t.id = NEW.therapist_id)
-     AND NEW.therapist_name IS NOT NULL
-     AND NEW.therapist_name <> ''
-  THEN
-    IF NOT EXISTS (
-      SELECT 1 FROM public.reviews r
-      WHERE r.shop_id = NEW.shop_id
-        AND r.therapist_name = NEW.therapist_name
-    ) THEN
-      NEW.is_public := true;
-    END IF;
-  ELSE
-    -- manual_*（手入力）・指名なし・存在しないIDは必ず非公開。
-    -- 管理者が /admin で内容を確認してから公開する運用にする。
-    NEW.is_public := false;
+  -- 既定は必ず非公開。条件を満たしたときだけ公開に倒す（fail-safe）
+  NEW.is_public := false;
+
+  IF NEW.therapist_id IS NULL OR NEW.shop_id IS NULL THEN
+    RETURN NEW;
   END IF;
+
+  -- ① 正式な所属を確認（同じ店舗に、そのIDのセラピストが実在するか）
+  SELECT t.name INTO official_name
+  FROM public.therapists t
+  WHERE t.id = NEW.therapist_id
+    AND t.shop_id = NEW.shop_id
+  LIMIT 1;
+
+  IF official_name IS NULL THEN
+    -- manual_*（手入力）・指名なし・別店舗のID・存在しないIDは公開しない
+    RETURN NEW;
+  END IF;
+
+  -- ② 名前はクライアントの申告を信用せず、DBの正式名で上書きする
+  NEW.therapist_name := official_name;
+
+  -- ③ 初回判定は therapist_name ではなく **shop_id + therapist_id** で行う
+  --    （名前ベースだと同名別人・表記揺れ・名前改変で判定を騙せる）
+  IF NOT EXISTS (
+    SELECT 1 FROM public.reviews r
+    WHERE r.shop_id = NEW.shop_id
+      AND r.therapist_id = NEW.therapist_id
+  ) THEN
+    NEW.is_public := true;
+  END IF;
+
   RETURN NEW;
 END;
 $$;

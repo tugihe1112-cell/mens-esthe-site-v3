@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import { authHeaders } from '../utils/supabaseRest';
 import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { useAppContext } from '../context/AppContext.tsx';
@@ -63,7 +64,9 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
         const url = process.env.VITE_SUPABASE_URL;
         const key = process.env.VITE_SUPABASE_ANON_KEY;
         if (!url || !key) return;
-        const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
+        // ⚠️ 2026-08-12: anonキー固定だと TO authenticated のRLSが発火せず、
+        //    本人・credits保有者・VIP・管理者に非公開口コミが返らない。
+        const headers = await authHeaders();
         // id/名前は `,` や `&` を含みうるので必ずURLエンコードする（未エンコードだとクエリが壊れて取得できない）
         const encShopId = encodeURIComponent(shopId);
         const encThreadId = encodeURIComponent(threadId);

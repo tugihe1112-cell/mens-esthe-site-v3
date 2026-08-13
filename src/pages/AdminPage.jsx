@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { authHeaders } from '../utils/supabaseRest';
 import { useNavigate, Link } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { supabase } from '../lib/supabase.js';
@@ -11,8 +12,11 @@ const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
 
 const url = process.env.VITE_SUPABASE_URL;
 const key = process.env.VITE_SUPABASE_ANON_KEY;
-const headers = { apikey: key, Authorization: `Bearer ${key}` };
-const jsonHeaders = { ...headers, 'Content-Type': 'application/json' };
+// ⚠️ 2026-08-12: 以前はここで `Authorization: Bearer <anon key>` を固定生成し全RESTで使い回していた。
+//    anonキーで送ると PostgREST 上は常に anon ロール扱いになるため、
+//    `TO authenticated` の管理者RLS（reviews_admin_read 等）が**一切発火しない**。
+//    12_適用後は口コミ全件取得・credits一覧・削除がすべて失敗するため、
+//    呼び出しごとに await authHeaders() でセッションJWTを載せる。
 
 function timeAgo(dateStr) {
   if (!dateStr) return '';
@@ -143,11 +147,13 @@ function ShopEditModal({ shop, onClose, onSave }) {
   const save = async () => {
     setIsSaving(true);
     try {
-      await fetch(`${url}/rest/v1/shops?id=eq.${shop.id}`, {
+      const res = await fetch(`${url}/rest/v1/shops?id=eq.${shop.id}`, {
         method: 'PATCH',
-        headers: jsonHeaders,
+        headers: await authHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(form),
       });
+      // ⚠️ 以前はレスポンスを見ずに画面だけ更新していたため、RLSで拒否されても成功に見えた
+      if (!res.ok) throw new Error(`保存に失敗しました (HTTP ${res.status})`);
       onSave({ ...shop, ...form });
       onClose();
     } catch (e) {
@@ -237,7 +243,7 @@ export default function AdminPage() {
   const fetchReviews = async () => {
     setIsLoadingReviews(true);
     try {
-      const res = await fetch(`${url}/rest/v1/reviews?select=*&order=created_at.desc&limit=200`, { headers });
+      const res = await fetch(`${url}/rest/v1/reviews?select=*&order=created_at.desc&limit=200`, { headers: await authHeaders() });
       const data = await res.json();
       if (Array.isArray(data)) setReviews(data);
     } finally {
@@ -246,7 +252,7 @@ export default function AdminPage() {
   };
 
   const fetchCredits = async () => {
-    const res = await fetch(`${url}/rest/v1/user_credits?select=*&order=updated_at.desc`, { headers });
+    const res = await fetch(`${url}/rest/v1/user_credits?select=*&order=updated_at.desc`, { headers: await authHeaders() });
     const data = await res.json();
     if (Array.isArray(data)) setCredits(data);
   };
@@ -254,7 +260,7 @@ export default function AdminPage() {
   const fetchShops = async () => {
     setIsLoadingShops(true);
     try {
-      const res = await fetch(`${url}/rest/v1/shops?select=id,name,image_url,website_url,schedule_url,raw_data&order=name.asc&limit=1000`, { headers });
+      const res = await fetch(`${url}/rest/v1/shops?select=id,name,image_url,website_url,schedule_url,raw_data&order=name.asc&limit=1000`, { headers: await authHeaders() });
       const data = await res.json();
       if (Array.isArray(data)) setShops(data);
     } finally {
@@ -264,13 +270,15 @@ export default function AdminPage() {
 
   const deleteReview = async (reviewId) => {
     if (!window.confirm('この口コミを削除しますか？')) return;
-    await fetch(`${url}/rest/v1/reviews?id=eq.${reviewId}`, { method: 'DELETE', headers });
+    const res = await fetch(`${url}/rest/v1/reviews?id=eq.${reviewId}`, { method: 'DELETE', headers: await authHeaders() });
+    if (!res.ok) { alert(`削除に失敗しました (HTTP ${res.status})`); return; }
     setReviews(prev => prev.filter(r => r.id !== reviewId));
   };
 
   const deleteShop = async (shopId) => {
     if (!window.confirm('この店舗を削除しますか？（元に戻せません）')) return;
-    await fetch(`${url}/rest/v1/shops?id=eq.${shopId}`, { method: 'DELETE', headers });
+    const res = await fetch(`${url}/rest/v1/shops?id=eq.${shopId}`, { method: 'DELETE', headers: await authHeaders() });
+    if (!res.ok) { alert(`削除に失敗しました (HTTP ${res.status})`); return; }
     setShops(prev => prev.filter(s => s.id !== shopId));
   };
 

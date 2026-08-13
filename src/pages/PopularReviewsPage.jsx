@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { authHeaders } from '../utils/supabaseRest';
 import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
@@ -44,7 +45,8 @@ export default function PopularReviewsPage() {
 
   const url = process.env.VITE_SUPABASE_URL;
   const key = process.env.VITE_SUPABASE_ANON_KEY;
-  const headers = { apikey: key, Authorization: `Bearer ${key}` };
+  // ⚠️ 2026-08-12: anonキー固定をやめ、fetch直前に await authHeaders() で
+  //    セッションJWT（未ログイン時はanon）を載せる。
 
   const normName = (s) => (s || '').replace(/[\s　]/g, '');
 
@@ -64,14 +66,14 @@ export default function PopularReviewsPage() {
     try {
       const reqs = [];
       reqs.push(shopIds.length
-        ? fetch(`${url}/rest/v1/shops?select=id,name,raw_data&id=in.${encodeURIComponent(inList(shopIds))}`, { headers }).then(r => r.json())
+        ? fetch(`${url}/rest/v1/shops?select=id,name,raw_data&id=in.${encodeURIComponent(inList(shopIds))}`, { headers: await authHeaders() }).then(r => r.json())
         : Promise.resolve([]));
       // therapist は id 一致を優先、取りこぼしは名前一致でフォールバック（旧データのID揺れ対策）
       reqs.push(therapistIds.length
-        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id&id=in.${encodeURIComponent(inList(therapistIds))}`, { headers }).then(r => r.json())
+        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id&id=in.${encodeURIComponent(inList(therapistIds))}`, { headers: await authHeaders() }).then(r => r.json())
         : Promise.resolve([]));
       reqs.push(therapistNames.length
-        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id&name=in.${encodeURIComponent(inList(therapistNames))}&limit=200`, { headers }).then(r => r.json())
+        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id&name=in.${encodeURIComponent(inList(therapistNames))}&limit=200`, { headers: await authHeaders() }).then(r => r.json())
         : Promise.resolve([]));
 
       const [shops, tById, tByName] = await Promise.all(reqs);
@@ -112,7 +114,7 @@ export default function PopularReviewsPage() {
       const res = await fetch(
         `${url}/rest/v1/reviews?select=id,shop_id,therapist_id,therapist_name,rating,tags,content,course,user_name,created_at,like_count` +
         `&is_public=eq.true&order=${order}&limit=${PAGE_SIZE}&offset=${currentOffset}`,
-        { headers }
+        { headers: await authHeaders() }
       );
       const data = await res.json();
       if (!Array.isArray(data)) return;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { authHeaders } from '../utils/supabaseRest';
 import { Link, useNavigate } from '../compat/router';
 import ReviewLikeButton from './ReviewLikeButton.jsx';
 import ThanksBadgeButton from './ThanksBadgeButton.jsx';
@@ -70,7 +71,7 @@ function DMButton({ toUserId, currentUser, navigate }) {
   const [isLoading, setIsLoading] = useState(false);
   const url = process.env.VITE_SUPABASE_URL;
   const key = process.env.VITE_SUPABASE_ANON_KEY;
-  const headers = { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'return=representation' };
+  // ⚠️ 2026-08-12: anonキー固定をやめる（TO authenticated のRLSが発火しないため）
 
   const startDM = async () => {
     if (isLoading) return;
@@ -81,7 +82,7 @@ function DMButton({ toUserId, currentUser, navigate }) {
       // 既存ルームを検索（user1/user2どちらでも）
       const res = await fetch(
         `${url}/rest/v1/chat_rooms?or=(and(user1_id.eq.${uid},user2_id.eq.${tid}),and(user1_id.eq.${tid},user2_id.eq.${uid}))&select=id`,
-        { headers: { apikey: key, Authorization: `Bearer ${key}` } }
+        { headers: await authHeaders() }
       );
       const existing = await res.json();
       if (Array.isArray(existing) && existing.length > 0) {
@@ -134,11 +135,17 @@ export default function ModernReviewCard({ review }) {
     if (!user) { setCreditDays(0); return; }
     const url = process.env.VITE_SUPABASE_URL;
     const key = process.env.VITE_SUPABASE_ANON_KEY;
-    fetch(`${url}/rest/v1/user_credits?user_id=eq.${user.id}&select=credits_days,expires_at`, {
-      headers: { apikey: key, Authorization: `Bearer ${key}` }
-    })
-      .then(r => r.json())
-      .then(data => {
+    // ⚠️ 2026-08-12: user_credits_read_own は TO authenticated。
+    //    anonキー固定で送っていたため、12_適用後は残高が必ず空になりW2Rが死ぬ。
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(
+          `${url}/rest/v1/user_credits?user_id=eq.${user.id}&select=credits_days,expires_at`,
+          { headers: await authHeaders() }
+        );
+        const data = await res.json();
+        if (cancelled) return;
         if (Array.isArray(data) && data.length > 0) {
           const { credits_days, expires_at } = data[0];
           const expired = expires_at && new Date(expires_at) < new Date();
@@ -146,12 +153,22 @@ export default function ModernReviewCard({ review }) {
         } else {
           setCreditDays(0);
         }
-      })
-      .catch(() => setCreditDays(0));
+      } catch {
+        if (!cancelled) setCreditDays(0);
+      }
+    })();
+    return () => { cancelled = true; };
   }, [user]);
 
   // 閲覧権限: プレミアム OR 閲覧日数あり OR owner_manual口コミ OR 公開口コミ（各セラピストの1件目）
   const canReadFull = isPremium || (creditDays !== null && creditDays > 0) || review.user_id === 'owner_manual' || review.is_public === true;
+
+  // ── セラピストへのリンク可否（snake/camel 両対応・manual_ は非リンク）──
+  const cardShopId = review.shop_id || review.shopId || '';
+  const cardTherapistId = review.therapist_id || review.therapistId || '';
+  const therapistLabel = review.therapist_name || review.therapistName || 'セラピスト';
+  const therapistLinkable =
+    !!cardShopId && !!cardTherapistId && !/^manual_/i.test(cardTherapistId);
 
   // 6軸メトリクス（snake/camel両対応・DBは detailed_ratings）
   const dr = review.detailedRatings || review.detailed_ratings || {};
@@ -185,14 +202,27 @@ export default function ModernReviewCard({ review }) {
             {/* SUBJECT: Therapist Name (Huge) */}
             <div className="flex flex-col">
               <div className="flex items-center gap-3">
-                 <Link 
-                   to={`/shops/${review.shopId}/threads/${review.therapistId}`}
-                   className="hover:opacity-70 transition-opacity cursor-pointer block"
-                 >
+                 {/* ⚠️ 2026-08-12:
+                     ① 旧コードは review.shopId / review.therapistId（camelCase）しか見ておらず、
+                        REST から取得した行は snake_case なので `/shops/undefined/threads/undefined`
+                        になっていた。両対応にする。
+                     ② `manual_` は手入力セラピストの合成IDで therapists に存在しないため、
+                        リンクすると必ず404になる（2026-08-10に潰したソフト404の再生産）。
+                        リンクにせず名前だけ表示する。 */}
+                 {therapistLinkable ? (
+                   <Link
+                     to={`/shops/${cardShopId}/threads/${cardTherapistId}`}
+                     className="hover:opacity-70 transition-opacity cursor-pointer block"
+                   >
+                     <h2 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 tracking-tight leading-tight">
+                       {therapistLabel}
+                     </h2>
+                   </Link>
+                 ) : (
                    <h2 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 tracking-tight leading-tight">
-                   {review.therapist_name || review.therapistName || "セラピスト"}
-                 </h2>
-                 </Link>
+                     {therapistLabel}
+                   </h2>
+                 )}
               </div>
               
               {/* META: Reviewer (Tiny & Subdued) */}
