@@ -73,15 +73,29 @@ BEGIN
 END $$;
 
 -- ══════════════════════════════════════════════════════════════
--- ④ 残りの SECURITY DEFINER 関数の search_path 固定
+-- ④ 残りの関数の search_path 固定（SECURITY INVOKER のまま）
 -- ══════════════════════════════════════════════════════════════
 -- Supabase Security Advisor の WARN 対象。search_path が可変だと
 -- 同名オブジェクトを差し込まれて意図しないテーブルを触らされうる。
+--
+-- ⚠️ **引数名を絶対に変えないこと（`ids` のまま）。**
+--    `CREATE OR REPLACE FUNCTION` は入力引数名を変更できず、
+--    `ERROR 42P13: cannot change name of input parameter "ids"` で失敗する。
+--    さらに Supabase の RPC は**名前付き引数**で呼ぶため、
+--    `api/track-view.js` の `rpc('increment_review_views', { ids })` と
+--    `api/cron/retention-email.js` の `rpc('ack_review_views', { ids })` が
+--    引数名を変えた瞬間に全て壊れる。DROP して作り直すのも同じ理由で不可。
+--
+-- ⚠️ **SECURITY INVOKER のまま維持する。**
+--    当初この3本を SECURITY DEFINER に変えたが、これは不要な権限昇格だった。
+--    increment / ack は service_role から呼ぶので INVOKER のままで更新できるし、
+--    update_post_reply_count も既存挙動を変える理由がない。
+--    （12_ で DEFINER 化したのは、authenticated から reviews の UPDATE 権限を
+--      剥奪したことで**実際に壊れる**トリガー関数だけ。ここは事情が違う）
 
 CREATE OR REPLACE FUNCTION public.update_post_reply_count()
 RETURNS trigger
 LANGUAGE plpgsql
-SECURITY DEFINER
 SET search_path = ''
 AS $$
 BEGIN
@@ -96,39 +110,37 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION public.increment_review_views(review_ids text[])
+CREATE OR REPLACE FUNCTION public.increment_review_views(ids text[])
 RETURNS void
 LANGUAGE plpgsql
-SECURITY DEFINER
 SET search_path = ''
 AS $$
 BEGIN
   UPDATE public.reviews
   SET view_count = coalesce(view_count, 0) + 1
-  WHERE id = ANY(review_ids);
+  WHERE id = ANY(ids);
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION public.ack_review_views(p_review_ids text[])
+CREATE OR REPLACE FUNCTION public.ack_review_views(ids text[])
 RETURNS void
 LANGUAGE plpgsql
-SECURITY DEFINER
 SET search_path = ''
 AS $$
 BEGIN
   UPDATE public.reviews
   SET last_notified_views = coalesce(view_count, 0)
-  WHERE id = ANY(p_review_ids);
+  WHERE id = ANY(ids);
 END;
 $$;
 
 -- クライアントからの直接実行を塞ぐ。
 -- increment / ack は /api/track-view と /api/cron/retention-email が service_role で呼ぶ。
-REVOKE EXECUTE ON FUNCTION public.update_post_reply_count()          FROM PUBLIC, anon, authenticated;
-REVOKE EXECUTE ON FUNCTION public.increment_review_views(text[])     FROM PUBLIC, anon, authenticated;
-REVOKE EXECUTE ON FUNCTION public.ack_review_views(text[])           FROM PUBLIC, anon, authenticated;
-GRANT  EXECUTE ON FUNCTION public.increment_review_views(text[])     TO service_role;
-GRANT  EXECUTE ON FUNCTION public.ack_review_views(text[])           TO service_role;
+REVOKE EXECUTE ON FUNCTION public.update_post_reply_count()      FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.increment_review_views(text[]) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.ack_review_views(text[])       FROM PUBLIC, anon, authenticated;
+GRANT  EXECUTE ON FUNCTION public.increment_review_views(text[]) TO service_role;
+GRANT  EXECUTE ON FUNCTION public.ack_review_views(text[])       TO service_role;
 
 -- ══════════════════════════════════════════════════════════════
 -- ⑤ reviews.content の最低文字数をDB側で担保する
@@ -194,17 +206,43 @@ BEGIN
     RAISE EXCEPTION '想定外のポリシーが残っています: %', extra;
   END IF;
 
-  -- (c) SECURITY DEFINER 関数の search_path が全て固定されているか
+  -- (c) search_path が固定されているか
+  --     ⚠️ SECURITY DEFINER だけを見ると、INVOKER のまま残す3関数
+  --        （update_post_reply_count / increment_review_views / ack_review_views）を
+  --        検査できない。Advisor の警告は definer 種別に関係なく出るので、
+  --        「全ての DEFINER」＋「今回対象の INVOKER 3本」を明示的に見る。
   SELECT string_agg(p.proname, ', ' ORDER BY p.proname) INTO bad_fn
   FROM pg_proc p
   JOIN pg_namespace n ON n.oid = p.pronamespace
   WHERE n.nspname IN ('public','private')
-    AND p.prosecdef                                   -- SECURITY DEFINER
+    AND (
+      p.prosecdef                                                        -- SECURITY DEFINER 全部
+      OR p.proname IN ('update_post_reply_count',
+                       'increment_review_views',
+                       'ack_review_views')                               -- INVOKER のまま残す3本
+    )
     AND (p.proconfig IS NULL OR NOT EXISTS (
       SELECT 1 FROM unnest(p.proconfig) c WHERE c LIKE 'search_path=%'
     ));
   IF bad_fn IS NOT NULL THEN
-    RAISE EXCEPTION 'search_path が固定されていない SECURITY DEFINER 関数があります: %', bad_fn;
+    RAISE EXCEPTION 'search_path が固定されていない関数があります: %', bad_fn;
+  END IF;
+
+  -- (d) RPC の引数名が `ids` のままか
+  --     ⚠️ 引数名を変えると Supabase の名前付きRPC呼び出しが全て壊れる
+  --        （track-view / retention-email が { ids } で呼んでいる）。
+  --        CREATE OR REPLACE では変更できないので通常は失敗するが、
+  --        将来 DROP→CREATE した場合の事故を防ぐためここでも検査する。
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+    WHERE n.nspname = 'public' AND p.proname = 'increment_review_views'
+      AND p.proargnames @> ARRAY['ids']
+  ) OR NOT EXISTS (
+    SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+    WHERE n.nspname = 'public' AND p.proname = 'ack_review_views'
+      AND p.proargnames @> ARRAY['ids']
+  ) THEN
+    RAISE EXCEPTION 'increment_review_views / ack_review_views の引数名が ids ではありません（RPC呼び出しが壊れます）';
   END IF;
 END $$;
 

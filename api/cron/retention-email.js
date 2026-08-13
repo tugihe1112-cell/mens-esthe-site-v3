@@ -93,8 +93,15 @@ export default async function handler(req, res) {
     }
 
     // 送信できた分だけ last_notified_views を現在値に更新（次週は新規閲覧のみ通知）
+    // ⚠️ 2026-08-13: 以前は結果を確認していなかった。ここが失敗すると
+    //    **メールは送信済みなのにカウントが進まず、翌週まったく同じ内容を再通知する**。
+    //    ユーザーから見れば同じ通知が繰り返し届くので、失敗は必ず表面化させる。
     if (ackIds.length) {
-      await supabase.rpc('ack_review_views', { ids: ackIds });
+      const { error: ackError } = await supabase.rpc('ack_review_views', { ids: ackIds });
+      if (ackError) {
+        console.error('[retention-email] ack_review_views 失敗:', ackError.message, 'ackIds:', ackIds.length);
+        throw new Error(`送信は完了しましたが既読カウントの更新に失敗しました: ${ackError.message}`);
+      }
     }
 
     return res.status(200).json({ ok: true, sent, skipped, users: Object.keys(byUser).length });
