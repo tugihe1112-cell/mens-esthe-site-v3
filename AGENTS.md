@@ -30,7 +30,8 @@
   - ホームのカバーフロー変更はD-002により不採用
   - 「投稿名は任意」は現行の認証・投稿データモデルに存在しないため追加しない
   - 対象プリセット、200/700字メーター、完了画面、投稿中のBottomNav非表示は既に実装済みなので再実装しない
-- 検証: `node scripts/ci/check_design_decisions.mjs`成功、`npm run build`でコンパイル・30ページ生成成功。390×844pxでホーム・セラピスト詳細・投稿画面を確認し、「ゆにぞん」で3系列店が地域付き表示されることを実測。既知の`typescript`未導入によるESLint parser警告と、変更対象外のTopHeroSlider内style由来Hydration警告は継続
+- 実装コミット `dac5d5c` をmainへpushし、Vercel Production `dpl_GHPUkQbER1kABZqX4xH9TuYDH7d4` へデプロイ済み
+- 検証: `node scripts/ci/check_design_decisions.mjs`成功、`npm run build`でコンパイル・30ページ生成成功。390×844pxでホーム・セラピスト詳細・投稿画面を確認し、「ゆにぞん」で3系列店が地域付き表示されることを実測。本番でも最新口コミ→中立性/母数の順、証拠行・実体験バッジ、正しい付与条件、3候補の地域表示を確認。既知の`typescript`未導入によるESLint parser警告と、変更対象外のTopHeroSlider内style由来Hydration警告は継続
 
 ---
 
