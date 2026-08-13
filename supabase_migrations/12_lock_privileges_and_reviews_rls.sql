@@ -293,6 +293,17 @@ ALTER TABLE public.review_likes
 REVOKE ALL ON public.user_badges FROM anon, authenticated;
 GRANT SELECT, INSERT, DELETE ON public.user_badges TO authenticated;
 
+-- ⚠️ **本番に実在する日本語名のポリシー3本を必ずDROPすること。**
+--    これを落とさないと PERMISSIVE の OR 結合により、
+--    ・「誰でも閲覧可」USING(true) で全バッジ行が閲覧可能なまま
+--    ・「ログイン済みが付与可」WITH CHECK(auth.uid() = from_user_id) が生き残り、
+--      下で追加する badge_target_valid() と「自分宛て禁止」を**迂回できる**
+--    という穴が残る。外部キーは「口コミが実在すること」しか守らないので代替にならない。
+--    ＝ 08-12 に user_badges_admin_write で踏んだ「存在しない名前をDROPして成功に見える」
+--       事故とまったく同じ型。**必ず pg_policies の実名で書く。**
+DROP POLICY IF EXISTS "誰でも閲覧可"           ON public.user_badges;
+DROP POLICY IF EXISTS "ログイン済みが付与可"    ON public.user_badges;
+DROP POLICY IF EXISTS "自分の付与を取消可"      ON public.user_badges;
 DROP POLICY IF EXISTS "user_badges_public_read"  ON public.user_badges;
 DROP POLICY IF EXISTS "user_badges_admin_write"  ON public.user_badges;
 DROP POLICY IF EXISTS "user_badges_read_own"     ON public.user_badges;
@@ -475,6 +486,58 @@ $$;
 -- トリガー経由でのみ発火させる（直接呼び出しを塞ぐ）
 REVOKE EXECUTE ON FUNCTION public.set_first_review_public()      FROM PUBLIC, anon, authenticated;
 REVOKE EXECUTE ON FUNCTION public.auto_grant_credits_on_review() FROM PUBLIC, anon, authenticated;
+
+-- ══════════════════════════════════════════════════════════════
+-- ⑧ 自己検証 — 意図しないポリシーが残っていたらCOMMITさせない
+-- ══════════════════════════════════════════════════════════════
+-- ⚠️ `DROP POLICY IF EXISTS` は**存在しない名前を指定しても静かに成功する**。
+--    そのため名前を1文字間違えるだけで、古い緩いポリシーが残ったまま
+--    「マイグレーション成功」と表示される。この事故を 08-12 に2回踏んでいる
+--    （user_badges_admin_all の誤記／user_badges の日本語名3本の漏れ）。
+--    → 想定した名前の集合と一致しなければ**例外を投げてロールバック**する。
+DO $$
+DECLARE
+  leftovers text;
+BEGIN
+  SELECT string_agg(tablename || '.' || policyname, ', ' ORDER BY tablename, policyname)
+  INTO leftovers
+  FROM pg_policies
+  WHERE schemaname = 'public'
+    AND tablename IN ('reviews', 'user_credits', 'profiles', 'shops', 'review_likes', 'user_badges')
+    AND policyname NOT IN (
+      -- reviews
+      'reviews_public_read', 'reviews_own_read', 'reviews_entitled_read',
+      'reviews_admin_read', 'reviews_authenticated_insert', 'reviews_admin_delete',
+      -- user_credits
+      'user_credits_read_own', 'user_credits_admin_read',
+      -- profiles
+      'profiles_read_own',
+      -- shops
+      'shops_public_read', 'shops_admin_update', 'shops_admin_delete',
+      -- review_likes
+      'review_likes_read_own', 'review_likes_own_insert', 'review_likes_own_delete',
+      -- user_badges
+      'user_badges_read_own', 'user_badges_own_insert', 'user_badges_own_delete'
+    );
+
+  IF leftovers IS NOT NULL THEN
+    RAISE EXCEPTION '想定外のポリシーが残っています（DROP漏れの可能性）: %', leftovers;
+  END IF;
+END $$;
+
+-- 書き込み権限が意図せず残っていないかも確認する
+DO $$
+BEGIN
+  IF has_table_privilege('anon', 'public.reviews', 'INSERT')
+     OR has_table_privilege('anon', 'public.reviews', 'UPDATE')
+     OR has_table_privilege('anon', 'public.reviews', 'DELETE')
+     OR has_table_privilege('authenticated', 'public.reviews', 'UPDATE')
+     OR has_table_privilege('anon', 'public.user_credits', 'SELECT')
+     OR has_table_privilege('anon', 'public.profiles', 'SELECT')
+  THEN
+    RAISE EXCEPTION '想定外のテーブル権限が残っています（REVOKE漏れの可能性）';
+  END IF;
+END $$;
 
 COMMIT;
 
