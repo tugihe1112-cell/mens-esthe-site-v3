@@ -225,19 +225,24 @@ CREATE POLICY "shops_admin_delete"
 --    正しい所有者ポリシーと PERMISSIVE の OR で結合されるため、
 --    **ログインさえしていれば他人の user_id でいいねを挿入できる**。撤去する。
 REVOKE ALL ON public.review_likes FROM anon, authenticated;
-GRANT SELECT ON public.review_likes TO anon, authenticated;
-GRANT INSERT, DELETE ON public.review_likes TO authenticated;
+-- anon には SELECT も付けない（誰が何にいいねしたかを公開しない）
+GRANT SELECT, INSERT, DELETE ON public.review_likes TO authenticated;
 
 DROP POLICY IF EXISTS "誰でも閲覧可"                    ON public.review_likes;
 DROP POLICY IF EXISTS "ログイン済みユーザーがいいね"      ON public.review_likes;
 DROP POLICY IF EXISTS "自分のいいねを削除可"             ON public.review_likes;
 DROP POLICY IF EXISTS "review_likes_own_insert"        ON public.review_likes;
 DROP POLICY IF EXISTS "review_likes_public_read"       ON public.review_likes;
+DROP POLICY IF EXISTS "review_likes_read_own"          ON public.review_likes;
 DROP POLICY IF EXISTS "review_likes_own_delete"        ON public.review_likes;
 
-CREATE POLICY "review_likes_public_read"
+-- ⚠️ 全件公開SELECTは付けない。表示件数は reviews.like_count から取るので、
+--    「誰がどの口コミにいいねしたか」の対応表を公開する必要がない
+--    （公開するとユーザーUUIDと嗜好が結びついてしまう）。自分の行だけ読めれば足りる。
+CREATE POLICY "review_likes_read_own"
   ON public.review_likes FOR SELECT
-  USING (true);
+  TO authenticated
+  USING ((SELECT auth.uid()) = user_id);
 
 -- 自分名義でしか押せない（他人の user_id を指定した挿入を拒否）
 CREATE POLICY "review_likes_own_insert"
@@ -270,6 +275,67 @@ END;
 $$;
 
 REVOKE EXECUTE ON FUNCTION public.update_review_like_count() FROM PUBLIC, anon, authenticated;
+
+-- 架空の review_id で行を量産されないよう外部キーを張る（本番の review_likes は0件なので今なら無停止で追加できる）
+ALTER TABLE public.review_likes DROP CONSTRAINT IF EXISTS review_likes_review_id_fkey;
+ALTER TABLE public.review_likes
+  ADD CONSTRAINT review_likes_review_id_fkey
+  FOREIGN KEY (review_id) REFERENCES public.reviews(id) ON DELETE CASCADE;
+
+-- ══════════════════════════════════════════════════════════════
+-- ⑥-4 user_badges — review_likes とまったく同じ型の問題を塞ぐ
+-- ══════════════════════════════════════════════════════════════
+-- ⚠️ ThanksBadgeButton は ModernReviewCard で**実際にレンダリングされている**
+--    （当初「UIに露出していない」と判断したのは誤り）。
+--    `update_review_badge_count()` が SECURITY INVOKER のまま reviews.badge_count を
+--    UPDATE するため、⑥で reviews の UPDATE 権限を剥奪すると
+--    バッジのINSERT/DELETEがトリガー内でロールバックする。いいねと同一の型。
+REVOKE ALL ON public.user_badges FROM anon, authenticated;
+GRANT SELECT, INSERT, DELETE ON public.user_badges TO authenticated;
+
+DROP POLICY IF EXISTS "user_badges_public_read"  ON public.user_badges;
+DROP POLICY IF EXISTS "user_badges_admin_write"  ON public.user_badges;
+DROP POLICY IF EXISTS "user_badges_read_own"     ON public.user_badges;
+DROP POLICY IF EXISTS "user_badges_own_insert"   ON public.user_badges;
+DROP POLICY IF EXISTS "user_badges_own_delete"   ON public.user_badges;
+
+-- 自分が送った/受け取ったバッジだけ読める（誰が誰に送ったかの全公開はしない）
+CREATE POLICY "user_badges_read_own"
+  ON public.user_badges FOR SELECT
+  TO authenticated
+  USING ((SELECT auth.uid()) = from_user_id OR (SELECT auth.uid()) = to_user_id);
+
+-- 自分名義でしか送れない
+CREATE POLICY "user_badges_own_insert"
+  ON public.user_badges FOR INSERT
+  TO authenticated
+  WITH CHECK ((SELECT auth.uid()) = from_user_id);
+
+CREATE POLICY "user_badges_own_delete"
+  ON public.user_badges FOR DELETE
+  TO authenticated
+  USING ((SELECT auth.uid()) = from_user_id);
+
+-- バッジ数の更新もトリガー内でのみ行う
+CREATE OR REPLACE FUNCTION public.update_review_badge_count()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    UPDATE public.reviews SET badge_count = coalesce(badge_count, 0) + 1
+    WHERE id::text = NEW.review_id;
+  ELSIF TG_OP = 'DELETE' THEN
+    UPDATE public.reviews SET badge_count = greatest(coalesce(badge_count, 0) - 1, 0)
+    WHERE id::text = OLD.review_id;
+  END IF;
+  RETURN NULL;
+END;
+$$;
+
+REVOKE EXECUTE ON FUNCTION public.update_review_badge_count() FROM PUBLIC, anon, authenticated;
 
 -- ══════════════════════════════════════════════════════════════
 -- ⑦ 既存トリガー関数の是正

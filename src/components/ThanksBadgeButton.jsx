@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { authHeaders } from '../utils/supabaseRest';
 
 export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0 }) {
   const { user } = useAuth();
@@ -12,14 +13,19 @@ export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0
 
   useEffect(() => {
     if (!user || !reviewId) return;
-    const headers = { apikey: key, Authorization: `Bearer ${key}` };
-    fetch(
-      `${url}/rest/v1/user_badges?from_user_id=eq.${user.id}&review_id=eq.${reviewId}&select=id`,
-      { headers }
-    )
-      .then(r => r.json())
-      .then(data => { if (Array.isArray(data) && data.length > 0) setGiven(true); })
-      .catch(() => {});
+    // ⚠️ 2026-08-12: anonキー固定だと TO authenticated のRLSが発火せず、常に空が返っていた。
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(
+          `${url}/rest/v1/user_badges?from_user_id=eq.${user.id}&review_id=eq.${reviewId}&select=id`,
+          { headers: await authHeaders() }
+        );
+        const data = await res.json();
+        if (!cancelled && Array.isArray(data) && data.length > 0) setGiven(true);
+      } catch { /* 取得失敗時は未送信扱い */ }
+    })();
+    return () => { cancelled = true; };
   }, [user, reviewId]);
 
   const toggle = async () => {
@@ -28,23 +34,27 @@ export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0
     if (isLoading) return;
     setIsLoading(true);
 
-    const headers = {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
+    // ⚠️ 2026-08-12: 以前は anonキー固定＋レスポンス未確認で、
+    //    一般ユーザーには「成功したように見えて保存されない」状態だった。
+    //    PostgREST は対象行0件でも 2xx を返しうるので、返却行まで検証する。
+    const headers = await authHeaders({
       'Content-Type': 'application/json',
-      Prefer: 'return=minimal',
-    };
+      Prefer: 'return=representation',
+    });
 
     try {
       if (given) {
-        await fetch(
+        const res = await fetch(
           `${url}/rest/v1/user_badges?from_user_id=eq.${user.id}&review_id=eq.${reviewId}`,
           { method: 'DELETE', headers }
         );
+        if (!res.ok) throw new Error(`取り消しに失敗しました (HTTP ${res.status})`);
+        const removed = await res.json().catch(() => []);
+        if (!Array.isArray(removed) || removed.length === 0) throw new Error('取り消し対象がありませんでした');
         setGiven(false);
         setCount(c => Math.max(0, c - 1));
       } else {
-        await fetch(`${url}/rest/v1/user_badges`, {
+        const res = await fetch(`${url}/rest/v1/user_badges`, {
           method: 'POST',
           headers,
           body: JSON.stringify({
@@ -53,11 +63,19 @@ export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0
             review_id: String(reviewId),
           }),
         });
+        if (!res.ok) throw new Error(`感謝バッジの送信に失敗しました (HTTP ${res.status})`);
+        const created = await res.json().catch(() => []);
+        if (!Array.isArray(created) || created.length === 0) throw new Error('感謝バッジを保存できませんでした');
         setGiven(true);
         setCount(c => c + 1);
       }
     } catch (e) {
       console.error(e);
+      if (typeof window !== 'undefined') {
+        alert(/401|403|row-level/i.test(String(e?.message))
+          ? 'ログインの有効期限が切れている可能性があります。再度ログインしてください。'
+          : (e?.message || '感謝バッジの送信に失敗しました'));
+      }
     } finally {
       setIsLoading(false);
     }
