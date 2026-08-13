@@ -3,8 +3,26 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-05-30 （公開後チェック・sitemap/robots本番URL化・お問い合わせフォーム追加）**
+> **最終更新: 2026-08-13 （13_セキュリティマイグレーション本番適用・厳密E2E・CRON_SECRET設定）**
 > 作業がひと段落するたびに、Codexがこのファイルを自動更新する。
+
+---
+
+## 2026-08-13 セキュリティ適用状況
+
+- `supabase_migrations/13_harden_auth_functions_and_review_content.sql`（Git SHA `f4fa4f1`）を本番適用済み
+  - Supabase migration: `harden_auth_functions_and_review_content_sha_f4fa4f1`
+  - version: `20260813125030`
+  - `handle_new_user` は全新規ユーザーを `free` に固定し、`master@%` のVIP特例を廃止
+  - `profiles_id_fkey` は `ON DELETE CASCADE`
+  - ban済み `master@mens-esthe.jp` は削除済み
+  - `increment_review_views(ids text[])` / `ack_review_views(ids text[])` は引数名`ids`・`SECURITY INVOKER`を維持
+  - `reviews_content_min_length` は200字以上の `NOT VALID` CHECK（既存短文2件は保持、新規だけ拒否）
+- 本番REST E2E済み: `master@...`→free、短文23514拒否、200字投稿→credits 3日、両RPC正常、`/api/track-view` 204＋加算
+- E2Eデータは全削除済み。最終件数: shops 1,098／therapists 60,999／reviews 16／auth.users 2／profiles 2
+- Supabase Security AdvisorはLeaked Password Protection未設定の1警告のみ
+- Vercel Productionへ `CRON_SECRET` をSensitive値で設定・再デプロイ済み
+  - `/api/cron/retention-email`: 未認証401、認証付き200（非月曜のため`skipped: not monday`）
 
 ---
 
@@ -39,6 +57,7 @@
   - `VITE_PUBLIC_SITE_URL` — `https://www.mens-esthe-map.jp`
   - `VITE_SUPABASE_ANON_KEY` — Supabase 匿名キー（All Environments、Mar 28 設定済み）
   - `VITE_SUPABASE_URL` — Supabase URL（All Environments、Mar 28 設定済み）
+  - `CRON_SECRET` — ProductionのSensitive値（2026-08-13設定・再デプロイ済み）
   - 任意: `CONTACT_TO_EMAIL` — お問い合わせ通知の送信先。未設定時は `tugihe1112@gmail.com`
 
 - [x] **RLS ポリシーを Supabase に適用済み**（2026-05-29）
