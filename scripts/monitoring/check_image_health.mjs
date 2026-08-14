@@ -13,7 +13,8 @@
  * 【測るもの】
  *   1. shops / therapists の image_url が null の比率
  *   2. 非nullのURLをランダムサンプリングして実際にHTTP 200 かつ image/* が返るか
- *   3. 前回値との差分（scripts/monitoring/image_health_history.json に追記）
+ *   3. 人物写真ではない既知の画像・広告名・同一画像の大量使い回し
+ *   4. 前回値との差分（scripts/monitoring/image_health_history.json に追記）
  *
  * 【落とす条件】（環境変数で調整可）
  *   - shops の null率が SHOPS_NULL_MAX(既定 20%) を超える
@@ -26,6 +27,11 @@
 import fs from 'fs';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
+import {
+  findRepeatedTherapistImageGroups,
+  isKnownBadTherapistImageUrl,
+  isSuspiciousTherapistName,
+} from '../lib/therapistImageQuality.mjs';
 
 const args = process.argv.slice(2);
 const SAMPLE = Number((args.find((a) => a.startsWith('--sample=')) || '').split('=')[1]) || 40;
@@ -54,6 +60,7 @@ const UA = 'Mozilla/5.0 (compatible; MensEstheMapImageHealth/1.0)';
 async function countOf(table, filter) {
   let q = supabase.from(table).select('id', { count: 'exact', head: true });
   if (filter === 'null') q = q.is('image_url', null);
+  if (filter === 'not-null') q = q.not('image_url', 'is', null);
   const { count, error } = await q;
   if (error) throw new Error(`${table}: ${error.message}`);
   return count || 0;
@@ -61,7 +68,7 @@ async function countOf(table, filter) {
 
 async function sampleUrls(table, n) {
   // ランダム性は order('id') のオフセットずらしで代用（PostgRESTにrandomが無いため）
-  const total = await countOf(table);
+  const total = await countOf(table, 'not-null');
   const offset = total > n ? Math.floor(Math.random() * Math.max(0, total - n)) : 0;
   const { data } = await supabase
     .from(table).select('id, image_url')
@@ -78,8 +85,28 @@ async function headOk(url) {
   } catch { return false; }
 }
 
+async function fetchAllActiveTherapists() {
+  const rows = [];
+  const pageSize = 1000;
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await supabase
+      .from('therapists')
+      .select('id,shop_id,name,image_url')
+      .or('is_active.is.null,is_active.eq.true')
+      .order('id')
+      .range(from, from + pageSize - 1);
+    if (error) throw new Error(`therapists semantic check: ${error.message}`);
+    rows.push(...(data || []));
+    if ((data || []).length < pageSize) break;
+  }
+  return rows;
+}
+
 async function main() {
-  const report = { at: new Date().toISOString().slice(0, 19).replace('T', ' ') };
+  const report = {
+    schemaVersion: 2,
+    at: new Date().toISOString().slice(0, 19).replace('T', ' '),
+  };
   const failures = [];
 
   for (const table of ['shops', 'therapists']) {
@@ -107,11 +134,35 @@ async function main() {
     }
   }
 
+  const therapistRows = await fetchAllActiveTherapists();
+  const knownBad = therapistRows.filter((row) => isKnownBadTherapistImageUrl(row.image_url));
+  const suspiciousNames = therapistRows.filter((row) => isSuspiciousTherapistName(row.name));
+  const repeatedGroups = findRepeatedTherapistImageGroups(therapistRows, 5);
+  report.therapistSemantic = {
+    checked: therapistRows.length,
+    knownBad: knownBad.length,
+    suspiciousNames: suspiciousNames.length,
+    repeatedGroups: repeatedGroups.length,
+    repeatedRows: repeatedGroups.reduce((sum, group) => sum + group.rowCount, 0),
+  };
+  if (!QUIET) {
+    console.log('\n■ therapist semantic quality');
+    console.log(`  既知の誤画像 ${knownBad.length}件 / 広告・プレースホルダー名 ${suspiciousNames.length}件`);
+    console.log(`  1店舗で5名以上への同一画像使い回し ${repeatedGroups.length}組`);
+  }
+  if (knownBad.length) failures.push(`目視確認済みの誤画像が${knownBad.length}件、表示対象に戻っています`);
+  if (suspiciousNames.length) failures.push(`広告・プレースホルダー名に画像が付いた行が${suspiciousNames.length}件あります`);
+  if (repeatedGroups.length) {
+    const examples = repeatedGroups.slice(0, 3).map((g) => `${g.shopId}:${g.distinctNames}名`).join(', ');
+    failures.push(`同じ画像を1店舗内の5名以上へ使った組が${repeatedGroups.length}件あります（${examples}）`);
+  }
+
   // 前回との差分＝「一括でnull化した」事故の検知（今回の82件消失もこれで即日気づけた）
   let history = [];
   try { history = JSON.parse(fs.readFileSync(HISTORY, 'utf-8')); } catch { /* 初回 */ }
   const prev = history[history.length - 1];
-  if (prev) {
+  // schemaVersionを上げた初回は、意図した一括修復によるnull増を新しい基準値にする。
+  if (prev?.schemaVersion === report.schemaVersion) {
     for (const table of ['shops', 'therapists']) {
       const jump = report[table].nulls - (prev[table]?.nulls ?? report[table].nulls);
       if (!QUIET) console.log(`  前回比: ${table} の null ${jump >= 0 ? '+' : ''}${jump}件`);

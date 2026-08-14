@@ -13,6 +13,7 @@
 // ─────────────────────────────────────────────────────────────
 import fs from 'fs';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { therapistImageRejectionReason } from './therapistImageQuality.mjs';
 
 const env = fs.readFileSync('.env', 'utf-8');
 const E = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
@@ -49,6 +50,13 @@ const mimeFromKey = (k) => {
  */
 export async function uploadImage(imageUrl, storageKey, referer = null, logicalBucket = 'therapist-images', options = {}) {
   try {
+    if (logicalBucket === 'therapist-images') {
+      const reason = therapistImageRejectionReason({ sourceUrl: imageUrl });
+      if (reason) {
+        console.warn(`  therapist image rejected: ${reason} (${imageUrl})`);
+        return null;
+      }
+    }
     const headers = { 'User-Agent': 'Mozilla/5.0' };
     if (referer) headers['Referer'] = referer;
     const timeoutMs = Number.isFinite(options.timeoutMs) ? options.timeoutMs : 15000;
@@ -58,6 +66,13 @@ export async function uploadImage(imageUrl, storageKey, referer = null, logicalB
     const ct = res.headers.get('content-type') || mimeFromKey(storageKey);
     // 200を返すエラーページ(HTML)を画像として保存しない。
     if (!ct.toLowerCase().startsWith('image/') || buf.length === 0) return null;
+    if (logicalBucket === 'therapist-images') {
+      const reason = therapistImageRejectionReason({ sourceUrl: imageUrl, buffer: buf });
+      if (reason) {
+        console.warn(`  therapist image rejected: ${reason} (${imageUrl})`);
+        return null;
+      }
+    }
     const key = `${logicalBucket}/${storageKey}`; // 例 therapist-images/prime_1234.jpg（移行済みURLと同形式）
     await s3.send(new PutObjectCommand({
       Bucket: R2_BUCKET,
@@ -76,6 +91,13 @@ export async function uploadImage(imageUrl, storageKey, referer = null, logicalB
 // 生バッファを直接R2へ（canvasで加工した画像など、fetch経由でない場合用）
 export async function uploadBuffer(buf, storageKey, contentType = null, logicalBucket = 'therapist-images') {
   try {
+    if (logicalBucket === 'therapist-images') {
+      const reason = therapistImageRejectionReason({ sourceUrl: storageKey, buffer: buf });
+      if (reason) {
+        console.warn(`  therapist image rejected: ${reason} (${storageKey})`);
+        return null;
+      }
+    }
     const key = `${logicalBucket}/${storageKey}`;
     await s3.send(new PutObjectCommand({
       Bucket: R2_BUCKET,

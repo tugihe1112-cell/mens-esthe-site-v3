@@ -131,5 +131,32 @@
       "dead": 2,
       "deadPct": 5
     }
+  },
+  {
+    "schemaVersion": 2,
+    "at": "2026-08-14 07:29:50",
+    "shops": {
+      "total": 1099,
+      "nulls": 79,
+      "nullPct": 7.2,
+      "sampled": 100,
+      "dead": 0,
+      "deadPct": 0
+    },
+    "therapists": {
+      "total": 60886,
+      "nulls": 9867,
+      "nullPct": 16.2,
+      "sampled": 100,
+      "dead": 0,
+      "deadPct": 0
+    },
+    "therapistSemantic": {
+      "checked": 60781,
+      "knownBad": 0,
+      "suspiciousNames": 0,
+      "repeatedGroups": 0,
+      "repeatedRows": 0
+    }
   }
 ]

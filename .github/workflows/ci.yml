@@ -48,6 +48,9 @@ jobs:
       - name: Guard - owner design decisions
         run: node scripts/ci/check_design_decisions.mjs
 
+      - name: Guard - therapist image quality rules
+        run: node scripts/ci/check_therapist_image_quality.mjs
+
       - name: Install deps
         run: npm install --legacy-peer-deps
 
