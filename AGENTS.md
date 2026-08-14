@@ -3,8 +3,23 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-08-14 （UI/UX画面設計ガイドの選別実装・スマホ実機相当検証）**
+> **最終更新: 2026-08-14 （メンズエステ セル〜Selu〜を本番登録）**
 > 作業がひと段落するたびに、Codexがこのファイルを自動更新する。
+
+---
+
+## 2026-08-14 メンズエステ セル〜Selu〜登録
+
+- 本番DBを店名・`selu`・`esthe-selu.com`で照合し、未登録を確認してから追加
+- 店舗ID: `tokyo_shibuya_yoyogiuehara_selu`
+- 公式情報: `https://esthe-selu.com/`、スケジュール`/schedule/`、代々木上原駅徒歩4分・経堂駅徒歩2分、11:00〜翌5:00、70分14,000円〜
+- 公式`/casts/`から現役48名を取得。本人写真47名はCloudflare R2へ保存
+- 「るい」は公式も店舗ロゴの代替画像だったため、誤って本人写真扱いせず`image_url=null`で保持（公開グリッドでは非表示、口コミ投稿の名前選択には残る）
+- 再実行用: `scripts/maintenance/process_selu.mjs`
+  - 既定dry-run、DB/R2更新は`--live`のみ
+  - 同一公式URLの別IDを検知して停止、取得人数・同名・cast IDを自己検証、shops/therapistsは冪等upsert
+- 本番確認: shops 1件、therapists 48名、写真47名、全保存画像がR2 URL。公開APIに反映、代表画像HTTP 200、匿名RLSで店舗1件・写真あり47名を取得
+- 登録後総数: shops 1,099／therapists 61,047／reviews 16
 
 ---
 
