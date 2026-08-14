@@ -98,6 +98,8 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
           .from('therapists')
           .select('id, name, image_url, shop_id')
           .not('image_url', 'is', null)
+          .neq('image_url', '')
+          .or('is_active.is.null,is_active.eq.true')
           .not('image_url', 'like', '%spacer%')
           .not('image_url', 'like', '%noimage%')
           .not('image_url', 'like', '%no_image%')

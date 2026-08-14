@@ -98,7 +98,9 @@ export default function ShopDetailPage({
             therapistShopIds = groupShops.map(s => s.id);
           }
         }
-        const therapistQuery = `shop_id=in.(${therapistShopIds.join(',')})`;
+        // 写真グリッドでは、画像を確認できる在籍プロフィールだけを返す。
+        // 写真なし行は口コミ投稿フォーム側では引き続き選択できる。
+        const therapistQuery = `shop_id=in.(${therapistShopIds.join(',')})&image_url=not.is.null`;
 
         // 2. group_id がある場合は系列店全店の口コミを取得（最新20件のみ）
         const reviewShopIds = therapistShopIds;
@@ -124,7 +126,9 @@ export default function ShopDetailPage({
         ]);
 
         if (isMounted) {
-          if (Array.isArray(tData) && tData.length > 0) setCloudTherapists(tData);
+          if (Array.isArray(tData)) {
+            setCloudTherapists(tData.filter((t) => t.image_url?.trim() && t.is_active !== false));
+          }
           if (Array.isArray(rData)) {
             setCloudReviews(rData);
             setHasMoreReviews(rData.length === REVIEW_PAGE_SIZE);

@@ -44,16 +44,20 @@ const mimeFromKey = (k) => {
  * @param {string} storageKey  保存ファイル名（例 'prime_1234.jpg'）。※URLのベースネーム推奨（衝突回避）
  * @param {string|null} referer  ホットリンク保護対策のRefererヘッダー
  * @param {string} logicalBucket  R2キーの接頭辞（既存と揃えるため既定 'therapist-images'。店ロゴは 'shop-logos'）
+ * @param {{timeoutMs?: number}} options 取得タイムアウト（既定15秒）
  * @returns {Promise<string|null>}  R2公開URL、失敗時 null
  */
-export async function uploadImage(imageUrl, storageKey, referer = null, logicalBucket = 'therapist-images') {
+export async function uploadImage(imageUrl, storageKey, referer = null, logicalBucket = 'therapist-images', options = {}) {
   try {
     const headers = { 'User-Agent': 'Mozilla/5.0' };
     if (referer) headers['Referer'] = referer;
-    const res = await fetch(imageUrl, { headers, signal: AbortSignal.timeout(15000) });
+    const timeoutMs = Number.isFinite(options.timeoutMs) ? options.timeoutMs : 15000;
+    const res = await fetch(imageUrl, { headers, signal: AbortSignal.timeout(timeoutMs) });
     if (!res.ok) return null;
     const buf = Buffer.from(await res.arrayBuffer());
     const ct = res.headers.get('content-type') || mimeFromKey(storageKey);
+    // 200を返すエラーページ(HTML)を画像として保存しない。
+    if (!ct.toLowerCase().startsWith('image/') || buf.length === 0) return null;
     const key = `${logicalBucket}/${storageKey}`; // 例 therapist-images/prime_1234.jpg（移行済みURLと同形式）
     await s3.send(new PutObjectCommand({
       Bucket: R2_BUCKET,

@@ -27,7 +27,12 @@ const s3 = new S3Client({
 const R2_BUCKET = E('R2_BUCKET') || 'mens-esthe-images';
 const specificId = process.argv.slice(2).find((a) => !a.startsWith('--'));
 
-const isR2 = (u) => u && (u.includes('.r2.dev') || u.includes('r2.cloudflarestorage.com'));
+const R2_PUBLIC_BASE = (E('R2_PUBLIC_BASE') || '').replace(/\/+$/, '');
+const isR2 = (u) => {
+  if (!u) return false;
+  if (R2_PUBLIC_BASE && u.startsWith(`${R2_PUBLIC_BASE}/`)) return true;
+  return u.includes('.r2.dev') || u.includes('r2.cloudflarestorage.com') || u.includes('.workers.dev/');
+};
 const keyFromUrl = (u) => { try { return new URL(u).pathname.replace(/^\/+/, ''); } catch { return null; } };
 
 async function listAllR2Keys() {

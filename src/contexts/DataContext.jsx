@@ -124,7 +124,13 @@ export const DataProvider = ({ children }) => {
     if (!shopId || loadedShopIds.has(shopId)) return;
     const brandIds = getBrandShopIds(shopId);
     try {
-      const { data, error } = await supabase.from('therapists').select('*').in('shop_id', brandIds);
+      const { data, error } = await supabase
+        .from('therapists')
+        .select('*')
+        .in('shop_id', brandIds)
+        .not('image_url', 'is', null)
+        .neq('image_url', '')
+        .or('is_active.is.null,is_active.eq.true');
       if (error) throw error;
       if (data) {
         const newTherapists = data.map(d => ({ ...(d.raw_data || {}), ...d }));

@@ -60,7 +60,7 @@ export default function NewTherapistsPage() {
 
     try {
       const res = await fetch(
-        `${url}/rest/v1/therapists?select=id,name,image_url,shop_id,created_at&image_url=not.is.null&order=created_at.desc&limit=${PAGE_SIZE}&offset=${currentOffset}`,
+        `${url}/rest/v1/therapists?select=id,name,image_url,shop_id,created_at&image_url=not.is.null&or=(is_active.is.null,is_active.eq.true)&order=created_at.desc&limit=${PAGE_SIZE}&offset=${currentOffset}`,
         { headers }
       );
       const data = await res.json();

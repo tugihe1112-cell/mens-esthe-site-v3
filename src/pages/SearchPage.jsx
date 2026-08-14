@@ -308,8 +308,11 @@ export default function SearchPage() {
           } else {
             const { data: d } = await supabase
               .from('therapists')
-              .select('id, shop_id, name, image_url, raw_data')
+              .select('id, shop_id, name, image_url, raw_data, is_active')
               .in('shop_id', matchedShopIds.slice(0, 100))
+              .not('image_url', 'is', null)
+              .neq('image_url', '')
+              .or('is_active.is.null,is_active.eq.true')
               .limit(1000);
             data = d || [];
           }
@@ -318,7 +321,10 @@ export default function SearchPage() {
           // キャストのみ → 名前正規化検索
           let q = supabase
             .from('therapists')
-            .select('id, shop_id, name, image_url, raw_data');
+            .select('id, shop_id, name, image_url, raw_data, is_active')
+            .not('image_url', 'is', null)
+            .neq('image_url', '')
+            .or('is_active.is.null,is_active.eq.true');
           q = applyNameFilter(q);
           const { data: d } = await q.limit(500);
           // クライアント側でスペース除去して完全照合
@@ -331,8 +337,11 @@ export default function SearchPage() {
           } else {
             const { data: d } = await supabase
               .from('therapists')
-              .select('id, shop_id, name, image_url, raw_data')
+              .select('id, shop_id, name, image_url, raw_data, is_active')
               .in('shop_id', matchedShopIds.slice(0, 100))
+              .not('image_url', 'is', null)
+              .neq('image_url', '')
+              .or('is_active.is.null,is_active.eq.true')
               .limit(1000);
             data = (d || []).filter(t => normName(t.name).includes(normCq));
           }
@@ -827,7 +836,7 @@ export default function SearchPage() {
                                   <span className="text-pink-500">📍</span>
                                   {t._extraShopIds?.length > 0
                                     ? `${shop?.name || ''} 他${t._extraShopIds.length}店舗`
-                                    : shop ? `${shop.area || shop.city} | ${shop.name}` : ''}
+                                    : shop ? [shop.area || shop.city, shop.name].filter(Boolean).join(' | ') : ''}
                                 </p>
                               </div>
                             </div>
