@@ -68,6 +68,22 @@ function read(path) {
   }
 }
 
+// ── D-007: /search の未入力状態を空にしない ──────────────────────────
+{
+  const p = 'src/pages/SearchPage.jsx';
+  const src = read(p);
+  if (src === null) {
+    violations.push(`[D-007] ${p} が存在しない。/searchは未入力でも注目セラピストを表示する。`);
+  } else {
+    if (!/buildFeaturedTherapistPool/.test(src)) {
+      violations.push('[D-007] /search から未入力時の注目セラピスト取得が消えている。');
+    }
+    if (!/気になるセラピストから探せます/.test(src)) {
+      violations.push('[D-007] /search から未入力時の案内・一覧導線が消えている。');
+    }
+  }
+}
+
 if (violations.length) {
   console.error('\n🚨 オーナー確定事項（playbook/decisions.md）に反する変更が検出されました:\n');
   violations.forEach((v) => console.error('  - ' + v + '\n'));

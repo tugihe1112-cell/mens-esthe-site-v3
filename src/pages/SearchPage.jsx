@@ -201,6 +201,53 @@ function useDebounce(value, delay = 300) {
   return debounced;
 }
 
+// 未検索時の「注目セラピスト」は、取得順のままだと同じ店舗・地域に偏る。
+// 各店舗2名まで → 都道府県ごとのラウンドロビンにして、一覧として見る価値を持たせる。
+function buildFeaturedTherapistPool(rows, shops, limit = 240) {
+  const shopMap = new Map((shops || []).map(shop => [shop.id, shop]));
+  const byShop = new Map();
+
+  for (const therapist of rows || []) {
+    if (!therapist?.id || !therapist?.name || !therapist?.shop_id || !shopMap.has(therapist.shop_id)) continue;
+    const shopRows = byShop.get(therapist.shop_id) || [];
+    if (shopRows.length >= 2) continue;
+    shopRows.push(therapist);
+    byShop.set(therapist.shop_id, shopRows);
+  }
+
+  const byPrefecture = new Map();
+  for (const [shopId, therapists] of byShop) {
+    const shop = shopMap.get(shopId);
+    const prefecture = shop?.prefecture || shop?.city || 'その他';
+    const prefectureRows = byPrefecture.get(prefecture) || [];
+    prefectureRows.push(...therapists);
+    byPrefecture.set(prefecture, prefectureRows);
+  }
+
+  const prefecturePools = [...byPrefecture.entries()]
+    .sort(([left], [right]) => left.localeCompare(right, 'ja'))
+    .map(([, therapists]) => therapists);
+  const result = [];
+  const seenNames = new Set();
+
+  for (let round = 0; result.length < limit; round += 1) {
+    let added = false;
+    for (const pool of prefecturePools) {
+      const therapist = pool[round];
+      if (!therapist) continue;
+      added = true;
+      const normalizedName = therapist.name.replace(/[\s　]/g, '');
+      if (!normalizedName || seenNames.has(normalizedName)) continue;
+      seenNames.add(normalizedName);
+      result.push(therapist);
+      if (result.length >= limit) break;
+    }
+    if (!added) break;
+  }
+
+  return result;
+}
+
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { shops, shopById } = useShopData();
@@ -298,8 +345,19 @@ export default function SearchPage() {
         let data = [];
 
         if (!sq && !cq) {
-          // 両方空 → 何も表示しない（プロンプトUIを出す）
-          data = [];
+          // 両方空 → ホームの「注目セラピスト > もっと見る」の遷移先として一覧を表示。
+          // 最近登録された写真あり在籍者を広めに取得し、店舗・地域分散はクライアントで行う。
+          const { data: d, error } = await supabase
+            .from('therapists')
+            .select('id, shop_id, name, image_url, is_active, created_at')
+            .not('image_url', 'is', null)
+            .neq('image_url', '')
+            .or('is_active.is.null,is_active.eq.true')
+            .order('created_at', { ascending: false })
+            .order('id', { ascending: true })
+            .limit(800);
+          if (error) throw error;
+          data = buildFeaturedTherapistPool(d || [], shops);
 
         } else if (sq && !cq) {
           // 店舗のみ → マッチ店舗のキャスト全員
@@ -497,6 +555,7 @@ export default function SearchPage() {
   }, [serverTherapists, reviewTagMap]);
 
   const isLoading = isPending || isFetchingDB;
+  const isFeaturedBrowse = !shopQuery.trim() && !castQuery.trim();
 
   const clearAll = () => {
     setShopInput('');
@@ -584,8 +643,8 @@ export default function SearchPage() {
               <p className="text-[10px] text-pink-400 font-bold">
                 {isLoading
                   ? '検索中...'
-                  : (!shopQuery.trim() && !castQuery.trim())
-                    ? 'キャスト名または店舗名を入力'
+                  : isFeaturedBrowse
+                    ? `注目セラピスト ${deduplicatedTherapists.length}件`
                     : `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length}件`}
               </p>
             </div>
@@ -618,10 +677,10 @@ export default function SearchPage() {
       </div>
 
       {/* ===== メインコンテンツ ===== */}
-      <div className="max-w-7xl mx-auto px-4 py-8 grid lg:grid-cols-[260px_1fr] gap-8 items-start">
+      <div className={`max-w-7xl mx-auto px-4 py-8 gap-8 items-start ${isFeaturedBrowse ? 'block' : 'grid lg:grid-cols-[260px_1fr]'}`}>
 
         {/* 左: タグフィルター */}
-        <aside className={`${isFilterOpen ? 'block' : 'hidden'} lg:block space-y-6 lg:sticky lg:top-36`}>
+        {!isFeaturedBrowse && <aside className={`${isFilterOpen ? 'block' : 'hidden'} lg:block space-y-6 lg:sticky lg:top-36`}>
           <button
             onClick={() => setIsFilterOpen(v => !v)}
             className="lg:hidden w-full text-center text-xs text-slate-500 mb-2"
@@ -661,7 +720,7 @@ export default function SearchPage() {
               </div>
             </div>
           ))}
-        </aside>
+        </aside>}
 
         {/* 右: 検索結果 */}
         <main className="min-h-[50vh] space-y-10">
@@ -690,12 +749,22 @@ export default function SearchPage() {
 
           {/* 💃 マッチしたキャスト */}
           <section>
-            {(matchingShops.length > 0 || castQuery) && (
+            {(isFeaturedBrowse || matchingShops.length > 0 || castQuery) && (
               <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
-                {shopQuery && castQuery ? 'この店舗のキャスト絞り込み結果' : shopQuery ? 'この店舗のキャスト一覧' : 'キャスト検索結果'}
+                {isFeaturedBrowse ? '注目セラピスト' : shopQuery && castQuery ? 'この店舗のキャスト絞り込み結果' : shopQuery ? 'この店舗のキャスト一覧' : 'キャスト検索結果'}
                 {!isLoading && <span className="text-purple-400 font-bold normal-case">{deduplicatedTherapists.length}件</span>}
               </h2>
+            )}
+
+            {isFeaturedBrowse && !isLoading && visibleTherapists.length > 0 && (
+              <div className="mb-6 flex items-start gap-3 rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-950/50 to-slate-900/70 px-4 py-3">
+                <span className="text-xl leading-none mt-0.5">✨</span>
+                <div>
+                  <p className="text-sm font-black text-white">気になるセラピストから探せます</p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-400">店舗・地域が偏らないように表示しています。名前検索や並び替えでさらに絞り込めます。</p>
+                </div>
+              </div>
             )}
 
             {/* キャスト内絞り込み・ソートバー */}
@@ -747,22 +816,13 @@ export default function SearchPage() {
             )}
 
             <div>
-              {/* クエリ未入力時のプロンプト */}
-              {!shopQuery.trim() && !castQuery.trim() && !isLoading && (
-                <div className="flex flex-col items-center justify-center py-20 text-center">
-                  <div className="text-5xl mb-5">🔍</div>
-                  <p className="text-white font-black text-lg mb-2">キャスト名か店舗名を入力してください</p>
-                  <p className="text-slate-500 text-sm">例:「あかり」「シルク」「銀座」</p>
-                </div>
-              )}
-
               {isLoading ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+                <div className={`grid grid-cols-2 md:grid-cols-3 ${isFeaturedBrowse ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} gap-4 md:gap-5`}>
                   {Array.from({ length: 8 }).map((_, i) => <TherapistCardSkeleton key={i} />)}
                 </div>
               ) : visibleTherapists.length > 0 ? (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+                  <div className={`grid grid-cols-2 md:grid-cols-3 ${isFeaturedBrowse ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} gap-4 md:gap-5`}>
                     {/* リストにいないセラピストの口コミカード（店舗指定時のみ） */}
                     {shopQuery && matchingShops.length >= 1 && (
                       <Link
