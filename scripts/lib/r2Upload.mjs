@@ -14,6 +14,7 @@
 import fs from 'fs';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { therapistImageRejectionReason } from './therapistImageQuality.mjs';
+import { assertOfficialRosterSource } from './sourceProvenance.mjs';
 
 const env = fs.readFileSync('.env', 'utf-8');
 const E = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
@@ -45,12 +46,22 @@ const mimeFromKey = (k) => {
  * @param {string} storageKey  保存ファイル名（例 'prime_1234.jpg'）。※URLのベースネーム推奨（衝突回避）
  * @param {string|null} referer  ホットリンク保護対策のRefererヘッダー
  * @param {string} logicalBucket  R2キーの接頭辞（既存と揃えるため既定 'therapist-images'。店ロゴは 'shop-logos'）
- * @param {{timeoutMs?: number}} options 取得タイムアウト（既定15秒）
+ * @param {{timeoutMs?: number, officialWebsiteUrl?: string, sourcePageUrl?: string}} options
+ *   取得タイムアウトと出所検証。新規名簿処理ではofficialWebsiteUrl/sourcePageUrlを必ず渡す。
  * @returns {Promise<string|null>}  R2公開URL、失敗時 null
  */
 export async function uploadImage(imageUrl, storageKey, referer = null, logicalBucket = 'therapist-images', options = {}) {
   try {
     if (logicalBucket === 'therapist-images') {
+      if (options.officialWebsiteUrl || options.sourcePageUrl) {
+        if (!options.officialWebsiteUrl || !options.sourcePageUrl) {
+          throw new Error('出所検証にはofficialWebsiteUrlとsourcePageUrlの両方が必要です');
+        }
+        assertOfficialRosterSource({
+          officialWebsiteUrl: options.officialWebsiteUrl,
+          rosterUrl: options.sourcePageUrl,
+        });
+      }
       const reason = therapistImageRejectionReason({ sourceUrl: imageUrl });
       if (reason) {
         console.warn(`  therapist image rejected: ${reason} (${imageUrl})`);

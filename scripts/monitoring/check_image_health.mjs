@@ -29,6 +29,7 @@ import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 import {
   findRepeatedTherapistImageGroups,
+  findUnrelatedRepeatedTherapistImageGroups,
   isKnownBadTherapistImageUrl,
   isSuspiciousTherapistName,
 } from '../lib/therapistImageQuality.mjs';
@@ -104,7 +105,7 @@ async function fetchAllActiveTherapists() {
 
 async function main() {
   const report = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     at: new Date().toISOString().slice(0, 19).replace('T', ' '),
   };
   const failures = [];
@@ -138,23 +139,35 @@ async function main() {
   const knownBad = therapistRows.filter((row) => isKnownBadTherapistImageUrl(row.image_url));
   const suspiciousNames = therapistRows.filter((row) => isSuspiciousTherapistName(row.name));
   const repeatedGroups = findRepeatedTherapistImageGroups(therapistRows, 5);
+  const unrelatedRepeatedGroups = findUnrelatedRepeatedTherapistImageGroups(therapistRows);
   report.therapistSemantic = {
     checked: therapistRows.length,
     knownBad: knownBad.length,
     suspiciousNames: suspiciousNames.length,
     repeatedGroups: repeatedGroups.length,
     repeatedRows: repeatedGroups.reduce((sum, group) => sum + group.rowCount, 0),
+    unrelatedRepeatedGroups: unrelatedRepeatedGroups.length,
   };
   if (!QUIET) {
     console.log('\n■ therapist semantic quality');
     console.log(`  既知の誤画像 ${knownBad.length}件 / 広告・プレースホルダー名 ${suspiciousNames.length}件`);
     console.log(`  1店舗で5名以上への同一画像使い回し ${repeatedGroups.length}組`);
+    console.log(`  1店舗で別人名への同一画像使い回し ${unrelatedRepeatedGroups.length}組`);
   }
   if (knownBad.length) failures.push(`目視確認済みの誤画像が${knownBad.length}件、表示対象に戻っています`);
   if (suspiciousNames.length) failures.push(`広告・プレースホルダー名に画像が付いた行が${suspiciousNames.length}件あります`);
   if (repeatedGroups.length) {
     const examples = repeatedGroups.slice(0, 3).map((g) => `${g.shopId}:${g.distinctNames}名`).join(', ');
     failures.push(`同じ画像を1店舗内の5名以上へ使った組が${repeatedGroups.length}件あります（${examples}）`);
+  }
+  if (unrelatedRepeatedGroups.length) {
+    const examples = unrelatedRepeatedGroups
+      .slice(0, 3)
+      .map((group) => `${group.shopId}:${group.names.join('/')}`)
+      .join(', ');
+    failures.push(
+      `同じ画像を別人名へ使った組が${unrelatedRepeatedGroups.length}件あります（${examples}）`,
+    );
   }
 
   // 前回との差分＝「一括でnull化した」事故の検知（今回の82件消失もこれで即日気づけた）
