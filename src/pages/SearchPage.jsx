@@ -262,12 +262,20 @@ export default function SearchPage() {
   const [castInput, setCastInput] = useState(initCast);
   const [selectedTags, setSelectedTags] = useState(initTags);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [mobileSearchMode, setMobileSearchMode] = useState(initCast && !initShop ? 'cast' : 'shop');
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
   const [isPending, startTransition] = useTransition();
 
   // キャスト結果内の名前フィルター・ソート
   const [castNameFilter, setCastNameFilter] = useState('');
   const [castSortOrder, setCastSortOrder] = useState('default'); // 'default' | 'aiueo' | 'reviews' | 'rating'
+
+  useEffect(() => {
+    if (!isFilterOpen || typeof document === 'undefined') return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [isFilterOpen]);
 
   const shopQuery = useDebounce(shopInput, 150);
   const castQuery = useDebounce(castInput, 150);
@@ -554,6 +562,11 @@ export default function SearchPage() {
     return counts;
   }, [serverTherapists, reviewTagMap]);
 
+  const hasAvailableTags = useMemo(
+    () => selectedTags.length > 0 || Object.values(tagCounts).some(count => count > 0),
+    [selectedTags, tagCounts]
+  );
+
   const isLoading = isPending || isFetchingDB;
   const isFeaturedBrowse = !shopQuery.trim() && !castQuery.trim();
 
@@ -561,6 +574,7 @@ export default function SearchPage() {
     setShopInput('');
     setCastInput('');
     setSelectedTags([]);
+    setIsFilterOpen(false);
   };
 
   // 状態サマリー用テキスト
@@ -583,10 +597,10 @@ export default function SearchPage() {
 
       {/* ===== 検索エリア ===== */}
       <div className="bg-slate-950 border-b border-white/10 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 py-4 space-y-3">
+        <div className="max-w-7xl mx-auto px-4 py-3 sm:py-4 space-y-3">
 
-          {/* 2つの検索バー */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          {/* デスクトップ: 店舗とキャストを同時に見せる */}
+          <div className="hidden sm:flex gap-3">
 
             {/* 🏢 店舗・エリア検索 */}
             <div className="flex-1 relative">
@@ -627,36 +641,87 @@ export default function SearchPage() {
               )}
             </div>
 
-            {/* 絞り込みボタン（モバイル） */}
-            <button
-              onClick={() => setIsFilterOpen(v => !v)}
-              className={`sm:hidden px-4 py-2 rounded-full text-xs font-bold border transition ${isFilterOpen ? 'bg-white text-slate-900 border-white' : 'bg-white/10 text-white border-white/10'}`}
-            >
-              絞り込み {selectedTags.length > 0 && `(${selectedTags.length})`}
-            </button>
+          </div>
+
+          {/* モバイル: 検索対象を切り替え、入力欄を1本に集約 */}
+          <div className="sm:hidden space-y-2.5">
+            <div className="grid grid-cols-2 gap-1 rounded-2xl border border-white/10 bg-slate-900/70 p-1" role="group" aria-label="検索対象">
+              {[
+                { key: 'shop', label: '🏢 店舗・エリア' },
+                { key: 'cast', label: '💃 セラピスト' },
+              ].map(option => (
+                <button
+                  key={option.key}
+                  type="button"
+                  onClick={() => setMobileSearchMode(option.key)}
+                  aria-pressed={mobileSearchMode === option.key}
+                  className={`min-h-9 rounded-xl px-3 text-xs font-black transition ${
+                    mobileSearchMode === option.key
+                      ? 'bg-white text-slate-950 shadow-sm'
+                      : 'text-slate-500'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none">
+                {mobileSearchMode === 'shop' ? '🏢' : '💃'}
+              </span>
+              <input
+                type="text"
+                inputMode="search"
+                enterKeyHint="search"
+                value={mobileSearchMode === 'shop' ? shopInput : castInput}
+                onChange={e => mobileSearchMode === 'shop' ? setShopInput(e.target.value) : setCastInput(e.target.value)}
+                placeholder={mobileSearchMode === 'shop' ? '店舗名・エリアで検索' : 'セラピスト名で検索'}
+                aria-label={mobileSearchMode === 'shop' ? '店舗名・エリアで検索' : 'セラピスト名で検索'}
+                className="w-full min-h-11 rounded-2xl border border-white/10 bg-slate-900/80 py-2.5 pl-10 pr-11 text-sm font-bold text-white placeholder-slate-500 transition focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500"
+              />
+              {(mobileSearchMode === 'shop' ? shopInput : castInput) && (
+                <button
+                  type="button"
+                  onClick={() => mobileSearchMode === 'shop' ? setShopInput('') : setCastInput('')}
+                  aria-label="入力を消す"
+                  className="absolute right-3 top-1/2 flex min-h-8 min-w-8 -translate-y-1/2 items-center justify-center rounded-full bg-slate-800 text-xs text-slate-400"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {!isFeaturedBrowse && hasAvailableTags && (
+              <button
+                type="button"
+                onClick={() => setIsFilterOpen(true)}
+                className="min-h-10 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-xs font-bold text-white"
+              >
+                ⚙ 条件で絞り込む {selectedTags.length > 0 && `(${selectedTags.length})`}
+              </button>
+            )}
           </div>
 
           {/* ステータスライン */}
-          <div className="flex items-center justify-between px-1">
+          {!isFeaturedBrowse && <div className="flex items-center justify-between px-1">
             <div>
               <p className="text-xs font-bold text-slate-400 truncate">{statusText}</p>
               <p className="text-[10px] text-pink-400 font-bold">
                 {isLoading
                   ? '検索中...'
-                  : isFeaturedBrowse
-                    ? `注目セラピスト ${deduplicatedTherapists.length}件`
-                    : `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length}件`}
+                  : `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length}件`}
               </p>
             </div>
             {(shopInput || castInput || selectedTags.length > 0) && (
               <button
                 onClick={clearAll}
-                className="text-[10px] text-slate-500 hover:text-white underline font-bold ml-4 flex-shrink-0"
+                className="min-h-8 text-[11px] sm:text-[10px] text-slate-500 hover:text-white underline underline-offset-4 font-bold ml-4 flex-shrink-0"
               >
                 すべてクリア
               </button>
             )}
-          </div>
+          </div>}
 
           {/* アクティブタグ */}
           {selectedTags.length > 0 && (
@@ -677,18 +742,38 @@ export default function SearchPage() {
       </div>
 
       {/* ===== メインコンテンツ ===== */}
-      <div className={`max-w-7xl mx-auto px-4 py-8 gap-8 items-start ${isFeaturedBrowse ? 'block' : 'grid lg:grid-cols-[260px_1fr]'}`}>
+      <div className={`max-w-7xl mx-auto px-3 sm:px-4 py-5 sm:py-8 gap-8 items-start ${isFeaturedBrowse ? 'block' : 'grid lg:grid-cols-[260px_1fr]'}`}>
 
         {/* 左: タグフィルター */}
-        {!isFeaturedBrowse && <aside className={`${isFilterOpen ? 'block' : 'hidden'} lg:block space-y-6 lg:sticky lg:top-36`}>
+        {!isFeaturedBrowse && isFilterOpen && (
           <button
-            onClick={() => setIsFilterOpen(v => !v)}
-            className="lg:hidden w-full text-center text-xs text-slate-500 mb-2"
-          >
-            閉じる
-          </button>
+            type="button"
+            aria-label="絞り込みを閉じる"
+            onClick={() => setIsFilterOpen(false)}
+            className="fixed inset-0 z-[70] bg-black/70 backdrop-blur-sm lg:hidden"
+          />
+        )}
+        {!isFeaturedBrowse && <aside
+          role={isFilterOpen ? 'dialog' : undefined}
+          aria-modal={isFilterOpen ? 'true' : undefined}
+          aria-labelledby={isFilterOpen ? 'mobile-filter-title' : undefined}
+          className={`${isFilterOpen ? 'block' : 'hidden'} fixed inset-x-0 bottom-0 z-[80] max-h-[82vh] space-y-4 overflow-y-auto rounded-t-3xl border-t border-white/10 bg-slate-950 p-4 shadow-2xl lg:sticky lg:inset-auto lg:top-36 lg:z-auto lg:block lg:max-h-none lg:space-y-6 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none`}
+        >
+          <div className="sticky top-0 z-10 -mx-4 -mt-4 mb-2 flex items-center justify-between border-b border-white/10 bg-slate-950/95 px-4 py-3 backdrop-blur lg:hidden">
+            <div>
+              <p id="mobile-filter-title" className="text-sm font-black text-white">条件で絞り込む</p>
+              <p className="mt-0.5 text-[10px] text-slate-500">口コミに付いた特徴タグから選択</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsFilterOpen(false)}
+              className="min-h-10 rounded-xl bg-white px-4 text-xs font-black text-slate-950"
+            >
+              完了
+            </button>
+          </div>
           {TAG_CATEGORIES.map(category => (
-            <div key={category.id} className="bg-slate-900/40 backdrop-blur rounded-3xl p-5 border border-white/5 shadow-xl">
+            <div key={category.id} className="bg-slate-900/40 backdrop-blur rounded-2xl lg:rounded-3xl p-4 lg:p-5 border border-white/5 shadow-xl">
               <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
                 {category.title}
@@ -728,7 +813,7 @@ export default function SearchPage() {
           {/* 🏢 マッチした店舗 */}
           {matchingShops.length > 0 && (
             <section>
-              <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3 sm:mb-4 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
                 マッチした店舗
                 <span className="text-pink-400 font-bold normal-case">{matchingShops.length}件</span>
@@ -758,11 +843,11 @@ export default function SearchPage() {
             )}
 
             {isFeaturedBrowse && !isLoading && visibleTherapists.length > 0 && (
-              <div className="mb-6 flex items-start gap-3 rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-950/50 to-slate-900/70 px-4 py-3">
-                <span className="text-xl leading-none mt-0.5">✨</span>
+              <div className="mb-4 sm:mb-6 flex items-center gap-2.5 rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-950/50 to-slate-900/70 px-3 py-2.5 sm:items-start sm:gap-3 sm:px-4 sm:py-3">
+                <span className="text-base sm:text-xl leading-none">✨</span>
                 <div>
-                  <p className="text-sm font-black text-white">気になるセラピストから探せます</p>
-                  <p className="mt-1 text-xs leading-relaxed text-slate-400">店舗・地域が偏らないように表示しています。名前検索や並び替えでさらに絞り込めます。</p>
+                  <p className="text-xs sm:text-sm font-black text-white">気になるセラピストから探せます</p>
+                  <p className="mt-1 hidden text-xs leading-relaxed text-slate-400 sm:block">店舗・地域が偏らないように表示しています。名前検索や並び替えでさらに絞り込めます。</p>
                 </div>
               </div>
             )}
@@ -771,7 +856,7 @@ export default function SearchPage() {
             {filteredTherapists.length > 0 && (
               <div className="mb-6">
                 {/* 名前検索 */}
-                <div className="relative mb-3">
+                <div className="relative mb-3 hidden sm:block">
                   <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-pink-400/60 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
                   </svg>
@@ -791,24 +876,25 @@ export default function SearchPage() {
                   )}
                 </div>
                 {/* ソートボタン */}
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar">
                   <span className="text-[10px] text-slate-600 font-black tracking-widest uppercase shrink-0">SORT</span>
                   {[
-                    { key: 'default', label: 'デフォルト' },
-                    { key: 'aiueo',   label: 'あ 五十音' },
-                    { key: 'reviews', label: '💬 口コミ多い' },
-                    { key: 'rating',  label: '⭐ 評価高い' },
+                    { key: 'default', label: 'デフォルト', mobileLabel: '標準' },
+                    { key: 'aiueo',   label: 'あ 五十音', mobileLabel: '五十音' },
+                    { key: 'reviews', label: '💬 口コミ多い', mobileLabel: '💬 口コミ' },
+                    { key: 'rating',  label: '⭐ 評価高い', mobileLabel: '⭐ 評価' },
                   ].map(opt => (
                     <button
                       key={opt.key}
                       onClick={() => setCastSortOrder(opt.key)}
-                      className={`px-3.5 py-1.5 rounded-full text-[11px] font-bold transition-all duration-200 ${
+                      className={`shrink-0 min-h-9 px-3.5 py-1.5 rounded-full text-[11px] font-bold transition-all duration-200 ${
                         castSortOrder === opt.key
                           ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-md shadow-pink-500/30'
                           : 'bg-slate-800/80 text-slate-500 hover:text-white hover:bg-slate-700'
                       }`}
                     >
-                      {opt.label}
+                      <span className="sm:hidden">{opt.mobileLabel}</span>
+                      <span className="hidden sm:inline">{opt.label}</span>
                     </button>
                   ))}
                 </div>
@@ -817,12 +903,12 @@ export default function SearchPage() {
 
             <div>
               {isLoading ? (
-                <div className={`grid grid-cols-2 md:grid-cols-3 ${isFeaturedBrowse ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} gap-4 md:gap-5`}>
+                <div className={`grid grid-cols-2 md:grid-cols-3 ${isFeaturedBrowse ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} gap-3 sm:gap-4 md:gap-5`}>
                   {Array.from({ length: 8 }).map((_, i) => <TherapistCardSkeleton key={i} />)}
                 </div>
               ) : visibleTherapists.length > 0 ? (
                 <>
-                  <div className={`grid grid-cols-2 md:grid-cols-3 ${isFeaturedBrowse ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} gap-4 md:gap-5`}>
+                  <div className={`grid grid-cols-2 md:grid-cols-3 ${isFeaturedBrowse ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} gap-3 sm:gap-4 md:gap-5`}>
                     {/* リストにいないセラピストの口コミカード（店舗指定時のみ） */}
                     {shopQuery && matchingShops.length >= 1 && (
                       <Link
@@ -842,24 +928,30 @@ export default function SearchPage() {
                     )}
                     {visibleTherapists.map((t, idx) => {
                       const shop = shopById[t.shop_id];
+                      const showWriteToRead = idx === 12 || (isFeaturedBrowse && idx === 10);
+                      const writeToReadVisibility = !isFeaturedBrowse
+                        ? 'flex'
+                        : idx === 10
+                          ? 'flex md:hidden xl:flex'
+                          : 'hidden md:flex xl:hidden';
                       return (
                         <React.Fragment key={t.id}>
-                        {/* 12枚目の後にW2R帯を挿入 */}
-                        {idx === 11 && (
+                        {/* 2/3/4/5列それぞれで行を崩さない枚数の後にW2R帯を挿入 */}
+                        {showWriteToRead && (
                           <Link
                             to="/post-review"
-                            className="col-span-2 md:col-span-3 lg:col-span-4 flex items-center justify-between gap-4 bg-gradient-to-r from-purple-900/70 to-pink-900/50 border border-purple-500/30 rounded-2xl px-5 py-4 hover:border-purple-400/50 transition-all group"
+                            className={`col-span-2 md:col-span-3 ${isFeaturedBrowse ? 'xl:col-span-5' : 'xl:col-span-4'} ${writeToReadVisibility} flex-col items-start justify-between gap-3 bg-gradient-to-r from-purple-900/70 to-pink-900/50 border border-purple-500/30 rounded-2xl px-4 sm:px-5 py-4 hover:border-purple-400/50 transition-all group sm:flex-row sm:items-center`}
                           >
                             <div>
                               <p className="text-white font-black text-sm">口コミを書くと、みんなの口コミが読み放題になります</p>
-                              <p className="text-purple-300 text-xs mt-0.5">体験談（700文字以上）を投稿 → 7日間の閲覧権を即時自動付与</p>
+                              <p className="text-purple-300 text-xs mt-0.5">200字で3日・700字で7日の閲覧権を即時付与</p>
                             </div>
-                            <span className="shrink-0 text-white bg-pink-600 group-hover:bg-pink-500 font-black text-xs px-4 py-2 rounded-xl transition whitespace-nowrap">口コミを書く →</span>
+                            <span className="w-full shrink-0 rounded-xl bg-pink-600 px-4 py-2 text-center text-xs font-black text-white transition group-hover:bg-pink-500 sm:w-auto whitespace-nowrap">口コミを書く →</span>
                           </Link>
                         )}
                         <Link
                           to={`/shops/${t.shop_id}/threads/${t.id}`}
-                          className="group relative block bg-slate-900 rounded-[1.5rem] overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-900/20 hover:-translate-y-1"
+                          className="group relative block bg-slate-900 rounded-2xl sm:rounded-[1.5rem] overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-900/20 hover:-translate-y-1"
                         >
                           <div className="aspect-[3/4] overflow-hidden relative">
                             <LazyImage src={t.image_url || t.image} alt={t.name} width={400} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
@@ -886,13 +978,13 @@ export default function SearchPage() {
                                 </div>
                               );
                             })()}
-                            <div className="absolute bottom-0 left-0 w-full p-3">
-                              <div className="bg-white/5 backdrop-blur-md rounded-xl p-3 border border-white/10 group-hover:bg-white/10 transition duration-300">
+                            <div className="absolute bottom-0 left-0 w-full p-2 sm:p-3">
+                              <div className="bg-white/5 backdrop-blur-md rounded-xl p-2 sm:p-3 border border-white/10 group-hover:bg-white/10 transition duration-300">
                                 <div className="flex items-center gap-1 mb-1">
                                   {t.age && <span className="bg-black/40 px-1.5 py-0.5 rounded text-[9px] font-bold text-white border border-white/10">{t.age}歳</span>}
                                 </div>
-                                <h3 className="text-white font-black text-base leading-tight truncate">{t.name}</h3>
-                                <p className="text-[10px] text-slate-300 font-bold truncate flex items-center gap-1 mt-1">
+                                <h3 className="text-white font-black text-sm sm:text-base leading-tight truncate">{t.name}</h3>
+                                <p className="text-[9px] sm:text-[10px] text-slate-300 font-bold truncate flex items-center gap-1 mt-1">
                                   <span className="text-pink-500">📍</span>
                                   {t._extraShopIds?.length > 0
                                     ? `${shop?.name || ''} 他${t._extraShopIds.length}店舗`
@@ -907,10 +999,10 @@ export default function SearchPage() {
                     })}
                   </div>
                   {visibleTherapists.length < deduplicatedTherapists.length && (
-                    <div className="mt-10 text-center">
+                    <div className="mt-8 sm:mt-10 text-center">
                       <button
                         onClick={() => setDisplayCount(n => n + ITEMS_PER_PAGE)}
-                        className="bg-slate-800 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-700 transition border border-white/10"
+                        className="w-full sm:w-auto bg-slate-800 text-white px-8 py-3.5 sm:py-3 rounded-2xl sm:rounded-full font-bold hover:bg-slate-700 transition border border-white/10"
                       >
                         もっと見る（残り{deduplicatedTherapists.length - visibleTherapists.length}件）
                       </button>
