@@ -227,7 +227,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
     <div className="min-h-screen bg-slate-950 pb-28 md:pb-16 overflow-x-hidden font-sans text-slate-200">
       <SeoHead
         title="メンズエステ検索・口コミ"
-        description="メンエスマップは全国580店舗以上のメンズエステを掲載。セラピスト別の口コミ・出勤スケジュール・料金を検索できるポータルサイトです。"
+        description={`メンエスマップは全国${Number(siteStats.coverage?.totalShops || 0).toLocaleString()}店舗・在籍${Number(siteStats.coverage?.totalTherapists || 0).toLocaleString()}人のメンズエステを掲載。セラピスト別の口コミ・出勤スケジュール・料金を検索できるポータルサイトです。掲載店舗から広告費・掲載料は一切受け取っていません。`}
         path="/"
       />
       {/* LCP対策: 先頭ヒーロー画像を最優先で先読み（初期HTMLのheadに埋め込む） */}

@@ -81,8 +81,8 @@ export default function StatsPage() {
   };
 
   const headlineSub = nationalPrice.median60
-    ? `全国${num(coverage.totalShops)}店舗を集計｜60分の相場${yen(nationalPrice.median60)}`
-    : `全国${num(coverage.totalShops)}店舗・${num(coverage.totalTherapists)}人を集計`;
+    ? `掲載${num(coverage.totalShops)}店舗を集計｜60分の中央値${yen(nationalPrice.median60)}`
+    : `掲載${num(coverage.totalShops)}店舗・${num(coverage.totalTherapists)}人を集計`;
   const ogImage = `${SITE_URL}/api/og?shop=${encodeURIComponent('メンズエステ統計 2026')}&sub=${encodeURIComponent(headlineSub)}`;
 
   const jsonLd = {
@@ -97,6 +97,18 @@ export default function StatsPage() {
     keywords: ['メンズエステ', '料金相場', '中央値', '店舗数', 'セラピスト', '統計'],
     isAccessibleForFree: true,
   };
+
+  // ⚠️ 料金サンプルの東京偏重を数値で開示する（2026-08-17）
+  //    n60=291のうち東京216（74%）、n90=388のうち東京304（78%）。
+  //    その結果「全国中央値」と「東京都の中央値」が完全に一致してしまっており、
+  //    ページ内の2つの表を見比べれば誰でも気づく。黙って「全国」と名乗るのは誠実でないうえ、
+  //    他社記事の相場（90分14,000〜16,000円）と食い違う理由の説明にもなる。
+  const tokyoPrice = priceByPrefecture.find((r) => r.prefecture === '東京都');
+  const tokyoShare = (() => {
+    const t = (tokyoPrice?.n60 || 0) + (tokyoPrice?.n90 || 0);
+    const all = (nationalPrice.n60 || 0) + (nationalPrice.n90 || 0);
+    return all > 0 ? Math.round((t / all) * 100) : null;
+  })();
 
   const prefMax = prefectureShopCounts[0]?.count || 1;
   const areaMax = areaDensity[0]?.count || 1;
@@ -145,7 +157,7 @@ export default function StatsPage() {
               本ページの数字は<b className="text-slate-300">当サイトが掲載している店舗</b>の実測値です。収集の進み具合は地域によって異なり、東京・関東圏は網羅的に収集していますが、その他の地域は主要店舗を中心に収集しています。
               そのため<b className="text-slate-300">都道府県別・エリア別の掲載店舗数は、その地域の実際の店舗総数ではありません</b>（例：兵庫県・福岡県は主要店舗のみのため実態より少なく出ます）。地域どうしの多寡を比較する用途には使えません。
               <br />
-              一方、<b className="text-slate-300">料金相場（60分・90分の中央値）は、サンプル数を併記した実測値</b>としてそのまま引用いただけます。本ページで最も信頼できるのはこの数字です。
+              一方、<b className="text-slate-300">料金相場（60分・90分の中央値）は、サンプル数を併記した実測値</b>です。本ページで最も信頼できるのはこの数字ですが、料金を公開している店舗の約{tokyoShare != null ? `${tokyoShare}%` : '4分の3'}が東京都であるため、<b className="text-slate-300">全体の中央値は首都圏の水準に近くなります</b>。地域別の水準は料金セクションの表をご参照ください。
             </p>
           </div>
         </header>
@@ -182,14 +194,14 @@ export default function StatsPage() {
               title="料金相場（60分・90分の中央値）"
               note={`料金を掲載している${num(coverage.priceSampleShops)}店舗から抽出。中央値を採用（外れ値の影響を抑えるため）。都道府県別はサンプル10店以上の帯のみ掲載`}
               copyText={nationalPrice.median60 || nationalPrice.median90
-                ? `メンズエステの料金相場（全国中央値）は 60分${yen(nationalPrice.median60)}・90分${yen(nationalPrice.median90)}`
+                ? `メンズエステの料金中央値は 60分${yen(nationalPrice.median60)}・90分${yen(nationalPrice.median90)}（掲載${num(coverage.priceSampleShops)}店舗の実測。サンプルの約${tokyoShare}%が東京都のため首都圏寄りの水準）。地域別では大阪90分${yen(priceByPrefecture.find((r) => r.prefecture === '大阪府')?.median90)}・神奈川90分${yen(priceByPrefecture.find((r) => r.prefecture === '神奈川県')?.median90)}`
                 : `メンズエステの料金相場を都道府県別に集計`}
               copiedKey={copiedKey} onCopy={handleCopy}
             >
-              {/* 全国中央値をSVGバーで自前描画 */}
+              {/* 掲載全店の中央値をSVGバーで自前描画（「全国」とは名乗らない＝東京77%のため） */}
               <div className="rounded-xl bg-slate-950/60 border border-white/5 p-4 mb-4">
-                <div className="text-[11px] text-slate-400 mb-2 font-bold">全国中央値</div>
-                <svg viewBox="0 0 300 70" className="w-full" role="img" aria-label="全国の料金中央値">
+                <div className="text-[11px] text-slate-400 mb-2 font-bold">掲載{num(coverage.priceSampleShops)}店舗の中央値</div>
+                <svg viewBox="0 0 300 70" className="w-full" role="img" aria-label="掲載店舗の料金中央値（60分・90分）">
                   {(() => {
                     const max = Math.max(nationalPrice.median60 || 0, nationalPrice.median90 || 0, 1);
                     const bars = [
@@ -207,6 +219,18 @@ export default function StatsPage() {
                 </svg>
                 <p className="text-[10px] text-slate-500 mt-1">60分帯 n={num(nationalPrice.n60)}／90分帯 n={num(nationalPrice.n90)}</p>
               </div>
+
+              {/* サンプルの地域偏りを明示。これを書かないと「全国」を名乗る数字が東京の数字と一致していることの説明がつかない */}
+              {tokyoShare != null && tokyoShare >= 50 && (
+                <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-3.5 mb-4">
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    <b className="text-amber-200/90">この数字は「全国平均」ではありません。</b>
+                    料金を公開している店舗のうち約<b className="text-slate-300">{tokyoShare}%が東京都</b>のため（60分 {num(tokyoPrice?.n60)}/{num(nationalPrice.n60)}店・90分 {num(tokyoPrice?.n90)}/{num(nationalPrice.n90)}店）、上の中央値は実質的に<b className="text-slate-300">首都圏の水準</b>です。
+                    実際、東京都の中央値（60分{yen(tokyoPrice?.median60)}・90分{yen(tokyoPrice?.median90)}）と一致します。
+                    地域ごとの水準は下の表をご覧ください（大阪府は90分{yen(priceByPrefecture.find((r) => r.prefecture === '大阪府')?.median90)}と、東京より低く出ます）。
+                  </p>
+                </div>
+              )}
 
               {priceByPrefecture.length > 0 ? (
                 <div className="overflow-x-auto">
