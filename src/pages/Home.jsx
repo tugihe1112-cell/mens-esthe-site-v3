@@ -598,7 +598,12 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
           >
             <div className="text-2xl mb-2">📊</div>
             <h4 className="text-white font-black text-sm">メンズエステ統計2026</h4>
-            <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">全国の店舗数・料金相場・激戦区ランキング</p>
+            {/* 料金中央値を数字のまま出す＝他社が公開していない一次データが最も強い誘引 */}
+            <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">
+              {siteStats.nationalPrice?.median60
+                ? `料金相場は60分¥${Number(siteStats.nationalPrice.median60).toLocaleString()}・90分¥${Number(siteStats.nationalPrice.median90 || 0).toLocaleString()}（${Number(siteStats.coverage?.priceSampleShops || 0).toLocaleString()}店舗の中央値）`
+                : '全国の料金相場・エリア別の掲載店舗数'}
+            </p>
             <span className="block mt-3 text-emerald-300 text-xs font-black">統計を見る →</span>
           </Link>
         </div>

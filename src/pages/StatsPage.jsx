@@ -88,13 +88,13 @@ export default function StatsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: '日本のメンズエステ統計 2026',
-    description: `全国${num(coverage.totalShops)}店舗・在籍${num(coverage.totalTherapists)}人のデータをもとに、都道府県別の店舗数・料金相場（中央値）・エリア別店舗密度・在籍セラピスト数を集計した統計データ。メンエスマップ調べ（${asOf}時点）。`,
+    name: '日本のメンズエステ料金相場・店舗統計 2026',
+    description: `料金を公開している${num(coverage.priceSampleShops)}店舗から算出した60分・90分コースの料金中央値を中心に、エリア別の店舗密度、在籍セラピスト数を集計した統計データ。メンエスマップ調べ（${asOf}時点・掲載${num(coverage.totalShops)}店舗）。都道府県別の掲載店舗数は当サイトの収集状況を反映したものであり、各都道府県の実際の店舗総数ではありません。`,
     url: CITE_URL,
     creator: { '@type': 'Organization', name: 'メンエスマップ', url: SITE_URL },
     dateModified: generatedAt,
     temporalCoverage: '2026',
-    keywords: ['メンズエステ', '店舗数', '料金相場', 'セラピスト', '統計'],
+    keywords: ['メンズエステ', '料金相場', '中央値', '店舗数', 'セラピスト', '統計'],
     isAccessibleForFree: true,
   };
 
@@ -106,8 +106,8 @@ export default function StatsPage() {
     <div className="min-h-screen bg-slate-950 text-slate-200">
       <Header />
       <SeoHead
-        title="【2026年版】メンズエステ統計｜店舗数・料金相場・激戦区ランキング"
-        description={`全国${num(coverage.totalShops)}店舗・在籍${num(coverage.totalTherapists)}人のデータで見る、都道府県別の店舗数・料金相場（60分/90分の中央値）・エリア別店舗密度ランキング。メンエスマップ調べ（${asOf}時点）。`}
+        title="【2026年版】メンズエステの料金相場｜60分・90分の中央値と激戦区ランキング"
+        description={`料金を公開している${num(coverage.priceSampleShops)}店舗から算出した60分・90分の料金中央値、エリア別の掲載店舗数TOP20、在籍セラピスト統計。推計を含まない実測データ。メンエスマップ調べ（${asOf}時点）。`}
         path="/stats"
         image={ogImage}
       />
@@ -129,11 +129,25 @@ export default function StatsPage() {
             日本のメンズエステ統計 <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">2026</span>
           </h1>
           <p className="text-sm text-slate-400 leading-relaxed">
-            当サイト掲載の全国 <b className="text-white">{num(coverage.totalShops)}店舗</b>・在籍 <b className="text-white">{num(coverage.totalTherapists)}人</b> のデータを機械集計した、都道府県別の店舗数・料金相場・エリア別店舗密度の統計です。数字はすべて掲載データからの実測で、推計は含みません。
+            料金を公開している <b className="text-white">{num(coverage.priceSampleShops)}店舗</b> の料金中央値を中心に、掲載 <b className="text-white">{num(coverage.totalShops)}店舗</b>・在籍 <b className="text-white">{num(coverage.totalTherapists)}人</b> のデータを機械集計した統計です。数字はすべて掲載データからの実測で、推計は含みません。
           </p>
           <p className="text-[11px] text-slate-500">
             メンエスマップ調べ／{asOf}時点／最終更新 {generatedAt}
           </p>
+          {/* ⚠️ 収集カバレッジの明示（2026-08-17 追加）
+              都道府県別の掲載店舗数は「その県の実際の店舗総数」ではなく「当サイトが収集できた数」。
+              東京506店に対し兵庫9店・福岡6店は市場規模の差ではなく収集状況の差であり、
+              これを黙って並べると業界を知る読み手に一目で見抜かれ、ページ全体の信頼を失う。
+              引用される資産にするには、限界を先に自分から書くことが必須。 */}
+          <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-3.5">
+            <p className="text-[11px] text-amber-200/90 font-bold mb-1">データの範囲について（先にお読みください）</p>
+            <p className="text-[11px] text-slate-400 leading-relaxed">
+              本ページの数字は<b className="text-slate-300">当サイトが掲載している店舗</b>の実測値です。収集の進み具合は地域によって異なり、東京・関東圏は網羅的に収集していますが、その他の地域は主要店舗を中心に収集しています。
+              そのため<b className="text-slate-300">都道府県別の掲載店舗数は、各都道府県の実際の店舗総数ではありません</b>（例：兵庫県・福岡県は主要店舗のみのため実態より少なく出ます）。都道府県どうしの多寡を比較する用途には使えません。
+              <br />
+              一方、<b className="text-slate-300">料金相場とエリア別店舗密度は、サンプル数を併記した実測値</b>としてそのまま参照いただけます。
+            </p>
+          </div>
         </header>
 
         {!hasData && (
@@ -158,38 +172,11 @@ export default function StatsPage() {
               ))}
             </div>
 
-            {/* 1. 都道府県別 店舗数 */}
-            <Section
-              id="pref"
-              title="都道府県別 店舗数ランキング"
-              note={`掲載${num(coverage.totalShops)}店舗を都道府県別に集計（TOP10）`}
-              copyText={`メンズエステ店舗数が多い都道府県TOP3は ${prefectureShopCounts.slice(0, 3).map((p, i) => `${i + 1}位${p.prefecture}(${p.count}店)`).join('・')}`}
-              copiedKey={copiedKey} onCopy={handleCopy}
-            >
-              <div className="space-y-2">
-                {prefectureShopCounts.slice(0, 10).map((p, i) => (
-                  <BarRow key={p.prefecture} rank={i + 1} label={p.prefecture} value={p.count} pct={(p.count / prefMax) * 100} valueLabel={`${p.count}店`} />
-                ))}
-              </div>
-            </Section>
-
-            {/* 2. エリア別 店舗密度 */}
-            <Section
-              id="area"
-              title="メンエス激戦区ランキング（エリア別 店舗密度TOP20）"
-              note="市区・駅エリア単位の掲載店舗数。数が多いほど選択肢の多い激戦区"
-              copyText={`メンズエステの激戦区（店舗密度）TOP3は ${areaDensity.slice(0, 3).map((a, i) => `${i + 1}位${a.area}(${a.prefecture}・${a.count}店)`).join('・')}`}
-              copiedKey={copiedKey} onCopy={handleCopy}
-            >
-              <div className="space-y-2">
-                {areaDensity.slice(0, 12).map((a, i) => (
-                  <BarRow key={`${a.prefecture}-${a.area}`} rank={i + 1} label={a.area} sub={a.prefecture} value={a.count} pct={(a.count / areaMax) * 100} valueLabel={`${a.count}店`} />
-                ))}
-              </div>
-              {areaDensity.length > 12 && <p className="text-[11px] text-slate-500 mt-3">13〜20位は下部の表を参照</p>}
-            </Section>
-
-            {/* 3. 料金相場 */}
+            {/* 1. 料金相場 ＝ このページの主役
+                ⚠️ 順序を変えた理由（2026-08-17）: 以前は「都道府県別 店舗数」が先頭だったが、
+                その数字は市場規模ではなく当サイトの収集状況（東京506店 vs 兵庫9店）を映すだけで、
+                業界を知る読み手には一目で見抜かれる。他社が出していない一次データは料金中央値なので、
+                引用の入口をここに変更した。 */}
             <Section
               id="price"
               title="料金相場（60分・90分の中央値）"
@@ -249,6 +236,42 @@ export default function StatsPage() {
               )}
             </Section>
 
+            {/* 2. エリア別 店舗密度 */}
+            <Section
+              id="area"
+              title="エリア別 掲載店舗数TOP20（メンエス激戦区）"
+              note="市区・駅エリア単位の掲載店舗数。掲載数が多いほど選択肢の多いエリア。※収集の進み具合が地域で異なるため、離れた地域どうしの比較には向きません"
+              copyText={`メンズエステの掲載店舗数が多いエリアTOP3は ${areaDensity.slice(0, 3).map((a, i) => `${i + 1}位${a.area}(${a.prefecture}・${a.count}店)`).join('・')}`}
+              copiedKey={copiedKey} onCopy={handleCopy}
+            >
+              <div className="space-y-2">
+                {areaDensity.slice(0, 12).map((a, i) => (
+                  <BarRow key={`${a.prefecture}-${a.area}`} rank={i + 1} label={a.area} sub={a.prefecture} value={a.count} pct={(a.count / areaMax) * 100} valueLabel={`${a.count}店`} />
+                ))}
+              </div>
+              {areaDensity.length > 12 && <p className="text-[11px] text-slate-500 mt-3">13〜20位は下部の表を参照</p>}
+            </Section>
+
+            {/* 3. 都道府県別 掲載店舗数
+                ⚠️「ランキング」と呼ばないこと。これは市場規模の順位ではなく収集状況の一覧。
+                   タイトル・note・copyText のいずれからも順位表現を外してある。 */}
+            <Section
+              id="pref"
+              title="都道府県別 掲載店舗数"
+              note={`当サイトが掲載している${num(coverage.totalShops)}店舗の内訳（上位10件）。各都道府県の実際の店舗総数ではありません`}
+              copyText={`メンエスマップの掲載店舗数の内訳は ${prefectureShopCounts.slice(0, 3).map((p) => `${p.prefecture}${p.count}店`).join('・')}（各都道府県の実際の店舗総数ではなく、当サイトの掲載数）`}
+              copiedKey={copiedKey} onCopy={handleCopy}
+            >
+              <div className="space-y-2">
+                {prefectureShopCounts.slice(0, 10).map((p, i) => (
+                  <BarRow key={p.prefecture} rank={i + 1} label={p.prefecture} value={p.count} pct={(p.count / prefMax) * 100} valueLabel={`${p.count}店`} />
+                ))}
+              </div>
+              <p className="text-[11px] text-slate-500 mt-3 leading-relaxed">
+                東京・関東圏は網羅的に収集しているため多く、その他の地域は主要店舗を中心に収集しているため少なく出ます。都道府県間の多寡の比較にはご利用いただけません。
+              </p>
+            </Section>
+
             {/* 4. 在籍セラピスト統計 */}
             <Section
               id="therapists"
@@ -276,10 +299,10 @@ export default function StatsPage() {
 
             {/* コピペ・引用しやすい表（全データ） */}
             <details className="rounded-2xl bg-slate-900/60 border border-white/5 p-5 sm:p-7">
-              <summary className="cursor-pointer text-sm font-black text-white">全データ表（都道府県別 店舗数・エリア密度）</summary>
+              <summary className="cursor-pointer text-sm font-black text-white">全データ表（都道府県別 掲載店舗数・エリア別 掲載店舗数）</summary>
               <div className="grid md:grid-cols-2 gap-6 mt-4">
                 <div className="overflow-x-auto">
-                  <h3 className="text-xs font-bold text-slate-400 mb-2">都道府県別 店舗数（全{prefectureShopCounts.length}件）</h3>
+                  <h3 className="text-xs font-bold text-slate-400 mb-2">都道府県別 掲載店舗数（全{prefectureShopCounts.length}件・実際の店舗総数ではありません）</h3>
                   <table className="w-full text-xs">
                     <thead><tr className="text-slate-500 border-b border-white/10"><th className="text-left py-1.5">順位</th><th className="text-left py-1.5">都道府県</th><th className="text-right py-1.5">店舗数</th></tr></thead>
                     <tbody>
@@ -290,7 +313,7 @@ export default function StatsPage() {
                   </table>
                 </div>
                 <div className="overflow-x-auto">
-                  <h3 className="text-xs font-bold text-slate-400 mb-2">エリア別 店舗密度 TOP20</h3>
+                  <h3 className="text-xs font-bold text-slate-400 mb-2">エリア別 掲載店舗数 TOP20</h3>
                   <table className="w-full text-xs">
                     <thead><tr className="text-slate-500 border-b border-white/10"><th className="text-left py-1.5">順位</th><th className="text-left py-1.5">エリア</th><th className="text-left py-1.5">都道府県</th><th className="text-right py-1.5">店舗数</th></tr></thead>
                     <tbody>
@@ -307,7 +330,9 @@ export default function StatsPage() {
             <div className="rounded-2xl bg-slate-900/40 border border-white/5 p-5 text-xs text-slate-400 leading-relaxed space-y-2">
               <p className="font-bold text-slate-300">この統計の引用について</p>
               <p>本ページの数字は自由に引用いただけます。引用の際は出典として「メンエスマップ調べ」および本ページURL（<span className="text-slate-300">{CITE_URL}</span>）の明記をお願いします。各セクションの「引用」ボタンで出典付きテキストをコピーできます。</p>
-              <p className="text-slate-500">※ 数字は当サイト掲載データからの実測値です（{asOf}時点・掲載{num(coverage.totalShops)}店舗）。料金はデータを掲載している店舗のみを対象に集計しており、実際の店舗料金とは異なる場合があります。推計値は含みません。</p>
+              <p className="text-slate-500">※ 数字は当サイト掲載データからの実測値です（{asOf}時点・掲載{num(coverage.totalShops)}店舗）。料金はデータを掲載している{num(coverage.priceSampleShops)}店舗のみを対象に集計しており、実際の店舗料金とは異なる場合があります。推計値は含みません。</p>
+              <p className="text-slate-500">※ 都道府県別・エリア別の掲載店舗数は<b className="text-slate-400">当サイトの収集状況</b>を反映した数字であり、その地域の実際の店舗総数ではありません。東京・関東圏は網羅的に、その他の地域は主要店舗を中心に収集しています。地域間の多寡を比較する統計としては使えません。</p>
+              <p className="text-slate-500">※ 掲載内容の誤り・削除のご依頼は<Link to="/contact" className="text-pink-400 hover:underline">お問い合わせ</Link>からお願いします。</p>
             </div>
 
             {/* 回遊導線（内部リンク＝PageRankを本命ページへ） */}

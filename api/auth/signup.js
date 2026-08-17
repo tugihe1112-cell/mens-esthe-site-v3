@@ -113,6 +113,52 @@ export default async function handler(req, res) {
     const resendResult = await r.json();
     if (!r.ok) throw new Error(`メール送信失敗: ${resendResult.message || JSON.stringify(resendResult)}`);
 
+    // ── 管理者へ新規登録の通知（2026-08-17 追加）──────────────────
+    // ⚠️ これまで新規登録の通知が一切なく、誰かが登録しても Supabase を
+    //    見に行かない限り気づけなかった（実際 2026-08-08 の初の一般ユーザー登録に
+    //    数日間気づいていない）。登録者が2人しかいない段階では、1人増えることが
+    //    最重要のイベントなので必ず知らせる。
+    // ⚠️ ここで失敗しても**登録自体は成功扱いにする**。通知はおまけであり、
+    //    これを理由にユーザー作成をロールバックしてはいけない
+    //    （この関数の catch はユーザー削除を行うため、try の外に出さない）。
+    try {
+      const ADMIN_TO = process.env.CONTACT_TO_EMAIL || 'tugihe1112@gmail.com';
+      const jstNow = new Date(Date.now() + 9 * 3600 * 1000).toISOString().replace('T', ' ').slice(0, 16);
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'メンエスマップ <noreply@mens-esthe-map.jp>',
+          to: [ADMIN_TO],
+          subject: `【新規登録】${email}`,
+          html: `
+            <div style="font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:32px;border-radius:12px;max-width:600px">
+              <p style="color:#f472b6;font-weight:bold;letter-spacing:.1em;font-size:12px;margin:0 0 8px">NEW SIGNUP</p>
+              <h2 style="color:#fff;margin:0 0 20px;font-size:20px">新しいユーザーが登録しました</h2>
+              <table style="width:100%;font-size:14px;line-height:2">
+                <tr><td style="color:#94a3b8;width:120px">メール</td><td style="color:#fff">${email}</td></tr>
+                <tr><td style="color:#94a3b8">登録日時</td><td>${jstNow} JST</td></tr>
+                <tr><td style="color:#94a3b8">プラン</td><td>free（自動）</td></tr>
+              </table>
+              <p style="color:#64748b;font-size:12px;margin-top:20px;line-height:1.8">
+                この時点ではまだ「メール確認前」です。確認リンクを踏むまでログインできません。<br>
+                投稿があれば別途「新着口コミ」の通知が届きます。
+              </p>
+              <a href="https://supabase.com/dashboard/project/azuetkuzzmshqfbrhqmf/auth/users"
+                 style="display:inline-block;margin-top:16px;background:#ec4899;color:#fff;text-decoration:none;padding:12px 20px;border-radius:10px;font-weight:bold;font-size:14px">
+                ユーザー一覧を開く
+              </a>
+            </div>`,
+        }),
+      });
+    } catch (notifyErr) {
+      // 通知の失敗は登録の成否に影響させない
+      console.error('[auth/signup] 管理者通知に失敗（登録は成功）:', notifyErr.message);
+    }
+
     return res.status(200).json({ ok: true });
 
   } catch (err) {
