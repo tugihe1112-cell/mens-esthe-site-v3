@@ -8,11 +8,13 @@ export default function Footer() {
   const totalTherapists = stats?.coverage?.totalTherapists || 0;
 
   return (
-    <footer className="bg-slate-950 border-t border-white/5 mt-20 relative z-10 pb-20 md:pb-0">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+    <footer className="bg-slate-950 border-t border-white/5 mt-10 md:mt-20 relative z-10 pb-20 md:pb-0">
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
+        {/* スマホは SERVICE / LEGAL を横2列に。従来は全部が縦1列で、
+            リンク8本ぶんスクロールが伸びるだけの退屈な帯になっていた。 */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8 mb-10">
 
-          <div className="md:col-span-2">
+          <div className="col-span-2">
             <h3 className="text-2xl font-black mb-4 tracking-tight">
               <span className="text-white">メンエス</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">
@@ -54,17 +56,23 @@ export default function Footer() {
 
         </div>
 
-        {/* エリア別リンク（内部リンク構造・SEO用） */}
+        {/* エリア別リンク（内部リンク構造・SEO用）
+            ⚠️ 以前は「東京都のメンズエステ」という長い文字列を16個並べており、
+               スマホで画面ほぼ1枚ぶんを、同じ語尾の繰り返しが占領していた。
+               「のメンズエステ」を小さい副次テキストに落として都道府県名を主役にし、
+               3列グリッドに整列させる。**アンカーテキストは "東京都メンズエステ" のまま**
+               維持されるので、索引復旧のために効いている内部リンクのSEO価値は落ちない。 */}
         <div className="border-t border-white/5 pt-8 mb-8">
           <h4 className="text-white font-bold mb-4 tracking-widest text-xs">エリアから探す</h4>
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
             {AREA_LINKS.map(({ slug, label }) => (
               <Link
                 key={slug}
                 to={`/area/${slug}`}
-                className="text-xs text-slate-400 hover:text-pink-400 transition bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-full border border-white/5"
+                className="group flex flex-col items-center justify-center rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-pink-500/40 transition px-2 py-2.5 text-center"
               >
-                {label}のメンズエステ
+                <span className="text-xs font-bold text-slate-200 group-hover:text-pink-400 transition leading-tight truncate w-full">{label}</span>
+                <span className="text-[9px] text-slate-600 leading-tight mt-0.5">メンズエステ</span>
               </Link>
             ))}
           </div>

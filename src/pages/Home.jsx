@@ -224,7 +224,11 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
   }, [shops]);
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-28 md:pb-16 overflow-x-hidden font-sans text-slate-200">
+    // ⚠️ pb-28 だった名残に注意（2026-08-17 修正）:
+    //    BottomNav ぶんの余白は Footer 側の pb-20 md:pb-0 が既に持っているのに、
+    //    ここでも 112px 取っていたため、最後のセクションとフッターの間に
+    //    112 + Footer の mt-80 = 約200px の説明のつかない黒い空白ができていた。
+    <div className="min-h-screen bg-slate-950 pb-6 md:pb-10 overflow-x-hidden font-sans text-slate-200">
       <SeoHead
         title="メンズエステ検索・口コミ"
         description={`メンエスマップは全国${Number(siteStats.coverage?.totalShops || 0).toLocaleString()}店舗・在籍${Number(siteStats.coverage?.totalTherapists || 0).toLocaleString()}人のメンズエステを掲載。セラピスト別の口コミ・出勤スケジュール・料金を検索できるポータルサイトです。掲載店舗から広告費・掲載料は一切受け取っていません。`}

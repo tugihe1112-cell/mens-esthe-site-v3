@@ -4,6 +4,13 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  // スマホでリンクをタップしたあと hover の色が residual に残る問題への対処。
+  // 実機スクショで、フッターの「群馬県」だけがピンクのまま固まっていた（押した記憶がなくても
+  // スクロール中に一瞬触れると残る）。これを付けると hover: が
+  // @media (hover: hover) で囲まれ、タッチ端末では発火しなくなる。サイト全体に効く。
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     extend: {
       fontFamily: {
