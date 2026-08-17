@@ -370,7 +370,9 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
                 人気エリア
               </h3>
             </div>
-            <span className="text-xs text-slate-400 font-bold">店舗数ランキング</span>
+            {/* ⚠️「店舗数ランキング」と書いていたが、これは市場規模の順位ではなく
+                   当サイトの掲載数の多い順。/stats で同じ表記を正した（2026-08-17）ので揃える。 */}
+            <span className="text-xs text-slate-400 font-bold">掲載店舗数の多い順</span>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[200px]">
