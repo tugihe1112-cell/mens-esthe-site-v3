@@ -63,7 +63,9 @@ export default function Footer() {
                3列グリッドに整列させる。**アンカーテキストは "東京都メンズエステ" のまま**
                維持されるので、索引復旧のために効いている内部リンクのSEO価値は落ちない。 */}
         <div className="border-t border-white/5 pt-8 mb-8">
-          <h4 className="text-white font-bold mb-4 tracking-widest text-xs">エリアから探す</h4>
+          {/* ⚠️ ホーム本文にも「エリアから探す」があり、1ページに同名の見出しが2つ並んでいた
+                 （2026-08-17 改名）。こちらは全ページ共通の都道府県リンク集なので役割で呼び分ける。 */}
+          <h4 className="text-white font-bold mb-4 tracking-widest text-xs">都道府県から探す</h4>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
             {AREA_LINKS.map(({ slug, label }) => (
               <Link

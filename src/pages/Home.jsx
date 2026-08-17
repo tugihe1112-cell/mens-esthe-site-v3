@@ -351,30 +351,28 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
           </div>
         </section>
 
-        {/* 2. エリアから探す */}
+        {/* 2. エリアから探す（旧「エリアから探す」＋旧「人気エリア」を1セクションに統合）
+            ⚠️ 統合した理由（2026-08-17）: ホーム1枚に「エリアから探す」という見出しが
+               本文とフッターの2箇所にあり、さらに隣接して「人気エリア」という
+               ほぼ同義のセクションが並んでいた＝同じ話題が3ブロックに散っていた。
+               「ハイライト（人気エリア）→ 全一覧（すべてのエリア）」の1本の流れに整理する。
+               フッター側は「都道府県から探す」に改名して役割を分けた。 */}
         <section>
           <div className="flex items-center justify-between mb-6 px-2">
-            <h3 className="text-xl font-black text-white flex items-center gap-2">
+            <h3 className="text-xl md:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
               <span className="w-1.5 h-6 bg-pink-500 rounded-full"></span>
               エリアから探す
             </h3>
           </div>
-          <PrefectureSelector shops={shops} />
-        </section>
 
-        {/* 3. 人気エリアランキング (詳細エリア優先) */}
-        <section>
-          <div className="flex items-end justify-between mb-8 px-2">
-            <div className="flex items-center gap-3">
-              <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight flex items-center gap-3">
-                人気エリア
-              </h3>
-            </div>
+          {/* ハイライト：掲載数の多いエリア */}
+          <div className="flex items-end justify-between mb-4 px-2">
+            <h4 className="text-sm font-black text-slate-300 tracking-wide">人気エリア</h4>
             {/* ⚠️「店舗数ランキング」と書いていたが、これは市場規模の順位ではなく
                    当サイトの掲載数の多い順。/stats で同じ表記を正した（2026-08-17）ので揃える。 */}
-            <span className="text-xs text-slate-400 font-bold">掲載店舗数の多い順</span>
+            <span className="text-xs text-slate-500 font-bold">掲載店舗数の多い順</span>
           </div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[200px]">
             {topAreas.map((area) => (
               <Link
@@ -401,6 +399,12 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
                 </div>
               </Link>
             ))}
+          </div>
+
+          {/* 全一覧：地方→都道府県→市区のアコーディオン */}
+          <div className="mt-8 pt-6 border-t border-white/5">
+            <h4 className="text-sm font-black text-slate-300 tracking-wide mb-4 px-2">すべてのエリア</h4>
+            <PrefectureSelector shops={shops} />
           </div>
         </section>
 
