@@ -112,9 +112,21 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
       <div>
         <h2 className="text-xl font-black text-white tracking-tight mb-1">店舗・セラピストを選択</h2>
         <p className="text-slate-500 text-sm">口コミを書く店舗とセラピストを選んでください</p>
-        <p className="mt-3 rounded-xl border border-pink-500/20 bg-pink-500/5 px-3 py-2 text-xs font-medium leading-relaxed text-slate-300">
-          200字で3日間、700字で7日間の閲覧権。選んだ対象は送信前に確認できます。
-        </p>
+        {/* ⚠️ 2026-08-13: ここに書く内容は**実仕様と一致させること**。
+            実施していない審査（「公開前に運営が確認します」等）を書いてはいけない。
+            現行の実仕様:
+              ・閲覧権 … 200字=3日 / 700字=7日（07_review_friction.sql の付与トリガー）
+              ・表示名 … user_metadata の表示名、無ければ「名無しさん」。自由入力欄は無い
+                        （useReviewForm.js。以前は user.email をフォールバックしており
+                          メールアドレスが公開される寸前だった）
+              ・公開範囲 … 12_ のトリガーで、公式登録セラピストへの**最初の1件だけ**が公開。
+                          2件目以降・手入力セラピスト・指名なしは非公開で、
+                          閲覧権のある人だけが読める */}
+        <div className="mt-3 space-y-1.5 rounded-xl border border-pink-500/20 bg-pink-500/5 px-3 py-2.5 text-xs font-medium leading-relaxed text-slate-300">
+          <p>📗 <span className="text-white">200字で3日間、700字で7日間</span>の閲覧権が付きます</p>
+          <p>👤 投稿者名は<span className="text-white">アカウントの表示名</span>（未設定なら「名無しさん」）。本名やメールアドレスは公開されません</p>
+          <p>🔓 そのセラピストへの<span className="text-white">最初の口コミは公開</span>されます。2件目以降は非公開で、閲覧権のある方だけが読めます</p>
+        </div>
       </div>
 
       <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl">
