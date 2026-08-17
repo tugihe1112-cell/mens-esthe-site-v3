@@ -38,7 +38,11 @@ const auth = new google.auth.GoogleAuth({
 });
 
 // GSCはデータ2〜3日遅れ → 直近28日（終端は2日前）で揃える
-const d = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+// ⚠️ 2026-08-17修正: 以前は `new Date(Date.now() - n*864e5).toISOString()` ＝ **UTC基準**で
+//    窓を作っていた。一方 `today`（行の日付セル）は JST 基準。
+//    朝8:55(JST)はUTCではまだ前日23:55なので、**窓だけが1日古くなる**ズレが常時発生していた。
+//    行の日付とGSCの窓を同じJSTで揃える。
+const d = (n) => new Date(Date.now() + 9 * 3600 * 1000 - n * 864e5).toISOString().slice(0, 10);
 const END = d(2), START = d(30);
 
 const sc = google.searchconsole({ version: 'v1', auth });
@@ -131,21 +135,42 @@ async function main() {
   // cells = ['', 日付, click, 表示, 順位, GA4U, unison, こころ, 広島, 所感, '']
   const numericBlank = [2, 3, 4, 5].every((i) => isBlank(cells[i]));
 
-  if (!numericBlank) {
-    console.log(`既に ${today} の行あり（数値も記入済み）→ スキップ:`, newRow);
+  // ⚠️ 2026-08-17修正: 数値が入っていても**無条件にスキップしてはいけない**。
+  //    GSCの窓は日中に前進する（朝は〜08-14、昼は〜08-15 など）。
+  //    従来は朝の古い窓が書かれた後、昼・夜スロットが**より新しい窓を取得しても
+  //    「行あり」で破棄**していた。実際 08-17 に、昼が取った最新窓 27/86/5.7 が
+  //    朝の 27/92/8.1（1日古い窓）に負けて捨てられている。
+  //    → 行に記録された窓の終端(END)より新しいデータなら上書きする。
+  const recordedEnd = (cells[9] || '').match(/GSC\s*\d{4}-\d{2}-\d{2}〜(\d{4}-\d{2}-\d{2})/)?.[1] || null;
+  const isNewerWindow = recordedEnd !== null && END > recordedEnd;
+
+  if (!numericBlank && !isNewerWindow) {
+    console.log(`既に ${today} の行あり（同じか古い窓 ${recordedEnd || '不明'}）→ スキップ:`, newRow);
     return;
   }
 
   const newCells = newRow.split('|');
   const oldNote = (cells[9] || '').trim();
   for (let i = 1; i <= 8; i++) cells[i] = newCells[i]; // 日付〜本命3ページを差し替え
-  cells[9] = ` ${newCells[9].trim()}`
-    + (oldNote
-      ? ` ⚠️**数値は後から補填**（この行は数値が無い時点で作られた）。補填前の記述: ${oldNote}`
-      : '');
+
+  // 所感（人間・タスクが書いた分析）は消さずに残す。
+  // ただし数値が変わった場合は、どの窓の数値に対する所感なのかが分かるよう履歴を明記する。
+  let suffix = '';
+  if (numericBlank && oldNote) {
+    suffix = ` ⚠️**数値は後から補填**（この行は数値が無い時点で作られた）。補填前の記述: ${oldNote}`;
+  } else if (isNewerWindow) {
+    suffix = ` ⚠️**より新しい窓(〜${END})の数値で上書き**（旧窓 〜${recordedEnd}）。上書き前の記述: ${oldNote}`;
+  }
+  cells[9] = ` ${newCells[9].trim()}${suffix}`;
+
   lines[idx] = cells.join('|');
   fs.writeFileSync(MD, lines.join('\n'));
-  console.log(`🔧 ${today} の空行に数値を補填しました:`, lines[idx].slice(0, 120) + '…');
+  console.log(
+    isNewerWindow
+      ? `🔄 ${today} をより新しい窓(〜${END})で更新しました:`
+      : `🔧 ${today} の空行に数値を補填しました:`,
+    lines[idx].slice(0, 120) + '…'
+  );
 }
 // ── 起動直後の一過性エラーに対するリトライ ────────────────────────────
 // launchd が Mac のスリープ復帰直後に起動すると、まだ以下が整っていないことがある:
