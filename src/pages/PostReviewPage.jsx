@@ -613,21 +613,45 @@ export default function PostReviewPage() {
   //    「書きかけの口コミがあります」が出る。保存を止めるフラグで塞ぐ。
   const draftDisabledRef = useRef(false);
 
+  // 保存状態を明示する（2026-08-18 改修）。
+  // ⚠️ 初版は11pxのグレー文字を本文の上に置いただけで、書いている最中は視界に入らなかった。
+  //    離脱を防ぐための機能なのに、離脱しそうな瞬間に見えていないのでは意味がない。
+  //    'saving'（入力直後）→'saved'（保存完了）の2状態を持ち、固定バーに常時出す。
+  const [draftStatus, setDraftStatus] = useState('idle'); // idle | saving | saved
+
   // 自動保存（入力が止まって1秒後に保存＝毎キーストロークで書き込まない）
   useEffect(() => {
     let timer;
     const sub = methods.watch((values) => {
       if (draftDisabledRef.current) return;
+      if (hasDraftContent(values)) setDraftStatus('saving'); // 打った瞬間に「保存中…」を出す
       clearTimeout(timer);
       timer = setTimeout(() => {
         if (draftDisabledRef.current) return;
         if (!hasDraftContent(values)) return;
         saveDraft(values, stepRef.current, false);
         setDraftSavedAt(Date.now());
+        setDraftStatus('saved');
       }, 1000);
     });
     return () => { clearTimeout(timer); sub?.unsubscribe?.(); };
   }, [methods]);
+
+  // 手動保存。自動保存があっても**押せるボタンがある**こと自体が安心につながる
+  // （okabayashi指摘「保存できていることをアピールできないとダメ」）。
+  // 自動保存が本体・ボタンは確証を得るための操作、という役割分担。
+  const saveDraftNow = () => {
+    const values = methods.getValues();
+    if (!hasDraftContent(values)) {
+      toast('まだ保存できる内容がありません', { duration: 2500 });
+      return;
+    }
+    draftDisabledRef.current = false;
+    saveDraft(values, stepRef.current, false);
+    setDraftSavedAt(Date.now());
+    setDraftStatus('saved');
+    toast.success('下書きを保存しました。閉じても続きから書けます', { duration: 3500 });
+  };
 
   const resumeDraft = () => {
     if (!draftPrompt) return;
@@ -858,8 +882,11 @@ export default function PostReviewPage() {
         <div
           className="pt-24"
           style={{
+            // 固定バーの実占有高: pt-6(24) + 保存チップ(約40) + gap(8) + ボタン(約60) + pb(24) ≒ 156px
+            // ＋ iPhone のホームバー(env safe-area ≒ 34px)。余裕を見て 12rem(192px)。
+            // ⚠️ バーの中身を変えたらこの値も必ず見直すこと（ズレると被る／謎の空白になる）。
             paddingBottom: currentStep < TOTAL_STEPS
-              ? 'calc(9.5rem + env(safe-area-inset-bottom, 0px))'
+              ? 'calc(12rem + env(safe-area-inset-bottom, 0px))'
               : 'calc(3rem + env(safe-area-inset-bottom, 0px))',
           }}
         >
@@ -920,15 +947,8 @@ export default function PostReviewPage() {
 
               {/* 自動保存されたことを見せる。これが無いと「保存されているのか」が分からず、
                   ユーザーは手動の保存ボタンを探してしまう（＝今回の要望の本質）。 */}
-              {/* ⚠️ ここに「破棄」ボタンは置かない。入力中に押されたとき
-                     「今書いている内容も消えるのか」が曖昧で誤操作を招く。
-                     破棄は復元バナー側（＝まだ何も書いていない場面）だけに置く。 */}
-              {draftSavedAt && !draftPrompt && (
-                <p className="mb-4 flex items-center gap-1.5 text-[11px] text-slate-500">
-                  <span className="text-emerald-400 text-[9px]">●</span>
-                  下書きを自動保存しました（{formatSavedAt(draftSavedAt)}）
-                </p>
-              )}
+              {/* 保存状態の表示は固定バー側（＝書いている最中に必ず視界に入る位置）へ移設した。
+                  ここ（本文の上）に置いていた初版は、スクロールすると見えなくなり機能しなかった。 */}
 
               <form onSubmit={methods.handleSubmit(onSubmit)} className="min-h-[60vh]">
                 {currentStep === 1 && (
@@ -953,9 +973,36 @@ export default function PostReviewPage() {
                      のどちらかが必ず起きる。 */}
               {currentStep < TOTAL_STEPS && (
                 <div
-                  className="fixed bottom-0 left-0 w-full px-4 pt-6 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent z-50 flex justify-center pointer-events-none"
+                  className="fixed bottom-0 left-0 w-full px-4 pt-6 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent z-50 flex flex-col items-center gap-2 pointer-events-none"
                   style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}
                 >
+                  {/* 保存状態＋手動保存。書いている最中は指も視線もこの位置にあるので、
+                      「保存されている」ことがここに出ていないと安心材料にならない。 */}
+                  <div className="pointer-events-auto w-full max-w-md flex items-center justify-between gap-2 rounded-xl bg-slate-900/90 border border-white/10 backdrop-blur px-3 py-2">
+                    <span className="min-w-0 flex items-center gap-1.5 text-[11px] font-bold">
+                      {draftStatus === 'saving' ? (
+                        <>
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+                          <span className="text-amber-200">保存中…</span>
+                        </>
+                      ) : draftStatus === 'saved' && draftSavedAt ? (
+                        <>
+                          <span className="text-emerald-400 shrink-0">✓</span>
+                          <span className="text-emerald-200 truncate">下書き保存済み {formatSavedAt(draftSavedAt)}</span>
+                        </>
+                      ) : (
+                        <span className="text-slate-400 truncate">入力すると自動で下書き保存されます</span>
+                      )}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={saveDraftNow}
+                      className="shrink-0 text-[11px] font-black px-3 py-2 rounded-lg border border-pink-500/40 text-pink-300 active:scale-95 transition"
+                    >
+                      下書き保存
+                    </button>
+                  </div>
+
                   <button
                     type="button"
                     onClick={nextStep}
