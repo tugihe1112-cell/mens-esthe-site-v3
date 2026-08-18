@@ -420,7 +420,8 @@ export default function ShopDetailPage({
               <button onClick={() => document.getElementById('sec-schedule')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg">
                 <span className="text-xl opacity-60 group-hover:opacity-100 transition">📅</span>
                 <div className="text-left flex-1">
-                  <div className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Schedule</div>
+                  {/* 英語ラベル＋9pxだった。日本語＋11pxに（2026-08-17） */}
+                  <div className="text-[11px] text-slate-400 font-bold mb-0.5">出勤スケジュール</div>
                   <div className="text-xs font-bold text-slate-200 tracking-wide group-hover:text-green-400 transition">出勤情報</div>
                 </div>
               </button>

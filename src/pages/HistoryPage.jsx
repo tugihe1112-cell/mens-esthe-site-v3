@@ -59,8 +59,12 @@ export default function HistoryPage() {
           </div>
         ) : (
           <div className="relative space-y-8 pl-6 border-l-2 border-slate-800 ml-4 pb-20">
+            {/* ⚠️ 横方向のスライドイン（slide-in-from-left/right）は使わないこと。
+                   幅いっぱいの要素をX方向に translate すると、その間ページが
+                   横スクロール可能になり、スクロールすると本文の左右が切れる。
+                   実機 iPhone で発生し原因特定に時間を要した（2026-08-17）。縦方向なら安全。 */}
             {formattedHistory.map((item, i) => (
-              <div key={i} className="relative group animate-in slide-in-from-left-4 duration-500" style={{ animationDelay: `${i * 50}ms` }}>
+              <div key={i} className="relative group animate-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: `${i * 50}ms` }}>
                 
                 {/* Timeline Dot */}
                 <div className="absolute top-8 -left-[31px] w-4 h-4 rounded-full bg-slate-900 border-2 border-slate-700 group-hover:border-pink-500 group-hover:bg-pink-500 transition-colors z-10 shadow-[0_0_10px_rgba(236,72,153,0.5)]"></div>

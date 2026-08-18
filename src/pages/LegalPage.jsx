@@ -11,7 +11,8 @@ export default function LegalPage() {
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
       <SeoHead title="特定商取引法に基づく表記" />
       <Header />
-      <div className="max-w-3xl mx-auto px-4 py-12">
+      {/* pt-24: 固定ヘッダー(最大約76px)を確実に避ける。py-12(48px)では「← 戻る」が隠れていた */}
+      <div className="max-w-3xl mx-auto px-4 pt-24 pb-12">
         <button onClick={() => navigate(-1)} className="mb-8 flex items-center gap-2 text-slate-400 hover:text-white transition font-bold text-sm">
           <span>←</span> 戻る
         </button>
@@ -40,7 +41,7 @@ export default function LegalPage() {
             <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] p-6 gap-2 md:gap-4 hover:bg-white/5 transition">
               <dt className="text-slate-400 font-bold">お問い合わせ</dt>
               <dd className="text-white font-medium">
-                <Link to="/contact" className="text-pink-300 hover:text-pink-200 underline underline-offset-4">
+                <Link to="/contact" className="text-pink-300 hover:text-pink-200 underline underline-offset-4 inline-block py-3 -my-2">
                   お問い合わせフォーム
                 </Link>
                 よりご連絡ください。

@@ -410,3 +410,24 @@ a {
 .hero-coverflow:not(.swiper-initialized) {
   visibility: hidden;
 }
+
+/* ===================================== */
+/* 🔴 iOS Safari の「フォーカス時 自動ズーム」対策（2026-08-17）           */
+/* ===================================== */
+/* iOS Safari は、フォントサイズが 16px 未満の input/textarea/select を    */
+/* タップした瞬間にページ全体を拡大する（仕様。無効化する方法は無い）。     */
+/* 拡大されるとレイアウトが崩れ、ユーザーは毎回ピンチで戻す必要がある。     */
+/* 実際に text-sm(14px) の入力欄がサイト全体で14箇所あり、**ホームの検索バー */
+/* と口コミ投稿フォーム**という主要導線がすべて該当していた。              */
+/*                                                                        */
+/* 個々のコンポーネントで text-base に直すと漏れるうえ、PCでは14pxのままに  */
+/* したい箇所もあるため、**スマホ幅のときだけ 16px を強制**する。          */
+/* Tailwind のユーティリティ(.text-sm)に勝つ必要があるので !important 必須。 */
+/* checkbox / radio は見た目が変わるので除外する。                        */
+@media (max-width: 767px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}

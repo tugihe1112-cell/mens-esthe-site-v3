@@ -18,14 +18,14 @@ export default function BrandPage() {
   }, [shops, brandId]);
 
   // ローディング中
-  if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading...</div>;
+  if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 text-sm">読み込み中...</div>;
   
   // 店舗が見つからない場合
   if (brandShops.length === 0) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white gap-4 font-sans">
         <Header />
-        <h1 className="text-2xl font-bold">Brand Not Found</h1>
+        <h1 className="text-2xl font-bold">店舗グループが見つかりません</h1>
         <p className="text-slate-400">指定されたグループの店舗が見つかりませんでした。</p>
         <button onClick={() => navigate('/search')} className="text-pink-400 underline">検索に戻る</button>
       </div>

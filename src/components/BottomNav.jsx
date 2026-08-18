@@ -7,7 +7,8 @@ import { useAuth } from '../contexts/AuthContext.jsx';
 // 理由: 投稿ページの主CTA「次へ進む」も fixed bottom-0 z-50 で、_app.jsx の描画順により
 // ドックが上に重なり、フライホイールの唯一の入口でCTAが押せない/押しにくくなっていた。
 // フォーム記入中に他タブへ逃がす導線は不要なので、非表示が正解（_app.jsx は編集不可のため自己非表示）。
-const POST_REVIEW_ROUTES = [
+// _app.jsx からも参照する（フッターも同じルートで隠すため）＝定義を2箇所に持たない
+export const POST_REVIEW_ROUTES = [
   '/post-review',
   '/shops/[shopId]/review',
   '/shops/[shopId]/threads/[threadId]/review',

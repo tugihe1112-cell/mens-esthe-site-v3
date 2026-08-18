@@ -227,7 +227,7 @@ export default function PopularReviewsPage() {
                           <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0 flex flex-wrap items-center gap-x-2 gap-y-1">
                               <Link to={shopLink} className="inline-flex items-center gap-1.5 min-w-0 font-black text-white text-sm hover:text-pink-300 transition">
-                                <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[9px] shrink-0">🏢</span>
+                                <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
                                 <span className="truncate">{shop.name || '店舗情報なし'}</span>
                               </Link>
                               {loc && (

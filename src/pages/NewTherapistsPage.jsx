@@ -138,12 +138,12 @@ export default function NewTherapistsPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
                         {/* NEWバッジ */}
-                        <div className="absolute top-2 left-2 bg-pink-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full shadow">
+                        <div className="absolute top-2 left-2 bg-pink-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full shadow">
                           NEW
                         </div>
 
                         {/* 登録日時 */}
-                        <div className="absolute top-2 right-2 bg-black/50 backdrop-blur text-slate-300 text-[9px] px-1.5 py-0.5 rounded-full">
+                        <div className="absolute top-2 right-2 bg-black/50 backdrop-blur text-slate-300 text-[10px] px-1.5 py-0.5 rounded-full">
                           {timeAgo(t.created_at)}
                         </div>
 
@@ -158,7 +158,7 @@ export default function NewTherapistsPage() {
                             </p>
                           )}
                           {shop.name && (
-                            <p className="text-slate-400 text-[9px] truncate leading-tight mt-0.5">
+                            <p className="text-slate-400 text-[10px] truncate leading-tight mt-0.5">
                               {shop.name}
                             </p>
                           )}

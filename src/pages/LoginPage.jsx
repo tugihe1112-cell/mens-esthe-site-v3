@@ -78,8 +78,8 @@ export default function LoginPage() {
               MENS <span className="text-pink-500">ESTHE</span>
             </h1>
           </Link>
-          <p className="text-slate-300 font-bold tracking-[0.3em] text-[10px] uppercase opacity-80">
-            Enter the Exclusive World
+          <p className="text-slate-300 font-bold text-xs opacity-90">
+            ログイン
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export default function LoginPage() {
             )}
             
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black text-slate-400 ml-2 tracking-widest group-focus-within:text-pink-400 transition">EMAIL</label>
+              <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">メールアドレス</label>
               <input 
                 type="email" 
                 value={email} 
@@ -108,7 +108,7 @@ export default function LoginPage() {
             </div>
             
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black text-slate-400 ml-2 tracking-widest group-focus-within:text-pink-400 transition">PASSWORD</label>
+              <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">パスワード</label>
               <input 
                 type="password" 
                 value={password} 
@@ -123,14 +123,14 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full py-4 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-black text-lg shadow-lg shadow-pink-900/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/10 relative overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span className="relative z-10">{loading ? 'LOGGING IN...' : 'LOGIN'}</span>
+              <span className="relative z-10">{loading ? 'ログイン中...' : 'ログイン'}</span>
               <div className="absolute inset-0 bg-white/20 blur-md opacity-0 group-hover:opacity-100 transition duration-500"></div>
             </button>
           </form>
 
           <div className="mt-8 text-center pt-4 border-t border-white/5">
-              <Link to="/register" className="text-sm text-slate-400 hover:text-white transition group font-medium">
-                Don't have an account? <span className="text-pink-400 font-bold border-b border-pink-400/30 group-hover:border-pink-400 pb-0.5 transition-all ml-1">Sign Up</span>
+              <Link to="/register" className="text-sm text-slate-400 hover:text-white transition group font-medium inline-block py-3">
+                アカウントをお持ちでない方は<span className="text-pink-400 font-bold border-b border-pink-400/30 group-hover:border-pink-400 transition-all ml-1">新規登録</span>
               </Link>
           </div>
         </div>

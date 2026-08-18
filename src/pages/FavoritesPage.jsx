@@ -14,7 +14,7 @@ export default function FavoritesPage() {
   const navigate = useNavigate();
 
   // Loading check
-  if (!shopById || !therapistById) return <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-500">Loading...</div>;
+  if (!shopById || !therapistById) return <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-400 text-sm">読み込み中...</div>;
 
   // --- Restore Data ---
   const favShopList = useMemo(() => {

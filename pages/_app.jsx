@@ -10,7 +10,7 @@ import { DataProvider } from '../src/contexts/DataContext.jsx';
 import { AppProvider } from '../src/context/AppContext.tsx';
 import ErrorBoundary from '../src/components/ErrorBoundary.jsx';
 import ScrollToTop from '../src/components/ScrollToTop.jsx';
-import BottomNav from '../src/components/BottomNav.jsx';
+import BottomNav, { POST_REVIEW_ROUTES } from '../src/components/BottomNav.jsx';
 import Footer from '../src/components/Footer.jsx';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
@@ -107,13 +107,30 @@ function RouteProgress() {
 function Layout({ children }) {
   const router = useRouter();
   const shouldHideNav = HIDE_NAV_PATHS.some(p => router.pathname === p);
+  // 投稿フローではフッターも出さない（2026-08-17）。
+  // BottomNav は以前から非表示にしていたのにフッターだけ残っており、実機で
+  // 「サイト全体のフッター」が記入フォームの直下に現れたうえ、fixed の主CTA
+  //「次へ進む」がその上に重なって押しにくい状態になっていた。
+  // 記入中に他ページへ逃がす導線は不要なので、フッターごと出さないのが正しい。
+  const isPostingFlow = POST_REVIEW_ROUTES.includes(router.pathname);
+  // フルのフッター（ブランド文・SERVICE/LEGAL・都道府県リンク集）はホームだけ。
+  // 他ページでは読む邪魔になるだけなので、法務リンクの1帯だけに落とす。
+  const isHome = router.pathname === '/';
   return (
-    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-200">
+    // 子のどれか1つが数pxはみ出すだけで**ページ全体が横スクロール可能**になり、
+    // mx-auto の中央寄せがビューポートでなく「はみ出した幅」を基準にするため、
+    // 右端の文字が切れて見える（実機 iPhone で発生）。最後の砦としてここで止める。
+    // ⚠️ overflow-x-hidden ではなく **overflow-x-clip** を使うこと。
+    //    hidden は祖先を「スクロールコンテナ」にしてしまい、内側の position:sticky が
+    //    ビューポートでなくこのdivを基準にするため、サイト内8箇所の sticky
+    //    （店舗ページのタブ・ランキングのタブ・検索バー・ホームのサイドバー等）が壊れる。
+    //    clip はスクロールコンテナを作らずに切るだけなので sticky に影響しない。
+    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-200 overflow-x-clip">
       <ChunkErrorGuard />
       <RouteProgress />
       <ScrollToTop />
       <main className="flex-grow">{children}</main>
-      {!shouldHideNav && <Footer />}
+      {!shouldHideNav && !isPostingFlow && <Footer variant={isHome ? 'full' : 'minimal'} />}
       {!shouldHideNav && <BottomNav />}
     </div>
   );

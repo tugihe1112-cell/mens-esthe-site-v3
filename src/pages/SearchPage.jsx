@@ -877,7 +877,7 @@ export default function SearchPage() {
                 </div>
                 {/* ソートボタン */}
                 <div className="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar">
-                  <span className="text-[10px] text-slate-600 font-black tracking-widest uppercase shrink-0">SORT</span>
+                  <span className="text-[11px] text-slate-500 font-black shrink-0">並び替え</span>
                   {[
                     { key: 'default', label: 'デフォルト', mobileLabel: '標準' },
                     { key: 'aiueo',   label: 'あ 五十音', mobileLabel: '五十音' },
@@ -981,10 +981,10 @@ export default function SearchPage() {
                             <div className="absolute bottom-0 left-0 w-full p-2 sm:p-3">
                               <div className="bg-white/5 backdrop-blur-md rounded-xl p-2 sm:p-3 border border-white/10 group-hover:bg-white/10 transition duration-300">
                                 <div className="flex items-center gap-1 mb-1">
-                                  {t.age && <span className="bg-black/40 px-1.5 py-0.5 rounded text-[9px] font-bold text-white border border-white/10">{t.age}歳</span>}
+                                  {t.age && <span className="bg-black/40 px-1.5 py-0.5 rounded text-[10px] font-bold text-white border border-white/10">{t.age}歳</span>}
                                 </div>
                                 <h3 className="text-white font-black text-sm sm:text-base leading-tight truncate">{t.name}</h3>
-                                <p className="text-[9px] sm:text-[10px] text-slate-300 font-bold truncate flex items-center gap-1 mt-1">
+                                <p className="text-[10px] sm:text-[11px] text-slate-300 font-bold truncate flex items-center gap-1 mt-1">
                                   <span className="text-pink-500">📍</span>
                                   {t._extraShopIds?.length > 0
                                     ? `${shop?.name || ''} 他${t._extraShopIds.length}店舗`

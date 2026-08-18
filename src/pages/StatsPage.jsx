@@ -129,7 +129,7 @@ export default function StatsPage() {
       <div className="max-w-3xl mx-auto px-4 pt-20 pb-24 space-y-6">
         {/* パンくず */}
         <nav className="text-xs text-slate-500">
-          <Link to="/" className="hover:text-pink-400">ホーム</Link>
+          <Link to="/" className="hover:text-pink-400 inline-block py-3 -my-3 pr-2">ホーム</Link>
           <span className="mx-1.5">›</span>
           <span className="text-slate-300">メンズエステ統計 2026</span>
         </nav>
@@ -356,7 +356,7 @@ export default function StatsPage() {
               <p>本ページの数字は自由に引用いただけます。引用の際は出典として「メンエスマップ調べ」および本ページURL（<span className="text-slate-300">{CITE_URL}</span>）の明記をお願いします。各セクションの「引用」ボタンで出典付きテキストをコピーできます。</p>
               <p className="text-slate-500">※ 数字は当サイト掲載データからの実測値です（{asOf}時点・掲載{num(coverage.totalShops)}店舗）。料金はデータを掲載している{num(coverage.priceSampleShops)}店舗のみを対象に集計しており、実際の店舗料金とは異なる場合があります。推計値は含みません。</p>
               <p className="text-slate-500">※ 都道府県別・エリア別の掲載店舗数は<b className="text-slate-400">当サイトの収集状況</b>を反映した数字であり、その地域の実際の店舗総数ではありません。東京・関東圏は網羅的に、その他の地域は主要店舗を中心に収集しています。地域間の多寡を比較する統計としては使えません。</p>
-              <p className="text-slate-500">※ 掲載内容の誤り・削除のご依頼は<Link to="/contact" className="text-pink-400 hover:underline">お問い合わせ</Link>からお願いします。</p>
+              <p className="text-slate-500">※ 掲載内容の誤り・削除のご依頼は<Link to="/contact" className="text-pink-400 hover:underline inline-block py-3 -my-3 px-1">お問い合わせ</Link>からお願いします。</p>
             </div>
 
             {/* 回遊導線（内部リンク＝PageRankを本命ページへ） */}

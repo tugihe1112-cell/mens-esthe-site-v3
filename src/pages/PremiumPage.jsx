@@ -23,7 +23,7 @@ export default function PremiumPage() {
         noindex
       />
       <Header />
-      <div className="max-w-2xl mx-auto p-4 md:p-6 mt-10">
+      <div className="max-w-2xl mx-auto px-4 md:px-6 pt-24 pb-10">
         <div className="bg-slate-900/60 backdrop-blur rounded-3xl p-8 md:p-12 border border-white/10 text-center">
 
           <div className="w-16 h-16 bg-slate-800 border border-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6">

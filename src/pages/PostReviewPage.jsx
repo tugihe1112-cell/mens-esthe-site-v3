@@ -107,7 +107,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
   const isNoneSelected = !selectedTherapistId && !customMode;
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <SeoHead title="口コミを投稿" noindex />
       <div>
         <h2 className="text-xl font-black text-white tracking-tight mb-1">店舗・セラピストを選択</h2>
@@ -314,7 +314,7 @@ const Step2_Rating = () => {
   const totalScore = (Object.values(ratings).reduce((a, b) => a + b, 0) / 6).toFixed(1);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center relative">
          <div className="w-24 h-24 mx-auto bg-slate-900/80 rounded-full flex items-center justify-center border-4 border-slate-800 shadow-2xl mb-4 relative z-10">
             <span className={`text-4xl font-black ${totalScore >= 4.5 ? 'text-pink-500' : totalScore >= 3.0 ? 'text-white' : 'text-slate-400'}`}>
@@ -378,7 +378,7 @@ const Step3_Story = ({ onMilestone }) => {
   }, [onMilestone, reached200, reached700, totalChars]);
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
        <div className="text-center">
         <h2 className="text-xl font-black text-white tracking-tight mb-1">体験談を書く</h2>
         <p className="text-slate-500 text-sm">あなたの体験を日記のように記録しましょう</p>
@@ -453,7 +453,7 @@ const Step4_Confirm = ({ isSubmitting }) => {
   const therapistLabel = therapistName || (therapistId ? null : '指名なし');
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center">
         <h2 className="text-xl font-black text-white tracking-tight mb-1">投稿内容の確認</h2>
         <p className="text-slate-500 text-sm">この内容で投稿しますか？</p>
@@ -755,25 +755,53 @@ export default function PostReviewPage() {
 
   return (
     <FormProvider {...methods}>
-      <div className="min-h-screen bg-slate-950 text-slate-200 font-sans">
+      {/* 🐛 横はみ出しの真因（2026-08-17 実測で特定）:
+             各ステップのラッパーに `slide-in-from-right-8` が付いていた。これは中身を
+             **X方向に32px** ずらすアニメーションで、要素は既に横幅いっぱい(370px)のため
+             右端が 402+16px となりページが横スクロール可能になっていた。
+             実機ではスクロール時に右へずれ、本文の左端（「全」国1,098店舗… の「全」）が切れる。
+             → 縦方向の `slide-in-from-bottom-4` に変更（見た目はほぼ同じ・横には広がらない）。
+             overflow-x-clip はあくまで保険で、原因はこちら。 */}
+      <div className="min-h-screen bg-slate-950 text-slate-200 font-sans overflow-x-clip">
         <Toaster position="top-center" />
         <Header />
-        <div className="pt-24 pb-32">
+        {/* ⚠️ 下端の余白（2026-08-17 修正）: 主CTA「次へ進む」は fixed bottom-0 で、
+            実測の占有高は p-6(48) + py-4(32) + 行高(28) ≒ 108px。従来 pb-32(128px) では
+            iPhone のホームバー領域(env safe-area ≒ 34px)を足すと足りず、最後のスライダーに
+            ボタンが被って押しにくかった。CTAの高さぶん + safe-area を確実に確保する。 */}
+        {/* ⚠️ 余白はCTAが出ているステップだけ確保する。
+            ステップ4（確認画面）は fixed CTA が無いので、同じ余白を付けると
+            今日ちょうどホームで潰したのと同じ「謎の空白」を再発させてしまう。 */}
+        <div
+          className="pt-24"
+          style={{
+            paddingBottom: currentStep < TOTAL_STEPS
+              ? 'calc(9.5rem + env(safe-area-inset-bottom, 0px))'
+              : 'calc(3rem + env(safe-area-inset-bottom, 0px))',
+          }}
+        >
           <ProgressBar current={currentStep} total={TOTAL_STEPS} />
 
           <div className="max-w-2xl mx-auto px-4">
-              {/* Nav Header */}
-              <div className="flex items-center justify-between mb-8">
+              {/* Nav Header
+                  ⚠️ min-w-0 と text-right: 「1 / 4 ステップ あと3ステップで完了」は
+                     狭い端末で折り返せずに親を押し広げ、横スクロールの一因になっていた。 */}
+              <div className="flex items-center justify-between gap-3 mb-8">
                 <button
                   type="button"
                   onClick={currentStep > 1 ? prevStep : () => navigate(-1)}
-                  className="text-slate-400 hover:text-white text-xs font-bold flex items-center gap-1 transition"
+                  className="shrink-0 text-slate-400 hover:text-white text-xs font-bold flex items-center gap-1 transition"
                 >
                   <span>←</span> {currentStep > 1 ? '戻る' : 'キャンセル'}
                 </button>
-                <span className="text-slate-500 font-bold text-xs">
+                <span className="min-w-0 text-right text-slate-500 font-bold text-xs leading-tight">
                   {currentStep} / {TOTAL_STEPS} ステップ
-                  {currentStep < TOTAL_STEPS && <span className="text-pink-400 ml-1.5">あと{TOTAL_STEPS - currentStep}ステップで完了</span>}
+                  {/* 「で完了」はスマホでは省く＝1行に収める */}
+                  {currentStep < TOTAL_STEPS && (
+                    <span className="text-pink-400 ml-1.5 whitespace-nowrap">
+                      あと{TOTAL_STEPS - currentStep}ステップ<span className="hidden sm:inline">で完了</span>
+                    </span>
+                  )}
                 </span>
               </div>
 
@@ -793,10 +821,17 @@ export default function PostReviewPage() {
                 {currentStep === 4 && <Step4_Confirm isSubmitting={isSubmitting} />}
               </form>
               
-              {/* Footer Nav */}
-              {currentStep < 4 && (
-                <div className="fixed bottom-0 left-0 w-full p-6 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent z-50 flex justify-center pointer-events-none">
-                  <button 
+              {/* Footer Nav
+                  ⚠️ 条件は上の paddingBottom と必ず同じ式にすること。
+                     片方が `< 4`、もう片方が `< TOTAL_STEPS` のようにズレると、
+                     CTAが無いのに余白だけ残る（謎の空白）／余白が無いのにCTAが被る、
+                     のどちらかが必ず起きる。 */}
+              {currentStep < TOTAL_STEPS && (
+                <div
+                  className="fixed bottom-0 left-0 w-full px-4 pt-6 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent z-50 flex justify-center pointer-events-none"
+                  style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}
+                >
+                  <button
                     type="button"
                     onClick={nextStep}
                     className="pointer-events-auto w-full max-w-md py-4 rounded-2xl font-black text-lg shadow-xl bg-white text-slate-900 hover:bg-slate-200 transition-all transform active:scale-95 flex items-center justify-center gap-2"

@@ -17,7 +17,7 @@ export default function RecentlyViewed() {
           </h3>
           <button
             onClick={clearHistory}
-            className="text-xs font-bold text-slate-500 hover:text-pink-400 transition"
+            className="text-xs font-bold text-slate-500 hover:text-pink-400 transition py-3 -my-3 pl-3"
           >
             履歴を消す
           </button>
@@ -55,9 +55,9 @@ export default function RecentlyViewed() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                 <div className="absolute bottom-1.5 left-2 right-2">
                   <p className="text-white font-black text-[11px] leading-tight truncate [text-shadow:0_1px_4px_rgba(0,0,0,0.9)]">{item.name}</p>
-                  {item.subText && <p className="text-pink-300 text-[9px] truncate mt-0.5">{item.subText}</p>}
+                  {item.subText && <p className="text-pink-300 text-[10px] truncate mt-0.5">{item.subText}</p>}
                 </div>
-                <div className={`absolute top-1.5 left-1.5 text-[9px] font-black px-1.5 py-0.5 rounded-full backdrop-blur-sm ${item.type === 'shop' ? 'bg-blue-600/90 text-white' : 'bg-pink-600/90 text-white'}`}>
+                <div className={`absolute top-1.5 left-1.5 text-[10px] font-black px-1.5 py-0.5 rounded-full backdrop-blur-sm ${item.type === 'shop' ? 'bg-blue-600/90 text-white' : 'bg-pink-600/90 text-white'}`}>
                   {item.type === 'shop' ? '店舗' : 'セラピスト'}
                 </div>
               </div>

@@ -228,7 +228,10 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
     //    BottomNav ぶんの余白は Footer 側の pb-20 md:pb-0 が既に持っているのに、
     //    ここでも 112px 取っていたため、最後のセクションとフッターの間に
     //    112 + Footer の mt-80 = 約200px の説明のつかない黒い空白ができていた。
-    <div className="min-h-screen bg-slate-950 pb-6 md:pb-10 overflow-x-hidden font-sans text-slate-200">
+    // ⚠️ overflow-x-hidden → **clip** に変更（2026-08-17）。
+    //    hidden はこのdivをスクロールコンテナにするため、中にある
+    //    サイドバーの `sticky top-4` がビューポート基準で効かなくなっていた。
+    <div className="min-h-screen bg-slate-950 pb-6 md:pb-10 overflow-x-clip font-sans text-slate-200">
       <SeoHead
         title="メンズエステ検索・口コミ"
         description={`メンエスマップは全国${Number(siteStats.coverage?.totalShops || 0).toLocaleString()}店舗・在籍${Number(siteStats.coverage?.totalTherapists || 0).toLocaleString()}人のメンズエステを掲載。セラピスト別の口コミ・出勤スケジュール・料金を検索できるポータルサイトです。掲載店舗から広告費・掲載料は一切受け取っていません。`}
@@ -275,7 +278,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
                 <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">最新の実体験口コミ</h3>
                 <p className="mt-1 text-xs font-medium text-slate-400">来店情報と評価を確認してから本文を読めます</p>
               </div>
-              <Link to="/popular-reviews" className="text-xs font-bold text-pink-400 hover:text-pink-300 transition">もっと見る →</Link>
+              <Link to="/popular-reviews" className="text-xs font-bold text-pink-400 hover:text-pink-300 transition py-3 -my-3 pl-3">もっと見る →</Link>
             </div>
 
             {leadReview && (
@@ -437,7 +440,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
             <h3 className="text-xl md:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
               <span className="text-2xl">💃</span> 注目セラピスト
             </h3>
-            <Link to="/search" className="text-xs text-slate-400 font-bold hover:text-white transition">もっと見る</Link>
+            <Link to="/search" className="text-xs text-slate-400 font-bold hover:text-white transition py-3 -my-3 pl-3">もっと見る</Link>
           </div>
           {loading || featuredTherapists.length === 0 ? (
             /* スケルトン: 横スクロール */
@@ -472,7 +475,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                       <div className="absolute bottom-2 left-2 right-2">
                         <p className="text-white font-black text-xs leading-tight [text-shadow:0_1px_4px_rgba(0,0,0,0.9)] truncate">{t.name}</p>
-                        {shop && <p className="text-pink-300 text-[9px] truncate mt-0.5">{getDisplayName(shop.name)}</p>}
+                        {shop && <p className="text-pink-300 text-[10px] truncate mt-0.5">{getDisplayName(shop.name)}</p>}
                       </div>
                     </div>
                   </Link>
@@ -488,7 +491,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
               <h3 className="text-xl md:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
                 <span className="text-2xl">✨</span> 新着店舗
               </h3>
-              <Link to="/shops" className="text-xs text-slate-400 font-bold hover:text-white transition">もっと見る</Link>
+              <Link to="/shops" className="text-xs text-slate-400 font-bold hover:text-white transition py-3 -my-3 pl-3">もっと見る</Link>
           </div>
 
           {loading ? (

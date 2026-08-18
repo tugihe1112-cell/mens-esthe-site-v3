@@ -187,7 +187,7 @@ export default function RankingSection() {
                  <div className="text-lg font-black text-pink-500 leading-none">
                    {item[`avg_${rankingTab}`].toFixed(1)}
                  </div>
-                 <div className="text-[9px] text-slate-500 font-bold mt-0.5">{item.count}件</div>
+                 <div className="text-[10px] text-slate-500 font-bold mt-0.5">{item.count}件</div>
                </div>
                
                <div className="text-slate-700 group-hover:text-pink-500 transition-colors px-2">›</div>

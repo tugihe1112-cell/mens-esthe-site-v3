@@ -90,10 +90,10 @@ export default function AreaSearchPage() {
       <div className="pt-24 px-4 pb-8 max-w-7xl mx-auto">
         <div className="text-center mb-10 animate-in slide-in-from-top-4 duration-700">
           <h1 className="text-4xl md:text-6xl font-black text-white mb-2 tracking-tighter drop-shadow-lg">
-            NIGHT <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">CITY</span> GUIDE
+            エリアから<span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">探す</span>
           </h1>
-          <p className="text-slate-400 font-bold tracking-[0.3em] text-xs md:text-sm uppercase">
-            Select Your Destination
+          <p className="text-slate-400 font-bold text-xs md:text-sm">
+            都道府県・エリアを選んでください
           </p>
         </div>
 
@@ -120,7 +120,7 @@ export default function AreaSearchPage() {
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition duration-300">
                   <div className="flex flex-wrap gap-1 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
                     {area.tags.map(tag => (
-                      <span key={tag} className="text-[9px] font-bold bg-white/20 backdrop-blur px-2 py-0.5 rounded text-white border border-white/10">
+                      <span key={tag} className="text-[10px] font-bold bg-white/20 backdrop-blur px-2 py-0.5 rounded text-white border border-white/10">
                         {tag}
                       </span>
                     ))}

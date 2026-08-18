@@ -73,7 +73,7 @@ export default function RegisterPage() {
               JOIN <span className="text-pink-500">VIP</span>
             </h1>
           </Link>
-          <p className="text-slate-300 font-bold tracking-[0.2em] text-[10px] uppercase opacity-80">Create New Account</p>
+          <p className="text-slate-300 font-bold text-xs opacity-90">新規会員登録</p>
         </div>
 
         {/* Glass Card */}
@@ -96,24 +96,30 @@ export default function RegisterPage() {
               </div>
             )}
 
+            {/* ⚠️ 2026-08-17 修正: ラベルが英語＋9px、しかも表示名のプレースホルダが
+                   「山田 太郎」＝**本名の例**だった。この業種で本名入力を誘導するのは危険で、
+                   実際には口コミ投稿者名として公開される項目。ニックネーム例に変更し、
+                   「公開される」ことをその場で明示する。登録者2人の段階で、ここは
+                   サイトで最も重要な入口。 */}
             <div className="space-y-1 group">
-              <label className="text-[9px] font-black text-slate-400 ml-2 tracking-widest group-focus-within:text-pink-400 transition">USERNAME</label>
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3.5 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold shadow-inner" placeholder="山田 太郎" />
+              <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">表示名（ニックネーム）</label>
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3.5 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold shadow-inner" placeholder="例）メンエス浪人" />
+              <p className="text-[11px] text-slate-500 ml-2 leading-relaxed">口コミの投稿者名として公開されます。本名は避けてください</p>
             </div>
 
             <div className="space-y-1 group">
-              <label className="text-[9px] font-black text-slate-400 ml-2 tracking-widest group-focus-within:text-pink-400 transition">EMAIL</label>
+              <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">メールアドレス</label>
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3.5 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold shadow-inner" placeholder="example@email.com" />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1 group">
-                <label className="text-[9px] font-black text-slate-400 ml-2 tracking-widest group-focus-within:text-pink-400 transition">PASSWORD</label>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3.5 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold shadow-inner" placeholder="8+ chars" />
+              <div className="space-y-1 group min-w-0">
+                <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">パスワード</label>
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3.5 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold shadow-inner" placeholder="8文字以上" />
               </div>
-              <div className="space-y-1 group">
-                <label className="text-[9px] font-black text-slate-400 ml-2 tracking-widest group-focus-within:text-pink-400 transition">CONFIRM</label>
-                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full p-3.5 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold shadow-inner" placeholder="Re-type" />
+              <div className="space-y-1 group min-w-0">
+                <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">パスワード（確認）</label>
+                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full p-3.5 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold shadow-inner" placeholder="もう一度入力" />
               </div>
             </div>
 
@@ -122,25 +128,25 @@ export default function RegisterPage() {
                 <input id="terms" type="checkbox" checked={agreeToTerms} onChange={(e) => setAgreeToTerms(e.target.checked)} className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-pink-600 focus:ring-pink-500" />
               </div>
               <label htmlFor="terms" className="ml-3 text-xs text-slate-400 font-medium leading-5">
-                <Link to="/terms" className="text-pink-400 hover:underline">利用規約</Link> と <Link to="/privacy" className="text-pink-400 hover:underline">プライバシーポリシー</Link> に同意する
+                <Link to="/terms" className="text-pink-400 hover:underline inline-block py-3 -my-3 px-1">利用規約</Link> と <Link to="/privacy" className="text-pink-400 hover:underline inline-block py-3 -my-3 px-1">プライバシーポリシー</Link> に同意する
               </label>
             </div>
 
             <button type="submit" disabled={isLoading} className="w-full py-4 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-black text-lg shadow-lg shadow-pink-900/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/10 mt-2">
-              {isLoading ? "登録中..." : "CREATE ACCOUNT"}
+              {isLoading ? "登録中..." : "無料で登録する"}
             </button>
           </form>
           )}
 
           <div className="mt-6 text-center pt-2 border-t border-white/5">
             <p className="text-sm text-slate-400 font-medium">
-              Already have an account? <Link to="/login" className="text-pink-400 font-bold hover:text-white transition ml-1 border-b border-pink-400/30 hover:border-white pb-0.5">Login Here</Link>
+              すでにアカウントをお持ちの方は<Link to="/login" className="text-pink-400 font-bold hover:text-white transition ml-1 border-b border-pink-400/30 hover:border-white inline-block py-3 -my-3 px-1">ログイン</Link>
             </p>
           </div>
         </div>
         
         <div className="mt-6 text-center">
-          <Link to="/" className="text-[10px] text-slate-500 hover:text-white transition font-bold tracking-widest uppercase">← Back to Home</Link>
+          <Link to="/" className="text-xs text-slate-500 hover:text-white transition font-bold inline-block py-3 -my-3 px-3">← ホームに戻る</Link>
         </div>
       </div>
       <style>{`

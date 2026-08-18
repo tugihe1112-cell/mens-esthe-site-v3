@@ -48,7 +48,11 @@ export default function Header() {
   };
 
   // トップページなど、初期状態で背景を透過させたいページ
-  const isTransparentPage = ['/', '/shops/', '/login', '/register'].some(path => location.pathname === path || location.pathname.startsWith(path));
+  // ⚠️ /ranking と /brands/ を追加（2026-08-17）:
+  //    この2ページも `h-[40vh]` のシネマティック・ヒーローを持つのに透過リストから漏れており、
+  //    不透明なヘッダーがヒーローの上端を覆って「板が乗っている」ように見えていた。
+  //    ヒーローを持つページは透過にする、というのがこのサイトの一貫した設計。
+  const isTransparentPage = ['/', '/shops/', '/login', '/register', '/ranking', '/brands/'].some(path => location.pathname === path || location.pathname.startsWith(path));
 
   return (
     <>

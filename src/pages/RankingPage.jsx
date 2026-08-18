@@ -64,14 +64,14 @@ export default function RankingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-slate-950"></div>
         
         <div className="relative z-10 text-center px-4 pt-10">
-           <span className="inline-block px-4 py-1 rounded-full border border-pink-500/30 bg-pink-500/10 text-pink-400 text-xs font-bold tracking-[0.3em] mb-4 backdrop-blur-md animate-in fade-in slide-in-from-bottom-4 duration-700">
-             OFFICIAL RANKING
+           <span className="inline-block px-4 py-1 rounded-full border border-pink-500/30 bg-pink-500/10 text-pink-400 text-xs font-bold tracking-wider mb-4 backdrop-blur-md animate-in fade-in slide-in-from-bottom-4 duration-700">
+             口コミ評価ランキング
            </span>
            <h1 className="text-4xl md:text-7xl font-black text-white tracking-tighter drop-shadow-2xl mb-2 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-             HALL OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">FAME</span>
+             人気<span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">ランキング</span>
            </h1>
-           <p className="text-slate-400 text-sm font-bold tracking-widest uppercase animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-             Top Rated Therapists & Shops
+           <p className="text-slate-400 text-sm font-bold animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+             口コミ評価の高いセラピスト・店舗
            </p>
         </div>
       </div>
@@ -96,7 +96,7 @@ export default function RankingPage() {
                  >
                    <div className="flex flex-col items-center">
                      <span>{tab.label}</span>
-                     <span className={`text-[9px] font-normal mt-0.5 transition ${isActive ? 'opacity-70' : 'opacity-0 group-hover:opacity-50'}`}>
+                     <span className={`text-[10px] font-normal mt-0.5 transition ${isActive ? 'opacity-70' : 'opacity-0 group-hover:opacity-50'}`}>
                        {tab.sub}
                      </span>
                    </div>

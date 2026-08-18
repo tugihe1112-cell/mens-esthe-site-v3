@@ -129,7 +129,7 @@ export default function HomeReviewCard({ r, variant = 'small', position, pref })
         if (!v) return null;
         return (
           <div key={k} className="flex items-center gap-1.5">
-            <span className="text-[9px] text-slate-500 w-9 shrink-0">{label}</span>
+            <span className="text-[10px] text-slate-500 w-10 shrink-0">{label}</span>
             <div className="flex-1 h-1 rounded-full bg-slate-800 overflow-hidden">
               <div className={`h-full rounded-full bg-gradient-to-r ${ratingGradientClass(v)}`} style={{ width: `${Math.min((v / 5) * 100, 100)}%` }} />
             </div>
