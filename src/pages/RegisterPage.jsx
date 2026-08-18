@@ -68,12 +68,20 @@ export default function RegisterPage() {
         
         {/* Header */}
         <div className="text-center mb-8">
-           <Link to="/" className="inline-block group">
+          {/* ⚠️ 2026-08-18: 見出しが `JOIN VIP` だった。日本語サイトに英語という以前に、
+                 **VIPという会員種別は実在しない**（プレミアムは準備中で価格表示も外してある）。
+                 入口で無いものを約束しないこと。ブランド名に統一し、
+                 副題には実際に得られるもの（登録で3日間の閲覧権＝api/auth/signup.js の credits_days:3）を書く。
+                 h1 は <Link to="/"> でロゴ兼ホーム導線を兼ねているので構造は変えない。 */}
+          <Link to="/" className="inline-block group">
             <h1 className="text-4xl font-black mb-2 text-white tracking-tighter drop-shadow-2xl group-hover:text-pink-100 transition">
-              JOIN <span className="text-pink-500">VIP</span>
+              メンエス<span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">マップ</span>
             </h1>
           </Link>
-          <p className="text-slate-300 font-bold text-xs opacity-90">新規会員登録</p>
+          <p className="text-slate-300 font-bold text-sm">無料会員登録</p>
+          <p className="text-slate-400 text-xs mt-1.5 leading-relaxed">
+            登録するだけで<b className="text-pink-300">3日間</b>、口コミが読み放題になります
+          </p>
         </div>
 
         {/* Glass Card */}

@@ -73,12 +73,14 @@ export default function LoginPage() {
         
         {/* Header */}
         <div className="text-center mb-10">
+          {/* ブランド表記はヘッダーのロゴと同じ「メンエスマップ」に統一（2026-08-18）。
+              以前は `MENS ESTHE` で、サイト名とも表記が違っていた。 */}
           <Link to="/" className="inline-block group">
-            <h1 className="text-5xl font-black mb-3 text-white tracking-tighter drop-shadow-2xl group-hover:scale-105 transition duration-500">
-              MENS <span className="text-pink-500">ESTHE</span>
+            <h1 className="text-4xl font-black mb-3 text-white tracking-tighter drop-shadow-2xl group-hover:scale-105 transition duration-500">
+              メンエス<span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">マップ</span>
             </h1>
           </Link>
-          <p className="text-slate-300 font-bold text-xs opacity-90">
+          <p className="text-slate-300 font-bold text-sm">
             ログイン
           </p>
         </div>
