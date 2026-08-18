@@ -498,9 +498,22 @@ const TOTAL_STEPS = 4;
 // 新規登録のメール確認で別タブに遷移しても下書きが生き残るようにlocalStorageを使う。
 // 保存日時を値に持たせ、24時間を過ぎた下書きは破棄する。
 const DRAFT_KEY = 'reviewDraft';
-const DRAFT_TTL = 24 * 60 * 60 * 1000; // 24h
-function saveDraft(data) {
-  try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ savedAt: Date.now(), data })); } catch { /* noop */ }
+// ⚠️ 24h → 7日に延長（2026-08-18）。700字の体験談は一度で書き切らず、
+//    数日空けて続きを書くことがある。1日で消えるとその離脱が全部無駄になる。
+const DRAFT_TTL = 7 * 24 * 60 * 60 * 1000;
+
+/**
+ * @param {object} data  フォームの値
+ * @param {number} step  保存時点のステップ（復元時に同じ場所へ戻すため）
+ * @param {boolean} pendingPublish
+ *   true = 「公開ボタンを押したが未ログインだったのでログインへ送った」状態。
+ *   この場合だけ復元時に確認画面(Step4)へ自動で飛ばす（ユーザーは公開する意思で戻ってくるため）。
+ *   false = 単なる書きかけ。勝手に飛ばさず「続きから書く／破棄」を選ばせる。
+ */
+function saveDraft(data, step = 1, pendingPublish = false) {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({ savedAt: Date.now(), step, pendingPublish, data }));
+  } catch { /* 容量超過等。保存できなくても入力は継続させる */ }
 }
 function loadDraft() {
   try {
@@ -508,8 +521,20 @@ function loadDraft() {
     if (!raw) return null;
     const obj = JSON.parse(raw);
     if (!obj || !obj.savedAt || (Date.now() - obj.savedAt) > DRAFT_TTL) { localStorage.removeItem(DRAFT_KEY); return null; }
-    return obj.data || null;
+    if (!obj.data) return null;
+    return obj; // { savedAt, step, pendingPublish, data }
   } catch { return null; }
+}
+/** 空の下書きを保存しないための判定。何も書いていない状態で復元バナーを出すと邪魔なだけ。 */
+function hasDraftContent(v) {
+  if (!v) return false;
+  if (v.shopId || v.therapistId || v.therapistName) return true;
+  return Object.values(v.story || {}).some((t) => (t || '').trim().length > 0);
+}
+/** 「保存: 8/18 18:42」の表記 */
+function formatSavedAt(ts) {
+  const d = new Date(ts);
+  return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
 function clearDraft() {
   try { localStorage.removeItem(DRAFT_KEY); } catch { /* noop */ }
@@ -557,16 +582,70 @@ export default function PostReviewPage() {
     }
   }, [effectiveShopId, paramThreadId, shops, methods]);
 
-  // 下書き復元（公開時ログインの往復から戻ってきた時・別タブのメール確認を跨いでも生存）
+  // ── 下書き（2026-08-18 全面改修）───────────────────────────────
+  // 従来は「公開ボタンを押して未ログインだった時」だけ保存しており、
+  // **書いている途中で離脱すると700字書いていても全部消えた**。
+  // 自動保存に変更し、保存されたことをユーザーに見せる。
+  const [draftPrompt, setDraftPrompt] = useState(null); // 書きかけがある時に出すバナー
+  const [draftSavedAt, setDraftSavedAt] = useState(null); // 「保存しました」表示用
+  const stepRef = useRef(1);
+  useEffect(() => { stepRef.current = currentStep; }, [currentStep]);
+
+  // 復元
   useEffect(() => {
-    const data = loadDraft();
-    if (!data) return;
-    methods.reset(data);
-    if (data.shopId) setSelectedShopId(data.shopId);
-    setCurrentStep(4); // 確認ステップへ
-    toast.success('下書きを復元しました。投稿を完了してください', { duration: 4000 });
+    const d = loadDraft();
+    if (!d) return;
+    if (d.pendingPublish) {
+      // 公開する意思でログインから戻ってきた ＝ 迷わせず確認画面へ
+      methods.reset(d.data);
+      if (d.data.shopId) setSelectedShopId(d.data.shopId);
+      setCurrentStep(TOTAL_STEPS);
+      toast.success('下書きを復元しました。投稿を完了してください', { duration: 4000 });
+    } else {
+      // 単なる書きかけ ＝ 勝手に画面を飛ばさず、本人に選ばせる
+      setDraftPrompt(d);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // 初回マウントのみ
+
+  // 🐛 競合の回避（重要）: 投稿成功時に clearDraft() しても、debounce 中の自動保存が
+  //    その1秒後に発火して下書きを**書き戻して**しまう。結果、投稿済みなのに次回訪問で
+  //    「書きかけの口コミがあります」が出る。保存を止めるフラグで塞ぐ。
+  const draftDisabledRef = useRef(false);
+
+  // 自動保存（入力が止まって1秒後に保存＝毎キーストロークで書き込まない）
+  useEffect(() => {
+    let timer;
+    const sub = methods.watch((values) => {
+      if (draftDisabledRef.current) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (draftDisabledRef.current) return;
+        if (!hasDraftContent(values)) return;
+        saveDraft(values, stepRef.current, false);
+        setDraftSavedAt(Date.now());
+      }, 1000);
+    });
+    return () => { clearTimeout(timer); sub?.unsubscribe?.(); };
+  }, [methods]);
+
+  const resumeDraft = () => {
+    if (!draftPrompt) return;
+    methods.reset(draftPrompt.data);
+    if (draftPrompt.data.shopId) setSelectedShopId(draftPrompt.data.shopId);
+    setCurrentStep(Math.min(Math.max(draftPrompt.step || 1, 1), TOTAL_STEPS));
+    setDraftSavedAt(draftPrompt.savedAt);
+    setDraftPrompt(null);
+    toast.success('前回の続きから再開します', { duration: 3000 });
+  };
+  const discardDraft = () => {
+    clearDraft();
+    setDraftPrompt(null);
+    setDraftSavedAt(null);
+    toast('下書きを破棄しました', { duration: 2500 });
+    // ⚠️ ここでは draftDisabledRef を立てない。破棄はあくまで「前回の書きかけを捨てる」であり、
+    //    これから書く内容は保存されてほしいため。
+  };
 
   // 測定: 投稿フロー開始（Step1到達）— A系改修の投稿ファネル比較用
   useEffect(() => {
@@ -651,8 +730,9 @@ export default function PostReviewPage() {
     });
 
     // 未ログインなら下書きを保存してログインへ（書いてから公開時ログイン）
+    // pendingPublish=true ＝ 戻ってきたら確認画面へ自動で飛ばす（公開する意思があるため）
     if (!user) {
-      saveDraft(data);
+      saveDraft(data, TOTAL_STEPS, true);
       toast('ログイン / 無料登録で投稿が完了します 🔑', { duration: 4000 });
       // ⚠️ compat useNavigate は state を渡せない（Next Pages Router）。redirectはクエリで渡す。
       navigate('/login?redirect=%2Fpost-review');
@@ -660,7 +740,10 @@ export default function PostReviewPage() {
     }
     const result = await submitReview(data);
     if (result.success) {
+      // 先にフラグを立ててから消す。逆順だと debounce 中の保存に書き戻される。
+      draftDisabledRef.current = true;
       clearDraft();
+      setDraftSavedAt(null);
       const grantedDays = len >= 700 ? 7 : 3;
       trackEvent('complete_review', { chars: len, granted_days: grantedDays });
       trackEvent('review_published', {
@@ -804,6 +887,48 @@ export default function PostReviewPage() {
                   )}
                 </span>
               </div>
+
+              {/* 書きかけの下書きがある場合のバナー。勝手に復元せず本人に選ばせる。 */}
+              {draftPrompt && (
+                <div className="mb-6 rounded-2xl border border-pink-500/30 bg-pink-500/[0.08] p-4">
+                  <p className="text-sm font-black text-white">書きかけの口コミがあります</p>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    最終保存 {formatSavedAt(draftPrompt.savedAt)}
+                    {(() => {
+                      const chars = Object.values(draftPrompt.data?.story || {}).filter(Boolean).join('').length;
+                      return chars > 0 ? ` ／ ${chars}文字` : '';
+                    })()}
+                  </p>
+                  <div className="flex gap-2 mt-3">
+                    <button
+                      type="button"
+                      onClick={resumeDraft}
+                      className="flex-1 py-3 rounded-xl bg-white text-slate-900 font-black text-sm active:scale-95 transition"
+                    >
+                      続きから書く
+                    </button>
+                    <button
+                      type="button"
+                      onClick={discardDraft}
+                      className="px-4 py-3 rounded-xl border border-white/15 text-slate-300 font-bold text-sm active:scale-95 transition"
+                    >
+                      破棄
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* 自動保存されたことを見せる。これが無いと「保存されているのか」が分からず、
+                  ユーザーは手動の保存ボタンを探してしまう（＝今回の要望の本質）。 */}
+              {/* ⚠️ ここに「破棄」ボタンは置かない。入力中に押されたとき
+                     「今書いている内容も消えるのか」が曖昧で誤操作を招く。
+                     破棄は復元バナー側（＝まだ何も書いていない場面）だけに置く。 */}
+              {draftSavedAt && !draftPrompt && (
+                <p className="mb-4 flex items-center gap-1.5 text-[11px] text-slate-500">
+                  <span className="text-emerald-400 text-[9px]">●</span>
+                  下書きを自動保存しました（{formatSavedAt(draftSavedAt)}）
+                </p>
+              )}
 
               <form onSubmit={methods.handleSubmit(onSubmit)} className="min-h-[60vh]">
                 {currentStep === 1 && (
