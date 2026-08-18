@@ -270,5 +270,33 @@
       "repeatedRows": 0,
       "unrelatedRepeatedGroups": 0
     }
+  },
+  {
+    "schemaVersion": 3,
+    "at": "2026-08-18 23:13:00",
+    "shops": {
+      "total": 1099,
+      "nulls": 79,
+      "nullPct": 7.2,
+      "sampled": 40,
+      "dead": 0,
+      "deadPct": 0
+    },
+    "therapists": {
+      "total": 60882,
+      "nulls": 10062,
+      "nullPct": 16.5,
+      "sampled": 40,
+      "dead": 0,
+      "deadPct": 0
+    },
+    "therapistSemantic": {
+      "checked": 60727,
+      "knownBad": 0,
+      "suspiciousNames": 0,
+      "repeatedGroups": 0,
+      "repeatedRows": 0,
+      "unrelatedRepeatedGroups": 0
+    }
   }
 ]
