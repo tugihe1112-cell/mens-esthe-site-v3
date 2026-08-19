@@ -194,6 +194,22 @@ export default function ShopDetailSSRPage({
         <title>{title}</title>
         <meta name="description" content={description} />
         {canonical && <link rel="canonical" href={canonical} />}
+        {/* 🚩 口コミ0件の店舗ページは noindex,follow（2026-08-19）
+            【根拠】GSCのURL検査API実測（scripts/metrics/index_coverage_probe.mjs）:
+              27URL中インデックスされているのは**トップページ1枚だけ**。
+              /stats も、口コミを投入した3店舗も「Crawled - currently not indexed」＝
+              **Googleが見に来たうえで却下**していた（クロール日 08-05/08-06 ＝口コミ投入後）。
+              サイトマップ1,140URLに対しインデックス51件＝成功率4.4%。
+              ＝「機械収集した薄いページを大量に持つ新規ドメイン」と判定されている。
+            【対処】独自コンテンツ（口コミ）が無いページを索引対象から外し、
+              インデックス対象を約30枚に絞る。提出URLに対する成功率を上げ、
+              サイト全体の品質シグナルを改善する。
+            【失うもの】ゼロ。これらのページの表示回数は現時点で0。
+            【自動復帰】口コミが1件でも付けば ssrReviewCount>0 になり、この行が消えて
+              自動的に索引対象へ戻る。手動運用にすると必ず戻し忘れるため条件式で書く。
+            【follow は残す】リンク先（セラピストページ・同エリア他店）への
+              クロール経路は殺さない。 */}
+        {ssrShop && ssrReviewCount === 0 && <meta name="robots" content="noindex,follow" />}
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         {ssrShop?.image_url && <meta property="og:image" content={ssrShop.image_url} />}
