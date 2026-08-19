@@ -415,6 +415,12 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
               >
                 <span>✍️</span> 最初の口コミを書く
               </button>
+              {/* ⚠️ 投稿ページに入る前の段階で「途中でやめられる」ことを伝える（2026-08-18）。
+                     ここで「700字も書くのか、面倒だ」と思われたらページにすら来ない。
+                     下書き機能は存在するだけでは意味がなく、**着手前に知られている**必要がある。 */}
+              <p className="mt-3 text-[11px] text-slate-400 font-medium">
+                💾 書きかけは自動保存されます。一度に書き切らなくて大丈夫です
+              </p>
             </div>
           )}
         </section>

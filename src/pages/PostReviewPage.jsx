@@ -127,6 +127,19 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
           <p>👤 投稿者名は<span className="text-white">アカウントの表示名</span>（未設定なら「名無しさん」）。本名やメールアドレスは公開されません</p>
           <p>🔓 そのセラピストへの<span className="text-white">最初の口コミは公開</span>されます。2件目以降は非公開で、閲覧権のある方だけが読めます</p>
         </div>
+
+        {/* ⚠️ 下書き機能の「存在」を書き始める前に伝える（2026-08-18・okabayashi指摘）。
+               保存状態の表示は「書いた後の確認」でしかなく、**着手前の不安**は消せない。
+               「700字も書くのか、途中でやめたら無駄になる」と思われた時点で離脱するので、
+               最初に読まれるこの位置で先に約束する。緑＝安心の色で他の注意書きと区別。 */}
+        <div className="mt-2 flex items-start gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.07] px-3 py-2.5">
+          <span className="text-base leading-none mt-0.5">💾</span>
+          <p className="text-xs font-medium leading-relaxed text-slate-300">
+            <span className="font-black text-emerald-300">書きかけは自動で保存されます。</span>
+            <br className="sm:hidden" />
+            途中でやめて閉じても、次に開いたときに続きから書けます（7日間）
+          </p>
+        </div>
       </div>
 
       <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl">
@@ -382,6 +395,16 @@ const Step3_Story = ({ onMilestone }) => {
        <div className="text-center">
         <h2 className="text-xl font-black text-white tracking-tight mb-1">体験談を書く</h2>
         <p className="text-slate-500 text-sm">あなたの体験を日記のように記録しましょう</p>
+      </div>
+
+      {/* ⚠️ ここが最も離脱する場所（700字という量を目の当たりにする瞬間）。
+             「一度に書き切らなくていい」と明示しないと、着手そのものを諦められる。 */}
+      <div className="flex items-start gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.07] px-3 py-2.5">
+        <span className="text-base leading-none mt-0.5">💾</span>
+        <p className="text-xs font-medium leading-relaxed text-slate-300">
+          <span className="font-black text-emerald-300">一度に書き切らなくて大丈夫です。</span>
+          入力は自動保存されるので、途中で閉じても続きから書けます
+        </p>
       </div>
 
       {/* 達成メーター（0→200字=3日→700字=7日の2段ゴール。しきい値通過でマイルストーンが点灯） */}
