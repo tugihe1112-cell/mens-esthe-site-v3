@@ -233,8 +233,10 @@ export const DataProvider = ({ children }) => {
       throw e;
     }
 
-    // 保存に成功したときだけ画面に反映する
-    setReviews(prev => [newReview, ...prev]);
+    // 保存に成功したときだけ画面に反映する。
+    // 生成したIDは管理者通知の深いリンクに使うため呼び出し元へ返す。
+    setReviews(prev => [{ ...newReview, id: reviewId }, ...prev]);
+    return reviewId;
   }, []);
 
   const shopById = useMemo(() => {

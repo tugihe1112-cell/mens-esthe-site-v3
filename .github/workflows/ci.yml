@@ -51,6 +51,10 @@ jobs:
       - name: Guard - therapist image quality rules
         run: node scripts/ci/check_therapist_image_quality.mjs
 
+      # メールアプリ内で未ログインでも、ログイン後に対象口コミへ戻れることを保証。
+      - name: Guard - admin review notification deep link
+        run: node scripts/ci/check_admin_review_notification.mjs
+
       - name: Install deps
         run: npm install --legacy-peer-deps
 

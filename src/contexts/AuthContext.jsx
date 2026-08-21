@@ -54,7 +54,18 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const signUp = (email, password) => supabase.auth.signUp({ email, password });
-  const signIn = (email, password) => supabase.auth.signInWithPassword({ email, password });
+  const signIn = async (email, password) => {
+    const result = await supabase.auth.signInWithPassword({ email, password });
+    // onAuthStateChangeの発火を待ってからページ遷移する実装だけに依存すると、
+    // メール→ログイン→/admin の直後に user=null が一瞬見え、
+    // 再びログイン画面へ戻される競合が起きうる。成功結果を即時反映する。
+    if (!result.error && result.data?.user) {
+      setUser(result.data.user);
+      setLoading(false);
+      await fetchProfile(result.data.user.id);
+    }
+    return result;
+  };
   const signOut = async () => {
     setUserPlan('free'); // ログアウト時にプランをリセット
     await supabase.auth.signOut();

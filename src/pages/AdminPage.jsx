@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { authHeaders } from '../utils/supabaseRest';
-import { useNavigate, Link } from '../compat/router';
+import { useNavigate, useLocation, Link } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { supabase } from '../lib/supabase.js';
 import LazyImage from '../components/LazyImage.jsx';
@@ -9,6 +9,7 @@ import SeoHead from '../components/SeoHead.jsx';
 // ⚠️ 2026-08-12: 'master@mens-esthe.jp' を削除（詳細は api/admin-grant-credit.js のコメント参照）。
 //    所有していないドメインのアドレスを管理者リストに入れてはいけない。
 const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
+const SCRAPED_IDS = ['owner_manual', 'menesthe_import', 'menesthe_rewritten', 'mensest_user'];
 
 const url = process.env.VITE_SUPABASE_URL;
 const key = process.env.VITE_SUPABASE_ANON_KEY;
@@ -207,8 +208,16 @@ function ShopEditModal({ shop, onClose, onSave }) {
 
 // ─── メインコンポーネント ───────────────────────────
 export default function AdminPage() {
-  const { user } = useAuth();
+  const { user, loading: isAuthLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const requestedReviewId = useMemo(() => {
+    const value = new URLSearchParams(location.search || '').get('review');
+    return value && value.length <= 200 ? value : null;
+  }, [location.search]);
+  const intendedAdminPath = requestedReviewId
+    ? `/admin?review=${encodeURIComponent(requestedReviewId)}`
+    : '/admin';
 
   const [activeTab, setActiveTab] = useState('reviews');
 
@@ -219,6 +228,9 @@ export default function AdminPage() {
   const [grantedIds, setGrantedIds] = useState(new Set());
   const [expandedId, setExpandedId] = useState(null);
   const [sortBy, setSortBy] = useState('new');
+  const [linkedReviewStatus, setLinkedReviewStatus] = useState(requestedReviewId ? 'loading' : null);
+  const reviewElementsRef = useRef(new Map());
+  const handledReviewIdRef = useRef(null);
 
   // クレジット
   const [credits, setCredits] = useState([]);
@@ -231,15 +243,21 @@ export default function AdminPage() {
 
   // 管理者チェック
   useEffect(() => {
-    if (user === null) return;
-    if (!user || !ADMIN_EMAILS.includes(user.email)) navigate('/');
-  }, [user, navigate]);
+    // メールアプリ内ブラウザは管理者セッションを持たないことが多い。
+    // 認証確定前の user=null と未ログインを区別し、後者は必ずログインへ送る。
+    if (isAuthLoading) return;
+    if (!user) {
+      navigate(`/login?redirect=${encodeURIComponent(intendedAdminPath)}`, { replace: true });
+      return;
+    }
+    if (!ADMIN_EMAILS.includes(user.email)) navigate('/', { replace: true });
+  }, [isAuthLoading, user, navigate, intendedAdminPath]);
 
   useEffect(() => {
-    if (!user || !ADMIN_EMAILS.includes(user.email)) return;
+    if (isAuthLoading || !user || !ADMIN_EMAILS.includes(user.email)) return;
     fetchReviews();
     fetchCredits();
-  }, [user]);
+  }, [isAuthLoading, user, requestedReviewId]);
 
   useEffect(() => {
     if (activeTab === 'shops' && shops.length === 0) fetchShops();
@@ -248,13 +266,53 @@ export default function AdminPage() {
   const fetchReviews = async () => {
     setIsLoadingReviews(true);
     try {
-      const res = await fetch(`${url}/rest/v1/reviews?select=*&order=created_at.desc&limit=200`, { headers: await authHeaders() });
+      const headers = await authHeaders();
+      const res = await fetch(`${url}/rest/v1/reviews?select=*&order=created_at.desc&limit=200`, { headers });
       const data = await res.json();
-      if (Array.isArray(data)) setReviews(data);
+      if (!Array.isArray(data)) return;
+
+      // 通知メールから開いた口コミが将来200件より古くなっても直リンクを壊さない。
+      if (requestedReviewId && !data.some((review) => String(review.id) === requestedReviewId)) {
+        const targetRes = await fetch(
+          `${url}/rest/v1/reviews?select=*&id=eq.${encodeURIComponent(requestedReviewId)}&limit=1`,
+          { headers }
+        );
+        if (targetRes.ok) {
+          const targetData = await targetRes.json();
+          if (Array.isArray(targetData) && targetData[0]) data.unshift(targetData[0]);
+        }
+      }
+      setReviews(data);
     } finally {
       setIsLoadingReviews(false);
     }
   };
+
+  // メールのreview IDに一致するカードを自動展開する。
+  useEffect(() => {
+    if (!requestedReviewId || isLoadingReviews || handledReviewIdRef.current === requestedReviewId) return;
+    const target = reviews.find((review) => String(review.id) === requestedReviewId);
+    handledReviewIdRef.current = requestedReviewId;
+    if (!target) {
+      setLinkedReviewStatus('not-found');
+      return;
+    }
+    setActiveTab(SCRAPED_IDS.includes(target.user_id) ? 'all' : 'reviews');
+    setExpandedId(target.id);
+    setLinkedReviewStatus('found');
+  }, [requestedReviewId, isLoadingReviews, reviews]);
+
+  // タブ切替・展開後のDOMへスクロールする。先に実行すると対象ノードがまだ無い。
+  useEffect(() => {
+    if (linkedReviewStatus !== 'found' || String(expandedId) !== requestedReviewId) return;
+    const timer = window.setTimeout(() => {
+      reviewElementsRef.current.get(requestedReviewId)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }, 80);
+    return () => window.clearTimeout(timer);
+  }, [linkedReviewStatus, expandedId, requestedReviewId, activeTab]);
 
   const fetchCredits = async () => {
     const res = await fetch(`${url}/rest/v1/user_credits?select=*&order=updated_at.desc`, { headers: await authHeaders() });
@@ -309,10 +367,26 @@ export default function AdminPage() {
     setShops(prev => prev.filter(s => s.id !== shopId));
   };
 
-  if (!user || !ADMIN_EMAILS.includes(user.email)) return null;
+  // Hooksは認証中の早期returnより前に必ず呼ぶ。
+  // ログイン前後でHooks数が変わると管理画面がクラッシュする。
+  const filteredShops = useMemo(() => {
+    const q = shopSearch.toLowerCase();
+    return shops.filter(s => !q || s.name?.toLowerCase().includes(q) || s.id?.toLowerCase().includes(q));
+  }, [shops, shopSearch]);
+
+  if (isAuthLoading || !user || !ADMIN_EMAILS.includes(user.email)) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-300 flex items-center justify-center p-6">
+        <SeoHead title="管理画面" noindex />
+        <div className="text-center">
+          <div className="w-9 h-9 mx-auto mb-3 rounded-full border-2 border-slate-700 border-t-pink-500 animate-spin" />
+          <p className="text-sm font-bold">{isAuthLoading ? 'ログイン状態を確認中…' : 'ログイン画面へ移動中…'}</p>
+        </div>
+      </div>
+    );
+  }
 
   // 口コミ仕分け
-  const SCRAPED_IDS = ['owner_manual', 'menesthe_import', 'menesthe_rewritten', 'mensest_user'];
   const realReviews = reviews.filter(r => r.user_id && !SCRAPED_IDS.includes(r.user_id));
   const sorted = (list) => [...list].sort((a, b) => {
     if (sortBy === 'ungranted') {
@@ -323,12 +397,6 @@ export default function AdminPage() {
   });
 
   const displayReviews = sorted(activeTab === 'reviews' ? realReviews : reviews);
-
-  // 店舗フィルター
-  const filteredShops = useMemo(() => {
-    const q = shopSearch.toLowerCase();
-    return shops.filter(s => !q || s.name?.toLowerCase().includes(q) || s.id?.toLowerCase().includes(q));
-  }, [shops, shopSearch]);
 
   const TABS = [
     { key: 'reviews', label: '📝 ユーザー口コミ', count: realReviews.length },
@@ -360,6 +428,17 @@ export default function AdminPage() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 pt-6">
+
+        {requestedReviewId && linkedReviewStatus === 'found' && (
+          <div className="mb-4 rounded-xl border border-pink-500/30 bg-pink-500/10 px-4 py-3 text-sm font-bold text-pink-200">
+            📩 メールの口コミを開きました。本文を確認して閲覧日数を付与できます。
+          </div>
+        )}
+        {requestedReviewId && linkedReviewStatus === 'not-found' && (
+          <div className="mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-200">
+            ⚠️ メールで指定された口コミは見つかりません。すでに削除された可能性があります。
+          </div>
+        )}
 
         {/* タブ */}
         <div className="flex gap-2 mb-6 bg-slate-800 p-1 rounded-2xl border border-slate-700 overflow-x-auto">
@@ -403,7 +482,16 @@ export default function AdminPage() {
 
                   return (
                     <div key={r.id}
-                      className={`border rounded-xl overflow-hidden transition ${isGranted ? 'bg-emerald-950/30 border-emerald-700/30' : 'bg-slate-800 border-slate-700'}`}>
+                      ref={(node) => {
+                        const id = String(r.id);
+                        if (node) reviewElementsRef.current.set(id, node);
+                        else reviewElementsRef.current.delete(id);
+                      }}
+                      className={`border rounded-xl overflow-hidden transition ${
+                        String(r.id) === requestedReviewId
+                          ? 'bg-pink-950/30 border-pink-500/60 ring-2 ring-pink-500/20'
+                          : isGranted ? 'bg-emerald-950/30 border-emerald-700/30' : 'bg-slate-800 border-slate-700'
+                      }`}>
 
                       {/* 折りたたみヘッダー */}
                       <div className="p-4 cursor-pointer hover:bg-white/5" onClick={() => setExpandedId(isExpanded ? null : r.id)}>

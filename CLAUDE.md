@@ -26,6 +26,12 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
+### 2026-08-22
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ✅ | **📩新着口コミメール→管理画面の導線を修復** | 実ユーザー初投稿で、メールの「管理画面で確認」が開かない問題を調査。原因は、メールアプリ内ブラウザが管理者セッションを持たないのに`AdminPage`が認証後も`user=null`を無条件で空表示していたこと、通知にreview IDが無く単なる`/admin`リンクだったこと。旧メールも未ログインなら`/login?redirect=%2Fadmin`へ送り、新メールは`/admin?review={id}`→ログイン→同URL復帰→対象口コミ自動展開・強調・スクロールとした。`addReview`の保存済みIDを投稿完了まで返すよう修正。`notify-review`はBearer JWTをSupabase Auth `getUser(token)`で検証し、口コミ所有者一致時だけDB内容から送信。ログインredirectは同一サイト内パスに制限。`scripts/ci/check_admin_review_notification.mjs`をCIに追加し、D-008として固定。本番DBで実投稿`r_1787333476619_i1oi0`（910字）を読み取り確認。実ブラウザでID付きURLのredirect保持と旧`/admin`の復帰先を確認。CIガード・`git diff --check`・`npm run build`成功（既知のTypeScript parser警告のみ）。 |
+
 ### 2026-08-21
 
 | 状態 | 作業内容 | メモ |

@@ -12,6 +12,7 @@ import TagSelector from '../components/TagSelector.jsx';
 import { useShopData } from '../contexts/DataContext.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { trackEvent } from '../utils/analytics';
+import { supabase } from '../lib/supabase.js';
 
 // --- Step Components ---
 
@@ -800,19 +801,26 @@ export default function PostReviewPage() {
         has_therapist: Boolean(data.therapistId || data.therapistName),
       });
 
-      // 管理者へメール通知（失敗しても投稿は成功扱い）
+      // 管理者へメール通知（失敗しても投稿は成功扱い）。
+      // 通知API側でJWTと投稿所有者を照合する。メール本文はDBから再取得するため、
+      // クライアントからは対象reviewId以外を信頼しない。
       const shopName = shops.find(s => s.id === data.shopId)?.name || '';
-      fetch('/api/notify-review', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          shopName,
-          therapistName: data.therapistName || null,
-          userName: data.userName || null,
-          rating: data.rating || null,
-          content: Object.values(data.story || {}).filter(Boolean).join('\n\n'),
-        }),
-      }).catch(() => {}); // エラーは無視
+      void supabase.auth.getSession().then(async ({ data: { session } }) => {
+        if (!session?.access_token || !result.reviewId) return;
+        const notifyRes = await fetch('/api/notify-review', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ reviewId: result.reviewId }),
+        });
+        if (!notifyRes.ok) {
+          console.error('[notify-review] 管理者通知に失敗:', notifyRes.status);
+        }
+      }).catch((notifyError) => {
+        console.error('[notify-review] 管理者通知に失敗:', notifyError);
+      });
 
       // B-3 投稿後体験: 即リダイレクトせず完了画面を表示（付与日数・自分の口コミへのリンク・通知の案内）
       const reviewLink = (data.shopId && data.therapistId)

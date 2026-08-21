@@ -78,8 +78,8 @@ export const useReviewForm = () => {
       };
 
       if (addReview) {
-        await addReview(submitData);
-        return { success: true };
+        const reviewId = await addReview(submitData);
+        return { success: true, reviewId };
       } else {
         throw new Error('保存機能が見つかりません');
       }

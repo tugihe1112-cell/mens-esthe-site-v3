@@ -7,8 +7,15 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   // redirectはクエリ(?redirect=/post-review)で受け取る（compatはstateを渡せないため）。旧state経路もフォールバックで残す。
-  const redirectTo = new URLSearchParams(location.search || '').get('redirect')
-    || location.state?.redirect || '/mypage';
+  // 外部URLや //example.com は受け付けず、同一サイト内の絶対パスだけを許可する。
+  const requestedRedirect = new URLSearchParams(location.search || '').get('redirect')
+    || location.state?.redirect;
+  const redirectTo = typeof requestedRedirect === 'string'
+    && requestedRedirect.startsWith('/')
+    && !requestedRedirect.startsWith('//')
+    && !/[\r\n]/.test(requestedRedirect)
+    ? requestedRedirect
+    : '/mypage';
   const { signIn } = useAuth(); // 👈 本物のログイン関数
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
