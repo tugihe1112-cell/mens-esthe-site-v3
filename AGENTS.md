@@ -22,6 +22,7 @@
 - お気に入り・閲覧履歴・マイページの英語中心ラベルを日本語化し、カードと余白をスマホ向けに整理
 - 店舗／セラピストカードのリンクを検索中継ではなく店舗・セラピスト詳細へ直結
 - 検証: `check_design_decisions.mjs`、`git diff --check`、`npm run build`成功。既知の`typescript`未導入によるESLint parser警告のみ継続
+- 本番: commit `a7f7681`、Vercel Production `dpl_8Kx6CWLvZqeLMucP17UV2fTbY9Rw` Ready。390pxの主要10ルートと820pxのタブレット導線を再検証済み
 
 ---
 
