@@ -21,6 +21,7 @@
   - `notify-review`はBearer JWTをSupabase Auth `getUser(token)`で検証し、JWTのユーザーIDと`reviews.user_id`が一致する場合だけ送信。メール内容はDBから再取得し、HTMLエスケープする
 - 再発防止: `scripts/ci/check_admin_review_notification.mjs`を新設し、深いリンク・JWT検証・所有者照合・ログイン後復帰・自動展開が消えたらCI失敗。`playbook/decisions.md` D-008にも固定
 - 検証: 実投稿IDで`/admin?review=...`を開き、未ログイン時に`/login?redirect=%2Fadmin%3Freview%3D...`へ正しく遷移すること、旧`/admin`も`redirect=%2Fadmin`を保持することを実ブラウザで確認。CIガード・`git diff --check`・`npm run build`成功
+- 本番: commit `4576c46`、Vercel Production `dpl_9aPwtC73ryJNtLDuXdXk5biPPpKU` Ready。本番でも新リンクがreview IDを保持したログインURLへ、旧`/admin`も`redirect=%2Fadmin`へ遷移し、両方console error 0。`notify-review`への未認証POSTは401で拒否
 
 ---
 
