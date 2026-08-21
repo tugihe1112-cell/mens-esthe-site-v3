@@ -4,6 +4,7 @@ import { useNavigate, useParams, useSearchParams } from '../compat/router';
 import { Toaster, toast } from 'react-hot-toast';
 import { useReviewForm } from '../features/reviews/hooks/useReviewForm';
 import { STORY_SECTIONS } from '../features/reviews/schema/reviewSchema';
+import { countReviewStoryChars } from '../features/reviews/reviewStory.mjs';
 import { ProgressBar } from '../components/ui/ProgressBar';
 import { RatingSlider } from '../components/ui/RatingSlider';
 import Header from '../components/Header.jsx';
@@ -380,7 +381,7 @@ const STORY_HINTS = {
 const Step3_Story = ({ onMilestone }) => {
   const { register, watch, formState: { errors } } = useFormContext();
   const story = watch('story') || {};
-  const totalChars = Object.values(story).filter(Boolean).join('').length;
+  const totalChars = countReviewStoryChars(story);
   const pct = Math.min(100, (totalChars / BONUS_CHARS) * 100); // 700字をゴールにした達成率
   const reached200 = totalChars >= MIN_CHARS;
   const reached700 = totalChars >= BONUS_CHARS;

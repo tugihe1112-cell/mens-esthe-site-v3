@@ -9,6 +9,7 @@ import {
   STORY_SECTIONS,
   normalizeReviewStory,
   composeReviewStoryContent,
+  countReviewStoryChars,
 } from '../../src/features/reviews/reviewStory.mjs';
 
 const sample = {
@@ -31,6 +32,11 @@ assert.equal(
   composeReviewStoryContent({ entrance: 'A', meeting: '', exit: 'C' }),
   'A\n\nC'
 );
+assert.equal(countReviewStoryChars({ entrance: ' A ', meeting: 'BB', exit: 'C' }), 4);
+assert.equal(
+  countReviewStoryChars({ entrance: 'A'.repeat(694), meeting: 'B'.repeat(6) }),
+  700
+);
 
 const read = (path) => fs.readFileSync(path, 'utf8');
 const hook = read('src/features/reviews/hooks/useReviewForm.js');
@@ -38,6 +44,7 @@ const dataContext = read('src/contexts/DataContext.jsx');
 const modernCard = read('src/components/ModernReviewCard.jsx');
 const adminPage = read('src/pages/AdminPage.jsx');
 const migration = read('supabase_migrations/14_review_story_sections.sql');
+const lengthMigration = read('supabase_migrations/15_review_story_character_count.sql');
 
 assert.match(hook, /story_sections:\s*storySections/);
 assert.match(dataContext, /story_sections:/);
@@ -45,6 +52,7 @@ assert.match(modernCard, /storySections=\{review\.story_sections/);
 assert.match(adminPage, /storySections=\{r\.story_sections/);
 assert.match(migration, /compose_review_story_content\(story_sections\) = content/);
 assert.match(migration, /VALIDATE CONSTRAINT reviews_story_sections_shape/);
+assert.match(lengthMigration, /review_story_char_length\(NEW\.story_sections\)/);
+assert.match(lengthMigration, /reviews_content_min_length/);
 
 console.log('✅ 口コミ4区分の保存・表示チェック OK');
-

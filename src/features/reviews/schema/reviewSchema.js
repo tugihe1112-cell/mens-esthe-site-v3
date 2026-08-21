@@ -1,5 +1,6 @@
 import { z } from 'zod';
 export { STORY_SECTIONS } from '../reviewStory.mjs';
+import { countReviewStoryChars } from '../reviewStory.mjs';
 
 export const reviewSchema = z.object({
   shopId: z.string().min(1, { message: '店舗を選択してください' }),
@@ -28,7 +29,6 @@ export const reviewSchema = z.object({
     afterglow: z.string().optional(),
     exit: z.string().min(1, { message: '総評を入力してください' }),
   }).refine((data) => {
-    const total = Object.values(data).filter(Boolean).join('').length;
-    return total >= 200;
+    return countReviewStoryChars(data) >= 200;
   }, { message: '口コミは合計200文字以上必要です' }),
 });

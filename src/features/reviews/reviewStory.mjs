@@ -19,3 +19,6 @@ export const composeReviewStoryContent = (story = {}) => STORY_SECTIONS
   .filter(Boolean)
   .join('\n\n');
 
+// 区分間に自動挿入する空行は文字数特典へ含めない。
+export const countReviewStoryChars = (story = {}) => STORY_SECTIONS
+  .reduce((total, { id }) => total + String(story?.[id] || '').trim().length, 0);
