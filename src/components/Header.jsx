@@ -61,10 +61,10 @@ export default function Header() {
           isVisible ? 'translate-y-0' : '-translate-y-full'
         } ${
           isScrolled || mobileMenuOpen
-            ? 'bg-slate-950 backdrop-blur-xl shadow-lg border-b border-white/10 py-3' // スクロール時・メニュー開放時: 完全不透明
+            ? 'bg-slate-950 backdrop-blur-xl shadow-lg border-b border-white/10 py-2.5 md:py-3' // スクロール時・メニュー開放時: 完全不透明
             : isTransparentPage
-              ? 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-6' // 透明時: 黒グラデーションで文字を見やすく
-              : 'bg-slate-900/80 backdrop-blur-md py-4'
+              ? 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-3 md:py-6' // 透明時: 黒グラデーションで文字を見やすく
+              : 'bg-slate-900/80 backdrop-blur-md py-3 md:py-4'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6">
@@ -78,9 +78,9 @@ export default function Header() {
                   <span className="text-base md:text-xl">💎</span>
                 </div>
               </div>
-              <h1 className={`font-black text-base md:text-xl tracking-tighter whitespace-nowrap transition duration-300 ${isScrolled || !isTransparentPage ? 'text-white' : 'text-white drop-shadow-md'}`}>
+              <div className={`font-black text-base md:text-xl tracking-tighter whitespace-nowrap transition duration-300 ${isScrolled || !isTransparentPage ? 'text-white' : 'text-white drop-shadow-md'}`}>
                 Mens Esthe<span className="text-pink-500">.Map</span>
-              </h1>
+              </div>
             </Link>
 
             {/* PC用 ナビゲーション (日本語化 & 視認性強化) */}
@@ -116,15 +116,21 @@ export default function Header() {
             {/* モバイル用 認証ボタン */}
             {!(currentUser || authUser) && (
               <div className="lg:hidden flex items-center gap-2 shrink-0">
+                {/* ログインは常設BottomNavにあるため、狭いヘッダーでは新規登録だけを残す。 */}
                 <Link to="/login"
-                  className="text-[11px] font-bold text-white border border-white/25 px-3 py-1.5 rounded-full whitespace-nowrap hover:bg-white/10 transition">
+                  className="hidden md:inline-flex min-h-10 items-center text-xs font-bold text-white border border-white/25 px-4 rounded-full whitespace-nowrap hover:bg-white/10 transition">
                   ログイン
                 </Link>
                 <Link to="/register"
-                  className="text-[11px] font-bold text-white bg-pink-600 px-3 py-1.5 rounded-full whitespace-nowrap hover:bg-pink-500 transition">
-                  会員登録
+                  className="min-h-10 inline-flex items-center text-xs font-black text-white bg-pink-600 px-4 rounded-full whitespace-nowrap hover:bg-pink-500 transition shadow-lg shadow-pink-950/30">
+                  無料登録
                 </Link>
               </div>
+            )}
+            {(currentUser || authUser) && (
+              <Link to="/mypage" className="hidden md:inline-flex lg:hidden min-h-10 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 text-xs font-black text-white">
+                👤 マイページ
+              </Link>
             )}
 
           </div>

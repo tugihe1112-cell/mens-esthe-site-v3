@@ -20,13 +20,13 @@ export default function HistoryPage() {
       <SeoHead title="閲覧履歴" noindex />
       <Header />
       
-      <div className="pt-24 px-4 max-w-3xl mx-auto">
+      <div className="pt-16 md:pt-24 px-4 max-w-3xl mx-auto">
         
         {/* Header */}
-        <div className="flex items-center justify-between mb-8 sticky top-24 z-30 bg-slate-950/90 backdrop-blur py-4 -mx-4 px-4 border-b border-white/5">
+        <div className="flex items-center justify-between mb-6 md:mb-8 sticky top-14 md:top-24 z-30 bg-slate-950/90 backdrop-blur py-3 md:py-4 -mx-4 px-4 border-b border-white/5">
           <div>
             <h1 className="text-2xl font-black text-white flex items-center gap-3 tracking-tight">
-              <span className="text-3xl">🕒</span> HISTORY
+              <span className="text-3xl">🕒</span> 閲覧履歴
             </h1>
             <p className="text-slate-400 text-xs font-bold mt-1 ml-1">最近チェックしたキャスト</p>
           </div>
@@ -36,7 +36,7 @@ export default function HistoryPage() {
               onClick={() => { if(window.confirm('履歴を全て削除しますか？')) clearHistory(); }} 
               className="text-xs font-bold text-red-400 border border-red-500/30 px-4 py-2 rounded-full hover:bg-red-500/10 transition"
             >
-              Clear All
+              全削除
             </button>
           )}
         </div>
@@ -73,15 +73,15 @@ export default function HistoryPage() {
                   to={item.link} 
                   className="block"
                 >
-                  <div className="flex items-start gap-5 bg-slate-900/50 p-4 rounded-2xl border border-white/5 hover:bg-slate-900 hover:border-pink-500/30 transition-all duration-300 shadow-lg group-hover:shadow-pink-900/10 group-hover:-translate-y-1">
-                    <div className="w-20 h-24 rounded-xl overflow-hidden flex-shrink-0 border border-white/5 relative bg-slate-800">
+                  <div className="flex items-start gap-3 md:gap-5 bg-slate-900/50 p-3 md:p-4 rounded-2xl border border-white/5 hover:bg-slate-900 hover:border-pink-500/30 transition-all duration-300 shadow-lg group-hover:shadow-pink-900/10 group-hover:-translate-y-1">
+                    <div className="w-16 h-20 md:w-20 md:h-24 rounded-xl overflow-hidden flex-shrink-0 border border-white/5 relative bg-slate-800">
                       <LazyImage src={item.image_url || item.image} alt={item.name} className="w-full h-full object-cover transition duration-500 group-hover:scale-110" />
                     </div>
                     
                     <div className="flex-1 min-w-0 py-1">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="text-lg font-black text-white mb-1 group-hover:text-pink-400 transition">{item.name}</h3>
+                          <h3 className="text-base md:text-lg font-black text-white mb-1 group-hover:text-pink-400 transition">{item.name}</h3>
                           <div className="flex items-center gap-2 mb-2">
                              <span className="text-[10px] font-bold bg-white/5 text-slate-400 px-2 py-0.5 rounded border border-white/5 group-hover:border-pink-500/20 group-hover:text-pink-300 transition">
                                {item.shopName || 'Unknown Shop'}
@@ -98,7 +98,7 @@ export default function HistoryPage() {
                       </p>
                     </div>
 
-                    <div className="self-center text-slate-700 group-hover:text-pink-500 transition transform group-hover:translate-x-1 text-xl">
+                    <div className="hidden sm:block self-center text-slate-700 group-hover:text-pink-500 transition transform group-hover:translate-x-1 text-xl">
                       →
                     </div>
                   </div>

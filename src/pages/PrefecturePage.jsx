@@ -121,7 +121,7 @@ export default function PrefecturePage() {
                 {areaShops.map(shop => (
                   <Link
                     key={shop.id}
-                    to={`/search?shop=${encodeURIComponent(shop.name)}`}
+                    to={`/shops/${shop.id}`}
                     className="group bg-slate-900/60 border border-white/5 hover:border-pink-500/30 rounded-2xl overflow-hidden transition-all hover:-translate-y-0.5"
                   >
                     {shop.image_url && (

@@ -14,10 +14,17 @@ export const POST_REVIEW_ROUTES = [
   '/shops/[shopId]/threads/[threadId]/review',
 ];
 
+// チャットルームは画面下部に専用の入力欄を持つ全画面UI。
+// 共通ドックを重ねると送信欄が隠れるため、投稿フローと同様に非表示にする。
+export const BOTTOM_NAV_HIDDEN_ROUTES = [
+  ...POST_REVIEW_ROUTES,
+  '/chat/[roomId]',
+];
+
 export default function BottomNav() {
   const { user } = useAuth();
   const router = useRouter();
-  const hideOnPostReview = POST_REVIEW_ROUTES.includes(router?.pathname);
+  const hideBottomNav = BOTTOM_NAV_HIDDEN_ROUTES.includes(router?.pathname);
 
   const navItems = [
     {
@@ -68,22 +75,22 @@ export default function BottomNav() {
     },
   ];
 
-  if (hideOnPostReview) return null;
+  if (hideBottomNav) return null;
 
   return (
     <div className="fixed bottom-0 left-0 w-full z-50 md:hidden pointer-events-none">
       {/* 背景のグラデーションフェード（コンテンツが消える演出） */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-slate-950 via-slate-950/75 to-transparent pointer-events-none"></div>
 
       {/* フローティングドック本体 */}
       <nav
-        className="pointer-events-auto relative mx-4 bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden"
-        style={{ marginBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}
+        className="pointer-events-auto relative mx-2.5 bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden"
+        style={{ marginBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))' }}
       >
         {/* 上部のハイライトライン */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
         
-        <div className="flex justify-around items-center h-16 relative">
+        <div className="flex justify-around items-center h-14 relative">
           {navItems.map((item) => (
             <NavLink
               key={item.path}

@@ -129,8 +129,8 @@ export default function ShopListPage() {
       <SeoHead title={pageTitle} description={`メンズエステ店舗検索。現在の表示件数: ${result?.length || 0}件`} />
       <Header />
 
-      <div className="pt-24 max-w-6xl mx-auto px-4 py-8">
-        <div className="mb-8 space-y-6">
+      <div className="pt-20 md:pt-24 max-w-6xl mx-auto px-4 py-6 md:py-8">
+        <div className="mb-6 md:mb-8 space-y-5 md:space-y-6">
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <h1 className="text-2xl md:text-3xl font-black flex items-center gap-2">
               <span className="text-3xl">🏢</span> {query ? 'SEARCH RESULTS' : 'ALL SHOPS'}
@@ -180,7 +180,7 @@ export default function ShopListPage() {
 
             {/* 通常の店舗リスト */}
             {result.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 animate-in fade-in duration-500">
                 {visibleShops.map((shop) => (
                   // 店舗ページへ直リンク。
                   // ⚠️ 以前は /search?shop={名前} に飛ばしていたため、店舗一覧ページ自身が
@@ -191,9 +191,9 @@ export default function ShopListPage() {
                   <Link
                     key={shop.id}
                     to={`/shops/${shop.id}`}
-                    className="group bg-slate-900 rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 hover:shadow-2xl hover:shadow-pink-900/10 transition-all duration-300 transform hover:-translate-y-1 active:scale-[0.98]"
+                    className="group bg-slate-900 rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 hover:shadow-2xl hover:shadow-pink-900/10 transition-all duration-300 flex md:block min-h-[132px] md:min-h-0 transform md:hover:-translate-y-1 active:scale-[0.98]"
                   >
-                    <div className="h-48 relative overflow-hidden">
+                    <div className="w-28 sm:w-36 md:w-full min-h-[132px] md:min-h-0 md:h-48 relative overflow-hidden shrink-0">
                       <LazyImage
                         src={shop.image_url || shop.image}
                         alt={shop.name}
@@ -202,30 +202,36 @@ export default function ShopListPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90"></div>
                       
                       {/* エリアバッジ */}
-                      <div className="absolute top-3 left-3">
+                      <div className="hidden md:block absolute top-3 left-3">
                           <span className="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
                             <span>📍</span> {shop.prefecture} {shop.city} {shop.area && `(${shop.area})`}
                           </span>
                       </div>
 
-                      <div className="absolute bottom-0 left-0 p-4 w-full">
+                      <div className="hidden md:block absolute bottom-0 left-0 p-4 w-full">
                         <h3 className="text-lg font-black text-white shadow-black drop-shadow-md truncate leading-tight">
                           {getDisplayName(shop.name)}
                         </h3>
                       </div>
                     </div>
 
-                    <div className="p-4 space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-400 text-xs truncate max-w-[70%]">
+                    <div className="p-3 md:p-4 space-y-2 md:space-y-3 min-w-0 flex-1 self-center">
+                      <div className="md:hidden text-[10px] font-bold text-pink-300 truncate">
+                        📍 {shop.prefecture} {shop.city} {shop.area && `(${shop.area})`}
+                      </div>
+                      <h3 className="md:hidden text-base font-black text-white leading-tight line-clamp-2">
+                        {getDisplayName(shop.name)}
+                      </h3>
+                      <div className="flex items-center justify-between gap-2 text-sm">
+                        <span className="text-slate-400 text-xs truncate min-w-0">
                            {shop.access || shop.address || "アクセス情報なし"}
                         </span>
-                        <span className="text-yellow-400 font-black flex items-center gap-1 text-xs">
+                        <span className="text-yellow-400 font-black flex items-center gap-1 text-xs shrink-0">
                           ★ {shop.rating || "New"}
                         </span>
                       </div>
-                      <div className="flex flex-wrap gap-1">
-                        {(shop.tags || []).slice(0, 3).map((tag, idx) => (
+                      <div className="flex flex-wrap gap-1 max-h-10 overflow-hidden">
+                        {(shop.tags || []).slice(0, 2).map((tag, idx) => (
                           <span key={idx} className="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-white/5">
                             #{tag}
                           </span>

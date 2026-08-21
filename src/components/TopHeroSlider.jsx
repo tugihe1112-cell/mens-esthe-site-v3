@@ -12,8 +12,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/effect-coverflow';
 
 // 本番スライドと同じ高さ。CLS防止のプレースホルダと共有する。
-const HERO_SLIDE_HEIGHT = 'clamp(200px, 38vh, 440px)';
-
 // データ取得待ちの間に出す、本番と同じ縦寸法の骨組み。
 // 以前は loading 中に return null していたため、データ到着時にヒーローが
 // ゼロ高さ→フル高さで出現し下のコンテンツを押し下げていた（CLS 0.572の主因）。
@@ -22,8 +20,7 @@ function HeroPlaceholder() {
   return (
     <div style={{ paddingTop: '20px', paddingBottom: '20px' }}>
       <div
-        className="mx-auto w-[88%] sm:w-[62%] lg:w-[45%] rounded-2xl bg-slate-800/60 animate-pulse"
-        style={{ height: HERO_SLIDE_HEIGHT }}
+        className="mx-auto w-[88%] sm:w-[62%] lg:w-[45%] h-[clamp(190px,32vh,270px)] sm:h-[clamp(200px,38vh,440px)] rounded-2xl bg-slate-800/60 animate-pulse"
       />
       <div className="flex justify-center gap-1.5 mt-4">
         {Array.from({ length: 5 }).map((_, i) => (
@@ -61,7 +58,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
   const items = heroItems.length ? heroItems : (initialHero || []);
 
   return (
-    <div className="relative w-full bg-slate-950 pt-20 md:pt-10 pb-4 md:pb-10" style={{ overflow: 'hidden', isolation: 'isolate' }}>
+    <div className="relative w-full bg-slate-950 pt-16 md:pt-10 pb-2 md:pb-10" style={{ overflow: 'hidden', isolation: 'isolate' }}>
       {/* 背景グロー */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(236,72,153,0.07) 0%, transparent 70%)' }} />
 
@@ -99,7 +96,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
         style={{ paddingTop: '20px', paddingBottom: '20px' }}
       >
         {items.map((shop, index) => (
-          <SwiperSlide key={shop.id} style={{ height: 'clamp(200px, 38vh, 440px)' }}>
+          <SwiperSlide key={shop.id} className="!h-[clamp(190px,32vh,270px)] sm:!h-[clamp(200px,38vh,440px)]">
             {({ isActive }) => (
               <div
                 className="w-full h-full rounded-2xl p-[2px]"
@@ -145,20 +142,20 @@ export default function TopHeroSlider({ initialHero = [] }) {
 
                 {/* アクティブ時コンテンツ */}
                 {isActive && (
-                  <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end items-start">
+                  <div className="absolute inset-0 p-4 md:p-10 flex flex-col justify-end items-start">
                     <p className="text-pink-400 font-bold tracking-widest text-xs mb-2 flex items-center gap-2">
                       <span className="w-5 h-[2px] bg-pink-400 inline-block" />
                       口コミ人気 No.{index + 1}
                     </p>
-                    <h3 className="text-2xl md:text-4xl font-black text-white mb-3 leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]">
+                    <h3 className="text-xl md:text-4xl font-black text-white mb-2 md:mb-3 leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]">
                       {getDisplayName(shop.name)}
                     </h3>
-                    <div className="flex flex-wrap items-center gap-2 mb-5">
+                    <div className="flex flex-wrap items-center gap-2 mb-3 md:mb-5">
                       <span className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white border border-white/20">📍 {shop.prefecture} {shop.city}</span>
                       {shop.rating > 0 && <span className="bg-pink-600/90 px-3 py-1 rounded-full text-xs text-white font-bold">★ {shop.rating}</span>}
                     </div>
                     <div className="flex items-center gap-3">
-                      <Link to={`/search?shop=${encodeURIComponent(shop.name)}`} className="bg-white text-slate-900 font-black px-6 py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 text-sm">
+                      <Link to={`/shops/${shop.id}`} className="bg-white text-slate-900 font-black px-6 py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 text-sm">
                         店舗を見る
                       </Link>
                       <LikeButton id={shop.id} className="w-11 h-11 bg-black/40 backdrop-blur-md rounded-xl p-2.5 text-white border border-white/20 hover:bg-white/20 transition active:scale-95" />
@@ -190,26 +187,6 @@ export default function TopHeroSlider({ initialHero = [] }) {
       </>
       )}
 
-      <style>{`
-        /* ↓ ヒーローのCLS対策(visibility:hidden until init)は src/index.css に移設済み。
-           インライン<style>はReact19がSSR HTMLに出力せず初回ペイントに効かないため。 */
-        .hero-coverflow .swiper-slide {
-          transition: transform 0.65s ease, filter 0.65s ease, opacity 0.65s ease;
-          filter: blur(1.5px) brightness(0.75);
-          opacity: 0.7;
-          /* 両隣スライドが中央の「店舗を見る」ボタンに被さってクリックを横取りする問題の対策。
-             非アクティブはクリックを透過させ、中央スライドのボタンだけが押せるようにする。 */
-          pointer-events: none;
-        }
-        .hero-coverflow .swiper-slide-active {
-          filter: blur(0px) brightness(1);
-          opacity: 1;
-          pointer-events: auto;
-        }
-        .swiper-button-next, .swiper-button-prev { color: white !important; background: rgba(15,23,42,0.7) !important; backdrop-filter: blur(10px); width: 40px !important; height: 40px !important; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); top: 46% !important; }
-        .swiper-button-next:hover, .swiper-button-prev:hover { background: #ec4899 !important; border-color: #ec4899; }
-        .swiper-button-next::after, .swiper-button-prev::after { font-size: 13px !important; font-weight: 900; }
-      `}</style>
     </div>
   );
 }

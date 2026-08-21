@@ -244,6 +244,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
         </Head>
       )}
       <Header />
+      <h1 className="sr-only">全国のメンズエステ店舗・セラピスト検索と口コミ</h1>
       
       {/* 1. ヒーローセクション */}
       <div className="relative">
@@ -342,6 +343,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
               { icon: '🔍', title: 'キャスト検索', desc: '名前・店舗・エリアで絞り込み検索', link: '/search' },
               { icon: '✍️', title: '口コミを書く', desc: '体験談を投稿して閲覧権を獲得', link: '/post-review' },
               { icon: '🏆', title: 'ランキング', desc: '口コミ評価が高いセラピスト', link: '/ranking' },
+              { icon: '✨', title: '新人を見る', desc: '新しく掲載されたセラピスト', link: '/new-therapists' },
             ].map(f => (
               <Link key={f.title} to={f.link}
                 className="group rounded-2xl bg-slate-900/60 border border-white/5 hover:border-pink-500/30 p-4 transition-all duration-200 hover:-translate-y-0.5">
@@ -458,7 +460,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
                 return (
                   <Link
                     key={t.id}
-                    to={shop ? `/search?shop=${encodeURIComponent(shop.name)}&cast=${encodeURIComponent(t.name)}` : '/search'}
+                    to={shop ? `/shops/${shop.id}/threads/${t.id}` : '/search'}
                     className="snap-center flex-shrink-0 w-[120px] md:w-[150px] group"
                   >
                     <div className="aspect-[3/4] rounded-2xl overflow-hidden relative bg-slate-900">
@@ -512,7 +514,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
             {recommendedShops.map((shop) => (
               <Link
                 key={shop.id}
-                to={`/search?shop=${encodeURIComponent(shop.name)}`}
+                to={`/shops/${shop.id}`}
                 className="snap-center flex-shrink-0 w-[160px] md:w-[240px] group"
               >
                 <div className="aspect-[3/4] rounded-t-2xl overflow-hidden relative bg-slate-900">
@@ -554,7 +556,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
               {sidebarShops.map(shop => (
                   <Link
                     key={shop.id}
-                    to={`/search?shop=${encodeURIComponent(shop.name)}`}
+                    to={`/shops/${shop.id}`}
                     className="group flex items-center gap-3 bg-slate-900/60 hover:bg-slate-800/80 border border-white/5 hover:border-pink-500/20 rounded-2xl p-3 transition-all duration-200"
                   >
                     <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-800">

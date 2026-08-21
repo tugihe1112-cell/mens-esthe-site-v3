@@ -36,20 +36,20 @@ export default function FavoritesPage() {
       <SeoHead title="お気に入り" noindex />
       <Header />
       
-      <div className="pt-24 px-4 max-w-5xl mx-auto">
+      <div className="pt-20 md:pt-24 px-4 max-w-5xl mx-auto">
         
         {/* Header Area */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl font-black text-white flex items-center gap-3 tracking-tight">
-              <span className="text-4xl">❤️</span> FAVORITES
+            <h1 className="text-2xl md:text-3xl font-black text-white flex items-center gap-3 tracking-tight">
+              <span className="text-3xl md:text-4xl">❤️</span> お気に入り
             </h1>
             <p className="text-slate-400 text-sm font-bold mt-1 ml-1">あなたの推しコレクション</p>
           </div>
         </div>
 
         {/* Tab Switcher (iOS Segmented Control Style) */}
-        <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-2xl mb-10 border border-white/5 flex shadow-inner sticky top-20 z-30">
+        <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-2xl mb-6 md:mb-10 border border-white/5 flex shadow-inner sticky top-14 md:top-20 z-30">
           <button 
             onClick={() => setActiveTab('therapists')}
             className={`flex-1 py-3 rounded-xl text-sm font-black transition-all duration-300 relative overflow-hidden ${
@@ -59,7 +59,7 @@ export default function FavoritesPage() {
             }`}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              <span>👩‍🦰</span> THERAPISTS <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favTherapistList.length}</span>
+              <span>👩‍🦰</span> セラピスト <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favTherapistList.length}</span>
             </span>
           </button>
           <button 
@@ -71,7 +71,7 @@ export default function FavoritesPage() {
             }`}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              <span>🏢</span> SHOPS <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favShopList.length}</span>
+              <span>🏢</span> 店舗 <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favShopList.length}</span>
             </span>
           </button>
         </div>
@@ -100,8 +100,8 @@ export default function FavoritesPage() {
                         </div>
                       )}
 
-                      <div className="absolute bottom-0 left-0 w-full p-4">
-                        <h3 className="text-xl font-black text-white leading-tight mb-1 group-hover:text-pink-400 transition">{t.name}</h3>
+                      <div className="absolute bottom-0 left-0 w-full p-3 md:p-4">
+                        <h3 className="text-base md:text-xl font-black text-white leading-tight mb-1 group-hover:text-pink-400 transition">{t.name}</h3>
                         <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-wide">
                           <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
                           {t.shopName}
@@ -123,7 +123,7 @@ export default function FavoritesPage() {
                 {favShopList.map(shop => (
                   <Link 
                     key={shop.id} 
-                    to={`/search?shop=${encodeURIComponent(shop.name)}`}
+                    to={`/shops/${shop.id}`}
                     className="flex items-center gap-5 bg-slate-900/50 p-4 rounded-3xl border border-white/5 hover:border-blue-500/50 hover:bg-slate-900 transition-all duration-300 group shadow-lg"
                   >
                     <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 border border-white/5 shadow-inner">

@@ -123,7 +123,7 @@ export default function NewTherapistsPage() {
                   return (
                     <Link
                       key={t.id}
-                      to={`/search?shop=${encodeURIComponent(shop.name || '')}&cast=${encodeURIComponent(t.name)}`}
+                      to={`/shops/${t.shop_id}/threads/${t.id}`}
                       className="group relative rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-pink-900/20 bg-slate-900"
                     >
                       {/* 写真 */}

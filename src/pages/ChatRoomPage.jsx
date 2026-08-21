@@ -273,7 +273,7 @@ export default function ChatRoomPage() {
       </div>
 
       {/* 入力エリア */}
-      <div className="flex-shrink-0 bg-slate-900/95 backdrop-blur border-t border-white/5 px-4 py-3">
+      <div className="flex-shrink-0 bg-slate-900/95 backdrop-blur border-t border-white/5 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
         <div className="flex items-end gap-3 max-w-2xl mx-auto">
           <textarea
             ref={inputRef}

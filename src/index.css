@@ -411,6 +411,46 @@ a {
   visibility: hidden;
 }
 
+/* TopHeroSliderの見た目はグローバルCSSに置く。
+   React 19ではコンポーネント内の<style>がSSRとhydrationで食い違い、
+   開発・低速端末でヒーロー全体が再生成される原因になっていた。 */
+.hero-coverflow .swiper-slide {
+  transition: transform 0.65s ease, filter 0.65s ease, opacity 0.65s ease;
+  filter: blur(1.5px) brightness(0.75);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.hero-coverflow .swiper-slide-active {
+  filter: blur(0) brightness(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero-coverflow .swiper-button-next,
+.hero-coverflow .swiper-button-prev {
+  color: white !important;
+  background: rgba(15, 23, 42, 0.7) !important;
+  backdrop-filter: blur(10px);
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  top: 46% !important;
+}
+
+.hero-coverflow .swiper-button-next:hover,
+.hero-coverflow .swiper-button-prev:hover {
+  background: #ec4899 !important;
+  border-color: #ec4899;
+}
+
+.hero-coverflow .swiper-button-next::after,
+.hero-coverflow .swiper-button-prev::after {
+  font-size: 13px !important;
+  font-weight: 900;
+}
+
 /* ===================================== */
 /* 🔴 iOS Safari の「フォーカス時 自動ズーム」対策（2026-08-17）           */
 /* ===================================== */

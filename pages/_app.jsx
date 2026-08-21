@@ -14,6 +14,7 @@ import BottomNav, { POST_REVIEW_ROUTES } from '../src/components/BottomNav.jsx';
 import Footer from '../src/components/Footer.jsx';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
+import Head from 'next/head';
 import { GA_ID } from '../src/utils/analytics';
 import '../src/index.css';
 
@@ -113,6 +114,7 @@ function Layout({ children }) {
   //「次へ進む」がその上に重なって押しにくい状態になっていた。
   // 記入中に他ページへ逃がす導線は不要なので、フッターごと出さないのが正しい。
   const isPostingFlow = POST_REVIEW_ROUTES.includes(router.pathname);
+  const isChatRoom = router.pathname === '/chat/[roomId]';
   // フルのフッター（ブランド文・SERVICE/LEGAL・都道府県リンク集）はホームだけ。
   // 他ページでは読む邪魔になるだけなので、法務リンクの1帯だけに落とす。
   const isHome = router.pathname === '/';
@@ -130,7 +132,7 @@ function Layout({ children }) {
       <RouteProgress />
       <ScrollToTop />
       <main className="flex-grow">{children}</main>
-      {!shouldHideNav && !isPostingFlow && <Footer variant={isHome ? 'full' : 'minimal'} />}
+      {!shouldHideNav && !isPostingFlow && !isChatRoom && <Footer variant={isHome ? 'full' : 'minimal'} />}
       {!shouldHideNav && <BottomNav />}
     </div>
   );
@@ -139,6 +141,11 @@ function Layout({ children }) {
 export default function MyApp({ Component, pageProps }) {
   return (
     <>
+      {/* Next.jsの既定viewportを上書きする場所は _document ではなく _app。
+          _documentに置くと既定タグと二重になり、端末によって拡大率やsafe-area判定が不安定になる。 */}
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" key="viewport" />
+      </Head>
       {/* GA4: 旧Viteのindex.htmlにしか無く未計測だったため、Next.jsで正式ロード（SPA遷移はGA4拡張計測が捕捉） */}
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
       <Script id="ga4-init" strategy="afterInteractive">{`

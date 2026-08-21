@@ -90,7 +90,7 @@ export default function BrandPage() {
           {brandShops.map((shop, idx) => (
             <Link
               key={shop.id}
-              to={`/search?shop=${encodeURIComponent(shop.name)}`}
+              to={`/shops/${shop.id}`}
               className="group bg-slate-900 rounded-3xl overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-900/20 hover:-translate-y-2 flex flex-col animate-in fade-in slide-in-from-bottom-8 duration-500"
               style={{ animationDelay: `${idx * 100}ms` }}
             >

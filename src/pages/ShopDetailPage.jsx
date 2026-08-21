@@ -234,6 +234,19 @@ export default function ShopDetailPage({
     }
     return counts;
   }, [therapists, reviewTagMap]);
+  const hasAvailableTags = React.useMemo(
+    () => Object.values(tagCounts).some((count) => count > 0),
+    [tagCounts]
+  );
+
+  // スマホのタグ絞り込みはボトムシートで出す。開いている間に背面が
+  // スクロールすると現在位置を見失うため、SearchPageと同様に固定する。
+  useEffect(() => {
+    if (!isFilterOpen || typeof document === 'undefined') return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [isFilterOpen]);
 
   const sortedTherapists = React.useMemo(() => {
     let list = [...therapists];
@@ -276,7 +289,7 @@ export default function ShopDetailPage({
   };
 
   return (
-    <div className="bg-slate-950 min-h-screen pb-28 md:pb-16 text-slate-200 font-sans relative">
+    <div className="bg-slate-950 min-h-screen pb-24 md:pb-16 text-slate-200 font-sans relative">
       <Header />
       <SeoHead
         title={seoTitle}
@@ -308,12 +321,12 @@ export default function ShopDetailPage({
       }) }} />
 
       {/* 1. Cinematic Hero Header */}
-      <div className="relative h-[45vh] md:h-[55vh] w-full overflow-hidden group">
+      <div className="relative h-[360px] sm:h-[45vh] md:h-[55vh] w-full overflow-hidden group">
          <button
            onClick={() => navigate(-1)}
            aria-label="前のページに戻る"
-           /* 共通ヘッダー（ロゴ・左上）と重ならないよう top-20 でヘッダー下に配置 */
-           className="absolute top-20 left-4 z-40 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-black/50 backdrop-blur-md text-white text-sm font-bold border border-white/15 hover:bg-black/70 transition active:scale-95"
+           /* 共通ヘッダー（ロゴ・左上）と重ならないようヘッダー下に配置 */
+           className="absolute top-16 md:top-20 left-4 z-40 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-black/50 backdrop-blur-md text-white text-sm font-bold border border-white/15 hover:bg-black/70 transition active:scale-95"
          >
            <span className="text-base leading-none">←</span> 戻る
          </button>
@@ -323,8 +336,8 @@ export default function ShopDetailPage({
            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-black/30"></div>
          </div>
 
-         <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 z-20">
-           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-end justify-between gap-6">
+         <div className="absolute bottom-0 left-0 w-full p-4 md:p-10 z-20">
+           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-end justify-between gap-3 md:gap-6">
              <div className="flex-1">
                <div className="flex flex-wrap gap-2 mb-3">
                  <span className="px-2.5 py-0.5 rounded-md bg-pink-600/80 backdrop-blur text-white text-[10px] font-bold tracking-widest uppercase border border-white/10">
@@ -337,31 +350,33 @@ export default function ShopDetailPage({
                  )}
                </div>
                {logoUrl && (<div className="mb-4 flex justify-center"><img src={logoUrl} alt="Brand Logo" className="h-16 md:h-20 w-auto object-contain" /></div>)}
-              <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-2 drop-shadow-xl tracking-tight">
+              <h1 className="text-3xl md:text-6xl font-black text-white leading-tight mb-2 drop-shadow-xl tracking-tight line-clamp-2">
                  {getDisplayName(shop.name)}
                </h1>
-               <div className="flex items-center gap-4 text-slate-300 text-xs md:text-sm font-medium">
-                 <span>📍 {shop.address}</span>
-                 <span className="text-yellow-400 font-bold">★ {shop.rating || 'New'}</span>
+               <div className="flex items-start gap-3 text-slate-300 text-xs md:text-sm font-medium">
+                 <span className="line-clamp-2">📍 {shop.address}</span>
+                 <span className="text-yellow-400 font-bold shrink-0">★ {shop.rating || 'New'}</span>
                </div>
              </div>
 
-             <div className="flex gap-3">
+             <div className="flex gap-2 self-start md:self-auto">
                <button 
                   onClick={() => toggleFavorite(shop.id)} 
-                  className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition shadow-lg backdrop-blur-sm ${
+                  aria-label={isFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
+                  className={`min-h-11 min-w-11 flex items-center justify-center gap-2 px-3 md:px-6 md:py-3 rounded-full font-bold transition shadow-lg backdrop-blur-sm ${
                     isFavorite 
                       ? 'bg-pink-600 text-white border border-pink-500' 
                       : 'bg-white/10 text-white border border-white/20 hover:bg-white/20'
                   }`}
                 >
-                  {isFavorite ? 'Saved ❤️' : 'Save'}
+                  <span className="md:hidden">{isFavorite ? '❤️' : '🤍'}</span>
+                  <span className="hidden md:inline">{isFavorite ? 'Saved ❤️' : 'Save'}</span>
                 </button>
                <button 
                  onClick={handlePostReview}
-                 className="hidden md:flex bg-white text-slate-950 px-6 py-3 rounded-full font-black shadow-lg hover:bg-pink-500 hover:text-white transition-all transform hover:-translate-y-1 items-center gap-2"
+                 className="min-h-11 flex bg-white text-slate-950 px-4 md:px-6 md:py-3 rounded-full font-black shadow-lg hover:bg-pink-500 hover:text-white transition-all transform hover:-translate-y-1 items-center gap-2 text-sm"
                >
-                 <span>✍️</span> クチコミ
+                 <span>✍️</span> 口コミを書く
                </button>
              </div>
            </div>
@@ -373,7 +388,7 @@ export default function ShopDetailPage({
              理由: okabayashiの方針で「タブ型の店舗ページは使わない」＝SearchPage型（キャスト一覧が主役）に寄せる。
              ただし内部リンク/canonical/JSON-LDは /shops/:id のまま維持する（7月の索引崩落から復旧させた
              1,098ページへのクロール経路をここで切らないため）。ナビはアンカースクロールに変更。 */}
-      <div className="sticky top-20 z-40 bg-slate-950/95 backdrop-blur border-b border-white/5 shadow-lg">
+      <div className="sticky top-14 md:top-20 z-40 bg-slate-950/95 backdrop-blur border-b border-white/5 shadow-lg">
         <div className="flex max-w-4xl mx-auto">
           {([
             { key: 'cast', label: 'キャスト' },
@@ -388,7 +403,7 @@ export default function ShopDetailPage({
                 e.preventDefault();
                 document.getElementById(`sec-${tab.key}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
-              className="flex-1 py-4 text-xs md:text-sm font-black tracking-wider text-slate-400 hover:text-white transition-all text-center"
+              className="flex-1 py-3 md:py-4 text-xs md:text-sm font-black tracking-wider text-slate-400 hover:text-white transition-all text-center"
             >
               {tab.label}
             </a>
@@ -397,7 +412,7 @@ export default function ShopDetailPage({
       </div>
 
       {/* 3. Content Area */}
-      <div className="max-w-4xl mx-auto px-4 py-8 min-h-[50vh] flex flex-col gap-12">
+      <div className="max-w-4xl mx-auto px-4 py-5 md:py-8 min-h-[50vh] flex flex-col gap-8 md:gap-12">
         
         <section id="sec-info" className="scroll-mt-32 order-3">
           <div className="space-y-8">
@@ -595,8 +610,24 @@ export default function ShopDetailPage({
         <section id="sec-cast" className="scroll-mt-32 order-1">
           {/* 左タグサイドバー＋右キャスト一覧＝SearchPageと同じレイアウト（オーナー確定デザイン） */}
           <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-6">
-          <aside className={`${isFilterOpen ? 'block' : 'hidden'} lg:block space-y-4 lg:sticky lg:top-36 self-start`}>
-            <button onClick={() => setIsFilterOpen(false)} className="lg:hidden w-full text-center text-xs text-slate-500 mb-1">閉じる</button>
+          {hasAvailableTags && (
+            <>
+            {isFilterOpen && (
+              <button
+                type="button"
+                aria-label="絞り込みを閉じる"
+                onClick={() => setIsFilterOpen(false)}
+                className="fixed inset-0 z-[65] bg-black/70 backdrop-blur-sm lg:hidden"
+              />
+            )}
+            <aside className={`${isFilterOpen ? 'fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))] z-[70] block max-h-[78vh] overflow-y-auto rounded-3xl bg-slate-950 p-4 border border-white/10 shadow-2xl' : 'hidden'} lg:z-auto lg:block lg:max-h-none lg:overflow-visible lg:rounded-none lg:bg-transparent lg:p-0 lg:border-0 lg:shadow-none space-y-4 lg:sticky lg:top-36 self-start`}>
+            <div className="lg:hidden sticky top-0 -mx-1 -mt-1 mb-2 flex items-center justify-between rounded-2xl bg-slate-950/95 px-2 py-2 backdrop-blur">
+              <div>
+                <p className="text-sm font-black text-white">タグで絞り込む</p>
+                <p className="text-[10px] text-slate-500">口コミに付いたタグから選べます</p>
+              </div>
+              <button onClick={() => setIsFilterOpen(false)} className="min-w-11 min-h-11 rounded-full bg-slate-800 text-white text-xl" aria-label="閉じる">×</button>
+            </div>
             {TAG_CATEGORIES.map((category) => (
               <div key={category.id} className="bg-slate-900/40 backdrop-blur rounded-2xl p-4 border border-white/5">
                 <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
@@ -637,11 +668,15 @@ export default function ShopDetailPage({
               </button>
             )}
           </aside>
+            </>
+          )}
 
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-w-0">
-             <button onClick={() => setIsFilterOpen((v) => !v)} className="lg:hidden w-full mb-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-xs font-bold text-slate-300">
-               🔎 タグで絞り込む{selectedTags.length > 0 ? `（${selectedTags.length}）` : ''}
-             </button>
+             {hasAvailableTags && (
+               <button onClick={() => setIsFilterOpen(true)} className="lg:hidden w-full min-h-11 mb-4 rounded-xl bg-slate-900 border border-white/10 text-xs font-bold text-slate-300">
+                 🔎 タグで絞り込む{selectedTags.length > 0 ? `（${selectedTags.length}）` : ''}
+               </button>
+             )}
              <div className="flex items-center justify-between mb-6 px-1">
                <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                  <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
