@@ -55,6 +55,10 @@ jobs:
       - name: Guard - admin review notification deep link
         run: node scripts/ci/check_admin_review_notification.mjs
 
+      # 投稿画面の4区分（入店・ご対面・施術・総評）が保存・表示で消えないことを保証。
+      - name: Guard - review story sections
+        run: node scripts/ci/check_review_story_format.mjs
+
       - name: Install deps
         run: npm install --legacy-peer-deps
 

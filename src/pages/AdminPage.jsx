@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext.jsx';
 import { supabase } from '../lib/supabase.js';
 import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import ReviewStoryContent from '../components/ReviewStoryContent.jsx';
 
 // ⚠️ 2026-08-12: 'master@mens-esthe.jp' を削除（詳細は api/admin-grant-credit.js のコメント参照）。
 //    所有していないドメインのアドレスを管理者リストに入れてはいけない。
@@ -535,9 +536,11 @@ export default function AdminPage() {
                               ))}
                             </div>
                           )}
-                          <p className="text-slate-200 text-sm leading-relaxed whitespace-pre-wrap bg-slate-900/60 rounded-xl p-3">
-                            {r.content}
-                          </p>
+                          <ReviewStoryContent
+                            content={r.content || ''}
+                            storySections={r.story_sections || r.storySections}
+                            className="rounded-xl bg-slate-900/60 p-3 text-sm leading-relaxed text-slate-200"
+                          />
                           <div className="flex gap-2 justify-end pt-1">
                             <button onClick={() => deleteReview(r.id)}
                               className="px-3 py-1.5 rounded-lg text-xs font-bold text-red-400 hover:text-red-300 border border-red-500/20 hover:border-red-500/40 transition">

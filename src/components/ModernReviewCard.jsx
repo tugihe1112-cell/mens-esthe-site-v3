@@ -5,6 +5,7 @@ import ReviewLikeButton from './ReviewLikeButton.jsx';
 import ThanksBadgeButton from './ThanksBadgeButton.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { trackEvent } from '../utils/analytics';
+import ReviewStoryContent from './ReviewStoryContent.jsx';
 
 // --- ウォーターマーク ---
 function Watermark({ text }) {
@@ -276,25 +277,15 @@ export default function ModernReviewCard({ review }) {
         <div className="relative pt-4 border-t border-white/10">
           {canReadFull ? (
             <>
-              <div
+              <ReviewStoryContent
+                content={review.content || ''}
+                storySections={review.story_sections || review.storySections}
                 className={`text-[15px] text-slate-200 leading-relaxed whitespace-pre-wrap ${!isExpanded && "line-clamp-4"}`}
                 style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                 onCopy={e => e.preventDefault()}
                 onCut={e => e.preventDefault()}
                 onContextMenu={e => e.preventDefault()}
-              >
-                {(review.content || "").split('\n').map((line, i) => {
-                  if (line.includes('【') && line.includes('】')) {
-                    return (
-                      <div key={i} className="flex items-center gap-2 mt-4 mb-2 first:mt-0">
-                        <span className="text-pink-400 text-[10px]"><Icons.ChevronRight /></span>
-                        <span className="text-xs font-bold text-slate-300">{line.replace(/[【】]/g, '')}</span>
-                      </div>
-                    );
-                  }
-                  return <span key={i}>{line}{'\n'}</span>;
-                })}
-              </div>
+              />
               {(review.content || "").length > 150 && (
                 <button
                   onClick={() => {

@@ -216,6 +216,7 @@ export const DataProvider = ({ children }) => {
         detailed_ratings: newReview.detailed_ratings || newReview.detailedRatings || null,
         tags: newReview.tags || null,
         content: newReview.content || newReview.text || '',
+        story_sections: newReview.story_sections || newReview.storySections || null,
       }]);
 
     if (error) {

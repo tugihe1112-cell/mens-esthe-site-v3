@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { reviewSchema } from '../schema/reviewSchema';
+import { normalizeReviewStory, composeReviewStoryContent } from '../reviewStory.mjs';
 import { useShopData } from '../../../contexts/DataContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
@@ -51,8 +52,10 @@ export const useReviewForm = () => {
   const submitReview = async (data) => {
     setIsSubmitting(true);
     try {
-      // データの整形
-      const combinedContent = Object.values(data.story).filter(t => t && t.trim().length > 0).join('\n\n');
+      // 入力時の「入店・ご対面・施術・総評」を構造として残す。
+      // contentには本文だけを入れ、生成見出しで200/700字特典を水増ししない。
+      const storySections = normalizeReviewStory(data.story);
+      const combinedContent = composeReviewStoryContent(storySections);
       const totalScore = (Object.values(data.ratings).reduce((a, b) => a + b, 0) / 6).toFixed(1);
 
       const submitData = {
@@ -75,6 +78,7 @@ export const useReviewForm = () => {
         detailed_ratings: data.ratings,
         tags: data.tags,
         content: combinedContent,
+        story_sections: storySections,
       };
 
       if (addReview) {

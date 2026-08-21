@@ -78,7 +78,7 @@ export async function getServerSideProps({ params, res }) {
 
     const { data: reviews } = await supabase
       .from('reviews')
-      .select('id, shop_id, therapist_name, therapist_id, rating, content, detailed_ratings, tags, created_at, is_public, user_id, user_name, course')
+      .select('id, shop_id, therapist_name, therapist_id, rating, content, story_sections, detailed_ratings, tags, created_at, is_public, user_id, user_name, course')
       .in('shop_id', reviewShopIds)
       .in('therapist_name', nameVariants)
       .or('is_public.eq.true,user_id.eq.owner_manual')
