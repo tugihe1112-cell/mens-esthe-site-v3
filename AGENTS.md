@@ -28,6 +28,7 @@
   - 適用後: shops 1,099／therapists 59,633／reviews 16／孤児0。実口コミがある退店セラピスト1名は意図的に保持
 - 依存・継続監視:
   - 未使用の`react-router-dom`を削除し、Vercel/CIの`--legacy-peer-deps`を撤去。lock厳守の`npm ci`へ統一。Turbopackの内部ポート制限によるpanicを避けるため本番buildは公式Webpackへ固定し、クリーン再現・lint・30ページbuild・npm audit 0を確認
+  - Vercel側の新しいnpmがoptional peer（`@emnapi/core` / `runtime`）のlock欠落を検出したため、3パッケージの公開integrityを復元。旧本番を維持したまま初回デプロイは安全に停止し、クリーン`npm ci`で727パッケージの再現を再確認
   - `check_site_integrity.mjs`（主要＋sitemap＋内部リンク、SEO/JSON-LD/charset/4xx）と`check_api_contracts.mjs`（公開API・認証拒否・CSP）を15分監視へ追加
   - 回帰ガードで依存競合の隠蔽、アクセシビリティ欠落、FK/view、監視削除をデプロイ前に停止
 - 通知: 新規登録自体は管理者メール障害で取り消さない設計を維持しつつ、ResendのHTTP失敗を握りつぶさずサーバーログへ記録
