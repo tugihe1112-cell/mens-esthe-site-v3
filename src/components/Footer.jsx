@@ -18,9 +18,9 @@ import stats from '../data/stats-latest.json';
  *    ホーム（最高PageRankかつ唯一インデックスされているページ）から張られ続ける。
  *    全ページ共通のボイラープレート・リンクは元々評価が低いため、影響は小さい。
  */
-export default function Footer({ variant = 'full' }) {
-  const totalShops = stats?.coverage?.totalShops || 0;
-  const totalTherapists = stats?.coverage?.totalTherapists || 0;
+export default function Footer({ variant = 'full', statsOverride = null }) {
+  const totalShops = statsOverride?.totalShops ?? stats?.coverage?.totalShops ?? 0;
+  const totalTherapists = statsOverride?.totalTherapists ?? stats?.coverage?.totalTherapists ?? 0;
 
   if (variant === 'minimal') {
     return (

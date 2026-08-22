@@ -1,51 +1,85 @@
 /**
  * Vercel サーバーレス関数 — クレジット付与メール通知
  * POST /api/notify-credit
- * Body: { user_id, days, credits_days, expires_at }
+ * Headers: Authorization: Bearer {Supabase access_token}
+ * Body: { user_id, days }
  */
 import { createClient } from '@supabase/supabase-js';
+
+const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { user_id, days, credits_days, expires_at } = req.body || {};
-  if (!user_id || !days) {
-    return res.status(400).json({ error: 'Missing required fields' });
+  res.setHeader('Cache-Control', 'no-store');
+
+  const supabaseUrl = process.env.VITE_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseUrl || !serviceRoleKey) {
+    console.error('[notify-credit] Supabase server credentials are not configured');
+    return res.status(500).json({ error: 'Server configuration error' });
   }
 
-  // ── ① Supabase Admin でユーザーのメールアドレスを取得 ──
-  const supabaseAdmin = createClient(
-    process.env.VITE_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
+  const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
 
+  // ── ① 呼び出し元JWTをAuthサーバーで検証し、管理者だけを許可 ──
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+  if (!token) return res.status(401).json({ error: 'Unauthorized: no token' });
+
+  const { data: { user: caller }, error: authError } = await supabaseAdmin.auth.getUser(token);
+  if (authError || !caller) return res.status(401).json({ error: 'Unauthorized: invalid token' });
+  if (!ADMIN_EMAILS.includes(caller.email)) {
+    return res.status(403).json({ error: 'Forbidden: not an admin' });
+  }
+
+  const { user_id, days } = req.body || {};
+  if (!UUID_PATTERN.test(String(user_id || '')) || !Number.isInteger(days) || days < 1 || days > 90) {
+    return res.status(400).json({ error: 'Missing or invalid fields' });
+  }
+
+  // ── ② 送信先と現在の付与状態はクライアント値を信頼せずDBから再取得 ──
   let userEmail = null;
+  let creditsDays = 0;
+  let expiresAt = null;
   try {
-    const { data, error } = await supabaseAdmin.auth.admin.getUserById(user_id);
-    if (error) throw error;
+    const [{ data, error }, { data: credit, error: creditError }] = await Promise.all([
+      supabaseAdmin.auth.admin.getUserById(user_id),
+      supabaseAdmin
+        .from('user_credits')
+        .select('credits_days,expires_at')
+        .eq('user_id', user_id)
+        .maybeSingle(),
+    ]);
+    if (error || creditError) throw error || creditError;
     userEmail = data?.user?.email;
+    creditsDays = Number(credit?.credits_days || 0);
+    expiresAt = credit?.expires_at || null;
   } catch (e) {
     console.error('Failed to get user email:', e.message);
-    // メール取得失敗はエラーにしない（付与自体は成功しているため）
-    return res.status(200).json({ ok: true, skipped: 'no_email' });
+    // 付与処理は別APIですでに完了しているためロールバックしないが、送信失敗は明示する。
+    return res.status(502).json({ ok: false, error: 'Failed to load recipient' });
   }
 
   if (!userEmail) {
-    return res.status(200).json({ ok: true, skipped: 'no_email' });
+    return res.status(404).json({ ok: false, error: 'Recipient email not found' });
   }
 
-  // ── ② 有効期限フォーマット ──
-  const expiryDate = expires_at
-    ? new Date(expires_at).toLocaleDateString('ja-JP', {
+  // ── ③ 有効期限フォーマット ──
+  const expiryDate = expiresAt
+    ? new Date(expiresAt).toLocaleDateString('ja-JP', {
         year: 'numeric', month: 'long', day: 'numeric',
       })
     : '不明';
 
   const siteUrl = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
-  // ── ③ メール本文（HTML） ──
+  // ── ④ メール本文（HTML） ──
   const html = `
 <!DOCTYPE html>
 <html lang="ja">
@@ -92,7 +126,7 @@ export default async function handler(req, res) {
                     有効期限：<strong style="color:#e2e8f0;">${expiryDate}</strong>まで
                   </p>
                   <p style="margin:4px 0 0;font-size:12px;color:#64748b;">
-                    累計閲覧日数：${credits_days}日
+                    累計閲覧日数：${creditsDays}日
                   </p>
                 </div>
               </div>
@@ -142,11 +176,11 @@ export default async function handler(req, res) {
 </html>
   `.trim();
 
-  // ── ④ Resend でメール送信 ──
+  // ── ⑤ Resend でメール送信 ──
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) {
-    console.warn('RESEND_API_KEY not set — skipping email');
-    return res.status(200).json({ ok: true, skipped: 'no_resend_key' });
+    console.error('RESEND_API_KEY not set — cannot send credit email');
+    return res.status(500).json({ ok: false, error: 'Email service is not configured' });
   }
 
   try {
@@ -167,13 +201,13 @@ export default async function handler(req, res) {
     if (!emailRes.ok) {
       const errBody = await emailRes.text();
       console.error('Resend error:', emailRes.status, errBody);
-      return res.status(200).json({ ok: true, skipped: 'resend_error', detail: errBody });
+      return res.status(502).json({ ok: false, error: 'Email delivery failed' });
     }
 
     const emailData = await emailRes.json();
     return res.status(200).json({ ok: true, email_id: emailData.id });
   } catch (e) {
     console.error('Email send failed:', e.message);
-    return res.status(200).json({ ok: true, skipped: 'exception', detail: e.message });
+    return res.status(502).json({ ok: false, error: 'Email delivery failed' });
   }
 }

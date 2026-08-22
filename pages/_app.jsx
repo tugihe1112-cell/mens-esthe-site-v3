@@ -105,7 +105,7 @@ function RouteProgress() {
   return loading ? <div className="route-progress" aria-hidden="true" /> : null;
 }
 
-function Layout({ children }) {
+function Layout({ children, liveCounts }) {
   const router = useRouter();
   const shouldHideNav = HIDE_NAV_PATHS.some(p => router.pathname === p);
   // 投稿フローではフッターも出さない（2026-08-17）。
@@ -132,7 +132,7 @@ function Layout({ children }) {
       <RouteProgress />
       <ScrollToTop />
       <main className="flex-grow">{children}</main>
-      {!shouldHideNav && !isPostingFlow && !isChatRoom && <Footer variant={isHome ? 'full' : 'minimal'} />}
+      {!shouldHideNav && !isPostingFlow && !isChatRoom && <Footer variant={isHome ? 'full' : 'minimal'} statsOverride={liveCounts} />}
       {!shouldHideNav && <BottomNav />}
     </div>
   );
@@ -159,7 +159,7 @@ export default function MyApp({ Component, pageProps }) {
         <DataProvider>
           <AuthProvider>
             <AppProvider>
-              <Layout>
+              <Layout liveCounts={pageProps.liveCounts}>
                 <Component {...pageProps} />
               </Layout>
             </AppProvider>

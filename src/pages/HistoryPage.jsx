@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
+import { historyLink, useRecentlyViewed } from '../hooks/useRecentlyViewed';
 import { Link, useNavigate } from '../compat/router';
 import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
@@ -12,7 +12,7 @@ export default function HistoryPage() {
   // 履歴データを整形
   const formattedHistory = history.map(item => ({
     ...item,
-    link: item.link || `/shops/${item.shopId}/threads/${item.therapistId || item.id}`
+    link: historyLink(item),
   }));
 
   return (

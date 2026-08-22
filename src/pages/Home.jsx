@@ -62,8 +62,12 @@ const RANK_STYLES = [
   { size: 'col-span-1 row-span-1', color: 'from-red-600 to-orange-900', tag: '🔥 注目' },        // 5位
 ];
 
-export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
+export default function HomePage({ initialHero = [], reviewsByPref = [], liveCounts = null }) {
   const { shops, loading } = useShopData();
+  const displayedCounts = {
+    totalShops: liveCounts?.totalShops ?? siteStats.coverage?.totalShops ?? 0,
+    totalTherapists: liveCounts?.totalTherapists ?? siteStats.coverage?.totalTherapists ?? 0,
+  };
   const [featuredTherapists, setFeaturedTherapists] = useState([]);
   const leadReview = useMemo(() => reviewsByPref
     .flatMap((block) => block.reviews || [])
@@ -234,7 +238,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
     <div className="min-h-screen bg-slate-950 pb-6 md:pb-10 overflow-x-clip font-sans text-slate-200">
       <SeoHead
         title="メンズエステ検索・口コミ"
-        description={`メンエスマップは全国${Number(siteStats.coverage?.totalShops || 0).toLocaleString()}店舗・在籍${Number(siteStats.coverage?.totalTherapists || 0).toLocaleString()}人のメンズエステを掲載。セラピスト別の口コミ・出勤スケジュール・料金を検索できるポータルサイトです。掲載店舗から広告費・掲載料は一切受け取っていません。`}
+        description={`メンエスマップは全国${Number(displayedCounts.totalShops).toLocaleString()}店舗・在籍${Number(displayedCounts.totalTherapists).toLocaleString()}人のメンズエステを掲載。セラピスト別の口コミ・出勤スケジュール・料金を検索できるポータルサイトです。掲載店舗から広告費・掲載料は一切受け取っていません。`}
         path="/"
       />
       {/* LCP対策: 先頭ヒーロー画像を最優先で先読み（初期HTMLのheadに埋め込む） */}
@@ -290,7 +294,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [] }) {
             <div className="my-6 rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-3 text-xs font-medium leading-relaxed text-slate-400">
               <span className="font-bold text-slate-200">掲載店舗から広告費・掲載料を受け取っていません。</span>
               <span className="ml-1">辛口の評価もそのまま掲載。</span>
-              <span className="ml-2 text-slate-300">掲載 {Number(siteStats.coverage?.totalShops || 0).toLocaleString()}店舗／在籍 {Number(siteStats.coverage?.totalTherapists || 0).toLocaleString()}人</span>
+              <span className="ml-2 text-slate-300">掲載 {Number(displayedCounts.totalShops).toLocaleString()}店舗／在籍 {Number(displayedCounts.totalTherapists).toLocaleString()}人</span>
               <Link to="/stats" className="ml-2 inline-flex min-h-11 items-center font-bold text-pink-400 hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">集計を見る →</Link>
             </div>
 

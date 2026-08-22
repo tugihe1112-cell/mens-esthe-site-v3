@@ -3,8 +3,27 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-08-22 （口コミの4区分を保存・表示まで維持）**
+> **最終更新: 2026-08-22 （認証・公開API・閲覧履歴・データ鮮度を改善）**
 > 作業がひと段落するたびに、Codexがこのファイルを自動更新する。
+
+---
+
+## 2026-08-22 認証・公開API・閲覧履歴・データ鮮度の改善
+
+- `notify-credit`を管理者JWT必須に変更。送信先メール・累計日数・期限はクライアント値を使わずAuth/DBから再取得し、送信失敗を成功扱いしない
+- 登録画面の表示名が捨てられていた問題を修正し、`auth.users.user_metadata.display_name`へ保存。1〜30文字を画面/APIの両方で検証
+- サービス権限を使う新規登録APIとお問い合わせAPIへ、IP＋メール単位のDB-backedレート制限を追加
+  - `api_rate_limits`はHMACキーのみ保持し、生のIP・メールは保存しない
+  - `consume_api_rate_limit`はUPSERT 1文で加算・判定し、並列リクエストでも上限を抜けない
+  - テーブルはRLS＋クライアント明示拒否、RPCはservice_roleだけ実行可
+- 閲覧履歴のセラピストカードに遷移先が保存されずホームへ戻る問題を修正。既存localStorageの旧形式も読み込み時に自動修復
+- ホームの掲載母数をSSR時に実DBから取得。統計JSONも非在籍行を除いて再集計し、1,099店舗／在籍60,727人へ更新
+- 日次監視へデータ鮮度チェックを追加。公式URL欠落、`last_seen_at`欠落、180日超未確認の在籍名簿を検知
+- `X-Powered-By`を無効化し、CSPを追加。旧式`X-XSS-Protection`は安全な`0`へ変更
+- DB適用履歴: `harden_public_api_rate_limits_sha_pending`、`fix_public_api_rate_limit_runtime`、`api_rate_limits_explicit_deny_policy`
+- 本番DB検証: RPCは1回目/2回目true・3回目false（上限2）、テスト行0、anon/authenticatedのtable SELECT・RPC EXECUTEはいずれもfalse、service_roleのみEXECUTE=true
+- Supabase Security Advisorは既知のLeaked Password Protection未設定（Freeプラン）の1警告のみ
+- 検証: コア安全ガード、デザイン決定、口コミ4区分、データ鮮度、`git diff --check`、`npm run build`成功。既知の`typescript`未導入によるESLint parser警告のみ継続
 
 ---
 

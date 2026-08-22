@@ -61,16 +61,14 @@ function GrantModal({ review, onClose, onGrant }) {
       try {
         const emailRes = await fetch('/api/notify-credit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${jwt}` },
           body: JSON.stringify({
             user_id: review.user_id,
             days,
-            credits_days: grantData.credits_days,
-            expires_at: grantData.expires_at,
           }),
         });
         const emailData = await emailRes.json();
-        setEmailStatus(emailData.ok ? 'sent' : 'failed');
+        setEmailStatus(emailRes.ok && emailData.ok ? 'sent' : 'failed');
       } catch {
         setEmailStatus('failed');
       }

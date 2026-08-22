@@ -3,6 +3,27 @@ import { useState, useEffect, useCallback } from 'react';
 const STORAGE_KEY = 'mens_esthe_history';
 const MAX_HISTORY = 10;
 
+export function historyLink(item) {
+  if (typeof item?.link === 'string' && item.link.startsWith('/') && item.link !== '/') {
+    return item.link;
+  }
+  if (item?.shopId && item?.therapistId) {
+    return `/shops/${item.shopId}/threads/${item.therapistId}`;
+  }
+  if (item?.shopId) return `/shops/${item.shopId}`;
+  return '/search';
+}
+
+function normalizeHistoryItem(item) {
+  return {
+    ...item,
+    type: item?.type || (item?.therapistId ? 'therapist' : 'shop'),
+    subText: item?.subText || item?.shopName || '',
+    image_url: item?.image_url || item?.image || null,
+    link: historyLink(item),
+  };
+}
+
 export function useRecentlyViewed() {
   const [history, setHistory] = useState([]);
 
@@ -11,7 +32,13 @@ export function useRecentlyViewed() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        setHistory(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        const normalized = Array.isArray(parsed)
+          ? parsed.filter((item) => item?.id).map(normalizeHistoryItem).slice(0, MAX_HISTORY)
+          : [];
+        setHistory(normalized);
+        // 旧形式（link未保存）も読んだ時点で修復し、次回以降も正しい遷移先を保持する。
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
       }
     } catch (e) {
       console.error("履歴の読み込みに失敗しました", e);
@@ -26,7 +53,7 @@ export function useRecentlyViewed() {
       const filtered = prev.filter((i) => i.id !== item.id);
       const newHistory = [
         {
-          ...item,
+          ...normalizeHistoryItem(item),
           viewedAt: new Date().toISOString(),
         },
         ...filtered

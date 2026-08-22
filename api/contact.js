@@ -4,6 +4,8 @@
  * Body: { name, email, category, message, company }
  */
 
+import { consumeRateLimit, rejectRateLimit, requestIp } from '../server/rateLimit.js';
+
 const MAX_NAME_LENGTH = 80;
 const MAX_CATEGORY_LENGTH = 80;
 const MAX_MESSAGE_LENGTH = 4000;
@@ -37,6 +39,8 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
+  res.setHeader('Cache-Control', 'no-store');
+
   const name = normalizeText(rawName).slice(0, MAX_NAME_LENGTH);
   const email = normalizeText(rawEmail).toLowerCase();
   const category = normalizeText(rawCategory || 'お問い合わせ').slice(0, MAX_CATEGORY_LENGTH);
@@ -52,6 +56,17 @@ export default async function handler(req, res) {
 
   if (normalizeText(rawMessage).length > MAX_MESSAGE_LENGTH) {
     return res.status(400).json({ error: 'Message too long' });
+  }
+
+  try {
+    const [ipAllowed, emailAllowed] = await Promise.all([
+      consumeRateLimit({ scope: 'contact-ip', subject: requestIp(req), limit: 5, windowSeconds: 3600 }),
+      consumeRateLimit({ scope: 'contact-email', subject: email, limit: 3, windowSeconds: 3600 }),
+    ]);
+    if (!ipAllowed || !emailAllowed) return rejectRateLimit(res, 3600);
+  } catch (error) {
+    console.error('[contact] rate limiter failed:', error.message);
+    return res.status(503).json({ error: '現在送信できません。時間をおいて再度お試しください。' });
   }
 
   const resendKey = process.env.RESEND_API_KEY;

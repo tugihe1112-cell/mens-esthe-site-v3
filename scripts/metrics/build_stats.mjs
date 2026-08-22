@@ -130,8 +130,9 @@ async function main() {
   console.log(`\n📊 統計集計 (${AS_OF})  ${DRY ? '[DRY-RUN]' : ''}\n`);
 
   const shops = await fetchAll('shops', 'id, name, raw_data, price_system');
-  const therapists = await fetchAll('therapists', 'id, shop_id');
-  console.log(`  店舗: ${shops.length}件 / セラピスト: ${therapists.length}件\n`);
+  const allTherapists = await fetchAll('therapists', 'id, shop_id, is_active');
+  const therapists = allTherapists.filter((therapist) => therapist.is_active !== false);
+  console.log(`  店舗: ${shops.length}件 / 在籍セラピスト: ${therapists.length}件（全レコード ${allTherapists.length}件）\n`);
 
   // ── 1. 都道府県別 店舗数 ──
   const prefCount = {};

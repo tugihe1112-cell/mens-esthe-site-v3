@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-08-14",
+  "generatedAt": "2026-08-22",
   "asOf": "2026年8月",
   "coverage": {
-    "totalShops": 1098,
-    "totalTherapists": 60999,
-    "priceSampleShops": 487
+    "totalShops": 1099,
+    "totalTherapists": 60727,
+    "priceSampleShops": 488
   },
   "prefectureShopCounts": [
     {
       "prefecture": "東京都",
-      "count": 506
+      "count": 507
     },
     {
       "prefecture": "大阪府",
@@ -131,6 +131,11 @@
       "count": 17
     },
     {
+      "area": "代々木・原宿",
+      "prefecture": "東京都",
+      "count": 17
+    },
+    {
       "area": "秋葉原",
       "prefecture": "東京都",
       "count": 17
@@ -152,11 +157,6 @@
     },
     {
       "area": "五反田",
-      "prefecture": "東京都",
-      "count": 16
-    },
-    {
-      "area": "代々木・原宿",
       "prefecture": "東京都",
       "count": 16
     },
@@ -207,8 +207,8 @@
     }
   ],
   "nationalPrice": {
-    "n60": 291,
-    "n90": 388,
+    "n60": 292,
+    "n90": 389,
     "median60": 14000,
     "median90": 18000
   },
@@ -236,8 +236,8 @@
     },
     {
       "prefecture": "東京都",
-      "n60": 216,
-      "n90": 304,
+      "n60": 217,
+      "n90": 305,
       "median60": 14000,
       "median90": 18000
     },
@@ -257,9 +257,9 @@
     }
   ],
   "therapistStats": {
-    "total": 60999,
+    "total": 60727,
     "shopsWithTherapists": 1025,
-    "medianPerShop": 43,
+    "medianPerShop": 42,
     "topShops": [
       {
         "shopId": "shizuoka_shizuoka_eden",

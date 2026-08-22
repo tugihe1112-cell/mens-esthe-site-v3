@@ -164,8 +164,12 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
         therapistId: therapist.id,
         shopId: shop.id,
         name: therapist.name,
-        image: therapist.image,
-        shopName: shop.name
+        image: therapist.image_url || therapist.image,
+        image_url: therapist.image_url || therapist.image,
+        shopName: shop.name,
+        subText: shop.name,
+        type: 'therapist',
+        link: `/shops/${shop.id}/threads/${therapist.id}`,
       });
     }
   }, [uniqueKey, therapist, shop, addToHistory]);

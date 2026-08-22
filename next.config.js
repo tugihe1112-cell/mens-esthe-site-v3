@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  poweredByHeader: false,
 
   // VITE_ 環境変数をそのままブラウザに公開（.envファイルの変数名変更不要）
   env: {

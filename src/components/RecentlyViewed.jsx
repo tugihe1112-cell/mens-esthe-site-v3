@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from '../compat/router';
-import { useRecentlyViewed } from '../hooks/useRecentlyViewed';
+import { historyLink, useRecentlyViewed } from '../hooks/useRecentlyViewed';
 
 export default function RecentlyViewed() {
   const { history, clearHistory } = useRecentlyViewed();
@@ -28,7 +28,7 @@ export default function RecentlyViewed() {
           {history.map((item) => (
             <Link
               key={item.id}
-              to={item.link}
+              to={historyLink(item)}
               className="flex-shrink-0 w-32 snap-start group"
             >
               {/* 🐛 判定と描画がズレていた（2026-08-17 修正）:

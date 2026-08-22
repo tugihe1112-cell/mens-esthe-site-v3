@@ -18,7 +18,9 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
 
-    if (!name || !email || !password || !confirmPassword) { setError("すべての項目を入力してください"); return; }
+    const displayName = name.normalize('NFKC').trim().replace(/\s+/g, ' ');
+    if (!displayName || !email || !password || !confirmPassword) { setError("すべての項目を入力してください"); return; }
+    if (displayName.length > 30) { setError("表示名は30文字以内で入力してください"); return; }
     if (password !== confirmPassword) { setError("パスワードが一致しません"); return; }
     if (password.length < 8) { setError("パスワードは8文字以上で設定してください"); return; }
     if (!agreeToTerms) { setError("利用規約に同意してください"); return; }
@@ -29,7 +31,7 @@ export default function RegisterPage() {
       const r = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ display_name: displayName, email, password }),
       });
       const result = await r.json();
       if (!r.ok) {
@@ -111,7 +113,7 @@ export default function RegisterPage() {
                    サイトで最も重要な入口。 */}
             <div className="space-y-1 group">
               <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">表示名（ニックネーム）</label>
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3.5 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold shadow-inner" placeholder="例）メンエス浪人" />
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} maxLength={30} autoComplete="nickname" className="w-full p-3.5 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold shadow-inner" placeholder="例）メンエス浪人" />
               <p className="text-[11px] text-slate-500 ml-2 leading-relaxed">口コミの投稿者名として公開されます。本名は避けてください</p>
             </div>
 

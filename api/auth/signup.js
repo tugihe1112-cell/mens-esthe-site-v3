@@ -1,18 +1,47 @@
 /**
  * POST /api/auth/signup
  * ユーザー作成 + 確認メール送信をサーバーサイドで完結させる
- * Body: { email, password }
+ * Body: { display_name, email, password }
  */
 import { createClient } from '@supabase/supabase-js';
+import { consumeRateLimit, rejectRateLimit, requestIp } from '../../server/rateLimit.js';
 
 const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
+
+const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+}[char]));
+
+const normalizeDisplayName = (value) => String(value || '')
+  .normalize('NFKC')
+  .trim()
+  .replace(/\s+/g, ' ');
+
+const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { email, password } = req.body || {};
-  if (!email || !password) {
-    return res.status(400).json({ error: 'email と password は必須です' });
+  res.setHeader('Cache-Control', 'no-store');
+
+  const { display_name: rawDisplayName, email: rawEmail, password } = req.body || {};
+  const displayName = normalizeDisplayName(rawDisplayName);
+  const email = String(rawEmail || '').trim().toLowerCase();
+  if (!displayName || !email || !password) {
+    return res.status(400).json({ error: '表示名・メールアドレス・パスワードは必須です' });
+  }
+  if (displayName.length > 30) {
+    return res.status(400).json({ error: '表示名は30文字以内で入力してください' });
+  }
+  if (email.length > 254 || !isValidEmail(email)) {
+    return res.status(400).json({ error: 'メールアドレスの形式が正しくありません' });
+  }
+  if (typeof password !== 'string' || password.length < 8 || password.length > 128) {
+    return res.status(400).json({ error: 'パスワードは8〜128文字で入力してください' });
   }
 
   const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
@@ -30,11 +59,20 @@ export default async function handler(req, res) {
   let userId = null;
 
   try {
+    // admin.createUserは通常の /auth/v1/signup のレート制限を通らないため、
+    // IPとメールの両方をDBで原子的に制限する。制限機構の障害時はfail-closed。
+    const [ipAllowed, emailAllowed] = await Promise.all([
+      consumeRateLimit({ scope: 'signup-ip', subject: requestIp(req), limit: 5, windowSeconds: 3600 }),
+      consumeRateLimit({ scope: 'signup-email', subject: email, limit: 3, windowSeconds: 86400 }),
+    ]);
+    if (!ipAllowed || !emailAllowed) return rejectRateLimit(res, ipAllowed ? 86400 : 3600);
+
     // Step1: ユーザー作成
     const { data: userData, error: createError } = await admin.auth.admin.createUser({
       email,
       password,
       email_confirm: false,
+      user_metadata: { display_name: displayName },
     });
 
     if (createError) {
@@ -139,7 +177,8 @@ export default async function handler(req, res) {
               <p style="color:#f472b6;font-weight:bold;letter-spacing:.1em;font-size:12px;margin:0 0 8px">NEW SIGNUP</p>
               <h2 style="color:#fff;margin:0 0 20px;font-size:20px">新しいユーザーが登録しました</h2>
               <table style="width:100%;font-size:14px;line-height:2">
-                <tr><td style="color:#94a3b8;width:120px">メール</td><td style="color:#fff">${email}</td></tr>
+                <tr><td style="color:#94a3b8;width:120px">表示名</td><td style="color:#fff">${escapeHtml(displayName)}</td></tr>
+                <tr><td style="color:#94a3b8;width:120px">メール</td><td style="color:#fff">${escapeHtml(email)}</td></tr>
                 <tr><td style="color:#94a3b8">登録日時</td><td>${jstNow} JST</td></tr>
                 <tr><td style="color:#94a3b8">プラン</td><td>free（自動）</td></tr>
               </table>
@@ -167,6 +206,9 @@ export default async function handler(req, res) {
     if (userId) {
       await admin.auth.admin.deleteUser(userId).catch(() => {});
     }
-    return res.status(500).json({ error: err.message });
+    const limiterFailed = err.message?.startsWith('Rate limiter') || err.message === 'Rate limiter is not configured';
+    return res.status(limiterFailed ? 503 : 500).json({
+      error: limiterFailed ? '現在登録を受け付けられません。時間をおいて再度お試しください。' : err.message,
+    });
   }
 }

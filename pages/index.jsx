@@ -11,8 +11,8 @@ import Home from '../src/pages/Home';
 import { HERO_SHOP_IDS, buildInitialHero } from '../src/data/heroShops';
 import { PREF_TO_SLUG } from '../src/data/areaLinks';
 
-export default function IndexPage({ initialHero, reviewsByPref }) {
-  return <Home initialHero={initialHero} reviewsByPref={reviewsByPref} />;
+export default function IndexPage({ initialHero, reviewsByPref, liveCounts }) {
+  return <Home initialHero={initialHero} reviewsByPref={reviewsByPref} liveCounts={liveCounts} />;
 }
 
 export async function getServerSideProps({ res }) {
@@ -22,14 +22,20 @@ export async function getServerSideProps({ res }) {
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
   let initialHero = [];
   let reviewsByPref = [];
+  let liveCounts = null;
   try {
     // 公開データ（shops）はRLSで匿名read可。クライアントと同じanon keyで取得。
     const supabase = createClient(
       process.env.VITE_SUPABASE_URL || '',
       process.env.VITE_SUPABASE_ANON_KEY || ''
     );
-    // ①ヒーロー店舗 と ②公開口コミ最新30件 は独立 → 並列（Vercel関数↔Supabaseの往復回数を削減）
-    const [{ data }, { data: revs }] = await Promise.all([
+    // ヒーロー・公開口コミ・表示母数は独立 → 並列（Vercel関数↔Supabaseの往復回数を削減）
+    const [
+      { data },
+      { data: revs },
+      { count: shopCount },
+      { count: activeTherapistCount },
+    ] = await Promise.all([
       supabase.from('shops').select('id, group_id, name, raw_data, image_url').in('id', HERO_SHOP_IDS),
       supabase.from('reviews')
         .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at, detailed_ratings, user_name, course')
@@ -37,8 +43,15 @@ export async function getServerSideProps({ res }) {
         .not('therapist_id', 'is', null)
         .order('created_at', { ascending: false })
         .limit(30),
+      supabase.from('shops').select('id', { count: 'exact', head: true }),
+      supabase.from('therapists')
+        .select('id', { count: 'exact', head: true })
+        .or('is_active.is.null,is_active.eq.true'),
     ]);
     initialHero = buildInitialHero(data);
+    if (Number.isInteger(shopCount) && Number.isInteger(activeTherapistCount)) {
+      liveCounts = { totalShops: shopCount, totalTherapists: activeTherapistCount };
+    }
 
     // 店名/エリア解決 と セラピスト写真 は②に依存するがお互い独立 → 並列
     const shopIds = [...new Set((revs || []).map((r) => r.shop_id).filter(Boolean))];
@@ -88,5 +101,5 @@ export async function getServerSideProps({ res }) {
     console.error('getServerSideProps home fetch failed:', e);
   }
 
-  return { props: { initialHero, reviewsByPref } };
+  return { props: { initialHero, reviewsByPref, liveCounts } };
 }

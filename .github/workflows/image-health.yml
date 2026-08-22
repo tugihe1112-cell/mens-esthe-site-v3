@@ -53,6 +53,17 @@ jobs:
           DEAD_MAX: '5'
           JUMP_MAX: '30'
 
+      # 写真が表示できても、在籍名簿や公式URLが古ければ利用者には誤情報になる。
+      # 180日以上再確認されない名簿と、公式URLの欠落を別軸で検知する。
+      - name: Check roster and source freshness
+        if: always()
+        run: node scripts/monitoring/check_data_freshness.mjs
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SHOP_WEBSITE_MISSING_MAX_PCT: '1'
+          THERAPIST_STALE_180_MAX_PCT: '5'
+
       # ── 履歴JSONをリポジトリに書き戻す ──
       # これが無いと、スクリプトが書いた履歴はランナー破棄と共に消え、
       # 前回比（JUMP_MAX）の基準が永久に更新されない＝じわじわ増える劣化を検知できない。
