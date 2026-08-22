@@ -30,6 +30,9 @@ forbidMatch('vercel.json', /legacy-peer-deps/, '本番installで依存競合を�
 forbidMatch('.github/workflows/ci.yml', /legacy-peer-deps/, 'CI installで依存競合を隠している');
 requireMatch('vercel.json', /"installCommand"\s*:\s*"npm ci"/, '本番installがlock厳守のnpm ciではない');
 requireMatch('.github/workflows/ci.yml', /run:\s*npm ci\s*$/m, 'CI installがlock厳守のnpm ciではない');
+requireMatch('.vercelignore', /^\.env$/m, 'Vercelへローカル.envがアップロードされ得る');
+requireMatch('.vercelignore', /^\.env\.\*$/m, 'Vercelへ.env派生ファイルがアップロードされ得る');
+requireMatch('.vercelignore', /^\.gcp-metrics-key\.json$/m, 'VercelへGCP鍵がアップロードされ得る');
 
 requireMatch('api/auth-email-hook.js', /new Webhook\(secret\)\.verify/, 'Standard Webhooks署名検証がない');
 requireMatch('api/auth-email-hook.js', /Invalid hook signature/, '不正署名を拒否する処理がない');

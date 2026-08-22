@@ -1,0 +1,16 @@
+# ローカル秘密情報はVercelへアップロードしない。値はVercel Environment Variablesだけを使う。
+.env
+.env.*
+.env.backup*
+.gcp-metrics-key.json
+*-key.json
+
+# ローカル生成物・VCSメタデータ
+.git
+.next
+node_modules
+dist
+out
+output
+scripts/metrics/cron.log
+r2_copy_errors.json
