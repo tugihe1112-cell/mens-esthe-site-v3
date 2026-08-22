@@ -12,7 +12,7 @@ const BASE = new URL(option('--base-url') || process.env.BASE_URL || 'https://ww
 const UA = 'mens-esthe-map-site-integrity/1.0';
 const MAX_LINKS = Math.max(1, Number(option('--max-links') || process.env.MAX_LINKS || 120));
 const CONCURRENCY = Math.max(1, Number(option('--concurrency') || process.env.CONCURRENCY || 16));
-const TIMEOUT_MS = 15_000;
+const TIMEOUT_MS = 20_000;
 
 const fixedRoutes = [
   '/', '/search', '/shops', '/area-search', '/ranking', '/new-therapists',
@@ -30,11 +30,20 @@ const failures = [];
 const warnings = [];
 
 async function get(url, { redirect = 'follow' } = {}) {
-  return fetch(url, {
-    redirect,
-    headers: { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml' },
-    signal: AbortSignal.timeout(TIMEOUT_MS),
-  });
+  let lastError;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      return await fetch(url, {
+        redirect,
+        headers: { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml' },
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+    } catch (error) {
+      lastError = error;
+      if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 400));
+    }
+  }
+  throw lastError;
 }
 
 async function mapLimit(items, limit, worker) {

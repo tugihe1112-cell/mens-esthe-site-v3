@@ -58,7 +58,11 @@ const failures = [];
 async function head(path) {
   const url = BASE + path;
   // 404判定にリダイレクトを混ぜたくないので manual
-  const res = await fetch(url, { redirect: 'manual', headers: { 'User-Agent': 'mens-esthe-map-monitor/1.0' } });
+  const res = await fetch(url, {
+    redirect: 'manual',
+    headers: { 'User-Agent': 'mens-esthe-map-monitor/1.0' },
+    signal: AbortSignal.timeout(20_000),
+  });
   return res;
 }
 
@@ -92,7 +96,10 @@ for (const path of MUST_200) {
 
 for (const path of MUST_BE_INDEXABLE) {
   try {
-    const res = await fetch(BASE + path, { headers: { 'User-Agent': 'mens-esthe-map-monitor/1.0' } });
+    const res = await fetch(BASE + path, {
+      headers: { 'User-Agent': 'mens-esthe-map-monitor/1.0' },
+      signal: AbortSignal.timeout(20_000),
+    });
     const html = await res.text();
     const m = html.match(/<meta[^>]+name=["']robots["'][^>]+content=["']([^"']*)["']/i);
     if (m && /noindex/i.test(m[1])) {

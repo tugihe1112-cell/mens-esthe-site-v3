@@ -8,16 +8,25 @@ const UA = 'mens-esthe-map-api-contract/1.0';
 const failures = [];
 
 async function request(path, init = {}) {
-  return fetch(new URL(path, BASE), {
-    ...init,
-    redirect: 'manual',
-    headers: {
-      'User-Agent': UA,
-      ...(init.body ? { 'Content-Type': 'application/json' } : {}),
-      ...(init.headers || {}),
-    },
-    signal: AbortSignal.timeout(15_000),
-  });
+  let lastError;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      return await fetch(new URL(path, BASE), {
+        ...init,
+        redirect: 'manual',
+        headers: {
+          'User-Agent': UA,
+          ...(init.body ? { 'Content-Type': 'application/json' } : {}),
+          ...(init.headers || {}),
+        },
+        signal: AbortSignal.timeout(20_000),
+      });
+    } catch (error) {
+      lastError = error;
+      if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 400));
+    }
+  }
+  throw lastError;
 }
 
 async function expectStatus(name, path, expected, init) {

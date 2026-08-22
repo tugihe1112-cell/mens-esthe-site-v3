@@ -33,6 +33,8 @@
   - `check_site_integrity.mjs`（主要＋sitemap＋内部リンク、SEO/JSON-LD/charset/4xx）と`check_api_contracts.mjs`（公開API・認証拒否・CSP）を15分監視へ追加
   - 回帰ガードで依存競合の隠蔽、アクセシビリティ欠落、FK/view、監視削除をデプロイ前に停止
 - 通知: 新規登録自体は管理者メール障害で取り消さない設計を維持しつつ、ResendのHTTP失敗を握りつぶさずサーバーログへ記録
+- 本番: commit `f9d66f8`、Vercel Production `dpl_HM19kK28HQcEVsW17uBUD3cnhjf1` Ready。`.env`検出警告は消滅
+- 本番再々検証: sitemap含む62ページ／内部リンク483件、公開API契約、404/200境界、49 JSチャンクすべて正常。画像100+100件の配信NG 0、名簿鮮度0日欠落・180日超0。新規デプロイ直後の並列cold startだけ通信例外が出たため監視に1回再試行を追加し、再実行は全成功（トップ温キャッシュTTFB 0.077秒）
 - Supabase AdvisorはLeaked Password Protection未設定の1警告のみ。`api_rate_limits_updated_at_idx`は小規模な期限切れ掃除を支えるため未使用判定でも保持
 
 ---
