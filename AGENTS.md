@@ -20,7 +20,7 @@
 - ホームの掲載母数をSSR時に実DBから取得。統計JSONも非在籍行を除いて再集計し、1,099店舗／在籍60,727人へ更新
 - 日次監視へデータ鮮度チェックを追加。公式URL欠落、`last_seen_at`欠落、180日超未確認の在籍名簿を検知
 - `X-Powered-By`を無効化し、CSPを追加。旧式`X-XSS-Protection`は安全な`0`へ変更
-- DB適用履歴: `harden_public_api_rate_limits_sha_pending`、`fix_public_api_rate_limit_runtime`、`api_rate_limits_explicit_deny_policy`
+- DB適用履歴: `harden_public_api_rate_limits_sha_pending`、`fix_public_api_rate_limit_runtime`、`api_rate_limits_explicit_deny_policy`、`verify_core_safety_guards_sha_664c8d7`
 - 本番DB検証: RPCは1回目/2回目true・3回目false（上限2）、テスト行0、anon/authenticatedのtable SELECT・RPC EXECUTEはいずれもfalse、service_roleのみEXECUTE=true
 - Supabase Security Advisorは既知のLeaked Password Protection未設定（Freeプラン）の1警告のみ
 - 検証: コア安全ガード、デザイン決定、口コミ4区分、データ鮮度、`git diff --check`、`npm run build`成功。既知の`typescript`未導入によるESLint parser警告のみ継続
