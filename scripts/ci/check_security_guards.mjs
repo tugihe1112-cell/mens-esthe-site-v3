@@ -17,9 +17,8 @@ const forbidMatch = (path, pattern, message) => {
   if (source !== null && pattern.test(source)) violations.push(`${path}: ${message}`);
 };
 
-if (fs.existsSync('api/send-confirmation.js')) {
-  violations.push('api/send-confirmation.js: 任意メールへ確認リンクを送れる旧公開APIを復活させないこと');
-}
+requireMatch('api/send-confirmation.js', /status\(410\)/, '廃止APIが明示的な410を返していない');
+forbidMatch('api/send-confirmation.js', /RESEND|sendEmail|generateLink|supabase/i, '廃止APIへメール・Auth処理を戻さないこと');
 
 for (const obsoletePath of ['src/App.jsx', 'src/main.jsx', 'src/pages/LoginPage.jsx.backup_ui']) {
   if (fs.existsSync(obsoletePath)) {

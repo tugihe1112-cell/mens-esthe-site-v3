@@ -20,7 +20,7 @@
   - 非管理者の`/admin`拒否、通知対象口コミの所有者照合、管理画面200件外のID追加取得を検証
   - 手動credits付与で`total_reviews_posted`を誤加算しないよう修正
 - 公開API・認証:
-  - 未使用の任意確認メールAPIを削除。Auth Send Email HookをStandard Webhooks署名必須・機密ログなし・fail-closedへ変更
+  - 未使用の任意確認メールAPIを送信処理なしの410 Goneへ固定。Auth Send Email HookをStandard Webhooks署名必須・機密ログなし・fail-closedへ変更
   - OG画像取得をHTTPS＋自社R2 hostだけに制限してSSRFを遮断
   - `track-view`と口コミ通知へDB-backedレート制限、ID件数上限、RPC/Resend失敗検査を追加
   - メール未設定時に成功扱いしていたお問い合わせ・通知を503へ変更、`shops-lite`をGET/HEAD限定
