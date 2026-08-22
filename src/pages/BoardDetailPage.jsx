@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import { authHeaders } from '../utils/supabaseRest.js';
+
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
 
 function timeAgo(dateStr) {
   const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
@@ -20,41 +23,41 @@ export default function BoardDetailPage() {
   const [replyContent, setReplyContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const url = process.env.VITE_SUPABASE_URL;
-  const key = process.env.VITE_SUPABASE_ANON_KEY;
-  const headers = { apikey: key, Authorization: `Bearer ${key}` };
+  const fetchReplies = useCallback(async () => {
+    fetch(`${supabaseUrl}/rest/v1/replies?post_id=eq.${encodeURIComponent(postId)}&select=*&order=created_at.asc`, { headers: await authHeaders() })
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setReplies(data); });
+  }, [postId]);
 
   useEffect(() => {
     if (!postId) return;
-    // 投稿取得
-    fetch(`${url}/rest/v1/posts?id=eq.${postId}&select=*`, { headers })
-      .then(r => r.json())
-      .then(data => { if (data?.[0]) setPost(data[0]); });
-    // 返信取得
-    fetchReplies();
-  }, [postId]);
-
-  const fetchReplies = () => {
-    fetch(`${url}/rest/v1/replies?post_id=eq.${postId}&select=*&order=created_at.asc`, { headers })
-      .then(r => r.json())
-      .then(data => { if (Array.isArray(data)) setReplies(data); });
-  };
+    (async () => {
+      const headers = await authHeaders();
+      fetch(`${supabaseUrl}/rest/v1/posts?id=eq.${encodeURIComponent(postId)}&select=*`, { headers })
+        .then(r => r.json())
+        .then(data => { if (data?.[0]) setPost(data[0]); });
+      fetchReplies();
+    })();
+  }, [postId, fetchReplies]);
 
   const submitReply = async () => {
     if (!user) { alert('返信するにはログインが必要です'); return; }
     if (!replyContent.trim()) return;
     setIsSubmitting(true);
     try {
-      await fetch(`${url}/rest/v1/replies`, {
+      const response = await fetch(`${supabaseUrl}/rest/v1/replies`, {
         method: 'POST',
-        headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        headers: await authHeaders({ 'Content-Type': 'application/json', Prefer: 'return=representation' }),
         body: JSON.stringify({
           post_id: postId,
           user_id: user.id,
-          user_name: user.email?.split('@')[0] || '名無し',
+          user_name: user.user_metadata?.display_name || user.email?.split('@')[0] || '名無し',
           content: replyContent.trim(),
         }),
       });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const created = await response.json().catch(() => []);
+      if (!Array.isArray(created) || created.length === 0) throw new Error('返信が保存されませんでした');
       setReplyContent('');
       fetchReplies();
     } catch (e) {
@@ -128,6 +131,7 @@ export default function BoardDetailPage() {
                   rows={4}
                   value={replyContent}
                   onChange={e => setReplyContent(e.target.value)}
+                  maxLength={5000}
                   className="w-full bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50 resize-none mb-3"
                 />
                 <div className="flex justify-end">

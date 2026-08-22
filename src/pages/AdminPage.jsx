@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { authHeaders } from '../utils/supabaseRest';
 import { useNavigate, useLocation, Link } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext.jsx';
@@ -13,7 +13,6 @@ const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
 const SCRAPED_IDS = ['owner_manual', 'menesthe_import', 'menesthe_rewritten', 'mensest_user'];
 
 const url = process.env.VITE_SUPABASE_URL;
-const key = process.env.VITE_SUPABASE_ANON_KEY;
 // ⚠️ 2026-08-12: 以前はここで `Authorization: Bearer <anon key>` を固定生成し全RESTで使い回していた。
 //    anonキーで送ると PostgREST 上は常に anon ロール扱いになるため、
 //    `TO authenticated` の管理者RLS（reviews_admin_read 等）が**一切発火しない**。
@@ -252,17 +251,7 @@ export default function AdminPage() {
     if (!ADMIN_EMAILS.includes(user.email)) navigate('/', { replace: true });
   }, [isAuthLoading, user, navigate, intendedAdminPath]);
 
-  useEffect(() => {
-    if (isAuthLoading || !user || !ADMIN_EMAILS.includes(user.email)) return;
-    fetchReviews();
-    fetchCredits();
-  }, [isAuthLoading, user, requestedReviewId]);
-
-  useEffect(() => {
-    if (activeTab === 'shops' && shops.length === 0) fetchShops();
-  }, [activeTab]);
-
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     setIsLoadingReviews(true);
     try {
       const headers = await authHeaders();
@@ -285,7 +274,7 @@ export default function AdminPage() {
     } finally {
       setIsLoadingReviews(false);
     }
-  };
+  }, [requestedReviewId]);
 
   // メールのreview IDに一致するカードを自動展開する。
   useEffect(() => {
@@ -313,13 +302,13 @@ export default function AdminPage() {
     return () => window.clearTimeout(timer);
   }, [linkedReviewStatus, expandedId, requestedReviewId, activeTab]);
 
-  const fetchCredits = async () => {
+  const fetchCredits = useCallback(async () => {
     const res = await fetch(`${url}/rest/v1/user_credits?select=*&order=updated_at.desc`, { headers: await authHeaders() });
     const data = await res.json();
     if (Array.isArray(data)) setCredits(data);
-  };
+  }, []);
 
-  const fetchShops = async () => {
+  const fetchShops = useCallback(async () => {
     setIsLoadingShops(true);
     try {
       // ⚠️ 2026-08-12: limit=1000 だと PostgREST の max-rows と合わさって
@@ -343,7 +332,17 @@ export default function AdminPage() {
     } finally {
       setIsLoadingShops(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isAuthLoading || !user || !ADMIN_EMAILS.includes(user.email)) return;
+    fetchReviews();
+    fetchCredits();
+  }, [isAuthLoading, user, fetchReviews, fetchCredits]);
+
+  useEffect(() => {
+    if (activeTab === 'shops' && shops.length === 0) fetchShops();
+  }, [activeTab, shops.length, fetchShops]);
 
   const deleteReview = async (reviewId) => {
     if (!window.confirm('この口コミを削除しますか？')) return;

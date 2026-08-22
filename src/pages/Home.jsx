@@ -90,7 +90,6 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
         setTimeout(() => setReordering(false), 60);
       }
     } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewsByPref]);
 
   // 注目セラピスト取得（店舗分散・地域分散ロジック）

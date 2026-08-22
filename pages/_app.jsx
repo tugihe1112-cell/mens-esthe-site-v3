@@ -4,7 +4,6 @@
  * BrowserRouter は不要（Next.js がルーティングを担う）。
  */
 import React from 'react';
-import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '../src/contexts/AuthContext.jsx';
 import { DataProvider } from '../src/contexts/DataContext.jsx';
 import { AppProvider } from '../src/context/AppContext.tsx';
@@ -154,7 +153,6 @@ export default function MyApp({ Component, pageProps }) {
         gtag('js', new Date());
         gtag('config', '${GA_ID}');
       `}</Script>
-      <HelmetProvider>
       <ErrorBoundary>
         <DataProvider>
           <AuthProvider>
@@ -166,7 +164,6 @@ export default function MyApp({ Component, pageProps }) {
           </AuthProvider>
         </DataProvider>
       </ErrorBoundary>
-    </HelmetProvider>
     </>
   );
 }

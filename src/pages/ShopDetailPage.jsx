@@ -37,7 +37,7 @@ export default function ShopDetailPage({
   const { shopById, getTherapistsByShopId, getReviewsByShopId, loadTherapistsForShop, loadReviewsForShop } = useShopData();
   const { toggleFavorite, favorites, toggleFavTherapist, favTherapists } = useAppContext();
   
-  const { userPlan } = useAuth();
+  const { user, userPlan } = useAuth();
   const isPremiumUser = userPlan === 'premium' || userPlan === 'vip';
 
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
@@ -200,18 +200,20 @@ export default function ShopDetailPage({
 
   // 共有箱(Context)はあくまで「保険」。基本は直接取ってきた cloudShop を使う
   const shop = cloudShop || (shopById ? shopById[shopId] : null);
-  // グループ店舗で同一セラピストが複数店舗に登録されている場合に重複除去
-  const dedupeTherapists = (arr) => {
-    if (!arr) return arr;
+  // グループ店舗で同一セラピストが複数店舗に登録されている場合に重複除去。
+  // 直接取得がまだ空の間だけContextを保険にし、安定した配列参照を後続memoへ渡す。
+  const therapists = React.useMemo(() => {
+    const source = Array.isArray(cloudTherapists) && cloudTherapists.length > 0
+      ? cloudTherapists
+      : (getTherapistsByShopId ? getTherapistsByShopId(shopId) : []);
     const seen = new Set();
-    return arr.filter(t => {
-      const key = (t.name || '').replace(/\s/g, '').replace(/　/g, '').trim();
+    return (source || []).filter((therapist) => {
+      const key = (therapist.name || '').replace(/[\s　]/g, '').trim();
       if (!key || seen.has(key)) return false;
       seen.add(key);
       return true;
     });
-  };
-  const therapists = dedupeTherapists(cloudTherapists) || (getTherapistsByShopId ? getTherapistsByShopId(shopId) : []) || [];
+  }, [cloudTherapists, getTherapistsByShopId, shopId]);
   const reviews = cloudReviews.length > 0 ? cloudReviews : (getReviewsByShopId ? getReviewsByShopId(shopId, isPremiumUser) : []);
   const isFavorite = shop ? favorites.includes(shop.id) : false;
 
@@ -361,7 +363,7 @@ export default function ShopDetailPage({
 
              <div className="flex gap-2 self-start md:self-auto">
                <button 
-                  onClick={() => toggleFavorite(shop.id)} 
+                  onClick={() => user ? toggleFavorite(shop.id) : navigate(`/login?redirect=${encodeURIComponent(`/shops/${shop.id}`)}`)}
                   aria-label={isFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
                   className={`min-h-11 min-w-11 flex items-center justify-center gap-2 px-3 md:px-6 md:py-3 rounded-full font-bold transition shadow-lg backdrop-blur-sm ${
                     isFavorite 
@@ -748,7 +750,8 @@ export default function ShopDetailPage({
                              <button
                                onClick={(e) => {
                                  e.preventDefault();
-                                 toggleFavTherapist(`${shop.id}_${t.id}`);
+                                 if (user) toggleFavTherapist(`${shop.id}_${t.id}`);
+                                 else navigate(`/login?redirect=${encodeURIComponent(`/shops/${shop.id}`)}`);
                                }}
                                className="w-8 h-8 rounded-full bg-black/30 backdrop-blur flex items-center justify-center text-lg hover:bg-pink-600 transition"
                              >

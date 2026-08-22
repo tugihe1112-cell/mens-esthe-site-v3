@@ -89,9 +89,7 @@ export default function RequestReviewPage() {
   };
 
   // 選択された都道府県の市区町村リスト
-  const availableCities = useMemo(() => {
-    return citiesByPrefecture[prefecture] || [];
-  }, [prefecture]);
+  const availableCities = citiesByPrefecture[prefecture] || [];
 
   const tagCategories = {
     容姿: ["美人", "可愛い", "綺麗", "清楚", "ギャル系", "大人っぽい"],

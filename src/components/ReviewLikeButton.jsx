@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { authHeaders } from '../utils/supabaseRest';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+
 export default function ReviewLikeButton({ reviewId, initialLikeCount = 0 }) {
   const { user } = useAuth();
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(initialLikeCount);
   const [isLoading, setIsLoading] = useState(false);
-
-  const url = process.env.VITE_SUPABASE_URL;
-  const key = process.env.VITE_SUPABASE_ANON_KEY;
 
   // 自分がいいねしているか確認
   useEffect(() => {
@@ -21,7 +20,7 @@ export default function ReviewLikeButton({ reviewId, initialLikeCount = 0 }) {
     (async () => {
       try {
         const res = await fetch(
-          `${url}/rest/v1/review_likes?review_id=eq.${reviewId}&user_id=eq.${user.id}&select=id`,
+          `${supabaseUrl}/rest/v1/review_likes?review_id=eq.${reviewId}&user_id=eq.${user.id}&select=id`,
           { headers: await authHeaders() }
         );
         const data = await res.json();
@@ -53,7 +52,7 @@ export default function ReviewLikeButton({ reviewId, initialLikeCount = 0 }) {
       if (liked) {
         // いいね解除
         const res = await fetch(
-          `${url}/rest/v1/review_likes?review_id=eq.${reviewId}&user_id=eq.${user.id}`,
+          `${supabaseUrl}/rest/v1/review_likes?review_id=eq.${reviewId}&user_id=eq.${user.id}`,
           { method: 'DELETE', headers }
         );
         if (!res.ok) throw new Error(`いいねの解除に失敗しました (HTTP ${res.status})`);
@@ -66,7 +65,7 @@ export default function ReviewLikeButton({ reviewId, initialLikeCount = 0 }) {
         setCount(c => Math.max(0, c - 1));
       } else {
         // いいね追加
-        const res = await fetch(`${url}/rest/v1/review_likes`, {
+        const res = await fetch(`${supabaseUrl}/rest/v1/review_likes`, {
           method: 'POST',
           headers,
           body: JSON.stringify({ review_id: String(reviewId), user_id: user.id }),

@@ -71,8 +71,8 @@ export default async function handler(req, res) {
 
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) {
-    console.warn('RESEND_API_KEY not set — skipping contact email');
-    return res.status(200).json({ ok: true, skipped: 'no_resend_key' });
+    console.error('[contact] RESEND_API_KEY is not configured');
+    return res.status(503).json({ error: '現在送信できません。時間をおいて再度お試しください。' });
   }
 
   const to = process.env.CONTACT_TO_EMAIL || 'tugihe1112@gmail.com';

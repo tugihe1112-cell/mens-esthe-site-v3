@@ -12,11 +12,11 @@ const nextConfig = {
 
   // 画像ドメイン許可
   images: {
-    domains: [
-      'azuetkuzzmshqfbrhqmf.supabase.co',
-      'cdn2-caskan.com',
-      'files.re-db.com',
-      'imagedelivery.net',
+    remotePatterns: [
+      { protocol: 'https', hostname: 'azuetkuzzmshqfbrhqmf.supabase.co' },
+      { protocol: 'https', hostname: 'cdn2-caskan.com' },
+      { protocol: 'https', hostname: 'files.re-db.com' },
+      { protocol: 'https', hostname: 'imagedelivery.net' },
     ],
     unoptimized: true, // 既存の LazyImage が Supabase Image Transform を使っているためオフ
   },

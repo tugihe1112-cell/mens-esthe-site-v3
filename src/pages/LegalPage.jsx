@@ -48,13 +48,13 @@ export default function LegalPage() {
               </dd>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] p-6 gap-2 md:gap-4 hover:bg-white/5 transition">
-              <dt className="text-slate-400 font-bold">販売価格・支払時期等</dt>
-              <dd className="text-white font-medium">各有料プランの購入ページに記載された金額・条件に準じます。</dd>
+              <dt className="text-slate-400 font-bold">現在の販売状況</dt>
+              <dd className="text-white font-medium">現在、有料プランの申込みおよび決済は受け付けていません。販売開始前に価格、支払時期、提供時期その他の条件を本ページと購入画面へ明示します。</dd>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] p-6 gap-2 md:gap-4 hover:bg-white/5 transition">
               <dt className="text-slate-400 font-bold">返品・キャンセル</dt>
               <dd className="text-white font-medium">
-                デジタルコンテンツという商品の性質上、決済完了後のキャンセル・返金はお受けできません。解約手続きはマイページよりいつでも可能です。
+                有料販売を開始する場合に、商品・サービスの性質に応じたキャンセル、返金、解約条件を申込み前に明示します。
               </dd>
             </div>
           </dl>

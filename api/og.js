@@ -9,22 +9,51 @@ export const config = {
   runtime: 'edge',
 };
 
+const ALLOWED_IMAGE_HOSTS = new Set([
+  'mens-esthe-images.tugihe1112.workers.dev',
+]);
+
+function safeText(value, fallback, maxLength) {
+  const text = String(value || fallback).normalize('NFKC').trim();
+  return text.slice(0, maxLength) || fallback;
+}
+
+function allowedImageUrl(value) {
+  if (!value || value.length > 2048) return null;
+  try {
+    const url = new URL(value);
+    if (url.protocol !== 'https:' || !ALLOWED_IMAGE_HOSTS.has(url.hostname.toLowerCase())) return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
 export default async function handler(req) {
   const { searchParams } = new URL(req.url);
-  const title = searchParams.get('shop') || 'メンエスマップ';
-  const sub   = searchParams.get('sub')  || 'メンズエステ 口コミ・店舗検索';
-  const imageUrl = searchParams.get('image');
+  const title = safeText(searchParams.get('shop'), 'メンエスマップ', 80);
+  const sub   = safeText(searchParams.get('sub'), 'メンズエステ 口コミ・店舗検索', 120);
+  // 任意URLをサーバー側fetchすると内部IP等へ到達できるSSRFになる。
+  // DBの店舗画像は全件このR2ホストへ移行済みなので、公式画像配信元だけを許可する。
+  const imageUrl = allowedImageUrl(searchParams.get('image'));
 
   // 画像を取得（外部URLはfetchしてbase64に変換）
   let imgData = null;
   if (imageUrl) {
     try {
       const imgRes = await fetch(imageUrl);
-      if (imgRes.ok) {
+      const contentType = imgRes.headers.get('content-type') || '';
+      const contentLength = Number(imgRes.headers.get('content-length') || 0);
+      if (imgRes.ok && /^image\/(?:jpeg|png|webp|gif)$/i.test(contentType) && contentLength <= 5_000_000) {
         const buf = await imgRes.arrayBuffer();
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
-        const mime = imgRes.headers.get('content-type') || 'image/jpeg';
-        imgData = `data:${mime};base64,${base64}`;
+        if (buf.byteLength <= 5_000_000) {
+          const bytes = new Uint8Array(buf);
+          let binary = '';
+          for (let i = 0; i < bytes.length; i += 0x8000) {
+            binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+          }
+          imgData = `data:${contentType};base64,${btoa(binary)}`;
+        }
       }
     } catch (_) {}
   }

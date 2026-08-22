@@ -52,7 +52,7 @@ export default async function handler(req, res) {
   try {
     const { data: existing } = await supabaseAdmin
       .from('user_credits')
-      .select('credits_days, expires_at, total_reviews_posted')
+      .select('credits_days, expires_at')
       .eq('user_id', target_user_id)
       .single();
 
@@ -69,7 +69,6 @@ export default async function handler(req, res) {
         .update({
           credits_days: newDays,
           expires_at: newExpiry.toISOString(),
-          total_reviews_posted: (existing.total_reviews_posted || 0) + 1,
           updated_at: new Date().toISOString(),
         })
         .eq('user_id', target_user_id);
@@ -79,7 +78,8 @@ export default async function handler(req, res) {
         user_id: target_user_id,
         credits_days: days,
         expires_at: newExpiry.toISOString(),
-        total_reviews_posted: 1,
+        // 管理者の手動付与は「投稿数」ではない。レビューINSERT時のDBトリガーだけが更新する。
+        total_reviews_posted: 0,
         updated_at: new Date().toISOString(),
       });
       if (error) throw error;

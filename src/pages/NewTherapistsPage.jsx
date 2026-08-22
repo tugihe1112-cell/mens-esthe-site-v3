@@ -4,6 +4,9 @@ import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 
 const PAGE_SIZE = 24;
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
+const publicHeaders = { apikey: supabaseAnonKey, Authorization: `Bearer ${supabaseAnonKey}` };
 
 function timeAgo(dateStr) {
   const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
@@ -32,13 +35,9 @@ export default function NewTherapistsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const url = process.env.VITE_SUPABASE_URL;
-  const key = process.env.VITE_SUPABASE_ANON_KEY;
-  const headers = { apikey: key, Authorization: `Bearer ${key}` };
-
   // 店舗情報を一括取得してMapに
   useEffect(() => {
-    fetch(`${url}/rest/v1/shops?select=id,name,raw_data`, { headers })
+    fetch(`${supabaseUrl}/rest/v1/shops?select=id,name,raw_data`, { headers: publicHeaders })
       .then(r => r.json())
       .then(data => {
         const m = {};
@@ -60,8 +59,8 @@ export default function NewTherapistsPage() {
 
     try {
       const res = await fetch(
-        `${url}/rest/v1/therapists?select=id,name,image_url,shop_id,created_at&image_url=not.is.null&or=(is_active.is.null,is_active.eq.true)&order=created_at.desc&limit=${PAGE_SIZE}&offset=${currentOffset}`,
-        { headers }
+        `${supabaseUrl}/rest/v1/therapists?select=id,name,image_url,shop_id,created_at&image_url=not.is.null&or=(is_active.is.null,is_active.eq.true)&order=created_at.desc&limit=${PAGE_SIZE}&offset=${currentOffset}`,
+        { headers: publicHeaders }
       );
       const data = await res.json();
       if (!Array.isArray(data)) return;
@@ -78,11 +77,11 @@ export default function NewTherapistsPage() {
       setIsLoading(false);
       setIsLoadingMore(false);
     }
-  }, [url, key]);
+  }, []);
 
   useEffect(() => {
     fetchTherapists(0, false);
-  }, []);
+  }, [fetchTherapists]);
 
   const loadMore = () => {
     const next = offset + PAGE_SIZE;

@@ -1,14 +1,13 @@
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useAppContext } from '../context/AppContext.tsx';
+import { useNavigate } from '../compat/router';
 
 export default function LikeButton({ id, className = "" }) {
-  const { favorites, toggleFavorite, currentUser, addToast } = useAppContext();
-  // ⚠️ 2026-08-12: currentUser は localStorage ベースの旧認証で常に null になるため、
-  //    ログイン済みでもお気に入りが使えなかった。Supabase Auth を併用して判定する
-  //    （Header.jsx が既に `currentUser || authUser` で同じ対処をしている）。
+  const { favorites, toggleFavorite } = useAppContext();
+  const navigate = useNavigate();
   const { user: authUser } = useAuth();
-  const isLoggedIn = !!(currentUser || authUser);
+  const isLoggedIn = !!authUser;
   const isFavorite = favorites.includes(String(id));
 
   const handleClick = (e) => {
@@ -16,7 +15,9 @@ export default function LikeButton({ id, className = "" }) {
     e.stopPropagation();
     
     if (!isLoggedIn) {
-      addToast("お気に入り機能にはログインが必要です", "info");
+      // 旧AppContextにはaddToastが存在せず、未ログイン時のハートタップで
+      // TypeErrorになっていた。ログイン後に戻れる正規導線へ送る。
+      navigate('/login?redirect=%2F');
       return;
     }
     

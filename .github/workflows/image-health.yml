@@ -12,6 +12,7 @@ name: Monitor (image health)
 on:
   schedule:
     - cron: '0 23 * * *' # 毎日 08:00 JST（UTC 23:00）
+    - cron: '0 22 * * 0' # 毎週月曜 07:00 JST：登録画像を全件走査
   workflow_dispatch:
 
 concurrency:
@@ -21,7 +22,7 @@ concurrency:
 jobs:
   image-health:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     # 履歴JSONをコミットして戻すために書き込み権限が要る。
     # （Settings → Actions → General → Workflow permissions が "Read and write" である必要あり。
     #   読み取り専用のままでも下の commit step は continue-on-error で握りつぶすので、
@@ -44,7 +45,7 @@ jobs:
         run: npm install @supabase/supabase-js --no-save --no-audit --no-fund
 
       - name: Check image health
-        run: node scripts/monitoring/check_image_health.mjs --sample=40
+        run: node scripts/monitoring/check_image_health.mjs --sample=100
         env:
           VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
@@ -52,6 +53,16 @@ jobs:
           SHOPS_NULL_MAX: '20'
           DEAD_MAX: '5'
           JUMP_MAX: '30'
+
+      # HTTP 200でも中身がHTMLのエラーページだった旧画像を、抽出監視だけでは
+      # 永久に見逃し得る。週1回と手動実行時は公開対象の全URLを実データまで読む。
+      - name: Check every published image body
+        if: github.event.schedule == '0 22 * * 0' || github.event_name == 'workflow_dispatch'
+        run: node scripts/monitoring/check_image_health.mjs --all --no-history --concurrency=48
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SHOPS_NULL_MAX: '20'
 
       # 写真が表示できても、在籍名簿や公式URLが古ければ利用者には誤情報になる。
       # 180日以上再確認されない名簿と、公式URLの欠落を別軸で検知する。

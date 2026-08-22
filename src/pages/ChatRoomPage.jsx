@@ -1,20 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, Link, useNavigate } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext.jsx';
-import { createClient } from '@supabase/supabase-js';
 import SeoHead from '../components/SeoHead.jsx';
+import { authHeaders } from '../utils/supabaseRest.js';
+import { supabase } from '../lib/supabase.js';
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
-
-// Realtimeのためにsupabase clientを作成
-let _supabase = null;
-function getSupabase() {
-  if (!_supabase) {
-    _supabase = createClient(supabaseUrl, supabaseKey);
-  }
-  return _supabase;
-}
 
 function formatTime(dateStr) {
   return new Date(dateStr).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
@@ -35,56 +26,42 @@ export default function ChatRoomPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
-  const [room, setRoom] = useState(null);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const headers = {
-    apikey: supabaseKey,
-    Authorization: `Bearer ${supabaseKey}`,
-  };
-
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  // ルーム情報取得
-  useEffect(() => {
-    if (!roomId || !user) return;
-    fetch(`${supabaseUrl}/rest/v1/chat_rooms?id=eq.${roomId}&select=*`, { headers })
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data) && data[0]) setRoom(data[0]);
-      });
-  }, [roomId, user]);
-
   // 既存メッセージ取得
   useEffect(() => {
-    if (!roomId) return;
+    if (!roomId || !user) return;
     setIsLoading(true);
-    fetch(
-      `${supabaseUrl}/rest/v1/chat_messages?room_id=eq.${roomId}&select=*&order=created_at.asc`,
-      { headers }
-    )
-      .then(r => r.json())
-      .then(data => {
+    (async () => {
+      try {
+        const response = await fetch(
+          `${supabaseUrl}/rest/v1/chat_messages?room_id=eq.${encodeURIComponent(roomId)}&select=*&order=created_at.asc`,
+          { headers: await authHeaders() },
+        );
+        const data = await response.json();
         if (Array.isArray(data)) setMessages(data);
-      })
-      .finally(() => setIsLoading(false));
-  }, [roomId]);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [roomId, user]);
 
   // スクロール
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   // Realtime購読
   useEffect(() => {
-    if (!roomId) return;
-    const supabase = getSupabase();
+    if (!roomId || !user) return;
     const channel = supabase
       .channel(`chat_room_${roomId}`)
       .on(
@@ -108,7 +85,7 @@ export default function ChatRoomPage() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [roomId]);
+  }, [roomId, user]);
 
   const sendMessage = async () => {
     if (!input.trim() || !user || isSending) return;
@@ -117,20 +94,22 @@ export default function ChatRoomPage() {
     setIsSending(true);
 
     try {
-      await fetch(`${supabaseUrl}/rest/v1/chat_messages`, {
+      const response = await fetch(`${supabaseUrl}/rest/v1/chat_messages`, {
         method: 'POST',
-        headers: {
-          ...headers,
+        headers: await authHeaders({
           'Content-Type': 'application/json',
-          Prefer: 'return=minimal',
-        },
+          Prefer: 'return=representation',
+        }),
         body: JSON.stringify({
           room_id: roomId,
           sender_id: user.id,
-          sender_name: user.email?.split('@')[0] || '名無し',
+          sender_name: user.user_metadata?.display_name || user.email?.split('@')[0] || '名無し',
           content,
         }),
       });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const created = await response.json().catch(() => []);
+      if (!Array.isArray(created) || created.length === 0) throw new Error('メッセージが保存されませんでした');
     } catch (e) {
       alert('送信に失敗しました');
       setInput(content);
@@ -149,12 +128,15 @@ export default function ChatRoomPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-white mb-4">ログインが必要です</p>
-          <Link to="/login" className="bg-pink-500 text-white px-6 py-2 rounded-full font-bold">ログイン</Link>
+      <>
+        <SeoHead title="チャット" noindex />
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-white mb-4">ログインが必要です</p>
+            <Link to="/login" className="bg-pink-500 text-white px-6 py-2 rounded-full font-bold">ログイン</Link>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -165,8 +147,6 @@ export default function ChatRoomPage() {
     groups[dateKey].push(msg);
     return groups;
   }, {});
-
-  const otherId = room ? (room.user1_id === user.id ? room.user2_id : room.user1_id) : null;
 
   return (
     <div className="flex flex-col h-screen bg-slate-950 text-white">
@@ -184,9 +164,9 @@ export default function ChatRoomPage() {
         </div>
         <div className="flex-1">
           <p className="text-white font-bold text-sm">
-            {otherId ? `${otherId.slice(0, 8)}...` : 'チャット'}
+            メッセージ
           </p>
-          <p className="text-slate-500 text-[10px]">オンライン</p>
+          <p className="text-slate-500 text-[10px]">参加者だけが閲覧できます</p>
         </div>
         {/* 💎ロゴ→トップ（全画面チャットなので共通Headerは重ねず、既存バーに導線を追加） */}
         <Link to="/" aria-label="トップへ" className="shrink-0">
@@ -279,6 +259,7 @@ export default function ChatRoomPage() {
             ref={inputRef}
             value={input}
             onChange={e => setInput(e.target.value)}
+            maxLength={2000}
             onKeyDown={handleKeyDown}
             placeholder="メッセージを入力... (Enterで送信)"
             rows={1}

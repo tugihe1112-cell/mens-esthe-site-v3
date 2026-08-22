@@ -10,7 +10,7 @@ import { trackEvent } from '../utils/analytics';
  * ⚠️ 2026-08: 価格表（¥2,980/月・¥29,800/年）を削除した。
  *   決済は未実装で1件も課金していないうえ、戦略上の決定価格（¥980/月・¥9,800/年）と
  *   矛盾する誤ったアンカーを訪問者に見せていたため。
- *   いまの正しい導線は「口コミを書けば読み放題（W2R）」のみ。
+ *   いまの正しい導線は「口コミを書けば一定期間読める（W2R）」のみ。
  *   noindex にして検索から到達させない（薄い準備中ページで索引を汚さない）。
  */
 export default function PremiumPage() {
@@ -18,7 +18,7 @@ export default function PremiumPage() {
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
       <SeoHead
         title="有料プランについて"
-        description="メンエスマップの有料プランは準備中です。いまは口コミを1件投稿すると、みんなの口コミが読み放題になります。"
+        description="メンエスマップの有料プランは準備中です。いまは口コミを投稿すると、文字数に応じて3日間または7日間、口コミを読めます。"
         path="/premium"
         noindex
       />
@@ -35,12 +35,12 @@ export default function PremiumPage() {
 
           <p className="text-slate-400 mb-8 font-bold leading-relaxed text-sm">
             いまは有料プランの受付をしていません。<br />
-            口コミを1件投稿していただければ、みんなの口コミが読み放題になります。
+            口コミを投稿すると、文字数に応じた期間、みんなの口コミを読めます。
           </p>
 
           {/* W2R（いま使える唯一の解放手段） */}
           <div className="bg-gradient-to-br from-purple-950/70 to-slate-900 border border-purple-500/25 rounded-2xl p-6 mb-8 text-left">
-            <h2 className="text-white font-black text-base mb-3">口コミを書けば読み放題</h2>
+            <h2 className="text-white font-black text-base mb-3">口コミを書けば一定期間読み放題</h2>
             <ul className="space-y-2 text-sm text-slate-300 font-bold">
               <li className="flex gap-2"><span className="text-purple-400">✓</span> 200文字以上の体験談で <span className="text-purple-300">3日間</span> の閲覧権を即時付与</li>
               <li className="flex gap-2"><span className="text-purple-400">✓</span> 700文字以上なら <span className="text-purple-300">7日間</span> に延長</li>

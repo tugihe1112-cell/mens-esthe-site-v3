@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from '../compat/router';
+import { Link, useLocation } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext";
-import { useAppContext } from "../context/AppContext.tsx";
 
 export default function Header() {
-  const navigate = useNavigate();
   const location = useLocation();
-  const { currentUser, logout } = useAppContext();
-  const { user: authUser } = useAuth(); // 👈 Supabaseの本物ユーザー
+  const { user: authUser } = useAuth();
   
   // --- スクロール & 表示制御 ---
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,11 +38,6 @@ export default function Header() {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
-
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
 
   // トップページなど、初期状態で背景を透過させたいページ
   // ⚠️ /ranking と /brands/ を追加（2026-08-17）:
@@ -94,7 +86,7 @@ export default function Header() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all group-hover:w-full"></span>
               </Link>
 
-              {currentUser || authUser ? (
+              {authUser ? (
                 <div className="flex items-center gap-4 pl-4 border-l border-white/20">
                   <Link to="/mypage" className="flex items-center gap-2 group">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 p-[1px] shadow-lg">
@@ -114,7 +106,7 @@ export default function Header() {
             </nav>
 
             {/* モバイル用 認証ボタン */}
-            {!(currentUser || authUser) && (
+            {!authUser && (
               <div className="lg:hidden flex items-center gap-2 shrink-0">
                 {/* ログインは常設BottomNavにあるため、狭いヘッダーでは新規登録だけを残す。 */}
                 <Link to="/login"
@@ -127,7 +119,7 @@ export default function Header() {
                 </Link>
               </div>
             )}
-            {(currentUser || authUser) && (
+            {authUser && (
               <Link to="/mypage" className="hidden md:inline-flex lg:hidden min-h-10 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 text-xs font-black text-white">
                 👤 マイページ
               </Link>

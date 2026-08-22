@@ -37,7 +37,6 @@ async function run() {
       /^(?:var|const|let)\s+(\w+)\s*=/,
       (_, varName) => `evalResult["${varName}"] =`
     );
-    // eslint-disable-next-line no-new-func
     new Function('evalResult', wrappedCode)(evalResult);
     parsed = Object.values(evalResult)[0];
     console.log('\n✅ eval パース成功');

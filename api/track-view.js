@@ -10,12 +10,19 @@
  * service role を使うのでRLSを気にせず確実に increment できる。
  */
 import { createClient } from '@supabase/supabase-js';
+import { consumeRateLimit, requestIp } from '../server/rateLimit.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
   try {
     const ids = req.body?.ids;
     if (!Array.isArray(ids) || ids.length === 0) return res.status(204).end();
+    const normalizedIds = [...new Set(ids
+      .filter((id) => typeof id === 'string')
+      .map((id) => id.trim())
+      .filter((id) => id.length > 0 && id.length <= 200))]
+      .slice(0, 50);
+    if (normalizedIds.length === 0) return res.status(204).end();
 
     // 念のため明白なbot UAは弾く（通常クライアントJSはbot非実行なので基本は人間のみ）
     const ua = (req.headers['user-agent'] || '').toLowerCase();
@@ -23,13 +30,25 @@ export default async function handler(req, res) {
       return res.status(204).end();
     }
 
+    // service_roleで閲覧数を更新する公開APIなので、IP単位で水増しを抑える。
+    // 制限機構が壊れた場合も集計だけを止め、閲覧画面自体には影響させない。
+    const allowed = await consumeRateLimit({
+      scope: 'track-view-ip',
+      subject: requestIp(req),
+      limit: 120,
+      windowSeconds: 3600,
+    });
+    if (!allowed) return res.status(204).end();
+
     const supabase = createClient(
       process.env.VITE_SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
-    await supabase.rpc('increment_review_views', { ids: ids.slice(0, 50) });
+    const { error } = await supabase.rpc('increment_review_views', { ids: normalizedIds });
+    if (error) throw error;
     return res.status(204).end();
   } catch (e) {
+    console.error('[track-view] skipped:', e?.message);
     // 集計失敗は表示・機能に影響させない
     return res.status(204).end();
   }

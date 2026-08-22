@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { Link, useNavigate } from '../compat/router';
@@ -6,30 +6,84 @@ import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import SeoHead from '../components/SeoHead.jsx';
+import { supabase } from '../lib/supabase.js';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 export default function FavoritesPage() {
   const { favorites, favTherapists } = useAppContext();
   const { shopById, therapistById } = useShopData();
-  const [activeTab, setActiveTab] = useState('therapists'); // 'therapists' | 'shops'
+  const { user, loading: authLoading } = useAuth();
+  // まだユーザーがタブを選んでいない間は、保存件数がある側を自動表示する。
+  // 店舗だけ保存した直後に「推しメンがまだいません」が出ると、保存に失敗したように見える。
+  const [activeTab, setActiveTab] = useState(null); // null | 'therapists' | 'shops'
+  const [fetchedTherapists, setFetchedTherapists] = useState({});
   const navigate = useNavigate();
-
-  // Loading check
-  if (!shopById || !therapistById) return <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-400 text-sm">読み込み中...</div>;
 
   // --- Restore Data ---
   const favShopList = useMemo(() => {
     return favorites.map(id => shopById[id]).filter(Boolean);
   }, [favorites, shopById]);
 
-  const favTherapistList = useMemo(() => {
-    return favTherapists.map(uniqueKey => {
-      const [sId, tId] = uniqueKey.split('_');
-      const therapist = therapistById[tId];
-      const shop = shopById[sId];
-      if (!therapist) return null;
-      return { ...therapist, shopId: sId, shopName: shop ? shop.name : 'Unknown Shop' };
+  // 保存キーは `${shopId}_${therapistId}` だが、両ID自身にも `_` が入る。
+  // split('_')の先頭2要素では必ず壊れるため、既知の店舗IDの最長一致で境界を復元する。
+  const favoriteTargets = useMemo(() => {
+    const shopIds = Object.keys(shopById || {}).sort((a, b) => b.length - a.length);
+    return favTherapists.map((uniqueKey) => {
+      const shopId = shopIds.find((id) => uniqueKey.startsWith(`${id}_`));
+      if (!shopId) return null;
+      const therapistId = uniqueKey.slice(shopId.length + 1);
+      return therapistId ? { uniqueKey, shopId, therapistId } : null;
     }).filter(Boolean);
-  }, [favTherapists, therapistById, shopById]);
+  }, [favTherapists, shopById]);
+
+  // Favoritesページを直接開いた直後はDataContextにセラピストが未読込。
+  // 保存済みIDだけをDBから取得し、ページ再読み込み後もお気に入りを復元する。
+  useEffect(() => {
+    const ids = [...new Set(favoriteTargets.map((target) => target.therapistId))];
+    if (ids.length === 0) { setFetchedTherapists({}); return; }
+    let active = true;
+    supabase.from('therapists').select('*').in('id', ids).then(({ data }) => {
+      if (!active) return;
+      setFetchedTherapists((data || []).reduce((map, therapist) => {
+        map[therapist.id] = therapist;
+        return map;
+      }, {}));
+    });
+    return () => { active = false; };
+  }, [favoriteTargets]);
+
+  const favTherapistList = useMemo(() => {
+    return favoriteTargets.map(({ uniqueKey, shopId, therapistId }) => {
+      const therapist = fetchedTherapists[therapistId] || therapistById[therapistId];
+      const shop = shopById[shopId];
+      if (!therapist) return null;
+      return { ...therapist, favoriteKey: uniqueKey, shopId, shopName: shop ? shop.name : '店舗情報なし' };
+    }).filter(Boolean);
+  }, [favoriteTargets, fetchedTherapists, therapistById, shopById]);
+
+  const displayTab = activeTab
+    || (favTherapistList.length === 0 && favShopList.length > 0 ? 'shops' : 'therapists');
+
+  if (authLoading) {
+    return <><SeoHead title="お気に入り" noindex /><div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">ログイン状態を確認中…</div></>;
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-slate-950 pb-32 text-slate-200">
+        <SeoHead title="お気に入り" noindex />
+        <Header />
+        <main className="pt-24 px-4">
+          <section className="mx-auto max-w-md rounded-3xl border border-white/10 bg-slate-900/50 p-8 text-center">
+            <p className="text-5xl mb-4">❤️</p>
+            <h1 className="text-2xl font-black text-white mb-2">お気に入り</h1>
+            <p className="text-sm text-slate-400 mb-7">保存した店舗・セラピストを見るにはログインしてください。</p>
+            <Link to="/login?redirect=%2Ffavorites" className="inline-flex min-h-12 items-center rounded-xl bg-pink-600 px-7 font-black text-white">ログイン</Link>
+          </section>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
@@ -53,7 +107,7 @@ export default function FavoritesPage() {
           <button 
             onClick={() => setActiveTab('therapists')}
             className={`flex-1 py-3 rounded-xl text-sm font-black transition-all duration-300 relative overflow-hidden ${
-              activeTab === 'therapists' 
+              displayTab === 'therapists'
                 ? 'bg-gradient-to-br from-pink-600 to-pink-500 text-white shadow-lg shadow-pink-900/30' 
                 : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
             }`}
@@ -65,7 +119,7 @@ export default function FavoritesPage() {
           <button 
             onClick={() => setActiveTab('shops')}
             className={`flex-1 py-3 rounded-xl text-sm font-black transition-all duration-300 relative overflow-hidden ${
-              activeTab === 'shops' 
+              displayTab === 'shops'
                 ? 'bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-900/30' 
                 : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
             }`}
@@ -80,12 +134,12 @@ export default function FavoritesPage() {
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-[50vh]">
           
           {/* Therapists Grid */}
-          {activeTab === 'therapists' && (
+          {displayTab === 'therapists' && (
             favTherapistList.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 {favTherapistList.map(t => (
                   <Link 
-                    key={`${t.shopId}_${t.id}`} 
+                    key={t.favoriteKey || `${t.shopId}_${t.id}`}
                     to={`/shops/${t.shopId}/threads/${t.id}`} 
                     className="group relative block bg-slate-900 rounded-2xl overflow-hidden border border-white/5 shadow-xl transition-all duration-300 hover:border-pink-500/50 hover:shadow-pink-900/20 hover:-translate-y-1"
                   >
@@ -117,7 +171,7 @@ export default function FavoritesPage() {
           )}
 
           {/* Shops List */}
-          {activeTab === 'shops' && (
+          {displayTab === 'shops' && (
             favShopList.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {favShopList.map(shop => (

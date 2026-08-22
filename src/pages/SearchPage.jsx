@@ -293,7 +293,6 @@ export default function SearchPage() {
     if (initShopId && shopById && shopById[initShopId]?.name) {
       setShopInput(shopById[initShopId].name);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initShopId, shopById]);
 
   // URLパラメータを同期
@@ -305,7 +304,7 @@ export default function SearchPage() {
       if (selectedTags.length > 0) params.tags = selectedTags.join(',');
       setSearchParams(params, { replace: true });
     });
-  }, [shopInput, castInput, selectedTags]);
+  }, [shopInput, castInput, selectedTags, setSearchParams]);
 
   // displayCount をリセット
   useEffect(() => {

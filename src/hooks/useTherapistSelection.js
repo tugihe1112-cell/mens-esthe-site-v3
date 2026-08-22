@@ -13,7 +13,7 @@ export const useTherapistSelection = (
 
   const shopTherapists = useMemo(() => {
     return selectedShop ? getTherapistsByShopId(selectedShop.id) : [];
-  }, [selectedShop?.id, getTherapistsByShopId]);
+  }, [selectedShop, getTherapistsByShopId]);
 
   useEffect(() => {
     hasAutoSelectedRef.current = false;

@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useRecentlyViewed } from '../hooks/useRecentlyViewed.js';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import ModernReviewCard from '../components/ModernReviewCard.jsx';
 import ReviewListWithRestriction from '../components/ReviewListWithRestriction.jsx';
@@ -34,11 +35,14 @@ function ThreadSkeleton() {
   );
 }
 
-export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, ssrReviews = [] }) {
+const EMPTY_REVIEWS = [];
+
+export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, ssrReviews = EMPTY_REVIEWS }) {
   const { shopId, threadId } = useParams();
   const navigate = useNavigate();
   const { shopById, therapistById, reviews } = useShopData();
   const { favTherapists, toggleFavTherapist } = useAppContext();
+  const { user } = useAuth();
   const { addToHistory } = useRecentlyViewed();
 
   // SSRで取得済みのデータを初期値に（クライアントの取り直し待ちを排除＝即・完全描画、写真チラつき解消）
@@ -53,8 +57,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
     setCloudTherapist(ssrTherapist);
     setCloudTherapistReviews(ssrReviews || []);
     setIsLoading(!ssrTherapist);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [threadId]);
+  }, [threadId, ssrShop, ssrTherapist, ssrReviews]);
 
   React.useEffect(() => {
     let isMounted = true;
@@ -133,7 +136,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
     };
     if (shopId && threadId) fetchData();
     return () => { isMounted = false; };
-  }, [shopId, threadId]);
+  }, [shopId, threadId, ssrTherapist]);
 
   const shop = cloudShop || (shopById ? shopById[shopId] : null);
   let therapist = cloudTherapist || (therapistById ? therapistById[threadId] : null);
@@ -194,7 +197,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
       (r.therapist_name === therapist.name) ||
       (r.therapistName === therapist.name)
     );
-  }, [cloudTherapistReviews, reviews, threadId, therapist?.name, shopId, shop?.group_id]);
+  }, [cloudTherapistReviews, reviews, threadId, therapist, shop]);
 
   // 閲覧カウント（クライアント発火・fire-and-forget）。
   // gSSPから移したことでページをCDNキャッシュ可能に。botはJS非実行で自然除外。
@@ -319,7 +322,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
           <button onClick={() => navigate(-1)} aria-label="前のページに戻る" className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-white/10 text-white text-sm font-bold border border-white/15 hover:bg-white/20 transition active:scale-95">
             <span className="text-base leading-none">←</span> 戻る
           </button>
-          <button onClick={() => toggleFavTherapist(uniqueKey)} aria-label="お気に入り" className={`w-10 h-10 rounded-full flex items-center justify-center border transition active:scale-90 ${isFav ? 'bg-pink-600/80 border-pink-500 text-white' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'}`}>
+          <button onClick={() => user ? toggleFavTherapist(uniqueKey) : navigate(`/login?redirect=${encodeURIComponent(`/shops/${shopId}/threads/${threadId}`)}`)} aria-label="お気に入り" className={`w-10 h-10 rounded-full flex items-center justify-center border transition active:scale-90 ${isFav ? 'bg-pink-600/80 border-pink-500 text-white' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'}`}>
             <span className="text-xl">{isFav ? '❤️' : '🤍'}</span>
           </button>
         </div>

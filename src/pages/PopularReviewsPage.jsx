@@ -101,7 +101,7 @@ export default function PopularReviewsPage() {
         });
       }
     } catch { /* マップ取得失敗はカードのフォールバック表示で吸収 */ }
-  }, [url, key]);
+  }, [url]);
 
   const fetchReviews = useCallback(async (currentOffset, sort, isLoadMore = false) => {
     if (isLoadMore) setIsLoadingMore(true);
@@ -129,7 +129,7 @@ export default function PopularReviewsPage() {
       setIsLoading(false);
       setIsLoadingMore(false);
     }
-  }, [url, key, hydrateMaps]);
+  }, [url, hydrateMaps]);
 
   useEffect(() => {
     setOffset(0);

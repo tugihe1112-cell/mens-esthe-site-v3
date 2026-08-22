@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { authHeaders } from '../utils/supabaseRest.js';
 
 const PAGE_SIZE = 20;
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
 
 const CATEGORIES = [
   { key: 'all', label: 'すべて' },
@@ -35,17 +37,13 @@ export default function BoardPage() {
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const url = process.env.VITE_SUPABASE_URL;
-  const key = process.env.VITE_SUPABASE_ANON_KEY;
-  const headers = { apikey: key, Authorization: `Bearer ${key}` };
-
-  const fetchPosts = async (cat, currentOffset, append = false) => {
+  const fetchPosts = useCallback(async (cat, currentOffset, append = false) => {
     setIsLoading(!append);
     const filter = cat !== 'all' ? `&category=eq.${cat}` : '';
     try {
       const res = await fetch(
-        `${url}/rest/v1/posts?select=*&order=created_at.desc&limit=${PAGE_SIZE}&offset=${currentOffset}${filter}`,
-        { headers }
+        `${supabaseUrl}/rest/v1/posts?select=*&order=created_at.desc&limit=${PAGE_SIZE}&offset=${currentOffset}${filter}`,
+        { headers: await authHeaders() }
       );
       const data = await res.json();
       if (!Array.isArray(data)) return;
@@ -54,30 +52,33 @@ export default function BoardPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     setOffset(0);
     fetchPosts(category, 0, false);
-  }, [category]);
+  }, [category, fetchPosts]);
 
   const submit = async () => {
     if (!user) { alert('投稿するにはログインが必要です'); return; }
     if (!form.title.trim() || !form.content.trim()) { alert('タイトルと本文を入力してください'); return; }
     setIsSubmitting(true);
     try {
-      await fetch(`${url}/rest/v1/posts`, {
+      const response = await fetch(`${supabaseUrl}/rest/v1/posts`, {
         method: 'POST',
-        headers: { ...headers, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        headers: await authHeaders({ 'Content-Type': 'application/json', Prefer: 'return=representation' }),
         body: JSON.stringify({
           user_id: user.id,
-          user_name: user.email?.split('@')[0] || '名無し',
+          user_name: user.user_metadata?.display_name || user.email?.split('@')[0] || '名無し',
           title: form.title.trim(),
           content: form.content.trim(),
           category: form.category,
           shop_name: form.shop_name.trim() || null,
         }),
       });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const created = await response.json().catch(() => []);
+      if (!Array.isArray(created) || created.length === 0) throw new Error('投稿が保存されませんでした');
       setForm({ title: '', content: '', category: 'general', shop_name: '' });
       setShowForm(false);
       fetchPosts(category, 0, false);
@@ -132,12 +133,14 @@ export default function BoardPage() {
                   placeholder="タイトル（例：渋谷でおすすめの店を教えてください）"
                   value={form.title}
                   onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                  maxLength={120}
                   className="w-full bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50"
                 />
                 <input
                   placeholder="関連店舗名（任意）"
                   value={form.shop_name}
                   onChange={e => setForm(f => ({ ...f, shop_name: e.target.value }))}
+                  maxLength={120}
                   className="w-full bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50"
                 />
                 <textarea
@@ -145,6 +148,7 @@ export default function BoardPage() {
                   rows={5}
                   value={form.content}
                   onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
+                  maxLength={5000}
                   className="w-full bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50 resize-none"
                 />
                 <div className="flex gap-2 justify-end">

@@ -45,15 +45,16 @@ export default function PrefecturePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
+      <><SeoHead title={title} description={description} path={`/area/${pref}`} /><div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
         <div className="w-10 h-10 border-4 border-pink-500 border-t-transparent rounded-full animate-spin" />
-      </div>
+      </div></>
     );
   }
 
   if (!prefName) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white gap-4">
+        <SeoHead title="エリアが見つかりません" noindex />
         <p className="text-slate-400">このエリアページは存在しません。</p>
         <Link to="/" className="text-pink-400 underline">トップへ戻る</Link>
       </div>

@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from '../compat/router';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import { authHeaders } from '../utils/supabaseRest.js';
+
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
 
 function timeAgo(dateStr) {
   if (!dateStr) return '';
@@ -15,28 +18,17 @@ function timeAgo(dateStr) {
 
 export default function ChatListPage() {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [newChatEmail, setNewChatEmail] = useState('');
-  const [showNewChat, setShowNewChat] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
 
-  const url = process.env.VITE_SUPABASE_URL;
-  const key = process.env.VITE_SUPABASE_ANON_KEY;
-  const headers = { apikey: key, Authorization: `Bearer ${key}` };
-
-  useEffect(() => {
+  const fetchRooms = useCallback(async () => {
     if (!user) return;
-    fetchRooms();
-  }, [user]);
-
-  const fetchRooms = async () => {
     setIsLoading(true);
     try {
+      const headers = await authHeaders();
       // 自分が参加しているルームを取得
       const res = await fetch(
-        `${url}/rest/v1/chat_rooms?or=(user1_id.eq.${user.id},user2_id.eq.${user.id})&select=*&order=created_at.desc`,
+        `${supabaseUrl}/rest/v1/chat_rooms?or=(user1_id.eq.${user.id},user2_id.eq.${user.id})&select=*&order=created_at.desc`,
         { headers }
       );
       const data = await res.json();
@@ -45,7 +37,7 @@ export default function ChatListPage() {
       // 各ルームの最新メッセージを取得
       const roomsWithMessages = await Promise.all(data.map(async (room) => {
         const msgRes = await fetch(
-          `${url}/rest/v1/chat_messages?room_id=eq.${room.id}&select=*&order=created_at.desc&limit=1`,
+          `${supabaseUrl}/rest/v1/chat_messages?room_id=eq.${room.id}&select=*&order=created_at.desc&limit=1`,
           { headers }
         );
         const msgs = await msgRes.json();
@@ -58,34 +50,16 @@ export default function ChatListPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
 
-  const createRoom = async () => {
-    if (!newChatEmail.trim()) return;
-    setIsCreating(true);
-    try {
-      // メールアドレスでユーザーを検索（auth.usersはアクセス不可なのでuser_nameで代用）
-      // ここではシンプルにメールプレフィックスをuser_nameとして扱う
-      const targetName = newChatEmail.trim().split('@')[0];
-
-      // 既存ルームチェック
-      const checkRes = await fetch(
-        `${url}/rest/v1/chat_rooms?or=(and(user1_id.eq.${user.id}),and(user2_id.eq.${user.id}))&select=*`,
-        { headers }
-      );
-
-      // シンプルにルームを作成（相手のIDが必要だが、ここでは仮実装）
-      alert(`チャット機能: "${targetName}" 宛のDMはまだ実装中です。\n\n現在は口コミ投稿者のプロフィールページからDMを開始できます。`);
-    } finally {
-      setIsCreating(false);
-      setShowNewChat(false);
-      setNewChatEmail('');
-    }
-  };
+  useEffect(() => {
+    fetchRooms();
+  }, [fetchRooms]);
 
   if (!user) {
     return (
       <>
+        <SeoHead title="メッセージ" noindex />
         <Header />
         <div className="min-h-screen bg-slate-950 flex items-center justify-center">
           <div className="text-center px-4">

@@ -8,6 +8,7 @@
  * JWTをSupabase Authで検証し、そのユーザーが所有する口コミだけをDBから再取得する。
  */
 import { createClient } from '@supabase/supabase-js';
+import { consumeRateLimit, rejectRateLimit } from '../server/rateLimit.js';
 
 const DEFAULT_SITE_URL = 'https://www.mens-esthe-map.jp';
 
@@ -52,6 +53,19 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized: invalid token' });
   }
 
+  try {
+    const allowed = await consumeRateLimit({
+      scope: 'notify-review-user',
+      subject: `${user.id}:${reviewId}`,
+      limit: 3,
+      windowSeconds: 86400,
+    });
+    if (!allowed) return rejectRateLimit(res, 86400);
+  } catch (error) {
+    console.error('[notify-review] rate limiter failed:', error.message);
+    return res.status(503).json({ error: 'Notification service temporarily unavailable' });
+  }
+
   const { data: review, error: reviewError } = await supabaseAdmin
     .from('reviews')
     .select('id,shop_id,therapist_name,user_id,user_name,rating,content')
@@ -75,8 +89,8 @@ export default async function handler(req, res) {
 
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) {
-    console.warn('[notify-review] RESEND_API_KEY not set — skipping email');
-    return res.status(200).json({ ok: true, skipped: 'no_resend_key' });
+    console.error('[notify-review] RESEND_API_KEY is not configured');
+    return res.status(503).json({ error: 'Notification service temporarily unavailable' });
   }
 
   const toEmail = process.env.CONTACT_TO_EMAIL || 'tugihe1112@gmail.com';

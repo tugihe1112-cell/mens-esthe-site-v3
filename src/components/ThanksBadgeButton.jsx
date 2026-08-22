@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { authHeaders } from '../utils/supabaseRest';
 
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+
 export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0 }) {
   const { user } = useAuth();
   const [given, setGiven] = useState(false);
   const [count, setCount] = useState(initialCount);
   const [isLoading, setIsLoading] = useState(false);
-
-  const url = process.env.VITE_SUPABASE_URL;
-  const key = process.env.VITE_SUPABASE_ANON_KEY;
 
   useEffect(() => {
     if (!user || !reviewId) return;
@@ -18,7 +17,7 @@ export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0
     (async () => {
       try {
         const res = await fetch(
-          `${url}/rest/v1/user_badges?from_user_id=eq.${user.id}&review_id=eq.${reviewId}&select=id`,
+          `${supabaseUrl}/rest/v1/user_badges?from_user_id=eq.${user.id}&review_id=eq.${reviewId}&select=id`,
           { headers: await authHeaders() }
         );
         const data = await res.json();
@@ -45,7 +44,7 @@ export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0
     try {
       if (given) {
         const res = await fetch(
-          `${url}/rest/v1/user_badges?from_user_id=eq.${user.id}&review_id=eq.${reviewId}`,
+          `${supabaseUrl}/rest/v1/user_badges?from_user_id=eq.${user.id}&review_id=eq.${reviewId}`,
           { method: 'DELETE', headers }
         );
         if (!res.ok) throw new Error(`取り消しに失敗しました (HTTP ${res.status})`);
@@ -54,7 +53,7 @@ export default function ThanksBadgeButton({ reviewId, toUserId, initialCount = 0
         setGiven(false);
         setCount(c => Math.max(0, c - 1));
       } else {
-        const res = await fetch(`${url}/rest/v1/user_badges`, {
+        const res = await fetch(`${supabaseUrl}/rest/v1/user_badges`, {
           method: 'POST',
           headers,
           body: JSON.stringify({

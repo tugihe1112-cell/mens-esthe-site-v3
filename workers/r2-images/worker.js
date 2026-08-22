@@ -8,7 +8,7 @@
  * デプロイ: Cloudflareダッシュボード → Workers & Pages → 新規Worker → このコードを貼付 → Deploy
  *           → Settings → Bindings → R2バケット追加（変数名 BUCKET / バケット mens-esthe-images）
  */
-export default {
+const imageWorker = {
   async fetch(request, env) {
     // 読み取り専用
     if (request.method !== 'GET' && request.method !== 'HEAD') {
@@ -39,3 +39,5 @@ export default {
     return new Response(request.method === 'HEAD' ? null : obj.body, { headers });
   },
 };
+
+export default imageWorker;

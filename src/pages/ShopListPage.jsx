@@ -83,7 +83,7 @@ export default function ShopListPage() {
     if (initialQuery !== query) {
       setQuery(initialQuery);
     }
-  }, [initialQuery]); // queryを含めるとループする可能性があるので外す
+  }, [initialQuery, query, setQuery]);
 
   // 検索結果が変わったら表示件数をリセット
   useEffect(() => {

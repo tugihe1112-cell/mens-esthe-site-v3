@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { useNavigate } from '../compat/router';
 import TagSelector from './TagSelector';
 import { useShopData } from '../contexts/DataContext.jsx';
@@ -63,7 +63,7 @@ export default function TagSearchModal({ isOpen, onClose }) {
   // -----------------------------------------------------
   // ✨ ハンドラ
   // -----------------------------------------------------
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsClosing(true);
     setTimeout(() => {
       setIsClosing(false);
@@ -71,7 +71,7 @@ export default function TagSearchModal({ isOpen, onClose }) {
       // モーダルを閉じたときにタグ選択をリセットするかはお好みで
       // setSelectedTags([]); 
     }, 300);
-  };
+  }, [onClose]);
 
   const handleSearch = () => {
     navigate(`/tag-search?tags=${selectedTags.join(',')}`);
@@ -82,7 +82,7 @@ export default function TagSearchModal({ isOpen, onClose }) {
     const handleEsc = (e) => { if (e.key === 'Escape') handleClose(); };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
-  }, []);
+  }, [handleClose]);
 
   if (!isOpen && !isClosing) return null;
 

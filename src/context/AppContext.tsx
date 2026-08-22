@@ -1,121 +1,78 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  // ------------------------------------------------
-  // 1. ユーザー認証 (Login)
-  // ------------------------------------------------
-  const [user, setUser] = useState(() => {
+  const { user } = useAuth();
+  // 認証はAuthContext（Supabase）のみで扱う。このContextは端末内のお気に入り専用。
+  // 旧デモ認証キーが残っていてもログイン表示へ影響しないよう、移行時に削除する。
+  useEffect(() => {
     try {
-      if (typeof window === 'undefined') return null;
-      const saved = localStorage.getItem('mens_esthe_user');
-      return saved ? JSON.parse(saved) : null;
-    } catch (e) { return null; }
-  });
+      localStorage.removeItem('mens_esthe_user');
+      localStorage.removeItem('mens_esthe_local_reviews');
+    } catch { /* noop */ }
+  }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem('mens_esthe_user', JSON.stringify(userData));
-  };
+  const [favorites, setFavorites] = useState([]);
+  const [favTherapists, setFavTherapists] = useState([]);
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('mens_esthe_user');
-  };
-
-  // ------------------------------------------------
-  // 2. 店舗のお気に入り (Shop Favorites)
-  // ------------------------------------------------
-  const [favorites, setFavorites] = useState(() => {
+  useEffect(() => {
+    if (!user?.id) {
+      setFavorites([]);
+      setFavTherapists([]);
+      return;
+    }
+    const shopKey = `mens_esthe_favorites:${user.id}`;
+    const therapistKey = `mens_esthe_fav_therapists:${user.id}`;
     try {
-      if (typeof window === 'undefined') return [];
-      const saved = localStorage.getItem('mens_esthe_favorites');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) { return []; }
-  });
+      // 旧版の端末共通データは、最初にログインした本人へ一度だけ移行する。
+      const scopedShops = localStorage.getItem(shopKey);
+      const scopedTherapists = localStorage.getItem(therapistKey);
+      const legacyShops = !scopedShops ? localStorage.getItem('mens_esthe_favorites') : null;
+      const legacyTherapists = !scopedTherapists ? localStorage.getItem('mens_esthe_fav_therapists') : null;
+      const nextShops = JSON.parse(scopedShops || legacyShops || '[]');
+      const nextTherapists = JSON.parse(scopedTherapists || legacyTherapists || '[]');
+      setFavorites(Array.isArray(nextShops) ? nextShops.map(String) : []);
+      setFavTherapists(Array.isArray(nextTherapists) ? nextTherapists.map(String) : []);
+      if (!scopedShops && legacyShops) localStorage.setItem(shopKey, legacyShops);
+      if (!scopedTherapists && legacyTherapists) localStorage.setItem(therapistKey, legacyTherapists);
+      localStorage.removeItem('mens_esthe_favorites');
+      localStorage.removeItem('mens_esthe_fav_therapists');
+    } catch {
+      setFavorites([]);
+      setFavTherapists([]);
+    }
+  }, [user?.id]);
 
   const toggleFavorite = (shopId) => {
+    if (!user?.id) return;
     setFavorites(prev => {
-      const next = prev.includes(shopId) 
-        ? prev.filter(id => id !== shopId) 
-        : [...prev, shopId];               
-      localStorage.setItem('mens_esthe_favorites', JSON.stringify(next));
+      const normalized = String(shopId);
+      const next = prev.includes(normalized)
+        ? prev.filter(id => id !== normalized)
+        : [...prev, normalized];
+      localStorage.setItem(`mens_esthe_favorites:${user.id}`, JSON.stringify(next));
       return next;
     });
   };
-
-  // ------------------------------------------------
-  // 3. セラピストのお気に入り (Therapist Favorites)
-  // ------------------------------------------------
-  const [favTherapists, setFavTherapists] = useState(() => {
-    try {
-      if (typeof window === 'undefined') return [];
-      const saved = localStorage.getItem('mens_esthe_fav_therapists');
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) { return []; }
-  });
 
   const toggleFavTherapist = (therapistId) => {
+    if (!user?.id) return;
     setFavTherapists(prev => {
-      const next = prev.includes(therapistId)
-        ? prev.filter(id => id !== therapistId)
-        : [...prev, therapistId];
-      localStorage.setItem('mens_esthe_fav_therapists', JSON.stringify(next));
+      const normalized = String(therapistId);
+      const next = prev.includes(normalized)
+        ? prev.filter(id => id !== normalized)
+        : [...prev, normalized];
+      localStorage.setItem(`mens_esthe_fav_therapists:${user.id}`, JSON.stringify(next));
       return next;
     });
-  };
-
-  // ------------------------------------------------
-  // 4. クチコミ投稿機能 (Submit Review) ★ここが復活箇所！
-  // ------------------------------------------------
-  
-  // 既存店舗へのクチコミ送信
-  const submitExistingShopReview = async (reviewData) => {
-    console.log("🚀 クチコミ送信:", reviewData);
-    
-    // ここで本来はAPIを叩くが、今はローカルストレージに保存する「擬似投稿」にする
-    // これにより、画面上で「投稿できた感」を演出できる
-    try {
-      // 既存のローカルクチコミを取得
-      if (typeof window === 'undefined') return false;
-      const localReviews = JSON.parse(localStorage.getItem('mens_esthe_local_reviews') || '[]');
-      
-      // 新しいクチコミを追加（IDなどを付与）
-      const newReview = {
-        ...reviewData,
-        id: `local_${Date.now()}`,
-        date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
-        isLocal: true // ローカル投稿フラグ
-      };
-      
-      const updatedReviews = [newReview, ...localReviews];
-      localStorage.setItem('mens_esthe_local_reviews', JSON.stringify(updatedReviews));
-
-      alert("クチコミを投稿しました！\n（※現在はデモモードのため、ブラウザ内にのみ保存されます）");
-      return true;
-    } catch (error) {
-      console.error("投稿エラー:", error);
-      alert("投稿に失敗しました");
-      return false;
-    }
-  };
-
-  // 新規店舗リクエスト送信
-  const submitNewShopRequest = async (requestData) => {
-    console.log("🚀 新規店舗リクエスト:", requestData);
-    alert("新規店舗の登録リクエストを受け付けました！\n運営が確認後に反映されます。");
-    return true;
   };
 
   return (
     <AppContext.Provider value={{ 
-      user, currentUser: user, // 互換性のため currentUser も用意
-      login, logout, 
       favorites, toggleFavorite,
       favTherapists, toggleFavTherapist,
-      submitExistingShopReview, // ★公開
-      submitNewShopRequest      // ★公開
     }}>
       {children}
     </AppContext.Provider>

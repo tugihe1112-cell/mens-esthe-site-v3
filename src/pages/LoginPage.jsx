@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate, useLocation, Link } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext"; // 👈 Supabaseの本物認証パイプ
 import SeoHead from '../components/SeoHead.jsx';
+import { supabase } from '../lib/supabase';
+
+const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -21,6 +24,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,6 +58,27 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePasswordReset = async () => {
+    const normalizedEmail = email.trim().toLowerCase();
+    setError('');
+    setResetSent(false);
+    if (!normalizedEmail) {
+      setError('再設定メールを送るメールアドレスを入力してください');
+      return;
+    }
+    setResetLoading(true);
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
+      redirectTo: `${SITE_URL}/reset-password`,
+    });
+    setResetLoading(false);
+    if (resetError) {
+      setError('再設定メールを送信できませんでした。時間をおいてお試しください。');
+      return;
+    }
+    // アカウントの有無を第三者へ漏らさない共通表示にする。
+    setResetSent(true);
   };
 
   // ⚠️ 2026-08-12 削除: ここに管理者のメールとパスワードを**平文でハードコード**し、
@@ -104,6 +130,11 @@ export default function LoginPage() {
                 ⚠️ {error}
               </div>
             )}
+            {resetSent && (
+              <div className="bg-emerald-500/15 border border-emerald-500/40 text-emerald-100 rounded-xl p-3 text-sm font-bold text-center">
+                登録済みの場合は、パスワード再設定メールが届きます。
+              </div>
+            )}
             
             <div className="space-y-2 group">
               <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">メールアドレス</label>
@@ -114,6 +145,14 @@ export default function LoginPage() {
                 className="w-full p-4 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold tracking-wide shadow-inner" 
                 placeholder="vip@example.com" 
               />
+              <button
+                type="button"
+                onClick={handlePasswordReset}
+                disabled={resetLoading}
+                className="ml-auto block min-h-10 px-2 text-xs font-bold text-pink-300 hover:text-white disabled:opacity-50"
+              >
+                {resetLoading ? '送信中…' : 'パスワードを忘れた方'}
+              </button>
             </div>
             
             <div className="space-y-2 group">

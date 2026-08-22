@@ -12,7 +12,8 @@
  *
  * 【測るもの】
  *   1. shops / therapists の image_url が null の比率
- *   2. 非nullのURLをランダムサンプリングして実際にHTTP 200 かつ image/* が返るか
+ *   2. 非nullのURLをランダムサンプリングして実際に画像バイトが返るか
+ *      --all では公開対象の全URLを重複排除して走査する
  *   3. 人物写真ではない既知の画像・広告名・同一画像の大量使い回し
  *   4. 前回値との差分（scripts/monitoring/image_health_history.json に追記）
  *
@@ -21,7 +22,7 @@
  *   - サンプルの死亡率が DEAD_MAX(既定 5%) を超える
  *   - null件数が前回から JUMP_MAX(既定 30件) 以上増えた ＝ 一括破壊の検知
  *
- * 実行: node scripts/monitoring/check_image_health.mjs [--sample=40] [--quiet]
+ * 実行: node scripts/monitoring/check_image_health.mjs [--sample=100] [--all] [--no-history] [--report=/tmp/report.json] [--quiet]
  *   CI/cron で毎日回す。ローカルでも .env があれば動く。
  */
 import fs from 'fs';
@@ -33,10 +34,18 @@ import {
   isKnownBadTherapistImageUrl,
   isSuspiciousTherapistName,
 } from '../lib/therapistImageQuality.mjs';
+import { checkImageBody, mapConcurrent } from '../lib/imageDeliveryQuality.mjs';
 
 const args = process.argv.slice(2);
 const SAMPLE = Number((args.find((a) => a.startsWith('--sample=')) || '').split('=')[1]) || 40;
 const QUIET = args.includes('--quiet');
+const FULL_SCAN = args.includes('--all');
+const NO_HISTORY = args.includes('--no-history');
+const REPORT_FILE = (args.find((a) => a.startsWith('--report=')) || '').split('=').slice(1).join('=');
+const CONCURRENCY = Math.max(
+  1,
+  Math.min(64, Number((args.find((a) => a.startsWith('--concurrency=')) || '').split('=')[1]) || 24),
+);
 
 const SHOPS_NULL_MAX = Number(process.env.SHOPS_NULL_MAX || 20);   // %
 const DEAD_MAX = Number(process.env.DEAD_MAX || 5);                // %
@@ -56,7 +65,21 @@ if (!SUPABASE_URL || !SUPABASE_KEY) { console.error('❌ Supabaseの接続情報
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const HISTORY = path.join('scripts', 'monitoring', 'image_health_history.json');
-const UA = 'Mozilla/5.0 (compatible; MensEstheMapImageHealth/1.0)';
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function withRetry(label, operation, attempts = 3) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) await wait(500 * attempt);
+    }
+  }
+  throw new Error(`${label}: ${lastError?.message || 'unknown error'}`);
+}
 
 async function countOf(table, filter) {
   let q = supabase.from(table).select('id', { count: 'exact', head: true });
@@ -78,25 +101,42 @@ async function sampleUrls(table, n) {
   return (data || []).map((r) => r.image_url).filter(Boolean);
 }
 
-async function headOk(url) {
-  try {
-    const res = await fetch(url, { method: 'HEAD', headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(12000) });
-    const ct = res.headers.get('content-type') || '';
-    return res.ok && (/^image\//i.test(ct) || ct === '');
-  } catch { return false; }
+async function fetchAllImageRows(table) {
+  const rows = [];
+  const pageSize = 1000;
+  for (let from = 0; ; from += pageSize) {
+    let query = supabase
+      .from(table)
+      .select('id,image_url')
+      .not('image_url', 'is', null)
+      .neq('image_url', '')
+      .order('id')
+      .range(from, from + pageSize - 1);
+    const { data } = await withRetry(`${table} full image scan`, async () => {
+      const result = await query;
+      if (result.error) throw result.error;
+      return result;
+    });
+    rows.push(...(data || []));
+    if ((data || []).length < pageSize) break;
+  }
+  return rows;
 }
 
 async function fetchAllActiveTherapists() {
   const rows = [];
   const pageSize = 1000;
   for (let from = 0; ; from += pageSize) {
-    const { data, error } = await supabase
-      .from('therapists')
-      .select('id,shop_id,name,image_url')
-      .or('is_active.is.null,is_active.eq.true')
-      .order('id')
-      .range(from, from + pageSize - 1);
-    if (error) throw new Error(`therapists semantic check: ${error.message}`);
+    const { data } = await withRetry('therapists semantic check', async () => {
+      const result = await supabase
+        .from('therapists')
+        .select('id,shop_id,name,image_url')
+        .or('is_active.is.null,is_active.eq.true')
+        .order('id')
+        .range(from, from + pageSize - 1);
+      if (result.error) throw result.error;
+      return result;
+    });
     rows.push(...(data || []));
     if ((data || []).length < pageSize) break;
   }
@@ -105,34 +145,72 @@ async function fetchAllActiveTherapists() {
 
 async function main() {
   const report = {
-    schemaVersion: 3,
+    // v4: 全件の実バイト検査と、意図した破損参照476行の除去後を新基準にする。
+    schemaVersion: 4,
     at: new Date().toISOString().slice(0, 19).replace('T', ' '),
   };
   const failures = [];
+  const saveReport = () => {
+    if (REPORT_FILE) fs.writeFileSync(REPORT_FILE, JSON.stringify({ report, failures }, null, 2));
+  };
 
   for (const table of ['shops', 'therapists']) {
     const total = await countOf(table);
     const nulls = await countOf(table, 'null');
-    const urls = await sampleUrls(table, SAMPLE);
-    const results = await Promise.all(urls.map(headOk));
-    const dead = results.filter((x) => !x).length;
+    const fullRows = FULL_SCAN ? await fetchAllImageRows(table) : [];
+    const urls = FULL_SCAN
+      ? [...new Set(fullRows.map((row) => row.image_url).filter(Boolean))]
+      : await sampleUrls(table, SAMPLE);
+    let lastProgress = 0;
+    const results = await mapConcurrent(urls, CONCURRENCY, checkImageBody, (completed, totalUrls) => {
+      if (FULL_SCAN && !QUIET && completed - lastProgress >= 2500) {
+        lastProgress = completed;
+        console.log(`  全件走査 ${completed.toLocaleString()} / ${totalUrls.toLocaleString()}`);
+      }
+    });
+    const badUrls = urls
+      .map((url, index) => ({ url, ...results[index] }))
+      .filter((result) => !result.ok);
+    const badUrlSet = new Set(badUrls.map((result) => result.url));
+    const affectedRows = FULL_SCAN ? fullRows.filter((row) => badUrlSet.has(row.image_url)) : [];
+    const dead = badUrls.length;
     const deadPct = urls.length ? (dead / urls.length) * 100 : 0;
     const nullPct = total ? (nulls / total) * 100 : 0;
 
-    report[table] = { total, nulls, nullPct: +nullPct.toFixed(1), sampled: urls.length, dead, deadPct: +deadPct.toFixed(1) };
+    report[table] = {
+      total,
+      nulls,
+      nullPct: +nullPct.toFixed(1),
+      mode: FULL_SCAN ? 'all' : 'sample',
+      checkedUrls: urls.length,
+      dead,
+      deadPct: +deadPct.toFixed(1),
+      affectedRows: affectedRows.length,
+      badExamples: badUrls
+        .slice(0, REPORT_FILE ? undefined : 20)
+        .map(({ url, status, contentType, reason }) => ({ url, status, contentType, reason })),
+      affectedExamples: affectedRows
+        .slice(0, REPORT_FILE ? undefined : 20)
+        .map(({ id, image_url: imageUrl }) => ({ id, imageUrl })),
+    };
 
     if (!QUIET) {
       console.log(`\n■ ${table}`);
       console.log(`  総数 ${total.toLocaleString()} / image_url=null ${nulls.toLocaleString()} (${nullPct.toFixed(1)}%)`);
-      console.log(`  サンプル ${urls.length}件 → 配信NG ${dead}件 (${deadPct.toFixed(1)}%)`);
+      console.log(`  ${FULL_SCAN ? '全登録URL' : 'サンプル'} ${urls.length.toLocaleString()}件 → 配信NG ${dead}件 (${deadPct.toFixed(1)}%)`);
+      badUrls.slice(0, 20).forEach((bad) => console.log(`    NG ${bad.reason}: ${bad.url}`));
     }
 
     if (table === 'shops' && nullPct > SHOPS_NULL_MAX) {
       failures.push(`shops の image_url=null が ${nullPct.toFixed(1)}%（閾値 ${SHOPS_NULL_MAX}%）`);
     }
-    if (deadPct > DEAD_MAX) {
+    if (FULL_SCAN && dead > 0) {
+      failures.push(`${table} の全画像実体検査で${dead} URL（${affectedRows.length}行）の異常を検出`);
+    } else if (deadPct > DEAD_MAX) {
       failures.push(`${table} の配信NGが ${deadPct.toFixed(1)}%（閾値 ${DEAD_MAX}%）＝Worker/R2/元URLの異常を疑う`);
     }
+    // 長時間の全件走査は後続の一時的なDB障害で結果を失わないよう逐次保存する。
+    saveReport();
   }
 
   const therapistRows = await fetchAllActiveTherapists();
@@ -175,7 +253,7 @@ async function main() {
   try { history = JSON.parse(fs.readFileSync(HISTORY, 'utf-8')); } catch { /* 初回 */ }
   const prev = history[history.length - 1];
   // schemaVersionを上げた初回は、意図した一括修復によるnull増を新しい基準値にする。
-  if (prev?.schemaVersion === report.schemaVersion) {
+  if (!NO_HISTORY && prev?.schemaVersion === report.schemaVersion) {
     for (const table of ['shops', 'therapists']) {
       const jump = report[table].nulls - (prev[table]?.nulls ?? report[table].nulls);
       if (!QUIET) console.log(`  前回比: ${table} の null ${jump >= 0 ? '+' : ''}${jump}件`);
@@ -184,9 +262,12 @@ async function main() {
       }
     }
   }
-  history.push(report);
-  fs.mkdirSync(path.dirname(HISTORY), { recursive: true });
-  fs.writeFileSync(HISTORY, JSON.stringify(history.slice(-120), null, 2));
+  if (!NO_HISTORY) {
+    history.push(report);
+    fs.mkdirSync(path.dirname(HISTORY), { recursive: true });
+    fs.writeFileSync(HISTORY, JSON.stringify(history.slice(-120), null, 2));
+  }
+  saveReport();
 
   if (failures.length) {
     console.error('\n🚨 画像健全性チェック失敗:');
