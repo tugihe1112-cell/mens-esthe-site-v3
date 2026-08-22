@@ -593,6 +593,7 @@ export default function SearchPage() {
         path="/search"
       />
       <Header />
+      <h1 className="sr-only">店舗・セラピスト検索</h1>
 
       {/* ===== 検索エリア ===== */}
       <div className="bg-slate-950 border-b border-white/10 shadow-lg">

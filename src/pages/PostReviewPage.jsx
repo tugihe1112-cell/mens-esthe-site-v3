@@ -904,6 +904,7 @@ export default function PostReviewPage() {
       <div className="min-h-screen bg-slate-950 text-slate-200 font-sans overflow-x-clip">
         <Toaster position="top-center" />
         <Header />
+        <h1 className="sr-only">口コミを投稿</h1>
         {/* ⚠️ 下端の余白（2026-08-17 修正）: 主CTA「次へ進む」は fixed bottom-0 で、
             実測の占有高は p-6(48) + py-4(32) + 行高(28) ≒ 108px。従来 pb-32(128px) では
             iPhone のホームバー領域(env safe-area ≒ 34px)を足すと足りず、最後のスライダーに

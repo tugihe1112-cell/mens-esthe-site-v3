@@ -45,3 +45,18 @@ jobs:
         run: node scripts/monitoring/check_http_status.mjs
         env:
           BASE_URL: https://www.mens-esthe-map.jp
+
+      # 主要ページとsitemap掲載ページ、その内部リンクを毎回たどり、
+      # 4xx・壊れたcanonical・SEO文のundefined・不正JSON-LDを検出する。
+      - name: Check page and internal-link integrity
+        if: always()
+        run: node scripts/monitoring/check_site_integrity.mjs
+        env:
+          BASE_URL: https://www.mens-esthe-map.jp
+
+      # 副作用のない入力だけで、公開API・認証拒否・メソッド制限を検証する。
+      - name: Check API contracts
+        if: always()
+        run: node scripts/monitoring/check_api_contracts.mjs
+        env:
+          BASE_URL: https://www.mens-esthe-map.jp

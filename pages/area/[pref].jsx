@@ -21,18 +21,19 @@ export async function getServerSideProps({ params, res }) {
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
   const pref = params.pref;
   const prefName = PREF_MAP[pref] || null;
-  if (!prefName) return { props: { ssr: null } };
+  if (!prefName) return { notFound: true };
 
   const supabase = createClient(
     process.env.VITE_SUPABASE_URL || '',
     process.env.SUPABASE_SERVICE_ROLE_KEY || ''
   );
   try {
-    const { data: shops } = await supabase
+    const { data: shops, error: shopsError } = await supabase
       .from('shops')
       .select('id, name, raw_data')
       .eq('raw_data->>prefecture', prefName)
       .limit(1000);
+    if (shopsError) throw shopsError;
 
     const shopList = (shops || []).map((s) => ({
       id: s.id, name: s.name, city: s.raw_data?.city || s.raw_data?.area || '',
@@ -65,6 +66,11 @@ export async function getServerSideProps({ params, res }) {
     return { props: { ssr: { prefName, pref, shopCount, topAreas, shopList: shopList.slice(0, 60), latestReviews } } };
   } catch (e) {
     console.error('[SSR Area]', e.message);
+    // DB障害を「店舗0件」の正常ページとしてキャッシュしない。実在ページは保持し、
+    // クローラーとCDNへ一時障害であることを明示する。
+    res.statusCode = 503;
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Retry-After', '120');
     return { props: { ssr: null } };
   }
 }
@@ -104,7 +110,7 @@ export default function AreaSSRPage({ ssr }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       </Head>
 
-      <PrefecturePage />
+      <PrefecturePage initialPrefName={prefName} initialShops={shopList} initialShopCount={shopCount} />
 
       {/* 店舗ページへのクロール経路（SSR・最重要）
           ⚠️ これまで1,098の店舗ページには内部リンクが1本も無く、サイトマップだけが

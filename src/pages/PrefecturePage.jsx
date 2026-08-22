@@ -12,20 +12,23 @@ import { PREF_SLUG_MAP } from '../data/areaLinks';
 //    サイトマップが submit しているURLがHTTP200で「存在しません」を返す soft404 だった。
 const PREF_MAP = PREF_SLUG_MAP;
 
-export default function PrefecturePage() {
+export default function PrefecturePage({ initialPrefName = null, initialShops = [], initialShopCount = 0 }) {
   const { pref } = useParams();
   const { shops, loading } = useShopData();
 
-  const prefName = PREF_MAP[pref];
+  const prefName = initialPrefName || PREF_MAP[pref];
 
   // 該当都道府県の店舗を絞り込み
   const prefShops = useMemo(() => {
-    if (!shops || !prefName) return [];
+    if (!prefName) return [];
+    if (!shops || shops.length === 0) return initialShops;
     return shops.filter(s => {
       const p = s.prefecture || s.raw_data?.prefecture || '';
       return p === prefName || p.includes(prefName.replace(/[都道府県]$/, ''));
     });
-  }, [shops, prefName]);
+  }, [shops, prefName, initialShops]);
+
+  const displayedShopCount = shops?.length > 0 ? prefShops.length : (initialShopCount || prefShops.length);
 
   // エリア（市区）ごとにグループ化
   const areaGroups = useMemo(() => {
@@ -38,12 +41,12 @@ export default function PrefecturePage() {
     return Object.entries(groups).sort(([, a], [, b]) => b.length - a.length);
   }, [prefShops]);
 
-  const title = prefName ? `${prefName}のメンズエステ${prefShops.length}店舗・口コミ` : 'エリア別メンズエステ';
+  const title = prefName ? `${prefName}のメンズエステ${displayedShopCount}店舗・口コミ` : 'エリア別メンズエステ';
   const description = prefName
-    ? `${prefName}のメンズエステ${prefShops.length}店舗を掲載。セラピスト情報・口コミ・料金・出勤スケジュールを検索できます。`
+    ? `${prefName}のメンズエステ${displayedShopCount}店舗を掲載。セラピスト情報・口コミ・料金・出勤スケジュールを検索できます。`
     : '';
 
-  if (loading) {
+  if (loading && initialShops.length === 0) {
     return (
       <><SeoHead title={title} description={description} path={`/area/${pref}`} /><div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
         <div className="w-10 h-10 border-4 border-pink-500 border-t-transparent rounded-full animate-spin" />
@@ -86,7 +89,7 @@ export default function PrefecturePage() {
           {prefName}のメンズエステ
         </h1>
         <p className="text-slate-400 text-sm">
-          {prefShops.length}店舗掲載 · セラピスト情報・口コミ・料金を検索
+          {displayedShopCount}店舗掲載 · セラピスト情報・口コミ・料金を検索
         </p>
 
         {/* 検索へのショートカット */}

@@ -26,6 +26,10 @@ for (const obsoletePath of ['src/App.jsx', 'src/main.jsx', 'src/pages/LoginPage.
   }
 }
 forbidMatch('.npmrc', /legacy-peer-deps\s*=\s*true/, '依存競合を隠すlegacy-peer-depsを有効にしている');
+forbidMatch('vercel.json', /legacy-peer-deps/, '本番installで依存競合を隠している');
+forbidMatch('.github/workflows/ci.yml', /legacy-peer-deps/, 'CI installで依存競合を隠している');
+requireMatch('vercel.json', /"installCommand"\s*:\s*"npm ci"/, '本番installがlock厳守のnpm ciではない');
+requireMatch('.github/workflows/ci.yml', /run:\s*npm ci\s*$/m, 'CI installがlock厳守のnpm ciではない');
 
 requireMatch('api/auth-email-hook.js', /new Webhook\(secret\)\.verify/, 'Standard Webhooks署名検証がない');
 requireMatch('api/auth-email-hook.js', /Invalid hook signature/, '不正署名を拒否する処理がない');
@@ -36,6 +40,7 @@ requireMatch('api/og.js', /url\.protocol !== 'https:'/, 'HTTPS以外の画像URL
 requireMatch('api/track-view.js', /consumeRateLimit/, 'service_role閲覧更新APIにレート制限がない');
 requireMatch('api/notify-review.js', /scope: 'notify-review-user'/, '口コミ通知の連打防止がない');
 requireMatch('api/notify-review.js', /\/admin\?review=\$\{encodeURIComponent\(review\.id\)\}/, '新着口コミメールが対象口コミへの管理画面直リンクになっていない');
+requireMatch('api/auth/signup.js', /if \(!adminNotifyResponse\.ok\)/, '新規登録の管理者通知失敗を検査していない');
 requireMatch('src/pages/AdminPage.jsx', /new URLSearchParams\(location\.search[^)]*\)\.get\(['"]review['"]\)/, '管理画面が通知メールのreview指定を受け取っていない');
 requireMatch('src/pages/AdminPage.jsx', /scrollIntoView\(/, '通知メールで指定された口コミへ自動移動しない');
 forbidMatch('api/contact.js', /skipped:\s*['"]no_resend_key/, 'メール未設定時に送信成功扱いしている');
@@ -45,6 +50,9 @@ requireMatch('src/components/SeoHead.jsx', /from 'next\/head'/, 'Next.jsの正�
 requireMatch('pages/request-review.jsx', /destination:\s*['"]\/post-review['"]/, '旧デモ投稿画面を正規投稿へ転送していない');
 requireMatch('src/pages/ResetPasswordPage.jsx', /auth\.updateUser\(\{ password \}\)/, 'パスワード再設定処理がない');
 requireMatch('src/pages/MyReviewsPage.jsx', /\.eq\(['"]user_id['"], user\.id\)/, '自分の口コミをDBから取得していない');
+requireMatch('src/components/LikeButton.jsx', /aria-pressed=/, 'いいねボタンの状態を支援技術へ伝えていない');
+requireMatch('src/pages/RankingPage.jsx', /<label[^>]+htmlFor=["']ranking-area["']/, 'ランキング地域選択にアクセシブル名がない');
+requireMatch('src/pages/SearchPage.jsx', /<h1[^>]*sr-only/, '検索ページに見出しがない');
 
 forbidMatch('src/context/AppContext.tsx', /submitExistingShopReview|mens_esthe_local_reviews[^'].*setItem/, 'ブラウザだけに保存するデモ口コミが復活している');
 requireMatch('src/context/AppContext.tsx', /mens_esthe_favorites:\$\{user\.id\}/, 'お気に入りがユーザー別に分離されていない');
@@ -61,11 +69,22 @@ requireMatch('.github/workflows/image-health.yml', /--all --no-history/, '定期
 for (const migration of [
   'supabase_migrations/20_harden_community_rls_and_integrity.sql',
   'supabase_migrations/21_consolidate_read_policies_and_indexes.sql',
+  'supabase_migrations/22_enforce_shop_integrity_and_view_rls.sql',
 ]) {
   if (!fs.existsSync(migration)) violations.push(`${migration}: 本番適用済みマイグレーションがリポジトリにない`);
 }
+requireMatch('supabase_migrations/22_enforce_shop_integrity_and_view_rls.sql', /FOREIGN KEY \(shop_id\) REFERENCES public\.shops\(id\)/, 'セラピストの孤児データを防ぐ外部キーがない');
+requireMatch('supabase_migrations/22_enforce_shop_integrity_and_view_rls.sql', /security_invoker\s*=\s*true/, '集計viewが基表RLSを継承していない');
+requireMatch('.github/workflows/monitor.yml', /check_site_integrity\.mjs/, 'ページ・内部リンクの定期監視がない');
+requireMatch('.github/workflows/monitor.yml', /check_api_contracts\.mjs/, 'API契約の定期監視がない');
 
 const packageJson = JSON.parse(read('package.json') || '{}');
+if (packageJson.dependencies?.['react-router-dom']) {
+  violations.push('package.json: Next.js移行後に未使用のreact-router-domを本番依存へ戻している');
+}
+if (packageJson.scripts?.build !== 'next build --webpack') {
+  violations.push('package.json: 制限環境で内部ポート作成に失敗するTurbopack本番buildへ戻している');
+}
 const nextMajor = Number(String(packageJson.dependencies?.next || '').match(/\d+/)?.[0] || 0);
 const ogMajor = Number(String(packageJson.dependencies?.['@vercel/og'] || '').match(/\d+/)?.[0] || 0);
 if (nextMajor < 16) violations.push('package.json: 脆弱性修正版のNext.js 16以上が必要');

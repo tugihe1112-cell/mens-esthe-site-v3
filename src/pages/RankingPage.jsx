@@ -113,7 +113,10 @@ export default function RankingPage() {
 
           {/* Area Selector */}
           <div className="relative w-full md:w-48">
+             <label htmlFor="ranking-area" className="sr-only">ランキングのエリア</label>
              <select 
+               id="ranking-area"
+               aria-label="ランキングのエリア"
                value={selectedArea} 
                onChange={(e) => setSelectedArea(e.target.value)}
                className="w-full bg-slate-900 border border-white/10 rounded-full px-4 py-2 text-sm font-bold text-white appearance-none focus:border-pink-500 focus:outline-none cursor-pointer hover:bg-slate-800 transition shadow-inner"

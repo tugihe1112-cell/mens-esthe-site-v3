@@ -8,6 +8,33 @@
 
 ---
 
+## 2026-08-22 全サイト完全性・DB親子整合性の追加監査
+
+- 既存の4視点監査を、SSR HTML・内部リンク・公開API・DBカタログ・依存再現性まで拡張
+- 画面／SEO:
+  - `/search`と口コミ投稿に一意のH1、ランキング選択にlabel、いいねに状態付きアクセシブル名を追加
+  - Next.jsが自動出力するcharsetとの重複を解消
+  - エリア／店舗ページのSSR本文を初期HTMLへ確実に出し、店舗descriptionの地域`undefined`と在籍数0への退行を修正
+  - 退店済みでも実口コミが残るセラピストは「アーカイブプロフィール」として200で保持し、無関係な店舗・同名口コミとの誤結合を禁止
+- 障害時の正しいHTTP:
+  - 存在しないエリアは404、Supabase障害時のエリア／店舗は503＋no-store＋Retry-After
+  - sitemap生成中のDBエラーを握りつぶして不完全なXMLを200キャッシュしていた経路を503へ変更
+- 本番DB:
+  - 明示的なテスト口コミ1件を削除
+  - 親店舗が存在せず口コミ参照もない孤児セラピスト1,249件を削除
+  - `therapists.shop_id -> shops.id`の検証済みFK（UPDATE/DELETE CASCADE）を追加し再発をDBで拒否
+  - `user_badge_counts`を`security_invoker=true`に変更して基表RLSを継承
+  - migration `enforce_shop_integrity_and_view_rls` / version `20260822152530`
+  - 適用後: shops 1,099／therapists 59,633／reviews 16／孤児0。実口コミがある退店セラピスト1名は意図的に保持
+- 依存・継続監視:
+  - 未使用の`react-router-dom`を削除し、Vercel/CIの`--legacy-peer-deps`を撤去。lock厳守の`npm ci`へ統一。Turbopackの内部ポート制限によるpanicを避けるため本番buildは公式Webpackへ固定し、クリーン再現・lint・30ページbuild・npm audit 0を確認
+  - `check_site_integrity.mjs`（主要＋sitemap＋内部リンク、SEO/JSON-LD/charset/4xx）と`check_api_contracts.mjs`（公開API・認証拒否・CSP）を15分監視へ追加
+  - 回帰ガードで依存競合の隠蔽、アクセシビリティ欠落、FK/view、監視削除をデプロイ前に停止
+- 通知: 新規登録自体は管理者メール障害で取り消さない設計を維持しつつ、ResendのHTTP失敗を握りつぶさずサーバーログへ記録
+- Supabase AdvisorはLeaked Password Protection未設定の1警告のみ。`api_rate_limits_updated_at_idx`は小規模な期限切れ掃除を支えるため未使用判定でも保持
+
+---
+
 ## 2026-08-22 全サイトを4視点で三重監査・根本修復
 
 - 客・初回客・常連・管理人の4視点で、公開／認証／投稿／掲示板／チャット／管理導線と主要27ルートを監査

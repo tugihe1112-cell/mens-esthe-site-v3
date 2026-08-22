@@ -162,7 +162,7 @@ export default async function handler(req, res) {
     try {
       const ADMIN_TO = process.env.CONTACT_TO_EMAIL || 'tugihe1112@gmail.com';
       const jstNow = new Date(Date.now() + 9 * 3600 * 1000).toISOString().replace('T', ' ').slice(0, 16);
-      await fetch('https://api.resend.com/emails', {
+      const adminNotifyResponse = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${RESEND_API_KEY}`,
@@ -193,6 +193,10 @@ export default async function handler(req, res) {
             </div>`,
         }),
       });
+      if (!adminNotifyResponse.ok) {
+        const adminNotifyBody = await adminNotifyResponse.text();
+        throw new Error(`管理者への登録通知に失敗: HTTP ${adminNotifyResponse.status} ${adminNotifyBody.slice(0, 200)}`);
+      }
     } catch (notifyErr) {
       // 通知の失敗は登録の成否に影響させない
       console.error('[auth/signup] 管理者通知に失敗（登録は成功）:', notifyErr.message);

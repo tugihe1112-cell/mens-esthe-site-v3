@@ -66,7 +66,7 @@ export default function BrandPage() {
 
         {/* Hero Image Background */}
         <div className="absolute inset-0 z-0">
-          <LazyImage src={heroImage} alt={displayBrandName} className="w-full h-full object-cover transition duration-[2s] group-hover:scale-105 filter brightness-[0.4]" />
+          <LazyImage src={heroImage} alt={displayBrandName} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 filter brightness-[0.4]" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-black/40"></div>
         </div>
 

@@ -40,25 +40,33 @@ export async function getServerSideProps({ params, res }) {
       supabase.from('therapists').select('*').eq('id', threadId).maybeSingle(),
     ]);
     const shopData = shopRes.data;
-    const therapistData = therapistRes.data;
+    let therapistData = therapistRes.data;
+
+    if (shopRes.error) throw shopRes.error;
+    if (therapistRes.error) throw therapistRes.error;
 
     // ── ソフト404の解消（店舗ページと同じ対処）──
     // 存在しないセラピスト/店舗でも200で空ページを返していた。404にして「もう無い」と伝える。
     // ⚠️ 404にするのは「クエリ成功かつ0件」のときだけ。DB障害時に404を返すと
     //    実在ページを一斉に消滅扱いにしてしまう（6/30の全API停止の型）。
-    if (!shopRes.error && !therapistRes.error && (!shopData || !therapistData)) {
+    if (!shopData) {
       return { notFound: true };
     }
 
     // 3. 公開口コミ取得（is_public=true または owner_manual）
     let reviewShopIds = [shopId];
     if (shopData?.group_id) {
-      const { data: groupShops } = await supabase
+      const { data: groupShops, error: groupShopsError } = await supabase
         .from('shops')
         .select('id')
         .eq('group_id', shopData.group_id);
+      if (groupShopsError) throw groupShopsError;
       if (groupShops?.length) reviewShopIds = groupShops.map(s => s.id);
     }
+
+    // URL上の店舗（または同一group）に属さないtherapist_idを混ぜたページを作らない。
+    // IDだけで引くと、別店舗のプロフィールを任意の店舗名と組み合わせて200表示できてしまう。
+    if (therapistData && !reviewShopIds.includes(therapistData.shop_id)) therapistData = null;
 
     const therapistName = therapistData?.name || threadId.split('_').pop();
 
@@ -76,20 +84,57 @@ export async function getServerSideProps({ params, res }) {
       (therapistName || '').replace(/[\s　]+/g, '　'),
     ].filter(Boolean)));
 
-    const { data: reviews } = await supabase
+    // 現在在籍中の行がある場合は、旧データとの互換性のため名前一致も見る。
+    // ただし主キーは必ず therapist_id。名前だけで絞ると、系列店に同名の別人がいる時に
+    // 口コミが混ざる。退店後に名簿行が消えても、口コミ自体は残すべきなので、
+    // therapist_id が一致する公開口コミがあれば「退店済みプロフィール」として表示する。
+    const { data: exactReviews, error: exactReviewsError } = await supabase
       .from('reviews')
       .select('id, shop_id, therapist_name, therapist_id, rating, content, story_sections, detailed_ratings, tags, created_at, is_public, user_id, user_name, course')
       .in('shop_id', reviewShopIds)
-      .in('therapist_name', nameVariants)
+      .eq('therapist_id', threadId)
       .or('is_public.eq.true,user_id.eq.owner_manual')
       .order('created_at', { ascending: false })
       .limit(200);
+    if (exactReviewsError) throw exactReviewsError;
+
+    let legacyReviews = [];
+    if (therapistData && nameVariants.length > 0) {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('id, shop_id, therapist_name, therapist_id, rating, content, story_sections, detailed_ratings, tags, created_at, is_public, user_id, user_name, course')
+        .in('shop_id', reviewShopIds)
+        .in('therapist_name', nameVariants)
+        .or('is_public.eq.true,user_id.eq.owner_manual')
+        .order('created_at', { ascending: false })
+        .limit(200);
+      if (error) throw error;
+      legacyReviews = data || [];
+    }
+
+    const reviewsById = new Map();
+    for (const review of [...(exactReviews || []), ...legacyReviews]) reviewsById.set(review.id, review);
+    const reviews = [...reviewsById.values()].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
 
     // セラピスト名でフィルタ
     const normName = (therapistName || '').replace(/[\s　]/g, '');
     const publicReviews = (reviews || []).filter(r =>
-      r.therapist_name && r.therapist_name.replace(/[\s　]/g, '') === normName
+      r.therapist_id === threadId ||
+      (therapistData && r.therapist_name && r.therapist_name.replace(/[\s　]/g, '') === normName)
     );
+
+    if (!therapistData) {
+      const archivedReview = publicReviews.find((review) => review.therapist_id === threadId);
+      if (!archivedReview) return { notFound: true };
+      therapistData = {
+        id: threadId,
+        shop_id: archivedReview.shop_id || shopId,
+        name: archivedReview.therapist_name || threadId.split('_').pop(),
+        image_url: null,
+        is_active: false,
+        raw_data: { archived: true },
+      };
+    }
 
     // 評価集計
     let avgRating = null;
@@ -98,7 +143,7 @@ export async function getServerSideProps({ params, res }) {
     }
 
     // Tier 2-2: 同じ店(group)で口コミがある他のセラピスト（相互リンク＝口コミページ間のPageRank流通）
-    const { data: relatedRevs } = await supabase
+    const { data: relatedRevs, error: relatedRevsError } = await supabase
       .from('reviews')
       .select('therapist_id, therapist_name, shop_id, created_at')
       .in('shop_id', reviewShopIds)
@@ -107,6 +152,7 @@ export async function getServerSideProps({ params, res }) {
       .neq('therapist_id', threadId)
       .order('created_at', { ascending: false })
       .limit(60);
+    if (relatedRevsError) throw relatedRevsError;
     const seenT = new Set();
     const ssrRelated = [];
     for (const rr of (relatedRevs || [])) {

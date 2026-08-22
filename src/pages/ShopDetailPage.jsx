@@ -24,6 +24,7 @@ const INITIAL_DISPLAY_COUNT = 12;
 const LOAD_MORE_COUNT = 12;
 
 export default function ShopDetailPage({
+  ssrShop = null,
   ssrTherapistCount = 0,
   ssrReviewedTherapists = [],
   ssrNearbyShops = [],
@@ -199,7 +200,7 @@ export default function ShopDetailPage({
   };
 
   // 共有箱(Context)はあくまで「保険」。基本は直接取ってきた cloudShop を使う
-  const shop = cloudShop || (shopById ? shopById[shopId] : null);
+  const shop = cloudShop || (shopById ? shopById[shopId] : null) || ssrShop;
   // グループ店舗で同一セラピストが複数店舗に登録されている場合に重複除去。
   // 直接取得がまだ空の間だけContextを保険にし、安定した配列参照を後続memoへ渡す。
   const therapists = React.useMemo(() => {
@@ -279,12 +280,23 @@ export default function ShopDetailPage({
   if (!shop) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Shop not found</div>;
 
   // Tier 2-3: 件数入りタイトル/descriptionでCTR改善（SSRラッパーと同じ形式で揃える）
-  const reviewCount = cloudReviews.length;
-  const avgRating = reviewCount > 0 ? (cloudReviews.reduce((s, r) => s + (r.rating || 0), 0) / reviewCount).toFixed(1) : null;
+  // クライアント取得は最新20件までなので、SSRで数えた全件数を下回らせない。
+  // また shops の地域情報は raw_data 内にある店舗が多く、直下カラムだけを読むと
+  // description に `undefinedundefined` が露出する。SSRの正規化済み値まで順にフォールバックする。
+  const reviewCount = Math.max(ssrReviewCount || 0, cloudReviews.length);
+  const clientAvgRating = cloudReviews.length > 0
+    ? (cloudReviews.reduce((s, r) => s + (r.rating || 0), 0) / cloudReviews.length).toFixed(1)
+    : null;
+  const avgRating = ssrAvgRating || clientAvgRating;
+  const seoPrefecture = shop.prefecture || shop.raw_data?.prefecture || ssrPrefecture || '';
+  const seoArea = shop.city || shop.raw_data?.city || shop.area ||
+    (Array.isArray(shop.raw_data?.area) ? shop.raw_data.area[0] : shop.raw_data?.area) || ssrArea || '';
+  const seoLocation = [seoPrefecture, seoArea].filter(Boolean).join(' ');
+  const seoTherapistCount = Math.max(ssrTherapistCount || 0, therapists.length);
   const seoTitle = reviewCount > 0 ? `${shop.name}の口コミ${reviewCount}件・セラピスト評判` : shop.name;
   const seoDesc = reviewCount > 0
-    ? `${shop.name}の口コミ${reviewCount}件（平均★${avgRating}）。${shop.prefecture}${shop.city}の在籍セラピスト${therapists.length}名の評判・体験談をチェック。`
-    : `${shop.name}（${shop.prefecture} ${shop.city}）の店舗情報。在籍セラピスト${therapists.length}名。`;
+    ? `${shop.name}の口コミ${reviewCount}件（平均★${avgRating}）。${seoLocation ? `${seoLocation}の` : ''}在籍セラピスト${seoTherapistCount}名の評判・体験談をチェック。`
+    : `${shop.name}${seoLocation ? `（${seoLocation}）` : ''}の店舗情報。在籍セラピスト${seoTherapistCount}名。`;
 
   const handlePostReview = () => {
     navigate(`/shops/${shop.id}/review`);
@@ -308,8 +320,8 @@ export default function ShopDetailPage({
         "image": shop.image_url || shop.image || undefined,
         "address": {
           "@type": "PostalAddress",
-          "addressRegion": shop.prefecture || shop.raw_data?.prefecture,
-          "addressLocality": shop.city || shop.raw_data?.city,
+          "addressRegion": seoPrefecture || undefined,
+          "addressLocality": seoArea || undefined,
           "addressCountry": "JP"
         },
         "telephone": shop.phone_number || shop.raw_data?.phone || undefined,
@@ -334,7 +346,7 @@ export default function ShopDetailPage({
          </button>
 
          <div className="absolute inset-0">
-           <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover transition duration-[2s] group-hover:scale-105" />
+           <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-black/30"></div>
          </div>
 

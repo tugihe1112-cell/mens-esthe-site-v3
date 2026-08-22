@@ -28,6 +28,7 @@ const MUST_404 = [
   '/shops/brand_59990861bb3800cabcb47ca6dd5d1b5f',
   '/shops/brand_fcf5a2d6fa81aa575e071b85fcfc38a6',
   '/shops/__no_such_shop_monitor__',
+  '/area/__no_such_area_monitor__',
   '/shops/kanagawa_sagamihara_unison_spa/threads/__no_such_therapist_monitor__',
 ];
 
@@ -42,6 +43,8 @@ const MUST_200 = [
   '/shops/hiroshima_hiroshima_hitozuma_san',
   '/area/tokyo',
   '/area/gunma',
+  // 名簿から消えても実口コミが残るページは、口コミ資産として200で維持する。
+  '/shops/tokyo_toshima_ikebukuro_aromamore/threads/tokyo_toshima_ikebukuro_aromamore_%E3%81%95%E3%81%AA',
   '/shops/tokyo_shinjuku_nishishinjuku_cor_caroli',      // メンズエステ コル・カロリ 西新宿店
   '/shops/tokyo_shinjuku_shinjuku_gyoen_platinum_tokyo', // PLATINUM TOKYO 新宿御苑店
   '/shops/osaka_tanimachi_新感覚mエステ',                 // 新感覚Mエステ

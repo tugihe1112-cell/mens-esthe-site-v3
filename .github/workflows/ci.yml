@@ -63,7 +63,7 @@ jobs:
         run: node scripts/ci/check_core_safety_guards.mjs
 
       - name: Install deps
-        run: npm install --legacy-peer-deps
+        run: npm ci
 
       - name: Next build
         run: npm run build

@@ -71,10 +71,22 @@ export default async function handler(req, res) {
     return res.status(405).send('Method Not Allowed');
   }
 
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
+  const databaseUrl = process.env.VITE_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!databaseUrl || !serviceRoleKey) {
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Retry-After', '120');
+    return res.status(503).send('Sitemap data source is unavailable');
+  }
+  const supabase = createClient(databaseUrl, serviceRoleKey);
+
+  // 途中まで取得した不完全なXMLを200で長期キャッシュすると、正常URLが大量に
+  // サイトマップから消えたように見える。依存DBの失敗は必ず503で再試行させる。
+  const dataSourceUnavailable = () => {
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Retry-After', '120');
+    return res.status(503).send('Sitemap data source is unavailable');
+  };
 
   // 🚩 2026-08-19 方針転換: サイトマップに**全店舗を載せるのをやめる**。
   //
@@ -111,7 +123,8 @@ export default async function handler(req, res) {
       .select('id')
       .order('id')
       .range(from, from + PAGE - 1);
-    if (error || !data || data.length === 0) break;
+    if (error) return dataSourceUnavailable();
+    if (!data || data.length === 0) break;
     shops.push(...data);
     if (data.length < PAGE) break;
     if (shops.length >= 50000) break; // 暴走ガード
@@ -129,7 +142,8 @@ export default async function handler(req, res) {
       .not('therapist_id', 'is', null)
       .order('shop_id')
       .range(from, from + PAGE - 1);
-    if (error || !data || data.length === 0) break;
+    if (error) return dataSourceUnavailable();
+    if (!data || data.length === 0) break;
     pubReviews.push(...data);
     if (data.length < PAGE) break;
     if (pubReviews.length >= 100000) break; // 暴走ガード

@@ -4,7 +4,6 @@ export default function Document() {
   return (
     <Html lang="ja">
       <Head>
-        <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/images/icon-192.png" />

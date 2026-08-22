@@ -1,5 +1,5 @@
 {
-  "installCommand": "npm install --legacy-peer-deps",
+  "installCommand": "npm ci",
   "regions": ["hnd1"],
   "crons": [
     { "path": "/api/cron/retention-email", "schedule": "0 9 * * 1" }

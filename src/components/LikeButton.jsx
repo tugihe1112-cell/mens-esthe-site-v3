@@ -26,7 +26,10 @@ export default function LikeButton({ id, className = "" }) {
 
   return (
     <button 
+      type="button"
       onClick={handleClick}
+      aria-label={isFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
+      aria-pressed={isFavorite}
       className={`transition-all duration-300 transform active:scale-125 flex items-center justify-center ${className} ${
         isFavorite ? 'text-pink-500' : 'text-gray-400 hover:text-pink-400'
       }`}

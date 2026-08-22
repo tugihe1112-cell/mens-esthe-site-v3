@@ -40,6 +40,8 @@ export async function getServerSideProps({ params, res }) {
         .select('id', { count: 'exact', head: true })
         .eq('shop_id', shopId),
     ]);
+    if (shopRes.error) throw shopRes.error;
+    if (therapistCountRes.error) throw therapistCountRes.error;
     const shop = shopRes.data;
     const therapistCount = therapistCountRes.count;
 
@@ -54,7 +56,7 @@ export async function getServerSideProps({ params, res }) {
     //    DB障害（error あり）で404を返すと、6/30のような全API停止時に
     //    実在する1,098ページを一斉に「消滅」とGoogleに宣言してしまう。
     //    取れない時は消さない＝下の catch と同じ思想。
-    if (!shopRes.error && !shop) {
+    if (!shop) {
       return { notFound: true };
     }
 
@@ -75,6 +77,8 @@ export async function getServerSideProps({ params, res }) {
             .limit(60)
         : Promise.resolve({ data: null }),
     ]);
+    if (groupRes.error) throw groupRes.error;
+    if (nearRes.error) throw nearRes.error;
 
     // 口コミ共有モデル: group_idがあれば系列全店のshop_idを対象にする
     let reviewShopIds = [shopId];
@@ -98,6 +102,8 @@ export async function getServerSideProps({ params, res }) {
         .order('created_at', { ascending: false })
         .limit(60),
     ]);
+    if (reviewsRes.error) throw reviewsRes.error;
+    if (revTRes.error) throw revTRes.error;
     const reviews = reviewsRes.data;
     const revT = revTRes.data;
 
@@ -226,6 +232,7 @@ export default function ShopDetailSSRPage({
         )}
       </Head>
       <ShopDetailPage
+        ssrShop={ssrShop}
         ssrTherapistCount={ssrTherapistCount}
         ssrReviewedTherapists={ssrReviewedTherapists}
         ssrNearbyShops={ssrNearbyShops}
