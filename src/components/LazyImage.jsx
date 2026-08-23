@@ -23,7 +23,18 @@ function isIconUrl(src) {
   return ICON_PATTERNS.some(p => lower.includes(p));
 }
 
-export default function LazyImage({ src, alt, className = '', fallback = NO_IMAGE_SVG, width = 800 }) {
+/**
+ * ⚠️ className は**ラッパーdiv**に付く。内側の <img> には届かない（2026-08-20 にここで事故）。
+ *    店舗ヒーローを object-contain にしようとして呼び出し側で className に指定したが、
+ *    <img> は下で object-cover をハードコードしていたため一切効かず、
+ *    「直したつもりで直っていない」状態のままデプロイした。
+ *    画像そのものの見え方を変えたいときは **imgClassName** を使うこと。
+ */
+export default function LazyImage({
+  src, alt, className = '', fallback = NO_IMAGE_SVG, width = 800,
+  imgClassName = 'w-full h-full object-cover',
+  ...rest
+}) {
   const [error, setError] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [retry, setRetry] = useState(0); // R2の一時エラー(429等)用の再試行カウンタ
@@ -106,8 +117,11 @@ export default function LazyImage({ src, alt, className = '', fallback = NO_IMAG
           }
         }}
         /* opacity で隠さない（loaded非依存）。relativeで裏のスケルトンより前面に。
-           軽いフェードは残す（透明→不透明でなく、描画時に自然表示）。 */
-        className="relative w-full h-full object-cover"
+           軽いフェードは残す（透明→不透明でなく、描画時に自然表示）。
+           ⚠️ 既定は object-cover のまま（既存の呼び出し全部の見た目を変えないため）。
+              contain にしたい箇所だけ imgClassName を渡す。 */
+        className={`relative ${imgClassName}`}
+        {...rest}
       />
     </div>
   );

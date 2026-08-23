@@ -360,15 +360,18 @@ export default function ShopDetailPage({
            <LazyImage
              src={shop.image_url || shop.image}
              alt=""
-             aria-hidden="true"
-             className="w-full h-full object-cover scale-110 blur-2xl opacity-40"
+             className="w-full h-full scale-110 blur-2xl opacity-40"
+             imgClassName="w-full h-full object-cover"
            />
-           {/* 本体: 切り取らずに全体を見せる。max-w/max-h で過剰な拡大も防ぐ */}
-           <div className="absolute inset-0 flex items-center justify-center p-6 pt-24 pb-28">
+           {/* 本体: 切り取らずに全体を見せる。
+               ⚠️ object-contain は **imgClassName** で渡すこと。className はラッパーdivに付くだけで
+                  <img> には届かない（2026-08-20 にここで「直したつもりで直っていない」事故） */}
+           <div className="absolute inset-0 flex items-center justify-center px-6 pt-24 pb-28">
              <LazyImage
                src={shop.image_url || shop.image}
                alt={shop.name}
-               className="max-w-[min(600px,90%)] max-h-full w-auto h-auto object-contain drop-shadow-2xl transition-transform duration-1000 group-hover:scale-105"
+               className="w-full h-full max-w-[720px] transition-transform duration-1000 group-hover:scale-105"
+               imgClassName="w-full h-full object-contain drop-shadow-2xl"
              />
            </div>
            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-black/30"></div>

@@ -100,16 +100,39 @@ function read(path) {
   for (const [p, label] of targets) {
     const src = read(p);
     if (src === null) { violations.push(`[D-008] ${p} が見つからない`); continue; }
-    // shop の画像を object-cover で「本体」として出していないか（背景のぼかし用は blur が付くので除外）
+    // ⚠️ 初版のガードは2回とも不十分だった。記録しておく。
+    //   1回目: 「object-cover が書かれていないこと」しか見ておらず**ザル**だった。
+    //     LazyImage は className をラッパーdivに渡し、<img> には object-cover をハードコードしている。
+    //     そのため呼び出し側が object-contain と書いても効かず、
+    //     ガードは通るのに実際は cover のまま、という状態を素通しした。
+    //   2回目: 行単位で見たため、複数行にまたがる JSX（src と imgClassName が別行）を誤検知した。
+    //     さらに OG画像・JSON-LD・onError など**表示ではない箇所**まで拾っていた。
+    //   → 「画像を実際に描画している行」だけを対象にし、その**周辺8行**に
+    //      object-contain か blur-（ぼかし背景レイヤー）があるかで判定する。
+    //   3回目の修正: ±8行の窓で見たら、**すぐ上のぼかし背景レイヤーが窓に入ってしまい**、
+    //     本体を cover に戻しても検知できなかった（テストで発覚）。
+    //     → 窓ではなく「その要素の開始タグから `/>` まで」を切り出して、要素単位で判定する。
     const lines = src.split('\n');
+    /** src= の行から、その要素（<LazyImage ... /> または <img ... />）の範囲を切り出す */
+    const elementAt = (i) => {
+      let s = i;
+      while (s > 0 && !/<(LazyImage|img)\b/.test(lines[s])) s--;
+      let e = i;
+      while (e < lines.length - 1 && !/\/>/.test(lines[e])) e++;
+      return lines.slice(s, e + 1).join('\n');
+    };
     lines.forEach((line, i) => {
-      if (!/shop\.image_url/.test(line)) return;
-      if (!/object-cover/.test(line)) return;
-      if (/blur-/.test(line)) return; // ぼかし背景レイヤーは意図的な object-cover なのでOK
+      // 実際に描画している行だけを対象にする（src= に渡している箇所）
+      if (!/src=\{[^}]*shop\.image_url/.test(line)) return;
+      const el = elementAt(i);
+      if (/object-contain/.test(el)) return; // 正しい
+      if (/blur-/.test(el)) return;          // ぼかし背景レイヤーは意図的な cover
       violations.push(
-        `[D-008] ${p}:${i + 1} で店舗画像を object-cover で表示している（${label}）。\n` +
+        `[D-008] ${p}:${i + 1} で店舗画像が contain 表示になっていない（${label}）。\n` +
         `        店舗画像は最大600px・横長バナーや低解像度が過半のため、拡大＋切り取りで破綻する。\n` +
-        `        「blur を付けた複製を背景に敷き、本体は object-contain」で表示すること。`
+        `        必ず **imgClassName="... object-contain"**（LazyImage）または\n` +
+        `        <img className="... object-contain">（生img）にすること。\n` +
+        `        ⚠️ LazyImage の className はラッパーdivに付くだけで <img> には届かない。`
       );
     });
   }

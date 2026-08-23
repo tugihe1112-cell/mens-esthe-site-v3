@@ -525,8 +525,9 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                        文字の断片だけが写って「壊れている」ように見える（2026-08-20 実機で発覚）。
                        ヒーローと同じく「ぼかし背景＋contain」にして全体を見せる。 */}
                 <div className="aspect-[3/4] rounded-t-2xl overflow-hidden relative bg-slate-900">
-                  <LazyImage src={shop.image_url || shop.image} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-30" />
-                  <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="absolute inset-0 m-auto max-w-[88%] max-h-[88%] w-auto h-auto object-contain transition duration-700 group-hover:scale-105" />
+                  {/* ⚠️ object-contain は imgClassName で渡す。className はラッパーdivに付くだけ。 */}
+                  <LazyImage src={shop.image_url || shop.image} alt="" className="absolute inset-0 w-full h-full scale-110 blur-xl opacity-30" imgClassName="w-full h-full object-cover" />
+                  <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="absolute inset-0 w-full h-full p-3 transition duration-700 group-hover:scale-105" imgClassName="w-full h-full object-contain" />
                   <div className="absolute top-2 left-2">
                     <span className="bg-pink-600/90 backdrop-blur text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-lg">NEW</span>
                   </div>
@@ -567,12 +568,15 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                     to={`/shops/${shop.id}`}
                     className="group flex items-center gap-3 bg-slate-900/60 hover:bg-slate-800/80 border border-white/5 hover:border-pink-500/20 rounded-2xl p-3 transition-all duration-200"
                   >
-                    <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-800">
+                    {/* ⚠️ 16x16の小さなサムネでも、横長ロゴを cover で入れると
+                           左右が切れて何の店か分からなくなる。ここも contain（D-008）。
+                           p-1 でロゴが枠に貼り付かないように余白を入れる。 */}
+                    <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-800 p-1">
                       <img
                         src={optimizeImageUrl(shop.image_url, 128)}
                         alt={shop.name}
                         decoding="async"
-                        className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                        className="w-full h-full object-contain group-hover:scale-110 transition duration-500"
                         onError={(e) => {
                           if (e.currentTarget.dataset.fb !== '1' && shop.image_url) { e.currentTarget.dataset.fb = '1'; e.currentTarget.src = shop.image_url; }
                           else { e.currentTarget.style.display = 'none'; }
