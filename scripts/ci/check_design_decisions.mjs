@@ -84,6 +84,37 @@ function read(path) {
   }
 }
 
+// ── D-008: 店舗画像を object-cover で全面表示しない ────────────────────────
+// 【事故】2026-08-20、PCで新着店舗スライダーと店舗ヒーローが「壊れて見える」と報告。
+//   実測すると、店舗画像は 2026-07-06 の一括リサイズで**全て最大600px**なのに、
+//   PCヒーローは幅約1,700px＝2.8倍に拡大し、さらに object-cover で上下を切り落としていた。
+//   ユニーク756枚のうち横長(aspect≥2.2)が245枚・低解像度(<200px)が129枚あり、
+//   **半数以上がこの表示方法で破綻する**状態だった。
+// 【対処】「ぼかした複製を背景に敷き、本体は object-contain」に変更。
+//   object-cover に戻すと同じ事故が必ず再発するので、機械的に止める。
+{
+  const targets = [
+    ['src/pages/ShopDetailPage.jsx', '店舗ページのヒーロー'],
+    ['src/pages/Home.jsx', 'ホームの新着店舗カード'],
+  ];
+  for (const [p, label] of targets) {
+    const src = read(p);
+    if (src === null) { violations.push(`[D-008] ${p} が見つからない`); continue; }
+    // shop の画像を object-cover で「本体」として出していないか（背景のぼかし用は blur が付くので除外）
+    const lines = src.split('\n');
+    lines.forEach((line, i) => {
+      if (!/shop\.image_url/.test(line)) return;
+      if (!/object-cover/.test(line)) return;
+      if (/blur-/.test(line)) return; // ぼかし背景レイヤーは意図的な object-cover なのでOK
+      violations.push(
+        `[D-008] ${p}:${i + 1} で店舗画像を object-cover で表示している（${label}）。\n` +
+        `        店舗画像は最大600px・横長バナーや低解像度が過半のため、拡大＋切り取りで破綻する。\n` +
+        `        「blur を付けた複製を背景に敷き、本体は object-contain」で表示すること。`
+      );
+    });
+  }
+}
+
 if (violations.length) {
   console.error('\n🚨 オーナー確定事項（playbook/decisions.md）に反する変更が検出されました:\n');
   violations.forEach((v) => console.error('  - ' + v + '\n'));

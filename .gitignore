@@ -25,3 +25,8 @@ scripts/metrics/cron.log
 r2_copy_errors.json
 outputs_gsc_analyze.py
 output/
+
+# 画像URLのバックアップ（audit_shop_images.mjs が --live 前に自動生成）。
+# 195KB×実行回数ぶん増えるうえ、内容はDBの複製なのでリポジトリには入れない。
+# ⚠️ ただし復旧に使うので、事故処理が終わるまでローカルから消さないこと。
+shop_image_url_backup_*.json

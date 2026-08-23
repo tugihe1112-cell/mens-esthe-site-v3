@@ -520,8 +520,13 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                 to={`/shops/${shop.id}`}
                 className="snap-center flex-shrink-0 w-[160px] md:w-[240px] group"
               >
+                {/* ⚠️ 店舗画像は横長のロゴ／キャンペーンバナーが多い（実測で245/756枚が aspect≥2.2）。
+                       縦長(3/4)のカードに object-cover で入れると上下を切り落とし、
+                       文字の断片だけが写って「壊れている」ように見える（2026-08-20 実機で発覚）。
+                       ヒーローと同じく「ぼかし背景＋contain」にして全体を見せる。 */}
                 <div className="aspect-[3/4] rounded-t-2xl overflow-hidden relative bg-slate-900">
-                  <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
+                  <LazyImage src={shop.image_url || shop.image} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-30" />
+                  <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="absolute inset-0 m-auto max-w-[88%] max-h-[88%] w-auto h-auto object-contain transition duration-700 group-hover:scale-105" />
                   <div className="absolute top-2 left-2">
                     <span className="bg-pink-600/90 backdrop-blur text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-lg">NEW</span>
                   </div>

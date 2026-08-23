@@ -345,8 +345,32 @@ export default function ShopDetailPage({
            <span className="text-base leading-none">←</span> 戻る
          </button>
 
+         {/* 🐛 ヒーローが「壊れて見える」真因（2026-08-20 実測で特定）
+             ・店舗画像は 2026-07-06 の一括リサイズで**全て最大600px**に縮小済み
+             ・PCのヒーローは幅約1,700px ＝ **2.8倍に拡大**していた
+             ・さらに object-cover なので、横長のロゴ／キャンペーンバナー（600x285等）は
+               上下を大きく切り取られ、文字の断片だけが巨大に表示される
+             → 実測: ユニーク756枚のうち横長(aspect≥2.2)が245枚、低解像度(<200px)が129枚。
+               つまり**半数以上がこの拡大＋切り取りで破綻する形**だった。
+             【対処】背景はぼかした複製で埋め、本体は object-contain で原寸を超えない範囲に収める。
+             これで横長バナーでも正方形ロゴでも切れず・ボケず・意図した見た目になる。
+             ⚠️ object-cover に戻さないこと。戻すと同じ事故が再発する。 */}
          <div className="absolute inset-0">
-           <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+           {/* 背景: ぼかして暗くした複製。拡大のボケはぼかしで意図的な演出になる */}
+           <LazyImage
+             src={shop.image_url || shop.image}
+             alt=""
+             aria-hidden="true"
+             className="w-full h-full object-cover scale-110 blur-2xl opacity-40"
+           />
+           {/* 本体: 切り取らずに全体を見せる。max-w/max-h で過剰な拡大も防ぐ */}
+           <div className="absolute inset-0 flex items-center justify-center p-6 pt-24 pb-28">
+             <LazyImage
+               src={shop.image_url || shop.image}
+               alt={shop.name}
+               className="max-w-[min(600px,90%)] max-h-full w-auto h-auto object-contain drop-shadow-2xl transition-transform duration-1000 group-hover:scale-105"
+             />
+           </div>
            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-black/30"></div>
          </div>
 
