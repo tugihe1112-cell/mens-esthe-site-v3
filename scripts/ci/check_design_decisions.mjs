@@ -31,20 +31,26 @@ function read(path) {
         `        → playbook/decisions.md D-001 を参照。変更したい場合は実装せずokabayashiに確認すること。`
       );
     }
-    // 🐛 2026-08-20: サイドバーを条件付きで隠すようにした際、グリッドの列定義
-    //    `lg:grid-cols-[220px_1fr]` を**固定のまま**にしたため、タグ0件の店舗では
-    //    キャスト一覧が220pxの1列目に落ちて写真が細く潰れ、右半分が空白になった。
-    //    「サイドバーが条件付きなら列定義も条件付き」でなければ通さない。
-    if (/hasAvailableTags/.test(src)) {
-      const fixedTwoCol = /className="[^"]*lg:grid-cols-\[220px_1fr\][^"]*"/.test(src);
-      if (fixedTwoCol) {
-        violations.push(
-          `[D-001] ${p} でサイドバーは条件付き（hasAvailableTags）なのに、\n` +
-          `        グリッドの列定義 lg:grid-cols-[220px_1fr] が固定のままになっている。\n` +
-          `        タグ0件の店舗でキャスト一覧が220pxに潰れる。列定義も条件付きにすること:\n` +
-          `        className={\`grid gap-6 \${hasAvailableTags ? 'grid-cols-1 lg:grid-cols-[220px_1fr]' : 'grid-cols-1'}\`}`
-        );
-      }
+    // 🚫 2026-08-20: **タグサイドバーを条件付きで出し分けること自体を禁止する。**
+    //    経緯: 2026-08-21 に「タグ0件なら隠す」分岐(`hasAvailableTags`)が入り、
+    //    口コミ0件の店舗だけ別レイアウトになった。しかも**開発中によく見る口コミありの店では
+    //    再現しない**ため、オーナーから3回同じ指摘を受けた。
+    //    列定義を条件付きにする修正では不十分（レイアウトが2種類ある限り必ずまた割れる）。
+    //    → **レイアウトを1種類に固定する**のが唯一の再発防止。
+    //    ⚠️ このチェックを緩めないこと。緩めた瞬間に同じ事故が起きる。
+    // ⚠️ コメント内の言及（「復活させるな」という注意書き自体）に反応しないよう、
+    //    行コメント・ブロックコメントを除去してから検査する。
+    const codeOnly = src
+      .replace(/\/\*[\s\S]*?\*\//g, '')   // /* ... */
+      .replace(/^\s*\/\/.*$/gm, '');      // 行頭の //
+    if (/hasAvailableTags|hasTags\b|tagsAvailable/.test(codeOnly)) {
+      violations.push(
+        `[D-001] ${p} にタグサイドバーの出し分け（hasAvailableTags 等）が復活している。\n` +
+        `        /shops/:id は**全店舗で常に**「左タグサイドバー＋キャスト一覧」（D-001）。\n` +
+        `        タグ件数が0でもレイアウトを変えないこと（SearchPageと同じ挙動）。\n` +
+        `        「0件だと無意味だから隠す」という判断は過去に却下されている。\n` +
+        `        → 実装せず okabayashi に確認すること。`
+      );
     }
     if (!/TAG_CATEGORIES/.test(src)) {
       violations.push(

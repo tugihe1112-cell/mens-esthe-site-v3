@@ -237,10 +237,16 @@ export default function ShopDetailPage({
     }
     return counts;
   }, [therapists, reviewTagMap]);
-  const hasAvailableTags = React.useMemo(
-    () => Object.values(tagCounts).some((count) => count > 0),
-    [tagCounts]
-  );
+  // 🚫 `hasAvailableTags`（タグ0件ならサイドバーを隠す分岐）は**廃止した**（2026-08-20）。
+  //    復活させないこと。理由:
+  //      ・D-001 は「/shops/:id は常に 左タグサイドバー＋キャスト一覧」というオーナー確定事項。
+  //        タグ件数が0でもレイアウトは変えない（SearchPageと同じ挙動。口コミが増えれば自然に機能する）。
+  //      ・`a7f7681`（2026-08-21 スマホUI改修）でこの分岐が後から入り、
+  //        口コミ0件の店舗だけレイアウトが別物になった。**開発時によく見る口コミありの店では
+  //        再現しない**ため、「直したはずなのにまた壊れている」が繰り返される原因になった。
+  //      ・**レイアウトを1種類にすれば、この揺れは構造的に起きない。**
+  //    ⚠️「タグが全部(0)だと無意味だから隠そう」という判断は、過去に却下されている。
+  //      実装せず okabayashi に確認すること。
 
   // スマホのタグ絞り込みはボトムシートで出す。開いている間に背面が
   // スクロールすると現在位置を見失うため、SearchPageと同様に固定する。
@@ -650,17 +656,10 @@ export default function ShopDetailPage({
 
         <section id="sec-cast" className="scroll-mt-32 order-1">
           {/* 左タグサイドバー＋右キャスト一覧＝SearchPageと同じレイアウト（オーナー確定デザイン・D-001）
-              🐛 2026-08-20 の不具合と修正:
-                `a7f7681`（スマホUI改善）で「タグが0件なら絞り込みを出さない」という
-                `hasAvailableTags` の条件分岐が入ったが、**グリッドの列定義を直し忘れていた**。
-                列は常に `lg:grid-cols-[220px_1fr]`（2カラム）を宣言していたため、
-                サイドバーが描画されない店舗では**キャスト一覧が220pxの1列目に落ち**、
-                写真が細く縮んで右側が丸ごと空白になっていた（LINDA SPA 等 口コミ0件の店舗が該当）。
-                → サイドバーの有無に合わせて列定義も切り替える。
-              ⚠️ サイドバーを条件付きにするなら、**必ずこの列定義も条件付きにすること**。 */}
-          <div className={`grid gap-6 ${hasAvailableTags ? 'grid-cols-1 lg:grid-cols-[220px_1fr]' : 'grid-cols-1'}`}>
-          {hasAvailableTags && (
-            <>
+              ⚠️ このレイアウトは**全店舗で常に同じ**。条件で出し分けないこと。
+                 2026-08-21 に「タグ0件なら隠す」分岐が入り、口コミ0件の店舗だけ別レイアウトになって
+                 オーナーから3回同じ指摘を受けた。**分岐を作らないこと自体が再発防止**。 */}
+          <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-6">
             {isFilterOpen && (
               <button
                 type="button"
@@ -717,11 +716,10 @@ export default function ShopDetailPage({
               </button>
             )}
           </aside>
-            </>
-          )}
 
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-w-0">
-             {hasAvailableTags && (
+             {/* スマホの絞り込みボタンも常に出す（PCのサイドバーと同じ扱い・条件で出し分けない） */}
+             {(
                <button onClick={() => setIsFilterOpen(true)} className="lg:hidden w-full min-h-11 mb-4 rounded-xl bg-slate-900 border border-white/10 text-xs font-bold text-slate-300">
                  🔎 タグで絞り込む{selectedTags.length > 0 ? `（${selectedTags.length}）` : ''}
                </button>
