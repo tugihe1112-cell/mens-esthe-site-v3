@@ -649,8 +649,16 @@ export default function ShopDetailPage({
         </section>
 
         <section id="sec-cast" className="scroll-mt-32 order-1">
-          {/* 左タグサイドバー＋右キャスト一覧＝SearchPageと同じレイアウト（オーナー確定デザイン） */}
-          <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-6">
+          {/* 左タグサイドバー＋右キャスト一覧＝SearchPageと同じレイアウト（オーナー確定デザイン・D-001）
+              🐛 2026-08-20 の不具合と修正:
+                `a7f7681`（スマホUI改善）で「タグが0件なら絞り込みを出さない」という
+                `hasAvailableTags` の条件分岐が入ったが、**グリッドの列定義を直し忘れていた**。
+                列は常に `lg:grid-cols-[220px_1fr]`（2カラム）を宣言していたため、
+                サイドバーが描画されない店舗では**キャスト一覧が220pxの1列目に落ち**、
+                写真が細く縮んで右側が丸ごと空白になっていた（LINDA SPA 等 口コミ0件の店舗が該当）。
+                → サイドバーの有無に合わせて列定義も切り替える。
+              ⚠️ サイドバーを条件付きにするなら、**必ずこの列定義も条件付きにすること**。 */}
+          <div className={`grid gap-6 ${hasAvailableTags ? 'grid-cols-1 lg:grid-cols-[220px_1fr]' : 'grid-cols-1'}`}>
           {hasAvailableTags && (
             <>
             {isFilterOpen && (

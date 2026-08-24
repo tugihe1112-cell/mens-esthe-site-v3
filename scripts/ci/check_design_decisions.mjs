@@ -31,6 +31,21 @@ function read(path) {
         `        → playbook/decisions.md D-001 を参照。変更したい場合は実装せずokabayashiに確認すること。`
       );
     }
+    // 🐛 2026-08-20: サイドバーを条件付きで隠すようにした際、グリッドの列定義
+    //    `lg:grid-cols-[220px_1fr]` を**固定のまま**にしたため、タグ0件の店舗では
+    //    キャスト一覧が220pxの1列目に落ちて写真が細く潰れ、右半分が空白になった。
+    //    「サイドバーが条件付きなら列定義も条件付き」でなければ通さない。
+    if (/hasAvailableTags/.test(src)) {
+      const fixedTwoCol = /className="[^"]*lg:grid-cols-\[220px_1fr\][^"]*"/.test(src);
+      if (fixedTwoCol) {
+        violations.push(
+          `[D-001] ${p} でサイドバーは条件付き（hasAvailableTags）なのに、\n` +
+          `        グリッドの列定義 lg:grid-cols-[220px_1fr] が固定のままになっている。\n` +
+          `        タグ0件の店舗でキャスト一覧が220pxに潰れる。列定義も条件付きにすること:\n` +
+          `        className={\`grid gap-6 \${hasAvailableTags ? 'grid-cols-1 lg:grid-cols-[220px_1fr]' : 'grid-cols-1'}\`}`
+        );
+      }
+    }
     if (!/TAG_CATEGORIES/.test(src)) {
       violations.push(
         `[D-001] ${p} からタグ絞り込みサイドバー（TAG_CATEGORIES）が消えている。\n` +
