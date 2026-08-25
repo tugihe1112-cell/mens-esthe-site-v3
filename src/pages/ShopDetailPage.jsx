@@ -10,7 +10,7 @@ import SeoHead from '../components/SeoHead.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import LocationLabel from '../components/LocationLabel.jsx';
-import { joinFields } from '../utils/shopFields';
+import { joinFields, shapeShopRow } from '../utils/shopFields';
 import { trackEvent } from '../utils/analytics';
 import siteStats from '../data/stats-latest.json';
 
