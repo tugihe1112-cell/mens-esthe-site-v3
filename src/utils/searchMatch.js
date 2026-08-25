@@ -48,16 +48,26 @@ const NON_WORD = `[^${WORD_CHARS}]`;
 export function bigramScore(normTarget, token) {
   const esc = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-  // 1. 語境界マッチを最優先（"reve" が "revere" の途中にヒットしないよう）
+  // 1. 語がまるごと一致（最優先）
   //    ⚠️ 境界は「語を構成する文字**以外**」で判定する。
   //       個別に `〜` や `（` を足していく方式は必ず漏れる（実際に漏れて0件になった）。
   const wordBoundary = new RegExp(`(?:^|${NON_WORD})${esc}(?=${NON_WORD}|$)`);
   if (wordBoundary.test(normTarget)) return 1.0;
 
-  // 2. 部分文字列マッチはスコア0.5に抑制（0.7閾値を下回る → 単独ではマッチしない）
+  // 2. 語の**先頭**一致も許可する（2026-08-22 オーナー判断）。
+  //    日本語は単語を空白で区切らないため「リンダスパ」が1語と見なされ、
+  //    「リンダ」では届かなかった。英字名も同様で `LIND` → `LINDA SPA` が出なかった。
+  //    実測: **1,099店中824店(75%)が、自分の店名の先頭4文字で検索しても出てこなかった**。
+  //    語頭一致を許すと該当は1店まで減る。
+  //    ⚠️ 語の「途中」は依然として当てない（下の0.5のまま）。ここを緩めると
+  //       「ルナ」で「アロマルナベール」に当たるような、意図しない一致が増える。
+  const wordPrefix = new RegExp(`(?:^|${NON_WORD})${esc}`);
+  if (wordPrefix.test(normTarget)) return 1.0;
+
+  // 3. 語の途中の部分文字列はスコア0.5に抑制（0.7閾値を下回る → 単独ではマッチしない）
   if (normTarget.includes(token)) return 0.5;
 
-  // 3. バイグラム類似度（タイポ許容）
+  // 4. バイグラム類似度（タイポ許容）
   if (token.length < 3) return 0.0;
   const bigrams = new Set();
   for (let i = 0; i < token.length - 1; i++) bigrams.add(token.slice(i, i + 2));
