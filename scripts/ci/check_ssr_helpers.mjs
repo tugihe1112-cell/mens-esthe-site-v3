@@ -176,6 +176,44 @@ const check = (name, fn) => {
   });
 }
 
+// ── 店舗ファジー検索（「セルで検索しても出てこない」の再発防止） ──────────
+// 【不具合】2026-08-22、「メンズエステ セル〜Selu〜」を「セル」で検索すると0件だった。
+//   語境界の判定文字が `[\s()\[\]・／-]` しか無く、「せる」の直後の「〜」を
+//   境界と見なせずスコア0.5（閾値0.7未満）で落ちていた。
+//   実測で、境界扱いされない区切り文字を名前に含む店舗は 477/1,099店。
+{
+  const m = await loadModule('src/utils/searchMatch.js');
+  const shop = (name, extra = {}) => ({ name, ...extra });
+
+  const selu = shop('メンズエステ セル〜Selu〜', { city: '渋谷区', area: '代々木・原宿' });
+  check('⭐「セル」で「メンズエステ セル〜Selu〜」がヒットする', () =>
+    (m.shopFuzzyMatch(selu, 'セル') ? null : '〜が語境界として扱われていない'));
+  check('「せる」（ひらがな）でもヒットする', () =>
+    (m.shopFuzzyMatch(selu, 'せる') ? null : 'かな正規化が効いていない'));
+  check('「Selu」でヒットする', () => (m.shopFuzzyMatch(selu, 'Selu') ? null : '英字でヒットしない'));
+  check('「メンズエステ セル」（2語AND）でヒットする', () =>
+    (m.shopFuzzyMatch(selu, 'メンズエステ セル') ? null : '複数トークンで落ちる'));
+
+  // 他の区切り文字も同様に効くこと
+  check('全角カッコ区切りでヒットする', () =>
+    (m.shopFuzzyMatch(shop('Vicca+plus. (ヴィッカプラス)'), 'ヴィッカプラス') ? null : '（）が境界でない'));
+  check('＋区切りでヒットする', () =>
+    (m.shopFuzzyMatch(shop('Vicca+plus. (ヴィッカプラス)'), 'plus') ? null : '+が境界でない'));
+
+  // ⚠️ ここが緩むと誤ヒットが増える。長音符・々は「語の一部」であって区切りではない
+  // ⚠️ 長音符「ー」を境界扱いすると、語の途中で切れて誤ヒットが激増する。
+  //    例: 「ミラ」で「ミラージュ」に当たってしまう（ー の直前で語が終わったと誤認）。
+  //    実データで「ー」は411店の名前に含まれるので影響が大きい。
+  check('⭐長音符は語の一部（「ミラ」で「ミラージュ」を誤ヒットさせない）', () =>
+    (!m.shopFuzzyMatch(shop('ミラージュ'), 'ミラ') ? null : 'ーを境界扱いして誤ヒットしている'));
+  check('⭐々も語の一部（「代」で「代々木」を誤ヒットさせない）', () =>
+    (!m.shopFuzzyMatch(shop('代々木サロン'), '代') ? null : '々を境界扱いして誤ヒットしている'));
+  check('⭐語の途中には当てない（reve → revere）', () =>
+    (!m.shopFuzzyMatch(shop('Revere Spa'), 'reve') ? null : '語中に誤ヒットしている'));
+  check('⭐「セル」で「Celtic（セルティック）」を誤ヒットさせない', () =>
+    (!m.shopFuzzyMatch(shop('Celtic（セルティック）'), 'セル') ? null : '語中に誤ヒットしている'));
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

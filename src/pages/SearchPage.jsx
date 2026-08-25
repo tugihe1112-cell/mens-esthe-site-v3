@@ -7,54 +7,13 @@ import { TherapistCardSkeleton } from '../components/ui/Skeleton.jsx';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
+import { normalizeForSearch, shopFuzzyMatch } from '../utils/searchMatch';
 import { trackEvent } from '../utils/analytics';
 
 // ─── ファジー店舗検索ユーティリティ ────────────────────────────
-// 1. 小文字カタカナ → 大文字カタカナ正規化
-// 2. カタカナ → ひらがな変換（「ウィニングヘブン」→「ういにんぐへぶん」）
-// 3. バイグラム類似度でタイポ許容（wining → winning）
-const SMALL_KATA = { 'ァ':'ア','ィ':'イ','ゥ':'ウ','ェ':'エ','ォ':'オ','ッ':'ツ','ャ':'ヤ','ュ':'ユ','ョ':'ヨ','ヮ':'ワ','ヵ':'カ','ヶ':'ケ' };
-const SMALL_HIRA = { 'ぁ':'あ','ぃ':'い','ぅ':'う','ぇ':'え','ぉ':'お','っ':'つ','ゃ':'や','ゅ':'ゆ','ょ':'よ','ゎ':'わ' };
-
-function normalizeForSearch(s) {
-  if (!s) return '';
-  let r = s.toLowerCase();
-  r = r.replace(/[ァィゥェォッャュョヮヵヶ]/g, c => SMALL_KATA[c] || c);
-  r = r.replace(/[ぁぃぅぇぉっゃゅょゎ]/g, c => SMALL_HIRA[c] || c);
-  // カタカナ → ひらがな（アイウ... → あいう...）
-  r = r.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
-  return r;
-}
-
-function bigramScore(normTarget, token) {
-  // 1. 語境界マッチを最優先（"reve" が "revere" の途中にヒットしないよう）
-  const esc = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const wordBoundary = new RegExp(
-    `(?:^|[\\s\\(\\)\\[\\]・／\\-])${esc}(?=[\\s\\(\\)\\[\\]・／\\-]|$)`
-  );
-  if (wordBoundary.test(normTarget)) return 1.0;
-
-  // 2. 部分文字列マッチはスコア0.5に抑制（0.7閾値を下回る → 単独ではマッチしない）
-  if (normTarget.includes(token)) return 0.5;
-
-  // 3. バイグラム類似度（タイポ許容）
-  if (token.length < 3) return 0.0;
-  const bigrams = new Set();
-  for (let i = 0; i < token.length - 1; i++) bigrams.add(token.slice(i, i + 2));
-  let hits = 0;
-  for (const bg of bigrams) { if (normTarget.includes(bg)) hits++; }
-  return hits / bigrams.size;
-}
-
-// クエリの全トークンが店舗にマッチするか（バイグラム類似度0.7以上で許容）
-function shopFuzzyMatch(shop, query) {
-  const aStr = (s) => Array.isArray(s.area) ? s.area.join(' ') : (s.area || '');
-  const normTarget = normalizeForSearch(
-    [shop.name, aStr(shop), shop.city, shop.address, shop.area_id].filter(Boolean).join(' ')
-  );
-  const tokens = normalizeForSearch(query).split(/\s+/).filter(Boolean);
-  return tokens.length > 0 && tokens.every(t => bigramScore(normTarget, t) >= 0.7);
-}
+// ⚠️ ロジック本体は src/utils/searchMatch.js に切り出してある（CIでテストするため）。
+//    ここに戻すとテストできなくなり、2026-08-22 の「セルで検索しても出てこない」
+//    （語境界に〜が入っておらず477店が影響しうる）型の不具合を検出できなくなる。
 // ─────────────────────────────────────────────────────────────
 
 // 店舗情報カード（検索結果用）
@@ -323,7 +282,16 @@ export default function SearchPage() {
 
   // DB フェッチ本体
   useEffect(() => {
-    if (shops.length === 0) return;
+    if (shops.length === 0) return undefined;
+
+    // ⚠️ 古いリクエストの結果で新しい結果を上書きしないためのフラグ。
+    //    これが無いと、検索条件が変わったときに**遅いほうの応答が後から勝つ**。
+    //    実例(2026-08-22): /search?shopId=... を開くと
+    //      ① shopInput が空の初回 → 注目セラピスト800件を取得（重い）
+    //      ② 店名が解決されて → シルクのキャストを取得（軽い・先に返る）
+    //    ①が後から返って②を上書きし、「この店舗のキャスト一覧 54件」と出ているのに
+    //    中身は那覇・熊本・金沢のセラピスト、という状態になっていた。
+    let cancelled = false;
 
     const fetch = async () => {
       setIsFetchingDB(true);
@@ -422,6 +390,7 @@ export default function SearchPage() {
           }
         }
 
+        if (cancelled) return; // 条件が変わっている＝この結果はもう古い
         const formatted = (data || []).map(d => ({
           ...d.raw_data,
           id: d.id,
@@ -431,25 +400,30 @@ export default function SearchPage() {
         }));
         setServerTherapists(formatted);
       } catch (e) {
-        console.error('検索エラー:', e);
+        if (!cancelled) console.error('検索エラー:', e);
       } finally {
-        setIsFetchingDB(false);
+        if (!cancelled) setIsFetchingDB(false);
       }
     };
 
     fetch();
+    return () => { cancelled = true; };
   }, [shopQuery, castQuery, shops]);
 
   // セラピスト別口コミ件数・タグ・評価取得（serverTherapistsが更新されたら実行）
   useEffect(() => {
-    if (!serverTherapists.length) { setReviewCountMap({}); setReviewTagMap({}); setRatingMap({}); return; }
+    if (!serverTherapists.length) { setReviewCountMap({}); setReviewTagMap({}); setRatingMap({}); return undefined; }
     const shopIds = [...new Set(serverTherapists.map(t => t.shop_id).filter(Boolean))];
-    if (!shopIds.length) return;
+    if (!shopIds.length) return undefined;
+    // ⚠️ ここも上のフェッチと同じ理由でキャンセルが要る（古い店舗の口コミ集計が
+    //    新しい検索結果に被さると、件数バッジやタグ件数が別店舗のものになる）
+    let cancelled = false;
     supabase
       .from('reviews')
       .select('therapist_name, tags, rating')
       .in('shop_id', shopIds.slice(0, 50))
       .then(({ data, error }) => {
+        if (cancelled) return;
         if (error) { console.error('口コミ件数取得エラー:', error); return; }
         if (!data) return;
         const norm = (s) => (s || '').replace(/[\s　]/g, '');
@@ -475,6 +449,7 @@ export default function SearchPage() {
         setReviewTagMap(tagMap);
         setRatingMap(avgRatings);
       });
+    return () => { cancelled = true; };
   }, [serverTherapists]);
 
   // 店舗セクション（ファジーマッチ：カナ正規化＋タイポ許容）
