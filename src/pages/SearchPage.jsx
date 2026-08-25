@@ -7,7 +7,7 @@ import { TherapistCardSkeleton } from '../components/ui/Skeleton.jsx';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
-import { normalizeForSearch, shopFuzzyMatch } from '../utils/searchMatch';
+import { normalizeForSearch, rankShops } from '../utils/searchMatch';
 import { trackEvent } from '../utils/analytics';
 
 // ─── ファジー店舗検索ユーティリティ ────────────────────────────
@@ -322,9 +322,11 @@ export default function SearchPage() {
           }
         };
 
-        // 店舗クエリがある場合、マッチする shop_id リストを作成（ファジーマッチ）
+        // 店舗クエリがある場合、マッチする shop_id リストを作成（関連度順）
+        // ⚠️ 上位100件しかDBに問い合わせないので、**関連度順**であることが重要。
+        //    以前は素の filter（DB順）だったため、関連の薄い店で枠が埋まる恐れがあった。
         const matchedShopIds = sq
-          ? shops.filter(s => shopFuzzyMatch(s, shopQuery)).map(s => s.id)
+          ? rankShops(shops, shopQuery).map(s => s.id)
           : null; // null = 絞り込みなし
 
         let data = [];
@@ -452,10 +454,13 @@ export default function SearchPage() {
     return () => { cancelled = true; };
   }, [serverTherapists]);
 
-  // 店舗セクション（ファジーマッチ：カナ正規化＋タイポ許容）
+  // 店舗セクション（関連度順：語一致 > 語頭一致 > タイポ許容）
+  // ⚠️ 必ず rankShops を使うこと。素の filter だとDB登録順のまま並び、
+  //    「メンズエステセル」で目的の店が20件中の下のほうに埋もれる
+  //    （実際にオーナーから「一番上にそれが出てこない」と指摘された）。
   const matchingShops = useMemo(() => {
     if (!shopQuery.trim()) return [];
-    return shops.filter(s => shopFuzzyMatch(s, shopQuery)).slice(0, 20);
+    return rankShops(shops, shopQuery).slice(0, 20);
   }, [shopQuery, shops]);
 
   // キャスト絞り込み（タグ）
