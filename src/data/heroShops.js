@@ -23,8 +23,13 @@ export const HERO_IMAGE_OVERRIDES = {
 // 以前は DataContext.jsx とここに**別々の実装**があり、しかも中身が食い違っていた
 // （ここは website_url / business_hours 等を落としていた）。
 // 2026-08-22 に src/utils/shopFields.js の shapeShopRow に一本化した。
-// 既存の import 互換のため再エクスポートだけ行う。
-export { shapeShopRow } from '../utils/shopFields';
+// 既存の import 互換のため再エクスポートする。
+// ⚠️ `export { X } from '...'` は**ローカル束縛を作らない**ので、この下の
+//    buildInitialHero() から shapeShopRow を呼べず SSR が ReferenceError で 500 になる
+//    （2026-08-22に本番を落とした。`npm run build` は実行時エラーなので通ってしまう）。
+//    必ず import してから export すること。
+import { shapeShopRow } from '../utils/shopFields';
+export { shapeShopRow };
 
 // shape済みshop → ヒーローアイテム（override適用）。画像が無ければ null。
 export function toHeroItem(shop) {
