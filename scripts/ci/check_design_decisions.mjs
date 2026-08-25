@@ -159,6 +159,68 @@ function read(path) {
   }
 }
 
+// ── D-009: 欠損しうる店舗フィールドを無条件で描画しない ──────────────────────
+// 【事故】2026-08-22、オーナーから「多分全ての店舗で同じ問題が起きてる」と指摘。
+//   実測すると掲載1,099店のうち **住所なし614店(56%)・市区+エリアなし65店・
+//   電話なし1,092店(99%)・営業時間なし615店(56%)** で、
+//   `📍 {shop.address}` のような無条件描画により
+//   「📍だけが浮く」「空のピンクの箱が出る」「ACCESSラベルの右が空白」状態が全店舗規模で発生していた。
+//   さらに `shop.access` は**DBに存在しないフィールド**で、参照3箇所すべてが常に空だった。
+// 【対処】src/components/LocationLabel.jsx（空なら null を返す）と
+//   src/utils/shopFields.js の joinFields() に一本化。呼び出し側で分岐を書かせない。
+// ⚠️ 出し分けを各ファイルに書くと必ずどこかが漏れる（実際に7ファイルで同じミスをしていた）。
+{
+  const files = [];
+  const walk = (dir) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === '_archive' || e.name === 'node_modules') continue;
+      const p = `${dir}/${e.name}`;
+      if (e.isDirectory()) walk(p);
+      // .bak_* 等の残骸はビルド対象外なので検査しない（そもそも削除済み）
+      else if (/\.(jsx|tsx)$/.test(e.name)) files.push(p);
+    }
+  };
+  for (const root of ['src', 'pages']) { if (fs.existsSync(root)) walk(root); }
+
+  for (const p of files) {
+    const src = read(p) || '';
+    const codeOnly = src
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+      .replace(/^\s*\/\/.*$/gm, '');
+
+    // (a) 📍 の直後に店舗フィールドを直書きしている＝データが空だとピンだけ残る
+    if (/📍\s*\{\s*shop\./.test(codeOnly)) {
+      violations.push(
+        `[D-009] ${p} が「📍 {shop.xxx}」を直書きしている。\n` +
+        `        住所が無い店舗が614店（全体の56%）あり、ピンだけが宙に浮く。\n` +
+        `        → <LocationLabel parts={[shop.prefecture, shop.city]} /> を使うこと\n` +
+        `          （中身が空なら要素ごと描画されない。呼び出し側の条件分岐は不要）。`
+      );
+    }
+
+    // (b) DBに存在しないフィールド。参照した時点で必ず undefined になる
+    if (/\bshop\.access\b/.test(codeOnly)) {
+      violations.push(
+        `[D-009] ${p} が存在しないフィールド shop.access を参照している。\n` +
+        `        shops/raw_data のどちらにも access は無い（正しくは address）。\n` +
+        `        2026-08-22 まで3箇所が常に空文字を描いていた。`
+      );
+    }
+
+    // (c) データが無いことだけを伝える行き止まり文言
+    const deadEnd = codeOnly.match(/'[^']*情報なし'|"[^"]*情報なし"/g);
+    if (deadEnd) {
+      violations.push(
+        `[D-009] ${p} に行き止まり文言（${deadEnd.join(' / ')}）がある。\n` +
+        `        「◯◯情報なし」はユーザーの次の行動に繋がらない。\n` +
+        `        → その行ごと出さない（LocationLabel / joinFields が空なら描画しない）か、\n` +
+        `          /stats の実測相場のように**代わりに使える情報**を出すこと。`
+      );
+    }
+  }
+}
+
 if (violations.length) {
   console.error('\n🚨 オーナー確定事項（playbook/decisions.md）に反する変更が検出されました:\n');
   violations.forEach((v) => console.error('  - ' + v + '\n'));

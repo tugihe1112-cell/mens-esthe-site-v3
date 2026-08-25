@@ -5,6 +5,7 @@ import { Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import LikeButton from './LikeButton.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
+import LocationLabel from './LocationLabel.jsx';
 import { HERO_SHOP_IDS, toHeroItem } from '../data/heroShops';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -151,7 +152,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
                       {getDisplayName(shop.name)}
                     </h3>
                     <div className="flex flex-wrap items-center gap-2 mb-3 md:mb-5">
-                      <span className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white border border-white/20">📍 {shop.prefecture} {shop.city}</span>
+                      <LocationLabel className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white border border-white/20" parts={[shop.prefecture, shop.city]} />
                       {shop.rating > 0 && <span className="bg-pink-600/90 px-3 py-1 rounded-full text-xs text-white font-bold">★ {shop.rating}</span>}
                     </div>
                     <div className="flex items-center gap-3">

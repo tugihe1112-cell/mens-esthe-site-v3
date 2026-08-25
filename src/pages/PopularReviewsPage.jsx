@@ -226,10 +226,14 @@ export default function PopularReviewsPage() {
                           {/* 1行目: 🏢店舗名(主役) ＋ 📍エリアピル ＋ ★色バッジ（HomeReviewCardと同序列） */}
                           <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0 flex flex-wrap items-center gap-x-2 gap-y-1">
-                              <Link to={shopLink} className="inline-flex items-center gap-1.5 min-w-0 font-black text-white text-sm hover:text-pink-300 transition">
-                                <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
-                                <span className="truncate">{shop.name || '店舗情報なし'}</span>
-                              </Link>
+                              {/* 店名が取れないときは「店舗情報なし」と書くのではなくリンクごと出さない
+                                  （押しても何も無いリンクは行き止まりで、口コミ本文の邪魔にもなる） */}
+                              {shop.name && (
+                                <Link to={shopLink} className="inline-flex items-center gap-1.5 min-w-0 font-black text-white text-sm hover:text-pink-300 transition">
+                                  <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
+                                  <span className="truncate">{shop.name}</span>
+                                </Link>
+                              )}
                               {loc && (
                                 <span className="text-[10px] font-bold text-pink-200 bg-pink-500/10 border border-pink-500/20 rounded-full px-2 py-0.5 shrink-0">📍 {loc}</span>
                               )}

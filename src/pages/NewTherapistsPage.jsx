@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import LocationLabel from '../components/LocationLabel.jsx';
 
 const PAGE_SIZE = 24;
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
@@ -151,11 +152,9 @@ export default function NewTherapistsPage() {
                           <p className="text-white font-black text-sm leading-tight mb-0.5 truncate drop-shadow">
                             {t.name}
                           </p>
-                          {shop.name && (
-                            <p className="text-pink-300 text-[10px] truncate leading-tight">
-                              📍 {shop.prefecture}{shop.city}
-                            </p>
-                          )}
+                          {/* ⚠️ ガードが shop.name なのに中身は prefecture/city だった＝
+                              店名はあるが所在地が無い店で「📍」だけが出ていた。 */}
+                          <LocationLabel as="p" className="text-pink-300 text-[10px] truncate leading-tight" parts={[shop.prefecture, shop.city]} />
                           {shop.name && (
                             <p className="text-slate-400 text-[10px] truncate leading-tight mt-0.5">
                               {shop.name}

@@ -6,6 +6,8 @@ import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import SeoHead from '../components/SeoHead.jsx';
+import LocationLabel from '../components/LocationLabel.jsx';
+import { joinFields } from '../utils/shopFields';
 import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
@@ -57,7 +59,9 @@ export default function FavoritesPage() {
       const therapist = fetchedTherapists[therapistId] || therapistById[therapistId];
       const shop = shopById[shopId];
       if (!therapist) return null;
-      return { ...therapist, favoriteKey: uniqueKey, shopId, shopName: shop ? shop.name : '店舗情報なし' };
+      // 店名が引けないときは空文字にする。描画側は空なら店名行ごと出さない
+      // （「店舗情報なし」と書いても読み手には何の役にも立たない）
+      return { ...therapist, favoriteKey: uniqueKey, shopId, shopName: shop?.name || '' };
     }).filter(Boolean);
   }, [favoriteTargets, fetchedTherapists, therapistById, shopById]);
 
@@ -156,10 +160,13 @@ export default function FavoritesPage() {
 
                       <div className="absolute bottom-0 left-0 w-full p-3 md:p-4">
                         <h3 className="text-base md:text-xl font-black text-white leading-tight mb-1 group-hover:text-pink-400 transition">{t.name}</h3>
-                        <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-wide">
-                          <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
-                          {t.shopName}
-                        </div>
+                        {/* 店名が引けないときは、点だけが残らないよう行ごと出さない */}
+                        {t.shopName && (
+                          <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                            <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
+                            {t.shopName}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Link>
@@ -184,11 +191,21 @@ export default function FavoritesPage() {
                       <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover transition duration-500 group-hover:scale-110" />
                     </div>
                     <div className="flex-1 min-w-0 py-1">
-                      <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">{shop.area}</span>
-                      </div>
+                      {/* ⚠️ エリアが無い店舗では中身の無い青い箱だけが出ていた */}
+                      {joinFields(shop.area, shop.city) && (
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">{joinFields(shop.area, shop.city)}</span>
+                        </div>
+                      )}
                       <h3 className="text-lg font-black text-white truncate group-hover:text-blue-400 transition">{getDisplayName(shop.name)}</h3>
-                      <p className="text-xs text-slate-500 mt-1 truncate">{shop.access || 'アクセス情報なし'}</p>
+                      {/* ⚠️ `shop.access` はDBに存在しないフィールドで、**全てのお気に入りに**
+                          「アクセス情報なし」が出ていた。正しくは address（無ければ出さない）。 */}
+                      <LocationLabel
+                        as="p"
+                        prefix=""
+                        className="text-xs text-slate-500 mt-1 truncate"
+                        parts={[shop.address || joinFields(shop.prefecture, shop.city)]}
+                      />
                     </div>
                     <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 group-hover:bg-blue-600 group-hover:text-white transition">
                       →

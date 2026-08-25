@@ -8,6 +8,8 @@ import { ListSkeleton } from "../components/Skeleton.jsx";
 import BrandResultCard from "../components/BrandResultCard"; 
 import SeoHead from "../components/SeoHead.jsx";
 import Header from "../components/Header.jsx";
+import LocationLabel from "../components/LocationLabel.jsx";
+import { joinFields } from "../utils/shopFields";
 
 const ITEMS_PER_PAGE = 18;
 
@@ -216,15 +218,20 @@ export default function ShopListPage() {
                     </div>
 
                     <div className="p-3 md:p-4 space-y-2 md:space-y-3 min-w-0 flex-1 self-center">
-                      <div className="md:hidden text-[10px] font-bold text-pink-300 truncate">
-                        📍 {shop.prefecture} {shop.city} {shop.area && `(${shop.area})`}
-                      </div>
+                      <LocationLabel
+                        as="div"
+                        className="md:hidden text-[10px] font-bold text-pink-300 truncate"
+                        parts={[shop.prefecture, shop.city, shop.area]}
+                      />
                       <h3 className="md:hidden text-base font-black text-white leading-tight line-clamp-2">
                         {getDisplayName(shop.name)}
                       </h3>
                       <div className="flex items-center justify-between gap-2 text-sm">
+                        {/* ⚠️ `shop.access` はDBに存在しないフィールド。住所も614店（56%）が空なので、
+                            以前は過半の店舗で「アクセス情報なし」という行き止まりが出ていた。
+                            住所が無くても都道府県・市区は出せることが多いのでフォールバックする。 */}
                         <span className="text-slate-400 text-xs truncate min-w-0">
-                           {shop.access || shop.address || "アクセス情報なし"}
+                           {shop.address || joinFields(shop.prefecture, shop.city, shop.area)}
                         </span>
                         <span className="text-yellow-400 font-black flex items-center gap-1 text-xs shrink-0">
                           ★ {shop.rating || "New"}

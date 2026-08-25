@@ -5,6 +5,7 @@ import Header from '../components/Header.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
+import { joinFields } from '../utils/shopFields';
 
 export default function BrandPage() {
   const { brandId } = useParams(); // URLパラメータはID (例: g_52b5309f)
@@ -114,12 +115,21 @@ export default function BrandPage() {
                 </h2>
                 <div className="flex items-center gap-3 text-sm text-slate-400 mb-4 z-10">
                   <span className="text-yellow-400 font-bold flex items-center gap-1">★ {shop.rating || 'New'}</span>
-                  <span className="opacity-30">|</span>
-                  <span className="truncate">{shop.access}</span>
+                  {/* ⚠️ 以前は `shop.access` を出していたが**DBに存在しないフィールド**で常に空だった
+                      （区切りの「|」だけが浮いていた）。所在地が無ければ区切りごと出さない。 */}
+                  {joinFields(shop.address || joinFields(shop.prefecture, shop.city)) && (
+                    <>
+                      <span className="opacity-30">|</span>
+                      <span className="truncate">{shop.address || joinFields(shop.prefecture, shop.city)}</span>
+                    </>
+                  )}
                 </div>
                 
                 <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between z-10">
-                  <span className="text-xs font-bold text-slate-500">OPEN: {shop.hours}</span>
+                  {/* 営業時間が無い店舗が615店（56%）。無条件だと「OPEN:」だけが残る */}
+                  <span className="text-xs font-bold text-slate-500">
+                    {joinFields(shop.hours || shop.business_hours) ? `OPEN: ${joinFields(shop.hours || shop.business_hours)}` : ''}
+                  </span>
                   <span className="text-xs font-bold text-white bg-slate-800 px-3 py-1 rounded-full group-hover:bg-pink-600 transition shadow-lg">
                     VIEW SHOP
                   </span>

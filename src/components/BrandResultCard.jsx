@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from '../compat/router';
 import LazyImage from './LazyImage';
 import { getDisplayName } from '../utils/shopHelpers';
+import LocationLabel from './LocationLabel.jsx';
 
 export default function BrandResultCard({ summary, shops }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +73,7 @@ export default function BrandResultCard({ summary, shops }) {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-white font-bold text-sm truncate group-hover:text-pink-400 transition">{getDisplayName(shop.name)}</h3>
-                  <p className="text-slate-500 text-xs truncate">📍 {shop.prefecture} {shop.city}</p>
+                  <LocationLabel as="p" className="text-slate-500 text-xs truncate" parts={[shop.prefecture, shop.city]} />
                 </div>
               </Link>
             ))}

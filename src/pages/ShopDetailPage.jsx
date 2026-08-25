@@ -9,6 +9,8 @@ import ModernReviewCard from '../components/ModernReviewCard.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
+import LocationLabel from '../components/LocationLabel.jsx';
+import { joinFields } from '../utils/shopFields';
 import { trackEvent } from '../utils/analytics';
 import siteStats from '../data/stats-latest.json';
 
@@ -387,9 +389,13 @@ export default function ShopDetailPage({
            <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-end justify-between gap-3 md:gap-6">
              <div className="flex-1">
                <div className="flex flex-wrap gap-2 mb-3">
-                 <span className="px-2.5 py-0.5 rounded-md bg-pink-600/80 backdrop-blur text-white text-[10px] font-bold tracking-widest uppercase border border-white/10">
-                   {shop.city} {shop.area}
-                 </span>
+                 {/* ⚠️ 市区・エリアが両方とも無い店舗が65店ある。
+                     無条件で描くと中身の無い「空のピンクの箱」だけが出る（2026-08-22に本番で発生）。 */}
+                 {joinFields(shop.city, shop.area) && (
+                   <span className="px-2.5 py-0.5 rounded-md bg-pink-600/80 backdrop-blur text-white text-[10px] font-bold tracking-widest uppercase border border-white/10">
+                     {joinFields(shop.city, shop.area)}
+                   </span>
+                 )}
                  {shop.group_id && (
                    <span className="px-2.5 py-0.5 rounded-md bg-blue-600/80 backdrop-blur text-white text-[10px] font-bold tracking-widest uppercase border border-white/10">
                      GROUP STORE
@@ -401,7 +407,12 @@ export default function ShopDetailPage({
                  {getDisplayName(shop.name)}
                </h1>
                <div className="flex items-start gap-3 text-slate-300 text-xs md:text-sm font-medium">
-                 <span className="line-clamp-2">📍 {shop.address}</span>
+                 {/* 住所が無い店舗は614店（56%）。LocationLabelが空なら描画しないので「📍」だけ残らない。
+                     住所が無くても都道府県・市区までは出せることが多いのでフォールバックする。 */}
+                 <LocationLabel
+                   className="line-clamp-2"
+                   parts={[shop.address || joinFields(shop.prefecture, shop.city, shop.area)]}
+                 />
                  <span className="text-yellow-400 font-bold shrink-0">★ {shop.rating || 'New'}</span>
                </div>
              </div>
@@ -595,12 +606,17 @@ export default function ShopDetailPage({
                     </dd>
                   </div>
                 )}
-                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                  <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">ACCESS</dt>
-                  <dd className="text-sm md:text-base text-slate-300 leading-relaxed">
-                    {shop.address}
-                  </dd>
-                </div>
+                {/* ⚠️ 住所が無い店舗が614店（56%）。無条件で出すと
+                    「ACCESS」というラベルの右が空白のままになる（営業時間・TELと同じ扱いに揃える）。
+                    住所が無くても都道府県・市区までは出せることが多いのでフォールバックする。 */}
+                {joinFields(shop.address || joinFields(shop.prefecture, shop.city, shop.area)) && (
+                  <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
+                    <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">ACCESS</dt>
+                    <dd className="text-sm md:text-base text-slate-300 leading-relaxed">
+                      {shop.address || joinFields(shop.prefecture, shop.city, shop.area)}
+                    </dd>
+                  </div>
+                )}
               </dl>
               
               <div className="mt-8">

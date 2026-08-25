@@ -6,6 +6,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import { TherapistCardSkeleton } from '../components/ui/Skeleton.jsx';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import LocationLabel from '../components/LocationLabel.jsx';
 import { trackEvent } from '../utils/analytics';
 
 // ─── ファジー店舗検索ユーティリティ ────────────────────────────
@@ -87,7 +88,7 @@ function ShopCard({ shop, onSelect }) {
           <span className="text-white font-bold text-sm block truncate">
             {shop.name}
           </span>
-          <div className="text-xs text-slate-500 mt-0.5">📍 {shop.prefecture}{shop.city}</div>
+          <LocationLabel as="div" className="text-xs text-slate-500 mt-0.5" parts={[shop.prefecture, shop.city]} />
           {shop.business_hours && (
             <div className="text-xs text-slate-400 mt-0.5">🕐 {shop.business_hours}</div>
           )}
