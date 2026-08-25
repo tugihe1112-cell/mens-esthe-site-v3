@@ -300,12 +300,21 @@ export default function SearchPage() {
   useEffect(() => {
     startTransition(() => {
       const params = {};
-      if (shopInput) params.shop = shopInput;
+      if (shopInput) {
+        params.shop = shopInput;
+      } else if (initShopId) {
+        // ⚠️ shopId はまだ店名に解決できていない間は**URLに残す**。
+        //    店舗データ(DataContext)の読み込みは非同期なので、初回レンダー時点では
+        //    上の解決effectがまだ店名をセットできていない。ここで消すと
+        //    読み込み完了時に shopId が失われ、**絞り込みが効かないまま全件表示**になる
+        //    （2026-08-22、無限ループを直した直後にこの状態が露出した）。
+        params.shopId = initShopId;
+      }
       if (castInput) params.cast = castInput;
       if (selectedTags.length > 0) params.tags = selectedTags.join(',');
       setSearchParams(params, { replace: true });
     });
-  }, [shopInput, castInput, selectedTags, setSearchParams]);
+  }, [shopInput, castInput, selectedTags, setSearchParams, initShopId]);
 
   // displayCount をリセット
   useEffect(() => {

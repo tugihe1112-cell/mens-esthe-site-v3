@@ -148,7 +148,14 @@ const check = (name, fn) => {
     return b(qs, { shop: 'Silk (シルク)' }) === null ? null : '日本語で差分と誤判定した';
   });
 
-  check('本当に変わるときは新しいクエリを返す', () => {
+  // /search?shopId=... の解決フロー。ここが崩れると
+  // 「ループは止まったが絞り込みが効かない」状態になる（2026-08-22に実際に発生）
+  check('shopId解決前: 同じshopIdを書き戻すだけなら replace しない', () => {
+    const out = b('shopId=tokyo_shibuya_silk', { shopId: 'tokyo_shibuya_silk' });
+    return out === null ? null : `不要なreplaceが走る（${out}）`;
+  });
+
+  check('shopId解決後: 店名クエリへ置き換わる', () => {
     const out = b('shopId=tokyo_shibuya_silk', { shop: 'Silk' });
     return out === 'shop=Silk' ? null : `変更が反映されない（${out}）`;
   });
