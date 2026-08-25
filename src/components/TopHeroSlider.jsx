@@ -153,7 +153,9 @@ export default function TopHeroSlider({ initialHero = [] }) {
                     </h3>
                     <div className="flex flex-wrap items-center gap-2 mb-3 md:mb-5">
                       <LocationLabel className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white border border-white/20" parts={[shop.prefecture, shop.city]} />
-                      {shop.rating > 0 && <span className="bg-pink-600/90 px-3 py-1 rounded-full text-xs text-white font-bold">★ {shop.rating}</span>}
+                      {/* ⚠️ 以前は収集元サイトの評価（raw_data.rating）を出していた。
+                          ★>0 の39店は当サイトの口コミが全て0件で、実質「根拠のない★」だった。
+                          星は口コミページ側で実データから出すので、ここでは出さない。 */}
                     </div>
                     <div className="flex items-center gap-3">
                       <Link to={`/shops/${shop.id}`} className="bg-white text-slate-900 font-black px-6 py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 text-sm">

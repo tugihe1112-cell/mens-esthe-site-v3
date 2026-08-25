@@ -19,21 +19,12 @@ export const HERO_IMAGE_OVERRIDES = {
   'tokyo_chiyoda_iidabashi_tokyo_aroma_este': { url: 'https://tokyoaroma.jp/wp-content/uploads/2023/12/girl-2554687_1280-1.jpg', type: 'cover' },
 };
 
-// DBの生レコード {id, group_id, name, raw_data, image_url} を
-// アプリ内のshape（raw_data展開 + トップレベル上書き）に変換。
-// DataContext.jsx の整形ロジックと同一に保つこと。
-export function shapeShopRow(d) {
-  if (!d) return null;
-  const raw = d.raw_data || {};
-  return {
-    ...raw,
-    area: typeof raw.area === 'string' ? raw.area : undefined,
-    id: d.id,
-    group_id: d.group_id,
-    name: d.name,
-    image_url: d.image_url,
-  };
-}
+// ⚠️ 変換ロジックはここに書かない。
+// 以前は DataContext.jsx とここに**別々の実装**があり、しかも中身が食い違っていた
+// （ここは website_url / business_hours 等を落としていた）。
+// 2026-08-22 に src/utils/shopFields.js の shapeShopRow に一本化した。
+// 既存の import 互換のため再エクスポートだけ行う。
+export { shapeShopRow } from '../utils/shopFields';
 
 // shape済みshop → ヒーローアイテム（override適用）。画像が無ければ null。
 export function toHeroItem(shop) {

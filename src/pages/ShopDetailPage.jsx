@@ -201,8 +201,15 @@ export default function ShopDetailPage({
     }
   };
 
-  // 共有箱(Context)はあくまで「保険」。基本は直接取ってきた cloudShop を使う
-  const shop = cloudShop || (shopById ? shopById[shopId] : null) || ssrShop;
+  // 共有箱(Context)はあくまで「保険」。基本は直接取ってきた cloudShop を使う。
+  // ⚠️ cloudShop は `select=*` の**生レコード**で raw_data が入れ子のまま。
+  //    以前はこれをそのまま使っていたため、住所・市区・エリア・都道府県が
+  //    **全1,099店で undefined** になり画面から消えていた（DBには入っている）。
+  //    必ず shapeShopRow を通して展開すること。
+  const shop = React.useMemo(
+    () => shapeShopRow(cloudShop) || (shopById ? shopById[shopId] : null) || ssrShop,
+    [cloudShop, shopById, shopId, ssrShop],
+  );
   // グループ店舗で同一セラピストが複数店舗に登録されている場合に重複除去。
   // 直接取得がまだ空の間だけContextを保険にし、安定した配列参照を後続memoへ渡す。
   const therapists = React.useMemo(() => {
@@ -413,7 +420,10 @@ export default function ShopDetailPage({
                    className="line-clamp-2"
                    parts={[shop.address || joinFields(shop.prefecture, shop.city, shop.area)]}
                  />
-                 <span className="text-yellow-400 font-bold shrink-0">★ {shop.rating || 'New'}</span>
+                 {/* ⚠️ 収集元サイトの `raw_data.rating` は使わない（shapeShopRow が構造的に落としている）。
+                     ★>0 を持つ39店は当サイトの口コミが全て0件で、出すと「口コミ0件なのに★4.7」になる。
+                     必ず**実際の口コミから算出した平均**だけを表示する。 */}
+                 <span className="text-yellow-400 font-bold shrink-0">★ {avgRating || 'New'}</span>
                </div>
              </div>
 

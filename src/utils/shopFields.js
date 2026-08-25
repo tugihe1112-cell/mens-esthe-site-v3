@@ -51,6 +51,48 @@ export function joinFields(...parts) {
   return out.join(' ');
 }
 
+/**
+ * DBの生レコード → 画面が使う形（raw_data を展開しつつ、テーブル列で上書き）。
+ *
+ * 【なぜ1本化したか（2026-08-22）】
+ * 同じ変換が DataContext.jsx と heroShops.js に**2つ**あり、しかも
+ * ShopDetailPage は変換を通さず生レコード（`select=*`）をそのまま使っていた。
+ * その結果、`shop.address` / `shop.city` / `shop.area` / `shop.prefecture` が
+ * **全1,099店で常に undefined** になり、住所も市区も画面に出ていなかった
+ * （DBには入っているのに）。＝「データが無い」のではなく「渡していなかった」。
+ *
+ * ⚠️ **rating / reviewCount は意図的に落とす。**
+ * `raw_data.rating` は収集元サイトの評価で、当サイトの口コミに裏付けが無い。
+ * 実測: ★>0 を持つ39店のうち **reviewCount は全店 0**。
+ * これを表示すると「口コミ0件なのに★4.7」となり、
+ * 「掲載料を受け取らないから辛口も載せる」という当サイト唯一の差別化を自ら壊す
+ * （＝偽レビューサイトの典型的シグネチャ）。
+ * 星は**必ず実際の口コミから算出**すること。ここで落としておけば事故は起こせない。
+ */
+const SHOP_TABLE_COLUMNS = [
+  'id', 'group_id', 'name', 'image_url',
+  'website_url', 'schedule_url', 'phone_number', 'business_hours', 'price_system',
+];
+
+export function shapeShopRow(row) {
+  if (!row) return null;
+  const raw = row.raw_data || {};
+  const shaped = {
+    ...raw,
+    // raw_data.area が文字列でない場合（配列・オブジェクト等）は undefined に正規化
+    area: typeof raw.area === 'string' ? raw.area : undefined,
+  };
+  // 収集元の評価は画面に出さない（上のコメント参照）
+  delete shaped.rating;
+  delete shaped.reviewCount;
+  for (const k of SHOP_TABLE_COLUMNS) {
+    if (k in row) shaped[k] = row[k];
+  }
+  // 既存コードに `shop.raw_data?.hours` のようなフォールバックがあるため参照は残す
+  shaped.raw_data = raw;
+  return shaped;
+}
+
 /** 店舗の所在地表示（詳細な住所を優先し、無ければ 都道府県/市区/エリア にフォールバック） */
 export function shopLocationText(shop) {
   if (!shop) return '';

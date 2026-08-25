@@ -114,7 +114,9 @@ export default function BrandPage() {
                   {getDisplayName(shop.name)}
                 </h2>
                 <div className="flex items-center gap-3 text-sm text-slate-400 mb-4 z-10">
-                  <span className="text-yellow-400 font-bold flex items-center gap-1">★ {shop.rating || 'New'}</span>
+                  {/* ⚠️ 収集元サイトの評価は出さない（口コミ0件で★4.7が出ていた）。
+                      当サイトの口コミが付けば店舗ページで実データの平均が出る。 */}
+                  <span className="text-yellow-400 font-bold flex items-center gap-1">★ New</span>
                   {/* ⚠️ 以前は `shop.access` を出していたが**DBに存在しないフィールド**で常に空だった
                       （区切りの「|」だけが浮いていた）。所在地が無ければ区切りごと出さない。 */}
                   {joinFields(shop.address || joinFields(shop.prefecture, shop.city)) && (

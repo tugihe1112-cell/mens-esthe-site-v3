@@ -208,7 +208,21 @@ function read(path) {
       );
     }
 
-    // (c) データが無いことだけを伝える行き止まり文言
+    // (c) 収集元サイトの評価を画面に出さない
+    //   `raw_data.rating` は他サイトから収集した値で、当サイトの口コミの裏付けが無い。
+    //   実測: ★>0 の39店は **全店 reviewCount 0**。出すと「口コミ0件なのに★4.7」になる。
+    //   星は必ず実際の口コミから算出する（shapeShopRow が rating を落としているので
+    //   shop.rating は常に undefined。参照が残っていること自体が設計の誤解を招く）。
+    if (/\bshop\.rating\b|raw_data\??\.rating\b/.test(codeOnly)) {
+      violations.push(
+        `[D-009] ${p} が shop.rating / raw_data.rating を参照している。\n` +
+        `        これは収集元サイトの評価で、当サイトの口コミの裏付けが無い（39店が★>0だが口コミ0件）。\n` +
+        `        「掲載料を受け取らないから辛口も載せる」という差別化を自ら壊すので表示しない。\n` +
+        `        → 実際の口コミから算出した平均（avgRating 等）を使うこと。`
+      );
+    }
+
+    // (d) データが無いことだけを伝える行き止まり文言
     const deadEnd = codeOnly.match(/'[^']*情報なし'|"[^"]*情報なし"/g);
     if (deadEnd) {
       violations.push(

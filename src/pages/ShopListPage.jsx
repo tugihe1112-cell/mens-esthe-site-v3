@@ -233,8 +233,10 @@ export default function ShopListPage() {
                         <span className="text-slate-400 text-xs truncate min-w-0">
                            {shop.address || joinFields(shop.prefecture, shop.city, shop.area)}
                         </span>
+                        {/* ⚠️ 収集元サイトの評価は出さない。実測で★4.5/4.7が出ていた店は
+                            いずれも当サイトの口コミ0件だった＝根拠のない★だった。 */}
                         <span className="text-yellow-400 font-black flex items-center gap-1 text-xs shrink-0">
-                          ★ {shop.rating || "New"}
+                          ★ New
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-1 max-h-10 overflow-hidden">
