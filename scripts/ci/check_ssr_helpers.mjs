@@ -114,6 +114,61 @@ const check = (name, fn) => {
     (f.shopLocationText({ raw_data: {} }) === '' ? null : '空にならない'));
 }
 
+// ── URLクエリ更新（無限ループ再発防止） ────────────────────────────────
+// 【事故】2026-08-22、/search?shopId=... で画面がチカチカした。
+//   useSearchParams が毎レンダーで setParams を作り直し、かつオブジェクト引数を無視して
+//   **同じURLへ router.replace を呼び続けて**いた。実測で3秒間に400回。
+{
+  const r = await loadModule('src/compat/queryString.js');
+  const b = r.buildNextQueryString;
+
+  check('オブジェクト形式が反映される（無視されていた元バグ）', () => {
+    const out = b('', { shop: 'Silk' });
+    return out === 'shop=Silk' ? null : `反映されない（${out}）`;
+  });
+
+  check('⭐変化が無ければ null（=replaceしない。ループの最後の砦）', () => {
+    const out = b('shop=Silk', { shop: 'Silk' });
+    return out === null ? null : `null を返さない（${out}）＝無限ループする`;
+  });
+
+  check('⭐エンコード揺れ(%20 vs +)でも「同じ」と判定できる', () => {
+    // 空白は `+` と `%20` のどちらでも来る。URLSearchParams は `+` で出力するので、
+    // 生の文字列比較のままだと `%20` で来た瞬間に毎回「違う」と判定してループする。
+    // ⚠️ ここは実際に無限ループの分かれ目。緩めないこと。
+    const a = b('shop=Silk%20Spa', { shop: 'Silk Spa' });
+    const c = b('shop=Silk+Spa', { shop: 'Silk Spa' });
+    if (a !== null) return `%20 で差分と誤判定した（${a}）`;
+    if (c !== null) return `+ で差分と誤判定した（${c}）`;
+    return null;
+  });
+
+  check('日本語を含んでも同じと判定できる', () => {
+    const qs = new URLSearchParams({ shop: 'Silk (シルク)' }).toString();
+    return b(qs, { shop: 'Silk (シルク)' }) === null ? null : '日本語で差分と誤判定した';
+  });
+
+  check('本当に変わるときは新しいクエリを返す', () => {
+    const out = b('shopId=tokyo_shibuya_silk', { shop: 'Silk' });
+    return out === 'shop=Silk' ? null : `変更が反映されない（${out}）`;
+  });
+
+  check('空・undefined・null の値は落とす', () => {
+    const out = b('', { shop: 'Silk', cast: '', tags: undefined, x: null });
+    return out === 'shop=Silk' ? null : `空値が残る（${out}）`;
+  });
+
+  check('関数形式でも動く（react-router互換）', () => {
+    const out = b('a=1', (p) => { p.set('a', '2'); });
+    return out === 'a=2' ? null : `関数形式が壊れている（${out}）`;
+  });
+
+  check('全部消したら空文字を返す（nullではない）', () => {
+    const out = b('a=1', {});
+    return out === '' ? null : `空クエリにできない（${out}）`;
+  });
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));
