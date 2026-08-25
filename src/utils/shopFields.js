@@ -45,10 +45,30 @@ export function joinFields(...parts) {
   for (const p of parts) {
     const s = cleanField(p);
     if (!s) continue;
-    if (out.includes(s)) continue;
+    const dupAt = out.findIndex((x) => sameLocality(x, s));
+    if (dupAt >= 0) {
+      // 「大阪 → 大阪市」のように情報量が多いほう（長いほう）を残す
+      if (s.length > out[dupAt].length) out[dupAt] = s;
+      continue;
+    }
     out.push(s);
   }
   return out.join(' ');
+}
+
+/**
+ * 「大阪市」と「大阪」のように、**市区町村の接尾辞が違うだけで同じ地名**か判定する。
+ * ⚠️ 単なる部分一致で畳んではいけない。実データには
+ *   「船橋 / 西船橋」「川崎 / 武蔵小杉」「横浜 / 関内」のように
+ *   一方が他方を含んでいても**別の場所**という組み合わせが324店ぶんある。
+ * そのため「前方一致 かつ 余りが 市/区/町/村/郡 のみ」に限定する（該当75店）。
+ */
+const CITY_SUFFIX_ONLY = /^[市区町村郡]+$/;
+function sameLocality(a, b) {
+  if (a === b) return true;
+  if (a.startsWith(b) && CITY_SUFFIX_ONLY.test(a.slice(b.length))) return true;
+  if (b.startsWith(a) && CITY_SUFFIX_ONLY.test(b.slice(a.length))) return true;
+  return false;
 }
 
 /**

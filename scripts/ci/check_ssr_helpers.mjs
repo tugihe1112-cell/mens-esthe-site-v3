@@ -98,6 +98,13 @@ const check = (name, fn) => {
   const f = await loadModule('src/utils/shopFields.js');
   check('joinFields は全部空なら空文字', () => (f.joinFields(undefined, null, '  ') === '' ? null : '空にならない'));
   check('joinFields は同値を畳む', () => (f.joinFields('埼玉県', '埼玉県') === '埼玉県' ? null : '重複が残る'));
+  check('joinFields は市区の接尾辞違いを畳む', () =>
+    (f.joinFields('大阪市', '大阪') === '大阪市' && f.joinFields('相模原', '相模原市') === '相模原市'
+      ? null : '「大阪市 大阪」型の冗長表示が残る'));
+  // ⚠️ ここが緩むと別地名を誤って1つに潰す。実データに324店ぶん存在する組み合わせ。
+  check('joinFields は別地名を畳まない（船橋/西船橋・川崎/武蔵小杉）', () =>
+    (f.joinFields('船橋', '西船橋') === '船橋 西船橋' && f.joinFields('川崎', '武蔵小杉') === '川崎 武蔵小杉'
+      ? null : '別の地名を誤って畳んでいる'));
   check("joinFields は文字列'undefined'を捨てる", () => (f.joinFields('undefined') === '' ? null : 'ゴミが残る'));
   check('shopLocationText は住所を優先', () =>
     (f.shopLocationText({ address: '東京都渋谷区1-1', prefecture: '東京都' }) === '東京都渋谷区1-1' ? null : '住所が優先されない'));
