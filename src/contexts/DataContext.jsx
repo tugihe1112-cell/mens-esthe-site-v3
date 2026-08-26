@@ -209,15 +209,28 @@ export const DataProvider = ({ children }) => {
 
     if (error) {
       console.error('[addReview] 保存に失敗:', error);
-      // RLSに弾かれた場合は原因が分かるメッセージにする（セッション切れが典型）
-      const isRls = /row-level security|violates row-level|42501/i.test(
-        `${error.message || ''} ${error.code || ''}`
-      );
-      const e = new Error(
-        isRls
-          ? 'ログインの有効期限が切れている可能性があります。再度ログインしてから投稿してください。'
-          : `口コミの保存に失敗しました（${error.message || '原因不明'}）`
-      );
+      const detail = `${error.message || ''} ${error.code || ''}`;
+
+      // ⚠️ 2026-08-26: 以前は 42501 をすべて「セッション切れ」と案内していたが、
+      //    **42501 は RLS違反と列権限不足の両方で返る**。実際に
+      //    `permission denied for column story_sections`（12_のGRANTに列を足し忘れた）
+      //    が起きたとき、セッションは有効なのに「再ログインしてください」と表示され、
+      //    オーナーが原因に辿り着けなかった。原因ごとに文言を分ける。
+      const isColumnDenied = /permission denied for (column|table)/i.test(detail);
+      const isRls = /row-level security|violates row-level/i.test(detail);
+
+      let message;
+      if (isColumnDenied) {
+        // ユーザー側では絶対に直せない＝設定の不備なので、そう伝える
+        message = '申し訳ありません。サイト側の不具合で投稿を保存できませんでした。'
+          + '書いた内容は下書きとして残していますので、少し時間をおいて再度お試しください。';
+      } else if (isRls) {
+        message = 'ログインの有効期限が切れている可能性があります。再度ログインしてから投稿してください。';
+      } else {
+        message = `口コミの保存に失敗しました（${error.message || '原因不明'}）`;
+      }
+
+      const e = new Error(message);
       e.cause = error;
       throw e;
     }
