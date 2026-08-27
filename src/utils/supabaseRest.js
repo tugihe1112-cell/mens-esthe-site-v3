@@ -26,11 +26,44 @@ export const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY;
  * ログイン中ならユーザーJWT、未ログインなら anon キーを Authorization に載せたヘッダーを返す。
  * @param {object} extra 追加ヘッダー（Content-Type / Prefer など）
  */
+// ⚠️ 期限判定は sessionExpiry.js に切り出してある（CIでテストするため）。
+//    ここに戻すと supabase クライアントのimportが邪魔でNodeから読めずテストできなくなる。
+export { EXPIRY_MARGIN_SEC, isSessionUnusable } from './sessionExpiry';
+import { isSessionUnusable } from './sessionExpiry';
+
+/**
+ * ログイン中ならユーザーJWT、未ログインなら anon キーを Authorization に載せたヘッダーを返す。
+ *
+ * 【事故（2026-08-26）】
+ * 以前は `getSession()` の access_token を**期限を見ずにそのまま**送っていた。
+ * トークンは1時間で切れるため、ログインしたまま時間が経つと
+ * PostgREST が全リクエストに `401 PGRST303 JWT expired` を返す。
+ * 呼び出し側は `Array.isArray(data)` で受けており、エラーは配列ではないので
+ * **空配列と同じ扱い**になり、画面には「在籍セラピスト情報はありません」と表示された。
+ * ＝ **ログインしている人だけ、店舗のキャストが全員消えて見える**。
+ * 実測: 匿名キーでは47件返るのに、保存済みJWTでは401で0件だった。
+ *
+ * 【対処2点】
+ * ① 期限が切れて（または切れかけて）いたら **refreshSession() で更新**してから使う。
+ * ② それでも駄目なら **anonキーにフォールバックする**。
+ *    ⚠️ ここが要点。ログインが切れただけで**公開データまで見えなくなるのは最悪**で、
+ *    しかもエラーではなく「データが無い」と表示されるので原因に辿り着けない。
+ *    公開データは anon でも読めるのだから、必ず読めるほうに倒す。
+ */
 export async function authHeaders(extra = {}) {
   let token = SUPABASE_ANON_KEY;
   try {
     const { data } = await supabase.auth.getSession();
-    if (data?.session?.access_token) token = data.session.access_token;
+    let session = data?.session || null;
+
+    if (isSessionUnusable(session)) {
+      // 期限切れ（or 直前）なら更新を試みる
+      const { data: refreshed } = await supabase.auth.refreshSession();
+      session = refreshed?.session || null;
+    }
+
+    // 更新に失敗した場合は anon のまま（＝公開データは必ず読める）
+    if (!isSessionUnusable(session)) token = session.access_token;
   } catch {
     /* セッション取得に失敗しても anon で続行する（公開データは読める） */
   }

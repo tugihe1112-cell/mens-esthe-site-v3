@@ -270,6 +270,28 @@ const check = (name, fn) => {
     (!m.shopFuzzyMatch(shop('LINDA SPA (リンダスパ)'), 'リンクス') ? null : '読み展開で誤ヒットしている'));
 }
 
+// ── 認証トークンの期限判定（「ログイン中だけキャストが全員消える」の再発防止）──
+// 【事故】2026-08-26、ログイン中に店舗ページのキャストが「全0人・在籍セラピスト情報はありません」に。
+//   実測: 匿名キーでは47件返るのに、保存済みJWTでは **401 PGRST303 JWT expired** で0件。
+//   authHeaders() が**期限を見ずに**保存済みトークンを送っていたため、
+//   トークンが切れた瞬間から全RESTが401になり、呼び出し側は
+//   `Array.isArray(data)` で受けているので**エラーではなく「データ無し」**として描画されていた。
+{
+  const s = await loadModule('src/utils/sessionExpiry.js');
+  const now = 1_700_000_000;
+  const f = s.isSessionUnusable;
+
+  check('トークンが無ければ使えない', () => (f(null, now) && f({}, now) ? null : '判定できていない'));
+  check('⭐期限切れは使えないと判定する', () =>
+    (f({ access_token: 'x', expires_at: now - 1 }, now) ? null : '期限切れを見逃している＝401で全部空になる'));
+  check('⭐期限直前（余裕60秒以内）も更新対象にする', () =>
+    (f({ access_token: 'x', expires_at: now + 30 }, now) ? null : '通信中に切れる恐れがある'));
+  check('十分に余裕があれば使う', () =>
+    (!f({ access_token: 'x', expires_at: now + 3600 }, now) ? null : '有効なトークンを捨てている'));
+  check('expires_at が無い場合は使ってみる（過剰にanonへ落とさない）', () =>
+    (!f({ access_token: 'x' }, now) ? null : '期限不明で捨てている'));
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));
