@@ -90,7 +90,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-slate-950">
-      <SeoHead title="ログイン" noindex />
+      <SeoHead title="会員ログイン・アカウント認証" noindex />
       
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">

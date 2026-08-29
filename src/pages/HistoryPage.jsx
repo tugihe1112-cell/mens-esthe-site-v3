@@ -17,7 +17,7 @@ export default function HistoryPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 font-sans text-slate-200">
-      <SeoHead title="閲覧履歴" noindex />
+      <SeoHead title="最近見た店舗・セラピストの閲覧履歴" noindex />
       <Header />
       
       <div className="pt-16 md:pt-24 px-4 max-w-3xl mx-auto">

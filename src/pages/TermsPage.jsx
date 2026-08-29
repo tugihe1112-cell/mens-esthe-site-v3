@@ -9,7 +9,7 @@ export default function TermsPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
-      <SeoHead title="利用規約" />
+      <SeoHead title="メンエスマップ利用規約・サービス利用条件" />
       <Header />
       {/* pt-24: 固定ヘッダー(最大約76px)を確実に避ける。py-12(48px)では「← 戻る」が隠れていた */}
       <div className="max-w-3xl mx-auto px-4 pt-24 pb-12">
