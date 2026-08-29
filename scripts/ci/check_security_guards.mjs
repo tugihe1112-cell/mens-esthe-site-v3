@@ -66,8 +66,23 @@ requireMatch('src/pages/ChatRoomPage.jsx', /await authHeaders\(/, 'チャット�
 
 requireMatch('scripts/lib/r2Upload.mjs', /startsWith\(['"]image\//, 'R2保存前のContent-Type検査がない');
 requireMatch('scripts/lib/imageDeliveryQuality.mjs', /image signature mismatch/, '画像の実バイト検査がない');
+requireMatch('scripts/lib/imageDeliveryQuality.mjs', /attempts = 3/, '一時的な画像配信遅延を再試行せず破損扱いしている');
 requireMatch('scripts/monitoring/check_image_health.mjs', /FULL_SCAN/, '全画像を検査するモードがない');
 requireMatch('.github/workflows/image-health.yml', /--all --no-history/, '定期的な全画像実体監査がない');
+requireMatch('scripts/monitoring/check_site_integrity.mjs', /discoveredImages/, '公開ページが参照する画像の外形監視がない');
+requireMatch('scripts/monitoring/check_site_integrity.mjs', /descriptionが短すぎる/, 'sitemap掲載ページのSEO文量を監視していない');
+for (const path of [
+  'src/pages/Home.jsx',
+  'src/pages/AreaSearchPage.jsx',
+  'src/pages/LoginPage.jsx',
+  'src/pages/RegisterPage.jsx',
+  'src/pages/RankingPage.jsx',
+  'public/data/shops.json',
+  'public/data/tokyo/toshima/ikebukuro/aromamore.json',
+  'src/data/tokyo/toshima/ikebukuro/aromamore.json',
+]) {
+  forbidMatch(path, /images\.unsplash\.com/, '外部写真URLへ再依存すると削除・巨大配信で画面が壊れる');
+}
 
 for (const migration of [
   'supabase_migrations/20_harden_community_rls_and_integrity.sql',

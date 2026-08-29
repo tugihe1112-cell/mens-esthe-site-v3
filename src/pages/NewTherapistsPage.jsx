@@ -92,7 +92,7 @@ export default function NewTherapistsPage() {
 
   return (
     <>
-      <SeoHead title="新人セラピスト一覧" description="全国のメンズエステに新しく登録されたセラピスト一覧。最新情報をチェック！" path="/new-therapists" />
+      <SeoHead title="全国の新人セラピスト一覧" description="全国のメンズエステに新しく登録された新人セラピストを一覧で掲載。所属店舗、エリア、プロフィール写真から最新情報を確認できます。" path="/new-therapists" />
       <Header />
 
       <div className="min-h-screen bg-slate-950 text-white pb-32">

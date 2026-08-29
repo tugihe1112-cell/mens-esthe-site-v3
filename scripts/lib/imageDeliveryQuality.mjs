@@ -14,7 +14,7 @@ export function isImageBytes(bytes, contentType = '') {
   return false;
 }
 
-export async function checkImageBody(url, { timeoutMs = 15000, userAgent = DEFAULT_UA } = {}) {
+async function checkImageBodyOnce(url, { timeoutMs, userAgent }) {
   try {
     const res = await fetch(url, {
       headers: { 'User-Agent': userAgent, Range: 'bytes=0-255', Accept: 'image/*' },
@@ -36,6 +36,19 @@ export async function checkImageBody(url, { timeoutMs = 15000, userAgent = DEFAU
   } catch (error) {
     return { ok: false, status: 0, contentType: '', reason: error?.name || 'fetch failed' };
   }
+}
+
+export async function checkImageBody(url, { timeoutMs = 15000, userAgent = DEFAULT_UA, attempts = 3 } = {}) {
+  let result;
+  for (let attempt = 1; attempt <= Math.max(1, attempts); attempt += 1) {
+    result = await checkImageBodyOnce(url, { timeoutMs, userAgent });
+    if (result.ok) return result;
+    const transient = result.status === 0 || result.status === 408 || result.status === 425 ||
+      result.status === 429 || result.status >= 500;
+    if (!transient || attempt === attempts) return result;
+    await new Promise((resolve) => setTimeout(resolve, 300 * attempt));
+  }
+  return result;
 }
 
 export async function mapConcurrent(items, concurrency, worker, onProgress = null) {

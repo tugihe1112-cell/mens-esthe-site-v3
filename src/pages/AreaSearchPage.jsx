@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from '../compat/router';
-import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import Header from '../components/Header.jsx';
 
@@ -13,7 +12,6 @@ const AREAS = [
     desc: '眠らない街、最大の激戦区',
     tags: ['#No1激戦区', '#高級店多数'],
     color: 'from-purple-600 to-indigo-900',
-    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1994&auto=format&fit=crop',
     size: 'col-span-2 row-span-2' // 大きく表示
   },
   {
@@ -23,7 +21,6 @@ const AREAS = [
     desc: 'トレンドと熱気が交差する',
     tags: ['#美女多数', '#アクセス抜群'],
     color: 'from-pink-600 to-rose-900',
-    image: 'https://images.unsplash.com/photo-1578469550956-0e16b69c6a3d?q=80&w=2006&auto=format&fit=crop',
     size: 'col-span-1 row-span-1'
   },
   {
@@ -33,7 +30,6 @@ const AREAS = [
     desc: 'ディープな魅力とコスパ',
     tags: ['#コスパ最強', '#隠れ家'],
     color: 'from-blue-600 to-cyan-900',
-    image: 'https://images.unsplash.com/photo-1626507306233-14e9f7831ca6?q=80&w=2070&auto=format&fit=crop',
     size: 'col-span-1 row-span-1'
   },
   {
@@ -43,7 +39,6 @@ const AREAS = [
     desc: '大人のための遊戯場',
     tags: ['#玄人好み', '#実力派'],
     color: 'from-emerald-600 to-teal-900',
-    image: 'https://images.unsplash.com/photo-1554797589-7241bb691973?q=80&w=1936&auto=format&fit=crop',
     size: 'col-span-1 row-span-2' // 縦長
   },
   {
@@ -53,7 +48,6 @@ const AREAS = [
     desc: '伝統と格式の遊郭跡',
     tags: ['#ソープ街', '#老舗'],
     color: 'from-red-600 to-orange-900',
-    image: 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?q=80&w=2036&auto=format&fit=crop',
     size: 'col-span-1 row-span-1'
   },
   {
@@ -63,7 +57,6 @@ const AREAS = [
     desc: '港町のロマンチックな夜',
     tags: ['#洗練', '#デートスポット'],
     color: 'from-sky-600 to-blue-900',
-    image: 'https://images.unsplash.com/photo-1505337298642-f8c7b8f95c47?q=80&w=2070&auto=format&fit=crop',
     size: 'col-span-1 row-span-1'
   },
   {
@@ -73,7 +66,6 @@ const AREAS = [
     desc: '日本屈指の風俗街',
     tags: ['#濃厚', '#サービス重視'],
     color: 'from-amber-600 to-yellow-900',
-    image: 'https://images.unsplash.com/photo-1601056556108-7275338600d2?q=80&w=2070&auto=format&fit=crop',
     size: 'col-span-2 row-span-1' // 横長
   },
 ];
@@ -106,14 +98,19 @@ export default function AreaSearchPage() {
               className={`group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:z-10 hover:scale-[1.02] ${area.size}`}
               style={{ animationDelay: `${idx * 100}ms` }}
             >
-              {/* Background Image */}
-              <div className="absolute inset-0 w-full h-full">
-                <LazyImage src={area.image_url || area.image} alt={area.name} className="w-full h-full object-cover transition duration-1000 group-hover:scale-110" />
+              {/* 外部写真に依存しない軽量背景。配信元の削除でカードが壊れる事故を防ぐ。 */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${area.color}`}>
+                <div
+                  className="absolute inset-0 opacity-25 group-hover:opacity-40 transition duration-500"
+                  style={{ backgroundImage: 'radial-gradient(circle at 20% 20%, rgba(255,255,255,.45) 0 1px, transparent 2px)', backgroundSize: '18px 18px' }}
+                />
+                <span aria-hidden="true" className="absolute -right-3 -top-8 text-[110px] md:text-[150px] font-black text-white/10 leading-none select-none group-hover:scale-105 transition duration-700">
+                  {area.name.slice(0, 1)}
+                </span>
               </div>
               
               {/* Overlay Gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${area.color} mix-blend-multiply opacity-60 group-hover:opacity-40 transition duration-500`}></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-white/5"></div>
 
               {/* Content */}
               <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">

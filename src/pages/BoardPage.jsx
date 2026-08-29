@@ -91,7 +91,7 @@ export default function BoardPage() {
 
   return (
     <>
-      <SeoHead title="掲示板" description="メンズエステについて自由に質問・情報交換できる掲示板" path="/board" />
+      <SeoHead title="メンズエステ情報交換掲示板" description="メンズエステの店舗選びやセラピスト、料金、利用方法について、利用者同士で質問・回答・情報交換ができる掲示板です。" path="/board" />
       <Header />
 
       <div className="min-h-screen bg-slate-950 text-white pb-32">

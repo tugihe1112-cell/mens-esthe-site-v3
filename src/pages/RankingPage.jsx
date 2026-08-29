@@ -54,13 +54,14 @@ export default function RankingPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 pb-28 md:pb-16 text-slate-200 overflow-hidden relative font-sans">
-      <SeoHead title={`${selectedArea}のエステランキング`} description={`メンズエステの人気ランキング。${selectedArea}エリアのセラピスト・店舗の評判をチェック。`} />
+      <SeoHead title={`${selectedArea}のメンズエステ人気ランキング`} description={`${selectedArea}エリアのメンズエステ人気ランキング。利用者の口コミ評価をもとに、評判の高いセラピストと店舗を比較できます。`} />
       <Header />
 
       {/* 1. Cinematic Hero Header */}
       <div className="relative h-[40vh] w-full overflow-hidden flex items-center justify-center mb-0">
         {/* 背景エフェクト */}
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20 blur-sm"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-950/60 via-slate-950 to-fuchsia-950/50"></div>
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(251,191,36,.65), transparent 42%)' }}></div>
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-slate-950"></div>
         
         <div className="relative z-10 text-center px-4 pt-10">

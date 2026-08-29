@@ -3,8 +3,29 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-08-22 （全サイトを4視点で三重監査・根本修復）**
+> **最終更新: 2026-08-29 （Semrush画像・SEO警告を実測修復）**
 > 作業がひと段落するたびに、Codexがこのファイルを自動更新する。
+
+---
+
+## 2026-08-29 Semrush画像・SEO警告の実測修復
+
+- Semrush週次メールはHealth Score 99。表示上の3 errorsを独立監査し、実害と推奨警告を分離
+- 画像:
+  - 「Image broken 3 / Page has broken image 1」の実体は`/area-search`が参照していたUnsplash画像3本のHTTP 404
+  - コードと旧JSONに残るUnsplash URLを全21本検査すると、12本が404、正常URLにも500〜880KB級が7本存在
+  - エリアカード、ランキング、ログイン／登録背景を外部写真不要のCSSグラデーションへ変更し、旧Aromamore JSONは既存ローカル画像へ統一。表示経路のUnsplash依存を0件化
+- SEO:
+  - sitemap＋主要64ページを実測し、壊れたページ0、sitemap掲載ページのtitle不足0を確認
+  - `PrefecturePage`と`ThreadDetailPage`内の`SeoHead`がSSR側の長いdescriptionを短い文へ上書きしていたため、50文字以上の固有説明へ統一
+  - `/shops`のSSR descriptionがデータ取得前に「表示件数0件」になる問題を修正。口コミ一覧・ランキング・新人・掲示板・お問い合わせも具体的な説明へ改善
+  - `noindex 465`は口コミ0件の薄い店舗／セラピストを索引対象から外し、口コミ追加時に自動復帰させる意図的仕様。ログイン等の`nofollow`も非公開・操作ページなので維持
+- 再発防止:
+  - `check_site_integrity.mjs`が主要＋sitemapページ内の`img`／OG画像を実取得し、404・非画像MIMEを15分監視
+  - sitemap掲載ページのtitle 15文字未満・description 50文字未満を監視で失敗させる
+  - 画像健全性検査はtimeout／429／5xxを最大3回再試行し、一時的なCloudflare遅延を破損扱いしない
+  - prebuildで表示経路へ`images.unsplash.com`が戻ったら失敗
+- 検証: 全DB画像（shops 756 URL＋therapists 32,456 URL）は確定破損0。1件の初回timeoutは直後HTTP 200／image/webpを確認。ローカル主要28ページ／内部リンク114件、390pxと1280pxの`/area-search`、主要5ページのSEO文・横はみ出し・破損画像を確認。lint・30ページbuild・npm audit 0成功
 
 ---
 

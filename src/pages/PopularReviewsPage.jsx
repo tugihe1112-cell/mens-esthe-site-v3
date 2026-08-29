@@ -145,7 +145,7 @@ export default function PopularReviewsPage() {
 
   return (
     <>
-      <SeoHead title="みんなの口コミ" description="全国のメンズエステ・セラピストへのリアルな口コミ体験談一覧。" path="/popular-reviews" />
+      <SeoHead title="メンズエステの口コミ・体験談一覧" description="全国のメンズエステ店舗・セラピストへ投稿された利用者の口コミと体験談を掲載。評価、施術、接客の感想から気になる店舗を比較できます。" path="/popular-reviews" />
       <Header />
 
       <div className="min-h-screen bg-slate-950 text-white pb-32">

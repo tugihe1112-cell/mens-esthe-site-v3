@@ -9,7 +9,7 @@ const DEFAULT_OG_IMAGE = `${SITE_URL}/images/og-image.jpg`;
 export default function SeoHead({ title, description, path, image, noindex = false }) {
   const router = useRouter();
   const pageTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE;
-  const pageDesc = description || "厳選されたメンズエステ店舗とセラピストを検索できるポータルサイトです。";
+  const pageDesc = description || "全国のメンズエステ店舗・セラピストを検索し、料金・出勤情報や利用者の口コミ・体験談を比較できるポータルサイトです。";
   // pathを渡していない静的ページも、トップへ誤canonical化しない。
   // React HelmetはNext.jsのSSRへ出力されず、一覧・統計・規約などの<title>が
   // 空になっていたため、Next Headへ一本化する。

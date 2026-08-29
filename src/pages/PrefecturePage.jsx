@@ -42,8 +42,10 @@ export default function PrefecturePage({ initialPrefName = null, initialShops = 
   }, [prefShops]);
 
   const title = prefName ? `${prefName}のメンズエステ${displayedShopCount}店舗・口コミ` : 'エリア別メンズエステ';
+  const topAreaNames = areaGroups.slice(0, 3).map(([areaName]) => areaName).filter(Boolean);
+  const areaSummary = topAreaNames.length ? `${topAreaNames.join('・')}など` : `${prefName || '全国'}各地`;
   const description = prefName
-    ? `${prefName}のメンズエステ${displayedShopCount}店舗を掲載。セラピスト情報・口コミ・料金・出勤スケジュールを検索できます。`
+    ? `${prefName}のメンズエステ${displayedShopCount}店舗を掲載。${areaSummary}の店舗、在籍セラピスト、料金、出勤スケジュール、利用者の口コミ・体験談を比較できます。`
     : '';
 
   if (loading && initialShops.length === 0) {

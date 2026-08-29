@@ -118,17 +118,20 @@ export default function ShopListPage() {
   const hasMore = result && displayCount < result.length;
 
   // 動的タイトルの決定
-  let pageTitle = "店舗一覧";
+  let pageTitle = "メンズエステ店舗一覧・検索";
   if (query) {
     pageTitle = `"${query}" の検索結果`;
   }
   if (mode === 'brand' && summary) {
     pageTitle = `${summary.brandName} 店舗一覧`;
   }
+  const pageDescription = result?.length > 0
+    ? `全国のメンズエステ店舗から${result.length}件を表示中。エリアや店名で検索し、在籍セラピスト、料金、出勤情報、口コミ・体験談を比較できます。`
+    : '全国のメンズエステ店舗をエリアや店名から検索。在籍セラピスト、料金、出勤情報、利用者の口コミ・体験談を比較できます。';
 
   return (
     <div className="min-h-screen bg-slate-950 text-white pb-24 font-sans">
-      <SeoHead title={pageTitle} description={`メンズエステ店舗検索。現在の表示件数: ${result?.length || 0}件`} />
+      <SeoHead title={pageTitle} description={pageDescription} />
       <Header />
 
       <div className="pt-20 md:pt-24 max-w-6xl mx-auto px-4 py-6 md:py-8">

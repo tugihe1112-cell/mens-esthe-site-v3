@@ -13,6 +13,7 @@ const UA = 'mens-esthe-map-site-integrity/1.0';
 const MAX_LINKS = Math.max(1, Number(option('--max-links') || process.env.MAX_LINKS || 120));
 const CONCURRENCY = Math.max(1, Number(option('--concurrency') || process.env.CONCURRENCY || 16));
 const TIMEOUT_MS = 20_000;
+const IMAGE_TIMEOUT_MS = 15_000;
 
 const fixedRoutes = [
   '/', '/search', '/shops', '/area-search', '/ranking', '/new-therapists',
@@ -96,6 +97,8 @@ function inspectHtml(path, html, { indexable = false } = {}) {
     if (!canonical) failures.push(`${path}: sitemap掲載ページにcanonicalが無い`);
     if (/noindex/i.test(robots)) failures.push(`${path}: sitemap掲載ページにnoindexがある`);
     if (h1Count !== 1) failures.push(`${path}: sitemap掲載ページのh1が${h1Count}件（1件であるべき）`);
+    if ([...title].length < 15) failures.push(`${path}: sitemap掲載ページのtitleが短すぎる（${[...title].length}文字）`);
+    if ([...description].length < 50) failures.push(`${path}: sitemap掲載ページのdescriptionが短すぎる（${[...description].length}文字）`);
   }
 
   for (const block of html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
@@ -104,6 +107,7 @@ function inspectHtml(path, html, { indexable = false } = {}) {
   }
 
   const links = [];
+  const images = [];
   for (const match of html.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>/gi)) {
     const raw = decodeEntities(match[1]).trim();
     if (!raw || raw.startsWith('#') || /^(mailto:|tel:|javascript:)/i.test(raw)) continue;
@@ -119,7 +123,19 @@ function inspectHtml(path, html, { indexable = false } = {}) {
       failures.push(`${path}: URLとして解釈できないリンク ${raw}`);
     }
   }
-  return { title, canonical, links };
+  for (const tag of html.match(/<img\b[^>]*>/gi) || []) {
+    const raw = firstMatch(tag, /\bsrc=["']([^"']+)["']/i);
+    if (!raw || /^(data:|blob:)/i.test(raw)) continue;
+    try { images.push(new URL(raw, BASE).href); }
+    catch { failures.push(`${path}: URLとして解釈できない画像 ${raw}`); }
+  }
+  const ogImage = firstMatch(html, /<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["'][^>]*>/i)
+    || firstMatch(html, /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["'][^>]*>/i);
+  if (ogImage) {
+    try { images.push(new URL(ogImage, BASE).href); }
+    catch { failures.push(`${path}: URLとして解釈できないOG画像 ${ogImage}`); }
+  }
+  return { title, canonical, links, images };
 }
 
 let sitemapPaths = [];
@@ -143,6 +159,7 @@ const routes = [...new Set([...fixedRoutes, ...sitemapPaths])];
 const titles = new Map();
 const canonicals = new Map();
 const discoveredLinks = new Set();
+const discoveredImages = new Set();
 
 await mapLimit(routes, CONCURRENCY, async (path) => {
   try {
@@ -169,8 +186,33 @@ await mapLimit(routes, CONCURRENCY, async (path) => {
       }
     }
     meta.links.forEach((link) => discoveredLinks.add(link));
+    meta.images.forEach((image) => discoveredImages.add(image));
   } catch (error) {
     failures.push(`${path}: 取得失敗 (${error.message})`);
+  }
+});
+
+await mapLimit([...discoveredImages].sort(), Math.min(CONCURRENCY, 8), async (url) => {
+  let lastError;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: { 'User-Agent': UA, Accept: 'image/*' },
+        signal: AbortSignal.timeout(IMAGE_TIMEOUT_MS),
+      });
+      const type = response.headers.get('content-type') || '';
+      await response.body?.cancel().catch(() => {});
+      if (response.ok && /^image\//i.test(type)) return;
+      const transient = response.status === 408 || response.status === 425 || response.status === 429 || response.status >= 500;
+      if (!transient || attempt === 1) {
+        failures.push(`画像 ${url}: HTTP ${response.status} (${type || 'content-typeなし'})`);
+        return;
+      }
+    } catch (error) {
+      lastError = error;
+      if (attempt === 1) failures.push(`画像 ${url}: 取得失敗 (${lastError.message})`);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 400));
   }
 });
 

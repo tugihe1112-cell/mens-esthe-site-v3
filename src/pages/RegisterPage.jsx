@@ -58,7 +58,8 @@ export default function RegisterPage() {
       
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop')] bg-cover bg-center opacity-40 animate-slow-zoom"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-950/70 via-slate-950 to-pink-950/60"></div>
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 50% 15%, rgba(168,85,247,.7), transparent 38%)' }}></div>
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950"></div> 
       </div>
 

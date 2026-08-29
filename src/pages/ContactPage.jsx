@@ -53,7 +53,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
-      <SeoHead title="お問い合わせ" path="/contact" />
+      <SeoHead title="お問い合わせ" description="メンエスマップへの掲載情報の修正、サービスに関する質問、不具合の報告はこちらのお問い合わせフォームからお送りください。" path="/contact" />
       <Header />
       <div className="max-w-3xl mx-auto px-4 pt-28 pb-12">
         <button onClick={() => navigate(-1)} className="mb-8 flex items-center gap-2 text-slate-400 hover:text-white transition font-bold text-sm">

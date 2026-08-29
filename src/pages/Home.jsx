@@ -19,40 +19,6 @@ import { supabase } from '../lib/supabase';
 import { TherapistGridSkeleton, ShopGridSkeleton } from '../components/ui/Skeleton.jsx';
 import siteStats from '../data/stats-latest.json';
 
-// エリア名に対応する画像の定義
-const AREA_IMAGES = {
-  // --- 東京エリア ---
-  '恵比寿': 'https://images.unsplash.com/photo-1578469550956-0e16b69c6a3d?q=80&w=2006&auto=format&fit=crop',
-  '歌舞伎町': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1994&auto=format&fit=crop',
-  '新宿': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=1994&auto=format&fit=crop',
-  '池袋': 'https://images.unsplash.com/photo-1626507306233-14e9f7831ca6?q=80&w=2070&auto=format&fit=crop',
-  '五反田': 'https://images.unsplash.com/photo-1554797589-7241bb691973?q=80&w=1936&auto=format&fit=crop',
-  '吉原': 'https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?q=80&w=2036&auto=format&fit=crop',
-  '上野': 'https://images.unsplash.com/photo-1590559599520-2c70094776e0?q=80&w=2070&auto=format&fit=crop',
-  '錦糸町': 'https://images.unsplash.com/photo-1588764062142-32c0276634b0?q=80&w=2000&auto=format&fit=crop',
-  '六本木': 'https://images.unsplash.com/photo-1634304620573-22872390a184?q=80&w=2000&auto=format&fit=crop',
-  '赤坂': 'https://images.unsplash.com/photo-1552560880-2c763d3f29b6?q=80&w=2000&auto=format&fit=crop',
-  '銀座': 'https://images.unsplash.com/photo-1572979244073-63c2677d2425?q=80&w=2000&auto=format&fit=crop',
-  '日本橋': 'https://images.unsplash.com/photo-1572979244073-63c2677d2425?q=80&w=2000&auto=format&fit=crop', // 銀座・東京駅周辺イメージ
-  '秋葉原': 'https://images.unsplash.com/photo-1616763355548-1b606f439f86?q=80&w=2000&auto=format&fit=crop',
-  
-  // --- 大阪エリア ---
-  '梅田': 'https://images.unsplash.com/photo-1590559599520-2c70094776e0?q=80&w=2070&auto=format&fit=crop',
-  '難波': 'https://images.unsplash.com/photo-1590559599520-2c70094776e0?q=80&w=2070&auto=format&fit=crop',
-  '堺筋本町': 'https://images.unsplash.com/photo-1590559599520-2c70094776e0?q=80&w=2070&auto=format&fit=crop', // 大阪オフィス街
-  '谷町九丁目': 'https://images.unsplash.com/photo-1590559599520-2c70094776e0?q=80&w=2070&auto=format&fit=crop',
-  '新大阪': 'https://images.unsplash.com/photo-1590559599520-2c70094776e0?q=80&w=2070&auto=format&fit=crop',
-
-  // --- その他主要都市 ---
-  '中洲': 'https://images.unsplash.com/photo-1617439343362-e621118ee66d?q=80&w=2000&auto=format&fit=crop',
-  'すすきの': 'https://images.unsplash.com/photo-1599557458156-a115b9c0d604?q=80&w=2000&auto=format&fit=crop',
-  '横浜': 'https://images.unsplash.com/photo-1574786358485-6bc01127027b?q=80&w=2070&auto=format&fit=crop',
-  '川崎': 'https://images.unsplash.com/photo-1605218427368-35b08968e279?q=80&w=2000&auto=format&fit=crop',
-  
-  // デフォルト
-  'DEFAULT': 'https://images.unsplash.com/photo-1480796927426-f609979314bd?q=80&w=2000&auto=format&fit=crop',
-};
-
 // 順位ごとの表示スタイル
 const RANK_STYLES = [
   { size: 'col-span-2 row-span-2', color: 'from-purple-600 to-indigo-900', tag: '👑 店舗数No.1' }, // 1位
@@ -193,8 +159,6 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
           tags: [style.tag],
           size: style.size,
           color: style.color,
-          // 画像マッピング
-          image: AREA_IMAGES[name] || AREA_IMAGES[name.replace("区", "")] || AREA_IMAGES['DEFAULT']
         };
       });
   }, [shops]);
