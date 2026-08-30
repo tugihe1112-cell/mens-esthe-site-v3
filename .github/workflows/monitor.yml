@@ -1,4 +1,4 @@
-# 外形監視 — 本番HTMLが指すJSチャンクが実在するかを15分おきに検証する。
+# 外形監視 — JSチャンク、HTTP境界、主要ページ・画像・内部リンク、公開APIを15分おきに検証する。
 #
 # 目的: 2026年7月上旬に6日間放置された「個別ページが真っ黒」事故の再発を即検知する。
 #       あの事故はユーザーだけでなくGooglebotも踏み、インデックスを230→53に崩落させた
@@ -6,7 +6,7 @@
 #
 # 通知: 失敗するとGitHub Actionsが「ワークフロー失敗」メールを送る
 #       （Settings → Notifications → Actions で受信設定を確認すること）。
-name: Monitor (chunk integrity)
+name: Monitor (production integrity)
 
 on:
   schedule:
@@ -16,17 +16,17 @@ on:
 
 # 監視の重複実行を防ぐ（前の回が詰まっていたら新しい方を優先）
 concurrency:
-  group: monitor-chunk-integrity
+  group: monitor-production-integrity
   cancel-in-progress: true
 
 jobs:
-  chunk-integrity:
+  production-integrity:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
 
@@ -53,6 +53,7 @@ jobs:
         run: node scripts/monitoring/check_site_integrity.mjs
         env:
           BASE_URL: https://www.mens-esthe-map.jp
+          CONCURRENCY: 8
 
       # 副作用のない入力だけで、公開API・認証拒否・メソッド制限を検証する。
       - name: Check API contracts

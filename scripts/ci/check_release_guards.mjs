@@ -8,3 +8,5 @@ await import('./check_ssr_helpers.mjs');
 // ⚠️ 2026-08-26追加: 列を足したのに GRANT を忘れて**口コミ投稿が4日間止まった**。
 //    テーブル定義と権限は必ず2箇所同時に直す必要があるが人間は片方を忘れるので機械で突き合わせる。
 await import('./check_review_insert_columns.mjs');
+// 監視自身の一時通信失敗で障害メールを連発せず、恒久404/5xxは隠さない。
+await import('./check_monitor_resilience.mjs');

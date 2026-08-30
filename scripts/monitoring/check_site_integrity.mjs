@@ -7,11 +7,13 @@
  *   --max-links=500 --concurrency=24 で全件寄りの手動監査も可能。
  */
 
+import { fetchWithRetry } from '../lib/monitorFetch.mjs';
+
 const option = (name) => process.argv.find((arg) => arg.startsWith(`${name}=`))?.slice(name.length + 1);
 const BASE = new URL(option('--base-url') || process.env.BASE_URL || 'https://www.mens-esthe-map.jp');
 const UA = 'mens-esthe-map-site-integrity/1.0';
 const MAX_LINKS = Math.max(1, Number(option('--max-links') || process.env.MAX_LINKS || 120));
-const CONCURRENCY = Math.max(1, Number(option('--concurrency') || process.env.CONCURRENCY || 16));
+const CONCURRENCY = Math.max(1, Number(option('--concurrency') || process.env.CONCURRENCY || 8));
 const TIMEOUT_MS = 20_000;
 const IMAGE_TIMEOUT_MS = 15_000;
 
@@ -31,20 +33,10 @@ const failures = [];
 const warnings = [];
 
 async function get(url, { redirect = 'follow' } = {}) {
-  let lastError;
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    try {
-      return await fetch(url, {
-        redirect,
-        headers: { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml' },
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-      });
-    } catch (error) {
-      lastError = error;
-      if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 400));
-    }
-  }
-  throw lastError;
+  return fetchWithRetry(url, {
+    redirect,
+    headers: { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml' },
+  }, { timeoutMs: TIMEOUT_MS });
 }
 
 async function mapLimit(items, limit, worker) {
@@ -141,7 +133,13 @@ function inspectHtml(path, html, { indexable = false } = {}) {
 let sitemapPaths = [];
 if (option('--skip-sitemap') !== '1' && !process.argv.includes('--skip-sitemap') && process.env.SKIP_SITEMAP !== '1') {
   const sitemapUrl = new URL('/api/sitemap.xml', BASE);
-  const sitemapResponse = await get(sitemapUrl);
+  let sitemapResponse;
+  try {
+    sitemapResponse = await get(sitemapUrl);
+  } catch (error) {
+    console.error(`❌ sitemap取得失敗（3回確認済み）: ${error.message}`);
+    process.exit(1);
+  }
   if (!sitemapResponse.ok || !/xml/i.test(sitemapResponse.headers.get('content-type') || '')) {
     console.error(`❌ sitemap取得失敗: HTTP ${sitemapResponse.status}`);
     process.exit(1);
@@ -192,31 +190,24 @@ await mapLimit(routes, CONCURRENCY, async (path) => {
   }
 });
 
-await mapLimit([...discoveredImages].sort(), Math.min(CONCURRENCY, 8), async (url) => {
-  let lastError;
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    try {
-      const response = await fetch(url, {
-        headers: { 'User-Agent': UA, Accept: 'image/*' },
-        signal: AbortSignal.timeout(IMAGE_TIMEOUT_MS),
-      });
-      const type = response.headers.get('content-type') || '';
-      await response.body?.cancel().catch(() => {});
-      if (response.ok && /^image\//i.test(type)) return;
-      const transient = response.status === 408 || response.status === 425 || response.status === 429 || response.status >= 500;
-      if (!transient || attempt === 1) {
-        failures.push(`画像 ${url}: HTTP ${response.status} (${type || 'content-typeなし'})`);
-        return;
-      }
-    } catch (error) {
-      lastError = error;
-      if (attempt === 1) failures.push(`画像 ${url}: 取得失敗 (${lastError.message})`);
+await mapLimit([...discoveredImages].sort(), Math.min(CONCURRENCY, 6), async (url) => {
+  try {
+    const response = await fetchWithRetry(url, {
+      headers: { 'User-Agent': UA, Accept: 'image/*' },
+    }, { timeoutMs: IMAGE_TIMEOUT_MS });
+    const type = response.headers.get('content-type') || '';
+    await response.body?.cancel().catch(() => {});
+    if (!response.ok || !/^image\//i.test(type)) {
+      failures.push(`画像 ${url}: HTTP ${response.status} (${type || 'content-typeなし'})`);
     }
-    await new Promise((resolve) => setTimeout(resolve, 400));
+  } catch (error) {
+    failures.push(`画像 ${url}: 取得失敗 (${error.message})`);
   }
 });
 
-const sortedLinks = [...discoveredLinks].sort();
+// routes本体は上でHTMLまで検査済み。同じURLをもう一度叩かず、未検査リンクだけを見る。
+const routeSet = new Set(routes);
+const sortedLinks = [...discoveredLinks].filter((path) => !routeSet.has(path)).sort();
 const checkedLinks = spreadSample(sortedLinks, MAX_LINKS);
 if (sortedLinks.length > MAX_LINKS) {
   warnings.push(`内部リンク${sortedLinks.length}件から全範囲に分散した${MAX_LINKS}件を検査`);

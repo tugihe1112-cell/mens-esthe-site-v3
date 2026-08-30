@@ -14,9 +14,9 @@ export const HERO_SHOP_IDS = [
 // スライドショー専用の画像上書き（店舗サムネイルとは別）
 // type: 'cover' = 写真（全面表示）, 'logo' = ロゴ（contain＋背景色）
 export const HERO_IMAGE_OVERRIDES = {
-  'tokyo_minato_azabujuban_linda_spa':        { url: 'https://linda-spa.com/wp-content/themes/linda2/img/logo.png',  type: 'logo' },
-  'tokyo_shinjuku_kabukicho_aromacharm':      { url: 'https://aromacharm.net/images_shop/logo.png',                  type: 'logo' },
-  'tokyo_chiyoda_iidabashi_tokyo_aroma_este': { url: 'https://tokyoaroma.jp/wp-content/uploads/2023/12/girl-2554687_1280-1.jpg', type: 'cover' },
+  'tokyo_minato_azabujuban_linda_spa':        { url: 'https://mens-esthe-images.tugihe1112.workers.dev/shop-logos/hero_linda_spa_logo.png', type: 'logo' },
+  'tokyo_shinjuku_kabukicho_aromacharm':      { url: 'https://mens-esthe-images.tugihe1112.workers.dev/shop-logos/hero_aromacharm_logo.png', type: 'logo' },
+  'tokyo_chiyoda_iidabashi_tokyo_aroma_este': { url: 'https://mens-esthe-images.tugihe1112.workers.dev/shop-logos/hero_tokyo_aroma_este.jpg', type: 'cover' },
 };
 
 // ⚠️ 変換ロジックはここに書かない。

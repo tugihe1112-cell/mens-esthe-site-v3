@@ -71,6 +71,12 @@ requireMatch('scripts/monitoring/check_image_health.mjs', /FULL_SCAN/, '全画�
 requireMatch('.github/workflows/image-health.yml', /--all --no-history/, '定期的な全画像実体監査がない');
 requireMatch('scripts/monitoring/check_site_integrity.mjs', /discoveredImages/, '公開ページが参照する画像の外形監視がない');
 requireMatch('scripts/monitoring/check_site_integrity.mjs', /descriptionが短すぎる/, 'sitemap掲載ページのSEO文量を監視していない');
+requireMatch('scripts/monitoring/check_site_integrity.mjs', /fetchWithRetry/, 'ページ監視が一時的な通信失敗を確認し直さない');
+requireMatch('scripts/monitoring/check_chunk_integrity.mjs', /chunksByUrl/, '共通JSチャンクをページごとに重複取得している');
+requireMatch('scripts/monitoring/check_chunk_integrity.mjs', /retryStatuses:\s*\[404\]/, 'デプロイ境界の一時的なchunk 404を再確認しない');
+forbidMatch('scripts/monitoring/check_chunk_integrity.mjs', /['"]Cache-Control['"]:\s*['"]no-cache/, '通常利用者と異なるno-cache経路ではstale HTML事故を見逃す');
+requireMatch('scripts/lib/monitorFetch.mjs', /attempts\s*=\s*3/, '外形監視の既定再試行回数が3回でない');
+requireMatch('scripts/lib/monitorFetch.mjs', /status\s*===\s*429[\s\S]*status\s*>?=\s*500/, '429・5xxを一時障害として再試行していない');
 for (const path of [
   'src/pages/Home.jsx',
   'src/pages/AreaSearchPage.jsx',
@@ -82,6 +88,10 @@ for (const path of [
   'src/data/tokyo/toshima/ikebukuro/aromamore.json',
 ]) {
   forbidMatch(path, /images\.unsplash\.com/, '外部写真URLへ再依存すると削除・巨大配信で画面が壊れる');
+}
+forbidMatch('src/data/heroShops.js', /url:\s*['"]https:\/\/(?!mens-esthe-images\.tugihe1112\.workers\.dev\/)/, '固定ヒーロー画像は外部公式サイトへ直リンクせず自社R2から配信する');
+for (const path of ['src/data/shops.json', 'src/data/all_shops.json', 'public/data/all_shops.json']) {
+  forbidMatch(path, /["'](?:image_url|image)["']\s*:\s*["']https:\/\/(?:linda-spa\.com|aromacharm\.net|tokyoaroma\.jp)\//, '固定表示画像の公式サイト直リンクを自社R2へ戻すこと');
 }
 
 for (const migration of [
@@ -95,6 +105,10 @@ requireMatch('supabase_migrations/22_enforce_shop_integrity_and_view_rls.sql', /
 requireMatch('supabase_migrations/22_enforce_shop_integrity_and_view_rls.sql', /security_invoker\s*=\s*true/, '集計viewが基表RLSを継承していない');
 requireMatch('.github/workflows/monitor.yml', /check_site_integrity\.mjs/, 'ページ・内部リンクの定期監視がない');
 requireMatch('.github/workflows/monitor.yml', /check_api_contracts\.mjs/, 'API契約の定期監視がない');
+for (const workflow of ['.github/workflows/ci.yml', '.github/workflows/monitor.yml', '.github/workflows/image-health.yml']) {
+  requireMatch(workflow, /actions\/checkout@v7/, 'Node 20版checkout actionへ戻さない');
+  requireMatch(workflow, /actions\/setup-node@v7/, 'Node 20版setup-node actionへ戻さない');
+}
 
 const packageJson = JSON.parse(read('package.json') || '{}');
 if (packageJson.dependencies?.['react-router-dom']) {

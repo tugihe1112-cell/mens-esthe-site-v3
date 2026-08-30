@@ -19,6 +19,8 @@
  *   BASE_URL=https://... node scripts/monitoring/check_chunk_integrity.mjs
  */
 
+import { fetchWithRetry } from '../lib/monitorFetch.mjs';
+
 const BASE = (process.env.BASE_URL || 'https://www.mens-esthe-map.jp').replace(/\/$/, '');
 
 // 事故が起きると致命的なページ（SSR＝CDNの古いHTML配信リスクがある経路）を選ぶ
@@ -34,19 +36,13 @@ const JS_MIME = /^(application|text)\/(javascript|ecmascript)/i;
 const TIMEOUT_MS = 20000;
 
 async function get(url, method = 'GET') {
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-  try {
-    // キャッシュを介さず、CDNが今この瞬間に返すものを見る
-    return await fetch(url, {
-      method,
-      redirect: 'follow',
-      signal: ctrl.signal,
-      headers: { 'Cache-Control': 'no-cache', 'User-Agent': 'chunk-integrity-monitor/1.0' },
-    });
-  } finally {
-    clearTimeout(timer);
-  }
+  // 普通の閲覧者と同じキャッシュ経路を見る。no-cacheを付けると、利用者だけが踏む
+  // stale HTML → 消えたchunkの組合せを監視自身が回避してしまう。
+  return fetchWithRetry(url, {
+    method,
+    redirect: 'follow',
+    headers: { 'User-Agent': 'chunk-integrity-monitor/1.0' },
+  }, { timeoutMs: TIMEOUT_MS });
 }
 
 /** HTMLから /_next/static/ を指すJS URLを抜き出す（script src と modulepreload の両方） */
@@ -67,7 +63,7 @@ function extractChunkUrls(html) {
 }
 
 const failures = [];
-let checkedChunks = 0;
+const chunksByUrl = new Map();
 
 for (const path of PAGES) {
   const pageUrl = BASE + path;
@@ -97,24 +93,34 @@ for (const path of PAGES) {
   }
 
   for (const url of chunks) {
-    checkedChunks++;
-    try {
-      const res = await get(url);
-      const ct = res.headers.get('content-type') || '(none)';
-      if (!res.ok) {
-        failures.push(`[CHUNK] ${url} → HTTP ${res.status}（${path} が指すチャンクが消えている＝真っ黒事故）`);
-      } else if (!JS_MIME.test(ct)) {
-        // 404時にCDNがHTML/text-plainを返すパターン。ブラウザは
-        // "Refused to execute script ... MIME type ('text/plain')" で拒否する
-        failures.push(`[CHUNK] ${url} → MIMEがJSでない: ${ct}（${path}）`);
-      }
-    } catch (e) {
-      failures.push(`[CHUNK] ${url} → 取得失敗: ${e.message}（${path}）`);
-    }
+    if (!chunksByUrl.has(url)) chunksByUrl.set(url, new Set());
+    chunksByUrl.get(url).add(path);
   }
 }
 
-console.log(`検査: ${PAGES.length}ページ / ${checkedChunks}チャンク @ ${BASE}`);
+// 共通chunkは一度だけ取得し、異常時には影響ページをすべて併記する。
+for (const [url, sourcePages] of chunksByUrl) {
+  const provenance = [...sourcePages].join(', ');
+  try {
+    // デプロイ境界の瞬間的な404も同じURLを3回確認する。恒久404は必ず失敗する。
+    const res = await fetchWithRetry(url, {
+      redirect: 'follow',
+      headers: { 'User-Agent': 'chunk-integrity-monitor/1.0' },
+    }, { timeoutMs: TIMEOUT_MS, retryStatuses: [404] });
+    const ct = res.headers.get('content-type') || '(none)';
+    if (!res.ok) {
+      failures.push(`[CHUNK] ${url} → HTTP ${res.status}（${provenance} が指すチャンクが消えている＝真っ黒事故）`);
+    } else if (!JS_MIME.test(ct)) {
+      // 404時にCDNがHTML/text-plainを返すパターン。ブラウザは
+      // "Refused to execute script ... MIME type ('text/plain')" で拒否する
+      failures.push(`[CHUNK] ${url} → MIMEがJSでない: ${ct}（${provenance}）`);
+    }
+  } catch (e) {
+    failures.push(`[CHUNK] ${url} → 取得失敗: ${e.message}（${provenance}）`);
+  }
+}
+
+console.log(`検査: ${PAGES.length}ページ / ${chunksByUrl.size}固有チャンク @ ${BASE}`);
 
 if (failures.length > 0) {
   console.error(`\n❌ チャンク整合性チェック失敗（${failures.length}件）`);
