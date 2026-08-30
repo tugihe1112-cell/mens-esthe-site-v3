@@ -3,8 +3,13 @@ import { FormProvider, useFormContext, Controller } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from '../compat/router';
 import { Toaster, toast } from 'react-hot-toast';
 import { useReviewForm } from '../features/reviews/hooks/useReviewForm';
-import { STORY_SECTIONS } from '../features/reviews/schema/reviewSchema';
-import { countReviewStoryChars } from '../features/reviews/reviewStory.mjs';
+import {
+  WRITABLE_STORY_SECTIONS,
+  RATING_AXES,
+  countReviewStoryChars,
+  buildRatingsNote,
+  withRatingsNote,
+} from '../features/reviews/reviewStory.mjs';
 import { ProgressBar } from '../components/ui/ProgressBar';
 import { RatingSlider } from '../components/ui/RatingSlider';
 import Header from '../components/Header.jsx';
@@ -313,20 +318,17 @@ const TherapistGrid = ({ shopTherapists, selectedTherapistId, selectTherapist, e
 };
 
 const Step2_Rating = () => {
-  const { control, watch, setValue } = useFormContext();
+  const { control, watch, setValue, register } = useFormContext();
   const ratings = watch('ratings');
+  const ratingNotes = watch('ratingNotes') || {};
   const tags = watch('tags');
-  
-  const RATING_CONFIG = [
-    { id: 'looks', label: 'ルックス', icon: '💎', color: 'text-pink-400' },
-    { id: 'style', label: 'スタイル', icon: '👙', color: 'text-purple-400' },
-    { id: 'massage', label: '技術', icon: '💆‍♀️', color: 'text-blue-400' },
-    { id: 'service', label: '接客', icon: '🥰', color: 'text-yellow-400' },
-    { id: 'intimacy', label: '密着度', icon: '🔥', color: 'text-red-400' },
-    { id: 'cleanliness', label: '清潔感', icon: '✨', color: 'text-emerald-400' },
-  ];
+
+  // ⚠️ 軸の定義は reviewStory.mjs（唯一の定義元）から取る。
+  //    ここにローカル定義を書き戻すと、採点コメントの見出しと採点欄の表記がズレる。
+  const RATING_CONFIG = RATING_AXES;
 
   const totalScore = (Object.values(ratings).reduce((a, b) => a + b, 0) / 6).toFixed(1);
+  const noteChars = buildRatingsNote(ratings, ratingNotes).length;
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -340,23 +342,42 @@ const Step2_Rating = () => {
          <p className="text-slate-500 text-sm">スライダーを動かして採点してください</p>
       </div>
 
-      <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl space-y-8">
+      {/* ⚠️ 一言コメントは必ず「任意」にすること。
+          必須にすると、体験談の崖を下げるつもりが逆に6つ増える（2026-08-26 設計判断）。 */}
+      <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl space-y-7">
         {RATING_CONFIG.map((item) => (
-          <Controller
-            key={item.id}
-            name={`ratings.${item.id}`}
-            control={control}
-            render={({ field }) => (
-              <RatingSlider 
-                label={item.label} 
-                icon={item.icon} 
-                value={field.value} 
-                colorClass={item.color} 
-                onChange={field.onChange} 
-              />
-            )}
-          />
+          <div key={item.id} className="space-y-2">
+            <Controller
+              name={`ratings.${item.id}`}
+              control={control}
+              render={({ field }) => (
+                <RatingSlider
+                  label={item.label}
+                  icon={item.icon}
+                  value={field.value}
+                  colorClass={item.color}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+            <input
+              type="text"
+              maxLength={120}
+              {...register(`ratingNotes.${item.id}`)}
+              placeholder={`${item.label}について一言（任意）`}
+              className="w-full bg-slate-950/60 border border-white/5 rounded-xl px-3 py-2 text-white placeholder-slate-600 focus:border-pink-500/40 focus:outline-none transition"
+            />
+          </div>
         ))}
+      </div>
+
+      {/* 書いた一言が無駄にならないこと（＝本文に入り文字数に数えること）をその場で示す */}
+      <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl px-4 py-3">
+        <p className="text-[11px] text-emerald-300 leading-relaxed">
+          {noteChars > 0
+            ? <>✓ 一言コメント <span className="font-black">{noteChars}文字</span> は文字数に加算され、口コミの最後に一緒に公開されます。</>
+            : <>一言はすべて任意です。書いた分は文字数に加算され、口コミの一部として公開されます。</>}
+        </p>
       </div>
 
       <div className="bg-slate-900/50 p-6 rounded-[2rem] border border-white/5 shadow-xl">
@@ -381,7 +402,12 @@ const STORY_HINTS = {
 const Step3_Story = ({ onMilestone }) => {
   const { register, watch, formState: { errors } } = useFormContext();
   const story = watch('story') || {};
-  const totalChars = countReviewStoryChars(story);
+  const ratings = watch('ratings') || {};
+  const ratingNotes = watch('ratingNotes') || {};
+  // ⚠️ 採点コメントを合成してから数える。ここを story 単体に戻すと
+  //    画面のカウンターとDBの判定（review_story_char_length）がズレて投稿が弾かれる。
+  const ratingsNoteChars = buildRatingsNote(ratings, ratingNotes).length;
+  const totalChars = countReviewStoryChars(withRatingsNote(story, ratings, ratingNotes));
   const pct = Math.min(100, (totalChars / BONUS_CHARS) * 100); // 700字をゴールにした達成率
   const reached200 = totalChars >= MIN_CHARS;
   const reached700 = totalChars >= BONUS_CHARS;
@@ -417,6 +443,12 @@ const Step3_Story = ({ onMilestone }) => {
             {totalChars}<span className="text-xs text-slate-500 font-bold"> 文字</span>
           </span>
         </div>
+        {/* 採点で書いた一言がここに含まれていることを明示（書き損にならないと分かるように） */}
+        {ratingsNoteChars > 0 && (
+          <p className="text-[11px] text-emerald-300 mb-2">
+            ✓ 採点の一言コメント {ratingsNoteChars}文字を含みます
+          </p>
+        )}
         {/* 2段メーター（200と700にマイルストーン線） */}
         <div className="relative h-2.5 bg-slate-800 rounded-full overflow-hidden">
           <div className={`h-full rounded-full transition-all duration-300 ${meterColor}`} style={{ width: `${pct}%` }} />
@@ -436,7 +468,9 @@ const Step3_Story = ({ onMilestone }) => {
       <div className="bg-slate-900/60 backdrop-blur-md rounded-[2rem] p-6 border border-white/5 shadow-2xl relative">
           <div className="absolute top-8 bottom-8 left-[27px] w-0.5 bg-gradient-to-b from-pink-500 via-purple-500 to-blue-500 opacity-30"></div>
           
-          {STORY_SECTIONS.map((section) => (
+          {/* ⚠️ 直接入力する区分だけを描く。ratings_note は採点欄から組み立てられる区分なので
+                 ここに欄を出さない（出すと同じ内容を2回書かせることになる）。 */}
+          {WRITABLE_STORY_SECTIONS.map((section) => (
             <div key={section.id} className="relative pl-10 mb-8 last:mb-0 group">
               <div className="absolute top-0 left-0 w-3.5 h-3.5 rounded-full border-2 bg-slate-900 border-slate-700 z-10"></div>
               
@@ -476,6 +510,9 @@ const Step4_Confirm = ({ isSubmitting }) => {
   const therapistName = watch('therapistName');
   const therapistId = watch('therapistId');
   const therapistLabel = therapistName || (therapistId ? null : '指名なし');
+  // ⚠️ 採点の一言コメントは**公開される本文の一部**になる。
+  //    投稿前に一度も見せずに公開するのは不意打ちなので、ここで実際の形を出す。
+  const ratingsNote = buildRatingsNote(watch('ratings') || {}, watch('ratingNotes') || {});
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -494,6 +531,23 @@ const Step4_Confirm = ({ isSubmitting }) => {
         <p className="text-slate-300 mb-4">内容を確認して、問題なければ投稿してください。</p>
         <p className="text-xs text-slate-500">※投稿後の修正はできません。</p>
       </div>
+
+      {ratingsNote && (
+        <div className="bg-slate-900/50 rounded-3xl border border-white/10 p-5 text-left">
+          <p className="text-[11px] font-black tracking-wide text-slate-400 mb-1">採点コメント</p>
+          <p className="text-[11px] text-slate-500 mb-3">
+            採点欄に書いた一言です。<span className="text-slate-300 font-bold">体験談の最後に、この形で一緒に公開されます。</span>
+          </p>
+          <ul className="space-y-1">
+            {ratingsNote.split('\n').filter(Boolean).map((line, i) => (
+              <li key={i} className="flex gap-2 text-[13px] text-slate-300 leading-relaxed">
+                <span aria-hidden="true" className="text-pink-400 shrink-0">・</span>
+                <span className="whitespace-pre-wrap">{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <button 
         type="submit"
@@ -554,7 +608,11 @@ function loadDraft() {
 function hasDraftContent(v) {
   if (!v) return false;
   if (v.shopId || v.therapistId || v.therapistName) return true;
-  return Object.values(v.story || {}).some((t) => (t || '').trim().length > 0);
+  if (Object.values(v.story || {}).some((t) => (t || '').trim().length > 0)) return true;
+  // ⚠️ 採点の一言コメントだけを書いた状態も「書きかけ」に含める。
+  //    ここを漏らすと、一言だけ書いて離脱した人の入力が保存されず、
+  //    「書いた分は無駄になりません」という約束を破ることになる。
+  return Object.values(v.ratingNotes || {}).some((t) => (t || '').trim().length > 0);
 }
 /** 「保存: 8/18 18:42」の表記 */
 function formatSavedAt(ts) {

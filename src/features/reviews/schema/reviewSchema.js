@@ -1,6 +1,11 @@
 import { z } from 'zod';
-export { STORY_SECTIONS } from '../reviewStory.mjs';
-import { countReviewStoryChars } from '../reviewStory.mjs';
+export { STORY_SECTIONS, WRITABLE_STORY_SECTIONS, RATING_AXES } from '../reviewStory.mjs';
+import { countReviewStoryChars, withRatingsNote, RATING_AXES as AXES } from '../reviewStory.mjs';
+
+/** 採点コメント（任意）。1軸あたり120字まで */
+const ratingNoteShape = Object.fromEntries(
+  AXES.map(({ id }) => [id, z.string().trim().max(120).optional().default('')]),
+);
 
 export const reviewSchema = z.object({
   shopId: z.string().min(1, { message: '店舗を選択してください' }),
@@ -21,6 +26,9 @@ export const reviewSchema = z.object({
     massage: z.number().min(1).max(5),
     intimacy: z.number().min(1).max(5),
   }),
+  // 採点の一言コメント（任意）。本文の最後に「採点コメント」区分として入り、文字数にも数える。
+  // ⚠️ 必須にしないこと。崖を1つ下げるつもりが6つ増える。
+  ratingNotes: z.object(ratingNoteShape).partial().optional().default({}),
   tags: z.array(z.string()),
   story: z.object({
     entrance: z.string().min(1, { message: '入店の感想を入力してください' }),
@@ -28,7 +36,14 @@ export const reviewSchema = z.object({
     session: z.string().optional(),
     afterglow: z.string().optional(),
     exit: z.string().min(1, { message: '総評を入力してください' }),
-  }).refine((data) => {
-    return countReviewStoryChars(data) >= 200;
-  }, { message: '口コミは合計200文字以上必要です' }),
-});
+    // 採点コメントから組み立てられる区分（ユーザーは直接編集しない）
+    ratings_note: z.string().optional(),
+  }),
+})
+  // ⚠️ 200字判定は story 単体ではなく **採点コメントを合成してから** 行う。
+  //    ここを story 内の refine に戻すと ratingNotes が数に入らず、
+  //    画面表示とDB制約（review_story_char_length）がズレて投稿が弾かれる。
+  .refine(
+    (data) => countReviewStoryChars(withRatingsNote(data.story, data.ratings, data.ratingNotes)) >= 200,
+    { message: '口コミは合計200文字以上必要です', path: ['story'] },
+  );

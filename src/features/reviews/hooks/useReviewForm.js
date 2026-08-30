@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { reviewSchema } from '../schema/reviewSchema';
-import { normalizeReviewStory, composeReviewStoryContent } from '../reviewStory.mjs';
+import { normalizeReviewStory, composeReviewStoryContent, withRatingsNote, RATING_AXES } from '../reviewStory.mjs';
 import { useShopData } from '../../../contexts/DataContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
@@ -29,6 +29,8 @@ export const useReviewForm = () => {
       therapistId: null,
       therapistName: '',
       ratings: { cleanliness: 3, looks: 3, style: 3, service: 3, massage: 3, intimacy: 3 },
+      // 採点の一言コメント（任意）。RATING_AXES から生成して定義の二重管理を避ける
+      ratingNotes: Object.fromEntries(RATING_AXES.map(({ id }) => [id, ''])),
       tags: [],
       story: { entrance: '', meeting: '', session: '', afterglow: '', exit: '' },
     },
@@ -54,7 +56,12 @@ export const useReviewForm = () => {
     try {
       // 入力時の「入店・ご対面・施術・総評」を構造として残す。
       // contentには本文だけを入れ、生成見出しで200/700字特典を水増ししない。
-      const storySections = normalizeReviewStory(data.story);
+      // ⚠️ 採点の一言コメントは **withRatingsNote で本文の最後に合成してから** 正規化する。
+      //    ここを飛ばすと、画面のカウンターは数えているのに保存本文には入らず、
+      //    DB側の review_story_char_length が200未満と判定して投稿が弾かれる。
+      const storySections = normalizeReviewStory(
+        withRatingsNote(data.story, data.ratings, data.ratingNotes),
+      );
       const combinedContent = composeReviewStoryContent(storySections);
       const totalScore = (Object.values(data.ratings).reduce((a, b) => a + b, 0) / 6).toFixed(1);
 
