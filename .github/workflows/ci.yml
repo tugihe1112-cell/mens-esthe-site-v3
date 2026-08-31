@@ -43,27 +43,20 @@ jobs:
           fi
           echo "✅ pages/ の stale-while-revalidate は全て300秒以下"
 
-      # ── ガード: オーナー確定事項（playbook/decisions.md）に反する変更を止める ──
-      # 同じデザイン決定が3回覆されたため機械で止める。詳細は playbook/decisions.md 参照。
-      - name: Guard - owner design decisions
-        run: node scripts/ci/check_design_decisions.mjs
-
-      - name: Guard - therapist image quality rules
-        run: node scripts/ci/check_therapist_image_quality.mjs
-
-      # メールアプリ内で未ログインでも、ログイン後に対象口コミへ戻れることを保証。
-      - name: Guard - admin review notification deep link
-        run: node scripts/ci/check_admin_review_notification.mjs
-
-      # 投稿画面の4区分（入店・ご対面・施術・総評）が保存・表示で消えないことを保証。
-      - name: Guard - review story sections
-        run: node scripts/ci/check_review_story_format.mjs
-
-      - name: Guard - auth, rate limit, history and CSP
-        run: node scripts/ci/check_core_safety_guards.mjs
-
       - name: Install deps
         run: npm ci
+
+      # ── ガード一式 ────────────────────────────────────────────────
+      # ⚠️ ここに個別のガードを並べないこと。
+      #    2026-08-26、ci.yml と scripts/ci/check_release_guards.mjs で
+      #    **別々のガードを並べていた**ため、手元の `npm run build` は通るのに
+      #    CIだけが落ちた（共通していたのは1本だけだった）。
+      #    リリース前ガードの一覧は check_release_guards.mjs が唯一の定義元。
+      #    新しいガードはそちらに1行足す。ここは触らない。
+      #    ※ npm run build の prebuild でも同じものが走るため二重に見えるが、
+      #      「依存を入れる前に落とせる」ことに意味があるのでここでも明示的に実行する。
+      - name: Guard - release guards (same set as local prebuild)
+        run: node scripts/ci/check_release_guards.mjs
 
       - name: Next build
         run: npm run build
