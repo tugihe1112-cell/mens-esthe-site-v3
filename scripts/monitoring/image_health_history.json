@@ -770,5 +770,41 @@
       "repeatedRows": 0,
       "unrelatedRepeatedGroups": 0
     }
+  },
+  {
+    "schemaVersion": 4,
+    "at": "2026-08-31 00:59:48",
+    "shops": {
+      "total": 1099,
+      "nulls": 89,
+      "nullPct": 8.1,
+      "mode": "sample",
+      "checkedUrls": 100,
+      "dead": 0,
+      "deadPct": 0,
+      "affectedRows": 0,
+      "badExamples": [],
+      "affectedExamples": []
+    },
+    "therapists": {
+      "total": 59633,
+      "nulls": 10266,
+      "nullPct": 17.2,
+      "mode": "sample",
+      "checkedUrls": 100,
+      "dead": 0,
+      "deadPct": 0,
+      "affectedRows": 0,
+      "badExamples": [],
+      "affectedExamples": []
+    },
+    "therapistSemantic": {
+      "checked": 59478,
+      "knownBad": 0,
+      "suspiciousNames": 0,
+      "repeatedGroups": 0,
+      "repeatedRows": 0,
+      "unrelatedRepeatedGroups": 0
+    }
   }
 ]
