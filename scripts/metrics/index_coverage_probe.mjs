@@ -44,15 +44,34 @@ const sc = google.searchconsole({ version: 'v1', auth });
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** サイトマップから店舗ページのURLを集める（Googleに送っている実物と同じ集合を見る） */
-async function sampleShopUrls(n) {
+/**
+ * サイトマップからURLを集める（Googleに送っている実物と同じ集合を見る）
+ *
+ * ⚠️ 2026-09-02 追加: 以前は**店舗ページしか検査していなかった**。
+ *    これは測定の穴だった。実測すると
+ *      店舗ページ     … 本文 約1,000字・**口コミ本文がSSRに入っていない**（70字の抜粋のみ）
+ *      セラピストページ … 本文 1,300〜1,700字・**口コミ本文がSSRに入っている**
+ *    ＝口コミという独自コンテンツが載っているのはセラピストページ側。
+ *    「中身が薄いから登録されない」という仮説を検証するには、
+ *    **厚いほうのページが登録されるか**を見なければ判定できない。
+ */
+async function sampleSitemapUrls(n) {
   const res = await fetch(`${ORIGIN}/api/sitemap.xml`);
   const xml = await res.text();
   const all = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   const shops = all.filter((u) => /\/shops\/[^/]+$/.test(u));
+  const threads = all.filter((u) => /\/threads\//.test(u));
   // 端に寄らないよう等間隔で抜く（先頭だけ見ると登録順のバイアスが乗る）
-  const step = Math.max(1, Math.floor(shops.length / n));
-  return { total: shops.length, sample: shops.filter((_, i) => i % step === 0).slice(0, n) };
+  const pick = (arr, k) => {
+    const step = Math.max(1, Math.floor(arr.length / k));
+    return arr.filter((_, i) => i % step === 0).slice(0, k);
+  };
+  return {
+    total: shops.length,
+    sample: pick(shops, n),
+    threadTotal: threads.length,
+    threadSample: pick(threads, Math.min(n, 6)),
+  };
 }
 
 async function inspect(url) {
@@ -81,7 +100,7 @@ async function inspect(url) {
 async function main() {
   console.log(`\n=== GSC URL検査 / ${SITE} ===\n`);
 
-  const { total, sample } = await sampleShopUrls(SHOP_LIMIT);
+  const { total, sample, threadTotal, threadSample } = await sampleSitemapUrls(SHOP_LIMIT);
   // 比較のため、性質の違うURLを混ぜる。
   // 「口コミがあるページ」と「無いページ」で判定が割れるかが最大の関心事。
   const targets = [
@@ -93,9 +112,14 @@ async function main() {
     { label: '★口コミ有(こころ大阪)', url: `${ORIGIN}/shops/osaka_umeda_kokoronoyurikago` },
     { label: '★口コミ有(広島人妻)', url: `${ORIGIN}/shops/hiroshima_hiroshima_hitozuma_san` },
     ...sample.map((u, i) => ({ label: `店舗サンプル${i + 1}`, url: u })),
+    // ⚠️ ここが判定の要。セラピストページは**口コミ本文がSSRに入っている厚いページ**。
+    //    店舗ページ(薄い)が全滅でも、こちらが登録されるなら
+    //    「薄いから登録されない」＝コンテンツの問題 と読める。
+    //    こちらも全滅なら、コンテンツ量ではなくドメイン評価側の問題を疑う。
+    ...threadSample.map((u, i) => ({ label: `◆セラピスト(口コミ有)${i + 1}`, url: u })),
   ];
 
-  console.log(`サイトマップの店舗ページ総数: ${total}／サンプル ${sample.length}件`);
+  console.log(`サイトマップ: 店舗${total}件（サンプル${sample.length}）／セラピスト${threadTotal}件（サンプル${threadSample.length}）`);
   console.log(`検査対象 合計 ${targets.length}件\n`);
 
   const rows = [];
@@ -125,6 +149,22 @@ async function main() {
   console.log('\n=== 判定の内訳 ===');
   for (const [k, v] of Object.entries(byCoverage).sort((a, b) => b[1] - a[1])) {
     console.log(`  ${String(v).padStart(3)}件  ${k}`);
+  }
+
+  // ── ページ種別ごとの登録率（ここが仮説の分かれ目）─────────────────
+  // 「薄いから登録されない」なら、厚いセラピストページの登録率が高くなるはず。
+  // 両方とも0なら、コンテンツ量ではなくドメイン評価側を疑う。
+  const isIndexed = (r) => /Submitted and indexed|Indexed, not submitted/i.test(r.coverage);
+  const groups = [
+    ['店舗ページ（本文約1,000字・口コミ本文なし）', ok.filter((r) => /\/shops\/[^/]+$/.test(r.url))],
+    ['セラピストページ（本文1,300〜1,700字・口コミ本文あり）', ok.filter((r) => /\/threads\//.test(r.url))],
+    ['その他（トップ・エリア・統計）', ok.filter((r) => !/\/shops\//.test(r.url))],
+  ];
+  console.log('\n=== ページ種別ごとの登録率 ===');
+  for (const [name, list] of groups) {
+    if (!list.length) continue;
+    const n = list.filter(isIndexed).length;
+    console.log(`  ${String(n).padStart(2)} / ${String(list.length).padEnd(2)} 登録  ${name}`);
   }
 
   const dupCount = ok.filter((r) => r.googleCanonical !== '-' && r.userCanonical !== '-' && r.googleCanonical !== r.userCanonical).length;
