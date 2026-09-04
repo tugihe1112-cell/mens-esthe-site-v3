@@ -9,6 +9,14 @@
 import fs from 'fs';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
+// ⚠️ 区分・6軸の定義は reviewStory.mjs が唯一の定義元。ここに再実装してはいけない
+//    （クライアント・DB制約・このスクリプトの3者がズレると INSERT が CHECK 制約で弾かれる）。
+import {
+  composeReviewStoryContent,
+  normalizeReviewStory,
+  countReviewStoryChars,
+  withRatingsNote,
+} from '../../src/features/reviews/reviewStory.mjs';
 
 const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
@@ -54,7 +62,19 @@ function validate(r) {
   const errs = [];
   if (!r.shop_id) errs.push('shop_id必須');
   if (!r.therapist_name) errs.push('therapist_name必須');
-  if (!r.content || typeof r.content !== 'string') errs.push('content必須');
+  // content 直接指定（旧形式）か、story の区分指定（推奨）のどちらか。
+  // story を使うと投稿画面と同じ4区分が story_sections に保存され、公開ページで見出し付きで表示される。
+  if (!r.content && !r.story) errs.push('content または story のどちらか必須');
+  if (r.story) {
+    if (typeof r.story !== 'object' || Array.isArray(r.story)) errs.push('storyはオブジェクト');
+    else {
+      if (!String(r.story.entrance || '').trim()) errs.push('story.entrance必須（入店・受付）');
+      if (!String(r.story.exit || '').trim()) errs.push('story.exit必須（総評）');
+      const unknown = Object.keys(r.story).filter(k => !['entrance', 'meeting', 'session', 'exit'].includes(k));
+      if (unknown.length) errs.push(`storyに未知のキー: ${unknown.join(',')}（許可はentrance/meeting/session/exit）`);
+    }
+  }
+  if (r.content && typeof r.content !== 'string') errs.push('contentは文字列');
   if (!r.detailed_ratings) errs.push('detailed_ratings必須');
   else for (const k of RATING_KEYS) {
     const v = r.detailed_ratings[k];
@@ -75,15 +95,36 @@ async function processOne(r, i) {
   if (badTags.length) console.log(`  ⚠️ UI非存在タグを除去: ${badTags.join(', ')}`);
   if (!goodTags.length) { console.log('  ❌ 有効タグが0件 → スキップ'); return 'skip'; }
 
-  const len = r.content.replace(/\s/g, '').length;
-  console.log(`  字数 ${len} ${len >= 700 ? '✅700+' : len >= 200 ? '△200+(700未満=閲覧ボーナス弱)' : '⚠️200未満'}`);
+  // ── 本文の組み立て ──
+  // story 指定なら、採点の一言コメント(rating_notes)を合成したうえで content を**機械的に生成**する。
+  // ⚠️ content を手書きしてはいけない。DBの CHECK 制約
+  //    `compose_review_story_content(story_sections) = content` が1文字でも違えば INSERT が失敗する。
+  const story = r.story
+    ? withRatingsNote(r.story, r.detailed_ratings, r.rating_notes || {})
+    : null;
+  const content = story ? composeReviewStoryContent(story) : r.content;
+  const storySections = story ? normalizeReviewStory(story) : null;
 
-  const rating = (typeof r.rating === 'number')
-    ? r.rating
-    : Math.round((RATING_KEYS.reduce((a, k) => a + r.detailed_ratings[k], 0) / 6) * 10) / 10;
+  // 字数は DB の review_story_char_length と同じ数え方（各区分をtrimした長さの合計・区分間の空行は数えない）
+  const len = story ? countReviewStoryChars(story) : content.replace(/\s/g, '').length;
+  console.log(`  字数 ${len} ${len >= 700 ? '✅700+（閲覧権7日）' : len >= 200 ? '△200+（閲覧権3日）' : '⚠️200未満（DB制約で拒否される）'}`);
+  if (story) {
+    const filled = Object.entries(storySections).map(([k, v]) => `${k}:${v.length}`).join(' / ');
+    console.log(`  区分 ${filled}`);
+  }
+
+  // ⚠️ 総合点は6軸の平均（小数第1位）。**手で整数を指定しないこと。**
+  //    2026-09-04に本番17件を検査したところ、初期の個別スクリプトが rating を手で整数指定していたため
+  //    owner_manual の14件が6軸平均とズレていた（例: 平均4.0なのに rating 3／平均4.5なのに 4）。
+  //    口コミが増えたときに星の差が潰れて順位が付かなくなるので、原則 rating は省略して自動計算に任せる。
+  const avg = Math.round((RATING_KEYS.reduce((a, k) => a + r.detailed_ratings[k], 0) / 6) * 10) / 10;
+  const rating = (typeof r.rating === 'number') ? r.rating : avg;
+  if (typeof r.rating === 'number' && r.rating !== avg) {
+    console.log(`  ⚠️ ratingを手動指定(${r.rating})しているが6軸平均は${avg}。意図が無ければ rating を省略すること`);
+  }
 
   // id: 明示があればそれ、無ければ therapist名+本文ハッシュで決定的生成（再実行で重複しない・同一人物に複数可）
-  const hash = crypto.createHash('sha1').update(r.content).digest('hex').slice(0, 8);
+  const hash = crypto.createHash('sha1').update(content).digest('hex').slice(0, 8);
   const id = r.id || `owner_${normName(r.therapist_name)}_${hash}`;
 
   const { data: ex } = await supabase.from('reviews').select('id').eq('id', id).maybeSingle();
@@ -98,10 +139,20 @@ async function processOne(r, i) {
     user_id: 'owner_manual', user_name: r.user_name || '常連',
     rating, course: r.course || null,
     detailed_ratings: r.detailed_ratings, tags: goodTags,
-    is_public: true, content: r.content,
+    is_public: true, content,
+    // story_sections は story 指定時のみ。null なら旧来どおり本文一本（DB制約はNULLをスキップする）
+    ...(storySections ? { story_sections: storySections } : {}),
   };
 
-  if (DRY) { console.log(`  [DRY] 挿入予定 id=${id} rating=${rating} tags=[${goodTags.join(',')}]`); return 'skip'; }
+  if (DRY) {
+    console.log(`  [DRY] 挿入予定 id=${id} rating=${rating} tags=[${goodTags.join(',')}]`);
+    if (storySections) {
+      // DB制約と同じ条件を手元で検算しておく（本番で 23514 に当たってから気づくのを避ける）
+      const ok = composeReviewStoryContent(storySections) === content;
+      console.log(`  [DRY] story_sections↔content の一致: ${ok ? '✅ OK' : '❌ 不一致（このままでは制約違反）'}`);
+    }
+    return 'skip';
+  }
   const { data, error } = await supabase.from('reviews').insert(review).select();
   if (error) { console.log(`  ❌ 挿入失敗: ${error.message}`); return 'fail'; }
   console.log(`  ✅ 挿入完了 id=${data[0].id}`);
