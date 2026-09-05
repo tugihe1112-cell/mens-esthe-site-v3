@@ -3,9 +3,14 @@ import { Link } from '../../../compat/router';
 import LazyImage from '../../../components/LazyImage';
 
 export const RankingListItem = ({ item, rank, delay }) => {
-  const linkPath = item.type === 'shop'
-    ? `/search?shop=${encodeURIComponent(item.name)}`
-    : `/shops/${item.shopId}/threads/${item.id}`;
+  const therapistId = item.therapistId || item.id;
+  const linkPath = item.type === 'shop' && item.id
+    ? `/shops/${item.id}`
+    : (item.shopId && therapistId
+        ? `/shops/${item.shopId}/threads/${therapistId}`
+        : '/popular-reviews');
+  const rating = item.averageRating ?? item.rating;
+  const reviewCount = item.count ?? item.reviewCount ?? 0;
 
   return (
     <Link 
@@ -47,11 +52,11 @@ export const RankingListItem = ({ item, rank, delay }) => {
         <div className="flex items-center gap-3 text-xs text-slate-400">
           <div className="flex items-center gap-1">
             <span className="text-yellow-500">★</span>
-            <span className="font-bold text-slate-200">{item.rating || '-'}</span>
+            <span className="font-bold text-slate-200">{Number.isFinite(Number(rating)) ? Number(rating).toFixed(1) : '-'}</span>
           </div>
           <div className="flex items-center gap-1">
             <span>💬</span>
-            <span>{item.reviewCount || 0}</span>
+            <span>{reviewCount}</span>
           </div>
         </div>
       </div>

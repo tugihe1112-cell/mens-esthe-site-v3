@@ -1,7 +1,7 @@
 /**
  * /shops/:shopId — 店舗詳細ページ（SSR）
  *
- * getServerSideProps で「公開口コミ件数・平均評価・冒頭サンプル」を取得し、
+ * getServerSideProps で「公開口コミ本文・件数・平均評価」を取得し、
  * <title>を「{店名}の口コミ{N}件・セラピスト評判 | メンエスマップ」形式にする（Tier 2-3：CTR改善）。
  * Googlebot がJSなしでも件数入りタイトル・description を読める。
  * 本体UI・クライアント動作は既存 ShopDetailPage がそのまま担う（client SeoHeadも件数連動に更新済み）。
@@ -88,7 +88,7 @@ export async function getServerSideProps({ params, res }) {
     const [reviewsRes, revTRes] = await Promise.all([
       supabase
         .from('reviews')
-        .select('rating, content, created_at')
+        .select('id, shop_id, therapist_id, therapist_name, rating, content, story_sections, detailed_ratings, tags, created_at, is_public, user_id, user_name, course, like_count')
         .in('shop_id', reviewShopIds)
         .or('is_public.eq.true,user_id.eq.owner_manual')
         .order('created_at', { ascending: false })
@@ -146,13 +146,19 @@ export async function getServerSideProps({ params, res }) {
     //    このラッパーが shop から使うのは id / name / image_url だけ。
     //    prefecture・area は上で取り出して別propsで渡している。
     const ssrShop = shop
-      ? { id: shop.id, name: shop.name, image_url: shop.image_url || null }
+      ? {
+          id: shop.id,
+          name: shop.name,
+          image_url: shop.image_url || null,
+          website_url: shop.website_url || null,
+        }
       : null;
 
     return {
       props: {
         ssrShop,
         ssrReviewCount: count,
+        ssrReviews: reviews || [],
         ssrAvgRating: avg,
         ssrSample: sample,
         ssrTherapistCount: therapistCount || 0,
@@ -172,7 +178,7 @@ export async function getServerSideProps({ params, res }) {
     res.setHeader('Retry-After', '120');
     return {
       props: {
-        ssrShop: null, ssrReviewCount: 0, ssrAvgRating: null, ssrSample: '',
+        ssrShop: null, ssrReviewCount: 0, ssrReviews: [], ssrAvgRating: null, ssrSample: '',
         ssrTherapistCount: 0, ssrReviewedTherapists: [], ssrNearbyShops: [], ssrPrefecture: null, ssrArea: null,
       },
     };
@@ -180,7 +186,7 @@ export async function getServerSideProps({ params, res }) {
 }
 
 export default function ShopDetailSSRPage({
-  ssrShop, ssrReviewCount, ssrAvgRating, ssrSample,
+  ssrShop, ssrReviewCount, ssrReviews = [], ssrAvgRating, ssrSample,
   ssrTherapistCount = 0, ssrReviewedTherapists = [], ssrNearbyShops = [], ssrPrefecture = null, ssrArea = null,
 }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
@@ -193,6 +199,43 @@ export default function ShopDetailSSRPage({
   const description = ssrReviewCount > 0
     ? `${shopName}の口コミ${ssrReviewCount}件（平均★${ssrAvgRating}）。${ssrSample}…実際に行った体験談・セラピスト評判をメンエスマップでチェック。`
     : `${shopName}の在籍セラピスト・口コミ・体験談。メンエスマップで最新情報をチェック。`;
+
+  const businessLd = ssrShop ? {
+    '@context': 'https://schema.org',
+    '@type': 'HealthAndBeautyBusiness',
+    '@id': `${canonical}#business`,
+    name: shopName,
+    url: canonical,
+    ...(ssrShop.website_url ? { sameAs: ssrShop.website_url } : {}),
+    ...(ssrShop.image_url ? { image: ssrShop.image_url } : {}),
+    address: {
+      '@type': 'PostalAddress',
+      ...(ssrPrefecture ? { addressRegion: ssrPrefecture } : {}),
+      ...(ssrArea ? { addressLocality: ssrArea } : {}),
+      addressCountry: 'JP',
+    },
+    ...(ssrReviewCount > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: ssrAvgRating,
+        reviewCount: ssrReviewCount,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      review: ssrReviews.slice(0, 5).map((review) => ({
+        '@type': 'Review',
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: Number(review.rating || 0),
+          bestRating: 5,
+          worstRating: 1,
+        },
+        author: { '@type': 'Person', name: review.user_name || '匿名' },
+        datePublished: review.created_at?.slice(0, 10),
+        reviewBody: (review.content || '').slice(0, 1500),
+      })),
+    } : {}),
+  } : null;
 
   return (
     <>
@@ -230,9 +273,13 @@ export default function ShopDetailSSRPage({
             ],
           }) }} />
         )}
+        {businessLd && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessLd) }} />
+        )}
       </Head>
       <ShopDetailPage
         ssrShop={ssrShop}
+        ssrReviews={ssrReviews}
         ssrTherapistCount={ssrTherapistCount}
         ssrReviewedTherapists={ssrReviewedTherapists}
         ssrNearbyShops={ssrNearbyShops}
@@ -240,6 +287,7 @@ export default function ShopDetailSSRPage({
         ssrArea={ssrArea}
         ssrReviewCount={ssrReviewCount}
         ssrAvgRating={ssrAvgRating}
+        renderSeo={false}
       />
     </>
   );

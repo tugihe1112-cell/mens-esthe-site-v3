@@ -3,15 +3,13 @@
  * GET /sitemap.xml (vercel.json のリライト経由)
  *
  * - Service Role Key で RLS をバイパス
- * - is_public=true の口コミがあるセラピストページを自動収録
- * - 全店舗ページも収録
+ * - 公開口コミがある店舗・セラピストページを自動収録
+ * - lastmod は実際の口コミ更新日だけを出力（更新日不明のURLには付けない）
  * - 1時間キャッシュ
  */
 import { createClient } from '@supabase/supabase-js';
 
 const SITE = 'https://www.mens-esthe-map.jp';
-const TODAY = new Date().toISOString().slice(0, 10);
-
 // 🚩 2026-08-19 整理: **独自コンテンツを持つページだけ**を提出する。
 //    以前は一覧・検索・ユーティリティも全部載せていたが、
 //    GSC実測でインデックス成功率4.4%と判明したため、分母を増やす行為をやめる。
@@ -64,6 +62,19 @@ function xmlEscape(str) {
 function encodeUrl(path) {
   // encodeURI はスラッシュ・コロンは保持し日本語等をエンコード
   return xmlEscape(encodeURI(SITE + path));
+}
+
+function normalizeLastmod(value) {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+function urlXml(path, { lastmod = null, priority = null } = {}) {
+  const normalizedLastmod = normalizeLastmod(lastmod);
+  return `  <url>
+    <loc>${encodeUrl(path)}</loc>${normalizedLastmod ? `\n    <lastmod>${normalizedLastmod}</lastmod>` : ''}${priority ? `\n    <priority>${priority}</priority>` : ''}
+  </url>`;
 }
 
 export default async function handler(req, res) {
@@ -130,17 +141,17 @@ export default async function handler(req, res) {
     if (shops.length >= 50000) break; // 暴走ガード
   }
 
-  // ── 2. 口コミ公開セラピストページ取得 ──
-  //    is_public=true または user_id='owner_manual' の口コミを持つセラピスト
+  // ── 2. 公開口コミ取得 ──
+  //    therapist_id が無い「指名なし」口コミも店舗ページの価値になるため除外しない。
+  //    created_at は、店舗・セラピストページの正確な lastmod に使う。
   //    こちらも同じ max-rows(1000) に当たるため range() でページングする。
   const pubReviews = [];
   for (let from = 0; ; from += PAGE) {
     const { data, error } = await supabase
       .from('reviews')
-      .select('shop_id, therapist_id')
+      .select('id, shop_id, therapist_id, created_at')
       .or('is_public.eq.true,user_id.eq.owner_manual')
-      .not('therapist_id', 'is', null)
-      .order('shop_id')
+      .order('id')
       .range(from, from + PAGE - 1);
     if (error) return dataSourceUnavailable();
     if (!data || data.length === 0) break;
@@ -151,15 +162,21 @@ export default async function handler(req, res) {
 
   // shop_id + therapist_id でユニーク化
   const therapistPages = [];
+  const therapistLastmod = new Map();
   if (pubReviews) {
     const seen = new Set();
     for (const r of pubReviews) {
       if (!r.therapist_id || !r.shop_id) continue;
       if (isExcludedId(r.shop_id) || isExcludedId(r.therapist_id)) continue; // テストデータ除外
       const key = `${r.shop_id}|${r.therapist_id}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      therapistPages.push(r);
+      const previous = therapistLastmod.get(key);
+      if (!previous || String(r.created_at || '') > String(previous || '')) {
+        therapistLastmod.set(key, r.created_at || null);
+      }
+      if (!seen.has(key)) {
+        seen.add(key);
+        therapistPages.push(r);
+      }
     }
   }
 
@@ -170,28 +187,32 @@ export default async function handler(req, res) {
   const shopIdsWithReviews = new Set(
     (pubReviews || []).map((r) => r.shop_id).filter((id) => id && !isExcludedId(id))
   );
+  const shopLastmod = new Map();
+  for (const review of pubReviews || []) {
+    if (!review.shop_id || isExcludedId(review.shop_id)) continue;
+    const previous = shopLastmod.get(review.shop_id);
+    if (!previous || String(review.created_at || '') > String(previous || '')) {
+      shopLastmod.set(review.shop_id, review.created_at || null);
+    }
+  }
 
   // ── 3. XML 組み立て ──
-  const staticXml = STATIC_PAGES.map(p => `  <url>
-    <loc>${encodeUrl(p.path)}</loc>
-    <lastmod>${TODAY}</lastmod>
-    <priority>${p.priority}</priority>
-  </url>`).join('\n');
+  // 静的ページはリポジトリの更新日をこの関数から正確に判定できない。
+  // 「毎日更新」と偽るより lastmod を省略する（Googleは不正確なlastmodを無視する）。
+  const staticXml = STATIC_PAGES.map((page) => urlXml(page.path, { priority: page.priority })).join('\n');
 
   // 🚩 口コミを持つ店舗だけを提出する（2026-08-19。理由は上部のコメント参照）。
   //    口コミが1件付けば shopIdsWithReviews に自動で入るので、戻し作業は不要。
   const indexableShops = (shops || []).filter(s => !isExcludedId(s.id) && shopIdsWithReviews.has(s.id));
-  const shopXml = indexableShops.map(s => `  <url>
-    <loc>${encodeUrl(`/shops/${s.id}`)}</loc>
-    <lastmod>${TODAY}</lastmod>
-    <priority>0.8</priority>
-  </url>`).join('\n');
+  const shopXml = indexableShops.map((s) => urlXml(`/shops/${s.id}`, {
+    lastmod: shopLastmod.get(s.id),
+    priority: '0.8',
+  })).join('\n');
 
-  const therapistXml = therapistPages.map(r => `  <url>
-    <loc>${encodeUrl(`/shops/${r.shop_id}/threads/${r.therapist_id}`)}</loc>
-    <lastmod>${TODAY}</lastmod>
-    <priority>0.6</priority>
-  </url>`).join('\n');
+  const therapistXml = therapistPages.map((r) => urlXml(`/shops/${r.shop_id}/threads/${r.therapist_id}`, {
+    lastmod: therapistLastmod.get(`${r.shop_id}|${r.therapist_id}`),
+    priority: '0.6',
+  })).join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

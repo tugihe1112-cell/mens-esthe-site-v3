@@ -13,6 +13,8 @@ await import('./check_therapist_image_quality.mjs');
 await import('./check_admin_review_notification.mjs');
 await import('./check_review_story_format.mjs');
 await import('./check_core_safety_guards.mjs');
+// 口コミありページをGoogleへ正しく渡すSSR・内部リンク・sitemap契約。
+await import('./check_indexability_guards.mjs');
 // ⚠️ 2026-08-22追加: `npm run build` は**実行時エラーを検出できない**。
 //    実際に「ビルド成功 → デプロイ → 本番500」を同じ日に2回起こしたため、
 //    ①未定義参照を静的に検出し ②SSRが依存する関数を実際に呼ぶ、の2段で止める。

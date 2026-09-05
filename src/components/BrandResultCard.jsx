@@ -65,7 +65,7 @@ export default function BrandResultCard({ summary, shops }) {
             {shops.map((shop) => (
               <Link 
                 key={shop.id} 
-                to={`/search?shop=${encodeURIComponent(shop.name)}`}
+                to={`/shops/${shop.id}`}
                 className="flex items-center gap-4 p-3 rounded-xl bg-slate-800/50 border border-white/5 hover:border-pink-500/50 hover:bg-slate-800 transition group"
               >
                 <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">

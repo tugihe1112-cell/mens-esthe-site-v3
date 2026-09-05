@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { authHeaders } from '../utils/supabaseRest';
 import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
@@ -33,18 +33,25 @@ const areaOf = (raw) => {
   return a || '';
 };
 
-export default function PopularReviewsPage() {
-  const [reviews, setReviews] = useState([]);
-  const [shopMap, setShopMap] = useState({});
-  const [therapistMap, setTherapistMap] = useState({}); // 正規化名 → therapist
-  const [isLoading, setIsLoading] = useState(true);
+export default function PopularReviewsPage({
+  initialReviews = null,
+  initialShopMap = {},
+  initialTherapistMap = {},
+  initialHasMore = false,
+}) {
+  const hasServerData = Array.isArray(initialReviews);
+  const [reviews, setReviews] = useState(() => initialReviews || []);
+  const [shopMap, setShopMap] = useState(() => initialShopMap || {});
+  // therapist ID と「店舗ID|正規化名」の両方で保持。同名の別店舗写真を誤結合しない。
+  const [therapistMap, setTherapistMap] = useState(() => initialTherapistMap || {});
+  const [isLoading, setIsLoading] = useState(!hasServerData);
   const [offset, setOffset] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(hasServerData ? initialHasMore : true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [sortBy, setSortBy] = useState('new'); // 'new' | 'rating'
+  const hasUsedInitialSsr = useRef(hasServerData);
 
   const url = process.env.VITE_SUPABASE_URL;
-  const key = process.env.VITE_SUPABASE_ANON_KEY;
   // ⚠️ 2026-08-12: anonキー固定をやめ、fetch直前に await authHeaders() で
   //    セッションJWT（未ログイン時はanon）を載せる。
 
@@ -94,8 +101,8 @@ export default function PopularReviewsPage() {
           const next = { ...prev };
           found.forEach(t => {
             const k = normName(t.name);
-            // 写真ありを優先（同名が複数店に登録されているため）
-            if (!next[k] || (!next[k].image_url && t.image_url)) next[k] = t;
+            if (t.id) next[t.id] = t;
+            if (t.shop_id && k) next[`${t.shop_id}|${k}`] = t;
           });
           return next;
         });
@@ -132,6 +139,11 @@ export default function PopularReviewsPage() {
   }, [url, hydrateMaps]);
 
   useEffect(() => {
+    // SSR済みの新着20件を初回描画で捨てない。タブ変更時だけクライアント再取得する。
+    if (hasUsedInitialSsr.current && sortBy === 'new') {
+      hasUsedInitialSsr.current = false;
+      return;
+    }
     setOffset(0);
     fetchReviews(0, sortBy, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,7 +205,9 @@ export default function PopularReviewsPage() {
               <div className="space-y-4">
                 {reviews.map(r => {
                   const shop = shopMap[r.shop_id] || {};
-                  const therapist = therapistMap[normName(r.therapist_name)] || {};
+                  const therapist = therapistMap[r.therapist_id]
+                    || therapistMap[`${r.shop_id}|${normName(r.therapist_name)}`]
+                    || {};
                   const tags = Array.isArray(r.tags) ? r.tags : [];
                   const content = r.content || '';
                   const preview = content.length > 120 ? content.slice(0, 120) + '…' : content;
@@ -205,10 +219,10 @@ export default function PopularReviewsPage() {
                   const threadLink = (r.shop_id && r.therapist_id)
                     ? `/shops/${r.shop_id}/threads/${r.therapist_id}`
                     : `/search?cast=${encodeURIComponent(r.therapist_name || '')}`;
-                  const shopLink = r.shop_id ? `/search?shopId=${encodeURIComponent(r.shop_id)}` : '/search';
+                  const shopLink = r.shop_id ? `/shops/${r.shop_id}` : '/search';
 
                   return (
-                    <div
+                    <article
                       key={r.id}
                       className="bg-slate-900 border border-white/10 hover:border-pink-500/40 rounded-2xl p-4 transition-all duration-200"
                     >
@@ -289,7 +303,7 @@ export default function PopularReviewsPage() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </article>
                   );
                 })}
               </div>

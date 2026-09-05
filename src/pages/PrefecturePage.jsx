@@ -12,7 +12,12 @@ import { PREF_SLUG_MAP } from '../data/areaLinks';
 //    サイトマップが submit しているURLがHTTP200で「存在しません」を返す soft404 だった。
 const PREF_MAP = PREF_SLUG_MAP;
 
-export default function PrefecturePage({ initialPrefName = null, initialShops = [], initialShopCount = 0 }) {
+export default function PrefecturePage({
+  initialPrefName = null,
+  initialShops = [],
+  initialShopCount = 0,
+  renderSeo = true,
+}) {
   const { pref } = useParams();
   const { shops, loading } = useShopData();
 
@@ -50,7 +55,7 @@ export default function PrefecturePage({ initialPrefName = null, initialShops = 
 
   if (loading && initialShops.length === 0) {
     return (
-      <><SeoHead title={title} description={description} path={`/area/${pref}`} /><div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
+      <>{renderSeo && <SeoHead title={title} description={description} path={`/area/${pref}`} />}<div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
         <div className="w-10 h-10 border-4 border-pink-500 border-t-transparent rounded-full animate-spin" />
       </div></>
     );
@@ -68,7 +73,7 @@ export default function PrefecturePage({ initialPrefName = null, initialShops = 
 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
-      <SeoHead title={title} description={description} path={`/area/${pref}`} />
+      {renderSeo && <SeoHead title={title} description={description} path={`/area/${pref}`} />}
       {/* ⚠️ noindex はここ（クライアント）で出してはいけない。
           判定が DataContext の shops 配列に依存していたため、Supabase が一時的に
           落ちている最中に Googlebot が来ると prefShops=0 → 全エリアページに

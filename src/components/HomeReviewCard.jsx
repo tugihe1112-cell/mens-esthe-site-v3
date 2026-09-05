@@ -7,7 +7,7 @@ import { ratingGradientClass } from '../utils/ratingStyle';
 
 // ホーム「最新の本物口コミ」＝呼水カード。
 // 情報序列は【店舗ファースト】で全variant統一:
-//   1行目: 🏢 店舗名(白bold・/search?shopId) ＋ 📍エリアピル ＋ ★バッジ
+//   1行目: 🏢 店舗名(白bold・/shops/:id) ＋ 📍エリアピル ＋ ★バッジ
 //   2行目: セラピスト名(1段小さく) ＋ 相対日付 ＋ by ペンネーム ＋ 🧾course
 //   → 写真・ティーザー・続きを読む・6軸ミニバー(ヒーロー)
 // variant='hero'(2カラムぶち抜き・写真大・6軸バー)／'small'／写真なしは引用カード。
@@ -41,7 +41,8 @@ export default function HomeReviewCard({ r, variant = 'small', position, pref })
   const time = relTime(r.createdAt);
 
   const threadLink = `/shops/${r.shopId}/threads/${r.therapistId}`;
-  const shopLink = `/search?shopId=${encodeURIComponent(r.shopId)}`; // 表記揺れ回避のためshopIdで解決（SearchPageが店名に変換）
+  // 検索中継ではなく正規の店舗URLへ直結し、利用者とクローラーの行き止まりをなくす。
+  const shopLink = `/shops/${r.shopId}`;
   const loc = [r.prefecture, r.area].filter(Boolean).join('・');
   const dr = r.detailedRatings || null;
 

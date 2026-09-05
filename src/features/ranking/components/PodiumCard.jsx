@@ -39,9 +39,14 @@ export const PodiumCard = ({ rank, item }) => {
   }[rank];
 
   // リンク先の生成 (店舗 or セラピスト)
-  const linkPath = item.type === 'shop'
-    ? `/search?shop=${encodeURIComponent(item.name)}`
-    : `/shops/${item.shopId}/threads/${item.id}`;
+  const therapistId = item.therapistId || item.id;
+  const linkPath = item.type === 'shop' && item.id
+    ? `/shops/${item.id}`
+    : (item.shopId && therapistId
+        ? `/shops/${item.shopId}/threads/${therapistId}`
+        : '/popular-reviews');
+  const rating = item.averageRating ?? item.rating;
+  const reviewCount = item.count ?? item.reviewCount ?? 0;
 
   return (
     <Link 
@@ -75,10 +80,10 @@ export const PodiumCard = ({ rank, item }) => {
         
         <div className="flex items-center justify-center gap-3 text-xs font-bold text-slate-400">
           <span className="bg-white/10 px-2 py-0.5 rounded border border-white/5 backdrop-blur">
-            ★ {item.rating || '-'}
+            ★ {Number.isFinite(Number(rating)) ? Number(rating).toFixed(1) : '-'}
           </span>
           <span>
-            {item.reviewCount || 0} reviews
+            {reviewCount} reviews
           </span>
         </div>
         

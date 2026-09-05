@@ -37,7 +37,12 @@ function ThreadSkeleton() {
 
 const EMPTY_REVIEWS = [];
 
-export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, ssrReviews = EMPTY_REVIEWS }) {
+export default function ThreadDetailPage({
+  ssrShop = null,
+  ssrTherapist = null,
+  ssrReviews = EMPTY_REVIEWS,
+  renderSeo = true,
+}) {
   const { shopId, threadId } = useParams();
   const navigate = useNavigate();
   const { shopById, therapistById, reviews } = useShopData();
@@ -275,14 +280,16 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
   return (
     <div className="min-h-screen bg-slate-950 pb-32 text-slate-200 font-sans">
       <Header />
-      <SeoHead
-        title={`${therapist.name} | ${shop.name}`}
-        description={seoDesc}
-        path={`/shops/${shopId}/threads/${threadId}`}
-      />
+      {renderSeo && (
+        <SeoHead
+          title={`${therapist.name} | ${shop.name}`}
+          description={seoDesc}
+          path={`/shops/${shopId}/threads/${threadId}`}
+        />
+      )}
 
       {/* 構造化データ: セラピスト口コミ（公開分のみ）→ 検索結果に★リッチリザルト */}
-      {therapistReviews.length > 0 && (
+      {renderSeo && therapistReviews.length > 0 && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "HealthAndBeautyBusiness",
@@ -331,7 +338,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
         <nav aria-label="パンくず" className="flex items-center gap-1.5 text-xs text-slate-400 flex-wrap">
           <Link to="/" className="hover:text-white transition">ホーム</Link>
           <span className="text-slate-600">›</span>
-          <Link to={`/search?shopId=${shopId}`} className="hover:text-white transition truncate max-w-[45%]">{getDisplayName(shop.name)}</Link>
+          <Link to={`/shops/${shopId}`} className="hover:text-white transition truncate max-w-[45%]">{getDisplayName(shop.name)}</Link>
           <span className="text-slate-600">›</span>
           <span className="text-slate-200 font-bold truncate max-w-[35%]">{therapist.name}</span>
         </nav>
@@ -350,7 +357,7 @@ export default function ThreadDetailPage({ ssrShop = null, ssrTherapist = null, 
             </div>
           </div>
           <div className="flex-1 min-w-0 flex flex-col justify-center">
-            <Link to={`/search?shopId=${shopId}`} className="inline-flex min-h-11 items-center gap-1.5 mb-1 text-sm font-bold text-slate-400 hover:text-white transition min-w-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">
+            <Link to={`/shops/${shopId}`} className="inline-flex min-h-11 items-center gap-1.5 mb-1 text-sm font-bold text-slate-400 hover:text-white transition min-w-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">
               <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
               <span className="truncate">{getDisplayName(shop.name)}</span>
             </Link>

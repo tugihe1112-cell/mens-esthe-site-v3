@@ -15,6 +15,7 @@
 import React from 'react';
 import Head from 'next/head';
 import SearchPage from '../src/pages/SearchPage';
+import SeoHead from '../src/components/SeoHead';
 
 export async function getServerSideProps({ query, res }) {
   // ⚠️ stale-while-revalidate は 300 以下（CIガードで300超はビルド失敗）。
@@ -26,16 +27,17 @@ export async function getServerSideProps({ query, res }) {
 }
 
 export default function SearchSSRPage({ hasQuery }) {
-  const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
-  const canonical = `${SITE}/search`;
-
   return (
     <>
+      <SeoHead
+        title="キャスト検索"
+        description="セラピスト名・店舗名でメンズエステを検索。出勤スケジュール・体験口コミ・料金を一括確認できます。全国580店舗以上対応。"
+        path="/search"
+      />
       <Head>
         {hasQuery && <meta name="robots" content="noindex,follow" />}
-        <link rel="canonical" href={canonical} />
       </Head>
-      <SearchPage />
+      <SearchPage renderSeo={false} />
     </>
   );
 }

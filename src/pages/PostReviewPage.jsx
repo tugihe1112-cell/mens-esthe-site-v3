@@ -863,7 +863,6 @@ export default function PostReviewPage() {
       // 管理者へメール通知（失敗しても投稿は成功扱い）。
       // 通知API側でJWTと投稿所有者を照合する。メール本文はDBから再取得するため、
       // クライアントからは対象reviewId以外を信頼しない。
-      const shopName = shops.find(s => s.id === data.shopId)?.name || '';
       void supabase.auth.getSession().then(async ({ data: { session } }) => {
         if (!session?.access_token || !result.reviewId) return;
         const notifyRes = await fetch('/api/notify-review', {
@@ -884,7 +883,7 @@ export default function PostReviewPage() {
       // B-3 投稿後体験: 即リダイレクトせず完了画面を表示（付与日数・自分の口コミへのリンク・通知の案内）
       const reviewLink = (data.shopId && data.therapistId)
         ? `/shops/${data.shopId}/threads/${data.therapistId}`
-        : (data.shopId ? `/search?shop=${encodeURIComponent(shopName)}` : '/');
+        : (data.shopId ? `/shops/${data.shopId}` : '/');
       setCompleted({ grantedDays, reviewLink, chars: len });
       window.scrollTo(0, 0);
     } else {

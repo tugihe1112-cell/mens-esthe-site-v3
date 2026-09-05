@@ -26,7 +26,6 @@ const fixedRoutes = [
   '/area/tokyo',
   '/shops/kanagawa_sagamihara_unison_spa',
   '/shops/kanagawa_sagamihara_unison_spa/threads/kanagawa_sagamihara_unison_spa_%E5%A4%A9%E6%B5%B7%E3%82%86%E3%82%89',
-  '/shops/tokyo_toshima_ikebukuro_aromamore/threads/tokyo_toshima_ikebukuro_aromamore_%E3%81%95%E3%81%AA',
 ];
 
 const failures = [];
@@ -70,6 +69,8 @@ function firstMatch(html, regex) {
 }
 
 function inspectHtml(path, html, { indexable = false } = {}) {
+  const descriptionCount = (html.match(/<meta\b[^>]*\bname=["']description["'][^>]*>/gi) || []).length;
+  const canonicalCount = (html.match(/<link\b[^>]*\brel=["']canonical["'][^>]*>/gi) || []).length;
   const title = firstMatch(html, /<title[^>]*>([\s\S]*?)<\/title>/i);
   const description = firstMatch(html, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)["'][^>]*>/i)
     || firstMatch(html, /<meta[^>]+content=["']([^"']*)["'][^>]+name=["']description["'][^>]*>/i);
@@ -85,12 +86,28 @@ function inspectHtml(path, html, { indexable = false } = {}) {
     failures.push(`${path}: SEO文に未定義値が露出している`);
   }
   if (indexable) {
+    if (descriptionCount !== 1) failures.push(`${path}: descriptionが${descriptionCount}件（1件であるべき）`);
+    if (canonicalCount !== 1) failures.push(`${path}: canonicalが${canonicalCount}件（1件であるべき）`);
     if (!description) failures.push(`${path}: sitemap掲載ページにdescriptionが無い`);
     if (!canonical) failures.push(`${path}: sitemap掲載ページにcanonicalが無い`);
     if (/noindex/i.test(robots)) failures.push(`${path}: sitemap掲載ページにnoindexがある`);
     if (h1Count !== 1) failures.push(`${path}: sitemap掲載ページのh1が${h1Count}件（1件であるべき）`);
     if ([...title].length < 15) failures.push(`${path}: sitemap掲載ページのtitleが短すぎる（${[...title].length}文字）`);
     if ([...description].length < 50) failures.push(`${path}: sitemap掲載ページのdescriptionが短すぎる（${[...description].length}文字）`);
+  }
+
+  // 口コミ件数をSEO文へ出した店舗が、初期HTMLで空状態を返す矛盾を許さない。
+  const isReviewedShop = /^\/shops\/[^/]+$/.test(path) && /口コミ[1-9][0-9]*件/.test(title);
+  if (isReviewedShop) {
+    if (/まだクチコミがありません/.test(html)) failures.push(`${path}: 口コミあり店舗のSSRに空状態が出ている`);
+    if (!/<article\b/i.test(html)) failures.push(`${path}: 口コミあり店舗のSSRに口コミ本文が無い`);
+  }
+
+  // サイトマップ掲載中の口コミハブは、JSなしでも実カードと正規リンクを持つこと。
+  if (path === '/popular-reviews' && indexable) {
+    if (!/<article\b/i.test(html)) failures.push(`${path}: SSRされた口コミカードが無い`);
+    if (!/href=["']\/shops\/[^"'?/#]+["']/i.test(html)) failures.push(`${path}: 正規店舗URLへのSSRリンクが無い`);
+    if (!/href=["']\/shops\/[^"'?/#]+\/threads\/[^"'?#]+["']/i.test(html)) failures.push(`${path}: セラピストページへのSSRリンクが無い`);
   }
 
   for (const block of html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
@@ -145,12 +162,23 @@ if (option('--skip-sitemap') !== '1' && !process.argv.includes('--skip-sitemap')
     process.exit(1);
   }
   const sitemapXml = await sitemapResponse.text();
-  sitemapPaths = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => {
-    const url = new URL(decodeEntities(m[1]));
-    return url.pathname;
+  const sitemapRows = [...sitemapXml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((match) => {
+    const loc = firstMatch(match[1], /<loc>([^<]+)<\/loc>/i);
+    const lastmod = firstMatch(match[1], /<lastmod>([^<]+)<\/lastmod>/i) || null;
+    const url = new URL(loc);
+    return { path: url.pathname, lastmod };
   });
+  sitemapPaths = sitemapRows.map((row) => row.path);
   if (sitemapPaths.length < 15) failures.push(`sitemapのURL数が少なすぎる: ${sitemapPaths.length}`);
   if (new Set(sitemapPaths).size !== sitemapPaths.length) failures.push('sitemapに重複URLがある');
+  for (const row of sitemapRows) {
+    const isReviewPage = /^\/shops\/[^/]+(?:\/threads\/[^/]+)?$/.test(row.path);
+    if (isReviewPage && !row.lastmod) failures.push(`sitemap ${row.path}: 口コミの実更新日が無い`);
+    if (!isReviewPage && row.lastmod) failures.push(`sitemap ${row.path}: 根拠のないlastmodが付いている`);
+    if (row.lastmod && (!Number.isFinite(Date.parse(row.lastmod)) || Date.parse(row.lastmod) > Date.now() + 300_000)) {
+      failures.push(`sitemap ${row.path}: lastmodが不正 (${row.lastmod})`);
+    }
+  }
 }
 
 const routes = [...new Set([...fixedRoutes, ...sitemapPaths])];

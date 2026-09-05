@@ -30,13 +30,14 @@ function ShopCard({ shop, onSelect }) {
     return [];
   }, [shop.price_system]);
 
-  // 店舗名をクリックするとキャスト一覧を表示（SearchPageのshop=パラメータに渡す）
-  const shopSearchUrl = `/search?shop=${encodeURIComponent(shop.name)}&shopId=${shop.id}`;
+  // 店舗名をクリックしたら、検索結果を中継せず正規店舗ページへ進む。
+  // 店舗ページ自体にキャスト一覧があるため機能を失わず、内部リンク評価も本命URLへ集約できる。
+  const shopDetailUrl = `/shops/${shop.id}`;
 
   return (
     <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden transition-all">
       {/* 上段: 基本情報 */}
-      <Link to={shopSearchUrl} onClick={() => onSelect && onSelect(shop)} className="flex items-center gap-3 p-4 hover:bg-slate-800/50 transition-colors">
+      <Link to={shopDetailUrl} onClick={() => onSelect && onSelect(shop)} className="flex items-center gap-3 p-4 hover:bg-slate-800/50 transition-colors">
         <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-slate-800 block">
           {shop.image_url
             ? <img src={shop.image_url} alt={shop.name} className="w-full h-full object-cover" />
@@ -208,7 +209,7 @@ function buildFeaturedTherapistPool(rows, shops, limit = 240) {
   return result;
 }
 
-export default function SearchPage() {
+export default function SearchPage({ renderSeo = true }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { shops, shopById } = useShopData();
 
@@ -577,11 +578,13 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 pt-20 pb-28 md:pb-16 text-slate-200 font-sans">
-      <SeoHead
-        title="キャスト検索"
-        description="セラピスト名・店舗名でメンズエステを検索。出勤スケジュール・体験口コミ・料金を一括確認できます。全国580店舗以上対応。"
-        path="/search"
-      />
+      {renderSeo && (
+        <SeoHead
+          title="キャスト検索"
+          description="セラピスト名・店舗名でメンズエステを検索。出勤スケジュール・体験口コミ・料金を一括確認できます。全国580店舗以上対応。"
+          path="/search"
+        />
+      )}
       <Header />
       <h1 className="sr-only">店舗・セラピスト検索</h1>
 

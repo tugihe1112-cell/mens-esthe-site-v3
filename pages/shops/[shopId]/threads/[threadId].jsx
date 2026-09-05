@@ -223,26 +223,25 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
     ? `${SITE}/shops/${ssrShop.id}/threads/${ssrTherapist.id}`
     : '';
 
-  // JSON-LD（Googleがインデックスする構造化データ）
+  // セラピストは店舗そのものではないため HealthAndBeautyBusiness と偽らない。
+  // ProfilePage + Person とし、所属店舗だけを HealthAndBeautyBusiness で参照する。
   const jsonLd = (ssrShop && ssrTherapist && ssrPublicReviews.length > 0) ? {
     '@context': 'https://schema.org',
-    '@type': 'HealthAndBeautyBusiness',
-    name: `${shopName} ${therapistName}`,
+    '@type': 'ProfilePage',
+    name: `${therapistName} | ${shopName}`,
     url: canonicalUrl,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: ssrAvgRating,
-      reviewCount: ssrPublicReviews.length,
-      bestRating: 5,
-      worstRating: 1,
+    dateModified: ssrPublicReviews[0]?.created_at || undefined,
+    mainEntity: {
+      '@type': 'Person',
+      name: therapistName,
+      url: canonicalUrl,
+      image: ssrTherapist.image_url || undefined,
+      worksFor: {
+        '@type': 'HealthAndBeautyBusiness',
+        name: shopName,
+        url: `${SITE}/shops/${ssrShop.id}`,
+      },
     },
-    review: ssrPublicReviews.slice(0, 5).map(r => ({
-      '@type': 'Review',
-      reviewRating: { '@type': 'Rating', ratingValue: r.rating || 3, bestRating: 5, worstRating: 1 },
-      author: { '@type': 'Person', name: '匿名' },
-      datePublished: r.created_at?.slice(0, 10) || '',
-      reviewBody: (r.content || '').slice(0, 300),
-    })),
   } : null;
 
   // Tier 2-4: パンくず構造化データ（Home > 店舗 > セラピスト）
@@ -290,7 +289,12 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
 
       {/* 既存コンポーネントをそのまま使用（クライアント側の全機能を維持）。
           SSRで取得済みのデータを初期値として渡す＝クライアントの取り直し待ちを排除（二重取得の体感遅延・写真チラつきを解消）。 */}
-      <ThreadDetailPage ssrShop={ssrShop} ssrTherapist={ssrTherapist} ssrReviews={ssrPublicReviews} />
+      <ThreadDetailPage
+        ssrShop={ssrShop}
+        ssrTherapist={ssrTherapist}
+        ssrReviews={ssrPublicReviews}
+        renderSeo={false}
+      />
 
       {/* Tier 2-2: 同じ店で口コミがある他のセラピストへの相互リンク（SSR・口コミページ間の内部リンク） */}
       {ssrRelated.length > 0 && (

@@ -110,7 +110,12 @@ export default function AreaSSRPage({ ssr }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       </Head>
 
-      <PrefecturePage initialPrefName={prefName} initialShops={shopList} initialShopCount={shopCount} />
+      <PrefecturePage
+        initialPrefName={prefName}
+        initialShops={shopList}
+        initialShopCount={shopCount}
+        renderSeo={false}
+      />
 
       {/* 店舗ページへのクロール経路（SSR・最重要）
           ⚠️ これまで1,098の店舗ページには内部リンクが1本も無く、サイトマップだけが

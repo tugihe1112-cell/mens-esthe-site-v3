@@ -27,6 +27,7 @@ const LOAD_MORE_COUNT = 12;
 
 export default function ShopDetailPage({
   ssrShop = null,
+  ssrReviews = [],
   ssrTherapistCount = 0,
   ssrReviewedTherapists = [],
   ssrNearbyShops = [],
@@ -34,6 +35,7 @@ export default function ShopDetailPage({
   ssrArea = null,
   ssrReviewCount = 0,
   ssrAvgRating = null,
+  renderSeo = true,
 }) {
   const { shopId } = useParams();
   const navigate = useNavigate();
@@ -55,7 +57,9 @@ export default function ShopDetailPage({
   // 🔒 ロック1：完全個室化ステート（※変数名は cloudShop のまま残して、後半のエラーを完全回避！）
   const [cloudShop, setCloudShop] = useState(null);
   const [cloudTherapists, setCloudTherapists] = useState(null);
-  const [cloudReviews, setCloudReviews] = useState([]);
+  // 公開口コミはSSR値から開始し、認証確定後にRLSで読める最新行へ更新する。
+  // これにより初期HTMLにも実本文が入り、件数表示と空状態が矛盾しない。
+  const [cloudReviews, setCloudReviews] = useState(ssrReviews || []);
   const [isFetching, setIsFetching] = useState(true);
 
   // レビューページネーション
@@ -320,13 +324,15 @@ export default function ShopDetailPage({
   return (
     <div className="bg-slate-950 min-h-screen pb-24 md:pb-16 text-slate-200 font-sans relative">
       <Header />
-      <SeoHead
-        title={seoTitle}
-        description={seoDesc}
-        path={`/shops/${shop.id}`}
-        image={`/api/og?shop=${encodeURIComponent(shop.name)}&sub=${encodeURIComponent(seoDesc.slice(0, 40))}&image=${encodeURIComponent(shop.image_url || shop.image || '')}`}
-      />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+      {renderSeo && (
+        <SeoHead
+          title={seoTitle}
+          description={seoDesc}
+          path={`/shops/${shop.id}`}
+          image={`/api/og?shop=${encodeURIComponent(shop.name)}&sub=${encodeURIComponent(seoDesc.slice(0, 40))}&image=${encodeURIComponent(shop.image_url || shop.image || '')}`}
+        />
+      )}
+      {renderSeo && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "HealthAndBeautyBusiness",
         "name": shop.name,
@@ -347,7 +353,7 @@ export default function ShopDetailPage({
           "bestRating": 5,
           "worstRating": 1
         } : undefined
-      }) }} />
+      }) }} />}
 
       {/* 1. Cinematic Hero Header */}
       <div className="relative h-[360px] sm:h-[45vh] md:h-[55vh] w-full overflow-hidden group">
