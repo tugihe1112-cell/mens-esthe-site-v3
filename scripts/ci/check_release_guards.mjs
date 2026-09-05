@@ -26,6 +26,9 @@ await import('./check_review_insert_columns.mjs');
 // ⚠️ 2026-08-26追加: 口コミの「区分」はクライアントとDBの4箇所に影響する。
 //    どれか1つ漏れると「画面では書けたのにDBが拒否」または「保存されたのに表示されない」。
 await import('./check_review_story_sync.mjs');
+// ⚠️ 2026-09-04追加: タグ定義が4箇所に重複し、既に食い違っていた
+//    （検索の絞り込みには「新人」があるのに投稿画面では選べない＝誰も付けられないタグ）。
+await import('./check_tag_single_source.mjs');
 // 監視自身の一時通信失敗で障害メールを連発せず、恒久404/5xxは隠さない。
 await import('./check_monitor_resilience.mjs');
 // ⚠️ 最後に「手元とCIで同じガードが走るか」自体を検査する。

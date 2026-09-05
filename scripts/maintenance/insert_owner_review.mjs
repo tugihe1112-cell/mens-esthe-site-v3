@@ -17,6 +17,8 @@ import {
   countReviewStoryChars,
   withRatingsNote,
 } from '../../src/features/reviews/reviewStory.mjs';
+// タグの白リストも定義元から読む（投稿画面・検索の絞り込みと必ず一致させるため）
+import { AVAILABLE_TAGS } from '../../src/data/constants.js';
 
 const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
@@ -28,13 +30,9 @@ const DRY = args.includes('--dry-run');
 const jsonPath = args.find(a => !a.startsWith('--'));
 if (!jsonPath) { console.error('使い方: node scripts/maintenance/insert_owner_review.mjs <review.json> [--dry-run]'); process.exit(1); }
 
-// UIの正式タグ（SearchPageの絞り込みと完全一致・lessons.md必須事項）。この外は自動除去。
-const ALLOWED_TAGS = new Set([
-  'スレンダー', 'グラマー', '巨乳', '美脚', '小柄', '高身長',
-  '可愛い系', '美人系', '清楚系', 'ギャル系', 'お姉さん系',
-  '10代', '20代前半', '20代後半', '30代', '40代',
-  '色白', '健康的', 'ベテラン', '外国人', '新人',
-]);
+// ⚠️ タグをここに列挙し直さないこと。src/data/constants.js が唯一の定義元。
+//    2026-09-04 まではこのファイルに直書きしており、投稿画面(constants.js)と食い違っていた。
+const ALLOWED_TAGS = new Set(AVAILABLE_TAGS);
 const RATING_KEYS = ['cleanliness', 'looks', 'style', 'service', 'massage', 'intimacy'];
 
 const normName = (s) => (s || '').replace(/[\s　]/g, '');

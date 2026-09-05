@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { authHeaders } from '../utils/supabaseRest';
 import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
@@ -15,12 +16,9 @@ import { trackEvent } from '../utils/analytics';
 import siteStats from '../data/stats-latest.json';
 
 // 左サイドバーのタグ絞り込み（SearchPage と同一定義。表記を割らないため必ず揃える）
-const TAG_CATEGORIES = [
-  { title: "BODY TYPE", id: "body", tags: ["スレンダー", "グラマー", "巨乳", "美脚", "小柄", "高身長"] },
-  { title: "ATMOSPHERE", id: "vibe", tags: ["可愛い系", "美人系", "清楚系", "ギャル系", "お姉さん系"] },
-  { title: "AGE GROUP", id: "age", tags: ["10代", "20代前半", "20代後半", "30代", "40代"] },
-  { title: "ATTRIBUTES", id: "attr", tags: ["色白", "健康的", "ベテラン", "外国人", "新人"] }
-];
+// ⚠️ タグ定義をここに書き戻さないこと（src/data/constants.js が唯一の定義元）。
+//    以前はローカル定義で、投稿画面(constants.js)と食い違っていた（「新人」が検索側にだけ存在）。
+const TAG_CATEGORIES = TAG_SOURCE.map(c => ({ id: c.id, title: c.titleEn, tags: c.tags }));
 
 const INITIAL_DISPLAY_COUNT = 12;
 const LOAD_MORE_COUNT = 12;
