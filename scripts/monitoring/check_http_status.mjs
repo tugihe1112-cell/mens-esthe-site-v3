@@ -37,18 +37,48 @@ const MUST_404 = [
 //    在籍セラピスト・口コミが同じために近似コンテンツと判定されているだけ）。
 //    ステータスの問題ではなくコンテンツ差別化の課題なので、**絶対に404にしない**。
 //    ここに置いて「うっかり消していないか」を見張る。
+// ⚠️ 2026-09-06: ここに**個別のセラピストURLをベタ書きしてはいけない**。
+//    以前 `.../threads/..._さな`（AROMA more池袋）を書いていたが、
+//    2026-09-04にその口コミを削除した（親セラピスト不在の孤児データ・オーナー判断）ため
+//    ページが正しく404になり、**監視だけが古い期待値を持ったまま15分ごとに赤くなり続けた**。
+//    ＝サイトは正常なのにメールが1日96通飛ぶ状態。
+//    口コミの増減で出入りするURLは下の「サイトマップから動的に採取」で見張ること。
 const MUST_200 = [
   '/',
   '/shops/kanagawa_sagamihara_unison_spa',
   '/shops/hiroshima_hiroshima_hitozuma_san',
   '/area/tokyo',
   '/area/gunma',
-  // 名簿から消えても実口コミが残るページは、口コミ資産として200で維持する。
-  '/shops/tokyo_toshima_ikebukuro_aromamore/threads/tokyo_toshima_ikebukuro_aromamore_%E3%81%95%E3%81%AA',
   '/shops/tokyo_shinjuku_nishishinjuku_cor_caroli',      // メンズエステ コル・カロリ 西新宿店
   '/shops/tokyo_shinjuku_shinjuku_gyoen_platinum_tokyo', // PLATINUM TOKYO 新宿御苑店
   '/shops/osaka_tanimachi_新感覚mエステ',                 // 新感覚Mエステ
 ];
+
+/**
+ * サイトマップに載っているURLは「Googleに出せと言っている」ページなので、必ず200でなければならない。
+ * 口コミの投入・削除で中身が入れ替わるため、**固定リストではなく毎回サイトマップから採取する**。
+ * これで「口コミを消したら監視が永久に赤くなる」型の事故が構造的に起きない。
+ */
+async function sampleFromSitemap(n = 4) {
+  const res = await fetch(`${BASE}/api/sitemap.xml`, {
+    headers: { 'User-Agent': 'mens-esthe-map-monitor/1.0' },
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!res.ok) throw new Error(`サイトマップが ${res.status}`);
+  const xml = await res.text();
+  const all = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(BASE, ''));
+  const shops = all.filter((u) => /^\/shops\/[^/]+$/.test(u));
+  const threads = all.filter((u) => u.includes('/threads/'));
+  // 空のサイトマップを「異常なし」と読まないための下限。ここが0なら索引導線が壊れている。
+  if (!shops.length || !threads.length) {
+    throw new Error(`サイトマップの中身が異常（店舗${shops.length}件・セラピスト${threads.length}件）`);
+  }
+  const pick = (arr) => {
+    const step = Math.max(1, Math.floor(arr.length / n));
+    return arr.filter((_, i) => i % step === 0).slice(0, n);
+  };
+  return { urls: [...pick(shops), ...pick(threads)], shops: shops.length, threads: threads.length };
+}
 
 // index されるべきなのに noindex が付いていないか（8/6に直したエリアページの再発検知）
 const MUST_BE_INDEXABLE = ['/area/tokyo', '/area/gunma', '/area/hiroshima'];
@@ -94,6 +124,28 @@ for (const path of MUST_200) {
   }
 }
 
+// サイトマップ掲載URLの実地確認（口コミの増減に自動追従する）
+let sitemapNote = '';
+try {
+  const { urls, shops, threads } = await sampleFromSitemap();
+  sitemapNote = `／サイトマップ抜き取り ${urls.length}件（掲載 店舗${shops}・セラピスト${threads}）`;
+  for (const path of urls) {
+    try {
+      const res = await head(path);
+      if (res.status !== 200) {
+        failures.push(
+          `[🚨サイトマップ掲載ページが落ちている] ${decodeURIComponent(path)} が ${res.status} を返した。\n` +
+          `          Googleに送っているURLなので、404のままだと索引から外れる。`
+        );
+      }
+    } catch (e) {
+      failures.push(`[🚨サイトマップ掲載ページ] ${decodeURIComponent(path)} の取得に失敗: ${e.message}`);
+    }
+  }
+} catch (e) {
+  failures.push(`[サイトマップ] 採取に失敗: ${e.message}`);
+}
+
 for (const path of MUST_BE_INDEXABLE) {
   try {
     const res = await fetch(BASE + path, {
@@ -116,4 +168,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`✅ HTTPステータス正常（404であるべき ${MUST_404.length}件 / 200であるべき ${MUST_200.length}件 / index可 ${MUST_BE_INDEXABLE.length}件）`);
+console.log(`✅ HTTPステータス正常（404であるべき ${MUST_404.length}件 / 200であるべき ${MUST_200.length}件 / index可 ${MUST_BE_INDEXABLE.length}件${sitemapNote}）`);
