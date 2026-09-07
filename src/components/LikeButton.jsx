@@ -2,6 +2,8 @@ import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useNavigate } from '../compat/router';
+import { withReturnTo } from '../utils/authRedirect.mjs';
+import { currentReturnTo } from '../utils/useReturnTo';
 
 export default function LikeButton({ id, className = "" }) {
   const { favorites, toggleFavorite } = useAppContext();
@@ -17,7 +19,10 @@ export default function LikeButton({ id, className = "" }) {
     if (!isLoggedIn) {
       // 旧AppContextにはaddToastが存在せず、未ログイン時のハートタップで
       // TypeErrorになっていた。ログイン後に戻れる正規導線へ送る。
-      navigate('/login?redirect=%2F');
+      // ⚠️ 2026-09-07（FIXES.md F01）: 戻り先がホーム固定だったため、
+      //    一覧の途中でハートを押すと必ずホームに飛ばされていた。
+      //    クリック時点の現在地を戻り先にする。
+      navigate(withReturnTo('/login', currentReturnTo()));
       return;
     }
     

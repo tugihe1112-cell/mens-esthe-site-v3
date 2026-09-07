@@ -292,6 +292,82 @@ const check = (name, fn) => {
     (!f({ access_token: 'x' }, now) ? null : '期限不明で捨てている'));
 }
 
+// ── 認証をまたいだ戻り先（FIXES.md F01）────────────────────────────
+// 【事故】口コミを読んで登録した人が、確認メールを踏むと**必ずホームに着地**していた。
+//   戻り先を捨てている箇所が3つ（RegisterPage / ログイン⇄登録リンク / generateLinkのredirectTo）。
+// 【危険】戻り先はURLから来る値なので、緩めるとオープンリダイレクトになる。
+//   「同一サイト内の相対URLだけ」を機械で固定する。
+{
+  const m = await loadModule('src/utils/authRedirect.mjs');
+  const f = m.normalizeReturnTo;
+
+  check('⭐口コミのハッシュ付きURLは戻り先として保存する', () =>
+    (f('/shops/a/threads/b#review-1') === '/shops/a/threads/b#review-1' ? null : '読了→登録→復帰が壊れる'));
+  check('日本語・underscore を含むIDを壊さない', () =>
+    (f('/shops/osaka_tanimachi_新感覚mエステ') === '/shops/osaka_tanimachi_新感覚mエステ' ? null : '日本語IDの店舗へ戻れない'));
+  check('⭐管理画面の /admin?review=... を保持する', () =>
+    (f('/admin?review=r_1', '/mypage') === '/admin?review=r_1' ? null : '新着口コミメールの導線が壊れる'));
+  check('⭐プロトコル相対 //evil は外へ出さない', () =>
+    (f('//evil.example') === '/' ? null : 'オープンリダイレクト'));
+  check('⭐エンコード済みの // も外へ出さない（二重デコード対策）', () =>
+    (f('/%2F%2Fevil.example') === '/' ? null : '二重デコードで外部へ出る'));
+  check('⭐バックスラッシュを外へ出さない', () =>
+    (f('/%5C%5Cevil.example') === '/' ? null : 'ブラウザによっては外部へ出る'));
+  check('絶対URLを外へ出さない', () =>
+    (f('https://evil.example/x') === '/' ? null : 'オープンリダイレクト'));
+  check('javascriptスキームを拒否する', () =>
+    (f('javascript:alert(1)') === '/' ? null : 'スキーム付きを通している'));
+  check('⭐認証ページ自身は戻り先にしない（ログインのループ防止）', () =>
+    (f('/login') === '/' && f('/auth/complete') === '/' ? null : '認証ループになる'));
+  check('戻り先が無ければ用途ごとの既定へ', () =>
+    (f('', '/popular-reviews') === '/popular-reviews' ? null : 'fallbackが効いていない'));
+  check('⭐リンク生成で二重エンコードしない', () => {
+    const url = m.withReturnTo('/register', '/shops/a#review-1', { source: 'review_end' });
+    if (url.includes('%252F')) return '二重エンコードされている（復帰に失敗する）';
+    return new URLSearchParams(url.split('?')[1]).get('redirect') === '/shops/a#review-1'
+      ? null : '戻り先を復元できない';
+  });
+  check('⭐戻り先が無いときはリンクに redirect を付けない', () => {
+    // ここを '/' に丸めると、ヘッダーのログインが常に ?redirect=/ を持ち、
+    // 既定の /mypage ではなくホームへ飛ぶ（SSR初期表示では戻り先が空になる）
+    if (m.withReturnTo('/login', '') !== '/login') return '空の戻り先が / に化けている';
+    return m.normalizeReturnTo('', '') === '' ? null : '空の fallback が / に丸められている';
+  });
+  check('確認後の着地点はパス固定（外部URLを渡させない）', () => {
+    const url = m.buildAuthCompleteUrl('/x', 'signup');
+    return url.startsWith('https://') && url.includes('/auth/complete?') ? null : '着地点が固定されていない';
+  });
+}
+
+// ── メール確認のワンタイムトークンを2回検証しない（FIXES.md F02）─────────
+// 【事故経路】compat の useNavigate が毎レンダー別関数 → effect 再実行 →
+//   成功済みトークンで再 verifyOtp → 「リンクが無効です」に化ける。
+{
+  const m = await loadModule('src/features/auth/verifyOtpOnce.mjs');
+
+  // 同じトークンは何度呼んでも検証は1回
+  let calls = 0;
+  const ok = m.createOtpVerifier(async () => { calls += 1; return {}; });
+  const [r1, r2, r3] = await Promise.all([ok('t1', 'signup'), ok('t1', 'signup'), ok('t1', 'signup')]);
+  check('⭐同一トークンの verifyOtp は1回だけ', () => (calls === 1 ? null : `${calls}回呼ばれた（使用済みトークンで失敗表示になる）`));
+  check('後から呼んだ側も同じ成功結果を受け取る（StrictMode対策）', () =>
+    (r1.ok && r2.ok && r3.ok ? null : '2回目以降が結果を受け取れず「確認中」で止まる'));
+
+  // 別トークンは別々に検証する
+  await ok('t2', 'signup');
+  check('別トークンはきちんと検証する', () => (calls === 2 ? null : `別トークンが検証されていない（calls=${calls}）`));
+
+  // reject を握りつぶさない（無限「確認中」を防ぐ）
+  const rejecting = m.createOtpVerifier(async () => { throw new Error('network down'); });
+  const rejected = await rejecting('t3', 'signup');
+  check('⭐非同期rejectも結果に畳む', () => (rejected.ok === false ? null : 'rejectで「確認中」から動かなくなる'));
+
+  // 期限切れ・使用済みは error として返る
+  const expired = m.createOtpVerifier(async () => ({ error: { message: 'Token has expired' } }));
+  const expiredResult = await expired('t4', 'signup');
+  check('期限切れはエラーとして扱う', () => (expiredResult.ok === false ? null : '期限切れを成功にしている'));
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

@@ -802,8 +802,17 @@ export default function PostReviewPage() {
       case 1: isValid = await methods.trigger('shopId'); break;
       case 2: isValid = await methods.trigger(['ratings', 'tags']); break;
       case 3: {
-        const story = methods.getValues('story') || {};
-        const totalChars = Object.values(story).filter(Boolean).join('').length;
+        // ⚠️ 2026-09-07（FIXES.md F03）: ここは `Object.values(story).join('').length` で
+        //    **採点コメントを数えていなかった**。画面のメーター（Step3）は
+        //    countReviewStoryChars(withRatingsNote(...)) を使っているため、
+        //    例: 入店90字＋総評90字＋ルックスの一言30字 → メーターは218字なのに
+        //    次へ判定は180字で止まる、という食い違いが起きていた。
+        //    数え方は正準関数1本に統一する（DB制約 review_story_char_length と同じ規則）。
+        const totalChars = countReviewStoryChars(withRatingsNote(
+          methods.getValues('story') || {},
+          methods.getValues('ratings') || {},
+          methods.getValues('ratingNotes') || {},
+        ));
         if (totalChars < MIN_CHARS) {
           toast.error(`あと${MIN_CHARS - totalChars}文字書いてください（合計${MIN_CHARS}文字以上で投稿OK）`);
           return false;
@@ -829,7 +838,9 @@ export default function PostReviewPage() {
   const prevStep = () => setCurrentStep((p) => Math.max(1, p - 1));
 
   const onSubmit = async (data) => {
-    const len = Object.values(data.story || {}).filter(Boolean).join('').length;
+    // 特典日数・計測イベントも同じ正準文字数を使う（FIXES.md F03）。
+    // ここが story 単体だと「メーターは700字なのに付与は3日」と表示が食い違う。
+    const len = countReviewStoryChars(withRatingsNote(data.story, data.ratings, data.ratingNotes));
     trackEvent('review_submit', {
       chars: len,
       source: paramThreadId ? 'therapist_detail' : effectiveShopId ? 'shop_detail' : 'generic',
@@ -851,7 +862,7 @@ export default function PostReviewPage() {
       draftDisabledRef.current = true;
       clearDraft();
       setDraftSavedAt(null);
-      const grantedDays = len >= 700 ? 7 : 3;
+      const grantedDays = len >= BONUS_CHARS ? 7 : 3;
       trackEvent('complete_review', { chars: len, granted_days: grantedDays });
       trackEvent('review_published', {
         chars: len,
@@ -1012,7 +1023,13 @@ export default function PostReviewPage() {
                   <p className="text-[11px] text-slate-400 mt-1">
                     最終保存 {formatSavedAt(draftPrompt.savedAt)}
                     {(() => {
-                      const chars = Object.values(draftPrompt.data?.story || {}).filter(Boolean).join('').length;
+                      // 下書きの文字数表示も正準関数に合わせる（FIXES.md F03）。
+                      // ここだけ別の数え方だと「復元したら文字数が変わった」ように見える。
+                      const chars = countReviewStoryChars(withRatingsNote(
+                        draftPrompt.data?.story || {},
+                        draftPrompt.data?.ratings || {},
+                        draftPrompt.data?.ratingNotes || {},
+                      ));
                       return chars > 0 ? ` ／ ${chars}文字` : '';
                     })()}
                   </p>

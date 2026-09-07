@@ -1,11 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext";
+import { useReturnTo } from '../utils/useReturnTo';
+import { withReturnTo } from '../utils/authRedirect.mjs';
 
 export default function Header() {
   const location = useLocation();
   const { user: authUser } = useAuth();
-  
+  // ⚠️ 2026-09-07（FIXES.md F01）: ヘッダーのログイン/登録も戻り先を捨てていた。
+  //    どのページから押しても認証後はホームか /mypage に落ちる。
+  //    認証ページ自身は normalizeReturnTo が弾くのでループしない。
+  const returnTo = useReturnTo();
+  const loginHref = withReturnTo('/login', returnTo);
+  const registerHref = withReturnTo('/register', returnTo, { source: 'header' });
+
   // --- スクロール & 表示制御 ---
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -97,8 +105,8 @@ export default function Header() {
                 </div>
               ) : (
                 <div className="flex items-center gap-3 pl-2">
-                  <Link to="/login" className="text-sm font-bold text-white hover:text-pink-400 transition drop-shadow-md">ログイン</Link>
-                  <Link to="/register" className="bg-white text-slate-900 px-5 py-2 rounded-full text-sm font-black hover:bg-slate-100 transition shadow-lg shadow-white/10 hover:shadow-white/20">
+                  <Link to={loginHref} className="text-sm font-bold text-white hover:text-pink-400 transition drop-shadow-md">ログイン</Link>
+                  <Link to={registerHref} className="bg-white text-slate-900 px-5 py-2 rounded-full text-sm font-black hover:bg-slate-100 transition shadow-lg shadow-white/10 hover:shadow-white/20">
                     会員登録
                   </Link>
                 </div>
@@ -109,11 +117,11 @@ export default function Header() {
             {!authUser && (
               <div className="lg:hidden flex items-center gap-2 shrink-0">
                 {/* ログインは常設BottomNavにあるため、狭いヘッダーでは新規登録だけを残す。 */}
-                <Link to="/login"
+                <Link to={loginHref}
                   className="hidden md:inline-flex min-h-10 items-center text-xs font-bold text-white border border-white/25 px-4 rounded-full whitespace-nowrap hover:bg-white/10 transition">
                   ログイン
                 </Link>
-                <Link to="/register"
+                <Link to={registerHref}
                   className="min-h-10 inline-flex items-center text-xs font-black text-white bg-pink-600 px-4 rounded-full whitespace-nowrap hover:bg-pink-500 transition shadow-lg shadow-pink-950/30">
                   無料登録
                 </Link>

@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext';
 import { trackEvent } from '../utils/analytics';
+import { useReturnTo } from '../utils/useReturnTo';
+import { withReturnTo } from '../utils/authRedirect.mjs';
 import ModernReviewCard from './ModernReviewCard';
 
 /**
@@ -19,6 +21,10 @@ import ModernReviewCard from './ModernReviewCard';
  */
 export default function ReviewListWithRestriction({ reviews }) {
   const { user } = useAuth();
+  // ⚠️ 2026-09-07（FIXES.md F01）: ここの登録リンクは `/register` 固定だった。
+  //    読み終わった口コミから登録した人が、メール確認後にホームへ落ちて戻れない。
+  //    いま読んでいるページ（#review-xxx を含む）を戻り先として渡す。
+  const returnTo = useReturnTo();
 
   const total = reviews.length;
   if (total === 0) return <p className="text-slate-500 font-bold">まだクチコミがありません。</p>;
@@ -46,7 +52,7 @@ export default function ReviewListWithRestriction({ reviews }) {
         </Link>
         {!user && (
           <Link
-            to="/register"
+            to={withReturnTo('/register', returnTo, { source: 'review_end' })}
             onClick={() => trackEvent('click_paywall_cta', { target: 'register' })}
             className="block mt-3 text-[11px] font-bold text-purple-300 hover:text-purple-200 hover:underline"
           >

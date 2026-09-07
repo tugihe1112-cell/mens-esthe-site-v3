@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext"; // 👈 Supabaseの本物認証パイプ
 import SeoHead from '../components/SeoHead.jsx';
 import { supabase } from '../lib/supabase';
+import { normalizeReturnTo, withReturnTo, AUTH_RETURN_TO_FALLBACKS } from '../utils/authRedirect.mjs';
 
 const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
@@ -10,15 +11,15 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   // redirectはクエリ(?redirect=/post-review)で受け取る（compatはstateを渡せないため）。旧state経路もフォールバックで残す。
-  // 外部URLや //example.com は受け付けず、同一サイト内の絶対パスだけを許可する。
+  // ⚠️ 2026-09-07（FIXES.md F01）: ここに書かれていた自前の検証を
+  //    src/utils/authRedirect.mjs の normalizeReturnTo に一本化した。
+  //    バックスラッシュ・二重エンコード・認証ページ自身へのループが素通りしていたため。
+  //    判定を各ファイルに散らすと必ずどこかが緩くなる（D-011 と同じ考え方）。
   const requestedRedirect = new URLSearchParams(location.search || '').get('redirect')
     || location.state?.redirect;
-  const redirectTo = typeof requestedRedirect === 'string'
-    && requestedRedirect.startsWith('/')
-    && !requestedRedirect.startsWith('//')
-    && !/[\r\n]/.test(requestedRedirect)
-    ? requestedRedirect
-    : '/mypage';
+  const redirectTo = normalizeReturnTo(requestedRedirect, AUTH_RETURN_TO_FALLBACKS.login);
+  // 新規登録リンクへ引き継ぐ戻り先（未指定＝/mypage のときは付けない）
+  const returnTo = normalizeReturnTo(requestedRedirect, '');
   const { signIn } = useAuth(); // 👈 本物のログイン関数
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -178,7 +179,7 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-8 text-center pt-4 border-t border-white/5">
-              <Link to="/register" className="text-sm text-slate-400 hover:text-white transition group font-medium inline-block py-3">
+              <Link to={withReturnTo('/register', returnTo)} className="text-sm text-slate-400 hover:text-white transition group font-medium inline-block py-3">
                 アカウントをお持ちでない方は<span className="text-pink-400 font-bold border-b border-pink-400/30 group-hover:border-pink-400 transition-all ml-1">新規登録</span>
               </Link>
           </div>

@@ -104,4 +104,31 @@ assert.match(ratingsNoteMigration, /compose_review_story_content[\s\S]*sections 
 assert.match(ratingsNoteMigration, /review_story_char_length[\s\S]*sections ->> 'ratings_note'/);
 assert.match(ratingsNoteMigration, /ARRAY\['entrance', 'meeting', 'session', 'exit', 'ratings_note'\]/);
 
+// ── 文字数の数え方を1本に保つ（2026-09-07 / FIXES.md F03）────────────────
+// 【事故】投稿画面のメーターは countReviewStoryChars(withRatingsNote(...)) で数えていたのに、
+//   「次へ」判定・付与日数・完了画面は `Object.values(story).join('').length` を使っていた。
+//   採点コメントが数に入らないため、例えば
+//     入店90字 ＋ 総評90字 ＋ ルックスの一言30字
+//   はメーター218字なのに次へ判定は180字で、**画面が「書けている」と言っているのに進めない**。
+//   数え方が2つあると必ず食い違う（区分定義・変換ロジック・ガード一覧でも同じ事故を起こしている）。
+// ⚠️ コメントを除去してから検査する。
+//    「なぜ直したか」を書いた説明コメントに旧コードが引用されているため、
+//    素のソースを検査すると**自分の注意書きに反応して落ちる**（実際に一度落ちた）。
+//    check_design_decisions.mjs が同じ理由でコメントを除去しているのと同じ。
+const stripComments = (source) => source
+  .replace(/\/\*[\s\S]*?\*\//g, ' ')
+  .replace(/(^|[^:])\/\/[^\n]*/g, '$1');
+
+const postReviewPage = stripComments(read('src/pages/PostReviewPage.jsx'));
+assert.doesNotMatch(
+  postReviewPage,
+  /Object\.values\((?:data\.)?story[^)]*\)[\s\S]{0,80}\.join\(''\)\.length/,
+  '投稿画面が story 単体で文字数を数えています。countReviewStoryChars(withRatingsNote(...)) に統一してください',
+);
+// 次へ判定・送信の両方が正準関数を通っていること
+assert.ok(
+  (postReviewPage.match(/countReviewStoryChars\(withRatingsNote\(/g) || []).length >= 3,
+  '投稿画面の文字数計算（メーター・次へ判定・送信）が正準関数を通っていません',
+);
+
 console.log(`✅ 口コミ区分の保存・表示チェック OK（${STORY_SECTIONS.length}区分）`);

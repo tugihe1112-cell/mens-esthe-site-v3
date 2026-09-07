@@ -14,26 +14,44 @@ import NextLink from 'next/link';
 import { buildNextQueryString } from './queryString';
 
 // ── useNavigate ──────────────────────────────────────
+/**
+ * ⚠️ 2026-09-07（FIXES.md F02）: **戻り値の関数を安定させること。**
+ *
+ *  以前は毎レンダーで新しい関数を返していた。呼び出し側が
+ *  `useEffect(..., [navigate])` と書くと、**state を更新するたびに effect が
+ *  cleanup → 再実行**される。AuthConfirmPage がまさにこの形で、
+ *    OTP検証成功 → setStatus → 再レンダー → navigate が別関数になる
+ *    → effect の cleanup で遷移タイマーが解除される → 同じ effect が再実行され
+ *    → **使用済みのワンタイムトークンでもう一度 verifyOtp を呼ぶ**
+ *  という経路があった（＝成功したのに「リンクが無効です」に化けうる）。
+ *
+ *  useSearchParams の setParams（下）と同じ理由・同じ手当て。
+ *  最新の router は ref に保持し、依存配列は空にする。
+ */
 export function useNavigate() {
   const router = useRouter();
-  return (to, options = {}) => {
+  const routerRef = React.useRef(router);
+  routerRef.current = router;
+
+  return React.useCallback((to, options = {}) => {
+    const r = routerRef.current;
     // react-router の navigate(-1) / navigate(1) 等（履歴移動）を Next.js に橋渡し。
     // ※以前は数値をそのまま router.push(-1) に渡していて何も起きなかった（＝「戻る」ボタンが無反応だった）。
     if (typeof to === 'number') {
-      if (typeof window === 'undefined') { router.back(); return; }
+      if (typeof window === 'undefined') { r.back(); return; }
       let hasNav = false;
       try { hasNav = !!sessionStorage.getItem('hasInternalNav'); } catch { /* noop */ }
       // 直リンク/新規タブ（アプリ内遷移なし=履歴に戻り先が無い）で navigate(-1) すると無反応になるため、ホームへフォールバック
-      if (to < 0 && !hasNav) { router.push('/'); return; }
+      if (to < 0 && !hasNav) { r.push('/'); return; }
       window.history.go(to);
       return;
     }
     if (options?.replace) {
-      router.replace(to);
+      r.replace(to);
     } else {
-      router.push(to);
+      r.push(to);
     }
-  };
+  }, []);
 }
 
 // ── useParams ────────────────────────────────────────

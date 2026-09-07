@@ -58,11 +58,40 @@ requirePattern(
   /setExpandedId\(target\.id\)/,
   '管理画面が指定された口コミを自動展開していません'
 );
+// ⚠️ 2026-09-07 更新（FIXES.md F01）:
+//    以前ここは LoginPage 内の自前検証（requestedRedirect.startsWith('/') …）を
+//    **文字列で**探していた。戻り先の検証を src/utils/authRedirect.mjs へ一本化した際に
+//    このガードが新しい正しい実装に反応して落ちた。
+//    検査そのものを外すのではなく、**同じ保護対象（ログイン後の遷移先が
+//    同一サイト内パスに限られること）を、実際に関数を動かして確認する形**へ更新する。
 requirePattern(
   'src/pages/LoginPage.jsx',
-  /requestedRedirect\.startsWith\(['"]\/['"]\)[\s\S]{0,160}!requestedRedirect\.startsWith\(['"]\/\/['"]\)/,
-  'ログイン後の redirect が同一サイト内パスに制限されていません'
+  /normalizeReturnTo\(\s*requestedRedirect/,
+  'ログイン後の redirect が normalizeReturnTo を通っていません（自前検証に戻すと抜けが再発します）'
 );
+
+const hostileRedirects = [
+  '//evil.example',
+  '/%2F%2Fevil.example',
+  'https://evil.example/admin',
+  'javascript:alert(1)',
+];
+try {
+  const { normalizeReturnTo } = await import('../../src/utils/authRedirect.mjs');
+  for (const value of hostileRedirects) {
+    const got = normalizeReturnTo(value, '/mypage');
+    if (got !== '/mypage') {
+      violations.push(`ログイン後の redirect が外部へ出ます: ${value} → ${got}`);
+    }
+  }
+  // 管理画面へ戻す本来の導線は壊さないこと
+  const adminPath = '/admin?review=r_1787333476619_i1oi0';
+  if (normalizeReturnTo(adminPath, '/mypage') !== adminPath) {
+    violations.push('メールからの /admin?review=... の戻り先が保持されません');
+  }
+} catch (error) {
+  violations.push(`src/utils/authRedirect.mjs を読み込めません: ${error.message}`);
+}
 
 if (violations.length) {
   console.error('\n🚨 新着口コミメール→管理画面の導線が壊れています:\n');

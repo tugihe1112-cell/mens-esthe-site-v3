@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from '../compat/router';
+import { useNavigate, useSearchParams, Link } from '../compat/router';
 import SeoHead from '../components/SeoHead.jsx';
+import { normalizeReturnTo, withReturnTo } from '../utils/authRedirect.mjs';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  // ⚠️ 2026-09-07（FIXES.md F01）: 登録画面が戻り先を受け取っていなかった。
+  //    口コミを読んで登録した人が、確認メールを踏んだ先で必ずホームに着地していた。
+  //    クエリ名は既存の `redirect` に統一する（新しい用語を増やさない）。
+  const [searchParams] = useSearchParams();
+  const returnTo = normalizeReturnTo(searchParams.get('redirect'), '');
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,7 +37,9 @@ export default function RegisterPage() {
       const r = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ display_name: displayName, email, password }),
+        // return_to はサーバー側でも normalizeReturnTo で再検証する。
+        // クライアントから絶対URLを自由に指定させない設計（FIXES.md F01-5）。
+        body: JSON.stringify({ display_name: displayName, email, password, return_to: returnTo }),
       });
       const result = await r.json();
       if (!r.ok) {
@@ -97,7 +105,12 @@ export default function RegisterPage() {
               <p className="text-slate-400 text-sm leading-relaxed">
                 <span className="text-pink-400 font-bold">{email}</span> に届いたメールのリンクをタップすると登録が完了します。
               </p>
-              <Link to="/login" className="mt-6 inline-block text-pink-400 font-bold text-sm hover:underline">ログインページへ →</Link>
+              {returnTo && (
+                <p className="text-emerald-300/90 text-xs mt-3 leading-relaxed">
+                  確認後、先ほどのページに戻ります。
+                </p>
+              )}
+              <Link to={withReturnTo('/login', returnTo)} className="mt-6 inline-block text-pink-400 font-bold text-sm hover:underline">ログインページへ →</Link>
             </div>
           ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -151,7 +164,7 @@ export default function RegisterPage() {
 
           <div className="mt-6 text-center pt-2 border-t border-white/5">
             <p className="text-sm text-slate-400 font-medium">
-              すでにアカウントをお持ちの方は<Link to="/login" className="text-pink-400 font-bold hover:text-white transition ml-1 border-b border-pink-400/30 hover:border-white inline-block py-3 -my-3 px-1">ログイン</Link>
+              すでにアカウントをお持ちの方は<Link to={withReturnTo('/login', returnTo)} className="text-pink-400 font-bold hover:text-white transition ml-1 border-b border-pink-400/30 hover:border-white inline-block py-3 -my-3 px-1">ログイン</Link>
             </p>
           </div>
         </div>

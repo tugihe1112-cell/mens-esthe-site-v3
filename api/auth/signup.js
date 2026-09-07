@@ -1,10 +1,19 @@
 /**
  * POST /api/auth/signup
  * ユーザー作成 + 確認メール送信をサーバーサイドで完結させる
- * Body: { display_name, email, password }
+ * Body: { display_name, email, password, return_to }
+ *
+ * ⚠️ return_to は「確認メールを踏んだあとに戻るページ」。
+ *    クライアントの申告をそのまま使わず、**サーバー側で必ず再検証する**
+ *    （normalizeReturnTo。外部origin・プロトコル相対・二重エンコードを拒否）。
  */
 import { createClient } from '@supabase/supabase-js';
 import { consumeRateLimit, rejectRateLimit, requestIp } from '../../server/rateLimit.js';
+import {
+  normalizeReturnTo,
+  buildAuthCompleteUrl,
+  AUTH_RETURN_TO_FALLBACKS,
+} from '../../src/utils/authRedirect.mjs';
 
 const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
@@ -28,9 +37,11 @@ export default async function handler(req, res) {
 
   res.setHeader('Cache-Control', 'no-store');
 
-  const { display_name: rawDisplayName, email: rawEmail, password } = req.body || {};
+  const { display_name: rawDisplayName, email: rawEmail, password, return_to: rawReturnTo } = req.body || {};
   const displayName = normalizeDisplayName(rawDisplayName);
   const email = String(rawEmail || '').trim().toLowerCase();
+  // 戻り先が無い/不正なら、登録直後に価値が分かる公開口コミ一覧へ送る
+  const returnTo = normalizeReturnTo(rawReturnTo, AUTH_RETURN_TO_FALLBACKS.signup);
   if (!displayName || !email || !password) {
     return res.status(400).json({ error: '表示名・メールアドレス・パスワードは必須です' });
   }
@@ -100,10 +111,18 @@ export default async function handler(req, res) {
     }
 
     // Step2: 確認リンク生成
+    // ⚠️ 2026-09-07（FIXES.md F01）: ここが `${SITE_URL}/` 固定だったため、
+    //    どこから登録しても確認メールの着地点は**必ずホーム**だった。
+    //    自社の固定パス `/auth/complete` へ送り、戻り先は検証済みの相対URLとして
+    //    `next` に載せる（クライアントに絶対URLを指定させない）。
+    //    ⚠️ Supabase の Authentication → URL Configuration → Redirect URLs に
+    //       `https://www.mens-esthe-map.jp/auth/complete` の許可が必要。
+    //       未許可なら Supabase は Site URL（ホーム）へ落とすだけなので、
+    //       「戻れない」現状に劣化するだけで壊れはしない。
     const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
       type: 'signup',
       email,
-      options: { redirectTo: `${SITE_URL}/` }
+      options: { redirectTo: buildAuthCompleteUrl(returnTo, 'signup') }
     });
 
     if (linkError) throw linkError;
