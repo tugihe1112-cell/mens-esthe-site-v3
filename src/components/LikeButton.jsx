@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useNavigate } from '../compat/router';
-import { withReturnTo } from '../utils/authRedirect.mjs';
+import { withReturnTo } from '../utils/authRedirect.js';
 import { currentReturnTo } from '../utils/useReturnTo';
 
 export default function LikeButton({ id, className = "" }) {

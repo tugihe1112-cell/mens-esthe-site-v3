@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext";
 import { useReturnTo } from '../utils/useReturnTo';
-import { withReturnTo } from '../utils/authRedirect.mjs';
+import { withReturnTo } from '../utils/authRedirect.js';
 import { isTransparentHeaderPath } from '../utils/headerTransparency.mjs';
 
 export default function Header() {

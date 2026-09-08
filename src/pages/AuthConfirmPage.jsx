@@ -7,7 +7,7 @@ import {
   withReturnTo,
   authCompletePath,
   AUTH_RETURN_TO_FALLBACKS,
-} from '../utils/authRedirect.mjs';
+} from '../utils/authRedirect.js';
 import { createOtpVerifier } from '../features/auth/verifyOtpOnce.mjs';
 
 /**

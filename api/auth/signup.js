@@ -13,7 +13,7 @@ import {
   normalizeReturnTo,
   buildAuthCompleteUrl,
   AUTH_RETURN_TO_FALLBACKS,
-} from '../../src/utils/authRedirect.mjs';
+} from '../../src/utils/authRedirect.js';
 
 const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 

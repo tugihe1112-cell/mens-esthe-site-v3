@@ -315,7 +315,7 @@ const check = (name, fn) => {
 // 【危険】戻り先はURLから来る値なので、緩めるとオープンリダイレクトになる。
 //   「同一サイト内の相対URLだけ」を機械で固定する。
 {
-  const m = await loadModule('src/utils/authRedirect.mjs');
+  const m = await loadModule('src/utils/authRedirect.js');
   const f = m.normalizeReturnTo;
 
   check('⭐口コミのハッシュ付きURLは戻り先として保存する', () =>

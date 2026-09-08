@@ -3,7 +3,7 @@ import { Link } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext';
 import { trackEvent } from '../utils/analytics';
 import { useReturnTo } from '../utils/useReturnTo';
-import { withReturnTo } from '../utils/authRedirect.mjs';
+import { withReturnTo } from '../utils/authRedirect.js';
 import ModernReviewCard from './ModernReviewCard';
 
 /**

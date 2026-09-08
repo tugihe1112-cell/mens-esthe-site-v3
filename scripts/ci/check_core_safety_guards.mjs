@@ -147,6 +147,48 @@ if (!/SAFE_API_MESSAGE_STATUS\.has\([^)]*\)\s*&&\s*apiMessage/.test(stripSrc(reg
 requireText(registerSrc, /text:\s*FORM_ERROR_TEXT\.server/,
   '登録画面の5xx経路が固定文言になっていません（内部の例外文が出ます）');
 
+
+// ── Vercelの関数から .mjs を import しない（2026-09-08 / 本番21時間停止）────────
+// 【事故】`api/auth/signup.js` が `src/utils/authRedirect.mjs` を import していた。
+//   Vercelは `api/` 配下をCommonJSにコンパイルするため、その import は require() になる。
+//   **.mjs は常にESMなので require() できない**。本番でだけこうなる:
+//     Error [ERR_REQUIRE_ESM]: require() of ES Module /var/task/src/utils/authRedirect.mjs
+//   関数が起動せず `/api/auth/signup` が Next の静的500ページを返し、
+//   **新規登録が約21時間まるごと止まっていた**（誰も登録できない状態）。
+// 🚩 `npm run build` は `api/` を検査しないので、**ビルド成功は何の保証にもならない**。
+//   ローカルの `node` でも読める（拡張子を解決できるため）。だから機械で止めるしかない。
+// ⚠️ 共有したい処理は `.js` に置くこと（`server/rateLimit.js` と同じ。実績がある）。
+//   Node 24 は `.js` の中のESM構文を自動判別するので、CIから直接 import しても動く。
+{
+  const offenders = [];
+  const walkApi = (dir) => {
+    let entries;
+    try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+    for (const e of entries) {
+      const full = `${dir}/${e.name}`;
+      if (e.isDirectory()) { walkApi(full); continue; }
+      if (!/\.(js|mjs|ts)$/.test(e.name)) continue;
+      const code = (read(full) || '')
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/^\s*\/\/.*$/gm, '');
+      for (const m of code.matchAll(/from\s*['"]([^'"]+\.mjs)['"]/g)) {
+        offenders.push(`${full} → ${m[1]}`);
+      }
+      for (const m of code.matchAll(/import\(\s*['"]([^'"]+\.mjs)['"]\s*\)/g)) {
+        offenders.push(`${full} → ${m[1]}（動的import）`);
+      }
+    }
+  };
+  for (const root of ['api', 'server']) walkApi(root);
+  if (offenders.length) {
+    failures.push(
+      'Vercelの関数が .mjs を import しています（本番で ERR_REQUIRE_ESM になり関数が起動しません）:\n' +
+      offenders.map((o) => `      - ${o}`).join('\n') +
+      '\n      → 共有する処理は .js に置くこと（server/rateLimit.js と同じ形）。'
+    );
+  }
+}
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

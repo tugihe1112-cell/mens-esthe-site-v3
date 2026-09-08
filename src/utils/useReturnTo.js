@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { normalizeReturnTo } from './authRedirect.mjs';
+import { normalizeReturnTo } from './authRedirect.js';
 
 /**
  * 「いま見ているページ」を認証後の戻り先として使える形で返す。

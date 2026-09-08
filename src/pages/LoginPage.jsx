@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Link } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext"; // 👈 Supabaseの本物認証パイプ
 import SeoHead from '../components/SeoHead.jsx';
 import { supabase } from '../lib/supabase';
-import { normalizeReturnTo, withReturnTo, AUTH_RETURN_TO_FALLBACKS } from '../utils/authRedirect.mjs';
+import { normalizeReturnTo, withReturnTo, AUTH_RETURN_TO_FALLBACKS } from '../utils/authRedirect.js';
 import { useRequestedReturnTo } from '../utils/useReturnTo';
 
 const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
@@ -13,7 +13,7 @@ export default function LoginPage() {
   const location = useLocation();
   // redirectはクエリ(?redirect=/post-review)で受け取る（compatはstateを渡せないため）。旧state経路もフォールバックで残す。
   // ⚠️ 2026-09-07（FIXES.md F01）: ここに書かれていた自前の検証を
-  //    src/utils/authRedirect.mjs の normalizeReturnTo に一本化した。
+  //    src/utils/authRedirect.js の normalizeReturnTo に一本化した。
   //    バックスラッシュ・二重エンコード・認証ページ自身へのループが素通りしていたため。
   //    判定を各ファイルに散らすと必ずどこかが緩くなる（D-011 と同じ考え方）。
   // ⚠️ 2026-09-08: ここを描画時に直接読むと、静的生成されたHTMLに焼かれた

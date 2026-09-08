@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Link } from '../compat/router';
 import SeoHead from '../components/SeoHead.jsx';
-import { normalizeReturnTo, withReturnTo } from '../utils/authRedirect.mjs';
+import { normalizeReturnTo, withReturnTo } from '../utils/authRedirect.js';
 import { useRequestedReturnTo } from '../utils/useReturnTo';
 
 // ⚠️ 内部の例外メッセージを利用者にそのまま出さない（DESIGN.md U03-10）。

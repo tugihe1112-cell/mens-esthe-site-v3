@@ -6,7 +6,7 @@ import {
   normalizeReturnTo,
   withReturnTo,
   AUTH_RETURN_TO_FALLBACKS,
-} from '../utils/authRedirect.mjs';
+} from '../utils/authRedirect.js';
 
 /**
  * /auth/complete — メール確認のあと Supabase から戻ってくる自社ページ（FIXES.md F01）。
