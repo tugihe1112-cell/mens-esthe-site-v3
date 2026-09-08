@@ -5,7 +5,12 @@ import { normalizeReturnTo, withReturnTo } from '../utils/authRedirect.mjs';
 import { useRequestedReturnTo } from '../utils/useReturnTo';
 
 // ⚠️ 内部の例外メッセージを利用者にそのまま出さない（DESIGN.md U03-10）。
-//    サーバーの状態から**固定の文言**へ写す。分類を増やすときはここだけを触る。
+//    ただし **4xx はAPIが利用者向けに書いた文言**（「メールアドレスの形式が正しくありません」等）で、
+//    握りつぶすと「なぜ送れないのか分からない」状態になる。実際に一度そうなった（2026-09-08）。
+//    分けて扱う：
+//      - 4xx と 503 … APIの文言をそのまま出してよい（すべて固定の日本語文）
+//      - 500 と通信失敗 … `err.message` が混ざるので**絶対に出さない**。固定文言に写す。
+const SAFE_API_MESSAGE_STATUS = new Set([400, 401, 403, 404, 409, 422, 429, 503]);
 const FORM_ERROR_TEXT = {
   duplicate: 'このメールアドレスは登録済みです。ログインしてください',
   rate_limit: '時間をおいて、もう一度お試しください',
@@ -30,7 +35,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
-  const [formErrorCode, setFormErrorCode] = useState("");
+  const [formError, setFormError] = useState(null); // { code, text }
   const [isLoading, setIsLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [sentTo, setSentTo] = useState("");
@@ -58,7 +63,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormErrorCode("");
+    setFormError(null);
 
     const displayName = name.normalize('NFKC').trim().replace(/\s+/g, ' ');
     const nextErrors = validate(displayName);
@@ -82,8 +87,23 @@ export default function RegisterPage() {
         body: JSON.stringify({ display_name: displayName, email, password, return_to: returnTo }),
       });
       if (!r.ok) {
-        // ⚠️ result.error（内部文言）をそのまま出さない。状態コードで分類する。
-        setFormErrorCode(r.status === 409 ? 'duplicate' : r.status === 429 ? 'rate_limit' : 'server');
+        let apiMessage = '';
+        try {
+          const result = await r.json();
+          if (typeof result?.error === 'string') apiMessage = result.error.slice(0, 200);
+        } catch { /* 本文が読めなくても固定文言で続行する */ }
+
+        if (r.status === 409) {
+          setFormError({ code: 'duplicate', text: FORM_ERROR_TEXT.duplicate });
+        } else if (r.status === 429) {
+          setFormError({ code: 'rate_limit', text: FORM_ERROR_TEXT.rate_limit });
+        } else if (SAFE_API_MESSAGE_STATUS.has(r.status) && apiMessage) {
+          // 入力の直し方が書かれているのはここ。握りつぶさない。
+          setFormError({ code: 'validation', text: apiMessage });
+        } else {
+          // 500 など。ここで apiMessage を使うと err.message が露出する。
+          setFormError({ code: 'server', text: FORM_ERROR_TEXT.server });
+        }
         setIsLoading(false);
         return;
       }
@@ -92,7 +112,7 @@ export default function RegisterPage() {
       setDone(true);
       setIsLoading(false);
     } catch {
-      setFormErrorCode('network');
+      setFormError({ code: 'network', text: FORM_ERROR_TEXT.network });
       setIsLoading(false);
     }
   };
@@ -162,10 +182,10 @@ export default function RegisterPage() {
             </div>
           ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-            {formErrorCode && (
+            {formError && (
               <div role="alert" className="rounded-xl border border-rose-500/50 bg-rose-500/10 p-3">
-                <p className="ui-error">{FORM_ERROR_TEXT[formErrorCode] || FORM_ERROR_TEXT.server}</p>
-                {formErrorCode === 'duplicate' && (
+                <p className="ui-error">{formError.text || FORM_ERROR_TEXT.server}</p>
+                {formError.code === 'duplicate' && (
                   <Link to={withReturnTo('/login', returnTo)} className="ui-link inline-flex items-center min-h-11" style={{ fontSize: '13px' }}>
                     ログインページへ
                   </Link>

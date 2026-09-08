@@ -133,6 +133,19 @@ if (/setError\(\s*result\.error/.test(stripSrc(registerSrc))) {
 }
 requireText(registerSrc, /FORM_ERROR_TEXT/,
   '登録画面のエラー文言の写し表（FORM_ERROR_TEXT）が消えています（内部文言が露出します）');
+// ⚠️ 2026-09-08: 逆に**全部を固定文言へ潰す**のも不具合だった。
+//   `+t1@gmail.com` を送ると Supabase 側で落ちるが、画面には「送信できませんでした」しか出ず、
+//   利用者も我々も原因が分からなかった。4xx はAPIが利用者向けに書いた文言なので出す。
+//   500 だけは `err.message` が入るので絶対に出さない。この線引きを守る。
+// ⚠️ 参照ではなく**定義**を見る。`.has()` の呼び出しだけ残っていても通してしまう
+//    （妨害テストで実際に素通りした。トークン検査でも同じ取り違えをしている）。
+requireText(registerSrc, /const\s+SAFE_API_MESSAGE_STATUS\s*=/,
+  '登録画面が4xxの案内文言を出す仕組み（SAFE_API_MESSAGE_STATUS）を失っています（原因の分からないエラーに戻ります）');
+if (!/SAFE_API_MESSAGE_STATUS\.has\([^)]*\)\s*&&\s*apiMessage/.test(stripSrc(registerSrc))) {
+  failures.push('登録画面がAPI文言の表示を4xxに限定していません（500の err.message が露出します）');
+}
+requireText(registerSrc, /text:\s*FORM_ERROR_TEXT\.server/,
+  '登録画面の5xx経路が固定文言になっていません（内部の例外文が出ます）');
 
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
