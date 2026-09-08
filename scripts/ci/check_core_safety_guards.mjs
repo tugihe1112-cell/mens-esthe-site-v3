@@ -85,6 +85,36 @@ if (resolvedUses < 3) {
   );
 }
 
+
+// ── F01: 認証画面のリンクは「マウント後に読む」形を保つ（2026-09-08 本番実測）──────
+// 【事故】/login /register は `○ Static`。HTMLに `href="/register"`（戻り先なし）が焼かれる。
+//   クライアントの初回レンダーが正しい href を計算しても、**Reactはハイドレーション時の
+//   属性の食い違いを直さない**ため、古い href がDOMに残る（本番では警告も出ない）。
+//   実測: Reactのpropsは `/register?redirect=%2Fpopular-reviews`、DOMは `/register`。
+//   → 初回はSSRと同じ空を返し、マウント後のeffectで実値に切り替える（＝本物の再レンダー）。
+const loginPage = read('src/pages/LoginPage.jsx');
+const registerPage = read('src/pages/RegisterPage.jsx');
+const returnToHook = read('src/utils/useReturnTo.js');
+
+requireText(returnToHook, /export function useRequestedReturnTo/,
+  'useRequestedReturnTo が消えています（認証画面のリンクが戻り先を失います）');
+requireText(loginPage, /useRequestedReturnTo\(/,
+  'LoginPage が戻り先をマウント後に読む形をやめています（新規登録リンクから redirect が消えます）');
+requireText(registerPage, /useRequestedReturnTo\(/,
+  'RegisterPage が戻り先をマウント後に読む形をやめています（ログインリンクから redirect が消えます）');
+
+// 描画時に直接読む形へ戻していないか（コメントは除去してから検査する）
+const stripJs = (src) => (src || '')
+  .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/^\s*\/\/.*$/gm, '');
+if (/searchParams\.get\(['"]redirect['"]\)/.test(stripJs(registerPage))) {
+  failures.push('RegisterPage が描画時に searchParams から redirect を読んでいます（DOMのhrefが更新されません）');
+}
+if (/new URLSearchParams\(location\.search[\s\S]{0,40}\)\.get\(['"]redirect['"]\)/.test(stripJs(loginPage))) {
+  failures.push('LoginPage が描画時に location.search から redirect を読んでいます（DOMのhrefが更新されません）');
+}
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

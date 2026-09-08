@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext"; // 👈 Supabaseの本物認�
 import SeoHead from '../components/SeoHead.jsx';
 import { supabase } from '../lib/supabase';
 import { normalizeReturnTo, withReturnTo, AUTH_RETURN_TO_FALLBACKS } from '../utils/authRedirect.mjs';
+import { useRequestedReturnTo } from '../utils/useReturnTo';
 
 const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
@@ -15,8 +16,10 @@ export default function LoginPage() {
   //    src/utils/authRedirect.mjs の normalizeReturnTo に一本化した。
   //    バックスラッシュ・二重エンコード・認証ページ自身へのループが素通りしていたため。
   //    判定を各ファイルに散らすと必ずどこかが緩くなる（D-011 と同じ考え方）。
-  const requestedRedirect = new URLSearchParams(location.search || '').get('redirect')
-    || location.state?.redirect;
+  // ⚠️ 2026-09-08: ここを描画時に直接読むと、静的生成されたHTMLに焼かれた
+  //    `href="/register"` をReactが上書きできない（ハイドレーションの属性ミスマッチ）。
+  //    マウント後に読む useRequestedReturnTo を通すこと。詳細は useReturnTo.js。
+  const requestedRedirect = useRequestedReturnTo('redirect') || location.state?.redirect;
   const redirectTo = normalizeReturnTo(requestedRedirect, AUTH_RETURN_TO_FALLBACKS.login);
   // 新規登録リンクへ引き継ぐ戻り先（未指定＝/mypage のときは付けない）
   const returnTo = normalizeReturnTo(requestedRedirect, '');

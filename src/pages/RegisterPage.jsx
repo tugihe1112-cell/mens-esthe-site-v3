@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { useNavigate, useSearchParams, Link } from '../compat/router';
+import { useNavigate, Link } from '../compat/router';
 import SeoHead from '../components/SeoHead.jsx';
 import { normalizeReturnTo, withReturnTo } from '../utils/authRedirect.mjs';
+import { useRequestedReturnTo } from '../utils/useReturnTo';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   // ⚠️ 2026-09-07（FIXES.md F01）: 登録画面が戻り先を受け取っていなかった。
   //    口コミを読んで登録した人が、確認メールを踏んだ先で必ずホームに着地していた。
   //    クエリ名は既存の `redirect` に統一する（新しい用語を増やさない）。
-  const [searchParams] = useSearchParams();
-  const returnTo = normalizeReturnTo(searchParams.get('redirect'), '');
+  // ⚠️ 2026-09-08: ここを描画時に直接読むと、静的生成されたHTMLに焼かれた
+  //    `href="/login"` をReactが上書きできない（ハイドレーションの属性ミスマッチ）。
+  //    マウント後に読む useRequestedReturnTo を通すこと。詳細は useReturnTo.js。
+  const returnTo = normalizeReturnTo(useRequestedReturnTo('redirect'), '');
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
