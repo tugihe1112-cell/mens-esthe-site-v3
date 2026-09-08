@@ -18,11 +18,18 @@
 - **GA4がNext移行後ずっと未計測** → gtagが旧Viteの`index.html`にしか無く、`_app`/`_document`に無かった。対策: `_app.jsx`に`next/script`で設置。"143イベント"は旧Vite残存。
 - **React19はbare `<style>`をSSR HTMLに出さない** → コンポーネント内インラインstyleが初回ペイントに効かない。対策: render-blockingが要るCSSは`src/index.css`(グローバル)へ。
 - **本番デプロイ完了前にLighthouse/curl確認** → 毎回旧版を測ってパニック。対策: Vercel Ready or マーカー(`"gssp":true`等)確認後に計測。
+- **`api/` の関数が `src/utils/xxx.mjs` を import して本番だけ起動しなくなった（新規登録が約21時間不可能）** → Vercelはリポジトリ直下の `api/` を**CommonJSにコンパイル**するので import は `require()` になり、**`.mjs` は常にESMなので `require()` できない**（`Error [ERR_REQUIRE_ESM]`）。関数が起動せず `/api/auth/signup` がNextの静的500 HTMLを返していた。**`npm run build` は `api/` を検査しないのでビルドは通る。ローカルの `node` は拡張子を解決できるので手元でも再現しない。** 対策: ①`api/` から共有する処理は必ず **`.js`** に置く（`server/rateLimit.js` と同じ。Node 24 は `.js` 内のESM構文を自動判別する）②`check_core_safety_guards.mjs` が `api/`・`server/` 配下の `.mjs` import を機械的に止める③**書き込み系APIはデプロイ後に実際にPOSTして応答がJSONであることを確かめる**。
+- **「ビルドが通った」「CI全緑」を「本番で動く」と報告した** → 上の事故の直前、画面の見た目とGET応答だけを見て「全部OK」と報告し、**登録フォームを一度も送っていなかった**。送信して初めて通る経路は、送信するまで検証していないのと同じ。対策: 触った経路ごとに「どの操作で通るか」を書き出し、**その操作を本番で実行してから完了と報告する**。
 
 ## パフォーマンス
 - **next/imageは入れない** → `unoptimized:true`＋多数CDN(remotePatterns未登録)＋LazyImageのSupabase WebP変換を壊すため。
 - **外部画像が巨大(8MB)** → モバイルLCP/SI悪化。対策: `optimizeImageUrl`で外部は`images.weserv.nl`経由リサイズ+WebP、Unsplashはw縮小、Supabaseはrender/image。
 - **モバイルLCPはSwiperのcoverflowが頭打ちの主因** → client描画＋visibility待ちで分散大。本質改善は静的ヒーロー化（別途）。
+
+## エラー表示 / 利用者への説明
+- **内部の例外文を隠すつもりで、APIが利用者向けに書いた4xxの案内文まで全部握りつぶした** → 画面には「送信できませんでした」しか出ず、**利用者も我々も登録できない理由を特定できなくなった**（直後の本番停止の切り分けも遅れた）。対策: **状態コードで線を引く**。4xxと503はAPIの日本語文をそのまま出す（`SAFE_API_MESSAGE_STATUS`）。500と通信失敗だけ固定文言へ写す（`err.message` が混ざるため）。**逆に、利用者が直せる失敗をAPIが500で返してもいけない**（`throw` せず4xx＋日本語で返す）。
+- **エラーの原因だけ出して「次に何をすればいいか」を書かなかった** → 「ログインできませんでした」だけでは利用者は同じ操作を繰り返すか離脱する。対策: 原因の分類ごとに `text`（何が起きたか）と `hint`（次の一手）を対で持つ（`src/utils/authErrorText.js`）。**分類できない例外は必ず固定文言側へ倒す**＝判定漏れが内部文言の露出にならない向きに倒す。
+- **CIガードが「参照」を見て「定義」の削除を見逃す** → `var(--ui-primary)` が残っていればトークン定義を消しても通る、`SAFE_API_MESSAGE_STATUS.has()` が残っていれば定義を消しても通る、という素通りを**1日で3回**やった。対策: ガードは**定義側**（`--ui-primary:` / `const X =`）を検査し、必要なら**件数**まで数える。**新しいガードは必ず妨害テスト（わざと壊して落ちるのを確認し、戻す）で検証する。**
 
 ## 定期実行 / 監視
 - **launchdの「実行されなかった日」を全部スリープのせいにしかけた** → cron.logを実測すると原因は別物だった。**7/22は未発火**（ログ行が無い＋翌7/23に2回動いた痕跡＝遅延catch-up。しかしスクリプトは常に「今日」の行を書くので7/22は永久に欠けた）。**8/4は発火して失敗**（`invalid_grant: Invalid JWT ... iat and exp`＝スリープ復帰直後でクロック未同期。7/6の`ENOTFOUND oauth2.googleapis.com`も同型でDNS未確立）。対策: ①`StartCalendarInterval`を配列にして1日複数回（スクリプトを冪等にしておけば重複しない）②復帰直後の一過性エラー（ENOTFOUND/EAI_AGAIN/invalid_grant/5xx）は指数バックオフでリトライ③**「ログが無い＝未発火」と「❌行がある＝発火して失敗」は別の障害**として切り分ける。
