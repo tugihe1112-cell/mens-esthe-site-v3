@@ -147,6 +147,46 @@ if (!/SAFE_API_MESSAGE_STATUS\.has\([^)]*\)\s*&&\s*apiMessage/.test(stripSrc(reg
 requireText(registerSrc, /text:\s*FORM_ERROR_TEXT\.server/,
   '登録画面の5xx経路が固定文言になっていません（内部の例外文が出ます）');
 
+// ── ログイン画面も同じ扱いにする（2026-09-08）────────────────────────────────
+// 【背景】登録画面だけ直して満足していたが、ログイン画面は
+//   「ログインできませんでした」の1行しか出ず、**なぜ入れないのかが分からない**ままだった。
+//   原因の分類と文言は src/utils/authErrorText.js に集約し、
+//   scripts/ci/check_ssr_helpers.mjs が**実際に呼んで**内容を検査している。
+//   ここでは「画面がその仕組みを使い続けているか」だけを見る。
+requireText(read('src/utils/authErrorText.js'), /export function loginErrorFor/,
+  '認証エラー文言の写し表（src/utils/authErrorText.js）が消えています');
+requireText(loginSrc, /from '\.\.\/utils\/authErrorText\.js'/,
+  'ログイン画面が authErrorText.js を使っていません（画面内で文言を組み立てると内部文言が漏れます）');
+// ⚠️ 参照ではなく**使用**を見る（import だけ残して固定文へ潰す改変を通さないため）。
+requireText(loginSrc, /setError\(loginErrorFor\(/,
+  'ログイン画面が失敗理由を分類していません（全部が同じ文言に戻ります）');
+requireText(loginSrc, /setError\(resetErrorFor\(/,
+  'パスワード再設定の失敗が分類されていません（原因の分からない案内に戻ります）');
+// 原因だけ出して終わらない。次の一手（hint）を画面に描いているか。
+if (!/error\.hint\s*&&/.test(stripSrc(loginSrc))) {
+  failures.push('ログイン画面が「次に何をすればいいか」(hint)を表示していません（U03-10）');
+}
+// どちらの欄が問題なのかを欄ごとに出す（1行のまとめ表示に戻さない）。
+requireText(loginSrc, /aria-invalid=\{fieldErrors\./,
+  'ログイン画面が項目別のエラー表示を失っています（どの欄が問題か分かりません）');
+requireText(loginSrc, /fieldError\('password'\)/,
+  'ログイン画面のパスワード欄に項目別エラーが出ていません');
+
+// ── 登録APIが「利用者が直せる失敗」を500で返さない（2026-09-08）──────────────
+// 【事故】`+t1@gmail.com` を送ると Supabase が弾くが、API は throw して **500** を返していた。
+//   500 の本文は `err.message`（英語＋内部パス）で、画面はそれを固定文言へ写す。
+//   結果、利用者にも我々にも「メールアドレスが受け付けられない」ことが伝わらず、
+//   登録できない理由を誰も特定できなかった。利用者が直せる失敗は 4xx ＋ 日本語で返す。
+requireText(signup, /email_address_invalid/,
+  '登録APIがメールアドレス不正を4xxで案内していません（500に落ちて理由が消えます）');
+if (/res\.status\([^)]*\)\.json\(\{[^{}]*err\.message/.test(stripSrc(signup))) {
+  failures.push('登録APIが応答本文へ内部の例外文（err.message）を入れています（利用者と通信経路へ露出します）');
+}
+// 🚩 分類はヘルパ側の仕事。画面が例外文へ触れた時点で露出経路が復活する。
+if (/\berr(or)?\??\.message/.test(stripSrc(loginSrc))) {
+  failures.push('ログイン画面が例外文（.message）を直接読んでいます（画面へ露出する経路が復活します）');
+}
+
 
 // ── Vercelの関数から .mjs を import しない（2026-09-08 / 本番21時間停止）────────
 // 【事故】`api/auth/signup.js` が `src/utils/authRedirect.mjs` を import していた。

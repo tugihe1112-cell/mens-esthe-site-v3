@@ -544,6 +544,71 @@ const check = (name, fn) => {
   });
 }
 
+// ── 失敗の理由を利用者に説明する（DESIGN.md U03-10 / 2026-09-08）──────────────
+// 【事故1】ログイン画面が `"ログインに失敗しました: " + err.message` を表示していた。
+//   Supabase の英語文がそのまま出て、利用者は次に何をすればいいか分からない。
+// 【事故2】それを直す際に**全部を1つの固定文へ潰した**。今度は「なぜ登録できないのか」が
+//   誰にも分からなくなり、登録が止まっているのに原因を追えなかった。
+// この検査は「内部文言を出さない」と「理由を説明する」の**両方**が同時に成立することを見る。
+{
+  const t = await loadModule('src/utils/authErrorText.js');
+  const { classifyAuthError, loginErrorFor, resetErrorFor, LOGIN_ERROR_TEXT, RESET_ERROR_TEXT } = t;
+
+  const cases = [
+    ['Invalid login credentials', 0, 'invalid_credentials'],
+    ['Email not confirmed', 0, 'email_not_confirmed'],
+    ['Request rate limit reached', 0, 'rate_limit'],
+    ['For security purposes, you can only request this after 51 seconds', 0, 'rate_limit'],
+    ['', 429, 'rate_limit'],
+    ['Failed to fetch', 0, 'network'],
+    ['Load failed', 0, 'network'],
+    ['NetworkError when attempting to fetch resource.', 0, 'network'],
+  ];
+  for (const [message, status, expected] of cases) {
+    check(`失敗理由の分類: ${expected} ← ${message || `status=${status}`}`, () => {
+      const got = classifyAuthError({ message, status });
+      return got === expected ? null : `${expected} のはずが ${got} になった（案内文が的外れになる）`;
+    });
+  }
+
+  check('⭐分類できない例外は server へ倒す（判定漏れで内部文言を出さない）', () =>
+    (classifyAuthError({ message: 'TypeError: cannot read properties of undefined' }) === 'server'
+      ? null : '未知の例外を server 以外へ分類している'));
+  check('message が無い/例外以外でも落ちない', () =>
+    (classifyAuthError(undefined) === 'server' && classifyAuthError({}) === 'server' && classifyAuthError('x') === 'server'
+      ? null : 'null相当の入力で分類が壊れる'));
+
+  // ⭐ 事故1の再発検出: 返す文字列に内部文言のかけらも混ぜない
+  const leaky = 'ZZINTERNALZZ';
+  for (const [label, fn] of [['ログイン', loginErrorFor], ['再設定', resetErrorFor]]) {
+    check(`⭐${label}の画面文言に内部の例外文が混ざらない`, () => {
+      const out = fn({ message: `PostgrestError: ${leaky} at /var/task/api/x.js:12`, status: 500 });
+      const dump = JSON.stringify(out);
+      if (dump.includes(leaky)) return '内部の例外文がそのまま画面へ出る（U03-10の再発）';
+      return /[A-Za-z]{6,}/.test(`${out.text}${out.hint}`) ? `英字の内部文言らしき文字列が残っている: ${dump}` : null;
+    });
+  }
+
+  // ⭐ 事故2の再発検出: 原因ごとに文言が分かれ、次の一手が必ず書いてある
+  check('⭐ログインの失敗理由が1種類に潰れていない', () => {
+    const texts = new Set(Object.keys(LOGIN_ERROR_TEXT).map((k) => LOGIN_ERROR_TEXT[k].text));
+    return texts.size >= 4 ? null : `文言が ${texts.size} 種類しかない（原因が分からない画面に戻っている）`;
+  });
+  for (const [label, table] of [['ログイン', LOGIN_ERROR_TEXT], ['再設定', RESET_ERROR_TEXT]]) {
+    check(`⭐${label}の全ての理由に「次にすること」が書いてある`, () => {
+      const bad = Object.keys(table).filter((k) => !table[k].text || !table[k].hint);
+      return bad.length === 0 ? null : `hint(次の一手)が無い: ${bad.join(', ')}`;
+    });
+  }
+  check('資格情報の誤りとメール未確認で別の案内になる', () =>
+    (loginErrorFor({ message: 'Invalid login credentials' }).text
+      !== loginErrorFor({ message: 'Email not confirmed' }).text
+      ? null : '原因が違うのに同じ案内を出している'));
+  check('再設定では「パスワードが違う」等の的外れな案内を出さない', () =>
+    (resetErrorFor({ message: 'Invalid login credentials' }).code === 'server'
+      ? null : '再設定メールの失敗にログイン用の文言を出している'));
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

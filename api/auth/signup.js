@@ -90,6 +90,18 @@ export default async function handler(req, res) {
       if (createError.message?.includes('already been registered') || createError.message?.includes('already exists')) {
         return res.status(409).json({ error: 'このメールアドレスはすでに登録されています' });
       }
+      // ⚠️ 2026-09-08: ここで throw すると下の catch に落ちて **500** になる。
+      //    500 は画面側が固定文言（「送信できませんでした」）へ写すため、
+      //    「メールアドレスが受け付けられない」ことが利用者に一切伝わらなかった。
+      //    実際に `+t1@gmail.com` で登録できず、原因が誰にも分からない状態になった。
+      //    利用者が直せる失敗は 4xx ＋ 日本語で返すこと（画面はそのまま表示する）。
+      const createMsg = String(createError.message || '');
+      if (createError.code === 'email_address_invalid' || /email address|invalid format|unable to validate email/i.test(createMsg)) {
+        return res.status(400).json({ error: 'このメールアドレスは受け付けられませんでした。入力に誤りがないか確認してください' });
+      }
+      if (createError.code === 'weak_password' || /password/i.test(createMsg)) {
+        return res.status(400).json({ error: 'このパスワードは使用できません。8文字以上で、推測されにくいものを設定してください' });
+      }
       throw createError;
     }
 
@@ -230,8 +242,14 @@ export default async function handler(req, res) {
       await admin.auth.admin.deleteUser(userId).catch(() => {});
     }
     const limiterFailed = err.message?.startsWith('Rate limiter') || err.message === 'Rate limiter is not configured';
+    // ⚠️ 2026-09-08: ここは `err.message` をそのまま返していた。
+    //    Supabaseやライブラリの英語文・内部パスが利用者と通信経路へ出る。
+    //    500 は「利用者が直せない失敗」なので、固定の日本語文だけを返す。
+    //    原因の追跡は上の console.error（サーバーログ）で行うこと。
     return res.status(limiterFailed ? 503 : 500).json({
-      error: limiterFailed ? '現在登録を受け付けられません。時間をおいて再度お試しください。' : err.message,
+      error: limiterFailed
+        ? '現在登録を受け付けられません。時間をおいて再度お試しください。'
+        : '登録手続きを完了できませんでした。時間をおいて、もう一度お試しください。解決しない場合はお問い合わせください。',
     });
   }
 }

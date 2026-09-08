@@ -5,8 +5,13 @@ import SeoHead from '../components/SeoHead.jsx';
 import { supabase } from '../lib/supabase';
 import { normalizeReturnTo, withReturnTo, AUTH_RETURN_TO_FALLBACKS } from '../utils/authRedirect.js';
 import { useRequestedReturnTo } from '../utils/useReturnTo';
+import { loginErrorFor, resetErrorFor } from '../utils/authErrorText.js';
 
 const SITE_URL = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
+
+// ⚠️ 2026-09-08（DESIGN.md U03-10）: 失敗の理由は利用者に説明する。ただし内部の例外文は出さない。
+//    分類と文言は src/utils/authErrorText.js に集約している（CIから実際に呼んで検査するため）。
+//    ここで err.message を組み立て直さないこと。
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -26,7 +31,8 @@ export default function LoginPage() {
   const { signIn } = useAuth(); // 👈 本物のログイン関数
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [error, setError] = useState(null); // { code, text, hint }
   const [loading, setLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
@@ -34,23 +40,36 @@ export default function LoginPage() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
+  const refs = { email: emailRef, password: passwordRef };
+
+  const validate = () => {
+    const next = {};
+    if (!email) next.email = 'メールアドレスを入力してください';
+    if (!password) next.password = 'パスワードを入力してください';
+    return next;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError("メールアドレスとパスワードを入力してください");
+    setError(null);
+
+    // ⚠️ 「メールアドレスとパスワードを入力してください」と1行で返していたので、
+    //    どちらが空なのか画面から分からなかった。欄ごとに出す。
+    const nextErrors = validate();
+    setFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
       // U03-9: 送信後は最初の不正欄へfocusを移す（入力値は消さない）
-      const target = !email ? emailRef.current : passwordRef.current;
-      if (target) target.focus();
+      const first = ['email', 'password'].find((k) => nextErrors[k]);
+      if (first && refs[first].current) refs[first].current.focus();
       return;
     }
-    
-    setError("");
+
     setLoading(true);
 
     try {
       // 🚀 Supabaseに本物のログインリクエストを送信
       const { error: signInError } = await signIn(email, password);
-      
+
       if (signInError) {
         throw signInError;
       }
@@ -59,17 +78,7 @@ export default function LoginPage() {
       navigate(redirectTo);
     } catch (err) {
       console.error("Login Error:", err);
-      // エラーメッセージの日本語化
-      // ⚠️ 2026-09-08（DESIGN.md U03-10）: 以前は `"ログインに失敗しました: " + err.message`
-      //    としており、Supabaseの内部メッセージをそのまま画面に出していた。
-      //    利用者が次に何をすればよいか分からないうえ、内部実装を露出させる。
-      if (err?.message?.includes("Invalid login credentials")) {
-        setError("メールアドレスまたはパスワードが間違っています");
-      } else if (err?.message?.includes("Email not confirmed")) {
-        setError("メールの確認がまだ完了していません。確認メールのリンクを押してください");
-      } else {
-        setError("ログインできませんでした。時間をおいて、もう一度お試しください");
-      }
+      setError(loginErrorFor(err));
     } finally {
       setLoading(false);
     }
@@ -77,24 +86,42 @@ export default function LoginPage() {
 
   const handlePasswordReset = async () => {
     const normalizedEmail = email.trim().toLowerCase();
-    setError('');
+    setError(null);
     setResetSent(false);
     if (!normalizedEmail) {
-      setError('再設定メールを送るメールアドレスを入力してください');
+      // 送信ボタンと同じ扱いにする（どの欄の話なのかを欄の下に出す）。
+      setFieldErrors({ email: '再設定メールを送るメールアドレスを入力してください' });
+      if (emailRef.current) emailRef.current.focus();
       return;
     }
+    setFieldErrors({});
     setResetLoading(true);
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
-      redirectTo: `${SITE_URL}/reset-password`,
-    });
+    let resetError = null;
+    try {
+      ({ error: resetError } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
+        redirectTo: `${SITE_URL}/reset-password`,
+      }));
+    } catch (err) {
+      // 通信そのものが失敗した場合（オフライン等）。例外を握って画面を止めない。
+      resetError = err;
+    }
     setResetLoading(false);
     if (resetError) {
-      setError('再設定メールを送信できませんでした。時間をおいてお試しください。');
+      setError(resetErrorFor(resetError));
       return;
     }
     // アカウントの有無を第三者へ漏らさない共通表示にする。
     setResetSent(true);
   };
+
+  const describedBy = (key) => (fieldErrors[key] ? `${key}-error` : undefined);
+
+  // ⚠️ コンポーネントとして定義するとレンダーのたびに型が変わり、Reactが毎回再マウントする。
+  //    ただの関数にして呼び出す（RegisterPage と同じ）。
+  const fieldError = (key) =>
+    fieldErrors[key] ? (
+      <p id={`${key}-error`} className="ui-error mt-1.5">{fieldErrors[key]}</p>
+    ) : null;
 
   // ⚠️ 2026-08-12 削除: ここに管理者のメールとパスワードを**平文でハードコード**し、
   //    それを「Fill Master ID」ボタンから誰でも入力できる状態で本番配信していた。
@@ -126,7 +153,14 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
               <div role="alert" className="rounded-xl border border-rose-500/50 bg-rose-500/10 p-3">
-                <p className="ui-error">{error}</p>
+                <p className="ui-error">{error.text}</p>
+                {/* ⚠️ 原因だけ出して終わらない。次の一手を必ず添える。 */}
+                {error.hint && <p className="ui-help mt-1.5">{error.hint}</p>}
+                {error.code === 'email_not_confirmed' && (
+                  <Link to={withReturnTo('/register', returnTo)} className="ui-link inline-flex items-center min-h-11" style={{ fontSize: '13px' }}>
+                    まだ登録していない方はこちら
+                  </Link>
+                )}
               </div>
             )}
             {resetSent && (
@@ -141,8 +175,11 @@ export default function LoginPage() {
                 id="email" name="email" ref={emailRef} type="email" required
                 value={email} onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email" autoCapitalize="none" spellCheck={false}
+                aria-invalid={fieldErrors.email ? 'true' : undefined}
+                aria-describedby={describedBy('email')}
                 className="ui-field mt-1.5" placeholder="example@email.com"
               />
+              {fieldError('email')}
             </div>
 
             <div>
@@ -153,6 +190,8 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'} required
                   value={password} onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
+                  aria-invalid={fieldErrors.password ? 'true' : undefined}
+                  aria-describedby={describedBy('password')}
                   className="ui-field pr-14" placeholder="パスワード"
                 />
                 {/* ⚠️ type=button（submitにしない）。切り替えても値は消さない。 */}
@@ -165,6 +204,7 @@ export default function LoginPage() {
                   {showPassword ? '隠す' : '表示'}
                 </button>
               </div>
+              {fieldError('password')}
               <div className="flex justify-end">
                 <button
                   type="button"
