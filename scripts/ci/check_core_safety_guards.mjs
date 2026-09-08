@@ -115,6 +115,25 @@ if (/new URLSearchParams\(location\.search[\s\S]{0,40}\)\.get\(['"]redirect['"]\
   failures.push('LoginPage が描画時に location.search から redirect を読んでいます（DOMのhrefが更新されません）');
 }
 
+
+// ── U03-10: 内部の例外メッセージを利用者にそのまま出さない（2026-09-08）──────
+// 【事故】ログイン画面が `"ログインに失敗しました: " + err.message` を表示していた。
+//   Supabase の内部文言が画面に出るうえ、利用者は次に何をすればよいか分からない。
+const loginSrc = read('src/pages/LoginPage.jsx');
+const registerSrc = read('src/pages/RegisterPage.jsx');
+const stripSrc = (src) => (src || '')
+  .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/^\s*\/\/.*$/gm, '');
+if (/setError\([^;]*\+\s*err(or)?\??\.message/.test(stripSrc(loginSrc))) {
+  failures.push('ログイン画面が内部の例外文（err.message）を画面へ連結しています（U03-10）');
+}
+if (/setError\(\s*result\.error/.test(stripSrc(registerSrc))) {
+  failures.push('登録画面がAPIの内部エラー文（result.error）をそのまま表示しています（U03-10）');
+}
+requireText(registerSrc, /FORM_ERROR_TEXT/,
+  '登録画面のエラー文言の写し表（FORM_ERROR_TEXT）が消えています（内部文言が露出します）');
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

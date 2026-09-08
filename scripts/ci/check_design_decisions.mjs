@@ -353,6 +353,123 @@ function read(path) {
   }
 }
 
+// ── U01/U03: 共通トークンとナビ、認証フォーム（2026-09-08） ──────────────────
+{
+  const strip = (src) => (src || '')
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+
+  // U01: トークンは .ui-* に閉じる。既存の .card や全 button を一括で上書きしない
+  {
+    const p = 'src/index.css';
+    const css = read(p);
+    if (css === null) { violations.push(`[U01] ${p} が見つからない`); }
+    else {
+      // ⚠️ `var(--ui-primary)` の**参照**では通さない。定義（`--ui-primary:`）があることを見る。
+      //    妨害テストで、定義だけ消しても参照が残っていて素通りした。
+      for (const token of ['--ui-primary', '--ui-field-min', '--ui-tap-min', '--ui-surface', '--ui-border']) {
+        if (!css.includes(`${token}:`)) violations.push(`[U01] ${p} に ${token} の定義が無い。`);
+      }
+      for (const cls of ['.ui-card', '.ui-field', '.ui-btn-primary', '.ui-label', '.ui-error', '.ui-tap']) {
+        if (!css.includes(cls)) violations.push(`[U01] ${p} から ${cls} が消えている。`);
+      }
+      // 全ボタン・全カードへの一括上書きは禁止（どこが壊れたか切り分けられなくなる）
+      if (/^\s*button\s*\{/m.test(css.replace(/\/\*[\s\S]*?\*\//g, ''))) {
+        violations.push(
+          `[U01] ${p} に全 button を対象にした一括指定がある。\n` +
+          `        .ui-* を「今回触る画面」から明示的に使う方式にすること（DESIGN.md U01）。`
+        );
+      }
+    }
+  }
+
+  // U01-3: ボトムナビは lg:hidden。768〜1023px で主ナビが消える状態に戻さない
+  {
+    const p = 'src/components/BottomNav.jsx';
+    const code = strip(read(p));
+    if (/className="[^"]*\bmd:hidden\b/.test(code)) {
+      violations.push(
+        `[U01-3] ${p} が md:hidden に戻っている。\n` +
+        `        ヘッダーのPCナビは lg: から出るため、768〜1023px で主ナビがどこにも無くなる。`
+      );
+    }
+    if (!/\blg:hidden\b/.test(code)) violations.push(`[U01-3] ${p} の lg:hidden が消えている。`);
+    if (!/aria-current=/.test(code)) violations.push(`[U01-5] ${p} が現在地を aria-current で示していない。`);
+    // U01-5: 未登録で「投稿」だけを常時強調しない
+    if (/highlight:\s*true/.test(code)) {
+      violations.push(`[U01-5] ${p} で特定の項目を常時強調している（選択中のみ強調する）。`);
+    }
+    for (const path of ['/popular-reviews', '/post-review', '/search']) {
+      if (!code.includes(`'${path}'`)) violations.push(`[U01-4] ${p} の5項目から ${path} が消えている。`);
+    }
+  }
+
+  // U01-3: フッターの下余白の境界も lg に揃える
+  {
+    const p = 'src/components/Footer.jsx';
+    const code = read(p) || '';
+    if (/pb-20\s+md:pb-/.test(code)) {
+      violations.push(`[U01-3] ${p} の下余白が md 境界のまま。BottomNav(lg:hidden) と食い違いドックが本文を覆う。`);
+    }
+  }
+
+  // U03: 認証フォーム
+  {
+    // ⚠️ 件数まで見る。登録はパスワード＋確認の**2欄**が対象で、
+    //    片方だけ外しても「1つはある」で素通りした（妨害テストで判明）。
+    for (const [p, autocomplete, needed] of [
+      ['src/pages/RegisterPage.jsx', 'new-password', 2],
+      ['src/pages/LoginPage.jsx', 'current-password', 1],
+    ]) {
+      const code = strip(read(p));
+      // U03-1: 常時動く 800px の発光レイヤーを戻さない
+      if (/w-\[800px\]/.test(code) || /animate-pulse-slow/.test(code)) {
+        violations.push(
+          `[U03-1] ${p} に常時動く大きな発光レイヤーが復活している。\n` +
+          `        背景は紺＋薄いグラデーション1枚。発光は主ボタンとスライダーへ集約する。`
+        );
+      }
+      // U03-4/5: ラベルと入力の結び付け、autoComplete
+      if (!/htmlFor="/.test(code)) violations.push(`[U03-4] ${p} の label が htmlFor で入力と結び付いていない。`);
+      const acCount = (code.match(new RegExp(`autoComplete="${autocomplete}"`, 'g')) || []).length;
+      if (acCount < needed) {
+        violations.push(`[U03-5] ${p} の autoComplete="${autocomplete}" が ${needed}箇所必要なのに ${acCount}箇所しかない。`);
+      }
+      if (!/autoCapitalize="none"/.test(code)) {
+        violations.push(`[U03-5] ${p} のメール欄に autoCapitalize="none" が無い。`);
+      }
+      // U03-6: パスワードの表示/隠す（type=button・対象を区別できる aria-label）
+      if (!/aria-label=\{show/.test(code)) {
+        violations.push(`[U03-6] ${p} にパスワードの表示/隠す操作（aria-labelで対象を区別）が無い。`);
+      }
+      // U01: 主ボタンとフォームは .ui-* を使う
+      if (!/ui-btn-primary/.test(code)) violations.push(`[U01] ${p} の主ボタンが .ui-btn-primary を使っていない。`);
+      if (!/ui-field/.test(code)) violations.push(`[U01] ${p} の入力欄が .ui-field を使っていない。`);
+    }
+
+    // U03-3: 登録の入力は1列（パスワードを2カラムに戻さない）
+    const reg = strip(read('src/pages/RegisterPage.jsx'));
+    if (/grid-cols-2/.test(reg)) {
+      violations.push('[U03-3] RegisterPage に2カラムのグリッドが復活している（入力欄は全て1列）。');
+    }
+    // U03-7: API成功を「登録完了」と表示しない
+    if (/登録が完了しました|登録完了/.test(reg)) {
+      violations.push('[U03-7] RegisterPage が送信受付を「登録完了」と表示している（完了はメール確認後）。');
+    }
+    if (!/確認メールを送る/.test(reg)) {
+      violations.push('[U03-7] RegisterPage の主ボタンが「確認メールを送る」ではない。');
+    }
+    // U03-8: 同意チェックを省略・初期ONにしない
+    if (!/useState\(false\)[\s\S]{0,0}/.test(reg) || !/agreeToTerms/.test(reg)) {
+      violations.push('[U03-8] RegisterPage の利用規約同意チェックが消えている。');
+    }
+    if (/agreeToTerms.{0,20}useState\(true\)|useState\(true\).{0,20}agreeToTerms/.test(reg)) {
+      violations.push('[U03-8] RegisterPage の同意チェックが初期ONになっている。');
+    }
+  }
+}
+
 if (violations.length) {
   console.error('\n🚨 オーナー確定事項（playbook/decisions.md）に反する変更が検出されました:\n');
   violations.forEach((v) => console.error('  - ' + v + '\n'));

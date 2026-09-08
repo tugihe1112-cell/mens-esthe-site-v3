@@ -24,7 +24,7 @@ export default function Footer({ variant = 'full', statsOverride = null }) {
 
   if (variant === 'minimal') {
     return (
-      <footer className="bg-slate-950 border-t border-white/5 mt-10 relative z-10 pb-20 md:pb-4">
+      <footer className="bg-slate-950 border-t border-white/5 mt-10 relative z-10 pb-20 lg:pb-4">
         <div className="max-w-7xl mx-auto px-4 py-5">
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] text-slate-500">
             <Link to="/legal" className="hover:text-pink-400 transition">特定商取引法に基づく表記</Link>
@@ -41,7 +41,7 @@ export default function Footer({ variant = 'full', statsOverride = null }) {
   }
 
   return (
-    <footer className="bg-slate-950 border-t border-white/5 mt-10 md:mt-20 relative z-10 pb-20 md:pb-0">
+    <footer className="bg-slate-950 border-t border-white/5 mt-10 md:mt-20 relative z-10 pb-20 lg:pb-0">
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
         {/* スマホは SERVICE / LEGAL を横2列に。従来は全部が縦1列で、
             リンク8本ぶんスクロールが伸びるだけの退屈な帯になっていた。
@@ -76,6 +76,9 @@ export default function Footer({ variant = 'full', statsOverride = null }) {
             <ul className="space-y-3 text-sm font-medium break-words">
               <li><Link to="/" className="text-slate-400 hover:text-pink-400 transition">ホーム</Link></li>
               <li><Link to="/search" className="text-slate-400 hover:text-pink-400 transition">キャスト検索</Link></li>
+              {/* ⚠️ U01-2: ランキングはヘッダーのPCナビから外し、ここへ残す。 */}
+              <li><Link to="/ranking" className="text-slate-400 hover:text-pink-400 transition">ランキング</Link></li>
+              <li><Link to="/popular-reviews" className="text-slate-400 hover:text-pink-400 transition">口コミを読む</Link></li>
               <li><Link to="/stats" className="text-slate-400 hover:text-pink-400 transition">メンズエステ統計2026</Link></li>
               <li><Link to="/post-review" className="text-slate-400 hover:text-pink-400 transition">口コミを書く（読み放題）</Link></li>
               <li><Link to="/contact" className="text-slate-400 hover:text-pink-400 transition">お問い合わせ</Link></li>

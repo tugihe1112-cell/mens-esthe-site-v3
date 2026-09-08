@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate, useLocation, Link } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext"; // 👈 Supabaseの本物認証パイプ
 import SeoHead from '../components/SeoHead.jsx';
@@ -30,12 +30,18 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) { 
-      setError("メールアドレスとパスワードを入力してください"); 
-      return; 
+    if (!email || !password) {
+      setError("メールアドレスとパスワードを入力してください");
+      // U03-9: 送信後は最初の不正欄へfocusを移す（入力値は消さない）
+      const target = !email ? emailRef.current : passwordRef.current;
+      if (target) target.focus();
+      return;
     }
     
     setError("");
@@ -54,10 +60,15 @@ export default function LoginPage() {
     } catch (err) {
       console.error("Login Error:", err);
       // エラーメッセージの日本語化
-      if (err.message.includes("Invalid login credentials")) {
+      // ⚠️ 2026-09-08（DESIGN.md U03-10）: 以前は `"ログインに失敗しました: " + err.message`
+      //    としており、Supabaseの内部メッセージをそのまま画面に出していた。
+      //    利用者が次に何をすればよいか分からないうえ、内部実装を露出させる。
+      if (err?.message?.includes("Invalid login credentials")) {
         setError("メールアドレスまたはパスワードが間違っています");
+      } else if (err?.message?.includes("Email not confirmed")) {
+        setError("メールの確認がまだ完了していません。確認メールのリンクを押してください");
       } else {
-        setError("ログインに失敗しました: " + err.message);
+        setError("ログインできませんでした。時間をおいて、もう一度お試しください");
       }
     } finally {
       setLoading(false);
@@ -93,112 +104,101 @@ export default function LoginPage() {
   //    テスト用の入力補助を本番に残してはいけない。復活させないこと。
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-slate-950">
+    <div className="min-h-screen flex items-center justify-center p-4 py-12 relative bg-slate-950">
       <SeoHead title="会員ログイン・アカウント認証" noindex />
-      
-      {/* Dynamic Background */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-pink-950/70 via-slate-950 to-purple-950/60"></div>
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 50% 15%, rgba(236,72,153,.7), transparent 38%)' }}></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950"></div> 
-      </div>
 
-      {/* Glow Effects */}
-      <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-pink-600/20 rounded-full blur-[120px] pointer-events-none animate-pulse-slow"></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none animate-pulse-slow delay-1000"></div>
+      {/* ⚠️ U03-1: 背景は紺＋薄いグラデーション**1枚**。
+          以前あった 800px の発光レイヤー2枚（animate-pulse-slow で常時動く）は削除した。 */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-slate-900 to-slate-950" aria-hidden="true"></div>
 
-      <div className="w-full max-w-md relative z-10 animate-in fade-in zoom-in-95 duration-700">
-        
-        {/* Header */}
-        <div className="text-center mb-10">
-          {/* ブランド表記はヘッダーのロゴと同じ「メンエスマップ」に統一（2026-08-18）。
-              以前は `MENS ESTHE` で、サイト名とも表記が違っていた。 */}
-          <Link to="/" className="inline-block group">
-            <h1 className="text-4xl font-black mb-3 text-white tracking-tighter drop-shadow-2xl group-hover:scale-105 transition duration-500">
-              メンエス<span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">マップ</span>
-            </h1>
+      <div className="w-full max-w-md relative z-10">
+
+        <div className="text-center mb-6">
+          {/* U03-2: ロゴは24px。ロゴをH1にしない */}
+          <Link to="/" className="inline-block text-2xl font-black text-white tracking-tight hover:text-pink-100 transition">
+            メンエス<span className="text-pink-500">マップ</span>
           </Link>
-          <p className="text-slate-300 font-bold text-sm">
-            ログイン
-          </p>
+          <h1 className="ui-h1 mt-4">ログイン</h1>
         </div>
 
-        {/* Glass Card */}
-        <div className="bg-slate-900/40 backdrop-blur-2xl rounded-[2.5rem] p-8 md:p-10 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
-          
-          {/* Top Shine */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-pink-500/50 to-transparent opacity-50"></div>
+        <div className="ui-card p-5 lg:p-6">
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-red-500/20 border border-red-500/50 text-red-200 rounded-xl p-3 text-sm font-bold text-center shadow-lg animate-shake">
-                ⚠️ {error}
+              <div role="alert" className="rounded-xl border border-rose-500/50 bg-rose-500/10 p-3">
+                <p className="ui-error">{error}</p>
               </div>
             )}
             {resetSent && (
-              <div className="bg-emerald-500/15 border border-emerald-500/40 text-emerald-100 rounded-xl p-3 text-sm font-bold text-center">
-                登録済みの場合は、パスワード再設定メールが届きます。
+              <div role="status" className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3">
+                <p className="ui-help text-emerald-100">登録済みの場合は、パスワード再設定メールが届きます。</p>
               </div>
             )}
-            
-            <div className="space-y-2 group">
-              <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">メールアドレス</label>
-              <input 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                className="w-full p-4 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold tracking-wide shadow-inner" 
-                placeholder="vip@example.com" 
-              />
-              <button
-                type="button"
-                onClick={handlePasswordReset}
-                disabled={resetLoading}
-                className="ml-auto block min-h-10 px-2 text-xs font-bold text-pink-300 hover:text-white disabled:opacity-50"
-              >
-                {resetLoading ? '送信中…' : 'パスワードを忘れた方'}
-              </button>
-            </div>
-            
-            <div className="space-y-2 group">
-              <label className="text-[11px] font-black text-slate-300 ml-2 group-focus-within:text-pink-400 transition">パスワード</label>
-              <input 
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                className="w-full p-4 rounded-xl bg-black/20 border border-white/10 text-white placeholder-slate-600 focus:border-pink-500 focus:bg-black/40 focus:outline-none focus:ring-1 focus:ring-pink-500 transition-all font-bold tracking-wide shadow-inner" 
-                placeholder="••••••••" 
+
+            <div>
+              <label htmlFor="email" className="ui-label">メールアドレス</label>
+              <input
+                id="email" name="email" ref={emailRef} type="email" required
+                value={email} onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email" autoCapitalize="none" spellCheck={false}
+                className="ui-field mt-1.5" placeholder="example@email.com"
               />
             </div>
 
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-black text-lg shadow-lg shadow-pink-900/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/10 relative overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <span className="relative z-10">{loading ? 'ログイン中...' : 'ログイン'}</span>
-              <div className="absolute inset-0 bg-white/20 blur-md opacity-0 group-hover:opacity-100 transition duration-500"></div>
+            <div>
+              <label htmlFor="password" className="ui-label">パスワード</label>
+              <div className="relative mt-1.5">
+                <input
+                  id="password" name="password" ref={passwordRef}
+                  type={showPassword ? 'text' : 'password'} required
+                  value={password} onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  className="ui-field pr-14" placeholder="パスワード"
+                />
+                {/* ⚠️ type=button（submitにしない）。切り替えても値は消さない。 */}
+                <button
+                  type="button" onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? 'パスワードを隠す' : 'パスワードを表示'}
+                  className="ui-tap absolute right-1 top-1/2 -translate-y-1/2 rounded-lg text-slate-300 hover:text-white"
+                  style={{ fontSize: '13px' }}
+                >
+                  {showPassword ? '隠す' : '表示'}
+                </button>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={handlePasswordReset}
+                  disabled={resetLoading}
+                  className="ui-link inline-flex items-center min-h-11 px-1 disabled:opacity-50"
+                  style={{ fontSize: '13px' }}
+                >
+                  {resetLoading ? '送信中…' : 'パスワードを忘れた方'}
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" disabled={loading} className="ui-btn-primary w-full">
+              {loading ? 'ログイン中…' : 'ログイン'}
             </button>
           </form>
 
-          <div className="mt-8 text-center pt-4 border-t border-white/5">
-              <Link to={withReturnTo('/register', returnTo)} className="text-sm text-slate-400 hover:text-white transition group font-medium inline-block py-3">
-                アカウントをお持ちでない方は<span className="text-pink-400 font-bold border-b border-pink-400/30 group-hover:border-pink-400 transition-all ml-1">新規登録</span>
-              </Link>
+          <div className="mt-6 pt-4 border-t border-white/10 text-center">
+            {/* ⚠️ F01: 戻り先を新規登録へ引き継ぐ。withReturnTo を外さないこと。 */}
+            <Link to={withReturnTo('/register', returnTo)} className="ui-help inline-flex items-center justify-center min-h-11">
+              アカウントをお持ちでない方は<span className="ui-link ml-1">新規登録</span>
+            </Link>
           </div>
         </div>
 
-        {/* Quick Login Helpers */}
         {/* ⚠️ 2026-08-12 削除: 「Quick Access / Fill Master ID」ボタン。
             管理者の認証情報を平文で埋め込んで本番配信していた重大な脆弱性のため撤去。
             開発用の入力補助が必要な場合も、本番バンドルに認証情報を含めてはいけない。 */}
 
+        <div className="mt-6 text-center">
+          <Link to="/" className="ui-link inline-flex items-center justify-center min-h-11" style={{ fontSize: '13px' }}>← ホームに戻る</Link>
+        </div>
       </div>
-      <style>{`
-        @keyframes slow-zoom { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
-        .animate-slow-zoom { animation: slow-zoom 20s infinite alternate linear; }
-        .animate-pulse-slow { animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-      `}</style>
     </div>
   );
 }

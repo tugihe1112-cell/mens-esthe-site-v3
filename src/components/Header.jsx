@@ -71,7 +71,8 @@ export default function Header() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between gap-4">
+          {/* U01-7: 高さの基準はスマホ64px・PC72px */}
+          <div className="flex items-center justify-between gap-3 sm:gap-4 min-h-[64px] lg:min-h-[72px]">
 
             {/* ロゴエリア */}
             <Link to="/" className="flex items-center gap-2 group relative z-50 shrink-0">
@@ -81,19 +82,22 @@ export default function Header() {
                   <span className="text-base md:text-xl">💎</span>
                 </div>
               </div>
-              <div className={`font-black text-base md:text-xl tracking-tighter whitespace-nowrap transition duration-300 ${isScrolled || !isTransparentPage ? 'text-white' : 'text-white drop-shadow-md'}`}>
-                Mens Esthe<span className="text-pink-500">.Map</span>
+              {/* ⚠️ U01: ロゴ表記はヘッダーでも「メンエスマップ」に統一する（アイコンは既存のまま）。 */}
+              <div className={`font-black text-base md:text-xl tracking-tight whitespace-nowrap transition duration-300 ${isScrolled || !isTransparentPage ? 'text-white' : 'text-white drop-shadow-md'}`}>
+                メンエス<span className="text-pink-500">マップ</span>
               </div>
             </Link>
 
             {/* PC用 ナビゲーション (日本語化 & 視認性強化) */}
             <nav className="hidden lg:flex items-center gap-6">
+              {/* ⚠️ U01: PCナビは「セラピストを探す」「口コミを読む」の2本に絞る。
+                  ランキングはフッターへ移した（主導線を増やしすぎない）。 */}
               <Link to="/search" className="text-sm font-bold text-white hover:text-pink-400 transition relative group drop-shadow-md">
-                キャスト検索
+                セラピストを探す
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all group-hover:w-full"></span>
               </Link>
-              <Link to="/ranking" className="text-sm font-bold text-white hover:text-pink-400 transition relative group drop-shadow-md">
-                ランキング
+              <Link to="/popular-reviews" className="text-sm font-bold text-white hover:text-pink-400 transition relative group drop-shadow-md">
+                口コミを読む
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all group-hover:w-full"></span>
               </Link>
 
@@ -110,7 +114,7 @@ export default function Header() {
                 <div className="flex items-center gap-3 pl-2">
                   <Link to={loginHref} className="text-sm font-bold text-white hover:text-pink-400 transition drop-shadow-md">ログイン</Link>
                   <Link to={registerHref} className="bg-white text-slate-900 px-5 py-2 rounded-full text-sm font-black hover:bg-slate-100 transition shadow-lg shadow-white/10 hover:shadow-white/20">
-                    会員登録
+                    無料登録
                   </Link>
                 </div>
               )}
@@ -119,13 +123,14 @@ export default function Header() {
             {/* モバイル用 認証ボタン */}
             {!authUser && (
               <div className="lg:hidden flex items-center gap-2 shrink-0">
-                {/* ログインは常設BottomNavにあるため、狭いヘッダーでは新規登録だけを残す。 */}
+                {/* ⚠️ U01-4: ボトムナビの5番目は「登録／マイページ」になったので、
+                    既存利用者のログインはヘッダーに常設する（狭い幅でも隠さない）。 */}
                 <Link to={loginHref}
-                  className="hidden md:inline-flex min-h-10 items-center text-xs font-bold text-white border border-white/25 px-4 rounded-full whitespace-nowrap hover:bg-white/10 transition">
+                  className="inline-flex min-h-11 items-center text-xs font-bold text-white border border-white/25 px-3 sm:px-4 rounded-full whitespace-nowrap hover:bg-white/10 transition">
                   ログイン
                 </Link>
                 <Link to={registerHref}
-                  className="min-h-10 inline-flex items-center text-xs font-black text-white bg-pink-600 px-4 rounded-full whitespace-nowrap hover:bg-pink-500 transition shadow-lg shadow-pink-950/30">
+                  className="min-h-11 inline-flex items-center text-xs font-black text-white bg-pink-600 px-3 sm:px-4 rounded-full whitespace-nowrap hover:bg-pink-500 transition shadow-lg shadow-pink-950/30">
                   無料登録
                 </Link>
               </div>
