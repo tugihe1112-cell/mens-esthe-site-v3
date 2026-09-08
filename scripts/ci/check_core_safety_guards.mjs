@@ -57,6 +57,34 @@ requireText(shopDetail, /id="sec-schedule"/, '出勤セクションのアンカ�
 requireText(shopDetail, /公式サイトで出勤を確認/, '出勤セクションの公式サイト導線が消えています');
 requireText(shopDetail, /schedule_url[\s\S]{0,400}rel="noopener noreferrer"/, '出勤リンクの rel="noopener noreferrer" がありません');
 
+
+// ── F01: 静的最適化ページで戻り先・確認トークンを落とさない（2026-09-08）──────
+// 【事故】/login /register /admin /auth/* は `○ Static` で router.asPath にクエリが載らない。
+//   asPath だけからクエリを読む実装に戻すと、戻り先も確認トークンもページに届かなくなる。
+const compatRouter = read('src/compat/router.js');
+const compatQuery = read('src/compat/queryString.js');
+const compatRouterCode = compatRouter
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/^\s*\/\/.*$/gm, '');
+
+requireText(compatQuery, /export function resolveQueryString/,
+  'resolveQueryString が消えています（静的ページで戻り先が落ちます）');
+requireText(compatQuery, /split\('#'\)/,
+  "resolveQueryString が fragment を落としていません（access_token がクエリ値へ混入します）");
+
+if (/asPath\.split\('\?'\)\[1\]/.test(compatRouterCode)) {
+  failures.push(
+    "compat/router.js が asPath だけからクエリを読む形に戻っています" +
+    "（/login・/register・/admin で戻り先が落ちます）"
+  );
+}
+const resolvedUses = (compatRouterCode.match(/useResolvedQueryString\(/g) || []).length;
+if (resolvedUses < 3) {
+  failures.push(
+    `compat/router.js の useResolvedQueryString が減っています（定義1 + useLocation + useSearchParams = 3箇所必要、実際 ${resolvedUses}箇所）`
+  );
+}
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

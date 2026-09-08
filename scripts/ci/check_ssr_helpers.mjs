@@ -491,6 +491,59 @@ const check = (name, fn) => {
   });
 }
 
+// ── 静的最適化ページでクエリを落とさない（FIXES.md F01 / 2026-09-07 本番実測）────
+// 【事故】`/login` `/register` `/admin` `/auth/*` は Automatic Static Optimization の
+//   対象（ビルド出力の `○ Static`）で、クライアントでも router.asPath にクエリが載らない。
+//   実測: `/login?redirect=%2Fshops%2F...` を開いて4秒後、window.location.search には
+//   クエリがあるのに、描画された「新規登録」リンクは `/register`（redirect無し）だった。
+//   ＝ 認証をまたいだ戻り先が、そもそもページに届いていなかった。
+//   同じ経路で `/admin?review=...`（新着口コミメールの導線）も壊れていた。
+{
+  const q = await loadModule('src/compat/queryString.js');
+  const R = q.resolveQueryString;
+
+  check('⭐asPath にクエリがある動的ページの挙動は変えない', () =>
+    (R('shop=x&cast=y', '?ignored=1') === 'shop=x&cast=y' ? null : 'asPath を優先していない'));
+
+  check('⭐asPath に無ければ実URLで補う（/login・/register・/admin）', () =>
+    (R('', '?redirect=%2Fshops%2FA%2Fthreads%2FB') === 'redirect=%2Fshops%2FA%2Fthreads%2FB'
+      ? null : '静的ページで戻り先が落ちる（F01が効かない）'));
+
+  check('先頭の ? を二重に残さない', () =>
+    (R('', '?a=1') === 'a=1' && R('', 'a=1') === 'a=1' ? null : '? の扱いが違う'));
+
+  check('どちらも空・undefined・null でも空文字', () =>
+    (R('', '') === '' && R(undefined, undefined) === '' && R(null, null) === ''
+      ? null : '空入力で落ちるか空にならない'));
+
+  check('⭐fragment をクエリ値へ混入させない（access_token/refresh_token の漏れ）', () => {
+    const got = R('token_hash=abc#access_token=xyz&refresh_token=zzz', '');
+    if (got !== 'token_hash=abc') return `fragment が残っている: ${got}`;
+    const p = new URLSearchParams(got);
+    if (p.get('token_hash') !== 'abc') return `token_hash が汚染されている: ${p.get('token_hash')}`;
+    if (p.get('refresh_token')) return 'refresh_token がクエリ値として取れてしまう';
+    return null;
+  });
+
+  check('実URL側に fragment が混ざっても落とす', () =>
+    (R('', '?next=%2Fx#access_token=y') === 'next=%2Fx' ? null : '実URL側の fragment が残る'));
+
+  check('fragment だけの asPath は実URLへフォールバックする', () =>
+    (R('#access_token=y', '?redirect=%2Fa') === 'redirect=%2Fa'
+      ? null : 'fragment だけの asPath を優先してしまう'));
+
+  check('⭐encode済みの # (%23) は戻り先の一部として残す', () => {
+    const qs = R('', '?redirect=%2Fshops%2F60026%2Fthreads%2F%E8%A6%B3%E6%9C%88%E3%81%9B%E3%81%AA%23review-1');
+    const v = new URLSearchParams(qs).get('redirect');
+    return v === '/shops/60026/threads/観月せな#review-1' ? null : `口コミのアンカーが壊れる: ${v}`;
+  });
+
+  check('管理画面の既存導線 /admin?review=... が読める', () => {
+    const v = new URLSearchParams(R('', '?review=abc-123')).get('review');
+    return v === 'abc-123' ? null : `新着口コミメールの導線が読めない: ${v}`;
+  });
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

@@ -24,6 +24,45 @@
  *    生の文字列比較だと、空白が `+` と `%20` のどちらで来るかといった
  *    エンコードの揺れで「毎回違う」と誤判定し、無限ループに逆戻りする。
  */
+/**
+ * 「router.asPath から取れたクエリ」と「ブラウザの実URLのクエリ」から、
+ * 実際に使うべきクエリ文字列を決める。
+ *
+ * 【背景の事故（2026-09-07 / 本番実測）】
+ * `/login` `/register` `/auth/confirm` `/auth/complete` は
+ * **Automatic Static Optimization の対象（`○ Static`）** で、ビルド時に
+ * クエリ無しの状態で書き出される。その結果クライアントでも
+ * `router.asPath` が `/login` のままになり、**クエリが読めない**。
+ *   実測: `/login?redirect=%2Fshops%2F...` を開いて4秒後も
+ *         `window.location.search` にはクエリがあるのに、
+ *         描画された「新規登録」リンクは `/register`（redirect無し）だった。
+ * ＝ 認証をまたいだ戻り先が、そもそもページに届いていなかった。
+ * ⚠️ これは今回の追加分だけの問題ではない。`/login?redirect=/admin?review=...`
+ *    （2026-08-22 の新着口コミメール導線）も同じ経路なので、同時に直る。
+ *
+ * 【なぜ「欠けているときだけ」補うのか】
+ * asPath にクエリがあるページ（`/search` などの `ƒ` 動的ページ）の挙動は
+ * **一切変えない**。上書きすると 2026-08-22 の無限ループを踏み直す危険がある。
+ * 情報が欠けているときに実URLで埋めるだけなら、増えることはあっても壊れない。
+ *
+ * @param {string} fromAsPath router.asPath の `?` 以降（無ければ空文字）
+ * @param {string} fromLocation window.location.search（`?` 付きでも無しでも可）
+ */
+export function resolveQueryString(fromAsPath, fromLocation) {
+  // ⚠️ fragment はクエリではない。`router.asPath` には Supabase が付ける
+  //    `#access_token=...&refresh_token=...` がそのまま乗ってくることがあり、
+  //    落とさずに URLSearchParams へ渡すと **最後のクエリ値に丸ごと混入する**
+  //    （2026-09-07 の実測では refresh_token がクエリ値として取り出せる状態だった）。
+  //    呼び出し側ごとに `.split('#')[0]` を書く運用は必ずどこかが漏れる
+  //    （実際 AuthConfirmPage / AuthCompletePage にはあるが Login / Register には無い）。
+  //    D-011 と同じ考え方で、**物理的に1箇所**で落とす。
+  //    ⚠️ 落とすのは生の `#` だけ。戻り先に含まれる `%23`（encode済みの#）は残る。
+  const fromAsPathQuery = String(fromAsPath || '').split('#')[0];
+  if (fromAsPathQuery) return fromAsPathQuery;
+  // window.location.search は fragment を含まないが、先頭の `?` は付いてくる。
+  return String(fromLocation || '').replace(/^\?/, '').split('#')[0];
+}
+
 export function buildNextQueryString(queryString, nextInit) {
   const currentNormalized = new URLSearchParams(queryString || '').toString();
   const next = new URLSearchParams(typeof nextInit === 'function' ? queryString || '' : undefined);

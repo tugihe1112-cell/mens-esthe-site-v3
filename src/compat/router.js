@@ -11,7 +11,31 @@ import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 // ⚠️ クエリ更新の判定ロジックは queryString.js に切り出してある（CIでテストするため）。
 //    ここに戻すとテストできなくなり、2026-08-22 の無限ループ事故が再発しうる。
-import { buildNextQueryString } from './queryString';
+import { buildNextQueryString, resolveQueryString } from './queryString';
+
+/**
+ * asPath のクエリを、必要なときだけブラウザの実URLで補う。
+ *
+ * ⚠️ 静的最適化されたページ（`/login` `/register` `/auth/*`）は
+ *    router.asPath にクエリが載らない（2026-09-07 に本番実測）。
+ *    そのままだと戻り先・確認トークンがページに届かない。
+ *
+ * ⚠️ SSR と初回レンダーでは asPath 由来の値だけを返す（hydration を壊さないため）。
+ *    マウント後の effect で実URLを取り込み、**欠けているときだけ**上書きする。
+ *    asPath にクエリがある動的ページの挙動は変えない。
+ */
+function useResolvedQueryString(asPath) {
+  const fromAsPath = asPath.includes('?') ? asPath.slice(asPath.indexOf('?') + 1) : '';
+  const [fromLocation, setFromLocation] = React.useState('');
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    // asPath 側にクエリがあるならそちらが正。実URLは見に行かない。
+    setFromLocation(fromAsPath ? '' : window.location.search);
+  }, [asPath, fromAsPath]);
+
+  return resolveQueryString(fromAsPath, fromLocation);
+}
 
 // ── useNavigate ──────────────────────────────────────
 /**
@@ -64,9 +88,11 @@ export function useParams() {
 export function useLocation() {
   const router = useRouter();
   const asPath = router.asPath || '';
-  const [pathname, search] = asPath.split('?');
+  const pathname = asPath.split('?')[0] || '/';
+  // 静的最適化されたページでは asPath にクエリが載らないので実URLで補う
+  const search = useResolvedQueryString(asPath);
   return {
-    pathname: pathname || '/',
+    pathname,
     search: search ? `?${search}` : '',
     hash: '',
     state: null,
@@ -96,7 +122,9 @@ export function useLocation() {
 export function useSearchParams() {
   const router = useRouter();
   const asPath = router.asPath || '';
-  const queryString = asPath.includes('?') ? asPath.split('?')[1] : '';
+  // ⚠️ 静的最適化されたページ（/register・/auth/confirm・/auth/complete）は
+  //    asPath にクエリが載らない。欠けているときだけ実URLで補う（動的ページは不変）。
+  const queryString = useResolvedQueryString(asPath);
 
   // queryString が同じ間は同じインスタンスを返す（依存配列に入れても再発火しない）
   const params = React.useMemo(() => new URLSearchParams(queryString), [queryString]);
