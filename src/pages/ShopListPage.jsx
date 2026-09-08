@@ -237,10 +237,14 @@ export default function ShopListPage() {
                            {shop.address || joinFields(shop.prefecture, shop.city, shop.area)}
                         </span>
                         {/* ⚠️ 収集元サイトの評価は出さない。実測で★4.5/4.7が出ていた店は
-                            いずれも当サイトの口コミ0件だった＝根拠のない★だった。 */}
-                        <span className="text-yellow-400 font-black flex items-center gap-1 text-xs shrink-0">
-                          ★ New
-                        </span>
+                            いずれも当サイトの口コミ0件だった＝根拠のない★だった（D-010）。
+                            ⚠️ 2026-09-08（FIXES.md F06-B・オーナー判断）: ここにあった固定の
+                            「★ New」も削除した。この一覧は口コミ件数を取得していないため
+                            **全店舗に無条件で出ており**、口コミがある店にも付いていた
+                            ＝D-010が意図した「0件のときの表示」になっていなかった。
+                            かつ「New」は新着とも読め、日時でも裏取りしていない。
+                            件数で出し分けるには一覧に口コミ集計が要る（F04/F05の対象）。
+                            それまでは何も主張しない。日時ベースの新着バッジも新設しない。 */}
                       </div>
                       <div className="flex flex-wrap gap-1 max-h-10 overflow-hidden">
                         {(shop.tags || []).slice(0, 2).map((tag, idx) => (

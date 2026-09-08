@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectCoverflow, A11y, Keyboard } from 'swiper/modules';
 import { Link } from '../compat/router';
@@ -58,15 +58,63 @@ export default function TopHeroSlider({ initialHero = [] }) {
   // → サーバー描画とhydration初回が一致し、ヒーロー画像が初期HTMLに乗る。
   const items = heroItems.length ? heroItems : (initialHero || []);
 
+  // 現在のスライド（loop対応の realIndex）。
+  // ⚠️ ドットの active はこれだけで決める。autoplay の残り時間（activeProgress）は
+  //    進行バーの表示にだけ使う。混ぜると F06-A の不具合（送っていないのに
+  //    ドットが動く）に戻る。
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const swiperRef = useRef(null);
+
+  const goToSlide = useCallback((i) => {
+    const s = swiperRef.current;
+    if (!s) return;
+    if (typeof s.slideToLoop === 'function') s.slideToLoop(i);
+    else if (typeof s.slideTo === 'function') s.slideTo(i);
+  }, []);
+
+  const toggleAutoplay = useCallback(() => {
+    const s = swiperRef.current;
+    if (!s || !s.autoplay) return;
+    if (isPlaying) { s.autoplay.stop(); setIsPlaying(false); }
+    else { s.autoplay.start(); setIsPlaying(true); }
+  }, [isPlaying]);
+
+  // prefers-reduced-motion は自動送りを初期停止する（W3C 2.2.2）。
+  // Swiper の init は子の effect で先に走るので、ここでは ref が埋まっている。
+  useEffect(() => {
+    if (!items.length) return;
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (swiperRef.current && swiperRef.current.autoplay) swiperRef.current.autoplay.stop();
+    setIsPlaying(false);
+  }, [items.length]);
+
+  // focus 中は自動送りを止める。スライダー内を移動しただけでは再開しない。
+  const handleFocusCapture = useCallback(() => {
+    if (swiperRef.current && swiperRef.current.autoplay) swiperRef.current.autoplay.stop();
+  }, []);
+  const handleBlurCapture = useCallback((e) => {
+    if (e.currentTarget.contains(e.relatedTarget)) return;
+    if (isPlaying && swiperRef.current && swiperRef.current.autoplay) swiperRef.current.autoplay.start();
+  }, [isPlaying]);
+
   return (
-    <div className="relative w-full bg-slate-950 pt-16 md:pt-10 pb-2 md:pb-10" style={{ overflow: 'hidden', isolation: 'isolate' }}>
+    <div
+      className="relative w-full bg-slate-950 pt-16 md:pt-10 pb-2 md:pb-10"
+      style={{ overflow: 'hidden', isolation: 'isolate' }}
+      onFocusCapture={handleFocusCapture}
+      onBlurCapture={handleBlurCapture}
+    >
       {/* 背景グロー */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(236,72,153,0.07) 0%, transparent 70%)' }} />
 
       {/* 進行バー */}
+      {isPlaying && (
       <div className="absolute bottom-0 left-0 w-full h-0.5 z-[60] bg-white/10">
         <div className="h-full bg-pink-500 shadow-[0_0_12px_#ec4899] transition-all duration-100 linear" style={{ width: `${(1 - activeProgress) * 100}%` }} />
       </div>
+      )}
 
       {items.length === 0 ? (
         <HeroPlaceholder />
@@ -93,6 +141,8 @@ export default function TopHeroSlider({ initialHero = [] }) {
         navigation={true}
         autoplay={{ delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true }}
         onAutoplayTimeLeft={(s, time, progress) => setActiveProgress(progress)}
+        onSwiper={(s) => { swiperRef.current = s; }}
+        onSlideChange={(s) => setActiveIndex(typeof s.realIndex === 'number' ? s.realIndex : (s.activeIndex || 0))}
         className="w-full hero-coverflow"
         style={{ paddingTop: '20px', paddingBottom: '20px' }}
       >
@@ -146,7 +196,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
                   <div className="absolute inset-0 p-4 md:p-10 flex flex-col justify-end items-start">
                     <p className="text-pink-400 font-bold tracking-widest text-xs mb-2 flex items-center gap-2">
                       <span className="w-5 h-[2px] bg-pink-400 inline-block" />
-                      口コミ人気 No.{index + 1}
+                      掲載店舗ピックアップ
                     </p>
                     <h3 className="text-xl md:text-4xl font-black text-white mb-2 md:mb-3 leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]">
                       {getDisplayName(shop.name)}
@@ -179,13 +229,45 @@ export default function TopHeroSlider({ initialHero = [] }) {
         ))}
       </Swiper>
 
-      {/* ドットインジケーター */}
-      <div className="flex justify-center gap-1.5 mt-4">
+      {/* ドットインジケーター＋自動送りの停止・再生
+          ⚠️ 2026-09-08（FIXES.md F06-A）: 以前は active 判定に autoplay の残り時間
+             （activeProgress）を使っており、スライドを送らなくても時間だけでドットが
+             動いていた。時間の progress と slide index は別物なので混ぜない。
+             現在地は onSlideChange の realIndex（loop対応）だけから決める。 */}
+      <div className="flex justify-center items-center gap-1 mt-1">
         {items.map((_, i) => (
-          <span key={i} className={`block h-1.5 rounded-full transition-all duration-500 ${
-            i === Math.round((1 - activeProgress) * (items.length - 1)) ? 'w-6 bg-pink-500' : 'w-1.5 bg-white/20'
-          }`} />
+          <button
+            key={i}
+            type="button"
+            onClick={() => goToSlide(i)}
+            aria-label={`${i + 1}枚目の店舗を表示`}
+            aria-current={i === activeIndex ? 'true' : undefined}
+            className="h-11 w-11 flex items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+          >
+            <span className={`block h-1.5 rounded-full transition-all duration-500 ${
+              i === activeIndex ? 'w-6 bg-pink-500' : 'w-1.5 bg-white/20'
+            }`} />
+          </button>
         ))}
+        {/* 動きを止められるようにする（W3C 2.2.2 Pause, Stop, Hide）。
+            prefers-reduced-motion では初期停止、focus 中は一時停止する。 */}
+        <button
+          type="button"
+          onClick={toggleAutoplay}
+          aria-label={isPlaying ? '店舗スライドの自動送りを一時停止' : '店舗スライドの自動送りを再生'}
+          className="h-11 w-11 flex items-center justify-center rounded-full text-white/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+        >
+          {isPlaying ? (
+            <svg className="w-3.5 h-3.5" viewBox="0 0 12 14" fill="currentColor" aria-hidden="true">
+              <rect x="0" y="0" width="4" height="14" rx="1" />
+              <rect x="8" y="0" width="4" height="14" rx="1" />
+            </svg>
+          ) : (
+            <svg className="w-3.5 h-3.5" viewBox="0 0 12 14" fill="currentColor" aria-hidden="true">
+              <path d="M0 0l12 7-12 7z" />
+            </svg>
+          )}
+        </button>
       </div>
       </>
       )}

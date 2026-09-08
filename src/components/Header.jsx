@@ -3,6 +3,7 @@ import { Link, useLocation } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext";
 import { useReturnTo } from '../utils/useReturnTo';
 import { withReturnTo } from '../utils/authRedirect.mjs';
+import { isTransparentHeaderPath } from '../utils/headerTransparency.mjs';
 
 export default function Header() {
   const location = useLocation();
@@ -52,7 +53,9 @@ export default function Header() {
   //    この2ページも `h-[40vh]` のシネマティック・ヒーローを持つのに透過リストから漏れており、
   //    不透明なヘッダーがヒーローの上端を覆って「板が乗っている」ように見えていた。
   //    ヒーローを持つページは透過にする、というのがこのサイトの一貫した設計。
-  const isTransparentPage = ['/', '/shops/', '/login', '/register', '/ranking', '/brands/'].some(path => location.pathname === path || location.pathname.startsWith(path));
+  // ⚠️ 2026-09-08（FIXES.md F06-D）: 判定を src/utils/headerTransparency.mjs へ一本化した。
+  //    以前の配列 some(startsWith) は '/' が全URLへ前方一致し、全ページが透過になっていた。
+  const isTransparentPage = isTransparentHeaderPath(location.pathname);
 
   return (
     <>

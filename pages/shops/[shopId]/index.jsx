@@ -10,6 +10,7 @@ import React from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import ShopDetailPage from '../../../src/pages/ShopDetailPage';
+import { pickNearbyShops } from '../../../src/utils/nearbyShops.mjs';
 
 export async function getServerSideProps({ params, res }) {
   const { shopId } = params;
@@ -127,17 +128,9 @@ export async function getServerSideProps({ params, res }) {
     }
 
     // 同エリアの他店（回遊＋クロール経路。エリアが無ければ同県でフォールバック）
-    let nearbyShops = [];
-    {
-      const near = nearRes.data;
-      const sameArea = (near || []).filter((s) => {
-        const a = Array.isArray(s.raw_data?.area) ? s.raw_data.area[0] : s.raw_data?.area;
-        return area ? a === area : true;
-      });
-      nearbyShops = (sameArea.length >= 3 ? sameArea : near || [])
-        .slice(0, 8)
-        .map((s) => ({ id: s.id, name: s.name }));
-    }
+    // ⚠️ F06-C: どちらの集合を使ったかを nearbyScope で画面へ渡す。
+    //    見出しだけが元の地域名のままだと「虎ノ門の他の店舗」と書いて荻窪を並べることになる。
+    const { shops: nearbyShops, scope: nearbyScope } = pickNearbyShops(nearRes.data, area, 8);
 
     // ⚠️ ssrShop に raw_data を載せない。
     //    raw_data は1店あたり約11.9KBで、その96%が raw_data.threads（古い重複セラピスト）。
@@ -166,6 +159,7 @@ export async function getServerSideProps({ params, res }) {
         ssrNearbyShops: nearbyShops,
         ssrPrefecture: prefecture,
         ssrArea: area,
+        ssrNearbyScope: nearbyScope,
       },
     };
   } catch (e) {
@@ -179,7 +173,7 @@ export async function getServerSideProps({ params, res }) {
     return {
       props: {
         ssrShop: null, ssrReviewCount: 0, ssrReviews: [], ssrAvgRating: null, ssrSample: '',
-        ssrTherapistCount: 0, ssrReviewedTherapists: [], ssrNearbyShops: [], ssrPrefecture: null, ssrArea: null,
+        ssrTherapistCount: 0, ssrReviewedTherapists: [], ssrNearbyShops: [], ssrPrefecture: null, ssrArea: null, ssrNearbyScope: 'prefecture',
       },
     };
   }

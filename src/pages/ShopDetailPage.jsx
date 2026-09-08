@@ -31,6 +31,7 @@ export default function ShopDetailPage({
   ssrNearbyShops = [],
   ssrPrefecture = null,
   ssrArea = null,
+  ssrNearbyScope = 'prefecture',
   ssrReviewCount = 0,
   ssrAvgRating = null,
   renderSeo = true,
@@ -309,6 +310,9 @@ export default function ShopDetailPage({
   const seoArea = shop.city || shop.raw_data?.city || shop.area ||
     (Array.isArray(shop.raw_data?.area) ? shop.raw_data.area[0] : shop.raw_data?.area) || ssrArea || '';
   const seoLocation = [seoPrefecture, seoArea].filter(Boolean).join(' ');
+  // F06-C: 実際に使った集合の名前だけを見出しに出す。
+  const nearbyScopeName = ssrNearbyScope === 'area' ? ssrArea : ssrPrefecture;
+  const nearbyHeading = nearbyScopeName ? `${nearbyScopeName}の他の店舗` : '他の店舗';
   const seoTherapistCount = Math.max(ssrTherapistCount || 0, therapists.length);
   const seoTitle = reviewCount > 0 ? `${shop.name}の口コミ${reviewCount}件・セラピスト評判` : shop.name;
   const seoDesc = reviewCount > 0
@@ -660,13 +664,15 @@ export default function ShopDetailPage({
               </div>
             )}
 
-            {/* 同エリアの他店＝比較したい人の回遊先＋クロール経路（孤立ページ化の解消） */}
+            {/* 他の店舗＝比較したい人の回遊先＋クロール経路（孤立ページ化の解消）
+                ⚠️ F06-C: 見出しは ssrNearbyScope が示す実際の集合（同エリア/同県）に合わせる。
+                距離を測っていないので「近く」とは書かない。 */}
             {ssrNearbyShops.length > 0 && (
               <div className="bg-slate-900/50 rounded-3xl p-6 md:p-8 border border-white/5">
                 <h3 className="text-sm font-black text-white mb-1">
-                  {ssrArea ? `${ssrArea}の他のメンズエステ` : `${ssrPrefecture || ''}の他のメンズエステ`}
+                  {nearbyHeading}
                 </h3>
-                <p className="text-[11px] text-slate-500 mb-4">近くの店舗と比べてみる</p>
+                <p className="text-[11px] text-slate-500 mb-4">他の店舗も比較する</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {ssrNearbyShops.map((s) => (
                     <Link
@@ -940,35 +946,30 @@ export default function ShopDetailPage({
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                 SCHEDULE
               </h3>
+            </div>
+            {/* ⚠️ 2026-09-08（FIXES.md F07）: ここは常時75vhの外部iframeだった。
+                本番では灰色のエラー表示になっていた＝当サイトのCSPが `default-src 'self'` で
+                frame-src を持たないため、外部の出勤表は構造的に読み込めない。
+                公式の出勤URL自体はHEAD 200を返しており、壊れているのは埋め込みの方。
+                🚫 CSPを緩めたり frame-src https: を足したりして通すことはしない。
+                   外部埋め込みの再実装は別要件として扱う。
+                ここでは公式サイトへ1操作で行けるコンパクトな案内カードにする。 */}
+            <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5 md:p-6">
+              <p className="text-sm font-bold text-white mb-1">{getDisplayName(shop.name)}の出勤</p>
+              <p className="text-[13px] text-slate-400 mb-4">最新の出勤は公式サイトで確認できます。</p>
               <a
                 href={cloudShop.schedule_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition"
+                onClick={() => trackEvent('click_outbound', { link_type: 'schedule', shop_id: shop.id, shop_name: shop.name })}
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-12 px-6 rounded-xl bg-white text-slate-900 font-black text-sm hover:bg-slate-200 transition shadow-lg"
               >
-                別タブで開く ↗
-              </a>
-            </div>
-            <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-slate-900" style={{ height: '75vh' }}>
-              <iframe
-                src={cloudShop.schedule_url}
-                title="出勤スケジュール"
-                className="w-full h-full border-0"
-                loading="lazy"
-              />
-            </div>
-            <div className="mt-4 flex justify-center">
-              <a
-                href={cloudShop.schedule_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-800 border border-white/10 text-sm text-slate-300 hover:text-white hover:bg-slate-700 transition"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                公式サイトで出勤を確認
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
-                表示されない場合は公式サイトで確認
               </a>
+              <p className="text-[13px] text-slate-500 mt-3">外部サイト（店舗の公式ページ）が新しいタブで開きます。</p>
             </div>
           </div>
         </section>

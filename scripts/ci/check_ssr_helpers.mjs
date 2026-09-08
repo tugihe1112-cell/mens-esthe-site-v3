@@ -122,6 +122,23 @@ const check = (name, fn) => {
   const r = await loadModule('src/compat/queryString.js');
   const b = r.buildNextQueryString;
 
+  // ── 静的最適化ページでクエリが読めない問題（2026-09-07 / 本番実測）─────────
+  // 【事故】`/login` `/register` `/auth/*` は `○ Static` でビルドされるため、
+  //   クライアントでも router.asPath が `/login` のままでクエリが載らない。
+  //   実測: `/login?redirect=%2Fshops%2F...` を開いて4秒後も、描画された
+  //   「新規登録」リンクは `/register`（redirect無し）だった。
+  //   ＝ 認証をまたいだ戻り先がページに届いていなかった。
+  //   `/login?redirect=/admin?review=...`（新着口コミメール導線）も同じ経路。
+  const rq = r.resolveQueryString;
+  check('⭐asPathにクエリが無ければ実URLで補う（静的ページの戻り先が届く）', () =>
+    (rq('', '?redirect=%2Fshops%2Fa') === 'redirect=%2Fshops%2Fa' ? null : '静的ページで戻り先が読めない'));
+  check('⭐asPathにクエリがあれば実URLを見ない（動的ページの挙動を変えない）', () =>
+    (rq('shop=Silk', '?shop=Other') === 'shop=Silk' ? null : '動的ページのクエリを上書きしている（ループ再発の恐れ）'));
+  check('先頭の ? を二重に付けない', () =>
+    (rq('', 'redirect=%2Fx') === 'redirect=%2Fx' ? null : '? の扱いが不正'));
+  check('どちらも空なら空', () =>
+    (rq('', '') === '' && rq('', undefined) === '' ? null : '空の扱いが不正'));
+
   check('オブジェクト形式が反映される（無視されていた元バグ）', () => {
     const out = b('', { shop: 'Silk' });
     return out === 'shop=Silk' ? null : `反映されない（${out}）`;
@@ -366,6 +383,112 @@ const check = (name, fn) => {
   const expired = m.createOtpVerifier(async () => ({ error: { message: 'Token has expired' } }));
   const expiredResult = await expired('t4', 'signup');
   check('期限切れはエラーとして扱う', () => (expiredResult.ok === false ? null : '期限切れを成功にしている'));
+}
+
+// ── ヘッダーの透過判定（FIXES.md F06-D）──────────────────────────────────
+// 【事故経路】['/', '/shops/', ...].some(p => path === p || path.startsWith(p))
+//   は '/' が**全URLに前方一致する**ため、全ページが「ヒーローあり＝透過」判定だった。
+//   /search・/popular-reviews・店舗一覧でも背景が透け、本文とヘッダーが重なっていた。
+{
+  const h = await loadModule('src/utils/headerTransparency.mjs');
+  const T = h.isTransparentHeaderPath;
+  const cases = [
+    ['/', true, 'ホーム'],
+    ['/login', true, 'ログイン'],
+    ['/register', true, '登録'],
+    ['/ranking', true, 'ランキング'],
+    ['/shops/60026', true, '店舗詳細'],
+    ['/shops/60026/threads/観月せな', true, '人物詳細'],
+    ['/brands/tiger-gate', true, 'ブランド詳細'],
+    ['/shops', false, '店舗一覧'],
+    ['/shops/', false, '店舗一覧（末尾スラッシュ）'],
+    ['/search', false, '検索'],
+    ['/popular-reviews', false, '口コミ一覧'],
+    ['/brands', false, 'ブランド一覧'],
+    ['/mypage', false, 'マイページ'],
+    ['/post-review', false, '投稿'],
+    ['/stats', false, '統計'],
+    ['', false, '空文字'],
+    [undefined, false, 'undefined'],
+    [null, false, 'null'],
+  ];
+  for (const [path, want, label] of cases) {
+    check(`ヘッダー透過: ${label}(${String(path)})`, () =>
+      (T(path) === want ? null : `${want} を期待したが ${T(path)}`));
+  }
+  check('⭐全ページ透過に戻っていない（F06-Dの再発検出）', () => {
+    const opaque = ['/search', '/popular-reviews', '/shops', '/mypage', '/stats', '/favorites', '/terms'];
+    const wrong = opaque.filter((x) => T(x));
+    return wrong.length ? `不透明であるべきページが透過になっている: ${wrong.join(', ')}` : null;
+  });
+  check('query/hash が混ざっても判定が変わらない', () =>
+    (T('/shops/60026?tab=1') === true && T('/search?q=x') === false && T('/#top') === true
+      ? null : 'query/hash付きで判定が変わる'));
+}
+
+// ── 「他の店舗」が同エリアか同県か（FIXES.md F06-C）───────────────────────
+// 【事故】同エリアが3件未満だとSSRは同県へフォールバックするのに、見出しは
+//   元の地域名のままだった＝「虎ノ門の他の店舗／近くの店舗と比べてみる」と書いて
+//   荻窪・池袋を並べていた。距離は測っていないので「近く」とも言えない。
+{
+  const n = await loadModule('src/utils/nearbyShops.mjs');
+  const row = (id, area) => ({ id, name: '店' + id, raw_data: { area } });
+  const area3 = [row(1, '虎ノ門'), row(2, '虎ノ門'), row(3, '虎ノ門'), row(4, '荻窪')];
+  const area2 = [row(1, '虎ノ門'), row(2, '虎ノ門'), row(4, '荻窪'), row(5, '池袋')];
+
+  check('⭐同エリア3件以上なら scope=area（見出しはエリア名）', () => {
+    const r = n.pickNearbyShops(area3, '虎ノ門');
+    if (r.scope !== 'area') return `scope=${r.scope}`;
+    if (r.shops.length !== 3) return `同エリアだけに絞れていない（${r.shops.length}件）`;
+    return null;
+  });
+  check('⭐同エリア3件未満なら scope=prefecture（見出しは県名）', () => {
+    const r = n.pickNearbyShops(area2, '虎ノ門');
+    if (r.scope !== 'prefecture') return `scope=${r.scope} ＝別エリアを「虎ノ門の他の店舗」と書いてしまう`;
+    if (r.shops.length !== 4) return `フォールバック時の件数が違う（${r.shops.length}件）`;
+    return null;
+  });
+  check('境界: ちょうど3件は area / 2件は prefecture', () => {
+    const three = [row(1, '虎ノ門'), row(2, '虎ノ門'), row(3, '虎ノ門')];
+    const two = [row(1, '虎ノ門'), row(2, '虎ノ門')];
+    if (n.pickNearbyShops(three, '虎ノ門').scope !== 'area') return '3件が area にならない';
+    if (n.pickNearbyShops(two, '虎ノ門').scope !== 'prefecture') return '2件が prefecture にならない';
+    return null;
+  });
+  check('area が無い店舗は最初から prefecture 扱い', () => {
+    const r = n.pickNearbyShops(area3, undefined);
+    return r.scope === 'prefecture' && r.shops.length === 4 ? null : `scope=${r.scope} / ${r.shops.length}件`;
+  });
+  check('raw_data.area が配列の店舗も拾う', () => {
+    const rows = [1, 2, 3].map((i) => ({ id: i, name: 'a' + i, raw_data: { area: ['虎ノ門'] } }));
+    const r = n.pickNearbyShops(rows, '虎ノ門');
+    return r.scope === 'area' ? null : `配列areaを拾えていない（scope=${r.scope}）`;
+  });
+  check('limit を超えない / 空・不正入力で落ちない', () => {
+    const many = Array.from({ length: 20 }, (_, i) => row(i, '虎ノ門'));
+    if (n.pickNearbyShops(many, '虎ノ門', 8).shops.length !== 8) return 'limitが効いていない';
+    if (n.pickNearbyShops(null, '虎ノ門').shops.length !== 0) return 'null入力で落ちる';
+    if (n.pickNearbyShops(undefined, undefined).scope !== 'prefecture') return 'undefined入力の扱いが違う';
+    if (n.pickNearbyShops([], '虎ノ門').shops.length !== 0) return '空配列の扱いが違う';
+    return null;
+  });
+  check('⭐返す一覧は修正前と同一（scopeを足しただけ）', () => {
+    const legacy = (near, area, limit = 8) => {
+      const sameArea = (near || []).filter((s) => {
+        const a = Array.isArray(s.raw_data?.area) ? s.raw_data.area[0] : s.raw_data?.area;
+        return area ? a === area : true;
+      });
+      return (sameArea.length >= 3 ? sameArea : near || [])
+        .slice(0, limit).map((s) => ({ id: s.id, name: s.name }));
+    };
+    const inputs = [[area3, '虎ノ門'], [area2, '虎ノ門'], [area3, undefined], [[], '虎ノ門'], [area2, '荻窪']];
+    for (const [rows, area] of inputs) {
+      const got = JSON.stringify(n.pickNearbyShops(rows, area).shops);
+      const want = JSON.stringify(legacy(rows, area));
+      if (got !== want) return `一覧が変わっている（area=${area}）: ${got} vs ${want}`;
+    }
+    return null;
+  });
 }
 
 if (failures.length) {

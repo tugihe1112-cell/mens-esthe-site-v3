@@ -235,6 +235,124 @@ function read(path) {
   }
 }
 
+// ── F06: 根拠のない順位・新着・近隣表示を出さない（2026-09-08） ──────────────
+// 【事故】本番のヒーローが「口コミ人気 No.1〜5」と表示していたが、実体は固定5件の配列番号で
+//   順位集計ではなかった。ドットの現在地も autoplay の**残り時間**から計算しており、
+//   スライドを送らなくても時間だけで別の番号が光っていた。
+//   店舗一覧は全店に「★ New」、店舗詳細は同県の店を並べながら「虎ノ門の他の/近く」と書いていた。
+//   ＝いずれも「掲載料を受け取らないから正直に出す」という差別化を自ら崩す表示。
+{
+  const strip = (src) => (src || '')
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+
+  // A. ヒーロー：順位に見える文言と、時間から作るドット判定
+  {
+    const p = 'src/components/TopHeroSlider.jsx';
+    const src = read(p);
+    if (src === null) { violations.push(`[F06-A] ${p} が見つからない`); }
+    else {
+      const code = strip(src);
+      if (/口コミ人気|人気\s*No\.|ランキング\s*No\./.test(code)) {
+        violations.push(
+          `[F06-A] ${p} に順位を主張する文言が復活している。\n` +
+          `        ヒーローは HERO_SHOP_IDS の固定5件で、口コミの集計順位ではない。\n` +
+          `        → 「掲載店舗ピックアップ」のように、実際にやっていることだけを書くこと。`
+        );
+      }
+      if (/activeProgress\s*\)\s*\*\s*\(\s*items\.length/.test(code)) {
+        violations.push(
+          `[F06-A] ${p} のドット選択が autoplay の残り時間（activeProgress）から計算されている。\n` +
+          `        時間の progress と slide index は別物。送っていないのにドットだけが動く。\n` +
+          `        → onSlideChange の realIndex を state に持ち、それだけで active を決めること。`
+        );
+      }
+      if (!/onSlideChange/.test(code)) {
+        violations.push(`[F06-A] ${p} が onSlideChange で現在スライドを取得していない。`);
+      }
+      if (!/aria-label=\{`\$\{i \+ 1\}枚目/.test(code)) {
+        violations.push(`[F06-A] ${p} のドットが読み上げ可能な操作でなくなっている（aria-label）。`);
+      }
+      if (!/prefers-reduced-motion/.test(code) || !/toggleAutoplay/.test(code)) {
+        violations.push(
+          `[F06-A] ${p} から自動送りの停止手段が消えている。\n` +
+          `        一時停止／再生ボタンと prefers-reduced-motion の初期停止は W3C 2.2.2 の要件。`
+        );
+      }
+    }
+  }
+
+  // B. 店舗一覧：全店に出る固定バッジ（2026-09-08 オーナー判断で削除）
+  {
+    const p = 'src/pages/ShopListPage.jsx';
+    const code = strip(read(p));
+    if (/★\s*New/.test(code)) {
+      violations.push(
+        `[F06-B] ${p} に固定の「★ New」が復活している。\n` +
+        `        この一覧は口コミ件数を取得していないため、全店舗に無条件で出る（口コミがある店にも付く）。\n` +
+        `        → playbook/decisions.md D-010 を参照。日時ベースの新着バッジも独断で新設しないこと。`
+      );
+    }
+  }
+
+  // C. 店舗詳細：同県の店を並べながら「近く」「元の地域名」と書かない
+  {
+    const p = 'src/pages/ShopDetailPage.jsx';
+    const code = strip(read(p));
+    if (/近くの店舗と比べて|近くのメンズエステ/.test(code)) {
+      violations.push(
+        `[F06-C] ${p} が「近く」と書いている。距離は measure していない（同エリア or 同県の集合）。`
+      );
+    }
+    // ⚠️ 「ssrNearbyScope という文字列がある」だけでは不十分。propsの受け口に残したまま
+    //    見出しの計算から外す、という壊し方を素通しする（実際に妨害テストで素通りした）。
+    //    見出しを組み立てている式そのものが scope を見ているかを検査する。
+    if (!/\{nearbyHeading\}/.test(code)) {
+      violations.push(
+        `[F06-C] ${p} の「他の店舗」見出しが nearbyHeading を使っていない。`
+      );
+    }
+    const headingStmts = [...code.matchAll(/const\s+(?:nearbyScopeName|nearbyHeading)\s*=\s*[^;]+;/g)]
+      .map((m) => m[0]).join('\n');
+    for (const [needle, why] of [
+      ['ssrNearbyScope', '実際に使った集合（area/prefecture）を見ていない'],
+      ['ssrArea', 'エリア名を出す経路が無い'],
+      ['ssrPrefecture', '同県フォールバック時に県名を出す経路が無い'],
+    ]) {
+      if (!headingStmts.includes(needle)) {
+        violations.push(
+          `[F06-C] ${p} の見出し計算が ${needle} を参照していない（${why}）。\n` +
+          `        同エリアが3件未満だとSSRは同県へフォールバックする。\n` +
+          `        見出しだけ元の地域名のままだと「虎ノ門の他の店舗」と書いて荻窪を並べることになる。`
+        );
+      }
+    }
+    const ssr = read('pages/shops/[shopId]/index.jsx');
+    if (ssr !== null && !/nearbyScope/.test(ssr)) {
+      violations.push('[F06-C] 店舗SSRが nearbyScope を props で渡していない。');
+    }
+  }
+
+  // D. ヘッダー：'/' の前方一致で全ページが透過になる書き方に戻さない
+  {
+    const p = 'src/components/Header.jsx';
+    const code = strip(read(p));
+    if (!/isTransparentHeaderPath/.test(code)) {
+      violations.push(
+        `[F06-D] ${p} が src/utils/headerTransparency.mjs を使っていない。\n` +
+        `        判定をここへ書き戻すと境界テストが効かなくなる。`
+      );
+    }
+    if (/\[\s*'\/'\s*,[^\]]*\]\s*\.some\(/.test(code)) {
+      violations.push(
+        `[F06-D] ${p} に「'/' を含む配列の some(startsWith)」が復活している。\n` +
+        `        全pathnameが '/' に前方一致するため、全ページが透過ヘッダーになる。`
+      );
+    }
+  }
+}
+
 if (violations.length) {
   console.error('\n🚨 オーナー確定事項（playbook/decisions.md）に反する変更が検出されました:\n');
   violations.forEach((v) => console.error('  - ' + v + '\n'));

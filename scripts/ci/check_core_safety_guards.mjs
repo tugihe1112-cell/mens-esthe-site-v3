@@ -36,6 +36,27 @@ requireText(migration, /revoke all on function[\s\S]*from public, anon, authenti
 requireText(migrationFix, /return coalesce\(v_allowed, false\)/, 'レート制限RPCの実行時修正がありません');
 requireText(migrationFix, /limit verification failed/, 'レート制限RPCの実呼び出し自己検証がありません');
 
+
+// ── F07: 外部出勤表のiframeとCSP（2026-09-08）────────────────────────────
+// 【事故】店舗詳細が外部の出勤表を 75vh の iframe で埋め込んでいたが、
+//   当サイトのCSPは `default-src 'self'` で frame-src を持たない＝構造的に読み込めず、
+//   本番では灰色のエラー枠が出ていた。公式の出勤URL自体は 200 を返しており、
+//   壊れているのは埋め込みの方。CSPを緩めて通すのではなく、公式サイトへの導線にする。
+const shopDetail = read('src/pages/ShopDetailPage.jsx');
+const shopDetailCode = shopDetail
+  .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+  .replace(/\/\*[\s\S]*?\*\//g, '');
+if (/<iframe/.test(shopDetailCode)) {
+  failures.push('店舗詳細に外部iframeが復活しています（F07: CSPが許可しないので必ずエラー表示になる）');
+}
+if (/frame-src/.test(csp)) {
+  failures.push("CSPに frame-src が追加されています（F07: 外部埋め込みのためにCSPを緩めない）");
+}
+requireText(csp, /default-src 'self'/, "CSPの default-src 'self' が外れています");
+requireText(shopDetail, /id="sec-schedule"/, '出勤セクションのアンカー(sec-schedule)が消えています');
+requireText(shopDetail, /公式サイトで出勤を確認/, '出勤セクションの公式サイト導線が消えています');
+requireText(shopDetail, /schedule_url[\s\S]{0,400}rel="noopener noreferrer"/, '出勤リンクの rel="noopener noreferrer" がありません');
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));
