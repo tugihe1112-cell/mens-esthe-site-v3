@@ -6,6 +6,9 @@ import ThanksBadgeButton from './ThanksBadgeButton.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { trackEvent } from '../utils/analytics';
 import ReviewStoryContent from './ReviewStoryContent.jsx';
+import { useReturnTo } from '../utils/useReturnTo';
+import { withReturnTo } from '../utils/authRedirect.js';
+import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 
 // --- ウォーターマーク ---
 function Watermark({ text }) {
@@ -126,6 +129,7 @@ function DMButton({ toUserId, currentUser, navigate }) {
 
 export default function ModernReviewCard({ review }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const reviewReturnTo = useReturnTo();
   const { user, userPlan } = useAuth();
   const navigate = useNavigate();
   const [creditDays, setCreditDays] = useState(null);
@@ -190,6 +194,15 @@ export default function ModernReviewCard({ review }) {
     || review.user_id === 'owner_manual'
     || review.is_public === true;
 
+  // ⚠️ U04: URLのアンカー（#review-<id>）で名指しされた口コミは折り畳みを開く。
+  //    登録→メール確認→元の口コミへ戻る、の最後の一歩がここ。
+  //    **権限のない本文をURLだけで開かない**ので canReadFull を条件に入れる。
+  useEffect(() => {
+    if (!canReadFull || !review.id) return;
+    if (typeof window === 'undefined') return;
+    if (window.location.hash === `#review-${review.id}`) setIsExpanded(true);
+  }, [canReadFull, review.id]);
+
   // ── セラピストへのリンク可否（snake/camel 両対応・manual_ は非リンク）──
   const cardShopId = review.shop_id || review.shopId || '';
   const cardTherapistId = review.therapist_id || review.therapistId || '';
@@ -216,7 +229,13 @@ export default function ModernReviewCard({ review }) {
     : 'mens-esthe.map';
 
   return (
-    <article className="relative w-full max-w-3xl mx-auto mb-5">
+    // ⚠️ F01/U04: 登録から戻ってきた人・ホームからのリンクが、同じ口コミを開けるようにする。
+    //    scroll-margin-top はヘッダー(64/72px)ぶん。付けないとアンカー先が隠れる。
+    <article
+      id={review.id ? `review-${review.id}` : undefined}
+      style={{ scrollMarginTop: '96px' }}
+      className="relative w-full max-w-3xl mx-auto mb-5"
+    >
       <div className="absolute inset-0 bg-slate-900/95 rounded-2xl border border-white/10 shadow-lg" />
       {/* ウォーターマーク */}
       <Watermark text={wmText} />
@@ -320,13 +339,26 @@ export default function ModernReviewCard({ review }) {
                 <p className="text-pink-300 font-bold text-xs mb-2">続き{Math.max(0, (review.content || '').length - 140)}文字は限定公開</p>
                 <p className="text-white font-black text-sm mb-1 leading-tight">体験談を投稿すると<br/>この続きが読めます</p>
                 <p className="text-slate-400 text-xs mb-3">1件投稿で<span className="text-pink-300 font-bold">最大7日間読み放題</span>（即時自動付与）</p>
-                <Link
-                  to="/post-review"
-                  onClick={() => trackEvent('click_paywall_cta', { target: 'post_review' })}
-                  className="inline-flex min-h-11 items-center rounded-2xl bg-pink-600 px-6 py-2.5 text-xs font-black text-white shadow-lg shadow-pink-900/40 transition hover:bg-pink-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
-                >
-                  体験談を投稿して続きを読む →
-                </Link>
+                {/* ⚠️ U04: ここは会員・未登録の区別なく「投稿して続きを読む」だけだった。
+                       未登録の人にとって投稿は登録より遠い操作で、行き止まりになる。
+                       未登録には登録CTA、会員には投稿CTAを出す。 */}
+                {user ? (
+                  <Link
+                    to="/post-review"
+                    onClick={() => trackEvent('click_paywall_cta', { target: 'post_review', source: 'review_lock' })}
+                    className="inline-flex min-h-11 items-center rounded-2xl bg-pink-600 px-6 py-2.5 text-xs font-black text-white shadow-lg shadow-pink-900/40 transition hover:bg-pink-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                  >
+                    体験談を投稿して続きを読む →
+                  </Link>
+                ) : (
+                  <Link
+                    to={withReturnTo('/register', reviewReturnTo, { source: 'review_lock' })}
+                    onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'review_lock' }); trackRegisterCtaClick('review_lock'); }}
+                    className="inline-flex min-h-11 items-center rounded-2xl bg-pink-600 px-6 py-2.5 text-xs font-black text-white shadow-lg shadow-pink-900/40 transition hover:bg-pink-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                  >
+                    無料登録して続きを読む →
+                  </Link>
+                )}
               </div>
             </div>
           )}

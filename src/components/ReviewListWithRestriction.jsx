@@ -1,10 +1,7 @@
 import React from 'react';
-import { Link } from '../compat/router';
-import { useAuth } from '../contexts/AuthContext';
-import { trackEvent } from '../utils/analytics';
 import { useReturnTo } from '../utils/useReturnTo';
-import { withReturnTo } from '../utils/authRedirect.js';
 import ModernReviewCard from './ModernReviewCard';
+import RegisterInvite from './RegisterInvite.jsx';
 
 /**
  * セラピストページ（SEO着地の本命）の口コミリスト。
@@ -19,8 +16,7 @@ import ModernReviewCard from './ModernReviewCard';
  * is_public / credits / owner_manual / premium 判定）。
  * 件数の出し分けが要るのは1ページ20件を超えてからで、今は存在しない問題。
  */
-export default function ReviewListWithRestriction({ reviews }) {
-  const { user } = useAuth();
+export default function ReviewListWithRestriction({ reviews, shopId = '', therapistId = '' }) {
   // ⚠️ 2026-09-07（FIXES.md F01）: ここの登録リンクは `/register` 固定だった。
   //    読み終わった口コミから登録した人が、メール確認後にホームへ落ちて戻れない。
   //    いま読んでいるページ（#review-xxx を含む）を戻り先として渡す。
@@ -35,31 +31,11 @@ export default function ReviewListWithRestriction({ reviews }) {
         <ModernReviewCard key={review.id} review={review} />
       ))}
 
-      {/* 読み終わり地点のW2R導線（ロックではなく次の行動の提示） */}
-      <div className="rounded-3xl border border-purple-500/25 bg-gradient-to-br from-purple-950/50 to-slate-900/80 p-6 text-center">
-        <p className="text-purple-300 font-black text-[11px] tracking-widest mb-2">口コミ募集中</p>
-        <h4 className="text-white font-black text-lg mb-2">あなたの体験談も、ここに載ります</h4>
-        <p className="text-slate-400 text-xs mb-5 leading-relaxed">
-          体験談を1件投稿すると<span className="text-purple-300 font-bold">最大7日間の閲覧権</span>が即時付与され、<br className="hidden sm:block" />
-          みんなの口コミが読み放題になります。
-        </p>
-        <Link
-          to="/post-review"
-          onClick={() => trackEvent('click_paywall_cta', { target: 'post_review' })}
-          className="inline-block px-8 py-3.5 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 rounded-full text-white font-black shadow-xl shadow-pink-900/50 hover:scale-[1.02] active:scale-[0.98] transition-all border border-white/10 text-sm"
-        >
-          口コミを書く →
-        </Link>
-        {!user && (
-          <Link
-            to={withReturnTo('/register', returnTo, { source: 'review_end' })}
-            onClick={() => trackEvent('click_paywall_cta', { target: 'register' })}
-            className="block mt-3 text-[11px] font-bold text-purple-300 hover:text-purple-200 hover:underline"
-          >
-            無料登録で3日間読み放題 →
-          </Link>
-        )}
-      </div>
+      {/* 読み終わり地点の案内（DESIGN.md U04）。
+          ⚠️ 2026-09-08: ここは状態に関わらず「口コミを書く」を主ボタンにしていた。
+             未登録の人に最初に見せるべきは登録で、投稿は副導線。状態ごとに出し分ける。
+             文言・状態分岐は RegisterInvite に一本化した（複数画面で同じ案内を使うため）。 */}
+      <RegisterInvite source="review_end" returnTo={returnTo} shopId={shopId} therapistId={therapistId} />
     </div>
   );
 }

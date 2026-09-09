@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from '../compat/router';
 import LazyImage from './LazyImage.jsx';
-import { supabase } from '../lib/supabase';
 import { trackEvent } from '../utils/analytics';
 import { ratingGradientClass } from '../utils/ratingStyle';
 
-// ホーム「最新の本物口コミ」＝呼水カード。
-// 情報序列は【店舗ファースト】で全variant統一:
-//   1行目: 🏢 店舗名(白bold・/shops/:id) ＋ 📍エリアピル ＋ ★バッジ
-//   2行目: セラピスト名(1段小さく) ＋ 相対日付 ＋ by ペンネーム ＋ 🧾course
-//   → 写真・ティーザー・続きを読む・6軸ミニバー(ヒーロー)
-// variant='hero'(2カラムぶち抜き・写真大・6軸バー)／'small'／写真なしは引用カード。
-// SSRはティーザー(snippet=120字)のみ。「続きを読む」で冒頭300字をidフェッチ（全文は本命ページへ）。
+// ホーム「最新の実体験口コミ」＝呼水カード。
+// 情報序列は【店舗ファースト】:
+//   上段: 写真80×104 ＋ 店舗名(16px・2行) / セラピスト名(14px) / 日時・投稿者(12px) / ★
+//   下段: 要約本文（カード全幅・14px・行高1.7）→ 6軸 → 「口コミ全文を読む」
+//
+// ⚠️ 2026-09-08（DESIGN.md U02）: 以前は「続きを読む」→ Supabaseから冒頭300字を取得 →
+//    「全文を読む」という**二段階**だった。押してから待たされ、待った先も本文ではない。
+//    通常のリンク1回（人物ページの該当口コミへ直行）に変更し、
+//    そのためだけの `body/loading/expanded/handleExpand` とSupabase取得を削除した。
+// ⚠️ 写真の右の細い列に本文を閉じ込めない。スマホで1行あたりの文字数が少なすぎて読めない。
 
 const DR_LABELS = [
   ['cleanliness', '清潔感'], ['looks', 'ルックス'], ['style', 'スタイル'],
@@ -31,16 +33,15 @@ function relTime(iso) {
 }
 
 export default function HomeReviewCard({ r, variant = 'small', position, pref }) {
-  const [expanded, setExpanded] = useState(false);
-  const [body, setBody] = useState(null);
-  const [loading, setLoading] = useState(false);
-
   const isHero = variant === 'hero';
   const isQuote = !r.image; // 写真なし＝引用カード
   const rating = r.rating != null ? Number(r.rating) : null;
   const time = relTime(r.createdAt);
 
+  // ⚠️ F01/U04: 該当の口コミそのものへ着地させる。`#review-<id>` は
+  //    ModernReviewCard 側の article id と対になっている。片方だけ変えない。
   const threadLink = `/shops/${r.shopId}/threads/${r.therapistId}`;
+  const reviewLink = r.id ? `${threadLink}#review-${r.id}` : threadLink;
   // 検索中継ではなく正規の店舗URLへ直結し、利用者とクローラーの行き止まりをなくす。
   const shopLink = `/shops/${r.shopId}`;
   const loc = [r.prefecture, r.area].filter(Boolean).join('・');
@@ -52,86 +53,60 @@ export default function HomeReviewCard({ r, variant = 'small', position, pref })
     trackEvent('select_home_review', { position, therapist_id: r.therapistId, variant: isQuote ? 'quote' : variant, pref });
   };
 
-  const handleExpand = async (e) => {
-    e.preventDefault();
-    trackEvent('expand_home_review', { therapist_id: r.therapistId, position, pref });
-    if (body == null && r.id) {
-      setLoading(true);
-      try {
-        const { data } = await supabase.from('reviews').select('content').eq('id', r.id).single();
-        setBody((data?.content || '').slice(0, 300)); // 冒頭300字だけ（全文は本命ページへ）
-      } catch { setBody(''); }
-      setLoading(false);
-    }
-    setExpanded(true);
-  };
-
-  // ── 共通パーツ（全variant同一序列） ──────────────
   const RatingBadge = rating != null ? (
-    <span className={`inline-flex items-center text-[11px] font-black text-white bg-gradient-to-br ${ratingGradientClass(rating)} rounded-md px-1.5 py-0.5 shrink-0 shadow`}>
+    <span className={`inline-flex items-center font-black text-white bg-gradient-to-br ${ratingGradientClass(rating)} rounded-md px-1.5 py-0.5 shrink-0 shadow`} style={{ fontSize: '12px' }}>
       ★ {rating.toFixed(1)}
     </span>
   ) : null;
 
-  // 1行目: 店舗名(主役) ＋ エリアピル ＋ ★バッジ
-  const ShopLine = (
-    <div className="flex items-start justify-between gap-2">
-      <div className="min-w-0 flex flex-wrap items-center gap-x-2 gap-y-1">
-        <Link to={shopLink} onClick={onOpen} className={`inline-flex items-center gap-1.5 min-w-0 font-black text-white hover:text-pink-300 transition ${isHero ? 'text-base' : 'text-sm'}`}>
-          <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[9px] shrink-0">🏢</span>
-          <span className="truncate">{r.shopName}</span>
+  const Meta = (
+    <div className="min-w-0 flex-1">
+      <div className="flex items-start justify-between gap-2">
+        <Link
+          to={shopLink}
+          onClick={onOpen}
+          className="min-w-0 font-black text-white hover:text-pink-300 transition line-clamp-2"
+          style={{ fontSize: '16px', lineHeight: 1.5 }}
+        >
+          {r.shopName}
         </Link>
-        {loc && (
-          <span className="text-[10px] font-bold text-pink-200 bg-pink-500/10 border border-pink-500/20 rounded-full px-2 py-0.5 shrink-0">📍 {loc}</span>
+        {RatingBadge}
+      </div>
+      <Link
+        to={threadLink}
+        onClick={onOpen}
+        className="mt-1 block truncate font-bold text-slate-200 hover:text-pink-300 transition"
+        style={{ fontSize: '14px' }}
+      >
+        {r.therapistName}
+      </Link>
+      <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-slate-400" style={{ fontSize: '12px' }}>
+        {time && (
+          <span className="inline-flex items-center gap-1">
+            {time.isNew && <span className="w-1.5 h-1.5 rounded-full bg-pink-500" />}
+            {time.label}
+          </span>
         )}
+        {r.userName && <span>by <span className="font-bold text-slate-300">{r.userName}</span></span>}
+        {loc && <span className="text-pink-200">📍 {loc}</span>}
+        {r.course && <span className="text-slate-300">🧾 {r.course}</span>}
       </div>
-      {RatingBadge}
     </div>
   );
 
-  // 2行目: セラピスト名(1段小さく) ＋ 相対日付 ＋ by ペンネーム ＋ course
-  const TherapistLine = (
-    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
-      <Link to={threadLink} onClick={onOpen} className={`font-bold text-slate-200 truncate hover:text-pink-300 transition ${isHero ? 'text-sm' : 'text-xs'}`}>{r.therapistName}</Link>
-      {time && (
-        <span className="inline-flex items-center gap-1 text-[10px] text-slate-500">
-          {time.isNew && <span className="w-1.5 h-1.5 rounded-full bg-pink-500 shadow shadow-pink-500/50" />}
-          {time.label}
-        </span>
-      )}
-      {r.userName && <span className="text-[10px] text-slate-400">by <span className="font-bold text-slate-300">{r.userName}</span></span>}
-      {r.course && (
-        <span className="text-[10px] font-bold text-slate-300 bg-white/5 border border-white/10 rounded-full px-2 py-0.5">🧾 {r.course}</span>
-      )}
-    </div>
-  );
-
-  const BodyBlock = !expanded ? (
-    <>
-      <p className={`text-slate-300/90 leading-relaxed ${isHero || isQuote ? 'text-sm line-clamp-4' : 'text-xs line-clamp-2'}`}>{r.snippet}…</p>
-      <button type="button" onClick={handleExpand} className="self-start mt-1.5 text-[11px] font-bold text-pink-400 hover:text-pink-300 transition">続きを読む ↓</button>
-    </>
-  ) : (
-    <>
-      <p className="text-xs md:text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
-        {loading ? '読み込み中…' : body}{!loading && '…'}
-      </p>
-      <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2">
-        <Link to={threadLink} onClick={onOpen} className="text-[11px] font-black text-pink-400 hover:text-pink-300 transition">全文を読む → セラピストページ</Link>
-        <Link to={shopLink} className="text-[11px] font-bold text-slate-300 hover:text-pink-300 transition">🏢 店舗ページ（料金・出勤）</Link>
-      </div>
-    </>
-  );
-
-  const MiniBars = (isHero && dr) ? (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-3 gap-y-1 mt-2.5">
+  // 値のない軸は表示しない（0点として描かない）。3列×2行。
+  const MiniBars = dr ? (
+    <div className="grid grid-cols-3 gap-x-3 gap-y-1.5 mt-3">
       {DR_LABELS.map(([k, label]) => {
         const v = Number(dr[k]) || 0;
         if (!v) return null;
         return (
-          <div key={k} className="flex items-center gap-1.5">
-            <span className="text-[10px] text-slate-500 w-10 shrink-0">{label}</span>
-            <div className="flex-1 h-1 rounded-full bg-slate-800 overflow-hidden">
+          <div key={k} className="min-w-0">
+            <div className="flex items-center justify-between gap-1 text-slate-400" style={{ fontSize: '12px' }}>
+              <span className="truncate">{label}</span>
+              <span className="font-bold text-slate-200">{v.toFixed(1)}</span>
+            </div>
+            <div className="mt-0.5 h-1 rounded-full bg-slate-800 overflow-hidden">
               <div className={`h-full rounded-full bg-gradient-to-r ${ratingGradientClass(v)}`} style={{ width: `${Math.min((v / 5) * 100, 100)}%` }} />
             </div>
           </div>
@@ -140,48 +115,44 @@ export default function HomeReviewCard({ r, variant = 'small', position, pref })
     </div>
   ) : null;
 
+  const Body = (
+    <>
+      <p className="mt-3 text-slate-300" style={{ fontSize: '14px', lineHeight: 1.7 }}>{r.snippet}…</p>
+      {isHero && MiniBars}
+      <Link
+        to={reviewLink}
+        onClick={onOpen}
+        className="ui-link mt-2 inline-flex min-h-11 items-center font-bold"
+        style={{ fontSize: '13px' }}
+      >
+        口コミ全文を読む →
+      </Link>
+    </>
+  );
+
+  const shell = `rounded-2xl border bg-slate-900 p-4 transition-all duration-300 ${
+    isHero ? 'md:col-span-2 border-pink-500/25 hover:border-pink-500/50' : 'border-white/10 hover:border-pink-500/40'
+  }`;
+
   // ── 引用カード（写真なし）＝文章が主役 ──────────
   if (isQuote) {
     return (
-      <div className={`relative overflow-hidden rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-950/50 via-slate-900 to-slate-900 p-4 hover:border-purple-400/40 transition-all duration-300 ${isHero ? 'md:col-span-2' : ''}`}>
-        <span aria-hidden className="absolute -top-3 left-2 text-6xl font-black text-purple-500/25 leading-none select-none">“</span>
-        <div className="relative pl-6">
-          {ShopLine}
-          {TherapistLine}
-          <div className="mt-2">{BodyBlock}</div>
-        </div>
-      </div>
+      <article className={shell}>
+        <div className="flex gap-3">{Meta}</div>
+        {Body}
+      </article>
     );
   }
 
-  // ── ヒーローカード（先頭・2カラムぶち抜き・写真大・6軸ミニバー） ──────────
-  if (isHero) {
-    return (
-      <div className="md:col-span-2 flex gap-4 rounded-2xl border border-pink-500/25 bg-gradient-to-br from-slate-900 to-slate-900/60 hover:border-pink-500/50 transition-all duration-300 p-4 shadow-lg shadow-pink-900/10">
-        <Link to={threadLink} onClick={onOpen} className="w-24 h-32 md:w-28 md:h-36 shrink-0 rounded-xl overflow-hidden bg-slate-800">
-          <LazyImage src={r.image} alt={r.therapistName} width={320} className="w-full h-full object-cover" />
-        </Link>
-        <div className="min-w-0 flex-1 flex flex-col">
-          {ShopLine}
-          {TherapistLine}
-          {MiniBars}
-          <div className="mt-2">{BodyBlock}</div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── 小カード ──────────
   return (
-    <div className="flex gap-3 rounded-2xl border border-white/10 bg-slate-900 hover:border-pink-500/40 transition-all duration-300 p-3">
-      <Link to={threadLink} onClick={onOpen} className="w-16 h-20 shrink-0 rounded-xl overflow-hidden bg-slate-800">
-        <LazyImage src={r.image} alt={r.therapistName} width={160} className="w-full h-full object-cover" />
-      </Link>
-      <div className="min-w-0 flex-1 flex flex-col">
-        {ShopLine}
-        {TherapistLine}
-        <div className="mt-1.5">{BodyBlock}</div>
+    <article className={shell}>
+      <div className="flex gap-3">
+        <Link to={reviewLink} onClick={onOpen} className="shrink-0 overflow-hidden rounded-xl bg-slate-800" style={{ width: '80px', height: '104px' }}>
+          <LazyImage src={r.image} alt={r.therapistName} width={240} className="w-full h-full object-cover" />
+        </Link>
+        {Meta}
       </div>
-    </div>
+      {Body}
+    </article>
   );
 }

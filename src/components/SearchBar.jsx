@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from '../compat/router';
 
+// ⚠️ DESIGN.md U02-4/5:
+//   ・入力と検索ボタンは**同じ行**。高さ48px、ボタン幅はスマホ72px・PC96px、間隔8px。
+//   ・入力は `min-width:0`（flex の中で縮まないと、ボタンが画面外へ押し出される）。
+//   ・検索欄は**常時ラベル**を持つ。placeholder はラベルの代わりにならない
+//     （入力を始めた瞬間に消えるので、何を入れる欄か分からなくなる）。
+//   ・Enterでも検索できる（form の submit のままにする）。
+//   ・モード変更で入力値を消す現行仕様は、この見た目変更で変えない。
 export default function SearchBar() {
   const [shopInput, setShopInput] = useState('');
   const [castInput, setCastInput] = useState('');
@@ -15,83 +22,91 @@ export default function SearchBar() {
     navigate(`/search?${params.toString()}`);
   };
 
+  const fieldClass =
+    'w-full min-w-0 rounded-xl border border-white/10 bg-white/10 px-3.5 text-white placeholder-slate-400 transition focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-pink-500';
+  const fieldStyle = { height: '48px', fontSize: '16px', fontWeight: 700 };
+  const submitClass =
+    'shrink-0 rounded-xl bg-[#be185d] font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 active:scale-[0.98]';
+
   return (
-    <form onSubmit={handleSearch} className="space-y-3">
+    <form onSubmit={handleSearch}>
       {/* スマホは検索対象を切り替えて入力欄を1つだけ表示。2欄縦積みで
           ファーストビューを使い切っていた問題を解消する。PCは従来どおりAND検索。 */}
-      <div className="sm:hidden rounded-xl bg-black/20 p-1 grid grid-cols-2" role="group" aria-label="検索対象">
-        {[
-          { key: 'shop', label: '🏢 店舗・エリア' },
-          { key: 'cast', label: '💃 セラピスト' },
-        ].map((mode) => (
-          <button
-            key={mode.key}
-            type="button"
-            onClick={() => {
-              setMobileMode(mode.key);
-              if (mode.key === 'shop') setCastInput('');
-              else setShopInput('');
-            }}
-            aria-pressed={mobileMode === mode.key}
-            className={`min-h-10 rounded-lg text-xs font-black transition ${
-              mobileMode === mode.key ? 'bg-white text-slate-950 shadow' : 'text-slate-400'
-            }`}
-          >
-            {mode.label}
-          </button>
-        ))}
-      </div>
+      <div className="sm:hidden">
+        <div className="grid grid-cols-2 gap-1 rounded-xl bg-black/20 p-1" role="group" aria-label="検索対象">
+          {[
+            { key: 'shop', label: '店舗・エリア' },
+            { key: 'cast', label: 'セラピスト' },
+          ].map((mode) => (
+            <button
+              key={mode.key}
+              type="button"
+              onClick={() => {
+                setMobileMode(mode.key);
+                if (mode.key === 'shop') setCastInput('');
+                else setShopInput('');
+              }}
+              aria-pressed={mobileMode === mode.key}
+              className={`min-h-11 rounded-lg font-black transition ${
+                mobileMode === mode.key ? 'bg-white text-slate-950 shadow' : 'text-slate-300'
+              }`}
+              style={{ fontSize: '13px' }}
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
 
-      <div className="sm:hidden relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg pointer-events-none">
-          {mobileMode === 'shop' ? '🏢' : '💃'}
-        </span>
-        <input
-          type="search"
-          value={mobileMode === 'shop' ? shopInput : castInput}
-          onChange={(e) => mobileMode === 'shop' ? setShopInput(e.target.value) : setCastInput(e.target.value)}
-          placeholder={mobileMode === 'shop' ? '店舗名・エリアを入力' : 'セラピスト名を入力'}
-          aria-label={mobileMode === 'shop' ? '店舗名・エリア' : 'セラピスト名'}
-          className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white/10 border border-white/10 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white/20 transition-all backdrop-blur-xl text-sm font-bold"
-        />
-      </div>
-
-      <div className="hidden sm:flex sm:flex-row gap-3">
-
-        {/* 🏢 店舗・エリア */}
-        <div className="flex-1 relative">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg pointer-events-none">🏢</span>
+        <label htmlFor="home-search-mobile" className="ui-label mt-3 block">
+          {mobileMode === 'shop' ? '店舗名・エリア' : 'セラピスト名'}
+        </label>
+        <div className="mt-1.5 flex items-stretch gap-2">
           <input
+            id="home-search-mobile"
+            type="search"
+            value={mobileMode === 'shop' ? shopInput : castInput}
+            onChange={(e) => (mobileMode === 'shop' ? setShopInput(e.target.value) : setCastInput(e.target.value))}
+            placeholder={mobileMode === 'shop' ? '例）新宿' : '例）観月せな'}
+            className={fieldClass}
+            style={fieldStyle}
+          />
+          <button type="submit" className={submitClass} style={{ height: '48px', width: '72px', fontSize: '14px' }}>
+            検索
+          </button>
+        </div>
+      </div>
+
+      <div className="hidden sm:flex sm:items-end sm:gap-2">
+        <div className="min-w-0 flex-1">
+          <label htmlFor="home-search-shop" className="ui-label block">店舗名・エリア</label>
+          <input
+            id="home-search-shop"
             type="search"
             value={shopInput}
-            onChange={e => setShopInput(e.target.value)}
-            placeholder="店舗名・エリアで検索..."
-            className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white/10 border border-white/10 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white/20 transition-all backdrop-blur-xl text-sm font-bold"
+            onChange={(e) => setShopInput(e.target.value)}
+            placeholder="例）新宿"
+            className={`${fieldClass} mt-1.5`}
+            style={fieldStyle}
           />
         </div>
 
-        {/* 区切り */}
-        <div className="hidden sm:flex items-center text-slate-500 font-bold text-sm flex-shrink-0">×</div>
-
-        {/* 💃 キャスト名 */}
-        <div className="flex-1 relative">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg pointer-events-none">💃</span>
+        <div className="min-w-0 flex-1">
+          <label htmlFor="home-search-cast" className="ui-label block">セラピスト名</label>
           <input
+            id="home-search-cast"
             type="search"
             value={castInput}
-            onChange={e => setCastInput(e.target.value)}
-            placeholder="キャスト名で検索..."
-            className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white/10 border border-white/10 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white/20 transition-all backdrop-blur-xl text-sm font-bold"
+            onChange={(e) => setCastInput(e.target.value)}
+            placeholder="例）観月せな"
+            className={`${fieldClass} mt-1.5`}
+            style={fieldStyle}
           />
         </div>
-      </div>
 
-      <button
-        type="submit"
-        className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black text-sm transition-all shadow-lg shadow-pink-900/40 active:scale-[0.98]"
-      >
-        検索する
-      </button>
+        <button type="submit" className={submitClass} style={{ height: '48px', width: '96px', fontSize: '14px' }}>
+          検索
+        </button>
+      </div>
     </form>
   );
 }

@@ -12,6 +12,10 @@ import SeoHead from '../components/SeoHead.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import { trackEvent } from '../utils/analytics';
+import { useReturnTo } from '../utils/useReturnTo';
+import { withReturnTo } from '../utils/authRedirect.js';
+import { trackRegisterCtaClick } from '../utils/registerAnalytics';
+import { filterReviewsForTherapist } from '../utils/reviewIdentity.js';
 
 // ローディング中の骨組み（全画面テキスト→スケルトンで"個人サイト感"を除去）
 function ThreadSkeleton() {
@@ -104,7 +108,6 @@ export default function ThreadDetailPage({
 
         // 4. 店舗の口コミを取得し、クライアント側でセラピスト名を正規化マッチング
         if (therapistName) {
-          const normName = therapistName.replace(/[\s　]/g, '');
           const shopForReview = shopData?.[0];
           const groupId = shopForReview?.group_id;
 
@@ -126,11 +129,19 @@ export default function ThreadDetailPage({
           );
           const rData = await rRes.json();
           if (Array.isArray(rData) && isMounted) {
-            // スペース除去して正規化マッチング
-            const matched = rData.filter(r =>
-              r.therapist_name && r.therapist_name.replace(/[\s　]/g, '') === normName
+            // ⚠️ 2026-09-08（FIXES.md F04）: ここは**名前だけ**で照合していた。
+            //    系列全店から取っているので、同名の別人の口コミがそのまま混ざる。
+            //    契約は src/utils/reviewIdentity.js に一本化した
+            //    （IDがあるものはID完全一致だけ／IDが無い旧口コミは同名1人のときだけ）。
+            const rosterRes = await fetch(
+              `${url}/rest/v1/therapists?${reviewQuery}select=id,shop_id,name`,
+              { headers }
             );
-            setCloudTherapistReviews(matched);
+            const rosterData = await rosterRes.json();
+            const roster = Array.isArray(rosterData) ? rosterData : [];
+            setCloudTherapistReviews(
+              filterReviewsForTherapist(rData, { id: threadId, shop_id: shopId, name: therapistName }, roster)
+            );
           }
         }
       } catch(e) {
@@ -191,18 +202,33 @@ export default function ThreadDetailPage({
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // ⚠️ U04: 読了案内（RegisterInvite）の主ボタンが画面に見えている間は固定CTAを隠す。
+  //    同じ意味のボタンが2つ重なって本文を覆うのを避けるため。
+  //    **スクロールごとにstateを更新しない**ので IntersectionObserver を使う。
+  const [inviteVisible, setInviteVisible] = React.useState(false);
+  const threadReturnTo = useReturnTo();
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof IntersectionObserver === 'undefined') return;
+    const el = document.querySelector('[data-cta="review-end"]');
+    if (!el) { setInviteVisible(false); return; }
+    const io = new IntersectionObserver(
+      (entries) => setInviteVisible(entries.some((e) => e.isIntersecting)),
+      { rootMargin: '0px 0px -80px 0px' }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [cloudTherapistReviews, reviews, threadId, user]);
+
   // 直接取得した口コミを優先、なければDataContextのreviewsからフォールバック
   const therapistReviews = useMemo(() => {
     if (cloudTherapistReviews.length > 0) return cloudTherapistReviews;
     if (!shop || !therapist || !reviews) return [];
-    return reviews.filter(r =>
-      (r.therapistId === threadId) ||
-      (r.threadId === threadId) ||
-      (r.therapist_id === threadId) ||
-      (r.therapist_name === therapist.name) ||
-      (r.therapistName === therapist.name)
-    );
-  }, [cloudTherapistReviews, reviews, threadId, therapist, shop]);
+    // ⚠️ F04: 名前一致（`r.therapist_name === therapist.name`）で拾い直さない。
+    //    IDが違う同名の別人が混ざる。IDが無い旧データだけ契約に従って拾う。
+    return filterReviewsForTherapist(reviews, { id: threadId, shop_id: shopId, name: therapist.name }, [
+      { id: threadId, shop_id: shopId, name: therapist.name },
+    ]);
+  }, [cloudTherapistReviews, reviews, threadId, therapist, shop, shopId]);
 
   // 閲覧カウント（クライアント発火・fire-and-forget）。
   // gSSPから移したことでページをCDNキャッシュ可能に。botはJS非実行で自然除外。
@@ -418,7 +444,7 @@ export default function ThreadDetailPage({
           </div>
 
           {therapistReviews.length > 0 ? (
-            <ReviewListWithRestriction reviews={therapistReviews} />
+            <ReviewListWithRestriction reviews={therapistReviews} shopId={shopId} therapistId={threadId} />
           ) : (
             <div className="text-center py-10 px-4 bg-slate-900/40 rounded-2xl border border-dashed border-purple-800/50">
               <p className="text-white font-black text-base mb-1">まだ口コミがありません</p>
@@ -440,16 +466,30 @@ export default function ThreadDetailPage({
         </section>
       </div>
 
-      {/* B-1: 追いCTA（スクロールで出るsticky）＝口コミを読み終えた直後に投稿へ誘導 */}
-      {showStickyCta && (
+      {/* B-1: 追いCTA（スクロールで出るsticky）。
+          ⚠️ U04: 未登録には投稿ではなく**登録**を出す（投稿は登録より遠い操作）。
+             登録済みの対象指定つき投稿導線は従来どおり維持する。
+             読了案内が見えている間は出さない（同じ意味のボタンを重ねない）。 */}
+      {showStickyCta && !inviteVisible && (
         <div className="fixed left-0 right-0 z-40 px-4 pointer-events-none" style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 72px)' }}>
-          <button
-            onClick={() => handlePostReview('sticky')}
-            className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-3.5 rounded-2xl shadow-2xl shadow-pink-900/50 active:scale-[0.98] transition text-sm"
-          >
-            <span>✍️</span>{therapist.name}の口コミを書く
-            <span className="text-[11px] font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">最大7日間</span>
-          </button>
+          {user ? (
+            <button
+              onClick={() => handlePostReview('sticky')}
+              className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-3.5 rounded-2xl shadow-2xl shadow-pink-900/50 active:scale-[0.98] transition text-sm"
+            >
+              <span>✍️</span>{therapist.name}の口コミを書く
+              <span className="text-[11px] font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">最大7日間</span>
+            </button>
+          ) : (
+            <Link
+              to={withReturnTo('/register', threadReturnTo, { source: 'review_end' })}
+              onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'sticky' }); trackRegisterCtaClick('review_end'); }}
+              className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-3.5 rounded-2xl shadow-2xl shadow-pink-900/50 active:scale-[0.98] transition text-sm"
+            >
+              無料登録する
+              <span className="text-[11px] font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">3日間読み放題</span>
+            </Link>
+          )}
         </div>
       )}
     </div>

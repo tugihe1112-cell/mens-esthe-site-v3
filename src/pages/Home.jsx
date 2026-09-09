@@ -18,6 +18,9 @@ import SeoHead from '../components/SeoHead.jsx';
 import { supabase } from '../lib/supabase';
 import { TherapistGridSkeleton, ShopGridSkeleton } from '../components/ui/Skeleton.jsx';
 import siteStats from '../data/stats-latest.json';
+import { useAuth } from '../contexts/AuthContext';
+import { withReturnTo } from '../utils/authRedirect.js';
+import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 
 // 順位ごとの表示スタイル
 const RANK_STYLES = [
@@ -42,6 +45,10 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
   // ── 都道府県ブロック: SSR初期HTMLは全ユーザー共通。マウント後にlocalStorageの好みで一致県を先頭へ（UIなしの自動並べ替え） ──
   const [orderedPrefs, setOrderedPrefs] = useState(reviewsByPref);
   const [reordering, setReordering] = useState(false);
+  // ⚠️ U02: 全県分を縦に並べると、ホームが「口コミの倉庫」になって読み終われない。
+  //    見出し＋select＋選択地域の最大2件にする。空文字＝先頭（SSRと初回レンダーを一致させる）。
+  const [selectedPref, setSelectedPref] = useState('');
+  const { user } = useAuth();
 
   useEffect(() => {
     setOrderedPrefs(reviewsByPref);
@@ -57,6 +64,13 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
       }
     } catch {}
   }, [reviewsByPref]);
+
+  // 選択中の地域ブロック（最大2件・最新カードと同じ口コミは除く）
+  const activePref = selectedPref || orderedPrefs[0]?.pref || '';
+  const activeBlock = orderedPrefs.find((b) => b.pref === activePref) || orderedPrefs[0] || null;
+  const activeBlockReviews = (activeBlock?.reviews || [])
+    .filter((review) => review.id !== leadReview?.id)
+    .slice(0, 2);
 
   // 注目セラピスト取得（店舗分散・地域分散ロジック）
   useEffect(() => {
@@ -211,23 +225,51 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
         </Head>
       )}
       <Header />
-      <h1 className="sr-only">全国のメンズエステ店舗・セラピスト検索と口コミ</h1>
-      
-      {/* 1. ヒーローセクション */}
+
+      {/* 1. ヒーローセクション
+          ⚠️ U02: スライダーの置換・静的化・coverflow効果や高さの再設計はしない。 */}
       <div className="relative">
         <TopHeroSlider initialHero={initialHero} />
-        {/* 検索カードをスライダーに食い込ませて常にファーストビュー内に */}
-        <div className="relative z-30 -mt-2 md:mt-6 px-3 md:px-4 max-w-4xl mx-auto">
-          <div className="bg-slate-900/80 backdrop-blur-2xl border border-white/10 p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-            <div className="text-center mb-3 md:mb-6">
-              <h2 className="text-xl md:text-3xl font-black text-white mb-1 md:mb-2 drop-shadow-lg tracking-tight">
-                店舗・セラピスト名で口コミ検索
-              </h2>
-              <p className="text-slate-300 text-xs md:text-sm font-bold opacity-80 hidden md:block">
-                全国のメンズエステを地域・キャスト名・店舗名から探せます
-              </p>
+        {/* 検索カードをスライダーに食い込ませて常にファーストビュー内に。
+            ⚠️ U02-2: PC幅880px・余白24px・角丸16px。以前の40px余白＋40px角丸は
+               「何のサイトか」を書くための領域をカードの縁で食い潰していた。 */}
+        <div className="relative z-30 -mt-2 md:mt-6 px-4 md:px-6 max-w-[880px] mx-auto">
+          <div className="bg-slate-900/80 backdrop-blur-2xl border border-white/10 p-4 md:p-6 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            {/* ⚠️ U02-1: ページのH1はここ1つだけ。以前は sr-only のH1が別にあり、
+                   画面に見えている一番大きな文字（＝利用者が読む見出し）と食い違っていた。
+                   このカード内のH1はスマホ22px・PC28pxで、汎用H1より小さくする（U02-2）。 */}
+            <h1 className="font-black text-white tracking-tight" style={{ fontSize: '22px', lineHeight: 1.3 }}>
+              <span className="md:hidden">口コミを読んで、店選びの不安を減らす。</span>
+              <span className="hidden md:inline" style={{ fontSize: '28px' }}>口コミを読んで、店選びの不安を減らす。</span>
+            </h1>
+
+            {!user ? (
+              <div className="mt-3">
+                <p className="text-pink-300 font-bold" style={{ fontSize: '15px' }}>無料登録で3日間、口コミ読み放題</p>
+                <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                  <Link
+                    to={withReturnTo('/register', '', { source: 'home' })}
+                    onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
+                    className="inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-[#be185d] px-6 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                    style={{ minHeight: '48px', fontSize: '15px' }}
+                  >
+                    無料登録する
+                  </Link>
+                  <Link to="/popular-reviews" className="ui-link inline-flex min-h-11 items-center justify-center px-2" style={{ fontSize: '14px' }}>
+                    登録せず口コミを読む
+                  </Link>
+                </div>
+                {/* ⚠️ U02-6: 起算はアカウント作成時点から72時間。「メール確認完了から丸3日」とは書かない。
+                       無料期間後の自動課金は実装が存在しないので「自動課金なし」は事実。 */}
+                <p className="ui-help mt-2">閲覧期間は登録手続き時から3日間です。メール確認後に利用できます。自動課金はありません</p>
+              </div>
+            ) : (
+              <p className="ui-muted mt-2">店舗名・エリア・セラピスト名で探す</p>
+            )}
+
+            <div className="mt-4">
+              <SearchBar />
             </div>
-            <SearchBar />
           </div>
         </div>
       </div>
@@ -239,7 +281,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
       <div className="flex-1 min-w-0 space-y-24">
 
         {/* 検索直後に最新の実体験を1件提示。その後に中立性と地域別口コミを続ける。 */}
-        {reviewsByPref.length > 0 && (
+        {reviewsByPref.length > 0 ? (
           <section>
             <div className="flex items-center justify-between mb-5 px-2">
               <div>
@@ -261,67 +303,65 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
               <Link to="/stats" className="ml-2 inline-flex min-h-11 items-center font-bold text-pink-400 hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">集計を見る →</Link>
             </div>
 
-            {/* 並べ替え（好みの県を先頭へ）はフェードでCLSを抑制 */}
-            <div className={`space-y-10 transition-opacity duration-300 ${reordering ? 'opacity-50' : 'opacity-100'}`}>
-              {orderedPrefs.map((block) => {
-                const blockReviews = block.reviews.filter((review) => review.id !== leadReview?.id);
-                if (blockReviews.length === 0) return null;
-                return (
-                  <div key={block.pref}>
-                    {/* 県見出し行 */}
-                    <div className="flex items-center justify-between mb-3 px-1">
-                      <h4 className="text-lg font-black text-white">📍 {block.pref}の口コミ</h4>
-                      <Link
-                        to={block.slug ? `/area/${block.slug}` : '/popular-reviews'}
-                        onClick={() => trackEvent('click_pref_more', { pref: block.pref })}
-                        className="text-xs text-slate-400 hover:text-white transition shrink-0 ml-2"
-                      >
-                        もっと見る →
-                      </Link>
-                    </div>
-                    {/* その県の最新2件・2カラム（small/引用カード） */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {blockReviews.map((r, i) => (
-                        <HomeReviewCard key={r.id || i} r={r} variant="small" position={i} pref={block.pref} />
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
+            {/* 地域別の口コミ（U02下部2〜3）
+                ⚠️ 全県分を縦に並べない。見出し＋select＋選択地域の**最大2件**。
+                   足りない場合は他地域の口コミで埋めない（「その地域の口コミ」ではなくなる）。
+                   全エリアの内部リンクは下の「すべてのエリア」とフッターに残っている。 */}
+            <div className={`transition-opacity duration-300 ${reordering ? 'opacity-50' : 'opacity-100'}`}>
+              <div className="flex flex-wrap items-end justify-between gap-3 mb-3 px-1">
+                <h4 className="text-lg font-black text-white">地域別の口コミ</h4>
+                <div className="flex items-center gap-2">
+                  <label htmlFor="home-pref-select" className="ui-label">口コミの地域</label>
+                  <select
+                    id="home-pref-select"
+                    value={activePref}
+                    onChange={(e) => setSelectedPref(e.target.value)}
+                    className="rounded-xl border border-white/10 bg-slate-800 px-3 font-bold text-white focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    style={{ minHeight: '44px', fontSize: '14px' }}
+                  >
+                    {orderedPrefs.map((block) => (
+                      <option key={block.pref} value={block.pref}>{block.pref}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
 
-              {/* 投稿の呼び水（末尾・破線・現行踏襲） */}
-              <Link
-                to="/post-review"
-                onClick={() => trackEvent('select_home_review', { position: 'invite', variant: 'invite' })}
-                className="group flex flex-col items-center justify-center text-center rounded-2xl border-2 border-dashed border-pink-500/30 bg-pink-500/5 hover:bg-pink-500/10 hover:border-pink-500/50 transition-all duration-200 p-5 min-h-[128px]"
-              >
-                <div className="text-2xl mb-1.5 transition-transform group-hover:-translate-y-0.5">✍️</div>
-                <div className="text-sm font-black text-white leading-snug">あなたの体験談が<br />次にここに載ります</div>
-                <div className="text-[11px] font-bold text-pink-300 mt-1.5">1件書けば口コミ読み放題 →</div>
-              </Link>
+              {activeBlock && (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {activeBlockReviews.map((r, i) => (
+                      <HomeReviewCard key={r.id || i} r={r} variant="small" position={i} pref={activeBlock.pref} />
+                    ))}
+                  </div>
+                  {activeBlockReviews.length === 0 && (
+                    <p className="ui-muted px-1">この地域の口コミはまだ準備中です。</p>
+                  )}
+                  <Link
+                    to={activeBlock.slug ? `/area/${activeBlock.slug}` : '/popular-reviews'}
+                    onClick={() => trackEvent('click_pref_more', { pref: activeBlock.pref })}
+                    className="ui-link mt-3 inline-flex min-h-11 items-center font-bold"
+                    style={{ fontSize: '13px' }}
+                  >
+                    この地域の口コミを見る →
+                  </Link>
+                </>
+              )}
+            </div>
+          </section>
+        ) : (
+          /* ⚠️ U02: 口コミが0件でも架空のカードを作らない。探せる場所へ送る。 */
+          <section className="ui-card p-5 text-center">
+            <p className="text-white font-black text-lg">まだ公開口コミがありません</p>
+            <div className="mt-4 flex flex-col sm:flex-row justify-center gap-3">
+              <Link to="/popular-reviews" className="ui-link inline-flex min-h-11 items-center justify-center px-2">公開口コミを探す</Link>
+              <Link to="/shops" className="ui-link inline-flex min-h-11 items-center justify-center px-2">店舗を探す</Link>
             </div>
           </section>
         )}
 
-        {/* 1.5. 主要機能ショートカット */}
-        <section>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              { icon: '🔍', title: 'キャスト検索', desc: '名前・店舗・エリアで絞り込み検索', link: '/search' },
-              { icon: '✍️', title: '口コミを書く', desc: '体験談を投稿して閲覧権を獲得', link: '/post-review' },
-              { icon: '🏆', title: 'ランキング', desc: '口コミ評価が高いセラピスト', link: '/ranking' },
-              { icon: '✨', title: '新人を見る', desc: '新しく掲載されたセラピスト', link: '/new-therapists' },
-            ].map(f => (
-              <Link key={f.title} to={f.link}
-                className="group rounded-2xl bg-slate-900/60 border border-white/5 hover:border-pink-500/30 p-4 transition-all duration-200 hover:-translate-y-0.5">
-                <div className="text-2xl mb-2">{f.icon}</div>
-                <h4 className="text-white font-black text-sm">{f.title}</h4>
-                <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">{f.desc}</p>
-                <span className="text-pink-400 text-[11px] font-bold mt-2 block group-hover:translate-x-1 transition-transform">使ってみる →</span>
-              </Link>
-            ))}
-          </div>
-        </section>
+        {/* ⚠️ 2026-09-08（U02下部4）削除: 4機能ショートカット。
+            共通ナビ（ホーム/探す/口コミ/投稿/登録）と検索カードで同じ導線を既に持っており、
+            ホーム1枚に同じ行き先が3重に並んでいた。**リンク先のページは削除していない。** */}
 
         {/* 2. エリアから探す（旧「エリアから探す」＋旧「人気エリア」を1セクションに統合）
             ⚠️ 統合した理由（2026-08-17）: ホーム1枚に「エリアから探す」という見出しが
@@ -380,28 +420,8 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
           </div>
         </section>
 
-        {/* 新人セラピスト・注目口コミ・掲示板 バナー */}
-        <section className="px-2 mb-6">
-          <div className="grid grid-cols-3 gap-3">
-            <Link to="/new-therapists" className="group relative rounded-2xl overflow-hidden border border-pink-500/20 bg-gradient-to-br from-pink-900/40 to-slate-900 hover:border-pink-500/50 transition-all duration-300 hover:-translate-y-1 p-4 flex flex-col justify-between min-h-[90px]">
-              <div>
-                <span className="text-xl">✨</span>
-                <h3 className="text-sm font-black text-white mt-1">新人キャスト</h3>
-                <p className="text-[10px] text-slate-400 mt-0.5">新しく登録されたキャスト</p>
-              </div>
-              <span className="text-pink-400 text-xs font-bold group-hover:translate-x-1 transition-transform">一覧を見る →</span>
-            </Link>
-            <Link to="/popular-reviews" className="group relative rounded-2xl overflow-hidden border border-purple-500/20 bg-gradient-to-br from-purple-900/40 to-slate-900 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-1 p-4 flex flex-col justify-between min-h-[90px]">
-              <div>
-                <span className="text-xl">💬</span>
-                <h3 className="text-sm font-black text-white mt-1">みんなの口コミ</h3>
-                <p className="text-[10px] text-slate-400 mt-0.5">注目の体験レポート</p>
-              </div>
-              <span className="text-purple-400 text-xs font-bold group-hover:translate-x-1 transition-transform">口コミを見る →</span>
-            </Link>
-            {/* ⚠️ 2026-08-12: 掲示板の導線を一時撤去（decisions.md D-006） */}
-          </div>
-        </section>
+        {/* ⚠️ 2026-09-08（U02下部4）削除: 「新人キャスト」「みんなの口コミ」バナー。
+            直前のショートカットと同じ行き先の重複。ページ自体は残っている。 */}
 
         {/* 3.5. 注目セラピスト */}
         <section>
@@ -512,6 +532,40 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
           )}
         </section>
 
+{/* 投稿バナー（U02下部5）
+            ⚠️ ホーム下部の**1か所だけ**に集約する。以前は本文中の破線バナー・
+               右サイドバー・ショートカットに同じ話が散っていた。
+            ⚠️「1件で読み放題」という期限のない書き方をしない。日数を明記する。 */}
+        <section>
+          {!user ? (
+            <div className="ui-card p-5 lg:p-6 text-center">
+              <h4 className="text-white font-black text-lg">無料登録で3日間、口コミ読み放題</h4>
+              <p className="ui-help mt-2">閲覧期間は登録手続き時から3日間です。メール確認後に利用できます</p>
+              <Link
+                to={withReturnTo('/register', '', { source: 'home' })}
+                onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
+                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-[#be185d] px-6 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                style={{ minHeight: '48px', fontSize: '15px' }}
+              >
+                無料登録する
+              </Link>
+            </div>
+          ) : (
+            <div className="ui-card p-5 lg:p-6 text-center">
+              <h4 className="text-white font-black text-lg">体験談を投稿して、閲覧期間を延長</h4>
+              <p className="ui-muted mt-2">200字で3日間、700字で7日間の閲覧権が即時付与されます</p>
+              <Link
+                to="/post-review"
+                onClick={() => trackEvent('click_paywall_cta', { target: 'post_review', source: 'home' })}
+                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-[#be185d] px-6 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                style={{ minHeight: '48px', fontSize: '15px' }}
+              >
+                体験談を書く
+              </Link>
+            </div>
+          )}
+        </section>
+
 {/* 5. ランキングセクション & 6. 履歴 */}
         <RankingSection />
         <RecentlyViewed />
@@ -557,46 +611,41 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
             </div>
           </div>
 
-          {/* 口コミ投稿バナー */}
-          <Link
-            to="/post-review"
-            className="block rounded-2xl bg-gradient-to-br from-purple-900/60 to-slate-900 border border-purple-500/20 hover:border-purple-500/50 p-5 transition-all duration-200 hover:-translate-y-0.5"
-          >
-            <div className="text-2xl mb-2">✍️</div>
-            <h4 className="text-white font-black text-sm leading-tight">口コミを書いて<br />閲覧権限をゲット</h4>
-            <p className="text-slate-400 text-[11px] mt-2 leading-relaxed">700文字以上の体験談を投稿すると、その場で7日間の閲覧権が自動付与されます。新規登録だけでも3日間無料。</p>
-            <span className="block mt-3 text-purple-300 text-xs font-black">口コミを投稿する →</span>
-          </Link>
+          {/* ⚠️ 2026-09-08（U02下部6）: 投稿・口コミ・統計の大きなカード3枚を
+              登録案内1枚＋統計のテキストリンクへ整理した。
+              PC右カラムが同じ話を繰り返す長い柱になっていた。固定追従バナーは追加しない。 */}
+          {!user ? (
+            <div className="ui-card p-5">
+              <h4 className="text-white font-black text-sm leading-snug">無料登録で3日間、口コミ読み放題</h4>
+              <p className="ui-help mt-2">閲覧期間は登録手続き時から3日間です。メール確認後に利用できます</p>
+              <Link
+                to={withReturnTo('/register', '', { source: 'home' })}
+                onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
+                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-[#be185d] px-4 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                style={{ minHeight: '48px', fontSize: '14px' }}
+              >
+                無料登録する
+              </Link>
+            </div>
+          ) : (
+            <div className="ui-card p-5">
+              <h4 className="text-white font-black text-sm leading-snug">体験談を投稿して、閲覧期間を延長</h4>
+              <p className="ui-help mt-2">200字で3日間、700字で7日間</p>
+              <Link
+                to="/post-review"
+                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-[#be185d] px-4 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                style={{ minHeight: '48px', fontSize: '14px' }}
+              >
+                体験談を書く
+              </Link>
+            </div>
+          )}
 
-          {/* 新着口コミへのリンク */}
-          <Link
-            to="/popular-reviews"
-            className="block rounded-2xl bg-gradient-to-br from-pink-900/40 to-slate-900 border border-pink-500/20 hover:border-pink-500/50 p-5 transition-all duration-200 hover:-translate-y-0.5"
-          >
-            <div className="text-2xl mb-2">💬</div>
-            <h4 className="text-white font-black text-sm">みんなの口コミ</h4>
-            <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">ユーザーの生の体験談をチェック</p>
-            <span className="block mt-3 text-pink-300 text-xs font-black">口コミを見る →</span>
-          </Link>
-
-          {/* 掲示板 */}
-          {/* ⚠️ 2026-08-12: 掲示板の導線を一時撤去（decisions.md D-006） */}
-
-          {/* メンズエステ統計2026 */}
-          <Link
-            to="/stats"
-            className="block rounded-2xl bg-gradient-to-br from-emerald-900/40 to-slate-900 border border-emerald-500/20 hover:border-emerald-500/50 p-5 transition-all duration-200 hover:-translate-y-0.5"
-          >
-            <div className="text-2xl mb-2">📊</div>
-            <h4 className="text-white font-black text-sm">メンズエステ統計2026</h4>
-            {/* 料金中央値を数字のまま出す＝他社が公開していない一次データが最も強い誘引 */}
-            <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">
-              {siteStats.nationalPrice?.median60
-                ? `料金相場は60分¥${Number(siteStats.nationalPrice.median60).toLocaleString()}・90分¥${Number(siteStats.nationalPrice.median90 || 0).toLocaleString()}（${Number(siteStats.coverage?.priceSampleShops || 0).toLocaleString()}店舗の中央値）`
-                : '全国の料金相場・エリア別の掲載店舗数'}
-            </p>
-            <span className="block mt-3 text-emerald-300 text-xs font-black">統計を見る →</span>
-          </Link>
+          <p className="px-1">
+            <Link to="/stats" className="ui-link inline-flex min-h-11 items-center" style={{ fontSize: '13px' }}>
+              メンズエステ統計2026（料金相場・掲載店舗数）→
+            </Link>
+          </p>
         </div>
       </aside>
 
