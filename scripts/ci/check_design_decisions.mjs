@@ -657,6 +657,43 @@ function read(path) {
   }
 }
 
+// ── 在籍一覧に居ない人を現役として見せない（2026-09-09）─────────────────────
+// 【事故】退店したセラピストのページは口コミごと残る（公開済みURLを殺さないため）が、
+//   画面には**何の表示もなかった**。訪問者は現役だと思って店へ行く。
+//   SEOの説明文に至っては「在籍情報…確認できます」と書いていた。
+// ⚠️ ただし断定もしない。根拠にできるのは「最新の在籍一覧に居ない」という事実だけで、
+//    退店か休業か収集失敗かは我々には分からない（★Newを消したのと同じ考え方）。
+{
+  const strip = (src) => (src || '')
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+  const p = 'src/pages/ThreadDetailPage.jsx';
+  const src = strip(read(p));
+
+  // 参照ではなく**定義**を見る。判定材料2つが両方残っていること。
+  if (!/const notListed =/.test(src)) {
+    violations.push(`[U05] ${p} に在籍状態の判定（notListed）が無い。退店した人が現役として表示される。`);
+  }
+  for (const [re, label] of [
+    [/therapist\.is_active === false/, 'is_active=false（行は残るが非在籍）'],
+    [/therapist\.raw_data\?\.archived === true/, 'raw_data.archived=true（名簿から消えた人）'],
+  ]) {
+    if (!re.test(src)) violations.push(`[U05] ${p} の在籍判定から「${label}」が外れている。`);
+  }
+  if (!src.includes('現在は在籍一覧にありません')) {
+    violations.push(`[U05] ${p} に「現在は在籍一覧にありません」の表示が無い。`);
+  }
+  // 断定しない（我々は退店の事実を確認していない）
+  if (/>\s*退店済み\s*</.test(src)) {
+    violations.push(`[U05] ${p} が「退店済み」と断定している。確認できているのは「在籍一覧に居ない」ことだけ。`);
+  }
+  // 在籍一覧に居ない人に「在籍情報を確認できます」と書かない
+  if (!/notListed\s*\n?\s*\?/.test(src) || !/現在は在籍一覧に掲載されていません/.test(src)) {
+    violations.push(`[U05] ${p} の説明文が在籍状態で出し分けられていない（居ない人に「在籍情報」と書く）。`);
+  }
+}
+
 if (violations.length) {
   console.error('\n🚨 オーナー確定事項（playbook/decisions.md）に反する変更が検出されました:\n');
   violations.forEach((v) => console.error('  - ' + v + '\n'));

@@ -157,6 +157,15 @@ export default function ThreadDetailPage({
   const shop = cloudShop || (shopById ? shopById[shopId] : null);
   let therapist = cloudTherapist || (therapistById ? therapistById[threadId] : null);
 
+  // ⚠️ 2026-09-09: 退店した人のページは口コミごと残る（公開済みURLを殺さないため）が、
+  //    画面には**何も表示していなかった**＝訪問者は現役だと思って店へ行く。
+  //    根拠にできるのは「店舗の最新の在籍一覧に居ない」という事実だけで、
+  //    退店なのか休業なのか収集失敗なのかは我々には分からない。
+  //    だから断定せず「在籍一覧にない」と書く（根拠のない表示をしない、D-010と同じ考え方）。
+  //    判定材料は2つ: is_active=false（行は残っているが非在籍）／
+  //    raw_data.archived=true（名簿から行ごと消え、SSRが口コミから復元したページ）。
+  const notListed = !!therapist && (therapist.is_active === false || therapist.raw_data?.archived === true);
+
   // 🔥 AI自動生成対応：公式リストにいなくても、クチコミがあれば「仮想プロフィール」を自動で作る！
   if (!therapist && reviews) {
     const hasReviews = reviews.some(r => r.therapistId === threadId || r.threadId === threadId || r.therapist_id === threadId);
@@ -287,7 +296,10 @@ export default function ThreadDetailPage({
 
   // 場所・年齢は欠損することがあるので、空なら丸ごと省く（「（undefined undefined）」「年齢:undefined歳」を出さない）
   const shopPlace = [shop.prefecture, shop.city].filter(Boolean).join(' ');
-  const seoDesc = `${shop.name}${shopPlace ? `（${shopPlace}）` : ''}のセラピスト、${therapist.name}さんのプロフィール。${therapist.age ? `年齢:${therapist.age}歳。` : ''}在籍情報、利用者が投稿した口コミ・評価、施術や接客の体験談をメンエスマップで確認できます。`;
+  // ⚠️ 在籍一覧に居ない人に「在籍情報を確認できます」と書かない。
+  const seoDesc = notListed
+    ? `${shop.name}${shopPlace ? `（${shopPlace}）` : ''}の${therapist.name}さんのページ。現在は在籍一覧に掲載されていません。過去に利用者が投稿した口コミ・評価・体験談を確認できます。`
+    : `${shop.name}${shopPlace ? `（${shopPlace}）` : ''}のセラピスト、${therapist.name}さんのプロフィール。${therapist.age ? `年齢:${therapist.age}歳。` : ''}在籍情報、利用者が投稿した口コミ・評価、施術や接客の体験談をメンエスマップで確認できます。`;
 
   const handlePostReview = (placement) => {
     trackEvent('click_write_from_thread', {
@@ -387,7 +399,20 @@ export default function ThreadDetailPage({
               <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
               <span className="truncate">{getDisplayName(shop.name)}</span>
             </Link>
-            <h1 className="text-2xl md:text-3xl font-black text-white leading-tight mb-2 break-words">{therapist.name}</h1>
+            <h1 className="text-2xl md:text-3xl font-black text-white leading-tight mb-2 break-words">
+              {therapist.name}
+              {notListed && (
+                <span className="ml-2 align-middle inline-flex items-center rounded-full border border-amber-500/40 bg-amber-500/15 px-2.5 py-1 font-bold text-amber-200" style={{ fontSize: '12px' }}>
+                  現在は在籍一覧にありません
+                </span>
+              )}
+            </h1>
+            {notListed && (
+              <p className="mb-2 rounded-xl border border-amber-500/25 bg-amber-500/5 px-3 py-2 text-amber-100" style={{ fontSize: '13px', lineHeight: 1.7 }}>
+                この店舗の最新の在籍一覧に掲載されていません（退店・休業などの可能性があります）。
+                過去の口コミはそのまま残しています。最新の在籍は公式サイトでご確認ください。
+              </p>
+            )}
             <div className="flex flex-wrap gap-1.5 mb-3">
               {therapist.age && <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white">{therapist.age}歳</span>}
               {therapist.T && <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white">身長{therapist.T}cm</span>}
