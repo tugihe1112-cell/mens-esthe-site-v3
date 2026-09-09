@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Link } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 
 // 投稿フロー（PostReviewPageを描画するルート）ではボトムドックを出さない。
 // 理由: 投稿ページの主CTA「次へ進む」も fixed bottom-0 z-50 で、_app.jsx の描画順により
@@ -108,6 +109,7 @@ export default function BottomNav() {
                 <Link
                   key={item.path}
                   to={item.path}
+                  onClick={item.path === '/register' ? () => trackRegisterCtaClick('bottom_nav') : undefined}
                   aria-current={active ? 'page' : undefined}
                   className={`relative flex flex-col items-center justify-center gap-0.5 w-full h-full min-w-[44px] select-none active:scale-95 transition-transform duration-200 ${
                     active || item.accent ? 'text-pink-400' : 'text-slate-400 hover:text-slate-200'

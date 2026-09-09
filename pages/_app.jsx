@@ -147,11 +147,19 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       {/* GA4: 旧Viteのindex.htmlにしか無く未計測だったため、Next.jsで正式ロード（SPA遷移はGA4拡張計測が捕捉） */}
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+      {/* ⚠️ 2026-09-08（DESIGN.md U06）: /auth/* はメールのリンクから
+          `?token=...` `#access_token=...` `?next=...` 付きで開かれる。
+          既定の自動page_viewは**生のURLをそのまま送る**ので、
+          認証経路だけ page_location / page_path をパスだけに差し替える。
+          トークンや戻り先をGAへ送らない。 */}
       <Script id="ga4-init" strategy="afterInteractive">{`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '${GA_ID}');
+        var isAuthPath = typeof location !== 'undefined' && location.pathname.indexOf('/auth/') === 0;
+        gtag('config', '${GA_ID}', isAuthPath
+          ? { page_location: location.origin + location.pathname, page_path: location.pathname }
+          : {});
       `}</Script>
       <ErrorBoundary>
         <DataProvider>

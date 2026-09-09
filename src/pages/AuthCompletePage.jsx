@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams, Link } from '../compat/router';
 import { supabase } from '../lib/supabase';
 import SeoHead from '../components/SeoHead.jsx';
+import { trackRegistrationConfirmed, trackRegistrationReturn } from '../utils/registerAnalytics';
 import {
   normalizeReturnTo,
   withReturnTo,
@@ -76,6 +77,11 @@ export default function AuthCompletePage() {
       active = false;
       window.clearTimeout(timer);
       setStatus('success');
+      // ⚠️ U06: 完了イベントの担当は**このページだけ**。
+      //    F02のOTP確認ページからも撃つと、同じ登録が二重に数えられる。
+      //    同一ブラウザの再表示は記録済みキーで抑える（完全な重複排除ではない）。
+      trackRegistrationConfirmed(session.user.id);
+      trackRegistrationReturn(String(returnToRef.current || '').split('?')[0].split('#')[0]);
       // replace で戻る（履歴に /auth/complete を残すと「戻る」でここへ戻ってしまう）
       navigate(returnToRef.current, { replace: true });
     };

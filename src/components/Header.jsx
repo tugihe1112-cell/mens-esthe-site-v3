@@ -3,6 +3,7 @@ import { Link, useLocation } from '../compat/router';
 import { useAuth } from "../contexts/AuthContext";
 import { useReturnTo } from '../utils/useReturnTo';
 import { withReturnTo } from '../utils/authRedirect.js';
+import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 import { isTransparentHeaderPath } from '../utils/headerTransparency.mjs';
 
 export default function Header() {
@@ -113,7 +114,7 @@ export default function Header() {
               ) : (
                 <div className="flex items-center gap-3 pl-2">
                   <Link to={loginHref} className="text-sm font-bold text-white hover:text-pink-400 transition drop-shadow-md">ログイン</Link>
-                  <Link to={registerHref} className="bg-white text-slate-900 px-5 py-2 rounded-full text-sm font-black hover:bg-slate-100 transition shadow-lg shadow-white/10 hover:shadow-white/20">
+                  <Link to={registerHref} onClick={() => trackRegisterCtaClick('header')} className="bg-white text-slate-900 px-5 py-2 rounded-full text-sm font-black hover:bg-slate-100 transition shadow-lg shadow-white/10 hover:shadow-white/20">
                     無料登録
                   </Link>
                 </div>
@@ -129,7 +130,7 @@ export default function Header() {
                   className="inline-flex min-h-11 items-center text-xs font-bold text-white border border-white/25 px-3 sm:px-4 rounded-full whitespace-nowrap hover:bg-white/10 transition">
                   ログイン
                 </Link>
-                <Link to={registerHref}
+                <Link to={registerHref} onClick={() => trackRegisterCtaClick('header')}
                   className="min-h-11 inline-flex items-center text-xs font-black text-white bg-pink-600 px-3 sm:px-4 rounded-full whitespace-nowrap hover:bg-pink-500 transition shadow-lg shadow-pink-950/30">
                   無料登録
                 </Link>

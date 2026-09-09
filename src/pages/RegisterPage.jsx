@@ -1,8 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from '../compat/router';
 import SeoHead from '../components/SeoHead.jsx';
 import { normalizeReturnTo, withReturnTo } from '../utils/authRedirect.js';
 import { useRequestedReturnTo } from '../utils/useReturnTo';
+import {
+  trackRegisterView, trackRegisterStart, trackRegisterSubmit,
+  trackRegisterEmailSent, trackRegisterError,
+} from '../utils/registerAnalytics';
 
 // ⚠️ 内部の例外メッセージを利用者にそのまま出さない（DESIGN.md U03-10）。
 //    ただし **4xx はAPIが利用者向けに書いた文言**（「メールアドレスの形式が正しくありません」等）で、
@@ -40,6 +44,16 @@ export default function RegisterPage() {
   const [done, setDone] = useState(false);
   const [sentTo, setSentTo] = useState("");
 
+  // ── U06: 登録ファネルの計測 ──────────────────────────────
+  // ⚠️ 表示は**マウント1回**だけ（再レンダーで重複させない）。
+  useEffect(() => { trackRegisterView(); }, []);
+  const startedRef = useRef(false);
+  const markStarted = () => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    trackRegisterStart();
+  };
+
   const refs = {
     name: useRef(null),
     email: useRef(null),
@@ -73,10 +87,12 @@ export default function RegisterPage() {
       const order = ['name', 'email', 'password', 'confirmPassword', 'terms'];
       const first = order.find((k) => nextErrors[k]);
       if (first && refs[first].current) refs[first].current.focus();
+      trackRegisterError('validation');
       return;
     }
 
     setIsLoading(true);
+    trackRegisterSubmit();
     try {
       // サーバーサイドでユーザー作成 + 確認メール送信を一括実行
       const r = await fetch('/api/auth/signup', {
@@ -95,24 +111,30 @@ export default function RegisterPage() {
 
         if (r.status === 409) {
           setFormError({ code: 'duplicate', text: FORM_ERROR_TEXT.duplicate });
+          trackRegisterError('duplicate');
         } else if (r.status === 429) {
           setFormError({ code: 'rate_limit', text: FORM_ERROR_TEXT.rate_limit });
+          trackRegisterError('rate_limit');
         } else if (SAFE_API_MESSAGE_STATUS.has(r.status) && apiMessage) {
           // 入力の直し方が書かれているのはここ。握りつぶさない。
           setFormError({ code: 'validation', text: apiMessage });
+          trackRegisterError('validation');
         } else {
           // 500 など。ここで apiMessage を使うと err.message が露出する。
           setFormError({ code: 'server', text: FORM_ERROR_TEXT.server });
+          trackRegisterError('server');
         }
         setIsLoading(false);
         return;
       }
       // ⚠️ API成功は「登録完了」ではない。確認メールを送ったところまで。
+      trackRegisterEmailSent();
       setSentTo(email);
       setDone(true);
       setIsLoading(false);
     } catch {
       setFormError({ code: 'network', text: FORM_ERROR_TEXT.network });
+      trackRegisterError('network');
       setIsLoading(false);
     }
   };
@@ -200,7 +222,7 @@ export default function RegisterPage() {
               <label htmlFor="display-name" className="ui-label">表示名（ニックネーム）</label>
               <input
                 id="display-name" name="display_name" ref={refs.name} type="text" required
-                value={name} onChange={(e) => setName(e.target.value)} maxLength={30}
+                value={name} onChange={(e) => { markStarted(); setName(e.target.value); }} maxLength={30}
                 autoComplete="nickname"
                 aria-invalid={fieldErrors.name ? 'true' : undefined}
                 aria-describedby={describedBy('name', 'display-name-help')}
@@ -214,7 +236,7 @@ export default function RegisterPage() {
               <label htmlFor="email" className="ui-label">メールアドレス</label>
               <input
                 id="email" name="email" ref={refs.email} type="email" required
-                value={email} onChange={(e) => setEmail(e.target.value)}
+                value={email} onChange={(e) => { markStarted(); setEmail(e.target.value); }}
                 autoComplete="email" autoCapitalize="none" spellCheck={false}
                 aria-invalid={fieldErrors.email ? 'true' : undefined}
                 aria-describedby={describedBy('email')}
@@ -230,7 +252,7 @@ export default function RegisterPage() {
                 <input
                   id="password" name="new-password" ref={refs.password}
                   type={showPassword ? 'text' : 'password'} required
-                  value={password} onChange={(e) => setPassword(e.target.value)}
+                  value={password} onChange={(e) => { markStarted(); setPassword(e.target.value); }}
                   autoComplete="new-password"
                   aria-invalid={fieldErrors.password ? 'true' : undefined}
                   aria-describedby={describedBy('password')}
@@ -256,7 +278,7 @@ export default function RegisterPage() {
                 <input
                   id="confirm-password" name="confirm-password" ref={refs.confirmPassword}
                   type={showConfirm ? 'text' : 'password'} required
-                  value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={confirmPassword} onChange={(e) => { markStarted(); setConfirmPassword(e.target.value); }}
                   autoComplete="new-password"
                   aria-invalid={fieldErrors.confirmPassword ? 'true' : undefined}
                   aria-describedby={describedBy('confirmPassword')}
@@ -278,7 +300,7 @@ export default function RegisterPage() {
               <div className="flex items-start gap-3">
                 <input
                   id="terms" name="terms" ref={refs.terms} type="checkbox"
-                  checked={agreeToTerms} onChange={(e) => setAgreeToTerms(e.target.checked)}
+                  checked={agreeToTerms} onChange={(e) => { markStarted(); setAgreeToTerms(e.target.checked); }}
                   aria-invalid={fieldErrors.terms ? 'true' : undefined}
                   aria-describedby={describedBy('terms')}
                   className="w-5 h-5 mt-0.5 shrink-0 rounded border-slate-600 bg-slate-800 text-pink-600 focus:ring-pink-500"
