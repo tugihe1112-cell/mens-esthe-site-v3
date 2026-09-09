@@ -245,7 +245,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
 
             {!user ? (
               <div className="mt-3">
-                <p className="text-pink-300 font-bold" style={{ fontSize: '15px' }}>無料登録で3日間、口コミ読み放題</p>
+                <p data-role="home-benefit" className="text-pink-300 font-bold" style={{ fontSize: '15px' }}>無料登録で3日間、口コミ読み放題</p>
                 <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
                   <Link
                     to={withReturnTo('/register', '', { source: 'home' })}

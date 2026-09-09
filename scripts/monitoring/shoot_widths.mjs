@@ -90,7 +90,9 @@ function measure() {
   // ⚠️ セレクタは**その要素だけ**を確実に掴むものにする。
   //    以前 `a[href*="/register"]` にしていたらヘッダーの登録ボタンを掴んで 0px を返し、
   //    判定が意味を成していなかった（2026-09-09に自分で踏んだ）。
-  for (const [key, sel] of [['benefit', '.ui-card .ui-help, .ui-help'], ['registerCta', '[data-cta="home-register"]'], ['searchInput', '#home-search-mobile, #home-search-shop']]) {
+  //    2度目の取り違え: `.ui-help` は「特典」ではなく、検索欄の**下**へ移した注記を掴んでいた。
+  //    測りたい3つには専用の目印を付け、クラス名で拾わない。
+  for (const [key, sel] of [['benefit', '[data-role="home-benefit"]'], ['registerCta', '[data-cta="home-register"]'], ['searchInput', '#home-search-mobile, #home-search-shop']]) {
     const el = document.querySelector(sel);
     firstView[key] = el ? Math.round(el.getBoundingClientRect().bottom) : null;
   }

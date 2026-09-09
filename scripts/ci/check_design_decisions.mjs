@@ -737,8 +737,11 @@ function read(path) {
     violations.push('[U02] ホームの補助文が検索欄より前にある。2行ぶん押し下げて390×844の初期画面から検索操作が外れる。');
   }
   // 計測が確実にカード内のCTAを掴めるようにする（ヘッダーの登録ボタンを誤って掴むと判定が死ぬ）
-  if (!/data-cta="home-register"/.test(home)) {
-    violations.push('[U02] ホームの登録CTAの目印（data-cta="home-register"）が無い。初期画面の自動判定が効かなくなる。');
+  // ⚠️ 目印はクラス名で代用しない。`.ui-help` で拾ったら注記を掴んで判定が狂った（2026-09-09、2度目）。
+  for (const [attr, label] of [['data-cta="home-register"', '登録CTA'], ['data-role="home-benefit"', '特典の一文']]) {
+    if (!home.includes(attr)) {
+      violations.push(`[U02] ホームの${label}の目印（${attr}）が無い。初期画面の自動判定が効かなくなる。`);
+    }
   }
 
   // 取得上限の数字を「件数」として出さない
