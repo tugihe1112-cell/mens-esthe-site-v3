@@ -72,13 +72,30 @@ function measure() {
     }
 
     // (b) 12px未満で描画されている文字（U01: 日時・件数でも12px以上）
+    // ⚠️ 装飾は対象外にする。読ませる文字ではないので、大きくしても意味がない。
+    //    ・aria-hidden の中（透かし・飾りの引用符など）
+    //    ・絵文字や記号だけの要素（📍 🏢 ✕ など＝アイコン代わり）
     const size = parseFloat(cs.fontSize);
     const text = (el.childNodes.length === 1 && el.firstChild?.nodeType === 3) ? el.textContent.trim() : '';
-    if (text && size && size < 11.5 && tiny.length < 12) {
+    const decorative = el.closest('[aria-hidden="true"]') !== null
+      || (text && !/[0-9A-Za-z\u3040-\u30ff\u4e00-\u9fff]/.test(text));
+    if (text && size && size < 11.5 && !decorative && tiny.length < 12) {
       tiny.push({ size: Math.round(size * 10) / 10, text: text.slice(0, 24) });
     }
   }
-  return { vw, scrollWidth: de.scrollWidth, overflowsX, offenders, tiny };
+
+  // (c) U02の受入条件: 390×844で「特典・登録CTA・検索操作」までが最初の画面に入るか
+  const firstView = {};
+  const vh = window.innerHeight;
+  for (const [key, sel] of [['benefit', '.ui-help'], ['registerCta', 'a[href*="/register"]'], ['searchInput', '#home-search-mobile, #home-search-shop']]) {
+    const el = document.querySelector(sel);
+    firstView[key] = el ? Math.round(el.getBoundingClientRect().bottom) : null;
+  }
+  firstView.viewportHeight = vh;
+  firstView.allWithinFirstView = ['benefit', 'registerCta', 'searchInput']
+    .every((k) => firstView[k] !== null && firstView[k] <= vh);
+
+  return { vw, scrollWidth: de.scrollWidth, overflowsX, offenders, tiny, firstView };
 }
 
 async function main() {
@@ -95,6 +112,20 @@ async function main() {
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 45000 });
         await new Promise((r) => setTimeout(r, 1200)); // クライアント描画の落ち着きを待つ
         const m = await page.evaluate(measure);
+
+        // ⚠️ まず「実際の初期画面」を1枚（固定ドックもそのまま写る）。
+        //    U02の「390×844で特典と登録CTAと検索操作まで見える」はこれで確認する。
+        const viewFile = path.join(OUT_DIR, `${name}_${vp.label}_view.png`);
+        await page.screenshot({ path: viewFile, fullPage: false });
+
+        // ⚠️ 全体ショットでは position:fixed の要素が本文の途中に写り込み、
+        //    その下にある本文を隠してしまう（実機では起きない撮影上の都合）。
+        //    判定を誤らせるので、全体ショットの間だけ固定要素を隠す。
+        await page.evaluate(() => {
+          for (const el of document.body.querySelectorAll('*')) {
+            if (getComputedStyle(el).position === 'fixed') { el.dataset.hiddenForShot = '1'; el.style.visibility = 'hidden'; }
+          }
+        });
         const file = path.join(OUT_DIR, `${name}_${vp.label}.png`);
         await page.screenshot({ path: file, fullPage: true });
         findings.push({ name, width: vp.w, ...m, file });
@@ -120,7 +151,15 @@ async function main() {
     for (const o of f.offenders) console.log(`      はみ出し: ${o.sel}  right=${o.right} width=${o.width}`);
   }
 
-  console.log('\n=== 12px未満で描画されている文字 ===');
+  const firstViewNg = findings.filter((f) => f.width === 390 && f.name === 'home' && f.firstView && !f.firstView.allWithinFirstView);
+  console.log('\n=== ホーム390pxの初期画面（U02: 特典・登録CTA・検索操作が入るか）===');
+  for (const f of findings.filter((x) => x.name === 'home' && x.width === 390 && x.firstView)) {
+    const v = f.firstView;
+    console.log(`  ビューポート高さ${v.viewportHeight}px / 特典 ${v.benefit}px / 登録CTA ${v.registerCta}px / 検索入力 ${v.searchInput}px → ${v.allWithinFirstView ? '✅ 収まっている' : '🚨 収まっていない'}`);
+  }
+  if (firstViewNg.length) console.log('  ⚠️ 最新口コミ本文まで入る必要はないが、上の3つは初期画面に入れる約束（DESIGN.md U02）。');
+
+  console.log('\n=== 12px未満で描画されている文字（装飾は除外）===');
   if (tiny.length === 0) console.log('  なし');
   for (const f of tiny) {
     console.log(`  ${f.name} @${f.width}px`);

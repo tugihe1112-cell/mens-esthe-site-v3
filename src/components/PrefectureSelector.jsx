@@ -34,7 +34,7 @@ const TOKYO_GROUPS = [
           <div className="flex flex-wrap gap-2">
             <Link
               to={`/shops?q=${pref} ${city}`}
-              className="bg-pink-600 hover:bg-pink-500 text-white text-[11px] font-bold px-4 py-2 rounded-lg shadow-lg transition-all active:scale-95"
+              className="bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-lg transition-all active:scale-95"
             >
               ✨ {city}すべて
             </Link>
@@ -42,7 +42,7 @@ const TOKYO_GROUPS = [
               <Link
                 key={area}
                 to={`/shops?q=${pref} ${area}`}
-                className="bg-slate-800/80 hover:bg-slate-700 border border-slate-700 hover:border-pink-500 text-slate-300 hover:text-white text-[11px] px-3 py-2 rounded-lg transition-all hover:shadow-[0_0_10px_rgba(236,72,153,0.4)]"
+                className="bg-slate-800/80 hover:bg-slate-700 border border-slate-700 hover:border-pink-500 text-slate-300 hover:text-white text-xs px-3 py-2 rounded-lg transition-all hover:shadow-[0_0_10px_rgba(236,72,153,0.4)]"
               >
                 {area}
               </Link>
@@ -145,7 +145,7 @@ export default function PrefectureSelector({ shops = [] }) {
                                 >
                                   <span className="text-sm">{ward.icon}</span>
                                   <span className="font-bold text-sm tracking-wider">{ward.name}</span>
-                                  <span className="bg-black/50 text-[10px] px-2 py-0.5 rounded-full text-slate-300 border border-white/10">{ward.count}件</span>
+                                  <span className="bg-black/50 text-xs px-2 py-0.5 rounded-full text-slate-300 border border-white/10">{ward.count}件</span>
                                 </button>
                               ))}
                             </div>
@@ -217,7 +217,7 @@ export default function PrefectureSelector({ shops = [] }) {
                                   }`}
                                 >
                                   {city}
-                                  {areas.length > 0 && <span className="text-[9px] opacity-70">▼</span>}
+                                  {areas.length > 0 && <span className="text-xs opacity-70">▼</span>}
                                 </button>
 
                                 {/* 4階層目 (詳細エリア): 歌舞伎町、新宿三丁目... */}

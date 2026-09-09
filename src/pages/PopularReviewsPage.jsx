@@ -188,7 +188,7 @@ export default function PopularReviewsPage({
               <h1 className="text-2xl md:text-3xl font-black tracking-tight">みんなの口コミ</h1>
             </div>
             <p className="text-slate-400 text-sm">全国のセラピストへのリアルな体験レポート</p>
-            <p className="text-slate-500 text-[11px] mt-1">掲載店舗から広告費・掲載料は受け取っていません。だから辛口もそのまま載ります。</p>
+            <p className="text-slate-500 text-xs mt-1">掲載店舗から広告費・掲載料は受け取っていません。だから辛口もそのまま載ります。</p>
           </div>
         </div>
 
@@ -273,16 +273,16 @@ export default function PopularReviewsPage({
                                   （押しても何も無いリンクは行き止まりで、口コミ本文の邪魔にもなる） */}
                               {shop.name && (
                                 <Link to={shopLink} className="inline-flex items-center gap-1.5 min-w-0 font-black text-white text-sm hover:text-pink-300 transition">
-                                  <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
+                                  <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-xs shrink-0">🏢</span>
                                   <span className="truncate">{shop.name}</span>
                                 </Link>
                               )}
                               {loc && (
-                                <span className="text-[10px] font-bold text-pink-200 bg-pink-500/10 border border-pink-500/20 rounded-full px-2 py-0.5 shrink-0">📍 {loc}</span>
+                                <span className="text-xs font-bold text-pink-200 bg-pink-500/10 border border-pink-500/20 rounded-full px-2 py-0.5 shrink-0">📍 {loc}</span>
                               )}
                             </div>
                             {rating != null && (
-                              <span className={`inline-flex items-center text-[11px] font-black text-white bg-gradient-to-br ${ratingGradientClass(rating)} rounded-md px-1.5 py-0.5 shrink-0 shadow`}>
+                              <span className={`inline-flex items-center text-xs font-black text-white bg-gradient-to-br ${ratingGradientClass(rating)} rounded-md px-1.5 py-0.5 shrink-0 shadow`}>
                                 ★ {rating.toFixed(1)}
                               </span>
                             )}
@@ -300,14 +300,14 @@ export default function PopularReviewsPage({
                               </span>
                             )}
                             {time && (
-                              <span className="inline-flex items-center gap-1 text-[10px] text-slate-500">
+                              <span className="inline-flex items-center gap-1 text-xs text-slate-500">
                                 {time.isNew && <span className="w-1.5 h-1.5 rounded-full bg-pink-500 shadow shadow-pink-500/50" />}
                                 {time.label}
                               </span>
                             )}
-                            {r.user_name && <span className="text-[10px] text-slate-400">by <span className="font-bold text-slate-300">{r.user_name}</span></span>}
+                            {r.user_name && <span className="text-xs text-slate-400">by <span className="font-bold text-slate-300">{r.user_name}</span></span>}
                             {r.course && (
-                              <span className="text-[10px] font-bold text-slate-300 bg-white/5 border border-white/10 rounded-full px-2 py-0.5">🧾 {r.course}</span>
+                              <span className="text-xs font-bold text-slate-300 bg-white/5 border border-white/10 rounded-full px-2 py-0.5">🧾 {r.course}</span>
                             )}
                           </div>
 
@@ -315,7 +315,7 @@ export default function PopularReviewsPage({
                           {tags.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">
                               {tags.slice(0, 4).map(tag => (
-                                <span key={tag} className="bg-slate-800 border border-white/10 text-slate-300 px-2 py-0.5 rounded-full text-[10px] font-bold">
+                                <span key={tag} className="bg-slate-800 border border-white/10 text-slate-300 px-2 py-0.5 rounded-full text-xs font-bold">
                                   {tag}
                                 </span>
                               ))}
@@ -331,7 +331,7 @@ export default function PopularReviewsPage({
                           >{preview}</p>
 
                           <div className="flex items-center justify-between mt-2">
-                            <Link to={threadLink} className="text-[11px] font-black text-pink-400 hover:text-pink-300 transition">
+                            <Link to={threadLink} className="text-xs font-black text-pink-400 hover:text-pink-300 transition">
                               全文を読む → セラピストページ
                             </Link>
                             <ReviewLikeButton reviewId={r.id} initialLikeCount={r.like_count || 0} />

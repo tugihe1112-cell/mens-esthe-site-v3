@@ -26,13 +26,13 @@ export default function Footer({ variant = 'full', statsOverride = null }) {
     return (
       <footer className="bg-slate-950 border-t border-white/5 mt-10 relative z-10 pb-20 lg:pb-4">
         <div className="max-w-7xl mx-auto px-4 py-5">
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] text-slate-500">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-slate-500">
             <Link to="/legal" className="hover:text-pink-400 transition">特定商取引法に基づく表記</Link>
             <Link to="/terms" className="hover:text-pink-400 transition">利用規約</Link>
             <Link to="/privacy" className="hover:text-pink-400 transition">プライバシーポリシー</Link>
             <Link to="/contact" className="hover:text-pink-400 transition">お問い合わせ</Link>
           </div>
-          <p className="mt-3 text-center text-[10px] text-slate-600">
+          <p className="mt-3 text-center text-xs text-slate-600">
             © {new Date().getFullYear()} メンエスマップ ／ 18歳未満の方のアクセスを固く禁じます
           </p>
         </div>
@@ -114,7 +114,7 @@ export default function Footer({ variant = 'full', statsOverride = null }) {
                 className="group flex flex-col items-center justify-center rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-pink-500/40 transition px-2 py-2.5 text-center"
               >
                 <span className="text-xs font-bold text-slate-200 group-hover:text-pink-400 transition leading-tight truncate w-full">{label}</span>
-                <span className="text-[10px] text-slate-600 leading-tight mt-0.5">メンズエステ</span>
+                <span className="text-xs text-slate-600 leading-tight mt-0.5">メンズエステ</span>
               </Link>
             ))}
           </div>
@@ -124,7 +124,7 @@ export default function Footer({ variant = 'full', statsOverride = null }) {
           <p className="text-xs text-slate-500 font-bold tracking-wider">
             &copy; {new Date().getFullYear()} メンエスマップ. All rights reserved.
           </p>
-          <div className="text-[10px] text-slate-600 font-bold border border-slate-800 px-3 py-1 rounded">
+          <div className="text-xs text-slate-600 font-bold border border-slate-800 px-3 py-1 rounded">
             18歳未満の方のアクセスを固く禁じます
           </div>
         </div>

@@ -412,12 +412,12 @@ export default function ShopDetailPage({
                  {/* ⚠️ 市区・エリアが両方とも無い店舗が65店ある。
                      無条件で描くと中身の無い「空のピンクの箱」だけが出る（2026-08-22に本番で発生）。 */}
                  {joinFields(shop.city, shop.area) && (
-                   <span className="px-2.5 py-0.5 rounded-md bg-pink-600/80 backdrop-blur text-white text-[10px] font-bold tracking-widest uppercase border border-white/10">
+                   <span className="px-2.5 py-0.5 rounded-md bg-pink-600/80 backdrop-blur text-white text-xs font-bold tracking-widest uppercase border border-white/10">
                      {joinFields(shop.city, shop.area)}
                    </span>
                  )}
                  {shop.group_id && (
-                   <span className="px-2.5 py-0.5 rounded-md bg-blue-600/80 backdrop-blur text-white text-[10px] font-bold tracking-widest uppercase border border-white/10">
+                   <span className="px-2.5 py-0.5 rounded-md bg-blue-600/80 backdrop-blur text-white text-xs font-bold tracking-widest uppercase border border-white/10">
                      系列店
                    </span>
                  )}
@@ -518,7 +518,7 @@ export default function ShopDetailPage({
                 <span className="text-xl opacity-60 group-hover:opacity-100 transition">📅</span>
                 <div className="text-left flex-1">
                   {/* 英語ラベル＋9pxだった。日本語＋11pxに（2026-08-17） */}
-                  <div className="text-[11px] text-slate-400 font-bold mb-0.5">出勤スケジュール</div>
+                  <div className="text-xs text-slate-400 font-bold mb-0.5">出勤スケジュール</div>
                   <div className="text-xs font-bold text-slate-200 tracking-wide group-hover:text-green-400 transition">出勤情報</div>
                 </div>
               </button>
@@ -539,7 +539,7 @@ export default function ShopDetailPage({
                 {/* 在籍セラピスト数＝全1,098店が持つ固有の実データ。まずこれを出す */}
                 {ssrTherapistCount > 0 && (
                   <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                    <dt className="text-[10px] md:text-xs font-bold text-slate-500 tracking-widest">在籍</dt>
+                    <dt className="text-xs md:text-xs font-bold text-slate-500 tracking-widest">在籍</dt>
                     <dd className="text-sm md:text-base font-bold text-white">
                       <span className="text-pink-400 text-lg md:text-xl">{ssrTherapistCount.toLocaleString()}</span> 人
                       {ssrReviewCount > 0 && (
@@ -553,12 +553,12 @@ export default function ShopDetailPage({
                 {/* ⚠️「営業時間情報なし」は行き止まりなので、データがある時だけ出す */}
                 {(shop.business_hours || shop.raw_data?.hours) && (
                   <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                    <dt className="text-[10px] md:text-xs font-bold text-slate-500 tracking-widest">営業時間</dt>
+                    <dt className="text-xs md:text-xs font-bold text-slate-500 tracking-widest">営業時間</dt>
                     <dd className="text-sm md:text-base font-bold text-white">{shop.business_hours || shop.raw_data?.hours}</dd>
                   </div>
                 )}
                 <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                  <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">料金</dt>
+                  <dt className="text-xs md:text-xs font-bold text-slate-500 uppercase tracking-widest">料金</dt>
                   <dd className="text-sm md:text-base text-white w-full bg-slate-800/50 p-4 rounded-xl border border-white/5">{shop?.price_system ? (
   <div className="flex flex-col space-y-3 w-full">
     {(() => {
@@ -598,7 +598,7 @@ export default function ShopDetailPage({
   <div className="space-y-3">
     <p className="text-slate-300 text-sm">この店舗の料金は未掲載です。</p>
     <div className="rounded-xl bg-black/20 border border-white/5 p-3">
-      <p className="text-[10px] text-slate-500 font-bold tracking-wider mb-2">
+      <p className="text-xs text-slate-500 font-bold tracking-wider mb-2">
         全国のメンズエステ料金相場（メンエスマップ調べ・{siteStats?.coverage?.priceSampleShops || 0}店の実測中央値）
       </p>
       <div className="flex gap-4">
@@ -611,12 +611,12 @@ export default function ShopDetailPage({
           <span className="text-white font-bold">¥{(siteStats?.nationalPrice?.median90 || 0).toLocaleString()}</span>
         </div>
       </div>
-      <Link to="/stats" className="inline-block mt-2 text-[11px] font-bold text-pink-400 hover:text-pink-300">
+      <Link to="/stats" className="inline-block mt-2 text-xs font-bold text-pink-400 hover:text-pink-300">
         エリア別の相場を見る →
       </Link>
     </div>
     {(shop.website_url || shop.url || shop?.raw_data?.url) && (
-      <p className="text-[11px] text-slate-500">最新の料金は公式サイトでご確認ください。</p>
+      <p className="text-xs text-slate-500">最新の料金は公式サイトでご確認ください。</p>
     )}
   </div>
 )}
@@ -624,7 +624,7 @@ export default function ShopDetailPage({
                 </div>
                 {(shop.phone_number || shop.raw_data?.phone) && (
                   <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                    <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">TEL</dt>
+                    <dt className="text-xs md:text-xs font-bold text-slate-500 uppercase tracking-widest">TEL</dt>
                     <dd className="text-sm md:text-base font-bold text-white tracking-widest">
                        <a href={`tel:${shop.phone_number || shop.raw_data?.phone}`} onClick={() => trackEvent('click_outbound', { link_type: 'phone', shop_id: shop.id, shop_name: shop.name })} className="hover:text-pink-400 transition">{shop.phone_number || shop.raw_data?.phone}</a>
                     </dd>
@@ -635,7 +635,7 @@ export default function ShopDetailPage({
                     住所が無くても都道府県・市区までは出せることが多いのでフォールバックする。 */}
                 {joinFields(shop.address || joinFields(shop.prefecture, shop.city, shop.area)) && (
                   <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                    <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">所在地</dt>
+                    <dt className="text-xs md:text-xs font-bold text-slate-500 uppercase tracking-widest">所在地</dt>
                     <dd className="text-sm md:text-base text-slate-300 leading-relaxed">
                       {shop.address || joinFields(shop.prefecture, shop.city, shop.area)}
                     </dd>
@@ -654,7 +654,7 @@ export default function ShopDetailPage({
             {ssrReviewedTherapists.length > 0 && (
               <div className="bg-slate-900/50 rounded-3xl p-6 md:p-8 border border-white/5">
                 <h3 className="text-sm font-black text-white mb-1">この店で口コミがあるセラピスト</h3>
-                <p className="text-[11px] text-slate-500 mb-4">実際に行った人の体験談が読めます</p>
+                <p className="text-xs text-slate-500 mb-4">実際に行った人の体験談が読めます</p>
                 <div className="flex flex-wrap gap-2">
                   {ssrReviewedTherapists.map((t) => (
                     <Link
@@ -678,7 +678,7 @@ export default function ShopDetailPage({
                 <h3 className="text-sm font-black text-white mb-1">
                   {nearbyHeading}
                 </h3>
-                <p className="text-[11px] text-slate-500 mb-4">他の店舗も比較する</p>
+                <p className="text-xs text-slate-500 mb-4">他の店舗も比較する</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {ssrNearbyShops.map((s) => (
                     <Link
@@ -714,13 +714,13 @@ export default function ShopDetailPage({
             <div className="lg:hidden sticky top-0 -mx-1 -mt-1 mb-2 flex items-center justify-between rounded-2xl bg-slate-950/95 px-2 py-2 backdrop-blur">
               <div>
                 <p className="text-sm font-black text-white">タグで絞り込む</p>
-                <p className="text-[10px] text-slate-500">口コミに付いたタグから選べます</p>
+                <p className="text-xs text-slate-500">口コミに付いたタグから選べます</p>
               </div>
               <button onClick={() => setIsFilterOpen(false)} className="min-w-11 min-h-11 rounded-full bg-slate-800 text-white text-xl" aria-label="閉じる">×</button>
             </div>
             {TAG_CATEGORIES.map((category) => (
               <div key={category.id} className="bg-slate-900/40 backdrop-blur rounded-2xl p-4 border border-white/5">
-                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
                   {category.title}
                 </h3>
@@ -737,7 +737,7 @@ export default function ShopDetailPage({
                           else if (count > 0) setSelectedTags((prev) => [...prev, tag]);
                         }}
                         disabled={count === 0 && !isSelected}
-                        className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all border ${
+                        className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                           isSelected
                             ? 'bg-pink-600 border-pink-500 text-white'
                             : count === 0
@@ -771,7 +771,7 @@ export default function ShopDetailPage({
                  <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
                  在籍セラピスト
                </h3>
-               <span className="bg-white/10 px-2 py-0.5 rounded text-[10px] font-bold text-slate-300">
+               <span className="bg-white/10 px-2 py-0.5 rounded text-xs font-bold text-slate-300">
                  {castNameFilter ? `${sortedTherapists.length} / ` : ''}全{therapists.length}人
                </span>
              </div>
@@ -823,13 +823,13 @@ export default function ShopDetailPage({
                            <LazyImage src={t.image_url || t.image} alt={t.name} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-60"></div>
                            <div className="absolute top-2 left-2 flex flex-col gap-1">
-                              {t.age && <span className="bg-black/60 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-white border border-white/10">{t.age}歳</span>}
+                              {t.age && <span className="bg-black/60 backdrop-blur px-1.5 py-0.5 rounded text-xs font-bold text-white border border-white/10">{t.age}歳</span>}
                            </div>
                            <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
                              {(() => {
                                const cnt = countsReady ? therapistReviewCounts[t.id] : undefined;
                                return cnt > 0 ? (
-                                 <span className="bg-pink-500 text-white text-[11px] font-black px-2 py-1 rounded-full shadow-lg shadow-pink-500/50 flex items-center gap-1">
+                                 <span className="bg-pink-500 text-white text-xs font-black px-2 py-1 rounded-full shadow-lg shadow-pink-500/50 flex items-center gap-1">
                                    💬 {cnt}
                                  </span>
                                ) : null;
@@ -850,9 +850,9 @@ export default function ShopDetailPage({
                            <div className="flex items-end justify-between">
                              <div>
                                <h4 className="text-white font-bold text-base leading-tight">{t.name}</h4>
-                               <p className="text-[10px] text-slate-400 mt-0.5">T{t.tall || '-'} / B{t.cup || '-'}</p>
+                               <p className="text-xs text-slate-400 mt-0.5">T{t.tall || '-'} / B{t.cup || '-'}</p>
                              </div>
-                             {t.isNew && <span className="text-[9px] font-bold text-yellow-400 bg-yellow-400/10 px-1.5 py-0.5 rounded border border-yellow-400/20">NEW</span>}
+                             {t.isNew && <span className="text-xs font-bold text-yellow-400 bg-yellow-400/10 px-1.5 py-0.5 rounded border border-yellow-400/20">NEW</span>}
                            </div>
                          </div>
                      </Link>

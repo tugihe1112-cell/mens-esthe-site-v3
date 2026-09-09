@@ -170,7 +170,7 @@ export default function RankingSection() {
                     <h3 className="text-white font-bold text-lg truncate group-hover:text-pink-400 transition">
                       {item.name}
                     </h3>
-                    {item.age && <span className="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full border border-slate-700">Age {item.age}</span>}
+                    {item.age && <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full border border-slate-700">Age {item.age}</span>}
                  </div>
                  <p className="text-xs text-slate-500 truncate mt-1">{item.shopName}</p>
                </div>
@@ -180,14 +180,14 @@ export default function RankingSection() {
                  <div className="text-2xl font-black text-pink-500 leading-none">
                    {item[`avg_${rankingTab}`].toFixed(1)}
                  </div>
-                 <div className="text-[10px] text-slate-500 font-bold mt-1">口コミ{item.count}件</div>
+                 <div className="text-xs text-slate-500 font-bold mt-1">口コミ{item.count}件</div>
                </div>
                {/* モバイルは省スペースで1行に */}
                <div className="text-right sm:hidden">
                  <div className="text-lg font-black text-pink-500 leading-none">
                    {item[`avg_${rankingTab}`].toFixed(1)}
                  </div>
-                 <div className="text-[10px] text-slate-500 font-bold mt-0.5">{item.count}件</div>
+                 <div className="text-xs text-slate-500 font-bold mt-0.5">{item.count}件</div>
                </div>
                
                <div className="text-slate-700 group-hover:text-pink-500 transition-colors px-2">›</div>

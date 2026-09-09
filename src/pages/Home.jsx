@@ -397,7 +397,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                 <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
                   <div className="flex flex-wrap gap-1 mb-2">
                     {area.tags.map(tag => (
-                      <span key={tag} className="text-[10px] font-bold bg-black/25 backdrop-blur px-2 py-0.5 rounded text-white border border-white/10">
+                      <span key={tag} className="text-xs font-bold bg-black/25 backdrop-blur px-2 py-0.5 rounded text-white border border-white/10">
                         {tag}
                       </span>
                     ))}
@@ -464,7 +464,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                       <div className="absolute bottom-2 left-2 right-2">
                         <p className="text-white font-black text-xs leading-tight [text-shadow:0_1px_4px_rgba(0,0,0,0.9)] truncate">{t.name}</p>
-                        {shop && <p className="text-pink-300 text-[10px] truncate mt-0.5">{getDisplayName(shop.name)}</p>}
+                        {shop && <p className="text-pink-300 text-xs truncate mt-0.5">{getDisplayName(shop.name)}</p>}
                       </div>
                     </div>
                   </Link>
@@ -513,12 +513,12 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                   <LazyImage src={shop.image_url || shop.image} alt="" className="absolute inset-0 w-full h-full scale-110 blur-xl opacity-30" imgClassName="w-full h-full object-cover" />
                   <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="absolute inset-0 w-full h-full p-3 transition duration-700 group-hover:scale-105" imgClassName="w-full h-full object-contain" />
                   <div className="absolute top-2 left-2">
-                    <span className="bg-pink-600/90 backdrop-blur text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-lg">NEW</span>
+                    <span className="bg-pink-600/90 backdrop-blur text-white text-xs font-bold px-2 py-0.5 rounded shadow-lg">NEW</span>
                   </div>
                 </div>
                 <div className="bg-slate-900 rounded-b-2xl px-3 py-2.5 border-t border-white/5">
                   <h4 className="text-white font-black text-sm leading-tight truncate">{getDisplayName(shop.name)}</h4>
-                  <p className="text-[10px] text-slate-400 truncate mt-0.5">{shop.prefecture || '東京'}{shop.city && shop.city !== shop.prefecture ? ` ${shop.city}` : ''}</p>
+                  <p className="text-xs text-slate-400 truncate mt-0.5">{shop.prefecture || '東京'}{shop.city && shop.city !== shop.prefecture ? ` ${shop.city}` : ''}</p>
                 </div>
               </Link>
             ))}
@@ -603,8 +603,8 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-white font-black text-xs leading-tight truncate">{getDisplayName(shop.name)}</p>
-                      <p className="text-slate-400 text-[10px] mt-0.5 truncate">{shop.prefecture} {shop.city}</p>
-                      <span className="text-pink-400 text-[10px] font-bold mt-1 block group-hover:translate-x-0.5 transition-transform">詳しく見る →</span>
+                      <p className="text-slate-400 text-xs mt-0.5 truncate">{shop.prefecture} {shop.city}</p>
+                      <span className="text-pink-400 text-xs font-bold mt-1 block group-hover:translate-x-0.5 transition-transform">詳しく見る →</span>
                     </div>
                   </Link>
                 ))}

@@ -101,7 +101,7 @@ function ShopCard({ shop, onSelect }) {
           {/* 出勤スケジュール埋め込み */}
           {shop.schedule_url && (
             <div>
-              <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+              <div className="text-xs font-black text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
                 出勤スケジュール
               </div>
@@ -126,7 +126,7 @@ function ShopCard({ shop, onSelect }) {
           {/* 料金システム */}
           {priceLines.length > 0 && (
             <div>
-              <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+              <div className="text-xs font-black text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
                 料金システム
               </div>
@@ -644,7 +644,7 @@ export default function SearchPage({ renderSeo = true }) {
               {shopInput && (
                 <button
                   onClick={() => setShopInput('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white bg-slate-800 rounded-full w-5 h-5 flex items-center justify-center text-[10px]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white bg-slate-800 rounded-full w-5 h-5 flex items-center justify-center text-xs"
                 >✕</button>
               )}
             </div>
@@ -665,7 +665,7 @@ export default function SearchPage({ renderSeo = true }) {
               {castInput && (
                 <button
                   onClick={() => setCastInput('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white bg-slate-800 rounded-full w-5 h-5 flex items-center justify-center text-[10px]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white bg-slate-800 rounded-full w-5 h-5 flex items-center justify-center text-xs"
                 >✕</button>
               )}
             </div>
@@ -737,7 +737,7 @@ export default function SearchPage({ renderSeo = true }) {
           {!isFeaturedBrowse && <div className="flex items-center justify-between px-1">
             <div>
               <p className="text-xs font-bold text-slate-400 truncate">{statusText}</p>
-              <p className="text-[10px] text-pink-400 font-bold">
+              <p className="text-xs text-pink-400 font-bold">
                 {isLoading
                   ? '検索中...'
                   : `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length}件`}
@@ -746,7 +746,7 @@ export default function SearchPage({ renderSeo = true }) {
             {(shopInput || castInput || selectedTags.length > 0) && (
               <button
                 onClick={clearAll}
-                className="min-h-8 text-[11px] sm:text-[10px] text-slate-500 hover:text-white underline underline-offset-4 font-bold ml-4 flex-shrink-0"
+                className="min-h-8 text-xs sm:text-xs text-slate-500 hover:text-white underline underline-offset-4 font-bold ml-4 flex-shrink-0"
               >
                 すべてクリア
               </button>
@@ -760,7 +760,7 @@ export default function SearchPage({ renderSeo = true }) {
                 <button
                   key={tag}
                   onClick={() => setSelectedTags(prev => prev.filter(t => t !== tag))}
-                  className="flex-shrink-0 bg-pink-600 text-white pl-3 pr-2 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 hover:bg-pink-500 transition"
+                  className="flex-shrink-0 bg-pink-600 text-white pl-3 pr-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 hover:bg-pink-500 transition"
                 >
                   {tag}
                   <span className="bg-black/20 rounded-full w-4 h-4 flex items-center justify-center">✕</span>
@@ -793,7 +793,7 @@ export default function SearchPage({ renderSeo = true }) {
           <div className="sticky top-0 z-10 -mx-4 -mt-4 mb-2 flex items-center justify-between border-b border-white/10 bg-slate-950/95 px-4 py-3 backdrop-blur lg:hidden">
             <div>
               <p id="mobile-filter-title" className="text-sm font-black text-white">条件で絞り込む</p>
-              <p className="mt-0.5 text-[10px] text-slate-500">口コミに付いた特徴タグから選択</p>
+              <p className="mt-0.5 text-xs text-slate-500">口コミに付いた特徴タグから選択</p>
             </div>
             <button
               type="button"
@@ -805,7 +805,7 @@ export default function SearchPage({ renderSeo = true }) {
           </div>
           {TAG_CATEGORIES.map(category => (
             <div key={category.id} className="bg-slate-900/40 backdrop-blur rounded-2xl lg:rounded-3xl p-4 lg:p-5 border border-white/5 shadow-xl">
-              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
                 {category.title}
               </h3>
@@ -821,7 +821,7 @@ export default function SearchPage({ renderSeo = true }) {
                         else if (count > 0) setSelectedTags(prev => [...prev, tag]);
                       }}
                       disabled={count === 0 && !isSelected}
-                      className={`px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all border ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
                         isSelected
                           ? 'bg-pink-600 border-pink-500 text-white'
                           : count === 0
@@ -932,7 +932,7 @@ export default function SearchPage({ renderSeo = true }) {
                     人物名の入力は castInput（上部）に一本化した。 */}
                 {/* ソートボタン */}
                 <div className="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar">
-                  <span className="text-[11px] text-slate-500 font-black shrink-0">並び替え</span>
+                  <span className="text-xs text-slate-500 font-black shrink-0">並び替え</span>
                   {[
                     { key: 'default', label: 'デフォルト', mobileLabel: '標準' },
                     { key: 'aiueo',   label: 'あ 五十音', mobileLabel: '五十音' },
@@ -942,7 +942,7 @@ export default function SearchPage({ renderSeo = true }) {
                     <button
                       key={opt.key}
                       onClick={() => setCastSortOrder(opt.key)}
-                      className={`shrink-0 min-h-9 px-3.5 py-1.5 rounded-full text-[11px] font-bold transition-all duration-200 ${
+                      className={`shrink-0 min-h-9 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
                         castSortOrder === opt.key
                           ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-md shadow-pink-500/30'
                           : 'bg-slate-800/80 text-slate-500 hover:text-white hover:bg-slate-700'
@@ -982,7 +982,7 @@ export default function SearchPage({ renderSeo = true }) {
                           </div>
                           <div className="text-center">
                             <p className="text-white font-black text-sm leading-tight">リストに<br />いない</p>
-                            <p className="text-slate-500 text-[10px] mt-1.5 leading-relaxed">新人・未登録の<br />セラピストの口コミ</p>
+                            <p className="text-slate-500 text-xs mt-1.5 leading-relaxed">新人・未登録の<br />セラピストの口コミ</p>
                           </div>
                         </div>
                       </Link>
