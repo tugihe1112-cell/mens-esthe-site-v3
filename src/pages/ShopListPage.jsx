@@ -138,10 +138,11 @@ export default function ShopListPage() {
         <div className="mb-6 md:mb-8 space-y-5 md:space-y-6">
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <h1 className="text-2xl md:text-3xl font-black flex items-center gap-2">
-              <span className="text-3xl">🏢</span> {query ? 'SEARCH RESULTS' : 'ALL SHOPS'}
+              <span className="text-3xl">🏢</span> {query ? '店舗の検索結果' : '店舗を探す'}
             </h1>
             <div className="text-gray-400 text-sm font-bold">
-              {loading ? '...' : `${result.length} 件`}
+              {/* ⚠️ U05: 総掲載数との差を「データ欠落」と読ませない書き方にする */}
+              {loading ? '...' : `表示対象${result.length}件`}
             </div>
           </div>
 

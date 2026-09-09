@@ -1,8 +1,9 @@
-import React, { useState, useMemo, useEffect, useTransition } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useTransition } from 'react';
 import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { useSearchParams, Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { supabase } from '../lib/supabase';
+import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews } from '../utils/reviewIdentity.js';
 import LazyImage from '../components/LazyImage.jsx';
 import { TherapistCardSkeleton } from '../components/ui/Skeleton.jsx';
 import Header from '../components/Header.jsx';
@@ -207,6 +208,11 @@ function buildFeaturedTherapistPool(rows, shops, limit = 240) {
   return result;
 }
 
+// ⚠️ U05: 320〜639px=2列 / 640〜1023px=3列 / 1024〜1279px=4列 / 1280px〜=5列。
+//    Tailwind の sm=640 / lg=1024 / xl=1280 がそのまま境界になる。
+//    間隔はスマホ12px・PC20px。列数を画面ごとに別定義せず1か所に置く。
+const GRID_CLASS = 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-5';
+
 export default function SearchPage({ renderSeo = true }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { shops, shopById } = useShopData();
@@ -225,15 +231,46 @@ export default function SearchPage({ renderSeo = true }) {
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
   const [isPending, startTransition] = useTransition();
 
-  // キャスト結果内の名前フィルター・ソート
-  const [castNameFilter, setCastNameFilter] = useState('');
+  // ⚠️ 2026-09-08（DESIGN.md U05）削除: 結果上部の3本目「キャスト名で絞り込み」。
+  //    上部の「セラピスト名」入力と役割が重複し、両方に別々の語を入れると
+  //    AND条件になって0件になる（利用者にはどちらが効いているか見えない）。
+  //    人物名の入力は castInput に一本化した。
   const [castSortOrder, setCastSortOrder] = useState('default'); // 'default' | 'aiueo' | 'reviews' | 'rating'
 
+  // ⚠️ U05: スマホのタグシートはモーダル。背景スクロール停止に加えて
+  //    Escapeで閉じる／開いた瞬間に中へfocus／Tabがシートの外へ出ない／
+  //    閉じたら開いたボタンへfocusを戻す、まで揃えないとキーボードで抜け出せなくなる。
+  const filterSheetRef = useRef(null);
+  const filterOpenerRef = useRef(null);
   useEffect(() => {
     if (!isFilterOpen || typeof document === 'undefined') return undefined;
     const previousOverflow = document.body.style.overflow;
+    // ⚠️ cleanup の時点で ref.current は別のノードを指しうるので、effect内で控える。
+    const opener = filterOpenerRef.current || document.activeElement;
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = previousOverflow; };
+
+    const focusables = () => Array.from(
+      filterSheetRef.current?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') || []
+    ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
+
+    focusables()[0]?.focus();
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); setIsFilterOpen(false); return; }
+      if (e.key !== 'Tab') return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      if (opener && typeof opener.focus === 'function') opener.focus();
+    };
   }, [isFilterOpen]);
 
   const shopQuery = useDebounce(shopInput, 150);
@@ -242,9 +279,16 @@ export default function SearchPage({ renderSeo = true }) {
   // --- DBフェッチ ---
   const [serverTherapists, setServerTherapists] = useState([]);
   const [isFetchingDB, setIsFetchingDB] = useState(true);
-  const [reviewCountMap, setReviewCountMap] = useState({}); // { normalizedName: count }
-  const [reviewTagMap, setReviewTagMap] = useState({}); // { normalizedName: Set<tag> }
-  const [ratingMap, setRatingMap] = useState({}); // { normalizedName: avgRating }
+  // ⚠️ 2026-09-08（FIXES.md F04）: キーを**正規化した名前**から **therapist_id** に変えた。
+  //    名前キーは別店舗・同一店舗の同名を1人に潰し、件数・評価・タグが別人と混ざる。
+  const [reviewCountMap, setReviewCountMap] = useState({}); // { therapistId: count }
+  const [reviewTagMap, setReviewTagMap] = useState({}); // { therapistId: Set<tag> }
+  const [ratingMap, setRatingMap] = useState({}); // { therapistId: avgRating|null }
+  // ⚠️ FIXES.md F05: 「まだ取れていない」と「0件」を区別する。
+  //    未取得を0件と表示すると、口コミがある人まで「0」に見える。
+  const [countsReady, setCountsReady] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
+  const [retryToken, setRetryToken] = useState(0);
 
   // shopId指定時はDBから正式な店舗名を解決してshopInputに反映
   // （店名の表記揺れで空表示になる問題を回避＝リンクは shopId で飛ばすのが確実）
@@ -277,7 +321,7 @@ export default function SearchPage({ renderSeo = true }) {
   // displayCount をリセット
   useEffect(() => {
     setDisplayCount(ITEMS_PER_PAGE);
-  }, [shopQuery, castQuery, selectedTags, castNameFilter, castSortOrder]);
+  }, [shopQuery, castQuery, selectedTags, castSortOrder]);
 
   // DB フェッチ本体
   useEffect(() => {
@@ -294,6 +338,7 @@ export default function SearchPage({ renderSeo = true }) {
 
     const fetch = async () => {
       setIsFetchingDB(true);
+      setFetchError(false);
       try {
         const sq = shopQuery.trim().toLowerCase();
         const cq = castQuery.trim();
@@ -350,7 +395,9 @@ export default function SearchPage({ renderSeo = true }) {
           if (matchedShopIds.length === 0) {
             data = [];
           } else {
-            const { data: d } = await supabase
+            // ⚠️ F05: Supabase の error を無視して `d || []` にすると、
+            //    通信失敗が「この条件では見つかりませんでした」になる。必ず投げる。
+            const { data: d, error } = await supabase
               .from('therapists')
               .select('id, shop_id, name, image_url, raw_data, is_active')
               .in('shop_id', matchedShopIds.slice(0, 100))
@@ -358,6 +405,7 @@ export default function SearchPage({ renderSeo = true }) {
               .neq('image_url', '')
               .or('is_active.is.null,is_active.eq.true')
               .limit(1000);
+            if (error) throw error;
             data = d || [];
           }
 
@@ -370,7 +418,8 @@ export default function SearchPage({ renderSeo = true }) {
             .neq('image_url', '')
             .or('is_active.is.null,is_active.eq.true');
           q = applyNameFilter(q);
-          const { data: d } = await q.limit(500);
+          const { data: d, error } = await q.limit(500);
+          if (error) throw error;
           // クライアント側でスペース除去して完全照合
           data = (d || []).filter(t => normName(t.name).includes(normCq));
 
@@ -379,7 +428,7 @@ export default function SearchPage({ renderSeo = true }) {
           if (matchedShopIds.length === 0) {
             data = [];
           } else {
-            const { data: d } = await supabase
+            const { data: d, error } = await supabase
               .from('therapists')
               .select('id, shop_id, name, image_url, raw_data, is_active')
               .in('shop_id', matchedShopIds.slice(0, 100))
@@ -387,6 +436,7 @@ export default function SearchPage({ renderSeo = true }) {
               .neq('image_url', '')
               .or('is_active.is.null,is_active.eq.true')
               .limit(1000);
+            if (error) throw error;
             data = (d || []).filter(t => normName(t.name).includes(normCq));
           }
         }
@@ -401,7 +451,8 @@ export default function SearchPage({ renderSeo = true }) {
         }));
         setServerTherapists(formatted);
       } catch (e) {
-        if (!cancelled) console.error('検索エラー:', e);
+        // ⚠️ F05: 失敗を空配列に丸めない。既存の結果を残し、再読み込みを出す。
+        if (!cancelled) { console.error('検索エラー:', e); setFetchError(true); }
       } finally {
         if (!cancelled) setIsFetchingDB(false);
       }
@@ -409,46 +460,47 @@ export default function SearchPage({ renderSeo = true }) {
 
     fetch();
     return () => { cancelled = true; };
-  }, [shopQuery, castQuery, shops]);
+  }, [shopQuery, castQuery, shops, retryToken]);
 
   // セラピスト別口コミ件数・タグ・評価取得（serverTherapistsが更新されたら実行）
+  // ⚠️ 2026-09-08（FIXES.md F04）: 集計キーを therapist_id にした。
+  //    以前は `therapist_name` を空白除去しただけの文字列をキーにしており、
+  //    別店舗の同名・同一店舗の同名が同じバケツに入っていた。
+  //    割り当ての契約は src/utils/reviewIdentity.js に一本化している。
   useEffect(() => {
-    if (!serverTherapists.length) { setReviewCountMap({}); setReviewTagMap({}); setRatingMap({}); return undefined; }
+    if (!serverTherapists.length) {
+      setReviewCountMap({}); setReviewTagMap({}); setRatingMap({}); setCountsReady(false);
+      return undefined;
+    }
     const shopIds = [...new Set(serverTherapists.map(t => t.shop_id).filter(Boolean))];
     if (!shopIds.length) return undefined;
     // ⚠️ ここも上のフェッチと同じ理由でキャンセルが要る（古い店舗の口コミ集計が
     //    新しい検索結果に被さると、件数バッジやタグ件数が別店舗のものになる）
     let cancelled = false;
+    setCountsReady(false);
     supabase
       .from('reviews')
-      .select('therapist_name, tags, rating')
+      .select('therapist_id, shop_id, therapist_name, tags, rating')
       .in('shop_id', shopIds.slice(0, 50))
       .then(({ data, error }) => {
         if (cancelled) return;
+        // ⚠️ F05: 失敗したら countsReady を立てない（未取得を0件と表示しない）。
         if (error) { console.error('口コミ件数取得エラー:', error); return; }
         if (!data) return;
-        const norm = (s) => (s || '').replace(/[\s　]/g, '');
+        const index = buildTherapistReviewIndex(data, serverTherapists);
         const counts = {};
         const tagMap = {};
-        const ratingSums = {};
-        const ratingCounts = {};
-        data.forEach(r => {
-          const n = norm(r.therapist_name);
-          if (n) {
-            counts[n] = (counts[n] || 0) + 1;
-            if (!tagMap[n]) tagMap[n] = new Set();
-            (r.tags || []).forEach(tag => tagMap[n].add(tag));
-            if (r.rating) {
-              ratingSums[n] = (ratingSums[n] || 0) + Number(r.rating);
-              ratingCounts[n] = (ratingCounts[n] || 0) + 1;
-            }
-          }
-        });
-        const avgRatings = {};
-        Object.keys(ratingSums).forEach(n => { avgRatings[n] = ratingSums[n] / ratingCounts[n]; });
+        const ratings = {};
+        for (const t of serverTherapists) {
+          const summary = summarizeReviews(reviewsForTherapist(index, t.id));
+          counts[t.id] = summary.count;
+          tagMap[t.id] = summary.tags;
+          ratings[t.id] = summary.rating; // 評価0件は null（0.0と表示しない）
+        }
         setReviewCountMap(counts);
         setReviewTagMap(tagMap);
-        setRatingMap(avgRatings);
+        setRatingMap(ratings);
+        setCountsReady(true);
       });
     return () => { cancelled = true; };
   }, [serverTherapists]);
@@ -467,11 +519,10 @@ export default function SearchPage({ renderSeo = true }) {
     if (!serverTherapists.length) return [];
     let results = serverTherapists;
 
-    // タグ絞り込み（口コミのtagsを参照）
+    // タグ絞り込み（口コミのtagsを参照）。キーは therapist_id（F04）。
     if (selectedTags.length > 0) {
-      const norm = (s) => (s || '').replace(/[\s　]/g, '');
       results = results.filter(t => {
-        const reviewTags = reviewTagMap[norm(t.name)] || new Set();
+        const reviewTags = reviewTagMap[t.id] || new Set();
         return selectedTags.every(sel => reviewTags.has(sel));
       });
     }
@@ -479,44 +530,28 @@ export default function SearchPage({ renderSeo = true }) {
     return results;
   }, [serverTherapists, selectedTags, reviewTagMap]);
 
-  // キャスト名フィルター + ソート
+  // ソート（件数・評価は F04 の集計と同じ therapist_id キーを使う）
   const sortedFilteredTherapists = useMemo(() => {
     let results = filteredTherapists;
-
-    // キャスト結果内の名前フィルター
-    if (castNameFilter.trim()) {
-      const f = normalizeForSearch(castNameFilter.trim());
-      results = results.filter(t => normalizeForSearch(t.name || '').includes(f));
-    }
-
-    // ソート
-    const norm = (s) => (s || '').replace(/[\s　]/g, '');
     if (castSortOrder === 'aiueo') {
       results = [...results].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ja'));
     } else if (castSortOrder === 'reviews') {
-      results = [...results].sort((a, b) => {
-        const ca = reviewCountMap[norm(a.name)] || 0;
-        const cb = reviewCountMap[norm(b.name)] || 0;
-        return cb - ca;
-      });
+      results = [...results].sort((a, b) => (reviewCountMap[b.id] || 0) - (reviewCountMap[a.id] || 0));
     } else if (castSortOrder === 'rating') {
-      results = [...results].sort((a, b) => {
-        const ra = ratingMap[norm(a.name)] || 0;
-        const rb = ratingMap[norm(b.name)] || 0;
-        return rb - ra;
-      });
+      results = [...results].sort((a, b) => (ratingMap[b.id] || 0) - (ratingMap[a.id] || 0));
     }
-
     return results;
-  }, [filteredTherapists, castNameFilter, castSortOrder, reviewCountMap, ratingMap]);
+  }, [filteredTherapists, castSortOrder, reviewCountMap, ratingMap]);
 
-  // 同名キャストを1枚にまとめる（複数店舗展開ブランドで同じ人が重複表示されるのを防ぐ）
+  // ⚠️ 2026-09-08（FIXES.md F04）: 「同名を1枚にまとめる」をやめ、**同一IDだけ**まとめる。
+  //    同名の別人（別店舗・同一店舗いずれも）が1枚のカードに統合され、
+  //    写真・件数・評価が混ざっていた。異なる人物IDは別カードとして残し、
+  //    店舗名・地域で区別できるようにする。
   const deduplicatedTherapists = useMemo(() => {
-    const norm = (s) => (s || '').replace(/[\s　]/g, '');
-    const seen = new Map(); // normName -> index in result
+    const seen = new Map(); // therapistId -> index in result
     const result = [];
     for (const t of sortedFilteredTherapists) {
-      const key = norm(t.name);
+      const key = String(t.id ?? '');
       if (seen.has(key)) {
         const idx = seen.get(key);
         result[idx]._extraShopIds.push(t.shop_id);
@@ -540,9 +575,8 @@ export default function SearchPage({ renderSeo = true }) {
   const tagCounts = useMemo(() => {
     const counts = {};
     TAG_CATEGORIES.forEach(cat => cat.tags.forEach(t => { counts[t] = 0; }));
-    const norm = (s) => (s || '').replace(/[\s　]/g, '');
     for (const t of serverTherapists) {
-      const reviewTags = reviewTagMap[norm(t.name)] || new Set();
+      const reviewTags = reviewTagMap[t.id] || new Set();
       for (const tag of reviewTags) {
         if (counts[tag] !== undefined) counts[tag]++;
       }
@@ -584,7 +618,11 @@ export default function SearchPage({ renderSeo = true }) {
         />
       )}
       <Header />
-      <h1 className="sr-only">店舗・セラピスト検索</h1>
+      {/* ⚠️ U05: 見えないH1をやめ、画面上部に可視のH1を置く。
+             利用者にとっての「このページは何か」と、機械が読む見出しを一致させる。 */}
+      <h1 className="max-w-7xl mx-auto px-4 pt-5 font-black text-white tracking-tight" style={{ fontSize: '28px', lineHeight: 1.3 }}>
+        セラピストを探す
+      </h1>
 
       {/* ===== 検索エリア ===== */}
       <div className="bg-slate-950 border-b border-white/10 shadow-lg">
@@ -686,6 +724,7 @@ export default function SearchPage({ renderSeo = true }) {
             {!isFeaturedBrowse && hasAvailableTags && (
               <button
                 type="button"
+                ref={filterOpenerRef}
                 onClick={() => setIsFilterOpen(true)}
                 className="min-h-10 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-xs font-bold text-white"
               >
@@ -745,6 +784,7 @@ export default function SearchPage({ renderSeo = true }) {
           />
         )}
         {!isFeaturedBrowse && <aside
+          ref={filterSheetRef}
           role={isFilterOpen ? 'dialog' : undefined}
           aria-modal={isFilterOpen ? 'true' : undefined}
           aria-labelledby={isFilterOpen ? 'mobile-filter-title' : undefined}
@@ -825,6 +865,46 @@ export default function SearchPage({ renderSeo = true }) {
 
           {/* 💃 マッチしたキャスト */}
           <section>
+            {/* ⚠️ U05: 効いている条件を結果の上に**解除できるチップ**で出す。
+                タグを選んだまま人物名を変えると、条件が隠れたまま残って0件の理由が分からなくなる。 */}
+            {(shopInput || castInput || selectedTags.length > 0) && (
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                <span className="ui-help">条件</span>
+                {shopInput && (
+                  <button type="button" onClick={() => setShopInput('')} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-white/15 bg-slate-900 px-3 font-bold text-white" style={{ fontSize: '13px' }}>
+                    店舗・エリア「{shopInput}」<span aria-hidden="true">×</span><span className="sr-only">を解除</span>
+                  </button>
+                )}
+                {castInput && (
+                  <button type="button" onClick={() => setCastInput('')} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-white/15 bg-slate-900 px-3 font-bold text-white" style={{ fontSize: '13px' }}>
+                    セラピスト名「{castInput}」<span aria-hidden="true">×</span><span className="sr-only">を解除</span>
+                  </button>
+                )}
+                {selectedTags.map((tag) => (
+                  <button key={tag} type="button" onClick={() => setSelectedTags((prev) => prev.filter((x) => x !== tag))} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-pink-500/30 bg-pink-500/10 px-3 font-bold text-pink-100" style={{ fontSize: '13px' }}>
+                    {tag}<span aria-hidden="true">×</span><span className="sr-only">を解除</span>
+                  </button>
+                ))}
+                <button type="button" onClick={clearAll} className="ui-link inline-flex min-h-11 items-center px-2" style={{ fontSize: '13px' }}>すべて解除</button>
+              </div>
+            )}
+
+            {/* ⚠️ FIXES.md F05: 通信失敗を「見つかりませんでした」と混同しない。
+                既存の結果は消さず、再読み込みだけを出す。 */}
+            {fetchError && (
+              <div role="alert" className="mb-4 rounded-xl border border-rose-500/50 bg-rose-500/10 p-3">
+                <p className="ui-error">読み込めませんでした</p>
+                <button
+                  type="button"
+                  onClick={() => setRetryToken((n) => n + 1)}
+                  className="ui-link mt-1.5 inline-flex min-h-11 items-center font-bold"
+                  style={{ fontSize: '13px' }}
+                >
+                  再読み込み
+                </button>
+              </div>
+            )}
+
             {(isFeaturedBrowse || matchingShops.length > 0 || castQuery) && (
               <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
@@ -837,8 +917,9 @@ export default function SearchPage({ renderSeo = true }) {
               <div className="mb-4 sm:mb-6 flex items-center gap-2.5 rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-950/50 to-slate-900/70 px-3 py-2.5 sm:items-start sm:gap-3 sm:px-4 sm:py-3">
                 <span className="text-base sm:text-xl leading-none">✨</span>
                 <div>
+                  {/* ⚠️ U05: 「店舗・地域が偏らないように表示しています」は実装の説明で、
+                      利用者が次にする操作の助けにならないので削除した。 */}
                   <p className="text-xs sm:text-sm font-black text-white">気になるセラピストから探せます</p>
-                  <p className="mt-1 hidden text-xs leading-relaxed text-slate-400 sm:block">店舗・地域が偏らないように表示しています。名前検索や並び替えでさらに絞り込めます。</p>
                 </div>
               </div>
             )}
@@ -846,26 +927,9 @@ export default function SearchPage({ renderSeo = true }) {
             {/* キャスト内絞り込み・ソートバー */}
             {filteredTherapists.length > 0 && (
               <div className="mb-6">
-                {/* 名前検索 */}
-                <div className="relative mb-3 hidden sm:block">
-                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-pink-400/60 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
-                  </svg>
-                  <input
-                    type="text"
-                    value={castNameFilter}
-                    onChange={e => setCastNameFilter(e.target.value)}
-                    placeholder="キャスト名で絞り込み..."
-                    className="w-full bg-gradient-to-r from-slate-900 to-slate-800 border border-pink-500/20 rounded-2xl pl-11 pr-10 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-pink-500/50 focus:shadow-lg focus:shadow-pink-500/10 transition-all"
-                  />
-                  {castNameFilter && (
-                    <button onClick={() => setCastNameFilter('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-pink-400 transition">
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  )}
-                </div>
+                {/* ⚠️ 2026-09-08（U05）削除: 3本目の「キャスト名で絞り込み」入力。
+                    上部の「セラピスト名」と重複し、両方に別の語を入れるとAND条件で必ず0件になる。
+                    人物名の入力は castInput（上部）に一本化した。 */}
                 {/* ソートボタン */}
                 <div className="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar">
                   <span className="text-[11px] text-slate-500 font-black shrink-0">並び替え</span>
@@ -894,16 +958,22 @@ export default function SearchPage({ renderSeo = true }) {
 
             <div>
               {isLoading ? (
-                <div className={`grid grid-cols-2 md:grid-cols-3 ${isFeaturedBrowse ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} gap-3 sm:gap-4 md:gap-5`}>
+                <div className={GRID_CLASS}>
                   {Array.from({ length: 8 }).map((_, i) => <TherapistCardSkeleton key={i} />)}
                 </div>
               ) : visibleTherapists.length > 0 ? (
                 <>
-                  <div className={`grid grid-cols-2 md:grid-cols-3 ${isFeaturedBrowse ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} gap-3 sm:gap-4 md:gap-5`}>
+                  <div className={GRID_CLASS}>
                     {/* リストにいないセラピストの口コミカード（店舗指定時のみ） */}
+                    {/* ⚠️ 2026-09-08（FIXES.md F05）: `matchingShops[0]` を無条件に指定していた。
+                        「新宿」のような地域検索では複数店舗に一致するので、
+                        投稿画面が**関係のない先頭店舗に固定**される。
+                        明示された店舗が1つに定まるときだけ指定し、それ以外は店舗選択へ送る。 */}
                     {shopQuery && matchingShops.length >= 1 && (
                       <Link
-                        to={`/post-review?shopId=${matchingShops[0].id}&customMode=true`}
+                        to={matchingShops.length === 1 || initShopId
+                          ? `/post-review?shopId=${initShopId || matchingShops[0].id}&customMode=true`
+                          : '/post-review?customMode=true'}
                         className="group relative block bg-slate-900/60 rounded-[1.5rem] overflow-hidden border border-dashed border-purple-500/30 hover:border-purple-500/70 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-900/20 hover:-translate-y-1"
                       >
                         <div className="aspect-[3/4] flex flex-col items-center justify-center gap-3 p-4">
@@ -944,45 +1014,31 @@ export default function SearchPage({ renderSeo = true }) {
                           to={`/shops/${t.shop_id}/threads/${t.id}`}
                           className="group relative block bg-slate-900 rounded-2xl sm:rounded-[1.5rem] overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-900/20 hover:-translate-y-1"
                         >
-                          <div className="aspect-[3/4] overflow-hidden relative">
+                          {/* ⚠️ U05: 名前・店舗・地域は**写真の下の単色面**へ置く。
+                              写真の上に重ねると、明るい画像や顔の位置次第で読めなくなる
+                              （読める文字を写真の明暗に依存させない）。
+                              写真の上に置くのは操作だけ。件数・評価も下の面へ移した。 */}
+                          <div className="aspect-[3/4] overflow-hidden relative bg-slate-800">
                             <LazyImage src={t.image_url || t.image} alt={t.name} width={400} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90 group-hover:opacity-60 transition duration-500"></div>
-                            {(() => {
-                              // 口コミがある人を視覚的に際立たせる＝「読むものがある人」に視線を集める。
-                              // ratingMapは既に算出済みだったがソートにしか使われておらず、★が一覧に出ていなかった。
-                              const key = (t.name || '').replace(/[\s　]/g, '');
-                              const cnt = reviewCountMap[key];
-                              if (!(cnt > 0)) return null;
-                              const avg = ratingMap[key];
-                              const avgColor = avg >= 4 ? 'text-emerald-300' : avg >= 3 ? 'text-amber-300' : 'text-rose-300';
-                              return (
-                                <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
-                                  {avg > 0 && (
-                                    <div className="bg-black/70 backdrop-blur-sm border border-white/10 text-[11px] font-black px-2 py-1 rounded-full shadow-lg flex items-center gap-0.5">
-                                      <span className="text-yellow-400">★</span>
-                                      <span className={avgColor}>{avg.toFixed(1)}</span>
-                                    </div>
-                                  )}
-                                  <div className="bg-pink-500 text-white text-[11px] font-black px-2 py-1 rounded-full shadow-lg shadow-pink-500/50 flex items-center gap-1">
-                                    💬 {cnt}
-                                  </div>
-                                </div>
-                              );
-                            })()}
-                            <div className="absolute bottom-0 left-0 w-full p-2 sm:p-3">
-                              <div className="bg-white/5 backdrop-blur-md rounded-xl p-2 sm:p-3 border border-white/10 group-hover:bg-white/10 transition duration-300">
-                                <div className="flex items-center gap-1 mb-1">
-                                  {t.age && <span className="bg-black/40 px-1.5 py-0.5 rounded text-[10px] font-bold text-white border border-white/10">{t.age}歳</span>}
-                                </div>
-                                <h3 className="text-white font-black text-sm sm:text-base leading-tight truncate">{t.name}</h3>
-                                <p className="text-[10px] sm:text-[11px] text-slate-300 font-bold truncate flex items-center gap-1 mt-1">
-                                  <span className="text-pink-500">📍</span>
-                                  {t._extraShopIds?.length > 0
-                                    ? `${shop?.name || ''} 他${t._extraShopIds.length}店舗`
-                                    : shop ? [shop.area || shop.city, shop.name].filter(Boolean).join(' | ') : ''}
-                                </p>
-                              </div>
-                            </div>
+                          </div>
+                          <div className="bg-slate-900 border-t border-white/5 p-2.5 sm:p-3">
+                            <h3 className="font-black text-white line-clamp-2" style={{ fontSize: '16px', lineHeight: 1.4 }}>{t.name}</h3>
+                            <p className="mt-1 text-slate-300 line-clamp-2" style={{ fontSize: '13px', lineHeight: 1.5 }}>
+                              {t._extraShopIds?.length > 0
+                                ? `${shop?.name || ''} 他${t._extraShopIds.length}店舗`
+                                : shop ? [shop.area || shop.city, shop.name].filter(Boolean).join(' | ') : ''}
+                            </p>
+                            {/* ⚠️ F04/F05: 件数はこの人物IDで実際に数えた公開データだけ。
+                                取得できていない間は**何も出さない**（0件と表示しない）。 */}
+                            {countsReady && reviewCountMap[t.id] > 0 && (
+                              <p className="mt-1.5 flex items-center gap-2 text-slate-300" style={{ fontSize: '13px' }}>
+                                <span className="font-bold text-pink-300">口コミ{reviewCountMap[t.id]}件</span>
+                                {ratingMap[t.id] != null && (
+                                  <span className="font-bold text-amber-300">★ {ratingMap[t.id].toFixed(1)}</span>
+                                )}
+                              </p>
+                            )}
+                            {t.age ? <p className="mt-1 text-slate-400" style={{ fontSize: '13px' }}>{t.age}歳</p> : null}
                           </div>
                         </Link>
                         </React.Fragment>

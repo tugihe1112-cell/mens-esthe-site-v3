@@ -46,6 +46,8 @@ export default function PopularReviewsPage({
   const [therapistMap, setTherapistMap] = useState(() => initialTherapistMap || {});
   const [isLoading, setIsLoading] = useState(!hasServerData);
   const [offset, setOffset] = useState(0);
+  // 'initial' … 初回の読み込み失敗 / 'more' … 追加分の失敗（既存カードは残す）
+  const [loadError, setLoadError] = useState(null);
   const [hasMore, setHasMore] = useState(hasServerData ? initialHasMore : true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [sortBy, setSortBy] = useState('new'); // 'new' | 'rating'
@@ -123,15 +125,30 @@ export default function PopularReviewsPage({
         `&is_public=eq.true&order=${order}&limit=${PAGE_SIZE}&offset=${currentOffset}`,
         { headers: await authHeaders() }
       );
+      // ⚠️ 2026-09-08（FIXES.md F05）: `res.ok` とJSONの型を検査する。
+      //    失敗を握りつぶすと「0件」と「読み込めなかった」が同じ見た目になる。
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      if (!Array.isArray(data)) return;
+      if (!Array.isArray(data)) throw new Error('unexpected payload');
 
-      if (isLoadMore) setReviews(prev => [...prev, ...data]);
-      else setReviews(data);
+      // ⚠️ 口コミIDで重複排除する（同じ行が二重に積まれるのを防ぐ）。
+      if (isLoadMore) {
+        setReviews(prev => {
+          const seen = new Set(prev.map(r => r.id));
+          return [...prev, ...data.filter(r => !seen.has(r.id))];
+        });
+      } else {
+        setReviews(data);
+      }
       setHasMore(data.length === PAGE_SIZE);
+      // ⚠️ offset は**正常結果を反映したあとにだけ**進める。
+      //    以前は loadMore が取得前に +20 していたため、失敗すると次の20件を飛ばしていた。
+      setOffset(currentOffset);
+      setLoadError(null);
       hydrateMaps(data);
     } catch (e) {
       console.error(e);
+      setLoadError(isLoadMore ? 'more' : 'initial');
     } finally {
       setIsLoading(false);
       setIsLoadingMore(false);
@@ -145,14 +162,15 @@ export default function PopularReviewsPage({
       return;
     }
     setOffset(0);
+    setLoadError(null);
     fetchReviews(0, sortBy, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy]);
 
+  // ⚠️ F05: 取得前に offset を進めない。リトライは同じ offset を使う。
   const loadMore = () => {
-    const next = offset + PAGE_SIZE;
-    setOffset(next);
-    fetchReviews(next, sortBy, true);
+    if (isLoadingMore) return; // 連打で二重に積まない
+    fetchReviews(offset + PAGE_SIZE, sortBy, true);
   };
 
   return (
@@ -193,6 +211,16 @@ export default function PopularReviewsPage({
               </button>
             ))}
           </div>
+
+          {/* ⚠️ F05: 初回の通信失敗は「0件」ではない。再読み込みを出す。 */}
+          {loadError === 'initial' && reviews.length === 0 && !isLoading && (
+            <div role="alert" className="rounded-xl border border-rose-500/50 bg-rose-500/10 p-4 text-center">
+              <p className="ui-error">読み込めませんでした</p>
+              <button type="button" onClick={() => fetchReviews(0, sortBy, false)} className="ui-link mt-1.5 inline-flex min-h-11 items-center font-bold" style={{ fontSize: '13px' }}>
+                再読み込み
+              </button>
+            </div>
+          )}
 
           {isLoading ? (
             <div className="space-y-4">
@@ -307,6 +335,17 @@ export default function PopularReviewsPage({
                   );
                 })}
               </div>
+
+              {/* ⚠️ F05: 追加分の失敗は既存カードを残したまま一覧末尾に出す。
+                  「見つかりませんでした」と混同させない。 */}
+              {loadError === 'more' && (
+                <div role="alert" className="mt-6 rounded-xl border border-rose-500/50 bg-rose-500/10 p-3 text-center">
+                  <p className="ui-error">追加分を読み込めませんでした</p>
+                  <button type="button" onClick={loadMore} className="ui-link mt-1.5 inline-flex min-h-11 items-center font-bold" style={{ fontSize: '13px' }}>
+                    もう一度読み込む
+                  </button>
+                </div>
+              )}
 
               {/* もっと見る */}
               {hasMore && (

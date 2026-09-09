@@ -9,6 +9,7 @@ import React from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import ThreadDetailPage from '../../../../src/pages/ThreadDetailPage.jsx';
+import { filterReviewsForTherapist } from '../../../../src/utils/reviewIdentity.js';
 
 // ────────────────────────────────────────────────────────────
 // SSR: サーバー側でSupabaseから公開データを取得
@@ -116,11 +117,26 @@ export async function getServerSideProps({ params, res }) {
     for (const review of [...(exactReviews || []), ...legacyReviews]) reviewsById.set(review.id, review);
     const reviews = [...reviewsById.values()].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
 
-    // セラピスト名でフィルタ
-    const normName = (therapistName || '').replace(/[\s　]/g, '');
-    const publicReviews = (reviews || []).filter(r =>
-      r.therapist_id === threadId ||
-      (therapistData && r.therapist_name && r.therapist_name.replace(/[\s　]/g, '') === normName)
+    // ⚠️ 2026-09-08（FIXES.md F04）: ここは
+    //      r.therapist_id === threadId || 名前が一致
+    //    という **OR** だった。左辺で弾いた「別人物IDの口コミ」を、
+    //    右辺の名前一致が拾い直してしまう＝同名の別人が混ざる。
+    //    割り当ての契約は src/utils/reviewIdentity.js に一本化した。
+    //    ・IDがある口コミ … threadId と完全一致した時だけ採用
+    //    ・IDが無い旧口コミ … 同一店舗に同名が1人だけのときに限り採用
+    const { data: sameNameRoster } = await supabase
+      .from('therapists')
+      .select('id, shop_id, name')
+      .in('shop_id', reviewShopIds)
+      .in('name', nameVariants);
+    const roster = [
+      ...(sameNameRoster || []),
+      ...(therapistData ? [{ id: threadId, shop_id: therapistData.shop_id, name: therapistName }] : []),
+    ].filter((t, i, arr) => arr.findIndex((x) => String(x.id) === String(t.id)) === i);
+    const publicReviews = filterReviewsForTherapist(
+      reviews || [],
+      { id: threadId, shop_id: therapistData?.shop_id || shopId, name: therapistName },
+      roster
     );
 
     if (!therapistData) {

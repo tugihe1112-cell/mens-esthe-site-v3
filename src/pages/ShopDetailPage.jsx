@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { authHeaders } from '../utils/supabaseRest';
+import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews } from '../utils/reviewIdentity.js';
 import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { useAppContext } from '../context/AppContext.tsx';
@@ -68,7 +69,10 @@ export default function ShopDetailPage({
   const [isLoadingMoreReviews, setIsLoadingMoreReviews] = useState(false);
 
   // セラピスト別口コミ件数 { name → count }
+  // ⚠️ F04: キーは therapist_id（正規化名ではない）。
   const [therapistReviewCounts, setTherapistReviewCounts] = useState({});
+  // ⚠️ F05: 未取得と0件を区別する。取得前に「0件」と描かない。
+  const [countsReady, setCountsReady] = useState(false);
 
   useEffect(() => {
     if (!shopId) return;
@@ -120,10 +124,12 @@ export default function ShopDetailPage({
           fetch(reviewFetchUrl, { headers, cache: 'no-store' })
         ]);
 
-        // セラピスト別口コミ件数（therapist_name列のみ取得・軽量）
+        // セラピスト別口コミ件数（軽量）
+        // ⚠️ 2026-09-08（FIXES.md F04）: therapist_id と shop_id も取る。
+        //    名前だけでは系列店の同名の別人を1人に束ねてしまう。
         const countFetchUrl = reviewShopIds.length > 1
-          ? `${url}/rest/v1/reviews?shop_id=in.(${reviewShopIds.join(',')})&select=therapist_name,tags`
-          : `${url}/rest/v1/reviews?shop_id=eq.${shopId}&select=therapist_name,tags`;
+          ? `${url}/rest/v1/reviews?shop_id=in.(${reviewShopIds.join(',')})&select=therapist_id,shop_id,therapist_name,tags`
+          : `${url}/rest/v1/reviews?shop_id=eq.${shopId}&select=therapist_id,shop_id,therapist_name,tags`;
 
         const [tData, rData, cData] = await Promise.all([
           tRes.json(),
@@ -140,21 +146,20 @@ export default function ShopDetailPage({
             setHasMoreReviews(rData.length === REVIEW_PAGE_SIZE);
             setReviewOffset(REVIEW_PAGE_SIZE);
           }
-          if (Array.isArray(cData)) {
-            const norm = (s) => (s || '').replace(/[\s　]/g, '');
+          if (Array.isArray(cData) && Array.isArray(tData)) {
+            // ⚠️ F04: キーは therapist_id。名前キーは同名の別人を混ぜる。
+            const roster = tData.map((t) => ({ id: t.id, shop_id: t.shop_id, name: t.name }));
+            const index = buildTherapistReviewIndex(cData, roster);
             const counts = {};
             const tagMap = {};
-            cData.forEach(r => {
-              const n = norm(r.therapist_name);
-              if (!n) return;
-              counts[n] = (counts[n] || 0) + 1;
-              if (Array.isArray(r.tags)) {
-                if (!tagMap[n]) tagMap[n] = new Set();
-                r.tags.forEach(t => tagMap[n].add(t));
-              }
-            });
+            for (const t of roster) {
+              const summary = summarizeReviews(reviewsForTherapist(index, t.id));
+              counts[t.id] = summary.count;
+              tagMap[t.id] = summary.tags;
+            }
             setTherapistReviewCounts(counts);
             setReviewTagMap(tagMap);
+            setCountsReady(true);
           }
         }
       } catch (err) {
@@ -244,7 +249,7 @@ export default function ShopDetailPage({
     const counts = {};
     TAG_CATEGORIES.forEach(cat => cat.tags.forEach(t => { counts[t] = 0; }));
     for (const t of therapists) {
-      const tags = reviewTagMap[normName(t.name)] || new Set();
+      const tags = reviewTagMap[t.id] || new Set();
       for (const tag of tags) if (counts[tag] !== undefined) counts[tag]++;
     }
     return counts;
@@ -273,7 +278,7 @@ export default function ShopDetailPage({
     let list = [...therapists];
     if (selectedTags.length > 0) {
       list = list.filter((t) => {
-        const tags = reviewTagMap[normName(t.name)] || new Set();
+        const tags = reviewTagMap[t.id] || new Set();
         return selectedTags.every((sel) => tags.has(sel));
       });
     }
@@ -284,7 +289,7 @@ export default function ShopDetailPage({
     if (castSortOrder === 'aiueo') {
       list.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ja'));
     } else if (castSortOrder === 'reviews') {
-      list.sort((a, b) => (therapistReviewCounts[normName(b.name)] || 0) - (therapistReviewCounts[normName(a.name)] || 0));
+      list.sort((a, b) => (therapistReviewCounts[b.id] || 0) - (therapistReviewCounts[a.id] || 0));
     }
     return list;
   }, [therapists, castNameFilter, castSortOrder, therapistReviewCounts, selectedTags, reviewTagMap]);
@@ -413,7 +418,7 @@ export default function ShopDetailPage({
                  )}
                  {shop.group_id && (
                    <span className="px-2.5 py-0.5 rounded-md bg-blue-600/80 backdrop-blur text-white text-[10px] font-bold tracking-widest uppercase border border-white/10">
-                     GROUP STORE
+                     系列店
                    </span>
                  )}
                </div>
@@ -446,7 +451,7 @@ export default function ShopDetailPage({
                   }`}
                 >
                   <span className="md:hidden">{isFavorite ? '❤️' : '🤍'}</span>
-                  <span className="hidden md:inline">{isFavorite ? 'Saved ❤️' : 'Save'}</span>
+                  <span className="hidden md:inline">{isFavorite ? 'お気に入り済み ❤️' : 'お気に入り'}</span>
                 </button>
                <button 
                  onClick={handlePostReview}
@@ -465,7 +470,7 @@ export default function ShopDetailPage({
              ただし内部リンク/canonical/JSON-LDは /shops/:id のまま維持する（7月の索引崩落から復旧させた
              1,098ページへのクロール経路をここで切らないため）。ナビはアンカースクロールに変更。 */}
       <div className="sticky top-14 md:top-20 z-40 bg-slate-950/95 backdrop-blur border-b border-white/5 shadow-lg">
-        <div className="flex max-w-4xl mx-auto">
+        <div className="flex max-w-[1200px] mx-auto">
           {([
             { key: 'cast', label: 'キャスト' },
             { key: 'review', label: '口コミ' },
@@ -488,7 +493,8 @@ export default function ShopDetailPage({
       </div>
 
       {/* 3. Content Area */}
-      <div className="max-w-4xl mx-auto px-4 py-5 md:py-8 min-h-[50vh] flex flex-col gap-8 md:gap-12">
+      {/* ⚠️ U05: PCのコンテンツ幅を1200pxへ（左タグ＋一覧が窮屈だった） */}
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-5 md:py-8 min-h-[50vh] flex flex-col gap-8 md:gap-12">
         
         <section id="sec-info" className="scroll-mt-32 order-3">
           <div className="space-y-8">
@@ -525,7 +531,7 @@ export default function ShopDetailPage({
               <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
                  <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                    <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
-                   SHOP INFORMATION
+                   店舗情報
                  </h3>
               </div>
 
@@ -552,7 +558,7 @@ export default function ShopDetailPage({
                   </div>
                 )}
                 <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                  <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">PRICE</dt>
+                  <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">料金</dt>
                   <dd className="text-sm md:text-base text-white w-full bg-slate-800/50 p-4 rounded-xl border border-white/5">{shop?.price_system ? (
   <div className="flex flex-col space-y-3 w-full">
     {(() => {
@@ -629,7 +635,7 @@ export default function ShopDetailPage({
                     住所が無くても都道府県・市区までは出せることが多いのでフォールバックする。 */}
                 {joinFields(shop.address || joinFields(shop.prefecture, shop.city, shop.area)) && (
                   <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                    <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">ACCESS</dt>
+                    <dt className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest">所在地</dt>
                     <dd className="text-sm md:text-base text-slate-300 leading-relaxed">
                       {shop.address || joinFields(shop.prefecture, shop.city, shop.area)}
                     </dd>
@@ -763,7 +769,7 @@ export default function ShopDetailPage({
              <div className="flex items-center justify-between mb-6 px-1">
                <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                  <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
-                 THERAPISTS
+                 在籍セラピスト
                </h3>
                <span className="bg-white/10 px-2 py-0.5 rounded text-[10px] font-bold text-slate-300">
                  {castNameFilter ? `${sortedTherapists.length} / ` : ''}全{therapists.length}人
@@ -821,7 +827,7 @@ export default function ShopDetailPage({
                            </div>
                            <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
                              {(() => {
-                               const cnt = therapistReviewCounts[(t.name || '').replace(/[\s　]/g, '')];
+                               const cnt = countsReady ? therapistReviewCounts[t.id] : undefined;
                                return cnt > 0 ? (
                                  <span className="bg-pink-500 text-white text-[11px] font-black px-2 py-1 rounded-full shadow-lg shadow-pink-500/50 flex items-center gap-1">
                                    💬 {cnt}
