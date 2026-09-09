@@ -108,18 +108,49 @@ export default async function handler(req, res) {
     userId = userData.user.id;
 
     // Step1.5: 新規登録ボーナス（閲覧権3日）
-    // 失敗しても登録自体は続行。メール送信失敗時のユーザー削除で cascade 削除される
-    try {
-      const { error: bonusError } = await admin.from('user_credits').insert({
-        user_id: userId,
-        credits_days: 3,
-        expires_at: new Date(Date.now() + 3 * 86_400_000).toISOString(),
-        total_reviews_posted: 0,
-        updated_at: new Date().toISOString(),
-      });
+    // ⚠️ 2026-09-08（FIXES.md F08）: 以前はINSERT失敗を**ログに出すだけ**で
+    //    確認メール送信へ進んでいた。利用者は「3日間読み放題」の案内を読んで
+    //    メールを踏むのに、閲覧権が付いていない状態で着地する。
+    //    付与を確認できなければ成功レスポンスも確認メールも出さない。
+    // ⚠️ 起算は「APIがアカウントを作る時点から72時間」。
+    //    メール確認時点からへ変更するのは商品仕様の変更なので行わない。
+    // ⚠️ 既に正しい行があれば再INSERTで延長しない（二重付与を作らない）。
+    {
+      const bonusDays = 3;
+      const expiresAt = new Date(Date.now() + bonusDays * 86_400_000).toISOString();
+      let bonusError = null;
+      try {
+        ({ error: bonusError } = await admin.from('user_credits').insert({
+          user_id: userId,
+          credits_days: bonusDays,
+          expires_at: expiresAt,
+          total_reviews_posted: 0,
+          updated_at: new Date().toISOString(),
+        }));
+      } catch (e) {
+        // 通信上は不明。書けている可能性があるので、この後の読み戻しで判定する。
+        bonusError = e;
+      }
       if (bonusError) console.error('[signup bonus] ', bonusError.message);
-    } catch (e) {
-      console.error('[signup bonus] ', e.message);
+
+      // 応答が失われた場合も含めて、**必ず読み戻して**成否を判断する。
+      const { data: bonusRows, error: bonusReadError } = await admin
+        .from('user_credits')
+        .select('credits_days, expires_at, total_reviews_posted')
+        .eq('user_id', userId)
+        .limit(1);
+      if (bonusReadError) throw new Error(`Signup bonus verification failed: ${bonusReadError.message}`);
+      const bonus = Array.isArray(bonusRows) ? bonusRows[0] : null;
+      const grantedOk = !!bonus
+        && Number(bonus.credits_days) === bonusDays
+        && Number(bonus.total_reviews_posted || 0) === 0
+        && bonus.expires_at
+        && new Date(bonus.expires_at).getTime() > Date.now();
+      if (!grantedOk) {
+        // ⚠️ 後始末（このリクエストが作ったuserIdの削除）は下の catch が行う。
+        //    既存会員は絶対に削除しない（userId はこのリクエストで作った分だけ）。
+        throw new Error('Signup bonus was not granted');
+      }
     }
 
     // Step2: 確認リンク生成
@@ -237,9 +268,19 @@ export default async function handler(req, res) {
 
   } catch (err) {
     console.error('[auth/signup] error:', err.message);
-    // メール送信失敗時はユーザーを削除してロールバック
+    // メール送信失敗・特典付与失敗時はユーザーを削除してロールバック。
+    // ⚠️ F08: 削除対象は**このリクエストが新しく作った userId** だけ。
+    //    既存会員を削除する経路をここに足さないこと。
     if (userId) {
-      await admin.auth.admin.deleteUser(userId).catch(() => {});
+      const { error: rollbackError } = await admin.auth.admin.deleteUser(userId).then(
+        (r) => r || {},
+        (e) => ({ error: e })
+      );
+      if (rollbackError) {
+        // ⚠️ 後始末そのものが失敗＝「アカウントだけ残って特典もメールも無い」状態。
+        //    人手の回復が要るので、探せる形でサーバーログに残す。
+        console.error('[auth/signup] ROLLBACK FAILED (needs manual recovery) userId=', userId, rollbackError.message);
+      }
     }
     const limiterFailed = err.message?.startsWith('Rate limiter') || err.message === 'Rate limiter is not configured';
     // ⚠️ 2026-09-08: ここは `err.message` をそのまま返していた。
