@@ -250,6 +250,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                   <Link
                     to={withReturnTo('/register', '', { source: 'home' })}
                     onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
+                    data-cta="home-register"
                     className="inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-[#be185d] px-6 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
                     style={{ minHeight: '48px', fontSize: '15px' }}
                   >
@@ -259,17 +260,23 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                     登録せず口コミを読む
                   </Link>
                 </div>
-                {/* ⚠️ U02-6: 起算はアカウント作成時点から72時間。「メール確認完了から丸3日」とは書かない。
-                       無料期間後の自動課金は実装が存在しないので「自動課金なし」は事実。 */}
-                <p className="ui-help mt-2">閲覧期間は登録手続き時から3日間です。メール確認後に利用できます。自動課金はありません</p>
               </div>
             ) : (
               <p className="ui-muted mt-2">店舗名・エリア・セラピスト名で探す</p>
             )}
 
-            <div className="mt-4">
+            <div className="mt-3">
               <SearchBar />
             </div>
+
+            {/* ⚠️ U02-6: 起算はアカウント作成時点から72時間。「メール確認完了から丸3日」とは書かない。
+                   無料期間後の自動課金は実装が存在しないので「自動課金なし」は事実。
+                ⚠️ 2026-09-09: この注記は**検索欄の下**へ置く。上に置くと2行ぶん(約44px)押し下げて、
+                   390×844の初期画面から検索欄がはみ出す（実測851px）。受入条件は
+                   「特典・登録CTA・検索操作まで初期画面に入る」なので、操作を優先する。 */}
+            {!user && (
+              <p className="ui-help mt-3">閲覧期間は登録手続き時から3日間です。メール確認後に利用できます。自動課金はありません</p>
+            )}
           </div>
         </div>
       </div>

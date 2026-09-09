@@ -721,6 +721,38 @@ function read(path) {
   }
 }
 
+// ── 初期画面と件数表示（2026-09-09の実測で判明）─────────────────────────────
+{
+  const strip = (src) => (src || '')
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+
+  // U02: 390×844の初期画面に「特典・登録CTA・検索操作」が入る。
+  // 実測で検索欄が851px（7pxはみ出し）だった原因は、補助文2行を検索欄の**上**に置いていたこと。
+  const home = strip(read('src/pages/Home.jsx'));
+  const noteIdx = home.indexOf('閲覧期間は登録手続き時から3日間です。メール確認後に利用できます。自動課金はありません');
+  const searchIdx = home.indexOf('<SearchBar />');
+  if (noteIdx >= 0 && searchIdx >= 0 && noteIdx < searchIdx) {
+    violations.push('[U02] ホームの補助文が検索欄より前にある。2行ぶん押し下げて390×844の初期画面から検索操作が外れる。');
+  }
+  // 計測が確実にカード内のCTAを掴めるようにする（ヘッダーの登録ボタンを誤って掴むと判定が死ぬ）
+  if (!/data-cta="home-register"/.test(home)) {
+    violations.push('[U02] ホームの登録CTAの目印（data-cta="home-register"）が無い。初期画面の自動判定が効かなくなる。');
+  }
+
+  // 取得上限の数字を「件数」として出さない
+  // 🚩「キャスト 1000件」は実際の母数ではなく `.limit(1000)` そのものだった。
+  //   2026-08-05にサイトマップが1,000件で切れて98店欠落したのと同じ型の誤り。
+  const search = strip(read('src/pages/SearchPage.jsx'));
+  if (!/const \[resultCapped, setResultCapped\]/.test(search)) {
+    violations.push('[U05] 検索が取得上限に達したかを持っていない（上限の数字を件数として表示してしまう）。');
+  }
+  if (!/resultCapped \? '以上' : ''/.test(search)) {
+    violations.push('[U05] 検索の件数表示が上限到達時に「以上」を付けていない。');
+  }
+}
+
 if (violations.length) {
   console.error('\n🚨 オーナー確定事項（playbook/decisions.md）に反する変更が検出されました:\n');
   violations.forEach((v) => console.error('  - ' + v + '\n'));

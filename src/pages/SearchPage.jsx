@@ -289,6 +289,11 @@ export default function SearchPage({ renderSeo = true }) {
   const [countsReady, setCountsReady] = useState(false);
   const [fetchError, setFetchError] = useState(false);
   const [retryToken, setRetryToken] = useState(0);
+  // ⚠️ 2026-09-09: 「キャスト 1000件」と表示されていたが、これは取得上限そのものだった。
+  //    ちょうど上限の数字を件数として出すと、実際の母数を偽ることになる
+  //    （2026-08-05にサイトマップが1,000件で切れて98店欠落したのと同じ型）。
+  //    上限に達したときは「○件以上」と書く。
+  const [resultCapped, setResultCapped] = useState(false);
 
   // shopId指定時はDBから正式な店舗名を解決してshopInputに反映
   // （店名の表記揺れで空表示になる問題を回避＝リンクは shopId で飛ばすのが確実）
@@ -339,6 +344,7 @@ export default function SearchPage({ renderSeo = true }) {
     const fetch = async () => {
       setIsFetchingDB(true);
       setFetchError(false);
+      let cappedAt = 0; // この検索で使った取得上限（達したかどうかの判定に使う）
       try {
         const sq = shopQuery.trim().toLowerCase();
         const cq = castQuery.trim();
@@ -388,6 +394,7 @@ export default function SearchPage({ renderSeo = true }) {
             .order('id', { ascending: true })
             .limit(800);
           if (error) throw error;
+          cappedAt = (d || []).length >= 800 ? 800 : 0;
           data = buildFeaturedTherapistPool(d || [], shops);
 
         } else if (sq && !cq) {
@@ -406,6 +413,7 @@ export default function SearchPage({ renderSeo = true }) {
               .or('is_active.is.null,is_active.eq.true')
               .limit(1000);
             if (error) throw error;
+            cappedAt = (d || []).length >= 1000 ? 1000 : 0;
             data = d || [];
           }
 
@@ -420,6 +428,7 @@ export default function SearchPage({ renderSeo = true }) {
           q = applyNameFilter(q);
           const { data: d, error } = await q.limit(500);
           if (error) throw error;
+          cappedAt = (d || []).length >= 500 ? 500 : 0;
           // クライアント側でスペース除去して完全照合
           data = (d || []).filter(t => normName(t.name).includes(normCq));
 
@@ -437,6 +446,7 @@ export default function SearchPage({ renderSeo = true }) {
               .or('is_active.is.null,is_active.eq.true')
               .limit(1000);
             if (error) throw error;
+            cappedAt = (d || []).length >= 1000 ? 1000 : 0;
             data = (d || []).filter(t => normName(t.name).includes(normCq));
           }
         }
@@ -450,6 +460,7 @@ export default function SearchPage({ renderSeo = true }) {
           image_url: d.image_url || d.raw_data?.image_url,
         }));
         setServerTherapists(formatted);
+        setResultCapped(cappedAt > 0);
       } catch (e) {
         // ⚠️ F05: 失敗を空配列に丸めない。既存の結果を残し、再読み込みを出す。
         if (!cancelled) { console.error('検索エラー:', e); setFetchError(true); }
@@ -740,7 +751,7 @@ export default function SearchPage({ renderSeo = true }) {
               <p className="text-xs text-pink-400 font-bold">
                 {isLoading
                   ? '検索中...'
-                  : `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length}件`}
+                  : `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length.toLocaleString()}件${resultCapped ? '以上' : ''}`}
               </p>
             </div>
             {(shopInput || castInput || selectedTags.length > 0) && (

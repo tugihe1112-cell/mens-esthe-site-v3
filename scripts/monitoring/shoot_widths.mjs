@@ -87,7 +87,10 @@ function measure() {
   // (c) U02の受入条件: 390×844で「特典・登録CTA・検索操作」までが最初の画面に入るか
   const firstView = {};
   const vh = window.innerHeight;
-  for (const [key, sel] of [['benefit', '.ui-help'], ['registerCta', 'a[href*="/register"]'], ['searchInput', '#home-search-mobile, #home-search-shop']]) {
+  // ⚠️ セレクタは**その要素だけ**を確実に掴むものにする。
+  //    以前 `a[href*="/register"]` にしていたらヘッダーの登録ボタンを掴んで 0px を返し、
+  //    判定が意味を成していなかった（2026-09-09に自分で踏んだ）。
+  for (const [key, sel] of [['benefit', '.ui-card .ui-help, .ui-help'], ['registerCta', '[data-cta="home-register"]'], ['searchInput', '#home-search-mobile, #home-search-shop']]) {
     const el = document.querySelector(sel);
     firstView[key] = el ? Math.round(el.getBoundingClientRect().bottom) : null;
   }
