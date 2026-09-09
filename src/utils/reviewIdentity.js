@@ -123,7 +123,12 @@ export function summarizeReviews(list = []) {
  */
 export function filterReviewsForTherapist(reviews = [], therapist = null, shopTherapists = null) {
   if (!therapist?.id) return [];
-  const roster = Array.isArray(shopTherapists) && shopTherapists.length ? shopTherapists : [therapist];
+  const base = Array.isArray(shopTherapists) ? shopTherapists.filter(Boolean) : [];
+  // 🚩 対象人物は**必ず**名簿に入れる。
+  //    退店して `therapists` の行が消えていても、その人物IDが入った口コミは本人のもの。
+  //    名簿だけを見ると退店者の口コミが全部落ち、退店プロフィールが200を返せなくなる
+  //    （2026-09-09、この関数を入れた直後に自分で作りかけた退行）。
+  const roster = base.some((t) => String(t?.id) === String(therapist.id)) ? base : [...base, therapist];
   const index = buildTherapistReviewIndex(reviews, roster);
   return reviewsForTherapist(index, therapist.id);
 }

@@ -680,6 +680,27 @@ const check = (name, fn) => {
     return (sum.tags.has('巨乳') && !sum.tags.has('清楚')) ? null : '別人のタグが混ざっている';
   });
 
+  // 🚩 退店（therapists の行が消えた）でも、その人物IDの口コミは本人のものとして残す。
+  //    ここを落とすと退店プロフィールが404になり、公開済みURLが死ぬ。
+  check('⭐退店して名簿から消えても、ID一致の口コミは残る（200を保つ）', () => {
+    const retired = { id: 'tGone', shop_id: 's9', name: '引退 みか' };
+    const rows = [
+      { id: 'q1', therapist_id: 'tGone', shop_id: 's9' },
+      { id: 'q2', therapist_id: 'tOther', shop_id: 's9' },
+    ];
+    // 名簿には退店者が居ない（在籍者だけが返ってくる状況）
+    const got = filterReviewsForTherapist(rows, retired, [{ id: 'tOther', shop_id: 's9', name: '別人 ゆき' }]);
+    return (got.length === 1 && got[0].id === 'q1') ? null : `退店者の口コミが落ちている: ${got.map((r) => r.id).join(',')}`;
+  });
+
+  check('名簿が空・null でも対象IDの口コミは拾う', () => {
+    const t = { id: 'tSolo', shop_id: 's8', name: '単独 あい' };
+    const rows = [{ id: 'z1', therapist_id: 'tSolo', shop_id: 's8' }];
+    return (filterReviewsForTherapist(rows, t, []).length === 1
+      && filterReviewsForTherapist(rows, t, null).length === 1)
+      ? null : '名簿が空のときに対象の口コミを落としている';
+  });
+
   check('⭐単一人物ページ（SSR）でも同じ契約になる', () => {
     const got = filterReviewsForTherapist(reviews, therapists[0], therapists.filter((t) => t.shop_id === 's1'));
     return (got.length === 1 && got[0].id === 'r1') ? null : `SSRの絞り込みが契約と違う: ${got.map((r) => r.id).join(',')}`;
