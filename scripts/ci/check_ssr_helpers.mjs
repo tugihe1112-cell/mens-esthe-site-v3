@@ -609,6 +609,125 @@ const check = (name, fn) => {
       ? null : '再設定メールの失敗にログイン用の文言を出している'));
 }
 
+// ── 同名の別人を混ぜない（FIXES.md F04）──────────────────────────────────
+// 【事故】検索・店舗・人物詳細・人物SSRが名前だけで口コミを人物へ割り当てていた。
+//   同名の別人が1枚のカードに統合され、写真・件数・評価・タグが混ざる。
+{
+  const m = await loadModule('src/utils/reviewIdentity.js');
+  const { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews, filterReviewsForTherapist } = m;
+
+  // 受入データ: 別店舗の同名2名／系列店で異なるIDの同名2名／同一店舗の同名2名
+  const therapists = [
+    { id: 'tA', shop_id: 's1', name: '観月 せな' },
+    { id: 'tB', shop_id: 's2', name: '観月せな' },   // 別店舗の同名（別人）
+    { id: 'tC', shop_id: 's3', name: '白石 あん' },
+    { id: 'tD', shop_id: 's3', name: '白石あん' },   // 同一店舗の同名2名
+    { id: 'tE', shop_id: 's4', name: '桜井 ゆい' },
+  ];
+  const reviews = [
+    { id: 'r1', therapist_id: 'tA', shop_id: 's1', therapist_name: '観月せな', rating: 4, tags: ['巨乳'] },
+    { id: 'r2', therapist_id: 'tB', shop_id: 's2', therapist_name: '観月せな', rating: 2, tags: ['清楚'] },
+    { id: 'r3', therapist_id: 'tZ', shop_id: 's1', therapist_name: '観月せな', rating: 5 }, // 退店等・名簿に無いID
+    { id: 'r4', shop_id: 's4', therapist_name: '桜井ゆい', rating: 3 },                     // IDなし旧口コミ（同名1人）
+    { id: 'r5', shop_id: 's3', therapist_name: '白石あん', rating: 5 },                     // IDなし旧口コミ（同名2人＝未結合）
+  ];
+  const idx = buildTherapistReviewIndex(reviews, therapists);
+  const ids = (t) => reviewsForTherapist(idx, t).map((r) => r.id).join(',');
+
+  check('⭐別店舗の同名を混ぜない（IDで分ける）', () =>
+    (ids('tA') === 'r1' && ids('tB') === 'r2' ? null : `tA=${ids('tA')} tB=${ids('tB')}`));
+  check('⭐名簿に無いIDの口コミを名前で拾い直さない', () =>
+    (!ids('tA').includes('r3') && idx.unmatched.some((r) => r.id === 'r3')
+      ? null : '別IDの口コミが名前一致で混入している'));
+  check('⭐IDなし旧口コミは同名が1人のときだけ結び付ける', () =>
+    (ids('tE') === 'r4' ? null : `tE=${ids('tE')}`));
+  check('⭐同一店舗に同名2人ならIDなし口コミは未結合にする', () =>
+    (ids('tC') === '' && ids('tD') === '' && idx.unmatched.some((r) => r.id === 'r5')
+      ? null : 'どちらかの同名人物へ勝手に割り当てている'));
+
+  check('系列店をまたいでも同じIDの関連付けは維持する', () => {
+    const roster = [{ id: 'tX', shop_id: 's10', name: '星野 ひな' }];
+    const rows = [
+      { id: 'g1', therapist_id: 'tX', shop_id: 's10' },
+      { id: 'g2', therapist_id: 'tX', shop_id: 's11' }, // 系列の別店舗で書かれた同一人物の口コミ
+    ];
+    const i2 = buildTherapistReviewIndex(rows, roster);
+    return reviewsForTherapist(i2, 'tX').length === 2 ? null : '同一IDの系列店口コミが落ちている';
+  });
+
+  check('camelCase（therapistId / shopId）でも同じ判定になる', () => {
+    const i3 = buildTherapistReviewIndex(
+      [{ id: 'c1', therapistId: 'tA', shopId: 's1' }],
+      [{ id: 'tA', shopId: 's1', name: '観月せな' }]
+    );
+    return reviewsForTherapist(i3, 'tA').length === 1 ? null : 'camelCaseの行を取りこぼす';
+  });
+
+  check('空・undefined・不正な入力で落ちない', () => {
+    const i4 = buildTherapistReviewIndex(undefined, undefined);
+    const i5 = buildTherapistReviewIndex([{}, { therapist_name: '' }], [{ id: '', name: 'x' }]);
+    return (i4.byTherapistId.size === 0 && i5.byTherapistId.size === 0) ? null : '不正入力を人物へ割り当てている';
+  });
+
+  check('⭐評価が無ければ rating は null（0.0と表示しない）', () => {
+    const s1 = summarizeReviews([{ id: 'a' }, { id: 'b', rating: 0 }]);
+    const s2 = summarizeReviews([{ rating: 4 }, { rating: 2 }]);
+    return (s1.rating === null && s1.count === 2 && s2.rating === 3) ? null : `rating=${s1.rating}/${s2.rating}`;
+  });
+
+  check('タグは実際に付いた口コミからだけ集める', () => {
+    const sum = summarizeReviews(reviewsForTherapist(idx, 'tA'));
+    return (sum.tags.has('巨乳') && !sum.tags.has('清楚')) ? null : '別人のタグが混ざっている';
+  });
+
+  check('⭐単一人物ページ（SSR）でも同じ契約になる', () => {
+    const got = filterReviewsForTherapist(reviews, therapists[0], therapists.filter((t) => t.shop_id === 's1'));
+    return (got.length === 1 && got[0].id === 'r1') ? null : `SSRの絞り込みが契約と違う: ${got.map((r) => r.id).join(',')}`;
+  });
+}
+
+// ── 登録ファネルの計測に個人情報を載せない（DESIGN.md U06 / 2026-09-08）────────
+{
+  const m = await loadModule('src/utils/registerAnalytics.js');
+  const { REGISTER_CTA_SOURCES, REGISTER_ERROR_CODES, pageTypeOf } = m;
+
+  check('⭐sourceは固定の許可値だけ', () => {
+    const expected = ['home', 'header', 'bottom_nav', 'review_end', 'review_lock', 'favorite'];
+    return JSON.stringify(REGISTER_CTA_SOURCES) === JSON.stringify(expected)
+      ? null : `許可値が変わっている: ${JSON.stringify(REGISTER_CTA_SOURCES)}`;
+  });
+  check('エラー分類は固定の5種類', () => {
+    const expected = ['validation', 'duplicate', 'rate_limit', 'network', 'server'];
+    return JSON.stringify(REGISTER_ERROR_CODES) === JSON.stringify(expected)
+      ? null : `分類が変わっている: ${JSON.stringify(REGISTER_ERROR_CODES)}`;
+  });
+  // ⭐ 生のURL・日本語ID・トークンをイベントに載せない
+  const cases = [
+    ['/shops/60026/threads/%E8%A6%B3%E6%9C%88%E3%81%9B%E3%81%AA', 'therapist'],
+    ['/shops/60026/threads/観月せな', 'therapist'],
+    ['/shops/60026', 'shop'],
+    ['/shops', 'shop_list'],
+    ['/popular-reviews', 'reviews'],
+    ['/search', 'search'],
+    ['/area/tokyo', 'area'],
+    ['/mypage', 'mypage'],
+    ['/', 'home'],
+    ['/legal', 'other'],
+    ['', 'home'],
+  ];
+  for (const [path, expected] of cases) {
+    check(`page_type: ${path || '(空)'} → ${expected}`, () =>
+      (pageTypeOf(path) === expected ? null : `${pageTypeOf(path)} になった`));
+  }
+  check('⭐page_type にIDや日本語スラッグが混ざらない', () => {
+    const out = new Set(cases.map(([p]) => pageTypeOf(p)));
+    for (const v of out) {
+      if (!/^[a-z_]+$/.test(v)) return `分類名にIDらしき値が混ざっている: ${v}`;
+    }
+    return null;
+  });
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

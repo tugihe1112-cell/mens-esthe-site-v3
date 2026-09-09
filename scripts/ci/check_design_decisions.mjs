@@ -470,6 +470,193 @@ function read(path) {
   }
 }
 
+// ── U02／U04: ホームの入口と、読了後の登録導線（2026-09-08）───────────────
+{
+  const strip = (src) => (src || '')
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+
+  // ── U02: ホーム ────────────────────────────────────────
+  {
+    const p = 'src/pages/Home.jsx';
+    const home = strip(read(p));
+    // U02-1: 見えるH1は1つだけ。sr-only H1と可視見出しの二重持ちに戻さない。
+    const h1Count = (home.match(/<h1\b/g) || []).length;
+    if (h1Count !== 1) {
+      violations.push(`[U02-1] ${p} の <h1> が ${h1Count} 個ある（可視のH1を1つだけにする）。`);
+    }
+    if (/<h1[^>]*className="sr-only"/.test(home)) {
+      violations.push(`[U02-1] ${p} に sr-only の H1 が復活している（画面の見出しと食い違う）。`);
+    }
+    if (!home.includes('口コミを読んで、店選びの不安を減らす。')) {
+      violations.push(`[U02-1] ${p} の検索カード見出しが価値説明になっていない。`);
+    }
+    // U02-2: カード幅880px（PC40px余白・40px角丸へ戻さない）
+    if (!/max-w-\[880px\]/.test(home)) {
+      violations.push(`[U02-2] ${p} の検索カードが幅880pxではない。`);
+    }
+    if (/rounded-\[2\.5rem\]|md:p-10/.test(home)) {
+      violations.push(`[U02-2] ${p} の検索カードが以前の40px角丸・40px余白へ戻っている。`);
+    }
+    // U02下部2: 地域別は select で1地域ずつ。全県を縦に並べる形へ戻さない。
+    if (!home.includes('home-pref-select')) {
+      violations.push('[U02] ホームの地域別口コミが select（口コミの地域）を失っている。全県を縦積みに戻さない。');
+    }
+    if (!/\.slice\(0,\s*2\)/.test(home)) {
+      violations.push('[U02] ホームの地域別口コミが最大2件に絞られていない。');
+    }
+    // U02下部5: 期限のない「読み放題」表現を使わない
+    if (/1件書けば口コミ読み放題|1件で読み放題/.test(home)) {
+      violations.push('[U02] ホームに期限のない「読み放題」表現が復活している（日数を明記する）。');
+    }
+    // U02下部4: 同じ行き先のショートカット群を戻さない
+    if (/キャスト検索[\s\S]{0,200}口コミを書く[\s\S]{0,200}ランキング/.test(home)) {
+      violations.push('[U02] ホームに4機能ショートカットが復活している（共通ナビ・検索と重複する）。');
+    }
+  }
+
+  // ── U02: ホームの口コミカード ──────────────────────────
+  {
+    const p = 'src/components/HomeReviewCard.jsx';
+    const card = strip(read(p));
+    // 「続きを読む」→取得→「全文を読む」の二段階に戻さない
+    if (/from '\.\.\/lib\/supabase'/.test(card)) {
+      violations.push(`[U02] ${p} が本文取得のためにSupabaseを呼んでいる（押して待つ中間状態が復活する）。`);
+    }
+    if (/続きを読む/.test(card)) {
+      violations.push(`[U02] ${p} に「続きを読む」の中間ステップが復活している（全文リンク1回にする）。`);
+    }
+    if (!card.includes('口コミ全文を読む')) {
+      violations.push(`[U02] ${p} の全文リンクが消えている。`);
+    }
+    // 全文リンクは該当口コミのアンカー付き
+    if (!/#review-\$\{/.test(card)) {
+      violations.push(`[U02] ${p} の全文リンクが該当口コミのアンカー（#review-<id>）を失っている。`);
+    }
+  }
+
+  // ── U02-4: 検索欄は常時ラベル・入力とボタンは同じ行 ─────
+  {
+    const p = 'src/components/SearchBar.jsx';
+    const bar = strip(read(p));
+    if (!/htmlFor="/.test(bar)) {
+      violations.push(`[U02-4] ${p} の検索欄が常時ラベルを持っていない（placeholderはラベルの代わりにならない）。`);
+    }
+    if (!/min-w-0/.test(bar)) {
+      violations.push(`[U02-4] ${p} の入力に min-width:0 が無い（検索ボタンが画面外へ押し出される）。`);
+    }
+  }
+
+  // ── U04: 読了後の登録導線 ──────────────────────────────
+  {
+    const p = 'src/components/RegisterInvite.jsx';
+    const invite = strip(read(p));
+    if (!invite) {
+      violations.push(`[U04] ${p} が見つからない（読了後の案内の状態分岐が失われる）。`);
+    } else {
+      // 3状態それぞれの主表示（DESIGN.md U04 の表）
+      for (const text of ['気になる口コミを、もっと読む', 'あなたの体験談も共有しませんか', '体験談を投稿して、閲覧期間を延長']) {
+        if (!invite.includes(text)) violations.push(`[U04] ${p} の状態別の見出し「${text}」が消えている。`);
+      }
+      // 公開口コミが読めている地点で「続きを読む」と書かない
+      if (/登録してこの続きを読む|この続きを読む/.test(invite)) {
+        violations.push(`[U04] ${p} が公開口コミの読了地点で「続きを読む」と書いている（読めなくなる誤解になる）。`);
+      }
+      // 戻り先はF01の契約だけを使う
+      if (!/withReturnTo\('\/register'/.test(invite)) {
+        violations.push(`[U04] ${p} の登録リンクが戻り先（withReturnTo）を渡していない。`);
+      }
+    }
+
+    const list = strip(read('src/components/ReviewListWithRestriction.jsx'));
+    if (!/<RegisterInvite/.test(list)) {
+      violations.push('[U04] ReviewListWithRestriction が読了案内（RegisterInvite）を使っていない。');
+    }
+
+    const mrc = strip(read('src/components/ModernReviewCard.jsx'));
+    // F01/U04: 口コミ単位のアンカー
+    if (!/id=\{review\.id \? `review-\$\{review\.id\}`/.test(mrc)) {
+      violations.push('[U04] ModernReviewCard の article に review-<id> のアンカーが無い（登録後に同じ口コミへ戻れない）。');
+    }
+    if (!/scrollMarginTop/.test(mrc)) {
+      violations.push('[U04] ModernReviewCard に scroll-margin-top が無い（アンカー先がヘッダーに隠れる）。');
+    }
+    // ロック表示は未登録＝登録CTA／会員＝投稿CTA
+    if (!mrc.includes('無料登録して続きを読む')) {
+      violations.push('[U04] ModernReviewCard のロック表示が未登録にも投稿CTAを出している（登録CTAにする）。');
+    }
+    // 権限のない本文をURLだけで開かない
+    if (!/if \(!canReadFull \|\| !review\.id\) return;/.test(mrc)) {
+      violations.push('[U04] ModernReviewCard がアンカー指定だけで本文を開けるようになっている（canReadFullで塞ぐ）。');
+    }
+
+    const thread = strip(read('src/pages/ThreadDetailPage.jsx'));
+    if (!/showStickyCta && !inviteVisible/.test(thread)) {
+      violations.push('[U04] 人物詳細の固定CTAが、読了案内が見えている間も表示される（本文を二重に覆う）。');
+    }
+    if (!/IntersectionObserver/.test(thread)) {
+      violations.push('[U04] 人物詳細の固定CTAの表示判定が IntersectionObserver ではない（毎フレームのstate更新は禁止）。');
+    }
+  }
+}
+
+// ── U05: 検索・店舗・人物ページの比較しやすさ（2026-09-08）─────────────────
+{
+  const strip = (src) => (src || '')
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+
+  const search = strip(read('src/pages/SearchPage.jsx'));
+  // 3本目の名前入力を戻さない（上部の「セラピスト名」とAND条件になり必ず0件になる）
+  if (/castNameFilter/.test(search)) {
+    violations.push('[U05] SearchPage に3本目の「キャスト名で絞り込み」が復活している（castInputへ一本化する）。');
+  }
+  if (!search.includes('セラピストを探す')) {
+    violations.push('[U05] SearchPage の可視H1「セラピストを探す」が無い。');
+  }
+  if (/店舗・地域が偏らないように表示しています/.test(search)) {
+    violations.push('[U05] SearchPage に実装の説明文が復活している（利用者の操作の助けにならない）。');
+  }
+  // 列数の段階（2/3/4/5）を1か所で定義する
+  if (!/const GRID_CLASS = 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5/.test(search)) {
+    violations.push('[U05] SearchPage の列数（320/640/1024/1280の4段階）の定義が消えている。');
+  }
+  // 名前・店舗・地域は写真の下の面へ（写真の上に重ねない）
+  if (!/bg-slate-900 border-t border-white\/5/.test(search)) {
+    violations.push('[U05] SearchPage のカードで名前・店舗・地域が写真下の単色面に置かれていない。');
+  }
+  // 未取得を0件と表示しない
+  if (!/countsReady && reviewCountMap\[t\.id\] > 0/.test(search)) {
+    violations.push('[U05/F05] SearchPage が未取得の口コミ件数を表示しうる（取得済みのときだけ出す）。');
+  }
+  // タグシートはモーダルとして閉じられる
+  for (const [re, msg] of [
+    [/aria-modal=/, 'aria-modal が無い'],
+    [/e\.key === 'Escape'/, 'Escapeで閉じられない'],
+    [/opener\.focus\(\)/, '閉じた後に開いたボタンへfocusが戻らない'],
+  ]) {
+    if (!re.test(search)) violations.push(`[U05] SearchPage のタグシートで ${msg}。`);
+  }
+
+  const list = strip(read('src/pages/ShopListPage.jsx'));
+  for (const en of ['ALL SHOPS', 'SEARCH RESULTS']) {
+    if (list.includes(en)) violations.push(`[U05] ShopListPage の見出しが英語（${en}）のまま。`);
+  }
+  if (!list.includes('表示対象')) {
+    violations.push('[U05] ShopListPage の件数表示が「表示対象○件」になっていない。');
+  }
+
+  const detail = strip(read('src/pages/ShopDetailPage.jsx'));
+  for (const en of ['THERAPISTS', 'SHOP INFORMATION', 'GROUP STORE']) {
+    if (detail.includes(en)) violations.push(`[U05] ShopDetailPage の見出しが英語（${en}）のまま。`);
+  }
+  if (!/max-w-\[1200px\]/.test(detail)) {
+    violations.push('[U05] ShopDetailPage のPCコンテンツ幅が1200pxになっていない。');
+  }
+}
+
 if (violations.length) {
   console.error('\n🚨 オーナー確定事項（playbook/decisions.md）に反する変更が検出されました:\n');
   violations.forEach((v) => console.error('  - ' + v + '\n'));

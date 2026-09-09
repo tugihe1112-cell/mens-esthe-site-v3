@@ -188,6 +188,120 @@ if (/\berr(or)?\??\.message/.test(stripSrc(loginSrc))) {
 }
 
 
+// ── 同名の別人を混ぜない（FIXES.md F04 / 2026-09-08）──────────────────────
+// 【事故】検索・店舗・人物詳細・人物SSRが**名前だけ**で口コミを人物へ割り当てていた。
+//   同名の別人の写真・件数・評価・タグが1枚のカードに混ざる。
+//   割り当ての契約は src/utils/reviewIdentity.js の1か所だけに置く（散らすと必ず緩む）。
+requireText(read('src/utils/reviewIdentity.js'), /export function buildTherapistReviewIndex/,
+  '口コミと人物の照合契約（src/utils/reviewIdentity.js）が消えています');
+{
+  const ssrThread = stripSrc(read('pages/shops/[shopId]/threads/[threadId].jsx'));
+  // 🚩 `therapist_id === threadId || 名前一致` の OR は、左辺で弾いた別人を右辺が拾い直す。
+  if (/therapist_id\s*===\s*threadId\s*\|\|/.test(ssrThread)) {
+    failures.push('人物SSRが「IDが違っても名前が同じなら採用」に戻っています（F04）');
+  }
+  requireText(ssrThread, /filterReviewsForTherapist\(/,
+    '人物SSRが照合契約（filterReviewsForTherapist）を使っていません（F04）');
+
+  const thread = stripSrc(read('src/pages/ThreadDetailPage.jsx'));
+  if (/r\.therapist_name\s*&&\s*r\.therapist_name\.replace|r\.therapist_name\s*===\s*therapist\.name/.test(thread)) {
+    failures.push('人物詳細が口コミを名前だけで照合しています（系列店の同名が混ざります・F04）');
+  }
+  // ⚠️ 参照が1つ残っているだけでは足りない。**両方の経路**（DB取得とDataContextの
+  //    フォールバック）が契約を通ることを件数で見る。片方だけ外す壊し方が素通りした。
+  {
+    const uses = (thread.match(/filterReviewsForTherapist\(/g) || []).length;
+    if (uses < 2) {
+      failures.push(`人物詳細の口コミ照合が契約を通っていません（${uses}箇所。DB取得とフォールバックの両方が必要・F04）`);
+    }
+  }
+
+  for (const p of ['src/pages/SearchPage.jsx', 'src/pages/ShopDetailPage.jsx']) {
+    requireText(read(p), /buildTherapistReviewIndex/,
+      `${p} の口コミ集計が照合契約を使っていません（名前キーの集計に戻っています・F04）`);
+  }
+  // 検索は同名カードを潰さない（別IDは別人）
+  // ⚠️ 「名前キーで統合していないこと」を否定形で書くと、別の書き方の統合を見逃す。
+  //    **IDでまとめている定義そのもの**を要求する。
+  const search = stripSrc(read('src/pages/SearchPage.jsx'));
+  if (!/const key = String\(t\.id \?\? ''\);/.test(search)) {
+    failures.push('検索のカード統合キーが therapist_id ではありません（同名の別人が1枚に統合されます・F04）');
+  }
+}
+
+// ── 通信失敗を「0件」と表示しない（FIXES.md F05 / 2026-09-08）──────────────
+{
+  const search = stripSrc(read('src/pages/SearchPage.jsx'));
+  const throws = (search.match(/if \(error\) throw error;/g) || []).length;
+  if (throws < 3) {
+    failures.push(`検索のDB取得が error を無視しています（${throws}箇所しか投げていない。通信失敗が「見つかりませんでした」になります・F05）`);
+  }
+  requireText(search, /setFetchError\(true\)/, '検索が取得失敗を利用者へ伝えていません（F05）');
+
+  const pop = stripSrc(read('src/pages/PopularReviewsPage.jsx'));
+  // 🚩 取得前に offset を進めると、失敗した20件がそのまま飛ぶ
+  if (/const next = offset \+ PAGE_SIZE;\s*setOffset\(next\)/.test(pop)) {
+    failures.push('口コミ一覧が取得前に offset を進めています（失敗すると次の20件を飛ばします・F05）');
+  }
+  requireText(pop, /setOffset\(currentOffset\)/,
+    '口コミ一覧の offset が「正常結果の反映後」に更新されていません（F05）');
+  requireText(pop, /if \(!res\.ok\) throw/,
+    '口コミ一覧が res.ok を検査していません（HTTPエラーが0件表示になります・F05）');
+}
+
+// ── 登録ボーナスの付与失敗を「登録成功」にしない（FIXES.md F08 / 2026-09-08）────
+// 【事故の芽】user_credits の INSERT 失敗を console に出すだけで確認メールへ進んでいた。
+//   利用者は「3日間読み放題」を読んでメールを踏み、閲覧権が無いまま着地する。
+requireText(signup, /Signup bonus was not granted/,
+  '登録APIが特典付与の失敗をそのまま成功にしています（F08）');
+requireText(signup, /from\('user_credits'\)\s*\.select\(|\.from\('user_credits'\)[\s\S]{0,120}\.select\(/,
+  '登録APIが特典行を読み戻して確認していません（書込成功・応答だけ失敗を判定できません・F08）');
+// ⚠️ 参照ではなく**定義**と検証条件そのものを見る。
+//    `const grantedOk` を消しても `if (!grantedOk)` の参照が残っていれば素通りした（妨害テスト）。
+{
+  const src = stripSrc(signup);
+  if (!/const\s+grantedOk\s*=/.test(src)) {
+    failures.push('登録APIの特典付与の検証（grantedOk）の定義が消えています（F08）');
+  }
+  for (const [re, label] of [
+    [/Number\(bonus\.credits_days\)\s*===\s*bonusDays/, '付与日数'],
+    [/Number\(bonus\.total_reviews_posted[^)]*\)\s*===\s*0/, '投稿数0'],
+    [/new Date\(bonus\.expires_at\)\.getTime\(\)\s*>\s*Date\.now\(\)/, '期限が未来'],
+  ]) {
+    if (!re.test(src)) failures.push(`登録APIの特典検証から「${label}」の条件が外れています（F08）`);
+  }
+}
+// 後始末はこのリクエストが作ったuserIdだけ。既存会員を消す経路を作らない。
+requireText(signup, /ROLLBACK FAILED \(needs manual recovery\)/,
+  '登録APIが後始末の失敗を記録していません（回復が必要な状態を見逃します・F08）');
+
+// ── 登録の計測に個人情報・生URLを載せない（DESIGN.md U06 / 2026-09-08）─────────
+requireText(read('src/utils/registerAnalytics.js'), /export const REGISTER_CTA_SOURCES/,
+  '登録CTAの source 許可リストが消えています（U06）');
+{
+  const reg = stripSrc(read('src/pages/RegisterPage.jsx'));
+  for (const [fn, label] of [
+    ['trackRegisterView', '登録画面の表示'],
+    ['trackRegisterStart', '入力開始'],
+    ['trackRegisterSubmit', '送信'],
+    ['trackRegisterEmailSent', 'メール送信成功'],
+    ['trackRegisterError', '失敗'],
+  ]) {
+    if (!new RegExp(`${fn}\\(`).test(reg)) failures.push(`登録画面が「${label}」を計測していません（U06）`);
+  }
+  // 完了イベントは確認後ページ1か所だけ（OTP確認ページから撃つと二重に数える）
+  const complete = stripSrc(read('src/pages/AuthCompletePage.jsx'));
+  const confirm = stripSrc(read('src/pages/AuthConfirmPage.jsx'));
+  requireText(complete, /trackRegistrationConfirmed\(/,
+    '確認後ページが登録完了を計測していません（U06）');
+  if (/trackRegistrationConfirmed\(/.test(confirm)) {
+    failures.push('OTP確認ページからも登録完了を撃っています（同じ登録が二重に数えられます・U06）');
+  }
+  // 認証経路の自動page_viewに token / next 入りの生URLを載せない
+  requireText(read('pages/_app.jsx'), /isAuthPath/,
+    '認証経路のGA自動page_viewが生URL（token・next付き）のままです（U06）');
+}
+
 // ── Vercelの関数から .mjs を import しない（2026-09-08 / 本番21時間停止）────────
 // 【事故】`api/auth/signup.js` が `src/utils/authRedirect.mjs` を import していた。
 //   Vercelは `api/` 配下をCommonJSにコンパイルするため、その import は require() になる。

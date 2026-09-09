@@ -55,7 +55,11 @@ requireMatch('src/pages/ResetPasswordPage.jsx', /auth\.updateUser\(\{ password \
 requireMatch('src/pages/MyReviewsPage.jsx', /\.eq\(['"]user_id['"], user\.id\)/, '自分の口コミをDBから取得していない');
 requireMatch('src/components/LikeButton.jsx', /aria-pressed=/, 'いいねボタンの状態を支援技術へ伝えていない');
 requireMatch('src/pages/RankingPage.jsx', /<label[^>]+htmlFor=["']ranking-area["']/, 'ランキング地域選択にアクセシブル名がない');
-requireMatch('src/pages/SearchPage.jsx', /<h1[^>]*sr-only/, '検索ページに見出しがない');
+// ⚠️ 2026-09-08（DESIGN.md U05）: 以前は `sr-only` のH1であることまで要求していたが、
+//    仕様が「画面に見えるH1を置く」に変わった。守りたいのは**H1が存在すること**なので、
+//    検査は残したまま条件を実態へ合わせる（START.md §5）。
+requireMatch('src/pages/SearchPage.jsx', /<h1[\s>]/, '検索ページに見出しがない');
+requireMatch('src/pages/SearchPage.jsx', /セラピストを探す/, '検索ページのH1が用件を表していない');
 
 forbidMatch('src/context/AppContext.tsx', /submitExistingShopReview|mens_esthe_local_reviews[^'].*setItem/, 'ブラウザだけに保存するデモ口コミが復活している');
 requireMatch('src/context/AppContext.tsx', /mens_esthe_favorites:\$\{user\.id\}/, 'お気に入りがユーザー別に分離されていない');
