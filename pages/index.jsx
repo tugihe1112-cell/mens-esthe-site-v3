@@ -58,7 +58,7 @@ export async function getServerSideProps({ res }) {
     const therapistIds = [...new Set((revs || []).map((r) => r.therapist_id).filter(Boolean))];
     const [{ data: shopRows } = {}, { data: tRows } = {}] = await Promise.all([
       shopIds.length ? supabase.from('shops').select('id, name, raw_data').in('id', shopIds) : Promise.resolve({ data: [] }),
-      therapistIds.length ? supabase.from('therapists').select('id, image_url').in('id', therapistIds) : Promise.resolve({ data: [] }),
+      therapistIds.length ? supabase.from('therapists').select('id, image_url, is_active').in('id', therapistIds) : Promise.resolve({ data: [] }),
     ]);
     const shopNameById = Object.fromEntries((shopRows || []).map((s) => [s.id, s.name]));
     const shopLocById = Object.fromEntries((shopRows || []).map((s) => {
@@ -67,6 +67,9 @@ export async function getServerSideProps({ res }) {
       return [s.id, { prefecture: rd.prefecture || null, area: area || null }];
     }));
     const imgById = Object.fromEntries((tRows || []).map((t) => [t.id, t.image_url]));
+    // ⚠️ 2026-09-09: 在籍一覧から外れた人のカードにも印を出す（ホームから現役として送らない）。
+    //    名簿に行が無い＝取得できなかった人も「在籍一覧にない」として扱う。
+    const notListedById = Object.fromEntries((tRows || []).map((t) => [t.id, t.is_active === false]));
     // ペンネーム表示用: user_nameがシステム上のプレースホルダなら出さない（実在感を損なうため）
     const PLACEHOLDER_NAMES = new Set(['owner_manual', 'mensest_user', 'menesthe_import', 'menesthe_rewritten', '匿名', '']);
     // ⚠️ 本文全文/300字はSSRに載せない（重複コンテンツ回避）。ティーザー(snippet 120字)のみ。展開時の300字はクライアントがidフェッチ。
@@ -80,6 +83,7 @@ export async function getServerSideProps({ res }) {
       area: shopLocById[r.shop_id]?.area || null,
       rating: r.rating || null,
       image: imgById[r.therapist_id] || null,
+      notListed: notListedById[r.therapist_id] === true,
       snippet: (r.content || '').replace(/\s+/g, '').slice(0, 120),
       detailedRatings: r.detailed_ratings || null,
       userName: PLACEHOLDER_NAMES.has(r.user_name) ? null : (r.user_name || null),

@@ -4,6 +4,7 @@ import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import ReviewLikeButton from '../components/ReviewLikeButton.jsx';
+import { isNotListed, NOT_LISTED_SHORT } from '../utils/therapistStatus.js';
 import LazyImage from '../components/LazyImage.jsx';
 import { ratingGradientClass } from '../utils/ratingStyle';
 
@@ -79,10 +80,10 @@ export default function PopularReviewsPage({
         : Promise.resolve([]));
       // therapist は id 一致を優先、取りこぼしは名前一致でフォールバック（旧データのID揺れ対策）
       reqs.push(therapistIds.length
-        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id&id=in.${encodeURIComponent(inList(therapistIds))}`, { headers: await authHeaders() }).then(r => r.json())
+        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id,is_active&id=in.${encodeURIComponent(inList(therapistIds))}`, { headers: await authHeaders() }).then(r => r.json())
         : Promise.resolve([]));
       reqs.push(therapistNames.length
-        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id&name=in.${encodeURIComponent(inList(therapistNames))}&limit=200`, { headers: await authHeaders() }).then(r => r.json())
+        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id,is_active&name=in.${encodeURIComponent(inList(therapistNames))}&limit=200`, { headers: await authHeaders() }).then(r => r.json())
         : Promise.resolve([]));
 
       const [shops, tById, tByName] = await Promise.all(reqs);
@@ -292,6 +293,12 @@ export default function PopularReviewsPage({
                             <Link to={threadLink} className="font-bold text-slate-200 text-xs truncate hover:text-pink-300 transition">
                               {r.therapist_name || '名前不明'}
                             </Link>
+                            {/* ⚠️ 在籍一覧から外れた人を現役として送らない。断定はしない（退店とは書かない）。 */}
+                            {isNotListed(therapist) && (
+                              <span className="shrink-0 rounded-full border border-amber-500/40 bg-amber-500/15 px-2 py-0.5 font-bold text-amber-200" style={{ fontSize: '11px' }}>
+                                {NOT_LISTED_SHORT}
+                              </span>
+                            )}
                             {time && (
                               <span className="inline-flex items-center gap-1 text-[10px] text-slate-500">
                                 {time.isNew && <span className="w-1.5 h-1.5 rounded-full bg-pink-500 shadow shadow-pink-500/50" />}

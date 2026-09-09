@@ -3,6 +3,7 @@ import { Link } from '../compat/router';
 import LazyImage from './LazyImage.jsx';
 import { trackEvent } from '../utils/analytics';
 import { ratingGradientClass } from '../utils/ratingStyle';
+import { isNotListed, NOT_LISTED_SHORT } from '../utils/therapistStatus.js';
 
 // ホーム「最新の実体験口コミ」＝呼水カード。
 // 情報序列は【店舗ファースト】:
@@ -72,14 +73,22 @@ export default function HomeReviewCard({ r, variant = 'small', position, pref })
         </Link>
         {RatingBadge}
       </div>
-      <Link
-        to={threadLink}
-        onClick={onOpen}
-        className="mt-1 block truncate font-bold text-slate-200 hover:text-pink-300 transition"
-        style={{ fontSize: '14px' }}
-      >
-        {r.therapistName}
-      </Link>
+      <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <Link
+          to={threadLink}
+          onClick={onOpen}
+          className="min-w-0 truncate font-bold text-slate-200 hover:text-pink-300 transition"
+          style={{ fontSize: '14px' }}
+        >
+          {r.therapistName}
+        </Link>
+        {/* ⚠️ 在籍一覧から外れた人を現役として送らない。断定はしない（退店とは書かない）。 */}
+        {isNotListed(r) && (
+          <span className="shrink-0 rounded-full border border-amber-500/40 bg-amber-500/15 px-2 py-0.5 font-bold text-amber-200" style={{ fontSize: '11px' }}>
+            {NOT_LISTED_SHORT}
+          </span>
+        )}
+      </div>
       <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-slate-400" style={{ fontSize: '12px' }}>
         {time && (
           <span className="inline-flex items-center gap-1">

@@ -16,6 +16,7 @@ import { useReturnTo } from '../utils/useReturnTo';
 import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 import { filterReviewsForTherapist } from '../utils/reviewIdentity.js';
+import { isNotListed, NOT_LISTED_LABEL, NOT_LISTED_NOTE } from '../utils/therapistStatus.js';
 
 // ローディング中の骨組み（全画面テキスト→スケルトンで"個人サイト感"を除去）
 function ThreadSkeleton() {
@@ -164,7 +165,7 @@ export default function ThreadDetailPage({
   //    だから断定せず「在籍一覧にない」と書く（根拠のない表示をしない、D-010と同じ考え方）。
   //    判定材料は2つ: is_active=false（行は残っているが非在籍）／
   //    raw_data.archived=true（名簿から行ごと消え、SSRが口コミから復元したページ）。
-  const notListed = !!therapist && (therapist.is_active === false || therapist.raw_data?.archived === true);
+  const notListed = isNotListed(therapist);
 
   // 🔥 AI自動生成対応：公式リストにいなくても、クチコミがあれば「仮想プロフィール」を自動で作る！
   if (!therapist && reviews) {
@@ -403,14 +404,13 @@ export default function ThreadDetailPage({
               {therapist.name}
               {notListed && (
                 <span className="ml-2 align-middle inline-flex items-center rounded-full border border-amber-500/40 bg-amber-500/15 px-2.5 py-1 font-bold text-amber-200" style={{ fontSize: '12px' }}>
-                  現在は在籍一覧にありません
+                  {NOT_LISTED_LABEL}
                 </span>
               )}
             </h1>
             {notListed && (
               <p className="mb-2 rounded-xl border border-amber-500/25 bg-amber-500/5 px-3 py-2 text-amber-100" style={{ fontSize: '13px', lineHeight: 1.7 }}>
-                この店舗の最新の在籍一覧に掲載されていません（退店・休業などの可能性があります）。
-                過去の口コミはそのまま残しています。最新の在籍は公式サイトでご確認ください。
+                {NOT_LISTED_NOTE}
               </p>
             )}
             <div className="flex flex-wrap gap-1.5 mb-3">

@@ -1,0 +1,170 @@
+/**
+ * check_shop_sites.mjs — 掲載店舗の公式URLが「まだその店のものか」を機械で確かめる
+ *
+ * 【なぜ必要か（2026-09-09に実際に見つけた）】
+ * 秋葉原の `Hiran Next (平安NEXT)` は、公式URL `akihabara-hiran.com` が
+ * **別ブランド `aden-esthe.com`「ADEN（アデン）」へリダイレクト**していた。
+ * 店名ごと変わっているのに、当サイトは旧店名と旧URLを掲載し続けていた。
+ * F07で入れた「公式サイトで出勤を確認」ボタンは、別名の店へ利用者を送っていたことになる。
+ * 同じ日、`Mirajour` は公式サイトに**閉店の告知**が出ていた。
+ *
+ * 【この検査が見るもの】
+ *  (a) 別ホストへのリダイレクト … 改名・売却・ブランド統合の最も強い信号
+ *  (b) 4xx/5xx・DNS失敗・タイムアウト … 閉店やドメイン失効の可能性
+ *  (c) 同一ホスト内のリダイレクト … 正常（http→https、/top 付与など）。報告するが問題ではない。
+ *
+ * ⚠️ この検査は**判定材料を出すだけ**で、DBを一切変更しない。
+ *    リダイレクト＝閉店とは限らない（一時的な移転・CDN・国別振り分けもある）。
+ *    最後は公式サイトを人が見て決める。**推測で店名や所在地を書き換えない。**
+ * ⚠️ 常時のCIゲートにはしない（外部サイトの都合で永久に赤くなる）。
+ *    `npm run` から手動で回すか、必要なら別途スケジュール実行する。
+ *
+ * 実行: node scripts/monitoring/check_shop_sites.mjs
+ *   LIMIT=50 だけ試す / CONCURRENCY=4 / TIMEOUT_MS=12000 で調整できる
+ */
+import fs from 'fs';
+import { createClient } from '@supabase/supabase-js';
+
+function env(key) {
+  if (process.env[key]) return process.env[key];
+  try {
+    const source = fs.readFileSync('.env', 'utf8');
+    return source.match(new RegExp(`^${key}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '') || '';
+  } catch {
+    return '';
+  }
+}
+
+const supabaseUrl = env('VITE_SUPABASE_URL');
+const serviceRoleKey = env('SUPABASE_SERVICE_ROLE_KEY');
+if (!supabaseUrl || !serviceRoleKey) {
+  console.error('❌ Supabaseのサーバー接続情報がありません（.env の VITE_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY）');
+  process.exit(1);
+}
+const supabase = createClient(supabaseUrl, serviceRoleKey, {
+  auth: { autoRefreshToken: false, persistSession: false },
+});
+
+const CONCURRENCY = Number(process.env.CONCURRENCY || 5);
+const TIMEOUT_MS = Number(process.env.TIMEOUT_MS || 12000);
+const LIMIT = Number(process.env.LIMIT || 0);
+const OUT_PATH = process.env.OUT || 'outputs/shop-site-audit.json';
+
+/** ⚠️ PostgRESTはサーバー側 max-rows(既定1000) が優先する。
+ *    `.limit(5000)` は効かない（2026-08-05にサイトマップが98店欠落した原因）。必ずページングする。 */
+async function fetchAllShops() {
+  const rows = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await supabase
+      .from('shops')
+      .select('id, name, website_url')
+      .order('id', { ascending: true })
+      .range(from, from + 999);
+    if (error) throw error;
+    rows.push(...(data || []));
+    if (!data || data.length < 1000) break;
+  }
+  return rows;
+}
+
+const hostOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } };
+
+async function probe(url) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    // ⚠️ HEADを拒否するサイトが多いのでGETで取り、本文は読まずに捨てる。
+    const res = await fetch(url, {
+      redirect: 'follow',
+      signal: controller.signal,
+      headers: { 'User-Agent': 'mens-esthe-map-site-audit/1.0 (+https://www.mens-esthe-map.jp)' },
+    });
+    try { await res.body?.cancel(); } catch { /* 本文は使わない */ }
+    return { status: res.status, finalUrl: res.url || url };
+  } catch (e) {
+    return { status: 0, finalUrl: '', error: String(e?.name === 'AbortError' ? 'timeout' : (e?.message || e)).slice(0, 120) };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function classify(original, result) {
+  if (result.status === 0) return 'unreachable';
+  if (result.status >= 500) return 'server_error';
+  if (result.status >= 400) return 'not_found';
+  const from = hostOf(original);
+  const to = hostOf(result.finalUrl);
+  if (from && to && from !== to) return 'redirect_other_host';
+  return 'ok';
+}
+
+async function main() {
+  const shops = await fetchAllShops();
+  const withUrl = shops.filter((s) => (s.website_url || '').trim());
+  const noUrl = shops.length - withUrl.length;
+
+  // 同じURLを共有する系列店はまとめて1回だけ叩く（相手サイトへの負荷を増やさない）
+  const byUrl = new Map();
+  for (const s of withUrl) {
+    const key = s.website_url.trim();
+    if (!byUrl.has(key)) byUrl.set(key, []);
+    byUrl.get(key).push({ id: s.id, name: s.name });
+  }
+  let urls = [...byUrl.keys()];
+  if (LIMIT > 0) urls = urls.slice(0, LIMIT);
+
+  console.log(`掲載 ${shops.length}店（URLあり ${withUrl.length} / URLなし ${noUrl}）→ 実際に確認するURL ${urls.length}件`);
+
+  const results = [];
+  let done = 0;
+  const queue = [...urls];
+  const worker = async () => {
+    for (;;) {
+      const url = queue.shift();
+      if (!url) return;
+      const r = await probe(url);
+      const verdict = classify(url, r);
+      results.push({ url, verdict, status: r.status, finalUrl: r.finalUrl, error: r.error, shops: byUrl.get(url) });
+      done += 1;
+      if (done % 50 === 0) console.log(`  …${done}/${urls.length}`);
+    }
+  };
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+
+  const counts = {};
+  for (const r of results) counts[r.verdict] = (counts[r.verdict] || 0) + 1;
+
+  const problems = results
+    .filter((r) => r.verdict !== 'ok')
+    .sort((a, b) => a.verdict.localeCompare(b.verdict));
+
+  fs.mkdirSync(OUT_PATH.replace(/\/[^/]+$/, ''), { recursive: true });
+  fs.writeFileSync(OUT_PATH, JSON.stringify({ checkedAt: new Date().toISOString(), counts, results }, null, 2));
+
+  console.log('\n=== 集計 ===');
+  for (const [k, v] of Object.entries(counts)) console.log(`  ${k}: ${v}`);
+
+  const label = {
+    redirect_other_host: '別ホストへリダイレクト（改名・統合の可能性）',
+    not_found: '4xx（ページが無い）',
+    server_error: '5xx（相手サーバーの異常）',
+    unreachable: '接続できない（DNS失敗・タイムアウト等）',
+  };
+  for (const kind of ['redirect_other_host', 'not_found', 'server_error', 'unreachable']) {
+    const list = problems.filter((p) => p.verdict === kind);
+    if (list.length === 0) continue;
+    console.log(`\n--- ${label[kind]}：${list.length}件 ---`);
+    for (const p of list.slice(0, 60)) {
+      const names = p.shops.map((s) => `${s.name}(${s.id})`).join(' / ');
+      console.log(`  ${p.url}`);
+      console.log(`    → ${p.finalUrl || p.error || `HTTP ${p.status}`}`);
+      console.log(`    店舗: ${names}`);
+    }
+    if (list.length > 60) console.log(`  …ほか ${list.length - 60}件（詳細は ${OUT_PATH}）`);
+  }
+
+  console.log(`\n📄 全結果: ${OUT_PATH}`);
+  console.log('⚠️ この結果はそのまま修正値にしない。公式サイトを見て、店名・所在地を人が確定させること。');
+}
+
+main().catch((e) => { console.error('❌', e); process.exit(1); });
