@@ -13,7 +13,7 @@
  *      **その店舗にその名前の人物が1人だけ**のときに限り結び付ける。複数なら未結合。
  *   4. 同じ人物IDに対する既存の関連付けは、系列店をまたいでも維持する。
  *      異なるIDを「同一人物」とみなす対応表は作らない（推測で作らない）。
- *   5. 系列店をまたぐ同一人物は **名前だけでなく画像URLも一致したとき**に限り束ねる。
+ *   5. 系列店をまたぐ同一人物は、同じ `group_id` の中で**正規化名が一致**したら束ねる。
  *      → samePersonTherapistIds()。根拠は下の【系列またぎ】。
  *
  * 【系列またぎ（2026-09-13 追加）】
@@ -22,14 +22,19 @@
  *   公開口コミ34件のうち**9件**が既にこれに当たっていた
  *   （ユニゾンスパ相模原の3人・TIGER GATEの6人）。
  *
- *   束ねる鍵は「同じ group_id ＋ 正規化名一致 ＋ 画像URL一致」。
- *   ⚠️ **名前だけで束ねてはいけない。** 同じ店の中に同名のセラピストが複数いる組が
- *      952組あり、うち **352組は画像が違う＝別人の可能性**がある（2026-09-13実測）。
- *      名前だけで束ねると、その別人の口コミが互いのページに出る。
- *      口コミサイトで「他人の評価が自分に付く」のは、取りこぼしより重い事故。
- *   ⚠️ 画像が無い行は束ねない。裏取りができないため。
- *   ✅ 実害の出ていた9件は全員、支店をまたいでも画像が一致していたので、
- *      この慎重な規則でも取りこぼしは無い（実データで確認済み）。
+   *   束ねる鍵は「同じ group_id ＋ **正規化名の一致**」。
+ *
+ *   ⚠️ 一度「画像URLも一致したときだけ」という慎重案を入れかけたが、**間違いだった**。
+ *      「同じ店に同名がいて画像が違う352組」を別人だと考えたが、実物はこうだった:
+ *          似鳥 芹香  → ..._似鳥_芹香
+ *          似鳥芹香   → ..._似鳥芹香
+ *      **スペースの有無で二重に取り込まれた同じ人**で、写真は取り込み時期の違い。
+ *      別人は1組も無かった。画像を条件に入れると、この人たちは永久に分かれたままになる。
+ *      → 画像は判定に使わない。写真は差し替わるもので、同一人物の根拠にならない。
+ *
+ *   ⚠️ ただし**名前の正規化を外してはいけない**。生の文字列比較に戻すと、
+ *      上の「似鳥 芹香 / 似鳥芹香」のような表記ゆれが別人扱いに戻る（335組が該当）。
+ *   ⚠️ 候補は必ず同じ group_id に絞ってから渡すこと。全店から渡すと系列の違う同名が混ざる。
  *
  * ⚠️ 拡張子は `.js`。`.mjs` は Vercel の `api/` から require できず、
  *    2026-09-08 に本番を21時間止めている。共有する純粋関数は `.js` に置く。
@@ -152,23 +157,21 @@ export function filterReviewsForTherapist(reviews = [], therapist = null, shopTh
 
 /**
  * 同一人物とみなせる人物IDの集合（本人を必ず含む）。
- * @param therapist 対象人物（id・name・image_url）
- * @param candidates 同じ系列に属する人物一覧（id・name・image_url）
+ * @param therapist 対象人物（id・name）
+ * @param candidates **同じ系列に絞った**人物一覧（id・name）
  */
 export function samePersonTherapistIds(therapist, candidates = []) {
   const self = therapist?.id == null || therapist.id === '' ? '' : String(therapist.id);
   const ids = new Set();
   if (self) ids.add(self);
   const name = normalizeTherapistName(therapist?.name);
-  const image = String(therapist?.image_url ?? '').trim();
-  // 画像が無い＝裏取りできない。本人だけを返す（名前だけで束ねない）。
-  if (!self || !name || !image) return ids;
+  if (!self || !name) return ids;
   for (const c of candidates || []) {
     if (c?.id == null || c.id === '') continue;
     const cid = String(c.id);
     if (cid === self) continue;
+    // 正規化して比べる。生比較に戻すと「似鳥 芹香 / 似鳥芹香」が別人に戻る。
     if (normalizeTherapistName(c?.name) !== name) continue;
-    if (String(c?.image_url ?? '').trim() !== image) continue;
     ids.add(cid);
   }
   return ids;

@@ -88,16 +88,16 @@ export async function getServerSideProps({ params, res }) {
     // ── 系列店に散らばった本人の行を先に集める（2026-09-13）──
     // セラピストは系列の複数店に出勤するが、行は店ごとに別。
     // ここを本人ID1つだけで引くと、渋谷店で書かれた口コミが恵比寿店のページに出ない。
-    // ⚠️ 束ねる鍵は「正規化名 ＋ 画像URL」。名前だけで束ねると、同じ店の中にいる
-    //    同名の別人（352組が該当）の口コミが互いのページに出る。判定は reviewIdentity.js。
+    // ⚠️ 束ねる鍵は**正規化した名前**（同じ系列の中でのみ）。生比較に戻すと
+    //    「似鳥 芹香 / 似鳥芹香」のような表記ゆれが別人扱いになる。判定は reviewIdentity.js。
     const { data: sameNameRoster, error: sameNameRosterError } = await supabase
       .from('therapists')
-      .select('id, shop_id, name, image_url')
+      .select('id, shop_id, name')
       .in('shop_id', reviewShopIds)
       .in('name', nameVariants);
     if (sameNameRosterError) throw sameNameRosterError;
     const personIds = [...samePersonTherapistIds(
-      { id: threadId, name: therapistName, image_url: therapistData?.image_url ?? null },
+      { id: threadId, name: therapistName },
       sameNameRoster || []
     )];
 
@@ -146,7 +146,7 @@ export async function getServerSideProps({ params, res }) {
     ].filter((t, i, arr) => arr.findIndex((x) => String(x.id) === String(t.id)) === i);
     const publicReviews = filterReviewsForPerson(
       reviews || [],
-      { id: threadId, shop_id: therapistData?.shop_id || shopId, name: therapistName, image_url: therapistData?.image_url ?? null },
+      { id: threadId, shop_id: therapistData?.shop_id || shopId, name: therapistName },
       roster,
       sameNameRoster || []
     );

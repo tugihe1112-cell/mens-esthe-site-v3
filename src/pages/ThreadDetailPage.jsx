@@ -102,12 +102,9 @@ export default function ThreadDetailPage({
         }
 
         let therapistName = null;
-        let therapistImage = null;
         if (tData && tData.length > 0 && isMounted) {
           setCloudTherapist(tData[0]);
           therapistName = tData[0].name;
-          // 系列店の同一人物判定に使う（名前だけで束ねると同名の別人が混ざる）
-          therapistImage = tData[0].image_url ?? null;
         }
 
         // 4. 店舗の口コミを取得し、クライアント側でセラピスト名を正規化マッチング
@@ -139,9 +136,9 @@ export default function ThreadDetailPage({
             //    （IDがあるものはID完全一致だけ／IDが無い旧口コミは同名1人のときだけ）。
             // ⚠️ 2026-09-13: SSRは系列店の本人ぶんまで出すのに、ここが本人ID1つだけで
             //    絞り直していると、開いた直後に出た口コミがJS実行後に消える。
-            //    画像URLまで取るのは同一人物の判定に要るため（reviewIdentity.js の契約5）。
+            //    同一人物の判定は reviewIdentity.js の契約5（同じ系列＋正規化名一致）。
             const rosterRes = await fetch(
-              `${url}/rest/v1/therapists?${reviewQuery}select=id,shop_id,name,image_url`,
+              `${url}/rest/v1/therapists?${reviewQuery}select=id,shop_id,name`,
               { headers }
             );
             const rosterData = await rosterRes.json();
@@ -149,7 +146,7 @@ export default function ThreadDetailPage({
             setCloudTherapistReviews(
               filterReviewsForPerson(
                 rData,
-                { id: threadId, shop_id: shopId, name: therapistName, image_url: therapistImage },
+                { id: threadId, shop_id: shopId, name: therapistName },
                 roster,
                 roster
               )
@@ -248,7 +245,7 @@ export default function ThreadDetailPage({
     //    IDが違う同名の別人が混ざる。IDが無い旧データだけ契約に従って拾う。
     // DataContext側は系列の名簿を持っていないので、ここでは本人ぶんだけ。
     // 系列店を含む一覧は上のクラウド取得（cloudTherapistReviews）が担う。
-    return filterReviewsForPerson(reviews, { id: threadId, shop_id: shopId, name: therapist.name, image_url: therapist.image_url ?? null }, [
+    return filterReviewsForPerson(reviews, { id: threadId, shop_id: shopId, name: therapist.name }, [
       { id: threadId, shop_id: shopId, name: therapist.name },
     ], []);
   }, [cloudTherapistReviews, reviews, threadId, therapist, shop, shopId]);

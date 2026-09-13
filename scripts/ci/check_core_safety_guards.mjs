@@ -220,17 +220,20 @@ requireText(read('src/utils/reviewIdentity.js'), /export function buildTherapist
     }
   }
 
-  // 🚩 系列またぎで同一人物とみなす判定は、**名前だけにしてはいけない**。
-  //    同じ店の中に同名のセラピストがいる組が952組あり、うち352組は画像が違う＝別人の可能性。
-  //    名前だけで束ねると、その別人の口コミが互いのページに出る
-  //    （口コミサイトで他人の評価が自分に付く＝取りこぼしより重い事故）。
+  // 🚩 系列またぎの同一人物判定は、**正規化した名前**で比べること。
+  //    生の文字列比較に戻すと「似鳥 芹香 / 似鳥芹香」のような表記ゆれが別人扱いになり、
+  //    335組が分かれたままになる（2026-09-13実測。スペースの有無で二重取り込みされた同一人物）。
   {
     const identity = stripSrc(read('src/utils/reviewIdentity.js'));
     const fn = identity.match(/export function samePersonTherapistIds\([\s\S]*?\n\}/);
     if (!fn) {
       failures.push('samePersonTherapistIds が消えています（系列またぎの同一人物判定）');
-    } else if (!/image_url/.test(fn[0])) {
-      failures.push('系列またぎの同一人物判定が名前だけになっています（画像URLの照合が必要・同名の別人が混ざります）');
+    } else {
+      const norms = (fn[0].match(/normalizeTherapistName\(/g) || []).length;
+      // 対象と候補の**両方**を正規化して初めて表記ゆれを吸収できる。片方だけでは素通りする。
+      if (norms < 2) {
+        failures.push(`系列またぎの同一人物判定が名前を正規化していません（${norms}箇所。対象と候補の両方が必要・表記ゆれが別人に戻ります）`);
+      }
     }
   }
 
