@@ -21,9 +21,15 @@
  *
  * 実行: node scripts/monitoring/check_shop_sites.mjs
  *   LIMIT=50 だけ試す / CONCURRENCY=4 / TIMEOUT_MS=12000 で調整できる
+ *   --verify … `fetch` で問題が出たURLだけ、**本物のブラウザ（puppeteer）でもう一度**開く
+ *
+ * ⚠️ `--verify` を付けずに出た結果だけで店舗を消さないこと。
+ *    `fetch` の失敗は「相手が Node からのアクセスを拒んだ」だけのこともある。
+ *    ブラウザで NXDOMAIN（ドメインが存在しない）まで確認できて初めて「閉店の疑いが濃い」と言える。
  */
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
+import puppeteer from 'puppeteer';
 
 function env(key) {
   if (process.env[key]) return process.env[key];
@@ -48,6 +54,7 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
 const CONCURRENCY = Number(process.env.CONCURRENCY || 5);
 const TIMEOUT_MS = Number(process.env.TIMEOUT_MS || 12000);
 const LIMIT = Number(process.env.LIMIT || 0);
+const VERIFY = process.argv.includes('--verify');
 const OUT_PATH = process.env.OUT || 'outputs/shop-site-audit.json';
 
 /** ⚠️ PostgRESTはサーバー側 max-rows(既定1000) が優先する。
@@ -98,6 +105,20 @@ function classify(original, result) {
   return 'ok';
 }
 
+/** ⚠️ Chromeの失敗理由を分ける。ここを一緒くたにすると「閉店の確証」が消える。
+ *  ERR_NAME_NOT_RESOLVED …… 名前が引けない＝ドメインが消えている（閉店の確証に最も近い）
+ *  ERR_CERT_* / ERR_SSL_* …… 証明書の設定不備。**サイトは生きている**ことが多い
+ *  ERR_BLOCKED_BY_CLIENT … 手元のブラウザ拡張が遮断しただけ。相手は無関係
+ */
+function verdictFromBrowserError(message) {
+  const m = String(message || '');
+  if (/ERR_NAME_NOT_RESOLVED|ERR_NAME_RESOLUTION_FAILED|NXDOMAIN/.test(m)) return 'dns_missing';
+  if (/ERR_BLOCKED_BY_CLIENT/.test(m)) return 'blocked_by_extension';
+  if (/ERR_CERT|ERR_SSL/.test(m)) return 'cert_error';
+  if (/ERR_CONNECTION|ERR_ADDRESS|ERR_TIMED_OUT|Navigation timeout/.test(m)) return 'unreachable';
+  return 'browser_error';
+}
+
 async function main() {
   const shops = await fetchAllShops();
   const withUrl = shops.filter((s) => (s.website_url || '').trim());
@@ -131,12 +152,61 @@ async function main() {
   };
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
+  // ── 第2段: 問題が出たURLを本物のブラウザで開き直す ──────────────────
+  // ⚠️ Node の fetch が失敗しても、相手がUAで弾いているだけのことがある。
+  //    ここで NXDOMAIN まで確認できたものだけを「ドメインが消えている」と言い切る。
+  if (VERIFY) {
+    const targets = results.filter((r) => r.verdict !== 'ok');
+    console.log(`\n--- ブラウザで再確認: ${targets.length}件 ---`);
+    const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'] });
+    for (const r of targets) {
+      const page = await browser.newPage();
+      try {
+        const resp = await page.goto(r.url, { waitUntil: 'domcontentloaded', timeout: 20000 });
+        const info = await page.evaluate(() => ({
+          href: location.href,
+          title: document.title.slice(0, 80),
+          text: document.body ? document.body.innerText.replace(/\s+/g, ' ').slice(0, 120) : '',
+        }));
+        r.browser = { status: resp ? resp.status() : null, ...info };
+        // Chromeのエラーページ（DNS失敗など）は chrome-error:// になる
+        r.browserVerdict = info.href.startsWith('chrome-error')
+          ? verdictFromBrowserError(info.text)
+          : classify(r.url, { status: r.browser.status || 200, finalUrl: info.href });
+      } catch (e) {
+        r.browser = { error: String(e.message).slice(0, 100) };
+        // ⚠️ 2026-09-13: ここで全部 browser_error にしていたため、
+        //    **唯一の閉店の証拠である ERR_NAME_NOT_RESOLVED が他の失敗に埋もれていた**。
+        //    Chromeのエラーコードで分ける。証明書エラーや拡張のブロックは閉店ではない。
+        r.browserVerdict = verdictFromBrowserError(e.message);
+      } finally {
+        await page.close();
+      }
+      console.log(`  ${r.browserVerdict.padEnd(20)} ${r.url}  ${r.browser?.title || r.browser?.error || ''}`);
+    }
+    await browser.close();
+  }
+
+  // ⚠️ 2026-09-09: --verify を回したのに、最後の集計が1段目(fetch)の判定のままだった。
+  //    実測では **21店が「接続できない」と出ていて実際は営業中**（Lynx 11店を含む）。
+  //    ブラウザで確認できたなら**そちらを正**とする。1段目の判定だけで店を消さない。
+  const finalVerdict = (r) => (VERIFY && r.browserVerdict ? r.browserVerdict : r.verdict);
+
   const counts = {};
-  for (const r of results) counts[r.verdict] = (counts[r.verdict] || 0) + 1;
+  for (const r of results) counts[finalVerdict(r)] = (counts[finalVerdict(r)] || 0) + 1;
+
+  if (VERIFY) {
+    const rescued = results.filter((r) => r.verdict !== 'ok' && r.browserVerdict === 'ok');
+    if (rescued.length) {
+      console.log(`\n✅ 1段目では問題に見えたが、ブラウザでは正常だったURL: ${rescued.length}件（${rescued.reduce((a, r) => a + r.shops.length, 0)}店）`);
+      console.log('   これらは**消してはいけない**。fetchの失敗＝閉店ではない。');
+      for (const r of rescued) console.log(`   ${r.url}  → ${r.browser?.title || ''}`);
+    }
+  }
 
   const problems = results
-    .filter((r) => r.verdict !== 'ok')
-    .sort((a, b) => a.verdict.localeCompare(b.verdict));
+    .filter((r) => finalVerdict(r) !== 'ok')
+    .sort((a, b) => finalVerdict(a).localeCompare(finalVerdict(b)));
 
   fs.mkdirSync(OUT_PATH.replace(/\/[^/]+$/, ''), { recursive: true });
   fs.writeFileSync(OUT_PATH, JSON.stringify({ checkedAt: new Date().toISOString(), counts, results }, null, 2));
@@ -144,23 +214,42 @@ async function main() {
   console.log('\n=== 集計 ===');
   for (const [k, v] of Object.entries(counts)) console.log(`  ${k}: ${v}`);
 
+  // ⚠️ --verify で出る判定（dns_missing / browser_error）も必ず一覧に出す。
+  //    ここに載せ忘れると、**唯一の確証である dns_missing が件数だけで中身が見えない**ことになる。
   const label = {
+    dns_missing: '🔴 ドメインが存在しない（ERR_NAME_NOT_RESOLVED／閉店の確証に最も近い）',
+    cert_error: '証明書の不備（サイト自体は生きていることが多い＝閉店ではない）',
+    blocked_by_extension: '手元のブラウザ拡張が遮断しただけ（相手のサイトとは無関係）',
     redirect_other_host: '別ホストへリダイレクト（改名・統合の可能性）',
     not_found: '4xx（ページが無い）',
     server_error: '5xx（相手サーバーの異常）',
     unreachable: '接続できない（DNS失敗・タイムアウト等）',
+    browser_error: '⚠️ ブラウザでも開けなかった（証明書エラー・拒否など／閉店とは限らない）',
   };
-  for (const kind of ['redirect_other_host', 'not_found', 'server_error', 'unreachable']) {
-    const list = problems.filter((p) => p.verdict === kind);
+  const KINDS = ['dns_missing', 'redirect_other_host', 'not_found', 'server_error', 'unreachable', 'cert_error', 'blocked_by_extension', 'browser_error'];
+  for (const kind of KINDS) {
+    const list = problems.filter((p) => finalVerdict(p) === kind);
     if (list.length === 0) continue;
     console.log(`\n--- ${label[kind]}：${list.length}件 ---`);
     for (const p of list.slice(0, 60)) {
       const names = p.shops.map((s) => `${s.name}(${s.id})`).join(' / ');
+      // ブラウザ判定を採用した行は、fetch段の古い理由ではなく**ブラウザで見えたもの**を出す
+      const usedBrowser = VERIFY && p.browserVerdict;
+      const detail = usedBrowser
+        ? (p.browser?.href || p.browser?.error || `HTTP ${p.browser?.status}`)
+        : (p.finalUrl || p.error || `HTTP ${p.status}`);
       console.log(`  ${p.url}`);
-      console.log(`    → ${p.finalUrl || p.error || `HTTP ${p.status}`}`);
+      console.log(`    → ${detail}${usedBrowser && p.browser?.title ? `  「${p.browser.title}」` : ''}`);
       console.log(`    店舗: ${names}`);
     }
     if (list.length > 60) console.log(`  …ほか ${list.length - 60}件（詳細は ${OUT_PATH}）`);
+  }
+
+  // 取りこぼし検知：上のKINDSに無い判定が出たら黙って消えないよう警告する
+  const unlisted = problems.filter((p) => !KINDS.includes(finalVerdict(p)));
+  if (unlisted.length) {
+    console.log(`\n--- 未分類の判定：${unlisted.length}件（labelに追記が必要） ---`);
+    for (const p of unlisted.slice(0, 30)) console.log(`  ${finalVerdict(p)}  ${p.url}`);
   }
 
   console.log(`\n📄 全結果: ${OUT_PATH}`);
