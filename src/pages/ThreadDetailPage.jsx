@@ -15,7 +15,7 @@ import { trackEvent } from '../utils/analytics';
 import { useReturnTo } from '../utils/useReturnTo';
 import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
-import { filterReviewsForTherapist } from '../utils/reviewIdentity.js';
+import { filterReviewsForPerson } from '../utils/reviewIdentity.js';
 import { isNotListed, NOT_LISTED_LABEL, NOT_LISTED_NOTE } from '../utils/therapistStatus.js';
 
 // ローディング中の骨組み（全画面テキスト→スケルトンで"個人サイト感"を除去）
@@ -102,9 +102,12 @@ export default function ThreadDetailPage({
         }
 
         let therapistName = null;
+        let therapistImage = null;
         if (tData && tData.length > 0 && isMounted) {
           setCloudTherapist(tData[0]);
           therapistName = tData[0].name;
+          // 系列店の同一人物判定に使う（名前だけで束ねると同名の別人が混ざる）
+          therapistImage = tData[0].image_url ?? null;
         }
 
         // 4. 店舗の口コミを取得し、クライアント側でセラピスト名を正規化マッチング
@@ -134,14 +137,22 @@ export default function ThreadDetailPage({
             //    系列全店から取っているので、同名の別人の口コミがそのまま混ざる。
             //    契約は src/utils/reviewIdentity.js に一本化した
             //    （IDがあるものはID完全一致だけ／IDが無い旧口コミは同名1人のときだけ）。
+            // ⚠️ 2026-09-13: SSRは系列店の本人ぶんまで出すのに、ここが本人ID1つだけで
+            //    絞り直していると、開いた直後に出た口コミがJS実行後に消える。
+            //    画像URLまで取るのは同一人物の判定に要るため（reviewIdentity.js の契約5）。
             const rosterRes = await fetch(
-              `${url}/rest/v1/therapists?${reviewQuery}select=id,shop_id,name`,
+              `${url}/rest/v1/therapists?${reviewQuery}select=id,shop_id,name,image_url`,
               { headers }
             );
             const rosterData = await rosterRes.json();
             const roster = Array.isArray(rosterData) ? rosterData : [];
             setCloudTherapistReviews(
-              filterReviewsForTherapist(rData, { id: threadId, shop_id: shopId, name: therapistName }, roster)
+              filterReviewsForPerson(
+                rData,
+                { id: threadId, shop_id: shopId, name: therapistName, image_url: therapistImage },
+                roster,
+                roster
+              )
             );
           }
         }
@@ -235,9 +246,11 @@ export default function ThreadDetailPage({
     if (!shop || !therapist || !reviews) return [];
     // ⚠️ F04: 名前一致（`r.therapist_name === therapist.name`）で拾い直さない。
     //    IDが違う同名の別人が混ざる。IDが無い旧データだけ契約に従って拾う。
-    return filterReviewsForTherapist(reviews, { id: threadId, shop_id: shopId, name: therapist.name }, [
+    // DataContext側は系列の名簿を持っていないので、ここでは本人ぶんだけ。
+    // 系列店を含む一覧は上のクラウド取得（cloudTherapistReviews）が担う。
+    return filterReviewsForPerson(reviews, { id: threadId, shop_id: shopId, name: therapist.name, image_url: therapist.image_url ?? null }, [
       { id: threadId, shop_id: shopId, name: therapist.name },
-    ]);
+    ], []);
   }, [cloudTherapistReviews, reviews, threadId, therapist, shop, shopId]);
 
   // 閲覧カウント（クライアント発火・fire-and-forget）。

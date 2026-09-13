@@ -9,7 +9,7 @@ import React from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import ThreadDetailPage from '../../../../src/pages/ThreadDetailPage.jsx';
-import { filterReviewsForTherapist } from '../../../../src/utils/reviewIdentity.js';
+import { filterReviewsForPerson, samePersonTherapistIds } from '../../../../src/utils/reviewIdentity.js';
 
 // ────────────────────────────────────────────────────────────
 // SSR: サーバー側でSupabaseから公開データを取得
@@ -85,6 +85,22 @@ export async function getServerSideProps({ params, res }) {
       (therapistName || '').replace(/[\s　]+/g, '　'),
     ].filter(Boolean)));
 
+    // ── 系列店に散らばった本人の行を先に集める（2026-09-13）──
+    // セラピストは系列の複数店に出勤するが、行は店ごとに別。
+    // ここを本人ID1つだけで引くと、渋谷店で書かれた口コミが恵比寿店のページに出ない。
+    // ⚠️ 束ねる鍵は「正規化名 ＋ 画像URL」。名前だけで束ねると、同じ店の中にいる
+    //    同名の別人（352組が該当）の口コミが互いのページに出る。判定は reviewIdentity.js。
+    const { data: sameNameRoster, error: sameNameRosterError } = await supabase
+      .from('therapists')
+      .select('id, shop_id, name, image_url')
+      .in('shop_id', reviewShopIds)
+      .in('name', nameVariants);
+    if (sameNameRosterError) throw sameNameRosterError;
+    const personIds = [...samePersonTherapistIds(
+      { id: threadId, name: therapistName, image_url: therapistData?.image_url ?? null },
+      sameNameRoster || []
+    )];
+
     // 現在在籍中の行がある場合は、旧データとの互換性のため名前一致も見る。
     // ただし主キーは必ず therapist_id。名前だけで絞ると、系列店に同名の別人がいる時に
     // 口コミが混ざる。退店後に名簿行が消えても、口コミ自体は残すべきなので、
@@ -93,7 +109,7 @@ export async function getServerSideProps({ params, res }) {
       .from('reviews')
       .select('id, shop_id, therapist_name, therapist_id, rating, content, story_sections, detailed_ratings, tags, created_at, is_public, user_id, user_name, course')
       .in('shop_id', reviewShopIds)
-      .eq('therapist_id', threadId)
+      .in('therapist_id', personIds)
       .or('is_public.eq.true,user_id.eq.owner_manual')
       .order('created_at', { ascending: false })
       .limit(200);
@@ -124,19 +140,15 @@ export async function getServerSideProps({ params, res }) {
     //    割り当ての契約は src/utils/reviewIdentity.js に一本化した。
     //    ・IDがある口コミ … threadId と完全一致した時だけ採用
     //    ・IDが無い旧口コミ … 同一店舗に同名が1人だけのときに限り採用
-    const { data: sameNameRoster } = await supabase
-      .from('therapists')
-      .select('id, shop_id, name')
-      .in('shop_id', reviewShopIds)
-      .in('name', nameVariants);
     const roster = [
       ...(sameNameRoster || []),
       ...(therapistData ? [{ id: threadId, shop_id: therapistData.shop_id, name: therapistName }] : []),
     ].filter((t, i, arr) => arr.findIndex((x) => String(x.id) === String(t.id)) === i);
-    const publicReviews = filterReviewsForTherapist(
+    const publicReviews = filterReviewsForPerson(
       reviews || [],
-      { id: threadId, shop_id: therapistData?.shop_id || shopId, name: therapistName },
-      roster
+      { id: threadId, shop_id: therapistData?.shop_id || shopId, name: therapistName, image_url: therapistData?.image_url ?? null },
+      roster,
+      sameNameRoster || []
     );
 
     if (!therapistData) {
@@ -165,7 +177,8 @@ export async function getServerSideProps({ params, res }) {
       .in('shop_id', reviewShopIds)
       .or('is_public.eq.true,user_id.eq.owner_manual')
       .not('therapist_id', 'is', null)
-      .neq('therapist_id', threadId)
+      // 本人の別支店の行を「他のセラピスト」として出すと、自分自身へのリンクになる
+      .not('therapist_id', 'in', `(${personIds.map((v) => `"${String(v).replace(/"/g, '')}"`).join(',')})`)
       .order('created_at', { ascending: false })
       .limit(60);
     if (relatedRevsError) throw relatedRevsError;

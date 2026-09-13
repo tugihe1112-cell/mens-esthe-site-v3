@@ -200,8 +200,12 @@ requireText(read('src/utils/reviewIdentity.js'), /export function buildTherapist
   if (/therapist_id\s*===\s*threadId\s*\|\|/.test(ssrThread)) {
     failures.push('人物SSRが「IDが違っても名前が同じなら採用」に戻っています（F04）');
   }
-  requireText(ssrThread, /filterReviewsForTherapist\(/,
-    '人物SSRが照合契約（filterReviewsForTherapist）を使っていません（F04）');
+  requireText(ssrThread, /filterReviewsFor(Therapist|Person)\(/,
+    '人物SSRが照合契約（filterReviewsForTherapist/ForPerson）を使っていません（F04）');
+  // 🚩 2026-09-13: 系列店に散らばった本人の行を集めずに本人ID1つで引くと、
+  //    渋谷店で書かれた口コミが同じ人の恵比寿店のページに出ない（公開34件中9件が該当していた）。
+  requireText(ssrThread, /samePersonTherapistIds\(/,
+    '人物SSRが系列店の本人を集めていません（口コミが支店ごとに分断されます）');
 
   const thread = stripSrc(read('src/pages/ThreadDetailPage.jsx'));
   if (/r\.therapist_name\s*&&\s*r\.therapist_name\.replace|r\.therapist_name\s*===\s*therapist\.name/.test(thread)) {
@@ -210,9 +214,23 @@ requireText(read('src/utils/reviewIdentity.js'), /export function buildTherapist
   // ⚠️ 参照が1つ残っているだけでは足りない。**両方の経路**（DB取得とDataContextの
   //    フォールバック）が契約を通ることを件数で見る。片方だけ外す壊し方が素通りした。
   {
-    const uses = (thread.match(/filterReviewsForTherapist\(/g) || []).length;
+    const uses = (thread.match(/filterReviewsFor(?:Therapist|Person)\(/g) || []).length;
     if (uses < 2) {
       failures.push(`人物詳細の口コミ照合が契約を通っていません（${uses}箇所。DB取得とフォールバックの両方が必要・F04）`);
+    }
+  }
+
+  // 🚩 系列またぎで同一人物とみなす判定は、**名前だけにしてはいけない**。
+  //    同じ店の中に同名のセラピストがいる組が952組あり、うち352組は画像が違う＝別人の可能性。
+  //    名前だけで束ねると、その別人の口コミが互いのページに出る
+  //    （口コミサイトで他人の評価が自分に付く＝取りこぼしより重い事故）。
+  {
+    const identity = stripSrc(read('src/utils/reviewIdentity.js'));
+    const fn = identity.match(/export function samePersonTherapistIds\([\s\S]*?\n\}/);
+    if (!fn) {
+      failures.push('samePersonTherapistIds が消えています（系列またぎの同一人物判定）');
+    } else if (!/image_url/.test(fn[0])) {
+      failures.push('系列またぎの同一人物判定が名前だけになっています（画像URLの照合が必要・同名の別人が混ざります）');
     }
   }
 
