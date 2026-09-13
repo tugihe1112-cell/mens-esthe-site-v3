@@ -23,6 +23,12 @@
  *   LIMIT=50 だけ試す / CONCURRENCY=4 / TIMEOUT_MS=12000 で調整できる
  *   --verify … `fetch` で問題が出たURLだけ、**本物のブラウザ（puppeteer）でもう一度**開く
  *
+ * 【この道具で言い切れること／言い切れないこと（2026-09-13 実測）】
+ *   言い切れる … `dns_missing`（NSが引けない＝ドメインが登録されていない）
+ *   言い切れない … 403 / 401 / タイムアウト / ERR_ABORTED / 証明書エラー
+ *     → **生きているサイトでも普通に出る**。403の7店も証明書の19店も営業中だった。
+ *     → これらを根拠に店を消さない。
+ *
  * ⚠️ `--verify` を付けずに出た結果だけで店舗を消さないこと。
  *    `fetch` の失敗は「相手が Node からのアクセスを拒んだ」だけのこともある。
  *    ブラウザで NXDOMAIN（ドメインが存在しない）まで確認できて初めて「閉店の疑いが濃い」と言える。
@@ -30,6 +36,7 @@
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import puppeteer from 'puppeteer';
+import dnsp from 'dns/promises';
 
 function env(key) {
   if (process.env[key]) return process.env[key];
@@ -152,6 +159,32 @@ async function main() {
   };
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
+  // ── 第1.5段: 名前が引けるかを見る（ここだけが信用できる） ──────────────
+  // ⚠️ 2026-09-13: 利用者から「richaroma.nagoya は普通に見られる」と指摘を受けた。
+  //    HTTPの結果（403・401・タイムアウト・ERR_ABORTED）は**生きているサイトでも出る**。
+  //    実際、口コミのある3店まで「問題あり」に並んでいた。
+  //    一方 DNS は相手の都合でも拡張の都合でも変わらない。
+  //      NSも引けない → ドメインが登録されていない＝サイトは存在しない（確証）
+  //      NSはあるがAが無い → ドメインは持っている。移転途中のこともある（確証ではない）
+  //    **閉店の判断はこの段だけを根拠にする。HTTPの結果は参考に留める。**
+  await Promise.all(results.map(async (r) => {
+    let host = '';
+    try { host = new URL(r.url).hostname; } catch { r.dns = { state: 'bad_url' }; return; }
+    try {
+      const a = await dnsp.resolve4(host);
+      r.dns = { state: 'alive', detail: a[0] };
+    } catch (e) {
+      try {
+        const ns = await dnsp.resolveNs(host.replace(/^www\./, ''));
+        r.dns = { state: 'no_a_record', detail: ns.join(',') };
+      } catch {
+        r.dns = { state: 'domain_gone', detail: e.code };
+      }
+    }
+  }));
+  const goneCount = results.filter((r) => r.dns?.state === 'domain_gone').length;
+  console.log(`\n--- 名前解決: ドメインが存在しない ${goneCount}件 / Aレコードなし ${results.filter((r) => r.dns?.state === 'no_a_record').length}件 ---`);
+
   // ── 第2段: 問題が出たURLを本物のブラウザで開き直す ──────────────────
   // ⚠️ Node の fetch が失敗しても、相手がUAで弾いているだけのことがある。
   //    ここで NXDOMAIN まで確認できたものだけを「ドメインが消えている」と言い切る。
@@ -190,7 +223,19 @@ async function main() {
   // ⚠️ 2026-09-09: --verify を回したのに、最後の集計が1段目(fetch)の判定のままだった。
   //    実測では **21店が「接続できない」と出ていて実際は営業中**（Lynx 11店を含む）。
   //    ブラウザで確認できたなら**そちらを正**とする。1段目の判定だけで店を消さない。
-  const finalVerdict = (r) => (VERIFY && r.browserVerdict ? r.browserVerdict : r.verdict);
+  //    ただし blocked_by_extension は**手元の拡張が遮断しただけで相手を何も見ていない**。
+  //    これを採用すると `me404.po-tal.net`（ドメイン失効の受け皿）へ飛んでいる証拠が消える。
+  //    ブラウザが何も分からなかった場合は1段目の判定を残す。
+  const BROWSER_LEARNED_NOTHING = new Set(['blocked_by_extension']);
+  const finalVerdict = (r) => {
+    // DNSが最優先。相手のbot対策にも手元の拡張にも左右されないため。
+    if (r.dns?.state === 'domain_gone') return 'dns_missing';
+    if (r.dns?.state === 'no_a_record') return 'dns_no_a';
+    // ここから先は**すべて参考値**。生きているサイトでも出る。
+    return VERIFY && r.browserVerdict && !BROWSER_LEARNED_NOTHING.has(r.browserVerdict)
+      ? r.browserVerdict
+      : r.verdict;
+  };
 
   const counts = {};
   for (const r of results) counts[finalVerdict(r)] = (counts[finalVerdict(r)] || 0) + 1;
@@ -217,7 +262,8 @@ async function main() {
   // ⚠️ --verify で出る判定（dns_missing / browser_error）も必ず一覧に出す。
   //    ここに載せ忘れると、**唯一の確証である dns_missing が件数だけで中身が見えない**ことになる。
   const label = {
-    dns_missing: '🔴 ドメインが存在しない（ERR_NAME_NOT_RESOLVED／閉店の確証に最も近い）',
+    dns_missing: '🔴 ドメインが登録されていない（NSも引けない／閉店の確証に最も近い）',
+    dns_no_a: '🟠 ドメインはあるがAレコードが無い（保有はしている。移転途中の可能性）',
     cert_error: '証明書の不備（サイト自体は生きていることが多い＝閉店ではない）',
     blocked_by_extension: '手元のブラウザ拡張が遮断しただけ（相手のサイトとは無関係）',
     redirect_other_host: '別ホストへリダイレクト（改名・統合の可能性）',
@@ -226,7 +272,7 @@ async function main() {
     unreachable: '接続できない（DNS失敗・タイムアウト等）',
     browser_error: '⚠️ ブラウザでも開けなかった（証明書エラー・拒否など／閉店とは限らない）',
   };
-  const KINDS = ['dns_missing', 'redirect_other_host', 'not_found', 'server_error', 'unreachable', 'cert_error', 'blocked_by_extension', 'browser_error'];
+  const KINDS = ['dns_missing', 'dns_no_a', 'redirect_other_host', 'not_found', 'server_error', 'unreachable', 'cert_error', 'blocked_by_extension', 'browser_error'];
   for (const kind of KINDS) {
     const list = problems.filter((p) => finalVerdict(p) === kind);
     if (list.length === 0) continue;
