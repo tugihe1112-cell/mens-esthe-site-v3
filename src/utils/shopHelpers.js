@@ -63,5 +63,34 @@ export const getDisplayName = (name, shop = null) => {
   // 末尾のスペース区切り: "Pepe Spa (ペペスパ) 下北沢"
   const bare = out.match(/^(.*\S)[\s　]+([^\s　]+)$/u);
   if (bare && places.has(bare[2].trim())) out = bare[1].trim();
+
+  // 区切りなしで地名がくっついている形（2026-09-14 オーナー確認）
+  //   "Aroma ELLA武蔵小杉" / "doigt de fee (ドゥワドフェ)溝の口" / "エステ美人マダム武蔵小杉"
+  // 日本語は語の区切りが無いので、スペースや括弧を頼りにできない。
+  //
+  // 🚩 **末尾だけ**外す。先頭は区切りがあるときだけ（下）。
+  //    区切り無しで先頭も外すと「東京アロマ」(東京都の店)が「アロマ」になる＝
+  //    地名で始まる正式なブランド名を削ってしまう（自前のテストで実際に出た）。
+  //    末尾に地名が付く形は支店表記なので、こちらは削ってよい。
+  // ⚠️ 外してよいのは**その店舗自身の**都道府県・市区・エリアと一致した部分だけ。
+  // ⚠️ 長い地名から先に試す（"武蔵小杉" より先に "小杉" を外すと "武蔵" が残る）。
+  // ⚠️ 残りが2文字未満になる削り方はしない＝店名が地名そのものの店を空にしない。
+  const ordered = [...places].sort((a, b) => b.length - a.length);
+  const MIN_KEEP = 2;
+  for (let pass = 0; pass < 2; pass += 1) {
+    const place = ordered.find(
+      (p) => out.endsWith(p) && out.length - p.length >= MIN_KEEP,
+    );
+    if (!place) break;
+    out = out.slice(0, -place.length).replace(/[\s　・|/-]+$/u, '').trim();
+  }
+
+  // 先頭の地名は**区切りがあるときだけ**外す: "武蔵小杉 ROYCE (ロイス)"
+  // 区切りが在ること自体が「ここまでが地名」という書き手の合図なので、誤削除になりにくい。
+  const lead = out.match(/^([^\s　]+)[\s　]+(.*\S)$/u);
+  if (lead && places.has(lead[1].trim()) && lead[2].trim().length >= MIN_KEEP) {
+    out = lead[2].trim();
+  }
+
   return out.trim();
 };

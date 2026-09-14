@@ -754,7 +754,7 @@ const check = (name, fn) => {
 //    ブランド1枚にまとめるとき地名を引き継ぎ損ねると、**代々木で検索しても出なくなる**。
 //    ここはオーナーが明示的に確認した要件なので、実データで固定する。
 {
-  const { buildBrands, groupBrandsByArea, pickNearbyBrands, buildBrandRoster } = await loadModule('src/utils/brandGroups.js');
+  const { buildBrands, groupBrandsByArea, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, countRoomsByBrand, shopRedirectPath } = await loadModule('src/utils/brandGroups.js');
   const { rankShops } = await loadModule('src/utils/searchMatch.js');
 
   // 本番DBの実データ（Chocolate 3ルーム / Aroma Levante 3ルーム / 単独店1）
@@ -907,6 +907,89 @@ const check = (name, fn) => {
     check('⭐生レコード: 全ルームの地名が検索用に残る（渋谷でも代々木でも出る）', () => {
       const missing = ['渋谷', '代々木'].filter((w) => !String(rawBrand.searchText).includes(w));
       return missing.length ? `searchText に無い: ${missing.join(',')}` : null;
+    });
+  }
+
+  // ── D-014 本命URLと301の判定（店舗SSR・サイトマップ・内部リンクが共有する）──
+  {
+    const counts = countRoomsByBrand(SHOPS);
+    const chocolate = buildBrands(SHOPS).find((b) => b.id === 'g_brand_chocolate');
+    const solo = buildBrands(SHOPS).find((b) => b.id === 'solo_silk');
+
+    check('⭐URL: 複数ルームのブランドは /brands/ が本命', () =>
+      (brandCanonicalPath(chocolate) === '/brands/g_brand_chocolate' ? null : brandCanonicalPath(chocolate)));
+    // ⭐ 単独店まで /brands/ に寄せると、同じ中身が2枚になる重複を新しく作る。
+    check('⭐URL: 単独店は /shops/ のまま（重複を新しく作らない）', () =>
+      (brandCanonicalPath(solo) === '/shops/solo_silk' ? null : brandCanonicalPath(solo)));
+    check('⭐301: 複数ルームの店舗はブランドへ送る', () => {
+      const got = shopRedirectPath({ id: 'tokyo_shinjuku_chocolate_shinjuku', group_id: 'g_brand_chocolate' }, counts);
+      return got === '/brands/g_brand_chocolate' ? null : `${got}`;
+    });
+    check('⭐301: group_id が無い店舗は送らない（506店が該当）', () =>
+      (shopRedirectPath({ id: 'solo_silk', group_id: null }, counts) === null ? null : '送ってしまった'));
+    // ⭐ group_id はあるがルームが1つだけ＝送る相手がいない。往復するだけ。
+    check('⭐301: group_idがあってもルーム1つなら送らない', () => {
+      const one = countRoomsByBrand([{ id: 'a', group_id: 'g_solo_x' }]);
+      return shopRedirectPath({ id: 'a', group_id: 'g_solo_x' }, one) === null ? null : '送ってしまった';
+    });
+    // ⭐ 判断材料が無いときに301を出すのは、消えていないページを消えたと宣言するのと同じ。
+    check('⭐301: ルーム数が分からないときは送らない', () => {
+      if (shopRedirectPath({ id: 'a', group_id: 'g_unknown' }, counts) !== null) return 'Mapに無いのに送った';
+      if (shopRedirectPath({ id: 'a', group_id: 'g_unknown' }, null) !== null) return 'Mapがnullなのに送った';
+      return null;
+    });
+    check('301: ルーム数の集計が group_id ごとに正しい', () => {
+      if (counts.get('g_brand_chocolate') !== 4) return `chocolate が ${counts.get('g_brand_chocolate')}`;
+      if (counts.get('g_brand_aroma_levante') !== 3) return `levante が ${counts.get('g_brand_aroma_levante')}`;
+      if (counts.has(null) || counts.has('')) return 'group_idなしを数えている';
+      return null;
+    });
+    check('URL/301: 空・nullで落ちない', () => {
+      if (countRoomsByBrand(null).size !== 0) return 'nullが0件でない';
+      if (shopRedirectPath(null, counts) !== null) return 'nullの店舗で送った';
+      if (!String(brandCanonicalPath(null)).startsWith('/shops/')) return 'nullブランドで /shops/ に倒れない';
+      return null;
+    });
+  }
+
+  // ── 表示名から支店名・地名を外す（U08 / 2026-09-14 オーナー確認で先頭も対象に）──
+  // 🚩 日本語は語の区切りが無いので、スペースや括弧を頼りにできない。
+  //    実データ:「Aroma ELLA武蔵小杉」「doigt de fee (ドゥワドフェ)溝の口」「武蔵小杉 ROYCE (ロイス)」
+  {
+    const { getDisplayName } = await loadModule('src/utils/shopHelpers.js');
+    const shop = (o) => ({ raw_data: o });
+    const cases = [
+      ['Aroma ELLA武蔵小杉', { city: '武蔵小杉' }, 'Aroma ELLA', '末尾に区切りなしで付いた市区'],
+      ['エステ美人マダム武蔵小杉', { city: '武蔵小杉' }, 'エステ美人マダム', '末尾に区切りなしで付いた市区(全角のみ)'],
+      ['doigt de fee (ドゥワドフェ)溝の口', { area: ['溝の口'] }, 'doigt de fee (ドゥワドフェ)', '括弧の外の末尾'],
+      ['武蔵小杉 ROYCE (ロイス)', { city: '武蔵小杉' }, 'ROYCE (ロイス)', '⭐先頭の地名'],
+      ['アロマモア 渋谷店', { area: ['渋谷'] }, 'アロマモア', '従来の「◯◯店」'],
+      ['CREST SPA TOKYO (吉祥寺)', { area: ['吉祥寺'] }, 'CREST SPA TOKYO', '従来の括弧'],
+      // ⭐ ここが安全装置。任意の地名を削り始めると正式なブランド名まで削れる。
+      ['Aroma ELLA武蔵小杉', { city: '渋谷' }, 'Aroma ELLA武蔵小杉', '⭐その店の地名でなければ削らない'],
+      ['渋谷', { city: '渋谷' }, '渋谷', '⭐店名が地名そのものなら空にしない'],
+      // ⭐ ここが一番効く安全装置。区切り無しで先頭も削ると、地名で始まる正式名が壊れる。
+      ['東京アロマ', { prefecture: '東京都' }, '東京アロマ', '⭐区切り無しの先頭は削らない(東京都の店)'],
+      ['大阪リラクゼーション', { city: '大阪市' }, '大阪リラクゼーション', '⭐区切り無しの先頭は削らない(大阪市の店)'],
+    ];
+    for (const [input, raw, want, label] of cases) {
+      check(`表示名(${label}): ${input}`, () => {
+        const got = getDisplayName(input, shop(raw));
+        return got === want ? null : `「${got}」になった（期待「${want}」）`;
+      });
+    }
+    check('⭐表示名: 長い地名から先に外す（武蔵小杉より先に小杉を外さない）', () => {
+      const got = getDisplayName('Aroma ELLA武蔵小杉', { raw_data: { city: '武蔵小杉', area: ['小杉'] } });
+      return got === 'Aroma ELLA' ? null : `「${got}」になった`;
+    });
+    check('表示名: 店舗を渡さなければ地名は触らない', () => {
+      const got = getDisplayName('Aroma ELLA武蔵小杉');
+      return got === 'Aroma ELLA武蔵小杉' ? null : `「${got}」になった`;
+    });
+    check('表示名: 空・nullで落ちない', () => {
+      if (getDisplayName('') !== '') return '空文字が変化した';
+      if (getDisplayName(null) !== null) return 'nullが変化した';
+      return null;
     });
   }
 
