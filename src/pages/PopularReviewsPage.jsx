@@ -7,6 +7,8 @@ import ReviewLikeButton from '../components/ReviewLikeButton.jsx';
 import { isNotListed, NOT_LISTED_SHORT } from '../utils/therapistStatus.js';
 import LazyImage from '../components/LazyImage.jsx';
 import { ratingGradientClass } from '../utils/ratingStyle';
+// 支店名は表示しない（地名は検索のためだけに name に入っている）
+import { getDisplayName } from '../utils/shopHelpers';
 
 const PAGE_SIZE = 20;
 
@@ -274,7 +276,7 @@ export default function PopularReviewsPage({
                               {shop.name && (
                                 <Link to={shopLink} className="inline-flex items-center gap-1.5 min-w-0 font-black text-white text-sm hover:text-pink-300 transition">
                                   <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-xs shrink-0">🏢</span>
-                                  <span className="truncate">{shop.name}</span>
+                                  <span className="truncate">{getDisplayName(shop.name, shop)}</span>
                                 </Link>
                               )}
                               {loc && (

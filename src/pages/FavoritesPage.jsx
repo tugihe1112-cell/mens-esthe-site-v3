@@ -198,7 +198,7 @@ export default function FavoritesPage() {
                             <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">{joinFields(shop.area, shop.city)}</span>
                         </div>
                       )}
-                      <h3 className="text-lg font-black text-white truncate group-hover:text-blue-400 transition">{getDisplayName(shop.name)}</h3>
+                      <h3 className="text-lg font-black text-white truncate group-hover:text-blue-400 transition">{getDisplayName(shop.name, shop)}</h3>
                       <ShopStatusChip shop={shop} className="mt-1" />
                       {/* ⚠️ `shop.access` はDBに存在しないフィールドで、**全てのお気に入りに**
                           「アクセス情報なし」が出ていた。正しくは address（無ければ出さない）。 */}

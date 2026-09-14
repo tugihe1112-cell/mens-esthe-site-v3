@@ -19,6 +19,8 @@ import { useShopData } from '../contexts/DataContext.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { trackEvent } from '../utils/analytics';
 import { supabase } from '../lib/supabase.js';
+// 支店名は表示しない（地名は検索のためだけに name に入っている）
+import { getDisplayName } from '../utils/shopHelpers';
 
 // --- Step Components ---
 
@@ -193,7 +195,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
                       onMouseDown={() => handleShopSelect(shop)}
                       className="min-h-11 w-full border-b border-white/5 px-4 py-3 text-left text-white transition hover:bg-pink-600/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-pink-500 last:border-0"
                     >
-                      <span className="block truncate text-sm font-bold">{shop.name}</span>
+                      <span className="block truncate text-sm font-bold">{getDisplayName(shop.name, shop)}</span>
                       {shopLocationLabel(shop) && <span className="mt-0.5 block truncate text-xs font-medium text-slate-400">{shopLocationLabel(shop)}</span>}
                     </button>
                   </li>

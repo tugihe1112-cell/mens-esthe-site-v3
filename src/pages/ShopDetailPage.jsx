@@ -425,7 +425,7 @@ export default function ShopDetailPage({
                </div>
                {logoUrl && (<div className="mb-4 flex justify-center"><img src={logoUrl} alt="Brand Logo" className="h-16 md:h-20 w-auto object-contain" /></div>)}
               <h1 className="text-3xl md:text-6xl font-black text-white leading-tight mb-2 drop-shadow-xl tracking-tight line-clamp-2">
-                 {getDisplayName(shop.name)}
+                 {getDisplayName(shop.name, shop)}
                </h1>
                {/* 閉店・営業未確認の帯。店名のすぐ下＝見落としようがない位置に置く。
                    判定と文言は src/utils/shopStatus.js にしかない。 */}
@@ -690,7 +690,7 @@ export default function ShopDetailPage({
                       to={`/shops/${s.id}`}
                       className="flex items-center justify-between bg-slate-800/50 hover:bg-slate-700/60 border border-white/5 hover:border-pink-500/30 rounded-xl px-4 py-3 text-xs font-bold text-slate-200 hover:text-white transition"
                     >
-                      <span className="truncate">{getDisplayName(s.name)}</span>
+                      <span className="truncate">{getDisplayName(s.name, s)}</span>
                       <span className="text-slate-600">›</span>
                     </Link>
                   ))}
@@ -965,7 +965,7 @@ export default function ShopDetailPage({
                    外部埋め込みの再実装は別要件として扱う。
                 ここでは公式サイトへ1操作で行けるコンパクトな案内カードにする。 */}
             <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5 md:p-6">
-              <p className="text-sm font-bold text-white mb-1">{getDisplayName(shop.name)}の出勤</p>
+              <p className="text-sm font-bold text-white mb-1">{getDisplayName(shop.name, shop)}の出勤</p>
               <p className="text-[13px] text-slate-400 mb-4">最新の出勤は公式サイトで確認できます。</p>
               <a
                 href={cloudShop.schedule_url}

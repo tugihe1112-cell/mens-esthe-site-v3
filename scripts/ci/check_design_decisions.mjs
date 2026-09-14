@@ -695,6 +695,36 @@ function read(path) {
     }
   }
 
+  // ── 支店名を画面に出さない（2026-09-14 オーナー確認）──
+  // 「アロマモア渋谷店」ではなく「アロマモア」。その店舗の「渋谷店」に価値はない。
+  // 地名が name に入っているのは**検索で引っかかるためだけ**。
+  {
+    const helper = strip(read('src/utils/shopHelpers.js'));
+    if (!/export const getDisplayName/.test(helper)) {
+      violations.push('[U08] getDisplayName が消えている（支店名の除去）。');
+    }
+    // 🚩 末尾の1語を無条件に外すとブランド名を削る
+    //    （"美・セラ極～KIWAMI～" "トキョプラ 旧T+Plus (ティープラス) 新宿" が実在）。
+    //    必ず**その店自身の所在地**と照合してから外すこと。
+    // ⚠️ 存在だけ見ると、括弧側と空白側の**片方だけ**外す壊し方が通る（2026-09-14 妨害テストで実際に素通りした）。
+    //    照合は2箇所（"CREST SPA TOKYO (荻窪)" と "らんぷ 北千住"）あるので件数で見る。
+    const checks = (helper.match(/places\.has\(/g) || []).length;
+    if (!/ownPlaceWords/.test(helper) || checks < 2) {
+      violations.push(`[U08] 表示名の地名除去が、その店自身の所在地と照合していない（${checks}箇所。括弧と空白の両方が必要・ブランド名を削る事故になる）。`);
+    }
+    // 一覧で生の店舗名を出していないこと（送れていない画面が必ず出るため件数で見る）
+    for (const f of [
+      'src/pages/SearchPage.jsx', 'src/pages/PopularReviewsPage.jsx',
+      'src/pages/NewTherapistsPage.jsx', 'src/pages/PostReviewPage.jsx',
+      'src/pages/PrefecturePage.jsx', 'src/pages/Home.jsx',
+    ]) {
+      const body = strip(read(f));
+      if (/[>{]\s*\{shop\.name\}/.test(body)) {
+        violations.push(`[U08] ${f} が支店名を含む生の店舗名を表示している（getDisplayName を通すこと）。`);
+      }
+    }
+  }
+
   // ── 店舗の状態（閉店／営業未確認）も同じ作りで守る（2026-09-14）──
   {
     const shopHelper = strip(read('src/utils/shopStatus.js'));

@@ -111,7 +111,7 @@ export default function BrandPage() {
                 <div className="absolute top-0 right-0 w-20 h-20 bg-pink-500/10 blur-2xl rounded-full pointer-events-none group-hover:bg-pink-500/20 transition"></div>
                 
                 <h2 className="text-lg md:text-xl font-black text-white mb-2 group-hover:text-pink-400 transition leading-tight z-10">
-                  {getDisplayName(shop.name)}
+                  {getDisplayName(shop.name, shop)}
                 </h2>
                 <div className="flex items-center gap-3 text-sm text-slate-400 mb-4 z-10">
                   {/* ⚠️ 収集元サイトの評価は出さない（口コミ0件で★4.7が出ていた）。

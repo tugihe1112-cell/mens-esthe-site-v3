@@ -134,7 +134,7 @@ export default function AreaSSRPage({ ssr }) {
                     href={`/shops/${s.id}`}
                     className="inline-block text-xs text-slate-300 hover:text-pink-300 bg-slate-800 hover:bg-slate-700 border border-white/10 rounded-full px-3 py-1.5 transition"
                   >
-                    {getDisplayName(s.name)}
+                    {getDisplayName(s.name, s)}
                     {s.city ? <span className="text-slate-500 ml-1">({s.city})</span> : null}
                   </a>
                 </li>

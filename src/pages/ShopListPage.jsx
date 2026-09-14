@@ -216,7 +216,7 @@ export default function ShopListPage() {
 
                       <div className="hidden md:block absolute bottom-0 left-0 p-4 w-full">
                         <h3 className="text-lg font-black text-white shadow-black drop-shadow-md truncate leading-tight">
-                          {getDisplayName(shop.name)}
+                          {getDisplayName(shop.name, shop)}
                         </h3>
                       </div>
                     </div>
@@ -228,7 +228,7 @@ export default function ShopListPage() {
                         parts={[shop.prefecture, shop.city, shop.area]}
                       />
                       <h3 className="md:hidden text-base font-black text-white leading-tight line-clamp-2">
-                        {getDisplayName(shop.name)}
+                        {getDisplayName(shop.name, shop)}
                       </h3>
                       <div className="flex items-center justify-between gap-2 text-sm">
                         {/* ⚠️ `shop.access` はDBに存在しないフィールド。住所も614店（56%）が空なので、

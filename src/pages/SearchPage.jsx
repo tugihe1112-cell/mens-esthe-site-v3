@@ -12,6 +12,8 @@ import LocationLabel from '../components/LocationLabel.jsx';
 import { normalizeForSearch, rankShops } from '../utils/searchMatch';
 import { trackEvent } from '../utils/analytics';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
+// 支店名は表示しない（地名は検索のためだけに name に入っている）
+import { getDisplayName } from '../utils/shopHelpers';
 
 // ─── ファジー店舗検索ユーティリティ ────────────────────────────
 // ⚠️ ロジック本体は src/utils/searchMatch.js に切り出してある（CIでテストするため）。
@@ -49,7 +51,7 @@ function ShopCard({ shop, onSelect }) {
         </div>
         <div className="min-w-0 flex-1">
           <span className="text-white font-bold text-sm block truncate">
-            {shop.name}
+            {getDisplayName(shop.name, shop)}
           </span>
           <ShopStatusChip shop={shop} className="mt-1" />
           <LocationLabel as="div" className="text-xs text-slate-500 mt-0.5" parts={[shop.prefecture, shop.city]} />

@@ -3,6 +3,8 @@ import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
+// 支店名は表示しない（地名は検索のためだけに name に入っている）
+import { getDisplayName } from '../utils/shopHelpers';
 
 const PAGE_SIZE = 24;
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
@@ -157,7 +159,7 @@ export default function NewTherapistsPage() {
                           <LocationLabel as="p" className="text-pink-300 text-[10px] truncate leading-tight" parts={[shop.prefecture, shop.city]} />
                           {shop.name && (
                             <p className="text-slate-400 text-[10px] truncate leading-tight mt-0.5">
-                              {shop.name}
+                              {getDisplayName(shop.name, shop)}
                             </p>
                           )}
                         </div>

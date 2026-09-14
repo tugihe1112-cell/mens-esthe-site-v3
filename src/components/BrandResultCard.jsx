@@ -72,7 +72,7 @@ export default function BrandResultCard({ summary, shops }) {
                   <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-white font-bold text-sm truncate group-hover:text-pink-400 transition">{getDisplayName(shop.name)}</h3>
+                  <h3 className="text-white font-bold text-sm truncate group-hover:text-pink-400 transition">{getDisplayName(shop.name, shop)}</h3>
                   <LocationLabel as="p" className="text-slate-500 text-xs truncate" parts={[shop.prefecture, shop.city]} />
                 </div>
               </Link>

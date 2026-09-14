@@ -309,8 +309,8 @@ export default function ThreadDetailPage({
   const shopPlace = [shop.prefecture, shop.city].filter(Boolean).join(' ');
   // ⚠️ 在籍一覧に居ない人に「在籍情報を確認できます」と書かない。
   const seoDesc = notListed
-    ? `${shop.name}${shopPlace ? `（${shopPlace}）` : ''}の${therapist.name}さんのページ。現在は在籍一覧に掲載されていません。過去に利用者が投稿した口コミ・評価・体験談を確認できます。`
-    : `${shop.name}${shopPlace ? `（${shopPlace}）` : ''}のセラピスト、${therapist.name}さんのプロフィール。${therapist.age ? `年齢:${therapist.age}歳。` : ''}在籍情報、利用者が投稿した口コミ・評価、施術や接客の体験談をメンエスマップで確認できます。`;
+    ? `${getDisplayName(shop.name, shop)}${shopPlace ? `（${shopPlace}）` : ''}の${therapist.name}さんのページ。現在は在籍一覧に掲載されていません。過去に利用者が投稿した口コミ・評価・体験談を確認できます。`
+    : `${getDisplayName(shop.name, shop)}${shopPlace ? `（${shopPlace}）` : ''}のセラピスト、${therapist.name}さんのプロフィール。${therapist.age ? `年齢:${therapist.age}歳。` : ''}在籍情報、利用者が投稿した口コミ・評価、施術や接客の体験談をメンエスマップで確認できます。`;
 
   const handlePostReview = (placement) => {
     trackEvent('click_write_from_thread', {
@@ -331,7 +331,7 @@ export default function ThreadDetailPage({
       <Header />
       {renderSeo && (
         <SeoHead
-          title={`${therapist.name} | ${shop.name}`}
+          title={`${therapist.name} | ${getDisplayName(shop.name, shop)}`}
           description={seoDesc}
           path={`/shops/${shopId}/threads/${threadId}`}
         />
@@ -342,7 +342,7 @@ export default function ThreadDetailPage({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "HealthAndBeautyBusiness",
-          "name": `${getDisplayName(shop.name)} ${therapist.name}`,
+          "name": `${getDisplayName(shop.name, shop)} ${therapist.name}`,
           "url": `https://www.mens-esthe-map.jp/shops/${shopId}/threads/${threadId}`,
           "image": therapist.image_url || therapist.image || undefined,
           "address": {
@@ -387,7 +387,7 @@ export default function ThreadDetailPage({
         <nav aria-label="パンくず" className="flex items-center gap-1.5 text-xs text-slate-400 flex-wrap">
           <Link to="/" className="hover:text-white transition">ホーム</Link>
           <span className="text-slate-600">›</span>
-          <Link to={`/shops/${shopId}`} className="hover:text-white transition truncate max-w-[45%]">{getDisplayName(shop.name)}</Link>
+          <Link to={`/shops/${shopId}`} className="hover:text-white transition truncate max-w-[45%]">{getDisplayName(shop.name, shop)}</Link>
           <span className="text-slate-600">›</span>
           <span className="text-slate-200 font-bold truncate max-w-[35%]">{therapist.name}</span>
         </nav>
@@ -408,7 +408,7 @@ export default function ThreadDetailPage({
           <div className="flex-1 min-w-0 flex flex-col justify-center">
             <Link to={`/shops/${shopId}`} className="inline-flex min-h-11 items-center gap-1.5 mb-1 text-sm font-bold text-slate-400 hover:text-white transition min-w-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">
               <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
-              <span className="truncate">{getDisplayName(shop.name)}</span>
+              <span className="truncate">{getDisplayName(shop.name, shop)}</span>
             </Link>
             <h1 className="text-2xl md:text-3xl font-black text-white leading-tight mb-2 break-words">
               {therapist.name}

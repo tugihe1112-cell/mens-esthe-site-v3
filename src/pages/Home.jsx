@@ -471,7 +471,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                       <div className="absolute bottom-2 left-2 right-2">
                         <p className="text-white font-black text-xs leading-tight [text-shadow:0_1px_4px_rgba(0,0,0,0.9)] truncate">{t.name}</p>
-                        {shop && <p className="text-pink-300 text-xs truncate mt-0.5">{getDisplayName(shop.name)}</p>}
+                        {shop && <p className="text-pink-300 text-xs truncate mt-0.5">{getDisplayName(shop.name, shop)}</p>}
                       </div>
                     </div>
                   </Link>
@@ -524,7 +524,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                   </div>
                 </div>
                 <div className="bg-slate-900 rounded-b-2xl px-3 py-2.5 border-t border-white/5">
-                  <h4 className="text-white font-black text-sm leading-tight truncate">{getDisplayName(shop.name)}</h4>
+                  <h4 className="text-white font-black text-sm leading-tight truncate">{getDisplayName(shop.name, shop)}</h4>
                   <p className="text-xs text-slate-400 truncate mt-0.5">{shop.prefecture || '東京'}{shop.city && shop.city !== shop.prefecture ? ` ${shop.city}` : ''}</p>
                 </div>
               </Link>
@@ -609,7 +609,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white font-black text-xs leading-tight truncate">{getDisplayName(shop.name)}</p>
+                      <p className="text-white font-black text-xs leading-tight truncate">{getDisplayName(shop.name, shop)}</p>
                       <p className="text-slate-400 text-xs mt-0.5 truncate">{shop.prefecture} {shop.city}</p>
                       <span className="text-pink-400 text-xs font-bold mt-1 block group-hover:translate-x-0.5 transition-transform">詳しく見る →</span>
                     </div>

@@ -199,7 +199,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
                       掲載店舗ピックアップ
                     </p>
                     <h3 className="text-xl md:text-4xl font-black text-white mb-2 md:mb-3 leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]">
-                      {getDisplayName(shop.name)}
+                      {getDisplayName(shop.name, shop)}
                     </h3>
                     <div className="flex flex-wrap items-center gap-2 mb-3 md:mb-5">
                       <LocationLabel className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white border border-white/20" parts={[shop.prefecture, shop.city]} />
@@ -219,7 +219,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
                 {/* 非アクティブ時：店舗名だけ薄く */}
                 {!isActive && (
                   <div className="absolute bottom-4 left-4 right-4">
-                    <p className="text-white/50 text-sm font-bold truncate">{getDisplayName(shop.name)}</p>
+                    <p className="text-white/50 text-sm font-bold truncate">{getDisplayName(shop.name, shop)}</p>
                   </div>
                 )}
               </div>

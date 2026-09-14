@@ -140,14 +140,14 @@ export default function PrefecturePage({
                       <div className="aspect-video overflow-hidden">
                         <LazyImage
                           src={shop.image_url}
-                          alt={getDisplayName(shop.name)}
+                          alt={getDisplayName(shop.name, shop)}
                           className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                         />
                       </div>
                     )}
                     <div className="p-3">
                       <h3 className="text-white font-black text-sm truncate group-hover:text-pink-400 transition">
-                        {getDisplayName(shop.name)}
+                        {getDisplayName(shop.name, shop)}
                       </h3>
                       <ShopStatusChip shop={shop} className="mt-1" />
                       {shop.city && (
