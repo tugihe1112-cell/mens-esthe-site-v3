@@ -142,9 +142,12 @@ for (const path of MUST_200) {
 for (const [path, expected] of MUST_301) {
   try {
     const res = await head(path);
-    if (res.status !== 301) {
+    // 301と308はどちらも恒久リダイレクトでGoogleの扱いも同じ。
+    // 実装は statusCode:301 を明示しているが、枠組みの既定値が変わっただけで
+    // 夜中にメールを飛ばさないよう、判定は「恒久リダイレクトであること」にする。
+    if (res.status !== 301 && res.status !== 308) {
       failures.push(
-        `[301が効いていない] ${path} が ${res.status} を返した（301であるべき）。\n` +
+        `[301が効いていない] ${path} が ${res.status} を返した（301/308であるべき）。\n` +
         `          複数ルームのブランドは1枚に集約している（D-014）。301が外れると同じ中身のページが復活し、\n` +
         `          GSCの「重複しています」が戻る。`
       );

@@ -96,7 +96,11 @@ export async function getServerSideProps({ params, res }) {
     // ⚠️ 単独店（group_idなし・ルーム1つ）はここを素通りする。506店が該当。
     const redirectTo = shopRedirectPath(shop, countRoomsByBrand(groupRes.data || []));
     if (redirectTo) {
-      return { redirect: { destination: redirectTo, permanent: true } };
+      // ⚠️ `permanent: true` と書いてはいけない。Next は **308** を返す
+      //    （next/dist/lib/redirect-status.js: permanent ? PermanentRedirect(308) : 307）。
+      //    SEO上は301と308は同じ扱いだが、外形監視・ログ・他社クローラは301を前提にしている。
+      //    `statusCode` と `permanent` は同時に指定できない。
+      return { redirect: { destination: redirectTo, statusCode: 301 } };
     }
 
     // 口コミ共有モデル: group_idがあれば系列全店のshop_idを対象にする

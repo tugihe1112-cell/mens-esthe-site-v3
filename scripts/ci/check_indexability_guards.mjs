@@ -170,8 +170,12 @@ requireMatch(searchPage, /const shopDetailUrl = brandCanonicalPath\(shop\)/,
   const brandPage2 = strip(read('src/pages/BrandPage.jsx'));
   const prefPage = strip(read('src/pages/PrefecturePage.jsx'));
 
-  requireMatch(shopWrapper, /redirect: \{ destination: redirectTo, permanent: true \}/,
+  requireMatch(shopWrapper, /redirect: \{ destination: redirectTo, statusCode: 301 \}/,
     '店舗ページからブランドページへの301が消えています（D-014）');
+  // 🚩 `permanent: true` は Next では **308** になる。外形監視は301を期待しているので、
+  //    この書き方に戻すと15分ごとに「301が効いていない」で赤くなる。
+  rejectMatch(shopWrapper, /redirect: \{[^}]*permanent:/,
+    '301を permanent:true で書いています（Nextは308を返すため監視が赤くなります。statusCode:301 と書くこと）');
   requireMatch(shopWrapper, /shopRedirectPath\(shop, countRoomsByBrand\(/,
     '301の判定が共有関数を通っていません（サイトマップ・内部リンクと食い違います）');
   // 🚩 ここが抜けるとルーム数を数えられず **301が一度も発火しない**（壊れないので気づけない）。
