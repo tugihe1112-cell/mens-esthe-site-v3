@@ -10,6 +10,7 @@ import LocationLabel from '../components/LocationLabel.jsx';
 import { joinFields } from '../utils/shopFields';
 import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
 export default function FavoritesPage() {
   const { favorites, favTherapists } = useAppContext();
@@ -198,6 +199,7 @@ export default function FavoritesPage() {
                         </div>
                       )}
                       <h3 className="text-lg font-black text-white truncate group-hover:text-blue-400 transition">{getDisplayName(shop.name)}</h3>
+                      <ShopStatusChip shop={shop} className="mt-1" />
                       {/* ⚠️ `shop.access` はDBに存在しないフィールドで、**全てのお気に入りに**
                           「アクセス情報なし」が出ていた。正しくは address（無ければ出さない）。 */}
                       <LocationLabel

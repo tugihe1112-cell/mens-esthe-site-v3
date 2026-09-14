@@ -6,6 +6,7 @@ import SeoHead from '../components/SeoHead.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import { PREF_SLUG_MAP } from '../data/areaLinks';
+import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
 // URL slug → 都道府県名（src/data/areaLinks.js に集約）
 // ⚠️ 以前はここに独自のリストを持っていたため ibaraki / tochigi / gunma が抜け、
@@ -148,6 +149,7 @@ export default function PrefecturePage({
                       <h3 className="text-white font-black text-sm truncate group-hover:text-pink-400 transition">
                         {getDisplayName(shop.name)}
                       </h3>
+                      <ShopStatusChip shop={shop} className="mt-1" />
                       {shop.city && (
                         <p className="text-slate-500 text-[11px] mt-0.5 truncate">
                           {shop.city}

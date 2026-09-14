@@ -695,6 +695,53 @@ function read(path) {
     }
   }
 
+  // ── 店舗の状態（閉店／営業未確認）も同じ作りで守る（2026-09-14）──
+  {
+    const shopHelper = strip(read('src/utils/shopStatus.js'));
+    if (!shopHelper) {
+      violations.push('[U07] src/utils/shopStatus.js が無い。閉店・営業未確認の判定と文言の集約先が失われる。');
+    } else {
+      if (!/export function shopStatusOf/.test(shopHelper)) {
+        violations.push('[U07] shopStatus.js の shopStatusOf の定義が消えている。');
+      }
+      // 🚩 「閉店」と「営業未確認」を1つに畳んではいけない。
+      //    サイトが消えた18店のうち15店は営業中だった（2026-09-13実測）。
+      //    確認できないだけの店に「閉店」と出すのは、営業中の店への誤情報。
+      for (const c of ['CLOSED_LABEL', 'CLOSED_SHORT', 'CLOSED_NOTE',
+                       'UNCONFIRMED_LABEL', 'UNCONFIRMED_SHORT', 'UNCONFIRMED_NOTE']) {
+        if (!new RegExp(`export const ${c}`).test(shopHelper)) {
+          violations.push(`[U07] shopStatus.js の ${c} が消えている（閉店と営業未確認の区別が失われる）。`);
+        }
+      }
+      for (const [re, label] of [
+        [/raw_data\.closed === true|raw\.closed === true/, '閉店の判定'],
+        [/operation_unconfirmed === true/, '営業未確認の判定'],
+      ]) {
+        if (!re.test(shopHelper)) violations.push(`[U07] shopStatus.js から「${label}」が外れている。`);
+      }
+      if (/UNCONFIRMED_LABEL\s*=\s*'閉店|UNCONFIRMED_SHORT\s*=\s*'閉店/.test(shopHelper)) {
+        violations.push('[U07] 「営業未確認」を「閉店」と表示している。確認できているのは「つながらない」ことだけ。');
+      }
+    }
+    // 帯・札が実際に描かれていること（importだけ残す改変を通さない）
+    for (const [file, tag, label] of [
+      ['src/pages/ShopDetailPage.jsx', '<ShopStatusBanner', '店舗ページの帯'],
+      ['src/pages/SearchPage.jsx', '<ShopStatusChip', '検索結果の札'],
+      ['src/pages/PrefecturePage.jsx', '<ShopStatusChip', 'エリア一覧の札'],
+    ]) {
+      if (!strip(read(file)).includes(tag)) {
+        violations.push(`[U07] ${label}（${file}）が描かれていない。`);
+      }
+    }
+    // 🚩 SSRは raw_data を丸ごと渡さない方針なので、印の2つだけ平らにして渡す必要がある。
+    //    ここが欠けると帯は本番で一度も出ない（ローカルでは気づけない）。
+    const shopSsr = strip(read('pages/shops/[shopId]/index.jsx'));
+    if (!/closed:\s*shop\.raw_data\?\.closed === true/.test(shopSsr)
+        || !/operationUnconfirmed:\s*shop\.raw_data\?\.operation_unconfirmed === true/.test(shopSsr)) {
+      violations.push('[U07] 店舗SSRが閉店・営業未確認の印を渡していない（帯がSSRで出ない）。');
+    }
+  }
+
   // 表示側3か所が**実際に呼んでいる**こと（importだけ残す改変を通さない）
   for (const [p, label] of [
     ['src/pages/ThreadDetailPage.jsx', '人物ページ'],

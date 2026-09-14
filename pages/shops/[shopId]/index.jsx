@@ -144,6 +144,11 @@ export async function getServerSideProps({ params, res }) {
           name: shop.name,
           image_url: shop.image_url || null,
           website_url: shop.website_url || null,
+          // ⚠️ 閉店・営業未確認の帯は**この2つだけ**を平らにして渡す。
+          //    raw_data ごと渡すと上のブロブ問題（HTMLが3倍）が戻る。
+          //    判定は src/utils/shopStatus.js（フラットなプロパティも見るようにしてある）。
+          closed: shop.raw_data?.closed === true,
+          operationUnconfirmed: shop.raw_data?.operation_unconfirmed === true,
         }
       : null;
 

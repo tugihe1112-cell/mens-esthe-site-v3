@@ -15,6 +15,7 @@ import LocationLabel from '../components/LocationLabel.jsx';
 import { joinFields, shapeShopRow } from '../utils/shopFields';
 import { trackEvent } from '../utils/analytics';
 import siteStats from '../data/stats-latest.json';
+import ShopStatusBanner from '../components/ShopStatusBanner.jsx';
 
 // 左サイドバーのタグ絞り込み（SearchPage と同一定義。表記を割らないため必ず揃える）
 // ⚠️ タグ定義をここに書き戻さないこと（src/data/constants.js が唯一の定義元）。
@@ -426,6 +427,9 @@ export default function ShopDetailPage({
               <h1 className="text-3xl md:text-6xl font-black text-white leading-tight mb-2 drop-shadow-xl tracking-tight line-clamp-2">
                  {getDisplayName(shop.name)}
                </h1>
+               {/* 閉店・営業未確認の帯。店名のすぐ下＝見落としようがない位置に置く。
+                   判定と文言は src/utils/shopStatus.js にしかない。 */}
+               <ShopStatusBanner shop={shop} className="mb-3 text-left" />
                <div className="flex items-start gap-3 text-slate-300 text-xs md:text-sm font-medium">
                  {/* 住所が無い店舗は614店（56%）。LocationLabelが空なら描画しないので「📍」だけ残らない。
                      住所が無くても都道府県・市区までは出せることが多いのでフォールバックする。 */}
