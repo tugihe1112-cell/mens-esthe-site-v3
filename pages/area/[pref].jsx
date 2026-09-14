@@ -11,6 +11,7 @@ import { createClient } from '@supabase/supabase-js';
 import PrefecturePage from '../../src/pages/PrefecturePage';
 import { PREF_SLUG_MAP } from '../../src/data/areaLinks';
 import { getDisplayName } from '../../src/utils/shopHelpers';
+import { buildBrands } from '../../src/utils/brandGroups.js';
 
 // 県リストは src/data/areaLinks.js に集約（4箇所に散らばって soft404 を生んだため）
 const PREF_MAP = PREF_SLUG_MAP;
@@ -30,18 +31,30 @@ export async function getServerSideProps({ params, res }) {
   try {
     const { data: shops, error: shopsError } = await supabase
       .from('shops')
-      .select('id, name, raw_data')
+      .select('id, name, group_id, raw_data')
       .eq('raw_data->>prefecture', prefName)
       .limit(1000);
     if (shopsError) throw shopsError;
 
-    const shopList = (shops || []).map((s) => ({
-      id: s.id, name: s.name, city: s.raw_data?.city || s.raw_data?.area || '',
+    // ⚠️ 支店レコードをそのまま並べると、同じブランドが何度も出る
+    //    （実測: AROMA EMERALD は中身が完全に同じ4レコード）。
+    //    セラピストは店舗ではなくブランドに属するので、一覧もブランド単位にする。
+    // ⚠️ この県のルームだけが渡るので、地名もこの県ぶんになる（エリアページとして正しい）。
+    const shopList = buildBrands(shops || []).map((b) => ({
+      id: b.primaryShopId || b.id,
+      name: b.name,
+      // 全ルームの地名。「渋谷にもあるブランド」が渋谷で見つかるために要る。
+      city: (b.areaLabels || []).join('・') || b.city || '',
     }));
     const shopCount = shopList.length;
 
     const areaCount = {};
-    for (const s of shopList) { const a = s.city || 'その他'; areaCount[a] = (areaCount[a] || 0) + 1; }
+    // 1ブランドが複数エリアに出るので、エリアごとに数える（連結文字列のままだと数えられない）
+    for (const s of shopList) {
+      for (const a of (s.city ? s.city.split('・') : ['その他'])) {
+        areaCount[a] = (areaCount[a] || 0) + 1;
+      }
+    }
     const topAreas = Object.entries(areaCount).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([a]) => a);
 
     let latestReviews = [];

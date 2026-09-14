@@ -7,6 +7,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import { PREF_SLUG_MAP } from '../data/areaLinks';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
+import { buildBrands, groupBrandsByArea } from '../utils/brandGroups.js';
 
 // URL slug → 都道府県名（src/data/areaLinks.js に集約）
 // ⚠️ 以前はここに独自のリストを持っていたため ibaraki / tochigi / gunma が抜け、
@@ -34,18 +35,16 @@ export default function PrefecturePage({
     });
   }, [shops, prefName, initialShops]);
 
-  const displayedShopCount = shops?.length > 0 ? prefShops.length : (initialShopCount || prefShops.length);
+  // ⚠️ 支店レコードをそのまま並べると同じブランドが何度も出る。
+  //    セラピストは店舗ではなくブランドに属するので、一覧もブランド単位にする。
+  const prefBrands = useMemo(() => buildBrands(prefShops), [prefShops]);
+
+  const displayedShopCount = shops?.length > 0 ? prefBrands.length : (initialShopCount || prefBrands.length);
 
   // エリア（市区）ごとにグループ化
-  const areaGroups = useMemo(() => {
-    const groups = {};
-    for (const shop of prefShops) {
-      const area = shop.area || shop.city || 'その他';
-      if (!groups[area]) groups[area] = [];
-      groups[area].push(shop);
-    }
-    return Object.entries(groups).sort(([, a], [, b]) => b.length - a.length);
-  }, [prefShops]);
+  // 🚩 振り分けの規則は brandGroups.js に集約（CIでテストしている）。
+  //    1ブランドが複数エリアにルームを持つときは、そのすべてのエリアに出す。
+  const areaGroups = useMemo(() => groupBrandsByArea(prefBrands), [prefBrands]);
 
   const title = prefName ? `${prefName}のメンズエステ${displayedShopCount}店舗・口コミ` : 'エリア別メンズエステ';
   const topAreaNames = areaGroups.slice(0, 3).map(([areaName]) => areaName).filter(Boolean);
@@ -133,7 +132,7 @@ export default function PrefecturePage({
                 {areaShops.map(shop => (
                   <Link
                     key={shop.id}
-                    to={`/shops/${shop.id}`}
+                    to={`/shops/${shop.primaryShopId || shop.id}`}
                     className="group bg-slate-900/60 border border-white/5 hover:border-pink-500/30 rounded-2xl overflow-hidden transition-all hover:-translate-y-0.5"
                   >
                     {shop.image_url && (

@@ -100,3 +100,28 @@ export function buildBrands(shops) {
   }
   return out;
 }
+
+/**
+ * ブランドをエリア（市区）ごとに振り分ける。
+ *
+ * 🚩 1ブランドが複数エリアにルームを持つときは、**そのすべてのエリアに出す**。
+ *    代表ルームのエリアだけに出すと、「渋谷を見ている人に、渋谷にルームがある
+ *    ブランドが出てこない」＝支店レコードを残している意味が無くなる。
+ *
+ * @returns {Array<[string, object[]]>} [エリア名, ブランド配列] を件数の多い順で
+ */
+export function groupBrandsByArea(brands, fallbackLabel = 'その他') {
+  const groups = new Map();
+  for (const brand of Array.isArray(brands) ? brands : []) {
+    if (!brand) continue;
+    const areas = uniq((brand.rooms || []).map(
+      (r) => (Array.isArray(r.area) ? r.area[0] : r.area) || r.city || '',
+    ));
+    for (const area of (areas.length ? areas : [fallbackLabel])) {
+      if (!groups.has(area)) groups.set(area, []);
+      const list = groups.get(area);
+      if (!list.some((b) => b.id === brand.id)) list.push(brand);
+    }
+  }
+  return [...groups.entries()].sort((a, b) => b[1].length - a[1].length);
+}
