@@ -749,6 +749,54 @@ const check = (name, fn) => {
   });
 }
 
+// ── ブランドにまとめても全ルームの地名で出ること（2026-09-14）─────────────
+// 🚩 支店レコードが存在する唯一の理由は「渋谷で検索した人に引っかかる」こと。
+//    ブランド1枚にまとめるとき地名を引き継ぎ損ねると、**代々木で検索しても出なくなる**。
+//    ここはオーナーが明示的に確認した要件なので、実データで固定する。
+{
+  const { buildBrands } = await loadModule('src/utils/brandGroups.js');
+  const { rankShops } = await loadModule('src/utils/searchMatch.js');
+
+  // 本番DBの実データ（Chocolate 3ルーム / Aroma Levante 3ルーム / 単独店1）
+  const SHOPS = [
+    { id: 'tokyo_shibuya_aroma_chocolate_tokyo', group_id: 'g_brand_chocolate', name: 'Chocolate (代々木ルーム)', prefecture: '東京都', city: '代々木', address: '東京都渋谷区代々木２丁目２７−１６ (最寄: 代々木駅)', area: ['代々木・原宿'], area_id: 'tokyo_shibuya_aroma' },
+    { id: 'tokyo_shinjuku_chocolate_shinjuku', group_id: 'g_brand_chocolate', name: 'Chocolate (新宿ルーム)', prefecture: '東京都', city: '新宿御苑', address: '東京都新宿区新宿２丁目６−４ (最寄: 新宿三丁目駅)', area: ['新宿御苑'], area_id: 'tokyo_shinjuku_chocolate' },
+    { id: 'tokyo_shinjuku_chocolate_shinokubo', group_id: 'g_brand_chocolate', name: 'Chocolate (新大久保ルーム)', prefecture: '東京都', city: '新大久保', address: '東京都新宿区百人町２丁目１１−２５ (最寄: 新大久保駅)', area: [], area_id: 'tokyo_shinjuku_chocolate' },
+    { id: 'tokyo_shibuya_aroma_levante', group_id: 'g_brand_aroma_levante', name: 'Aroma Levante (代々木ルーム)', prefecture: '東京都', city: '代々木', address: '東京都渋谷区代々木 (最寄: 代々木駅西口 徒歩5分)', area: ['代々木・原宿'], area_id: 'tokyo_shibuya_aroma' },
+    { id: 'tokyo_shinjuku_aroma_levante_shinjuku', group_id: 'g_brand_aroma_levante', name: 'Aroma Levante (新宿ルーム)', prefecture: '東京都', city: '新宿御苑', address: '東京都新宿区 (最寄: 新宿三丁目駅E1出口 徒歩3分)', area: ['新宿御苑'], area_id: 'tokyo_shinjuku_aroma' },
+    { id: 'tokyo_yoyogi_aroma_levante', group_id: 'g_brand_aroma_levante', name: 'Aroma Levante (代々木ルーム)', prefecture: null, city: null, address: null, area: [], area_id: 'tokyo_yoyogi_aroma' },
+    { id: 'solo_silk', group_id: null, name: 'Silk (シルク)', prefecture: '東京都', city: '渋谷区', address: '東京都渋谷区', area: ['渋谷'], area_id: 'tokyo_shibuya_silk' },
+  ];
+  const brands = buildBrands(SHOPS);
+  const hit = (q, name) => rankShops(brands, q).some((b) => String(b.name).includes(name));
+
+  check('ブランド: 7レコード→3ブランド', () => (brands.length === 3 ? null : `${brands.length}件になった`));
+  check('ブランド: 名前から支店名が消える', () => {
+    const b = brands.find((x) => x.id === 'g_brand_chocolate');
+    return b?.name === 'Chocolate' ? null : `「${b?.name}」になった`;
+  });
+  check('ブランド: 所属する全店舗のidを持つ', () => {
+    const b = brands.find((x) => x.id === 'g_brand_chocolate');
+    return b?.shopIds?.length === 3 ? null : `${b?.shopIds?.length}件`;
+  });
+  // ⭐ ここが本番。1枚にしても全ルームの地名で引っかかること。
+  for (const [q, name] of [
+    ['渋谷', 'Chocolate'], ['代々木', 'Chocolate'], ['新大久保', 'Chocolate'],
+    ['新宿', 'Chocolate'], ['原宿', 'Chocolate'],
+    ['代々木', 'Aroma Levante'], ['新宿', 'Aroma Levante'],
+    ['渋谷', 'Silk'],
+  ]) {
+    check(`⭐「${q}」で ${name} が出る`, () => (hit(q, name) ? null : '出なかった'));
+  }
+  check('ブランド: 関係ない地名では出ない', () => (hit('大阪', 'Chocolate') ? '大阪で出てしまった' : null));
+  check('ブランド: 店名でも出る', () => (hit('Chocolate', 'Chocolate') ? null : '店名で出なかった'));
+  check('ブランド: 空配列・nullで落ちない', () => {
+    if (buildBrands([]).length !== 0) return '空配列が0件でない';
+    if (buildBrands(null).length !== 0) return 'nullが0件でない';
+    return null;
+  });
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

@@ -114,9 +114,27 @@ export function kanaToRomaji(normalized) {
  * 店舗の検索対象テキストを作る。
  * 英字ブランド名には**カタカナ読みを併記**して、カタカナ入力でも当たるようにする。
  */
+/**
+ * 住所に語の切れ目を入れる。
+ *
+ * 🚩 2026-09-14 実測: 「東京都渋谷区代々木２丁目２７−１６」に対して
+ *    「渋谷」で検索してもヒットしなかった。住所が切れ目のない1語なので
+ *    tokenScore の「語の途中＝0.5」にしかならず、閾値0.7に届かないため。
+ *    **住所に書いてある地名が一生ヒットしない**という状態だった。
+ *
+ * ⚠️ 閾値を下げてはいけない。「宮城」が「竜宮城」に当たる既知の事故が戻る。
+ *    直すべきは閾値ではなく、住所に語の切れ目が無いこと。
+ *    都/道/府/県/市/区/郡/町/村/丁目 の後ろで切る（日本の住所の自然な区切り）。
+ * ⚠️ 先頭の1文字では切らない（「市ヶ谷」が「市 ヶ谷」に割れるのを防ぐ）。
+ */
+export function splitAddressWords(address) {
+  return String(address ?? '').replace(/(.{2,}?)(都|道|府|県|市|区|郡|町|村|丁目)(?=.)/gu, '$1$2 ');
+}
+
 export function buildSearchTarget(shop) {
   const areaStr = Array.isArray(shop.area) ? shop.area.join(' ') : (shop.area || '');
-  const base = [shop.name, areaStr, shop.city, shop.address, shop.area_id].filter(Boolean).join(' ');
+  const addressStr = splitAddressWords(shop.address);
+  const base = [shop.name, areaStr, shop.city, addressStr, shop.area_id].filter(Boolean).join(' ');
   const norm = normalizeForSearch(base);
   const nameOnly = normalizeForSearch(shop.name || '');
 
