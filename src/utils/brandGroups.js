@@ -72,16 +72,21 @@ export function buildBrands(shops) {
       ...head,
       id: key,
       isBrand: true,
+      // 表示・リンク用。ブランドページができるまでは代表ルームの店舗ページへ送る。
+      primaryShopId: head.id,
       shopIds: rooms.map((s) => s.id),
       roomCount: rooms.length,
       // 支店名を外したブランド名（getDisplayName は地名も所在地と照合して外す）
       name: getDisplayName(head.name, head),
-      // ── 検索に使う項目（全ルームぶん）──
-      area: areas,
-      city: cities.join(' '),
-      address: addresses.join(' '),
-      prefecture: prefectures.join(' '),
-      area_id: areaIds.join(' '),
+
+      // ⚠️ 表示用の項目（prefecture / city / address / area）は**代表ルームのまま**にする。
+      //    ここに全ルームぶんを詰めると、カードに「東京都 東京都」「代々木 新宿御苑」と
+      //    並んで読めなくなる。検索用は下の searchText に分ける。
+      // 🚩 検索に使う地名は**全ルームぶん**。ここが痩せると
+      //    「代々木で検索しても出ない」が起きる（このファイルの存在理由）。
+      searchText: [...areas, ...cities, ...addresses, ...prefectures, ...areaIds].join(' '),
+      // 画面で「どこにルームがあるか」を1行で出すための素材
+      areaLabels: uniq([...areas, ...cities]),
       // 画面で「どこにルームがあるか」を出すための素材
       rooms: rooms.map((s) => ({
         id: s.id,

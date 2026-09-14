@@ -134,7 +134,11 @@ export function splitAddressWords(address) {
 export function buildSearchTarget(shop) {
   const areaStr = Array.isArray(shop.area) ? shop.area.join(' ') : (shop.area || '');
   const addressStr = splitAddressWords(shop.address);
-  const base = [shop.name, areaStr, shop.city, addressStr, shop.area_id].filter(Boolean).join(' ');
+  // ⚠️ searchText はブランドにまとめたときの「全ルームぶんの地名」。
+  //    表示用の項目（city/address）は代表ルームのままなので、
+  //    これを足さないと他ルームの地名で検索しても出ない。
+  const base = [shop.name, areaStr, shop.city, addressStr, shop.area_id, splitAddressWords(shop.searchText)]
+    .filter(Boolean).join(' ');
   const norm = normalizeForSearch(base);
   const nameOnly = normalizeForSearch(shop.name || '');
 

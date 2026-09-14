@@ -790,6 +790,20 @@ const check = (name, fn) => {
   }
   check('ブランド: 関係ない地名では出ない', () => (hit('大阪', 'Chocolate') ? '大阪で出てしまった' : null));
   check('ブランド: 店名でも出る', () => (hit('Chocolate', 'Chocolate') ? null : '店名で出なかった'));
+  // 🚩 2026-09-14 実装中に踏んだ2つの穴。どちらも画面が壊れる。
+  check('⭐ブランド: リンク先が実在する店舗id（group_idのままだと404）', () => {
+    const b = brands.find((x) => x.id === 'g_brand_chocolate');
+    if (!b?.primaryShopId) return 'primaryShopId が無い';
+    if (!b.shopIds.includes(b.primaryShopId)) return `${b.primaryShopId} は所属ルームに無い`;
+    return b.primaryShopId === b.id ? 'group_id のままになっている' : null;
+  });
+  check('⭐ブランド: 表示用の項目を検索用で潰さない', () => {
+    const b = brands.find((x) => x.id === 'g_brand_chocolate');
+    // 全ルームを詰めると「代々木 新宿御苑 新大久保」になりカードが読めなくなる
+    if (String(b?.city || '').trim().includes(' ')) return `city が連結されている: ${b.city}`;
+    if (String(b?.prefecture || '').trim().includes(' ')) return `prefecture が連結されている: ${b.prefecture}`;
+    return null;
+  });
   check('ブランド: 空配列・nullで落ちない', () => {
     if (buildBrands([]).length !== 0) return '空配列が0件でない';
     if (buildBrands(null).length !== 0) return 'nullが0件でない';

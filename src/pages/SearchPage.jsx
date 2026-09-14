@@ -14,6 +14,8 @@ import { trackEvent } from '../utils/analytics';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 // 支店名は表示しない（地名は検索のためだけに name に入っている）
 import { getDisplayName } from '../utils/shopHelpers';
+// 検索結果はブランド単位。支店レコードは「渋谷で引っかかる」ための地名を持つだけ。
+import { buildBrands } from '../utils/brandGroups.js';
 
 // ─── ファジー店舗検索ユーティリティ ────────────────────────────
 // ⚠️ ロジック本体は src/utils/searchMatch.js に切り出してある（CIでテストするため）。
@@ -37,7 +39,9 @@ function ShopCard({ shop, onSelect }) {
 
   // 店舗名をクリックしたら、検索結果を中継せず正規店舗ページへ進む。
   // 店舗ページ自体にキャスト一覧があるため機能を失わず、内部リンク評価も本命URLへ集約できる。
-  const shopDetailUrl = `/shops/${shop.id}`;
+  // ⚠️ ブランドにまとめた行は id が group_id なので、そのままURLにすると404。
+  //    ブランドページをSSR化するまでは代表ルームの店舗ページへ送る。
+  const shopDetailUrl = `/shops/${shop.primaryShopId || shop.id}`;
 
   return (
     <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden transition-all">
@@ -220,6 +224,11 @@ const GRID_CLASS = 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-
 export default function SearchPage({ renderSeo = true }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { shops, shopById } = useShopData();
+  // ⚠️ 支店レコードをそのまま並べると、同じブランドが何枚も出る
+  //    （実測: AROMA EMERALD は中身が完全に同じページが4枚）。
+  //    ブランド単位にまとめる。地名は全ルームぶん引き継がれるので
+  //    「渋谷」でも「代々木」でも同じブランドが出る（CIで固定済み）。
+  const brands = useMemo(() => buildBrands(shops), [shops]);
 
   // --- URLパラメータから初期値を取得（旧 ?q= も shopQuery に統合）---
   const initShopId = searchParams.get('shopId') || '';
@@ -379,8 +388,11 @@ export default function SearchPage({ renderSeo = true }) {
         // 店舗クエリがある場合、マッチする shop_id リストを作成（関連度順）
         // ⚠️ 上位100件しかDBに問い合わせないので、**関連度順**であることが重要。
         //    以前は素の filter（DB順）だったため、関連の薄い店で枠が埋まる恐れがあった。
+        // ⚠️ ここで欲しいのは**セラピストを引くためのshop_id**なので、
+        //    ブランドで一致させたあと、所属する全ルームのidへ展開する。
+        //    展開を忘れると「渋谷で検索したのに代々木ルームの人が出ない」になる。
         const matchedShopIds = sq
-          ? rankShops(shops, shopQuery).map(s => s.id)
+          ? rankShops(brands, shopQuery).flatMap(b => b.shopIds || [b.id])
           : null; // null = 絞り込みなし
 
         let data = [];
@@ -475,7 +487,7 @@ export default function SearchPage({ renderSeo = true }) {
 
     fetch();
     return () => { cancelled = true; };
-  }, [shopQuery, castQuery, shops, retryToken]);
+  }, [shopQuery, castQuery, shops, brands, retryToken]);
 
   // セラピスト別口コミ件数・タグ・評価取得（serverTherapistsが更新されたら実行）
   // ⚠️ 2026-09-08（FIXES.md F04）: 集計キーを therapist_id にした。
@@ -526,8 +538,8 @@ export default function SearchPage({ renderSeo = true }) {
   //    （実際にオーナーから「一番上にそれが出てこない」と指摘された）。
   const matchingShops = useMemo(() => {
     if (!shopQuery.trim()) return [];
-    return rankShops(shops, shopQuery).slice(0, 20);
-  }, [shopQuery, shops]);
+    return rankShops(brands, shopQuery).slice(0, 20);
+  }, [shopQuery, brands]);
 
   // キャスト絞り込み（タグ）
   const filteredTherapists = useMemo(() => {

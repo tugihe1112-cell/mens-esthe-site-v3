@@ -46,7 +46,12 @@ requireMatch(threadWrapper, /'@type': 'ProfilePage'/, 'セラピストをProfile
 requireMatch(threadPage, /to=\{`\/shops\/\$\{shopId\}`\}/, 'セラピスト画面の店舗リンクが正規店舗URLではありません');
 requireMatch(homeReview, /const shopLink = `\/shops\/\$\{r\.shopId\}`/, 'ホーム口コミの店舗リンクが正規店舗URLではありません');
 requireMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/, 'ブランド一覧の店舗リンクが正規店舗URLではありません');
-requireMatch(searchPage, /const shopDetailUrl = `\/shops\/\$\{shop\.id\}`/, '検索結果の店舗リンクが正規店舗URLではありません');
+// ⚠️ 2026-09-14: 検索結果をブランド単位にまとめたため、行の id は group_id になった。
+//    そのままURLにすると `/shops/g_brand_xxx` で404するので primaryShopId を使う。
+//    守りたいのは「中継ページを挟まず正規の店舗URLへ直接リンクすること」なので、
+//    検査は外さず**実在する店舗idを使っているか**を見る形にする（START.md §5）。
+requireMatch(searchPage, /const shopDetailUrl = `\/shops\/\$\{shop\.primaryShopId \|\| shop\.id\}`/,
+  '検索結果の店舗リンクが正規店舗URLではありません（ブランド行は primaryShopId を使うこと）');
 requireMatch(postReviewPage, /data\.shopId \? `\/shops\/\$\{data\.shopId\}`/, '指名なし投稿後のリンクが正規店舗URLではありません');
 for (const [name, source] of [['表彰台', podiumCard], ['ランキング一覧', rankingListItem]]) {
   requireMatch(source, /item\.therapistId\s*\|\|\s*item\.id/, `${name}が実データのtherapistIdを使っていません`);
