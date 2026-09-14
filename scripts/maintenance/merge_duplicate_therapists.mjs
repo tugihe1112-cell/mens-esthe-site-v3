@@ -14,10 +14,19 @@
  *
  * 【残す行の決め方】
  *  1. 口コミが付いている行があれば**それを残す**（複数あればいちばん多い行）
- *  2. 次に**情報が埋まっている行**を残す（年齢・身長・カップ・スリーサイズ・写真）
- *     実測では、新しい取り込み（名前にスペースあり）のほうが情報が多い
- *  3. それでも並んだら is_active → last_seen_at → created_at → id の順で決める（毎回同じ結果になるように）
- *  4. 残す行に欠けている項目は、消す行から**埋めてから**消す（情報を落とさない）
+ *  2. 次に **last_seen_at が新しい行**（＝取り込みが今も維持している行）を残す
+ *
+ *     ⚠️ ここが最重要。取り込みスクリプトは id を名前から機械的に作っている:
+ *         `${shopId}_${name.replace(/\s+/g, '_')}`
+ *     つまり **取り込みが今も書いている側の行を消すと、次の取り込みで復活する**。
+ *     統合したつもりが元に戻り、また2行に増える。
+ *
+ *     ⚠️ 2026-09-13、最初は「情報が埋まっている行」を先に見ていたが、
+ *        `raw_data`（古い取り込みが残した塊）を持つ**古い行**が勝ってしまい、
+ *        今も更新されている新しい行を消す判定になっていた（下見で発覚）。
+ *        raw_data は利用者に見える情報ではないので、良し悪しの判断に使わない。
+ *  3. それでも並んだら is_active → 情報の埋まり具合 → created_at → id の順（毎回同じ結果になるように）
+ *  4. 残す行に欠けている項目は、消す行から**埋めてから**消す（情報を落とさない。raw_data も引き継ぐ）
  *  5. 消す行に付いた口コミは、残す行へ**付け替えてから**消す
  *
  * 【安全装置】
@@ -84,20 +93,26 @@ async function fetchAll(table, columns) {
   return out;
 }
 
-const FILL_FIELDS = ['image_url', 'profile_image', 'age', 'height', 'cup', 'three_size', 'bust', 'waist', 'hip', 'raw_data'];
-const filled = (t) => FILL_FIELDS.reduce((n, f) => n + (t?.[f] == null || t[f] === '' ? 0 : 1), 0);
+/** 残す行へ引き継ぐ項目（raw_data も落とさず引き継ぐ） */
+const COPY_FIELDS = ['image_url', 'profile_image', 'age', 'height', 'cup', 'three_size', 'bust', 'waist', 'hip', 'raw_data'];
+/** ⚠️ 良し悪しの判断に使う項目。raw_data は**入れない**。
+ *  古い取り込みの塊を持っているだけの行が「情報が多い」と判定され、
+ *  今も更新されている行を消してしまう（2026-09-13に下見で発覚）。 */
+const INFO_FIELDS = ['image_url', 'profile_image', 'age', 'height', 'cup', 'three_size', 'bust', 'waist', 'hip'];
+const filled = (t) => INFO_FIELDS.reduce((n, f) => n + (t?.[f] == null || t[f] === '' ? 0 : 1), 0);
 
 /** 残す行を決める。毎回同じ結果になること（ランダム・Setの順序に頼らない）。 */
 function pickSurvivor(rows, reviewCountById) {
   return [...rows].sort((a, b) => {
     const ra = reviewCountById.get(String(a.id)) || 0;
     const rb = reviewCountById.get(String(b.id)) || 0;
-    if (ra !== rb) return rb - ra;                       // 口コミが多い行
-    const fa = filled(a); const fb = filled(b);
-    if (fa !== fb) return fb - fa;                       // 情報が埋まっている行
-    if (!!a.is_active !== !!b.is_active) return a.is_active ? -1 : 1;
+    if (ra !== rb) return rb - ra;                       // ① 口コミが多い行
+    // ② 取り込みが今も維持している行。ここを外すと次の取り込みで消した行が復活する。
     const la = String(a.last_seen_at || ''); const lb = String(b.last_seen_at || '');
-    if (la !== lb) return lb.localeCompare(la);          // 新しく見かけた行
+    if (la !== lb) return lb.localeCompare(la);
+    if (!!a.is_active !== !!b.is_active) return a.is_active ? -1 : 1;  // ③ 在籍中
+    const fa = filled(a); const fb = filled(b);
+    if (fa !== fb) return fb - fa;                       // ④ 情報が埋まっている行
     const ca = String(a.created_at || ''); const cb = String(b.created_at || '');
     if (ca !== cb) return cb.localeCompare(ca);
     return String(a.id).localeCompare(String(b.id));
@@ -138,7 +153,7 @@ async function run() {
     const keep = pickSurvivor(rows, reviewCountById);
     const drop = rows.filter((r) => String(r.id) !== String(keep.id));
     const patch = {};
-    for (const f of FILL_FIELDS) {
+    for (const f of COPY_FIELDS) {
       if (keep[f] != null && keep[f] !== '') continue;
       const donor = drop.find((d) => d[f] != null && d[f] !== '');
       if (donor) patch[f] = donor[f];
