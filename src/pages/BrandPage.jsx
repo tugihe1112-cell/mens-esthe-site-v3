@@ -23,6 +23,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
 import { buildBrands } from '../utils/brandGroups.js';
+import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
 const fmtDate = (v) => {
@@ -37,10 +38,16 @@ export default function BrandPage({
   ssrReviews = [],
   ssrReviewCount = 0,
   ssrAvgRating = null,
+  ssrRoster = [],
+  ssrRosterTruncated = false,
+  ssrNearbyBrands = [],
+  ssrNearbyScope = 'prefecture',
+  ssrArea = null,
+  ssrPrefecture = null,
   renderSeo = true,
 }) {
   const { brandId } = useParams();
-  const { shops, loading } = useShopData();
+  const { shops, loading, getTherapistsByShopId } = useShopData();
 
   // SSRで渡ってきたブランドを優先。クライアント単体で開かれたときだけ組み立てる。
   const brand = React.useMemo(() => {
@@ -49,6 +56,29 @@ export default function BrandPage({
     const rooms = shops.filter((s) => s.group_id === brandId || s.id === brandId);
     return rooms.length ? buildBrands(rooms)[0] : null;
   }, [ssrBrand, shops, brandId]);
+
+  // 在籍セラピスト。SSRは先頭24名だけ焼いてある（420名規模のブランドがあるためHTMLを膨らませない）。
+  // クライアントでは全ルームぶんを集めて**人単位**で重複除去する。
+  // ⚠️ 咲さんは渋谷店にも代々木店にも行を持つ。素直に並べると同じ人が並ぶ。
+  const roster = React.useMemo(() => {
+    const seen = new Set();
+    const out = [];
+    const push = (t) => {
+      if (!t || t.is_active === false) return;
+      const img = t.image_url || t.imageUrl;
+      if (!String(img || '').trim()) return;
+      const key = normalizeTherapistName(t.name);
+      if (!key || seen.has(key)) return;
+      seen.add(key);
+      out.push({ id: t.id, name: t.name || '', image_url: img, shopId: t.shopId || t.shop_id });
+    };
+    (ssrRoster || []).forEach(push);
+    const ids = ssrBrand?.shopIds || brand?.shopIds || (brand?.rooms || []).map((r) => r.id);
+    if (getTherapistsByShopId) {
+      for (const id of ids || []) (getTherapistsByShopId(id) || []).forEach(push);
+    }
+    return out;
+  }, [ssrRoster, ssrBrand, brand, getTherapistsByShopId]);
 
   if (!brand && loading) {
     return (<><SeoHead title="店舗ブランド" noindex /><div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 text-sm">読み込み中...</div></>);
@@ -69,6 +99,12 @@ export default function BrandPage({
 
   const rooms = brand.rooms || [];
   const areaLabels = brand.areaLabels || [];
+  // 口コミ投稿の宛先は実在の店舗ID。ブランドIDを渡すと投稿画面が店舗を引けない。
+  const reviewShopId = brand.primaryShopId || rooms[0]?.id || brand.id;
+  // ⚠️ 見出しは実際に使った集合に合わせる（F06-C）。同県へ広げたのに地域名で書かない。
+  const nearbyHeading = ssrNearbyScope === 'area' && ssrArea
+    ? `${ssrArea}の他のブランド`
+    : (ssrPrefecture ? `${ssrPrefecture}の他のブランド` : '他のブランド');
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-24">
@@ -106,6 +142,16 @@ export default function BrandPage({
                 口コミ{ssrReviewCount}件{ssrAvgRating ? ` ★${ssrAvgRating}` : ''}
               </span>
             )}
+          </div>
+          {/* ⚠️ 口コミ投稿の導線は必ず残す。店舗ページには「口コミを書く」があり、
+              ここに無いまま店舗ページを畳むとサイトの一次コンテンツの入口が消える。 */}
+          <div className="flex flex-wrap gap-3 mt-5">
+            <Link
+              to={`/shops/${reviewShopId}/review`}
+              className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-black text-sm px-5 py-3 rounded-xl transition"
+            >
+              ✍️ 口コミを書く
+            </Link>
           </div>
           {brand.website_url && (
             <a
@@ -162,6 +208,35 @@ export default function BrandPage({
           </section>
         )}
 
+        {/* 在籍セラピスト＝このページの本体。
+            ⚠️ セラピストは店舗ではなくブランドに属する。全ルームぶんを1つの名簿として出す。
+            ⚠️ SSR分だけでも初期HTMLに名前とリンクが載る（D-013: JS実行前に本文と内部リンク）。 */}
+        {roster.length > 0 && (
+          <section>
+            <h2 className="text-base font-black text-white mb-3">
+              在籍セラピスト
+              {ssrTherapistCount > 0 && <span className="ml-2 text-xs font-bold text-slate-500">{ssrTherapistCount}名</span>}
+            </h2>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+              {roster.map((t) => (
+                <Link
+                  key={t.id}
+                  to={`/shops/${t.shopId || reviewShopId}/threads/${t.id}`}
+                  className="group bg-slate-900 rounded-xl overflow-hidden border border-white/5 hover:border-pink-500/50 transition"
+                >
+                  <div className="aspect-[3/4] overflow-hidden bg-slate-800">
+                    <LazyImage src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
+                  </div>
+                  <p className="text-[11px] text-slate-300 group-hover:text-pink-300 font-bold px-2 py-1.5 truncate">{t.name}</p>
+                </Link>
+              ))}
+            </div>
+            {ssrRosterTruncated && roster.length <= (ssrRoster || []).length && (
+              <p className="text-xs text-slate-500 mt-2">写真を確認できるセラピストを表示しています。</p>
+            )}
+          </section>
+        )}
+
         {/* ルームは「どこにあるか」が分かればよい。支店を主役にしない。 */}
         {rooms.length > 0 && (
           <section>
@@ -174,6 +249,29 @@ export default function BrandPage({
                     className="inline-block text-xs text-slate-300 hover:text-pink-300 bg-slate-900 hover:bg-slate-800 border border-white/10 rounded-full px-3 py-1.5 transition"
                   >
                     {r.area || r.city || r.prefecture || 'ルーム'}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* 同エリア他ブランド＝回遊とクロールの経路。
+            ⚠️ 店舗ページの「他の店舗」に相当する。ここを持たないまま店舗ページを畳むと
+               エリアページ→店舗の内部リンクで索引を戻した経緯（D-001 補足）を細らせる。
+            ⚠️ 送り先は店舗ではなくブランド。店舗へ送ると同じブランドの支店が並ぶ。 */}
+        {ssrNearbyBrands.length > 0 && (
+          <section>
+            <h2 className="text-base font-black text-white mb-3">{nearbyHeading}</h2>
+            <ul className="flex flex-wrap gap-2">
+              {ssrNearbyBrands.map((b) => (
+                <li key={b.id}>
+                  <Link
+                    to={`/brands/${b.id}`}
+                    className="inline-block text-xs text-slate-300 hover:text-pink-300 bg-slate-900 hover:bg-slate-800 border border-white/10 rounded-full px-3 py-1.5 transition"
+                  >
+                    {b.name}
+                    {b.areaLabel && <span className="text-slate-500 ml-1">{b.areaLabel}</span>}
                   </Link>
                 </li>
               ))}

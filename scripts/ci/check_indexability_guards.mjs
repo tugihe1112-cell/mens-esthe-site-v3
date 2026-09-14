@@ -86,6 +86,37 @@ requireMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/, 'ブランド一�
     'ブランドページが全ルームの地名を取り出していません（渋谷で検索した人が辿り着けなくなります）');
   requireMatch(brandPage, /parts=\{areaLabels\}/,
     'ブランドページが全ルームの地名を描画に渡していません');
+
+  // ── 店舗ページと同等の中身（301で寄せる前提条件）───────────────────
+  // ⚠️ 店舗ページが持っていてブランドページに無い要素があるまま301を入れると、
+  //    348枚を**痩せたページへ寄せる**ことになる。ここで機械的に揃っているか見張る。
+  // ⚠️ 「therapists を引いているか」では**在籍数カウントのクエリ**に当たって素通りする
+  //    （2026-09-14 妨害テストで実際に素通りした。「参照ではなく効果」の取り違え通算7回目）。
+  //    名簿に要る列（name と image_url）を取っていることまで見る。
+  requireMatch(brandWrapper, /from\('therapists'\)\.select\('id, name, image_url/,
+    'ブランドページが在籍セラピストを取得していません（店舗ページにある本体の中身が欠けます）');
+  requireMatch(brandPage, /roster\.map\(/,
+    'ブランドページが在籍セラピストを描画していません');
+  // 🚩 人単位の重複除去。ここを独自実装に戻すと同じ人が全ルームぶん並ぶ。
+  requireMatch(brandWrapper, /normalizeTherapistName\(t\.name\)/,
+    'ブランドページSSRの在籍セラピスト重複除去が normalizeTherapistName を使っていません');
+  requireMatch(brandPage, /normalizeTherapistName\(t\.name\)/,
+    'ブランドページの在籍セラピスト重複除去が normalizeTherapistName を使っていません');
+  // 🚩 口コミ投稿の導線。これが無いまま店舗ページを畳むと一次コンテンツの入口が消える。
+  requireMatch(brandPage, /to=\{`\/shops\/\$\{reviewShopId\}\/review`\}/,
+    'ブランドページに口コミ投稿の導線がありません（サイトの一次コンテンツの入口です）');
+  requireMatch(brandPage, /const reviewShopId = brand\.primaryShopId/,
+    '口コミ投稿の宛先がブランドIDになっています（投稿画面は実在の店舗IDを要ります）');
+  // 🚩 回遊・クロール経路。送り先は店舗ではなくブランド（店舗へ送ると301と往復する）。
+  requireMatch(brandPage, /to=\{`\/brands\/\$\{b\.id\}`\}/,
+    'ブランドページに他ブランドへの内部リンクがありません（回遊とクロールの経路が切れます）');
+  requireMatch(brandWrapper, /pickNearbyBrands\(/,
+    'ブランドページSSRが同エリア他ブランドを取得していません');
+  // 🚩 店舗ページが持っている構造化データを揃える
+  requireMatch(brandWrapper, /'@type': 'BreadcrumbList'/,
+    'ブランドページにパンくず構造化データがありません（店舗ページは持っています）');
+  requireMatch(brandWrapper, /reviewBody:/,
+    'ブランドページの構造化データに口コミ本文がありません（店舗ページは持っています）');
 }
 
 requireMatch(searchPage, /const shopDetailUrl = `\/shops\/\$\{shop\.primaryShopId \|\| shop\.id\}`/,

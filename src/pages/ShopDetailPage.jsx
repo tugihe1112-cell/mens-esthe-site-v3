@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { authHeaders } from '../utils/supabaseRest';
-import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews } from '../utils/reviewIdentity.js';
+import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews, normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { useAppContext } from '../context/AppContext.tsx';
@@ -227,7 +227,9 @@ export default function ShopDetailPage({
       : (getTherapistsByShopId ? getTherapistsByShopId(shopId) : []);
     const seen = new Set();
     return (source || []).filter((therapist) => {
-      const key = (therapist.name || '').replace(/[\s　]/g, '').trim();
+      // ⚠️ 独自の正規化を書かない。ここだけ半角/全角・大文字小文字を畳まないと
+      //    「ｱｲ」と「アイ」が別人として2枚並ぶ。人物同定は reviewIdentity に一本化する。
+      const key = normalizeTherapistName(therapist.name);
       if (!key || seen.has(key)) return false;
       seen.add(key);
       return true;

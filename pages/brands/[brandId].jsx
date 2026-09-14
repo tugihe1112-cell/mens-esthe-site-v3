@@ -17,7 +17,8 @@ import React from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import BrandPage from '../../src/pages/BrandPage';
-import { buildBrands } from '../../src/utils/brandGroups.js';
+import { buildBrands, pickNearbyBrands } from '../../src/utils/brandGroups.js';
+import { normalizeTherapistName } from '../../src/utils/reviewIdentity.js';
 
 export async function getServerSideProps({ params, res }) {
   const { brandId } = params;
@@ -46,10 +47,21 @@ export async function getServerSideProps({ params, res }) {
     const brand = buildBrands(rooms)[0];
     const shopIds = rooms.map((s) => s.id);
 
-    const [therapistRes, reviewRes, revTRes] = await Promise.all([
+    // 代表ルーム＝口コミ投稿の宛先。投稿APIは shop_id を要るので必ず実在の店舗IDを渡す。
+    const primaryShopId = brand.primaryShopId || rooms[0].id;
+    // ⚠️ brand.prefecture / brand.area を直接読んではいけない。
+    //    buildBrands は代表行をそのまま展開するので、DBの生レコードでは
+    //    prefecture も area も**トップレベルには無い**（raw_data の中にある）＝常に undefined になり、
+    //    「同エリアの他ブランド」が永久に同県フォールバックへ落ちる（静かに劣化する型）。
+    //    正規化済みの brand.rooms から取る。
+    const headRoom = (brand.rooms || []).find((r) => r.id === brand.primaryShopId) || (brand.rooms || [])[0] || null;
+    const prefecture = headRoom?.prefecture || null;
+    const headArea = (Array.isArray(headRoom?.area) ? headRoom.area[0] : headRoom?.area) || null;
+
+    const [therapistRes, reviewRes, revTRes, rosterRes, nearRes] = await Promise.all([
       supabase.from('therapists').select('id', { count: 'exact', head: true }).in('shop_id', shopIds),
       supabase.from('reviews')
-        .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at')
+        .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at, user_name')
         .in('shop_id', shopIds)
         .or('is_public.eq.true,user_id.eq.owner_manual')
         .order('created_at', { ascending: false })
@@ -62,10 +74,19 @@ export async function getServerSideProps({ params, res }) {
         .not('therapist_id', 'is', null)
         .order('created_at', { ascending: false })
         .limit(60),
+      // 在籍セラピスト（写真グリッド用）。店舗ページと同じ条件＝写真が確認できる行だけ。
+      // ⚠️ ブランドは最大420名規模。SSRに全員は焼かない（HTMLが膨れる）。取得だけ広めにして下で絞る。
+      supabase.from('therapists').select('id, name, image_url, shop_id, is_active').in('shop_id', shopIds).limit(500),
+      // 同エリア他ブランド（回遊＋クロール経路）。店舗ページの「他の店舗」に相当する。
+      prefecture
+        ? supabase.from('shops').select('id, name, group_id, raw_data').eq('raw_data->>prefecture', prefecture).limit(120)
+        : Promise.resolve({ data: null }),
     ]);
     if (therapistRes.error) throw therapistRes.error;
     if (reviewRes.error) throw reviewRes.error;
     if (revTRes.error) throw revTRes.error;
+    if (rosterRes.error) throw rosterRes.error;
+    if (nearRes.error) throw nearRes.error;
 
     const seenT = new Set();
     const reviewedTherapists = [];
@@ -75,6 +96,28 @@ export async function getServerSideProps({ params, res }) {
       reviewedTherapists.push({ id: r.therapist_id, name: r.therapist_name || '', shopId: r.shop_id, rating: r.rating || null });
       if (reviewedTherapists.length >= 12) break;
     }
+
+    // 在籍セラピストは**人単位で重複除去**する。
+    // ⚠️ 同じ咲さんが3ルームぶん3行あるので、素直に並べると同じ人が3回出る。
+    //    キーは reviewIdentity の normalizeTherapistName に統一する（NFKC＋空白除去＋小文字）。
+    //    ここで独自の正規化を書くと「似鳥 芹香 / 似鳥芹香」が別人に戻る。
+    const seenPerson = new Set();
+    const roster = [];
+    for (const t of rosterRes.data || []) {
+      if (!t || t.is_active === false) continue;
+      if (!String(t.image_url || '').trim()) continue;
+      const key = normalizeTherapistName(t.name);
+      if (!key || seenPerson.has(key)) continue;
+      seenPerson.add(key);
+      roster.push({ id: t.id, name: t.name || '', image_url: t.image_url, shopId: t.shop_id });
+      if (roster.length >= 24) break;
+    }
+
+    const nearby = pickNearbyBrands(nearRes.data, {
+      area: headArea,
+      excludeIds: [brand.id, ...shopIds],
+      limit: 8,
+    });
 
     const reviews = reviewRes.data || [];
     const count = reviews.length;
@@ -91,6 +134,7 @@ export async function getServerSideProps({ params, res }) {
           website_url: brand.website_url || null,
           roomCount: brand.roomCount,
           areaLabels: brand.areaLabels || [],
+          primaryShopId,
           // ⚠️ raw_data は丸ごと渡さない（1店約11.9KBでHTMLが膨れる）。必要な項目だけ平らにする。
           rooms: (brand.rooms || []).map((r) => ({
             id: r.id, prefecture: r.prefecture, city: r.city, address: r.address,
@@ -103,6 +147,12 @@ export async function getServerSideProps({ params, res }) {
         ssrReviewCount: count,
         ssrAvgRating: avg,
         ssrSample: sample,
+        ssrRoster: roster,
+        ssrRosterTruncated: (therapistRes.count || 0) > roster.length,
+        ssrNearbyBrands: nearby.brands,
+        ssrNearbyScope: nearby.scope,
+        ssrArea: headArea,
+        ssrPrefecture: prefecture,
       },
     };
   } catch (e) {
@@ -111,12 +161,13 @@ export async function getServerSideProps({ params, res }) {
     res.statusCode = 503;
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Retry-After', '120');
-    return { props: { ssrBrand: null, ssrTherapistCount: 0, ssrReviewedTherapists: [], ssrReviews: [], ssrReviewCount: 0, ssrAvgRating: null, ssrSample: '' } };
+    return { props: { ssrBrand: null, ssrTherapistCount: 0, ssrReviewedTherapists: [], ssrReviews: [], ssrReviewCount: 0, ssrAvgRating: null, ssrSample: '', ssrRoster: [], ssrRosterTruncated: false, ssrNearbyBrands: [], ssrNearbyScope: 'prefecture', ssrArea: null, ssrPrefecture: null } };
   }
 }
 
 export default function BrandSSRPage({
   ssrBrand, ssrTherapistCount = 0, ssrReviewedTherapists = [], ssrReviews = [], ssrReviewCount = 0, ssrAvgRating = null, ssrSample = '',
+  ssrRoster = [], ssrRosterTruncated = false, ssrNearbyBrands = [], ssrNearbyScope = 'prefecture', ssrArea = null, ssrPrefecture = null,
 }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
   const name = ssrBrand?.name || '';
@@ -152,6 +203,15 @@ export default function BrandSSRPage({
     } : {}),
     ...(ssrReviewCount > 0 && ssrAvgRating ? {
       aggregateRating: { '@type': 'AggregateRating', ratingValue: ssrAvgRating, reviewCount: ssrReviewCount, bestRating: 5, worstRating: 1 },
+      // ⚠️ 本文つきの review[] を出す。店舗ページ側は持っていてブランド側に無いと、
+      //    301で寄せたときにリッチリザルトの材料だけ痩せる。
+      review: ssrReviews.slice(0, 5).map((r) => ({
+        '@type': 'Review',
+        reviewRating: { '@type': 'Rating', ratingValue: Number(r.rating || 0), bestRating: 5, worstRating: 1 },
+        author: { '@type': 'Person', name: r.user_name || '匿名' },
+        datePublished: r.created_at?.slice(0, 10),
+        reviewBody: (r.content || '').slice(0, 1500),
+      })),
     } : {}),
   } : null;
 
@@ -165,6 +225,16 @@ export default function BrandSSRPage({
             follow を残すのでセラピストページへのクロール経路は殺さない。
             口コミが1件でも付けば自動で index 対象に戻る（手動の戻し作業を作らない）。 */}
         {ssrReviewCount === 0 && <meta name="robots" content="noindex,follow" />}
+        {/* パンくず（Home > ブランド）。店舗ページが持っているものをブランド側にも揃える。 */}
+        {ssrBrand && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'メンエスマップ', item: SITE },
+              { '@type': 'ListItem', position: 2, name, item: canonical },
+            ],
+          }) }} />
+        )}
         {businessLd && (
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessLd) }} />
         )}
@@ -176,6 +246,12 @@ export default function BrandSSRPage({
         ssrReviews={ssrReviews}
         ssrReviewCount={ssrReviewCount}
         ssrAvgRating={ssrAvgRating}
+        ssrRoster={ssrRoster}
+        ssrRosterTruncated={ssrRosterTruncated}
+        ssrNearbyBrands={ssrNearbyBrands}
+        ssrNearbyScope={ssrNearbyScope}
+        ssrArea={ssrArea}
+        ssrPrefecture={ssrPrefecture}
         renderSeo={false}
       />
     </>

@@ -125,3 +125,40 @@ export function groupBrandsByArea(brands, fallbackLabel = 'その他') {
   }
   return [...groups.entries()].sort((a, b) => b[1].length - a[1].length);
 }
+
+/**
+ * 同エリア（足りなければ同県）の**他ブランド**を返す。
+ *
+ * ⚠️ 店舗ページの「他の店舗」(pickNearbyShops)と同じ回遊・クロール導線だが、
+ *    返すのは店舗ではなく**ブランド**。ここを店舗のまま出すと
+ *    (a) 同じブランドの支店が3枚並んで「1枚にまとめた」意味が消える
+ *    (b) ブランドページから店舗ページへ送り返すリンクになる（301を入れると往復する）
+ *
+ * ⚠️ scope を返す理由は pickNearbyShops と同じ（F06-C）。
+ *    同エリアが足りず同県へ広げたのに、見出しだけ元の地域名のままにしない。
+ *
+ * @param {object[]} rows 同県の店舗行（raw_data 付きの生レコードでよい）
+ * @param {{area?: string|null, excludeIds?: string[], limit?: number}} opts
+ *        excludeIds には**自分のブランドIDと全ルームIDの両方**を渡すこと。
+ *        片方だけだと自分自身が「他のブランド」に出る。
+ */
+export function pickNearbyBrands(rows, { area = null, excludeIds = [], limit = 8 } = {}) {
+  const exclude = new Set((excludeIds || []).filter(Boolean).map(String));
+  const brands = buildBrands(Array.isArray(rows) ? rows : []).filter(
+    (b) => !exclude.has(String(b.id)) && !(b.shopIds || []).some((id) => exclude.has(String(id))),
+  );
+  const inArea = brands.filter((b) => (b.rooms || []).some((r) => {
+    const a = Array.isArray(r.area) ? r.area[0] : r.area;
+    return Boolean(a) && a === area;
+  }));
+  const useArea = Boolean(area) && inArea.length >= 3;
+  return {
+    scope: useArea ? 'area' : 'prefecture',
+    brands: (useArea ? inArea : brands).slice(0, limit).map((b) => ({
+      id: b.id,
+      name: b.name,
+      areaLabel: (b.areaLabels || [])[0] || null,
+      roomCount: b.roomCount || 1,
+    })),
+  };
+}

@@ -754,7 +754,7 @@ const check = (name, fn) => {
 //    ブランド1枚にまとめるとき地名を引き継ぎ損ねると、**代々木で検索しても出なくなる**。
 //    ここはオーナーが明示的に確認した要件なので、実データで固定する。
 {
-  const { buildBrands, groupBrandsByArea } = await loadModule('src/utils/brandGroups.js');
+  const { buildBrands, groupBrandsByArea, pickNearbyBrands } = await loadModule('src/utils/brandGroups.js');
   const { rankShops } = await loadModule('src/utils/searchMatch.js');
 
   // 本番DBの実データ（Chocolate 3ルーム / Aroma Levante 3ルーム / 単独店1）
@@ -828,6 +828,86 @@ const check = (name, fn) => {
     });
     check('エリア: 空・nullで落ちない', () =>
       (groupBrandsByArea([]).length === 0 && groupBrandsByArea(null).length === 0 ? null : '0件でない'));
+  }
+
+  // ── 「他のブランド」（ブランドページの回遊・クロール経路） ──
+  // ⚠️ 別フィクスチャにする。上の SHOPS に行を足すと groupBrandsByArea の件数順テストが動く。
+  {
+    const NEAR = [
+      ...SHOPS,
+      { id: 'solo_a', group_id: null, name: 'アロマA', prefecture: '東京都', city: '代々木', address: '東京都渋谷区代々木１', area: ['代々木・原宿'], area_id: 'x_a' },
+      { id: 'solo_b', group_id: null, name: 'アロマB', prefecture: '東京都', city: '代々木', address: '東京都渋谷区代々木２', area: ['代々木・原宿'], area_id: 'x_b' },
+    ];
+    const self = { id: 'g_brand_chocolate', shopIds: SHOPS.filter((s2) => s2.group_id === 'g_brand_chocolate').map((s2) => s2.id) };
+    const near = pickNearbyBrands(NEAR, { area: '代々木・原宿', excludeIds: [self.id, ...self.shopIds], limit: 8 });
+
+    // ⭐ 一番効くところ: 自分が「他のブランド」に出ないこと。
+    //    ブランドIDだけ／ルームIDだけの除外では片方をすり抜ける。両方を効果で見る。
+    check('⭐他ブランド: 自分のブランドが出ない', () =>
+      (near.brands.some((b) => b.id === 'g_brand_chocolate') ? '自分が出た' : null));
+    check('⭐他ブランド: 自分のルームIDでも出ない', () => {
+      const byRoom = pickNearbyBrands(NEAR, { area: '代々木・原宿', excludeIds: SHOPS.filter((s2) => s2.group_id === 'g_brand_chocolate').map((s2) => s2.id) });
+      return byRoom.brands.some((b) => b.id === 'g_brand_chocolate') ? 'ルームID除外が効いていない' : null;
+    });
+    check('⭐他ブランド: 送り先が /brands/ に使えるブランドID（group_id）', () => {
+      const lev = near.brands.find((b) => String(b.name).includes('Levante'));
+      if (!lev) return 'Levante が出なかった';
+      return lev.id === 'g_brand_aroma_levante' ? null : `id が ${lev.id}`;
+    });
+    // ⚠️ ここは**件数で判定してはいけない**。エリア絞り込みを丸ごと外しても
+    //    「3件以上」「scope==='area'」は両方そのまま通る（2026-09-14 妨害テストで素通り）。
+    //    見るのは中身＝「同県だが別エリアの Silk(渋谷) が混ざっていないか」。
+    check('⭐他ブランド: scope=area のとき別エリアの店を混ぜない', () => {
+      if (near.scope !== 'area') return `scope が ${near.scope}（フィクスチャが同エリア3件未満になっている）`;
+      if (near.brands.some((b) => String(b.name).includes('Silk'))) return '渋谷の Silk が代々木・原宿に混ざった';
+      const want = ['Levante', 'アロマA', 'アロマB'];
+      const missing = want.filter((w) => !near.brands.some((b) => String(b.name).includes(w)));
+      return missing.length ? `同エリアなのに出ない: ${missing.join(',')}` : null;
+    });
+    check('⭐他ブランド: 同エリアが足りなければ同県へ広げ scope=prefecture', () => {
+      const r = pickNearbyBrands(NEAR, { area: '存在しないエリア', excludeIds: ['g_brand_chocolate'] });
+      if (r.scope !== 'prefecture') return `scope が ${r.scope}`;
+      if (!r.brands.some((b) => String(b.name).includes('Silk'))) return '同県フォールバックなのに別エリアの Silk が出ない';
+      // ⚠️ ブランドIDだけを渡す呼び方でも自分が出ないこと。
+      //    ルームIDも一緒に渡す呼び方だけを検査すると、ID除外を消しても素通りする（保護の二重掛け）。
+      return r.brands.some((b) => b.id === 'g_brand_chocolate') ? 'ブランドID単独の除外が効いていない' : null;
+    });
+    check('他ブランド: limit が効く', () =>
+      (pickNearbyBrands(NEAR, { area: '代々木・原宿', excludeIds: [], limit: 2 }).brands.length === 2 ? null : 'limitが効かない'));
+    check('他ブランド: 空・nullで落ちない', () => {
+      if (pickNearbyBrands([], {}).brands.length !== 0) return '空配列が0件でない';
+      if (pickNearbyBrands(null, {}).brands.length !== 0) return 'nullが0件でない';
+      if (pickNearbyBrands(NEAR).brands.length === 0) return '引数省略で0件';
+      return null;
+    });
+  }
+
+  // ── DBの生レコード形（raw_data入れ子）でも地名が取れること ──────────
+  // ⚠️ 上の SHOPS は prefecture / area をトップレベルに持つ「整形済み」の形。
+  //    ところが**SSRがDBから受け取るのは raw_data に入れ子になった生レコード**で、
+  //    トップレベルの prefecture / area は undefined。
+  //    2026-09-14、ブランドSSRで `brand.prefecture` を直接読んでおり、
+  //    「同エリアの他ブランド」が本番で永久に同県フォールバックへ落ちる状態だった
+  //    （壊れないので気づけない＝静かに劣化する型）。整形済みフィクスチャでは再現しない。
+  {
+    const RAW = [
+      { id: 'raw_1', group_id: 'g_raw', name: 'アロマRAW 渋谷店', raw_data: { prefecture: '東京都', city: '渋谷区', address: '東京都渋谷区', area: ['渋谷'] } },
+      { id: 'raw_2', group_id: 'g_raw', name: 'アロマRAW 代々木店', raw_data: { prefecture: '東京都', city: '代々木', address: '東京都渋谷区代々木', area: ['代々木・原宿'] } },
+    ];
+    const [rawBrand] = buildBrands(RAW);
+    check('⭐生レコード: ブランドのルームが都道府県を持つ（SSRの同エリア判定の前提）', () => {
+      const head = (rawBrand.rooms || []).find((r) => r.id === rawBrand.primaryShopId) || rawBrand.rooms[0];
+      return head?.prefecture === '東京都' ? null : `prefecture が ${JSON.stringify(head?.prefecture)}`;
+    });
+    check('⭐生レコード: ブランドのルームがエリアを持つ', () => {
+      const head = (rawBrand.rooms || []).find((r) => r.id === rawBrand.primaryShopId) || rawBrand.rooms[0];
+      const a = Array.isArray(head?.area) ? head.area[0] : head?.area;
+      return a ? null : `area が ${JSON.stringify(head?.area)}`;
+    });
+    check('⭐生レコード: 全ルームの地名が検索用に残る（渋谷でも代々木でも出る）', () => {
+      const missing = ['渋谷', '代々木'].filter((w) => !String(rawBrand.searchText).includes(w));
+      return missing.length ? `searchText に無い: ${missing.join(',')}` : null;
+    });
   }
 
   check('ブランド: 空配列・nullで落ちない', () => {
