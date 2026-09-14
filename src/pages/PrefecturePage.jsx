@@ -149,9 +149,15 @@ export default function PrefecturePage({
                         {getDisplayName(shop.name, shop)}
                       </h3>
                       <ShopStatusChip shop={shop} className="mt-1" />
-                      {shop.city && (
+                      {/* ⚠️ ここに代表ルームの市区を出してはいけない。
+                          見出しが「恵比寿」のセクションの中で「LINDA SPA / 三軒茶屋」と
+                          出てしまい、なぜここに居るのか分からなくなる
+                          （2026-09-14 本番で実際にそう見えた）。
+                          セクション見出しが既にエリアを言っているので、
+                          ここは「ルームが他にもある」ことだけ伝える。 */}
+                      {shop.roomCount > 1 && (
                         <p className="text-slate-500 text-[11px] mt-0.5 truncate">
-                          {shop.city}
+                          {shop.roomCount}ルーム
                         </p>
                       )}
                     </div>
