@@ -22,8 +22,7 @@ import Header from '../components/Header.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
-import { buildBrands } from '../utils/brandGroups.js';
-import { normalizeTherapistName } from '../utils/reviewIdentity.js';
+import { buildBrands, buildBrandRoster } from '../utils/brandGroups.js';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
 const fmtDate = (v) => {
@@ -61,23 +60,14 @@ export default function BrandPage({
   // クライアントでは全ルームぶんを集めて**人単位**で重複除去する。
   // ⚠️ 咲さんは渋谷店にも代々木店にも行を持つ。素直に並べると同じ人が並ぶ。
   const roster = React.useMemo(() => {
-    const seen = new Set();
-    const out = [];
-    const push = (t) => {
-      if (!t || t.is_active === false) return;
-      const img = t.image_url || t.imageUrl;
-      if (!String(img || '').trim()) return;
-      const key = normalizeTherapistName(t.name);
-      if (!key || seen.has(key)) return;
-      seen.add(key);
-      out.push({ id: t.id, name: t.name || '', image_url: img, shopId: t.shopId || t.shop_id });
-    };
-    (ssrRoster || []).forEach(push);
     const ids = ssrBrand?.shopIds || brand?.shopIds || (brand?.rooms || []).map((r) => r.id);
-    if (getTherapistsByShopId) {
-      for (const id of ids || []) (getTherapistsByShopId(id) || []).forEach(push);
-    }
-    return out;
+    const fromContext = getTherapistsByShopId
+      ? (ids || []).flatMap((id) => getTherapistsByShopId(id) || [])
+      : [];
+    // ⚠️ SSRで焼いた分を先に置く（初期表示と並びを変えない）。
+    //    重複除去は buildBrandRoster に一本化する＝画面側で別の畳み方を書くと
+    //    「咲さんが3ルームぶん3回出る」が片側だけ復活する。
+    return buildBrandRoster([...(ssrRoster || []), ...fromContext], { limit: 24 }).roster;
   }, [ssrRoster, ssrBrand, brand, getTherapistsByShopId]);
 
   if (!brand && loading) {

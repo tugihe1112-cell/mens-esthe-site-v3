@@ -97,11 +97,20 @@ requireMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/, 'ブランド一�
     'ブランドページが在籍セラピストを取得していません（店舗ページにある本体の中身が欠けます）');
   requireMatch(brandPage, /roster\.map\(/,
     'ブランドページが在籍セラピストを描画していません');
-  // 🚩 人単位の重複除去。ここを独自実装に戻すと同じ人が全ルームぶん並ぶ。
-  requireMatch(brandWrapper, /normalizeTherapistName\(t\.name\)/,
-    'ブランドページSSRの在籍セラピスト重複除去が normalizeTherapistName を使っていません');
-  requireMatch(brandPage, /normalizeTherapistName\(t\.name\)/,
-    'ブランドページの在籍セラピスト重複除去が normalizeTherapistName を使っていません');
+  // 🚩 人単位の重複除去は buildBrandRoster に一本化する。
+  //    SSRと画面で別々に畳むと、片方だけ「咲さんが3ルームぶん3回出る」に戻る。
+  requireMatch(brandWrapper, /buildBrandRoster\(/,
+    'ブランドページSSRの在籍セラピストが buildBrandRoster を通っていません');
+  requireMatch(brandPage, /buildBrandRoster\(/,
+    'ブランドページの在籍セラピストが buildBrandRoster を通っていません');
+  requireMatch(strip(read('src/utils/brandGroups.js')), /normalizeTherapistName\(t\.name\)/,
+    '在籍セラピストの人物同定が normalizeTherapistName を使っていません（表記ゆれが別人に戻ります）');
+  // 🚩 在籍数は**行数ではなく実人数**。
+  //    2026-09-14、相模原1室が「140人」なのにブランドが「420名」＝同じ140人を3回数えていた。
+  requireMatch(brandWrapper, /ssrTherapistCount:\s*rosterTruncated \? null : personCount/,
+    'ブランドページの在籍数が実人数ではありません（ルーム数ぶん水増しされます）');
+  rejectMatch(brandWrapper, /from\('therapists'\)[^;]{0,80}count:\s*'exact'/,
+    'ブランドページが在籍数を行数で数えています（同じ人をルーム数ぶん重複計上します）');
   // 🚩 口コミ投稿の導線。これが無いまま店舗ページを畳むと一次コンテンツの入口が消える。
   requireMatch(brandPage, /to=\{`\/shops\/\$\{reviewShopId\}\/review`\}/,
     'ブランドページに口コミ投稿の導線がありません（サイトの一次コンテンツの入口です）');

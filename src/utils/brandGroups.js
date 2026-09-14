@@ -22,6 +22,7 @@
  *    そのまま読めるプロパティ名に合わせてある。
  */
 import { getDisplayName } from './shopHelpers';
+import { normalizeTherapistName } from './reviewIdentity.js';
 
 /** ブランドの鍵。group_id が無い単独店は自分自身が1ブランド。 */
 export const brandKeyOf = (shop) => shop?.group_id || shop?.id || '';
@@ -161,4 +162,40 @@ export function pickNearbyBrands(rows, { area = null, excludeIds = [], limit = 8
       roomCount: b.roomCount || 1,
     })),
   };
+}
+
+/**
+ * ブランドの在籍者を「人単位」にまとめ、名簿と**実人数**を返す。
+ *
+ * 🚩 なぜ人数を数え直すのか（2026-09-14 本番実測）
+ *    ユニゾンスパの店舗ページ（相模原1室）は「在籍 140人」、
+ *    ブランドページは「セラピスト420名」＝**140人を3ルームぶん3回数えていた**。
+ *    セラピストは店舗ではなくブランドに属するので、同じ咲さんを3人と数えてはいけない。
+ *    すぐ下の名簿は重複除去しているのに、見出しの数字だけ3倍という状態だった。
+ *
+ * ⚠️ 人数は**写真の有無・在籍フラグに関わらず**数える（店舗ページの在籍数と同じ母数）。
+ *    名簿に出すのは写真を確認できる行だけ、という区別は写真グリッド側の都合。
+ *
+ * ⚠️ 同一人物が「写真なしの行」と「写真ありの行」を持つことがあるので、
+ *    写真が無い行で人物キーを予約してはいけない（名簿から消える）。
+ */
+export function buildBrandRoster(rows, { limit = 24 } = {}) {
+  const people = new Set();
+  const shown = new Set();
+  const roster = [];
+  for (const t of Array.isArray(rows) ? rows : []) {
+    if (!t) continue;
+    const key = normalizeTherapistName(t.name);
+    if (!key) continue;
+    people.add(key);
+    if (roster.length >= limit) continue;
+    if (t.is_active === false) continue;
+    if (!String(t.image_url ?? '').trim()) continue;
+    if (shown.has(key)) continue;
+    shown.add(key);
+    // ⚠️ SSRで焼いた行（shopId）と、クライアントが持つDB行（shop_id）の両方を受ける。
+    //    片方だけ見ると、同じ関数を通したのにリンク先が消える。
+    roster.push({ id: t.id, name: t.name || '', image_url: t.image_url, shopId: t.shopId ?? t.shop_id ?? null });
+  }
+  return { roster, personCount: people.size };
 }

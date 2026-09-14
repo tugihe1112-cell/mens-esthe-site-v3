@@ -754,7 +754,7 @@ const check = (name, fn) => {
 //    ブランド1枚にまとめるとき地名を引き継ぎ損ねると、**代々木で検索しても出なくなる**。
 //    ここはオーナーが明示的に確認した要件なので、実データで固定する。
 {
-  const { buildBrands, groupBrandsByArea, pickNearbyBrands } = await loadModule('src/utils/brandGroups.js');
+  const { buildBrands, groupBrandsByArea, pickNearbyBrands, buildBrandRoster } = await loadModule('src/utils/brandGroups.js');
   const { rankShops } = await loadModule('src/utils/searchMatch.js');
 
   // 本番DBの実データ（Chocolate 3ルーム / Aroma Levante 3ルーム / 単独店1）
@@ -907,6 +907,74 @@ const check = (name, fn) => {
     check('⭐生レコード: 全ルームの地名が検索用に残る（渋谷でも代々木でも出る）', () => {
       const missing = ['渋谷', '代々木'].filter((w) => !String(rawBrand.searchText).includes(w));
       return missing.length ? `searchText に無い: ${missing.join(',')}` : null;
+    });
+  }
+
+  // ── 在籍者の名簿と実人数（2026-09-14 本番実測で発覚）──────────────
+  // 🚩 ユニゾンスパ: 店舗ページ(相模原1室)は「在籍140人」なのにブランドページは「420名」＝
+  //    同じ140人を3ルームぶん3回数えていた。すぐ下の名簿は重複除去しているのに数字だけ3倍。
+  {
+    // 同じ3人が3ルームに1行ずつ＝9行。実人数は3人。
+    const ROWS = [];
+    for (const room of ['r1', 'r2', 'r3']) {
+      for (const n of ['咲', '上野 ゆい', '似鳥芹香']) {
+        ROWS.push({ id: `${room}_${n}`, name: n, image_url: 'https://x/i.jpg', shop_id: room });
+      }
+    }
+    check('⭐名簿: 3ルームに同じ3人がいても実人数は3（行数9を人数にしない）', () => {
+      const { personCount } = buildBrandRoster(ROWS);
+      return personCount === 3 ? null : `personCount が ${personCount}`;
+    });
+    check('⭐名簿: 表記ゆれ（似鳥 芹香 / 似鳥芹香・全角半角）を同一人物として数える', () => {
+      const r = buildBrandRoster([
+        { id: 'a', name: '似鳥芹香', image_url: 'i', shop_id: 'r1' },
+        { id: 'b', name: '似鳥 芹香', image_url: 'i', shop_id: 'r2' },
+        { id: 'c', name: 'ｱｲ', image_url: 'i', shop_id: 'r1' },
+        { id: 'd', name: 'アイ', image_url: 'i', shop_id: 'r2' },
+      ]);
+      return r.personCount === 2 ? null : `personCount が ${r.personCount}`;
+    });
+    check('⭐名簿: 同じ人を写真グリッドに二重に出さない', () => {
+      const { roster } = buildBrandRoster(ROWS);
+      const names = roster.map((t) => t.name);
+      return new Set(names).size === names.length ? null : `重複: ${names.join(',')}`;
+    });
+    // ⚠️ 人数は「写真あり」に限定してはいけない（店舗ページの在籍数と母数が変わる）。
+    check('⭐名簿: 写真が無い人も人数には数える（名簿には出さない）', () => {
+      const r = buildBrandRoster([
+        { id: 'a', name: '咲', image_url: 'i', shop_id: 'r1' },
+        { id: 'b', name: '写真なしの人', image_url: '', shop_id: 'r1' },
+      ]);
+      if (r.personCount !== 2) return `personCount が ${r.personCount}`;
+      return r.roster.length === 1 ? null : `名簿が ${r.roster.length}件`;
+    });
+    // ⚠️ 同一人物が「写真なしの行」と「写真ありの行」を持つ実データがある。
+    //    写真なしの行で人物キーを予約すると、その人が名簿から丸ごと消える。
+    check('⭐名簿: 写真なしの行が先にあっても、写真ありの行で名簿に出る', () => {
+      const r = buildBrandRoster([
+        { id: 'a', name: '咲', image_url: null, shop_id: 'r1' },
+        { id: 'b', name: '咲', image_url: 'i', shop_id: 'r2' },
+      ]);
+      return r.roster.length === 1 && r.roster[0].shopId === 'r2' ? null : `名簿 ${JSON.stringify(r.roster)}`;
+    });
+    check('名簿: 在籍でない行は名簿に出さない', () => {
+      const r = buildBrandRoster([{ id: 'a', name: '咲', image_url: 'i', shop_id: 'r1', is_active: false }]);
+      return r.roster.length === 0 ? null : '在籍外が名簿に出た';
+    });
+    check('名簿: SSRが焼いた形(shopId)でもリンク先が消えない', () => {
+      const r = buildBrandRoster([{ id: 'a', name: '咲', image_url: 'i', shopId: 'r9' }]);
+      return r.roster[0]?.shopId === 'r9' ? null : `shopId が ${r.roster[0]?.shopId}`;
+    });
+    check('名簿: limitで打ち切っても人数は打ち切らない', () => {
+      const many = Array.from({ length: 50 }, (_, i) => ({ id: `x${i}`, name: `人${i}`, image_url: 'i', shop_id: 'r1' }));
+      const r = buildBrandRoster(many, { limit: 24 });
+      if (r.roster.length !== 24) return `名簿が ${r.roster.length}件`;
+      return r.personCount === 50 ? null : `personCount が ${r.personCount}`;
+    });
+    check('名簿: 空・nullで落ちない', () => {
+      if (buildBrandRoster([]).personCount !== 0) return '空配列が0でない';
+      if (buildBrandRoster(null).roster.length !== 0) return 'nullが0件でない';
+      return null;
     });
   }
 

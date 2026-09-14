@@ -17,8 +17,11 @@ import React from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import BrandPage from '../../src/pages/BrandPage';
-import { buildBrands, pickNearbyBrands } from '../../src/utils/brandGroups.js';
-import { normalizeTherapistName } from '../../src/utils/reviewIdentity.js';
+import { buildBrands, pickNearbyBrands, buildBrandRoster } from '../../src/utils/brandGroups.js';
+
+// PostgREST は1回に最大1000行。人数を数えるので取り切る必要がある。
+const THERAPIST_PAGE = 1000;
+const THERAPIST_MAX = 4000;
 
 export async function getServerSideProps({ params, res }) {
   const { brandId } = params;
@@ -58,8 +61,7 @@ export async function getServerSideProps({ params, res }) {
     const prefecture = headRoom?.prefecture || null;
     const headArea = (Array.isArray(headRoom?.area) ? headRoom.area[0] : headRoom?.area) || null;
 
-    const [therapistRes, reviewRes, revTRes, rosterRes, nearRes] = await Promise.all([
-      supabase.from('therapists').select('id', { count: 'exact', head: true }).in('shop_id', shopIds),
+    const [reviewRes, revTRes, rosterRes, nearRes] = await Promise.all([
       supabase.from('reviews')
         .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at, user_name')
         .in('shop_id', shopIds)
@@ -74,15 +76,15 @@ export async function getServerSideProps({ params, res }) {
         .not('therapist_id', 'is', null)
         .order('created_at', { ascending: false })
         .limit(60),
-      // 在籍セラピスト（写真グリッド用）。店舗ページと同じ条件＝写真が確認できる行だけ。
-      // ⚠️ ブランドは最大420名規模。SSRに全員は焼かない（HTMLが膨れる）。取得だけ広めにして下で絞る。
-      supabase.from('therapists').select('id, name, image_url, shop_id, is_active').in('shop_id', shopIds).limit(500),
+      // 在籍セラピスト。名簿（写真あり）と**実人数**の両方をこの1本から作る。
+      // ⚠️ PostgREST は1回に最大1000行しか返さない。ここを limit だけで書くと、
+      //    ルーム数の多いブランドで人数が黙って頭打ちになる。足りなければ下で継ぎ足す。
+      supabase.from('therapists').select('id, name, image_url, shop_id, is_active').in('shop_id', shopIds).range(0, THERAPIST_PAGE - 1),
       // 同エリア他ブランド（回遊＋クロール経路）。店舗ページの「他の店舗」に相当する。
       prefecture
         ? supabase.from('shops').select('id, name, group_id, raw_data').eq('raw_data->>prefecture', prefecture).limit(120)
         : Promise.resolve({ data: null }),
     ]);
-    if (therapistRes.error) throw therapistRes.error;
     if (reviewRes.error) throw reviewRes.error;
     if (revTRes.error) throw revTRes.error;
     if (rosterRes.error) throw rosterRes.error;
@@ -97,21 +99,22 @@ export async function getServerSideProps({ params, res }) {
       if (reviewedTherapists.length >= 12) break;
     }
 
-    // 在籍セラピストは**人単位で重複除去**する。
-    // ⚠️ 同じ咲さんが3ルームぶん3行あるので、素直に並べると同じ人が3回出る。
-    //    キーは reviewIdentity の normalizeTherapistName に統一する（NFKC＋空白除去＋小文字）。
-    //    ここで独自の正規化を書くと「似鳥 芹香 / 似鳥芹香」が別人に戻る。
-    const seenPerson = new Set();
-    const roster = [];
-    for (const t of rosterRes.data || []) {
-      if (!t || t.is_active === false) continue;
-      if (!String(t.image_url || '').trim()) continue;
-      const key = normalizeTherapistName(t.name);
-      if (!key || seenPerson.has(key)) continue;
-      seenPerson.add(key);
-      roster.push({ id: t.id, name: t.name || '', image_url: t.image_url, shopId: t.shop_id });
-      if (roster.length >= 24) break;
+    // 1000行で埋まっていたら次のページを継ぎ足す（人数を頭打ちにしないため）。
+    // 1ページで収まるブランドが大半なので、その場合は追加リクエストは飛ばない。
+    let therapistRows = rosterRes.data || [];
+    while (therapistRows.length >= THERAPIST_PAGE && therapistRows.length < THERAPIST_MAX) {
+      const nextRes = await supabase
+        .from('therapists')
+        .select('id, name, image_url, shop_id, is_active')
+        .in('shop_id', shopIds)
+        .range(therapistRows.length, therapistRows.length + THERAPIST_PAGE - 1);
+      if (nextRes.error) throw nextRes.error;
+      if (!nextRes.data?.length) break;
+      therapistRows = therapistRows.concat(nextRes.data);
     }
+    // ⚠️ 上限に当たったら人数は**出さない**。数え切れていない数字を出さない（D-010の考え方）。
+    const rosterTruncated = therapistRows.length >= THERAPIST_MAX;
+    const { roster, personCount } = buildBrandRoster(therapistRows, { limit: 24 });
 
     const nearby = pickNearbyBrands(nearRes.data, {
       area: headArea,
@@ -141,14 +144,14 @@ export async function getServerSideProps({ params, res }) {
             area: Array.isArray(r.area) ? r.area[0] || null : r.area || null,
           })),
         },
-        ssrTherapistCount: therapistRes.count || 0,
+        ssrTherapistCount: rosterTruncated ? null : personCount,
         ssrReviewedTherapists: reviewedTherapists,
         ssrReviews: reviews,
         ssrReviewCount: count,
         ssrAvgRating: avg,
         ssrSample: sample,
         ssrRoster: roster,
-        ssrRosterTruncated: (therapistRes.count || 0) > roster.length,
+        ssrRosterTruncated: personCount > roster.length,
         ssrNearbyBrands: nearby.brands,
         ssrNearbyScope: nearby.scope,
         ssrArea: headArea,
