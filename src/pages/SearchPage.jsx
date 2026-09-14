@@ -58,7 +58,15 @@ function ShopCard({ shop, onSelect }) {
             {getDisplayName(shop.name, shop)}
           </span>
           <ShopStatusChip shop={shop} className="mt-1" />
-          <LocationLabel as="div" className="text-xs text-slate-500 mt-0.5" parts={[shop.prefecture, shop.city]} />
+          {/* ⚠️ ブランドにまとめると、代表ルームの所在地だけ出すのは誤解を生む。
+              「渋谷」で検索したのに「📍 東京都 経堂」と出て、なぜ出たのか分からなくなる
+              （2026-09-14 本番で実際にそう見えた）。全ルームの地名を渡す。
+              ⚠️ D-009: 📍は直書きせず必ず LocationLabel に渡す（中身が空なら描画されない）。 */}
+          <LocationLabel
+            as="div"
+            className="text-xs text-slate-500 mt-0.5 line-clamp-1"
+            parts={shop.areaLabels?.length ? shop.areaLabels : [shop.prefecture, shop.city]}
+          />
           {shop.business_hours && (
             <div className="text-xs text-slate-400 mt-0.5">🕐 {shop.business_hours}</div>
           )}
@@ -1052,8 +1060,8 @@ export default function SearchPage({ renderSeo = true }) {
                             <h3 className="font-black text-white line-clamp-2" style={{ fontSize: '16px', lineHeight: 1.4 }}>{t.name}</h3>
                             <p className="mt-1 text-slate-300 line-clamp-2" style={{ fontSize: '13px', lineHeight: 1.5 }}>
                               {t._extraShopIds?.length > 0
-                                ? `${shop?.name || ''} 他${t._extraShopIds.length}店舗`
-                                : shop ? [shop.area || shop.city, shop.name].filter(Boolean).join(' | ') : ''}
+                                ? `${getDisplayName(shop?.name, shop) || ''} 他${t._extraShopIds.length}店舗`
+                                : shop ? [shop.area || shop.city, getDisplayName(shop.name, shop)].filter(Boolean).join(' | ') : ''}
                             </p>
                             {/* ⚠️ F04/F05: 件数はこの人物IDで実際に数えた公開データだけ。
                                 取得できていない間は**何も出さない**（0件と表示しない）。 */}
