@@ -8,6 +8,11 @@
  * - 1時間キャッシュ
  */
 import { createClient } from '@supabase/supabase-js';
+// ⚠️ Vercel は api/ 直下を legacy Serverless Function として **CommonJS にコンパイル**する。
+//    そのため import 先は `.js` でなければならない（2026-09-08、`.mjs` を import して
+//    ERR_REQUIRE_ESM で新規登録が21時間停止した）。brandGroups/shopHelpers/reviewIdentity は
+//    いずれも依存ゼロの純粋関数なので、ここから読んで安全。
+import { countRoomsByBrand, shopRedirectPath } from '../src/utils/brandGroups.js';
 
 const SITE = 'https://www.mens-esthe-map.jp';
 // 🚩 2026-08-19 整理: **独自コンテンツを持つページだけ**を提出する。
@@ -131,7 +136,7 @@ export default async function handler(req, res) {
   for (let from = 0; ; from += PAGE) {
     const { data, error } = await supabase
       .from('shops')
-      .select('id')
+      .select('id, group_id')
       .order('id')
       .range(from, from + PAGE - 1);
     if (error) return dataSourceUnavailable();
@@ -204,8 +209,31 @@ export default async function handler(req, res) {
   // 🚩 口コミを持つ店舗だけを提出する（2026-08-19。理由は上部のコメント参照）。
   //    口コミが1件付けば shopIdsWithReviews に自動で入るので、戻し作業は不要。
   const indexableShops = (shops || []).filter(s => !isExcludedId(s.id) && shopIdsWithReviews.has(s.id));
-  const shopXml = indexableShops.map((s) => urlXml(`/shops/${s.id}`, {
+
+  // 🚩 D-014: 複数ルームのブランドは /brands/:id へ301している。
+  //    301するURLをサイトマップに出し続けると「Googleに出せと言っているURLが301」になり、
+  //    外形監視（サイトマップ抜き取り→200を要求）も毎回赤くなる。
+  //    ⚠️ 判定は shopRedirectPath に一本化する（店舗SSRの301と同じ関数）。ここに条件を
+  //       直書きすると、片方だけ直したときに食い違う。
+  //    ⚠️ 1ブランド1行にまとめる。lastmod は所属ルームのうち**最も新しい口コミ日**。
+  const roomCounts = countRoomsByBrand(shops || []);
+  const brandLastmod = new Map();
+  const soloShops = [];
+  for (const s of indexableShops) {
+    const to = shopRedirectPath(s, roomCounts);
+    if (!to) { soloShops.push(s); continue; }
+    const prev = brandLastmod.get(to);
+    const cur = shopLastmod.get(s.id) || null;
+    if (!prev || (cur && cur > prev)) brandLastmod.set(to, cur);
+  }
+
+  const shopXml = soloShops.map((s) => urlXml(`/shops/${s.id}`, {
     lastmod: shopLastmod.get(s.id),
+    priority: '0.8',
+  })).join('\n');
+
+  const brandXml = [...brandLastmod.entries()].map(([path, lastmod]) => urlXml(path, {
+    lastmod,
     priority: '0.8',
   })).join('\n');
 
@@ -218,6 +246,7 @@ export default async function handler(req, res) {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${staticXml}
 ${shopXml}
+${brandXml}
 ${therapistXml}
 </urlset>`;
 

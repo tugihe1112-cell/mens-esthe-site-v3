@@ -43,15 +43,28 @@ const MUST_404 = [
 //    ページが正しく404になり、**監視だけが古い期待値を持ったまま15分ごとに赤くなり続けた**。
 //    ＝サイトは正常なのにメールが1日96通飛ぶ状態。
 //    口コミの増減で出入りするURLは下の「サイトマップから動的に採取」で見張ること。
+// ⚠️ 2026-09-14（D-014）: **複数ルームのブランドの店舗URLをここに書いてはいけない**。
+//    それらは /brands/:id へ301するようになった。`head()` は redirect:'manual' なので
+//    301は200ではなく、15分ごとに「実在ページが落ちている」で赤くなる（上の96通事故と同じ型）。
+//    以前ここに在った下記4件は、まさにその「系列店どうしで中身が同じ」店舗だった＝301の対象:
+//      /shops/kanagawa_sagamihara_unison_spa
+//      /shops/tokyo_shinjuku_nishishinjuku_cor_caroli
+//      /shops/tokyo_shinjuku_shinjuku_gyoen_platinum_tokyo
+//      /shops/osaka_tanimachi_新感覚mエステ
+//    → 集約先のブランドURLを見張る形へ移し、301そのものは下の MUST_301 で見張る。
+//    → 店舗URLを1本だけ残すなら、**group_id を持たない単独店**を選ぶこと（301されない）。
 const MUST_200 = [
   '/',
-  '/shops/kanagawa_sagamihara_unison_spa',
-  '/shops/hiroshima_hiroshima_hitozuma_san',
   '/area/tokyo',
   '/area/gunma',
-  '/shops/tokyo_shinjuku_nishishinjuku_cor_caroli',      // メンズエステ コル・カロリ 西新宿店
-  '/shops/tokyo_shinjuku_shinjuku_gyoen_platinum_tokyo', // PLATINUM TOKYO 新宿御苑店
-  '/shops/osaka_tanimachi_新感覚mエステ',                 // 新感覚Mエステ
+  '/brands/g_brand_unison_spa',                          // ユニゾンスパ（3ルーム＝集約先）
+  '/shops/kanagawa_kawasaki_musashikosugi_madamu',       // エステ美人マダム武蔵小杉（group_idなし＝単独店）
+];
+
+// 301が効いていることを見張る（効かなくなると重複ページが復活し、GSCの重複指摘が戻る）。
+// ⚠️ ここに書いてよいのは「複数ルームのブランドに属すると確認済み」の店舗URLだけ。
+const MUST_301 = [
+  ['/shops/kanagawa_sagamihara_unison_spa', '/brands/g_brand_unison_spa'],
 ];
 
 /**
@@ -67,11 +80,13 @@ async function sampleFromSitemap(n = 4) {
   if (!res.ok) throw new Error(`サイトマップが ${res.status}`);
   const xml = await res.text();
   const all = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(BASE, ''));
-  const shops = all.filter((u) => /^\/shops\/[^/]+$/.test(u));
+  // ⚠️ D-014以降、本命ページは店舗URLとブランドURLの**両方**が在りうる。
+  //    `/shops/` だけを数えると、集約が進んだときに0件→例外→監視が永久に赤くなる。
+  const shops = all.filter((u) => /^\/(shops|brands)\/[^/]+$/.test(u));
   const threads = all.filter((u) => u.includes('/threads/'));
   // 空のサイトマップを「異常なし」と読まないための下限。ここが0なら索引導線が壊れている。
   if (!shops.length || !threads.length) {
-    throw new Error(`サイトマップの中身が異常（店舗${shops.length}件・セラピスト${threads.length}件）`);
+    throw new Error(`サイトマップの中身が異常（店舗・ブランド${shops.length}件・セラピスト${threads.length}件）`);
   }
   const pick = (arr) => {
     const step = Math.max(1, Math.floor(arr.length / n));
@@ -124,6 +139,26 @@ for (const path of MUST_200) {
   }
 }
 
+for (const [path, expected] of MUST_301) {
+  try {
+    const res = await head(path);
+    if (res.status !== 301) {
+      failures.push(
+        `[301が効いていない] ${path} が ${res.status} を返した（301であるべき）。\n` +
+        `          複数ルームのブランドは1枚に集約している（D-014）。301が外れると同じ中身のページが復活し、\n` +
+        `          GSCの「重複しています」が戻る。`
+      );
+    } else {
+      const loc = res.headers.get('location') || '';
+      if (!loc.endsWith(expected)) {
+        failures.push(`[301の行き先が違う] ${path} → ${loc}（${expected} であるべき）。`);
+      }
+    }
+  } catch (e) {
+    failures.push(`[301確認] ${path} の取得に失敗: ${e.message}`);
+  }
+}
+
 // サイトマップ掲載URLの実地確認（口コミの増減に自動追従する）
 let sitemapNote = '';
 try {
@@ -168,4 +203,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`✅ HTTPステータス正常（404であるべき ${MUST_404.length}件 / 200であるべき ${MUST_200.length}件 / index可 ${MUST_BE_INDEXABLE.length}件${sitemapNote}）`);
+console.log(`✅ HTTPステータス正常（404であるべき ${MUST_404.length}件 / 200であるべき ${MUST_200.length}件 / 301であるべき ${MUST_301.length}件 / index可 ${MUST_BE_INDEXABLE.length}件${sitemapNote}）`);

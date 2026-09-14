@@ -22,7 +22,7 @@ import Header from '../components/Header.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
-import { buildBrands, buildBrandRoster } from '../utils/brandGroups.js';
+import { buildBrands, buildBrandRoster, brandCanonicalPath } from '../utils/brandGroups.js';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
 const fmtDate = (v) => {
@@ -231,15 +231,17 @@ export default function BrandPage({
         {rooms.length > 0 && (
           <section>
             <h2 className="text-base font-black text-white mb-3">ルーム</h2>
+            {/* ⚠️ ルームはリンクにしない（D-014）。
+                複数ルームの店舗ページはこのページへ301するので、リンクにすると
+                「押す → 301 → 同じページに戻る」という往復になる。
+                ここで見せたいのは「どこにルームがあるか」であって支店ページではない。 */}
             <ul className="flex flex-wrap gap-2">
               {rooms.map((r) => (
-                <li key={r.id}>
-                  <Link
-                    to={`/shops/${r.id}`}
-                    className="inline-block text-xs text-slate-300 hover:text-pink-300 bg-slate-900 hover:bg-slate-800 border border-white/10 rounded-full px-3 py-1.5 transition"
-                  >
-                    {r.area || r.city || r.prefecture || 'ルーム'}
-                  </Link>
+                <li
+                  key={r.id}
+                  className="inline-block text-xs text-slate-300 bg-slate-900 border border-white/10 rounded-full px-3 py-1.5"
+                >
+                  {r.area || r.city || r.prefecture || 'ルーム'}
                 </li>
               ))}
             </ul>
@@ -257,7 +259,7 @@ export default function BrandPage({
               {ssrNearbyBrands.map((b) => (
                 <li key={b.id}>
                   <Link
-                    to={`/brands/${b.id}`}
+                    to={brandCanonicalPath(b)}
                     className="inline-block text-xs text-slate-300 hover:text-pink-300 bg-slate-900 hover:bg-slate-800 border border-white/10 rounded-full px-3 py-1.5 transition"
                   >
                     {b.name}

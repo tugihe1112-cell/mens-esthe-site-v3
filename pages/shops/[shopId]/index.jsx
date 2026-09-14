@@ -11,6 +11,7 @@ import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import ShopDetailPage from '../../../src/pages/ShopDetailPage';
 import { pickNearbyShops } from '../../../src/utils/nearbyShops.mjs';
+import { shopRedirectPath, countRoomsByBrand } from '../../../src/utils/brandGroups.js';
 
 export async function getServerSideProps({ params, res }) {
   const { shopId } = params;
@@ -67,7 +68,9 @@ export async function getServerSideProps({ params, res }) {
     // ── wave 2: 系列店ID と 同エリア他店（どちらも shop だけに依存＝並列可）
     const [groupRes, nearRes] = await Promise.all([
       shop?.group_id
-        ? supabase.from('shops').select('id').eq('group_id', shop.group_id)
+        // ⚠️ group_id も取る。id だけにすると countRoomsByBrand がルーム数を数えられず、
+        //    301が**一度も発火しない**（壊れないので気づけない型）。
+        ? supabase.from('shops').select('id, group_id').eq('group_id', shop.group_id)
         : Promise.resolve({ data: null }),
       prefecture
         ? supabase
@@ -80,6 +83,21 @@ export async function getServerSideProps({ params, res }) {
     ]);
     if (groupRes.error) throw groupRes.error;
     if (nearRes.error) throw nearRes.error;
+
+    // ── D-014: 複数ルームのブランドは1枚（/brands/:id）へ集約する ──
+    // セラピストは店舗ではなくブランドに属する。支店レコードが在る理由は地名だけで、
+    // 「渋谷店」という単位自体に価値は無い＝同じ在籍者・同じ口コミのページが348枚あった。
+    //
+    // ⚠️ 判定は shopRedirectPath に一本化する（サイトマップ・内部リンクと同じ関数）。
+    //    ここに条件を直書きすると「リンクは /brands を指すのに301は効いていない」型の
+    //    食い違いが静かに生まれる。
+    // ⚠️ groupRes が取れなかったとき（DB障害）は上の throw で catch へ落ちる＝301は出ない。
+    //    判断材料が無いまま301を出すのは、消えていないページを消えたと宣言するのと同じ。
+    // ⚠️ 単独店（group_idなし・ルーム1つ）はここを素通りする。506店が該当。
+    const redirectTo = shopRedirectPath(shop, countRoomsByBrand(groupRes.data || []));
+    if (redirectTo) {
+      return { redirect: { destination: redirectTo, permanent: true } };
+    }
 
     // 口コミ共有モデル: group_idがあれば系列全店のshop_idを対象にする
     let reviewShopIds = [shopId];

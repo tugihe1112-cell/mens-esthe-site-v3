@@ -17,7 +17,7 @@ import React from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import BrandPage from '../../src/pages/BrandPage';
-import { buildBrands, pickNearbyBrands, buildBrandRoster } from '../../src/utils/brandGroups.js';
+import { buildBrands, pickNearbyBrands, buildBrandRoster, brandCanonicalPath } from '../../src/utils/brandGroups.js';
 
 // PostgREST は1回に最大1000行。人数を数えるので取り切る必要がある。
 const THERAPIST_PAGE = 1000;
@@ -136,8 +136,8 @@ export async function getServerSideProps({ params, res }) {
           image_url: brand.image_url || null,
           website_url: brand.website_url || null,
           roomCount: brand.roomCount,
-          areaLabels: brand.areaLabels || [],
           primaryShopId,
+          areaLabels: brand.areaLabels || [],
           // ⚠️ raw_data は丸ごと渡さない（1店約11.9KBでHTMLが膨れる）。必要な項目だけ平らにする。
           rooms: (brand.rooms || []).map((r) => ({
             id: r.id, prefecture: r.prefecture, city: r.city, address: r.address,
@@ -174,7 +174,12 @@ export default function BrandSSRPage({
 }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
   const name = ssrBrand?.name || '';
-  const canonical = ssrBrand ? `${SITE}/brands/${ssrBrand.id}` : '';
+  // ⚠️ 単独店のブランドページは /shops/:id と中身が同じ（ルームが1つしかない）。
+  //    canonical を自分自身に向けると、同じ内容のページを2枚Googleに出すことになる。
+  //    D-014 の本命URL規則（brandCanonicalPath）に従って、単独店は店舗URLを正規とする。
+  const canonicalPath = ssrBrand ? brandCanonicalPath(ssrBrand) : '';
+  const canonical = ssrBrand ? `${SITE}${canonicalPath}` : '';
+  const isSoloBrand = Boolean(ssrBrand) && !canonicalPath.startsWith('/brands/');
   const areas = (ssrBrand?.areaLabels || []).join('・');
 
   const title = ssrReviewCount > 0
@@ -227,7 +232,7 @@ export default function BrandSSRPage({
         {/* ⚠️ 口コミ0件のページはサイトマップの方針に合わせて noindex,follow。
             follow を残すのでセラピストページへのクロール経路は殺さない。
             口コミが1件でも付けば自動で index 対象に戻る（手動の戻し作業を作らない）。 */}
-        {ssrReviewCount === 0 && <meta name="robots" content="noindex,follow" />}
+        {(ssrReviewCount === 0 || isSoloBrand) && <meta name="robots" content="noindex,follow" />}
         {/* パンくず（Home > ブランド）。店舗ページが持っているものをブランド側にも揃える。 */}
         {ssrBrand && (
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

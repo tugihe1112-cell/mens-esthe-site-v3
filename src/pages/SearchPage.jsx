@@ -15,7 +15,7 @@ import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 // 支店名は表示しない（地名は検索のためだけに name に入っている）
 import { getDisplayName } from '../utils/shopHelpers';
 // 検索結果はブランド単位。支店レコードは「渋谷で引っかかる」ための地名を持つだけ。
-import { buildBrands } from '../utils/brandGroups.js';
+import { buildBrands , brandCanonicalPath } from '../utils/brandGroups.js';
 
 // ─── ファジー店舗検索ユーティリティ ────────────────────────────
 // ⚠️ ロジック本体は src/utils/searchMatch.js に切り出してある（CIでテストするため）。
@@ -41,7 +41,9 @@ function ShopCard({ shop, onSelect }) {
   // 店舗ページ自体にキャスト一覧があるため機能を失わず、内部リンク評価も本命URLへ集約できる。
   // ⚠️ ブランドにまとめた行は id が group_id なので、そのままURLにすると404。
   //    ブランドページをSSR化するまでは代表ルームの店舗ページへ送る。
-  const shopDetailUrl = `/shops/${shop.primaryShopId || shop.id}`;
+  // D-014: 複数ルームなら /brands/:id、単独店なら /shops/:id。判定は1か所（brandCanonicalPath）。
+  // ⚠️ ここで /shops/ を直書きすると、複数ルームの店舗URLへ送って301を1回余計に踏ませる。
+  const shopDetailUrl = brandCanonicalPath(shop);
 
   return (
     <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden transition-all">

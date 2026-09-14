@@ -7,7 +7,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import { PREF_SLUG_MAP } from '../data/areaLinks';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
-import { buildBrands, groupBrandsByArea } from '../utils/brandGroups.js';
+import { buildBrands, groupBrandsByArea, brandCanonicalPath } from '../utils/brandGroups.js';
 
 // URL slug → 都道府県名（src/data/areaLinks.js に集約）
 // ⚠️ 以前はここに独自のリストを持っていたため ibaraki / tochigi / gunma が抜け、
@@ -132,7 +132,7 @@ export default function PrefecturePage({
                 {areaShops.map(shop => (
                   <Link
                     key={shop.id}
-                    to={`/shops/${shop.primaryShopId || shop.id}`}
+                    to={brandCanonicalPath(shop)}
                     className="group bg-slate-900/60 border border-white/5 hover:border-pink-500/30 rounded-2xl overflow-hidden transition-all hover:-translate-y-0.5"
                   >
                     {shop.image_url && (

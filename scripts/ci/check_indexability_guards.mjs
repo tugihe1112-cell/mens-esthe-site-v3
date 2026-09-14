@@ -10,9 +10,39 @@ import fs from 'node:fs';
 const read = (path) => fs.readFileSync(path, 'utf8');
 /** ⚠️ コメントを剥がしてから検査する。
  *  剥がさないと「この表示はやめた」と**説明したコメント自体**にガードが反応する
- *  （2026-09-14、自分で書いた注記に引っかかって実際に誤検知した）。 */
-const strip = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+ *  （2026-09-14、自分で書いた注記に引っかかって実際に誤検知した）。
+ *
+ *  🚩 **行コメントを先に剥がすこと。順序を逆にすると検査が骨抜きになる。**
+ *  店舗SSRに `// 正しくは404…。/area/* で08-06に直したのと同じ型。` という行があり、
+ *  この `/*` がブロックコメントの開始と解釈されて **200行以上先の `*/` まで丸ごと消えていた**。
+ *  消えた範囲にある実装は何を壊してもガードが通る＝**落ちないガード**になる。
+ *  （2026-09-14、D-014のガードを足したら一度も一致せず、そこで発覚した。）
+ *  行コメントの正規表現は行頭の `//` だけを見るので、'https://…' のような文字列は壊さない。 */
+const strip = (src) => src.replace(/^\s*\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
 const failures = [];
+
+// 🚩 strip() 自身の自己診断。
+//    ここが壊れると**全てのガードが静かに骨抜きになる**（何を消しても通る）ので、
+//    検査本体より先に、コメントの剥がし方そのものを確かめる。
+{
+  const sample = [
+    "// 正しくは404を返す。/area/* で直したのと同じ型。",
+    "const MARKER = 'keep-me';",
+    "/* ふつうのブロックコメント */",
+    "const AFTER = 'keep-me-too';",
+  ].join('\n');
+  const out = strip(sample);
+  if (!out.includes('keep-me') || !out.includes('keep-me-too')) {
+    failures.push(
+      '[strip自己診断] コメント除去が実装本体まで消している。' +
+      '行コメント内の `/*` をブロックコメントの開始と誤読していないか確認すること。' +
+      'これを放置すると全ガードが「何を壊しても通る」状態になる。'
+    );
+  }
+  if (out.includes('ふつうのブロックコメント') || out.includes('/area/')) {
+    failures.push('[strip自己診断] コメントが剥がせていない（説明文にガードが誤反応する）。');
+  }
+}
 const requireMatch = (source, pattern, message) => {
   if (!pattern.test(source)) failures.push(message);
 };
@@ -67,8 +97,8 @@ requireMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/, 'ブランド一�
   requireMatch(brandWrapper, /rel="canonical"/,
     'ブランドページがcanonicalを出していません');
   // 口コミ0件はサイトマップの方針に合わせて noindex,follow（follow は残す）
-  requireMatch(brandWrapper, /ssrReviewCount === 0 && <meta name="robots" content="noindex,follow"/,
-    'ブランドページの口コミ0件時のrobots指定が消えています');
+  requireMatch(brandWrapper, /\(ssrReviewCount === 0 \|\| isSoloBrand\) && <meta name="robots" content="noindex,follow"/,
+    'ブランドページのrobots指定が消えています（口コミ0件、および単独店のブランドページ）');
   // 🚩 SSRで raw_data を丸ごと渡すとHTMLが3倍に膨れる（2026-08-09の実測）
   rejectMatch(brandWrapper, /ssrBrand:\s*brand\b(?![\s\S]{0,40}\{)/,
     'ブランドページのSSRがブランドをそのまま渡しています（raw_dataが焼き込まれます）');
@@ -117,8 +147,8 @@ requireMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/, 'ブランド一�
   requireMatch(brandPage, /const reviewShopId = brand\.primaryShopId/,
     '口コミ投稿の宛先がブランドIDになっています（投稿画面は実在の店舗IDを要ります）');
   // 🚩 回遊・クロール経路。送り先は店舗ではなくブランド（店舗へ送ると301と往復する）。
-  requireMatch(brandPage, /to=\{`\/brands\/\$\{b\.id\}`\}/,
-    'ブランドページに他ブランドへの内部リンクがありません（回遊とクロールの経路が切れます）');
+  requireMatch(brandPage, /to=\{brandCanonicalPath\(b\)\}/,
+    'ブランドページの他ブランドリンクが本命URL規則を通っていません（単独店の存在しない /brands/ へ送ります）');
   requireMatch(brandWrapper, /pickNearbyBrands\(/,
     'ブランドページSSRが同エリア他ブランドを取得していません');
   // 🚩 店舗ページが持っている構造化データを揃える
@@ -128,8 +158,38 @@ requireMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/, 'ブランド一�
     'ブランドページの構造化データに口コミ本文がありません（店舗ページは持っています）');
 }
 
-requireMatch(searchPage, /const shopDetailUrl = `\/shops\/\$\{shop\.primaryShopId \|\| shop\.id\}`/,
-  '検索結果の店舗リンクが正規店舗URLではありません（ブランド行は primaryShopId を使うこと）');
+requireMatch(searchPage, /const shopDetailUrl = brandCanonicalPath\(shop\)/,
+  '検索結果のリンクが本命URL規則(brandCanonicalPath)を通っていません（301を1回余計に踏ませます）');
+
+// ── D-014 複数ルームのブランドへの集約（2026-09-14）──────────────────
+// 301・サイトマップ・内部リンクは**同時に**動かないと壊れる。片方だけ直す事故を機械で止める。
+{
+  const shopWrapper = strip(read('pages/shops/[shopId]/index.jsx'));
+  const sitemap = strip(read('api/sitemap.xml.js'));
+  const monitor = strip(read('scripts/monitoring/check_http_status.mjs'));
+  const brandPage2 = strip(read('src/pages/BrandPage.jsx'));
+  const prefPage = strip(read('src/pages/PrefecturePage.jsx'));
+
+  requireMatch(shopWrapper, /redirect: \{ destination: redirectTo, permanent: true \}/,
+    '店舗ページからブランドページへの301が消えています（D-014）');
+  requireMatch(shopWrapper, /shopRedirectPath\(shop, countRoomsByBrand\(/,
+    '301の判定が共有関数を通っていません（サイトマップ・内部リンクと食い違います）');
+  // 🚩 ここが抜けるとルーム数を数えられず **301が一度も発火しない**（壊れないので気づけない）。
+  requireMatch(shopWrapper, /from\('shops'\)\.select\('id, group_id'\)\.eq\('group_id'/,
+    '系列店の取得が group_id を選んでいません（ルーム数を数えられず301が発火しません）');
+  requireMatch(sitemap, /shopRedirectPath\(s, roomCounts\)/,
+    'サイトマップが301対象の店舗URLを出し続けています（Googleに出すURLが301になります）');
+  // 🚩 監視の期待値。301するURLをMUST_200に残すと15分ごとに赤くなる（1日96通の事故と同じ型）。
+  requireMatch(monitor, /const MUST_301 = \[/,
+    '外形監視に301の確認がありません（301が外れても気づけません）');
+  requireMatch(monitor, /\/\^\\\/\(shops\|brands\)\\\/\[\^\/\]\+\$\//,
+    'サイトマップ採取がブランドURLを数えていません（集約が進むと0件判定で監視が永久に赤くなります）');
+  // 🚩 ルームをリンクにすると「押す→301→同じページ」の往復になる。
+  rejectMatch(brandPage2, /to=\{`\/shops\/\$\{r\.id\}`\}/,
+    'ブランドページのルームが店舗ページへリンクしています（301でこのページへ戻る往復になります）');
+  requireMatch(prefPage, /to=\{brandCanonicalPath\(shop\)\}/,
+    'エリア一覧のリンクが本命URL規則を通っていません');
+}
 requireMatch(postReviewPage, /data\.shopId \? `\/shops\/\$\{data\.shopId\}`/, '指名なし投稿後のリンクが正規店舗URLではありません');
 for (const [name, source] of [['表彰台', podiumCard], ['ランキング一覧', rankingListItem]]) {
   requireMatch(source, /item\.therapistId\s*\|\|\s*item\.id/, `${name}が実データのtherapistIdを使っていません`);

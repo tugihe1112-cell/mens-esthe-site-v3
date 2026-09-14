@@ -21,7 +21,7 @@
  *    **全ルームぶんを連結**する。searchMatch.js の buildSearchTarget が
  *    そのまま読めるプロパティ名に合わせてある。
  */
-import { getDisplayName } from './shopHelpers';
+import { getDisplayName } from './shopHelpers.js';
 import { normalizeTherapistName } from './reviewIdentity.js';
 
 /** ブランドの鍵。group_id が無い単独店は自分自身が1ブランド。 */
@@ -160,6 +160,9 @@ export function pickNearbyBrands(rows, { area = null, excludeIds = [], limit = 8
       name: b.name,
       areaLabel: (b.areaLabels || [])[0] || null,
       roomCount: b.roomCount || 1,
+      // ⚠️ 単独店の本命URLは /shops/:id（D-014）。これを落とすと
+      //    brandCanonicalPath が行き先を決められず、存在しない /brands/ へ送る。
+      primaryShopId: b.primaryShopId || b.id,
     })),
   };
 }
@@ -198,4 +201,49 @@ export function buildBrandRoster(rows, { limit = 24 } = {}) {
     roster.push({ id: t.id, name: t.name || '', image_url: t.image_url, shopId: t.shopId ?? t.shop_id ?? null });
   }
   return { roster, personCount: people.size };
+}
+
+/**
+ * 「このブランドの本命URLはどれか」を決める**唯一の場所**（D-014）。
+ *
+ * 🚩 ルームが2つ以上 → /brands/:brandId に1枚へ集約する。
+ *    ルームが1つ    → 集約する相手がいないので /shops/:id のまま。
+ *    506店が group_id を持たないので、全部をブランドURLに寄せると
+ *    「同じ中身が /shops と /brands に2枚」という重複を**新しく作る**ことになる。
+ *
+ * ⚠️ 店舗SSRの301・サイトマップ・内部リンクは**必ずこの関数を通す**こと。
+ *    別々に条件を書くと、リンクは /brands を指しているのに301は効いていない
+ *    （あるいはその逆）という食い違いが静かに生まれる。
+ */
+export function brandCanonicalPath(brand) {
+  const id = brand?.id ?? '';
+  const primary = brand?.primaryShopId || id;
+  return Number(brand?.roomCount) > 1 ? `/brands/${id}` : `/shops/${primary}`;
+}
+
+/** group_id ごとのルーム数。店舗行（id, group_id）だけあれば作れる。 */
+export function countRoomsByBrand(shops) {
+  const counts = new Map();
+  for (const s of Array.isArray(shops) ? shops : []) {
+    const gid = s?.group_id;
+    if (!gid) continue;
+    counts.set(gid, (counts.get(gid) || 0) + 1);
+  }
+  return counts;
+}
+
+/**
+ * この店舗ページを301で送るべき先。送らないなら null。
+ *
+ * ⚠️ group_id があっても**ルームが1つしか無いなら送らない**。
+ *    送ると /shops/:id と /brands/:gid の間で中身が同じページを往復させるだけになる。
+ * ⚠️ ルーム数が分からないとき（Mapに無い）は**送らない**。
+ *    判断材料が無いときに301を出すのは、消えていないページを消えたと宣言するのと同じ。
+ */
+export function shopRedirectPath(shop, roomCounts) {
+  const gid = shop?.group_id;
+  if (!gid) return null;
+  const n = roomCounts instanceof Map ? roomCounts.get(gid) : roomCounts?.[gid];
+  if (!(Number(n) > 1)) return null;
+  return `/brands/${gid}`;
 }
