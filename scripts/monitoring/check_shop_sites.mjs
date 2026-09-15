@@ -34,6 +34,7 @@
  *    ブラウザで NXDOMAIN（ドメインが存在しない）まで確認できて初めて「閉店の疑いが濃い」と言える。
  */
 import fs from 'fs';
+import { classifyDnsFailure } from '../lib/dnsVerdict.mjs';
 import { createClient } from '@supabase/supabase-js';
 import puppeteer from 'puppeteer';
 import dnsp from 'dns/promises';
@@ -177,13 +178,28 @@ async function main() {
       try {
         const ns = await dnsp.resolveNs(host.replace(/^www\./, ''));
         r.dns = { state: 'no_a_record', detail: ns.join(',') };
-      } catch {
-        r.dns = { state: 'domain_gone', detail: e.code };
+      } catch (e2) {
+        // 🚩 両方引けなくても「ドメインが無い」とは限らない（2026-09-15 に気づいた誤り）。
+        //    **ENOTFOUND（＝NXDOMAIN・登録されていない）だけが確証。**
+        //    ETIMEOUT / ESERVFAIL / EAI_AGAIN / ECONNREFUSED は
+        //    **こちらが調べられなかっただけ**で、店の状態について何も言っていない。
+        //    これを閉店の根拠にするのは、2026-09-13に潰した
+        //    「応答しない＝店が無い」（403やタイムアウトを閉店扱いした件）と同じ誤りを
+        //    1階層下で繰り返すことになる。実際 `bellrose-osaka.com` と `wife-room.com` が
+        //    ETIMEOUT で「ドメイン消滅」に分類され、危うく営業中の店に閉店の札を貼るところだった。
+        const code = e2?.code || e?.code || 'UNKNOWN';
+        r.dns = { state: classifyDnsFailure(code), detail: code };
       }
     }
   }));
   const goneCount = results.filter((r) => r.dns?.state === 'domain_gone').length;
-  console.log(`\n--- 名前解決: ドメインが存在しない ${goneCount}件 / Aレコードなし ${results.filter((r) => r.dns?.state === 'no_a_record').length}件 ---`);
+  const unresolved = results.filter((r) => r.dns?.state === 'dns_unresolved');
+  console.log(`\n--- 名前解決: ドメインが存在しない(NXDOMAIN) ${goneCount}件 / Aレコードなし ${results.filter((r) => r.dns?.state === 'no_a_record').length}件 / **調べられなかった** ${unresolved.length}件 ---`);
+  if (unresolved.length) {
+    // ⚠️ ここに出るものは「閉店の候補」ではない。こちらの回線・resolverの問題かもしれない。
+    console.log('    ⚠️ 下記は結果が出なかっただけで、閉店の根拠にはならない（別の回線で引き直すこと）:');
+    for (const r of unresolved) console.log(`      ${r.url}  (${r.dns.detail})`);
+  }
 
   // ── 第2段: 問題が出たURLを本物のブラウザで開き直す ──────────────────
   // ⚠️ Node の fetch が失敗しても、相手がUAで弾いているだけのことがある。
