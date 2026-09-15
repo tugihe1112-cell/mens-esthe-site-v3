@@ -101,8 +101,25 @@ export async function getServerSideProps({ res }) {
       .sort((a, b) => b.count - a.count)
       .slice(0, 4);
   } catch (e) {
-    // 取得失敗時は空配列で返す（ビルドは落とさない）
     console.error('getServerSideProps home fetch failed:', e);
+  }
+
+  // 🚩 中身が何も取れなかったときに **200で空ページを配信しない**（2026-09-15）。
+  //    店舗・ブランド・人物・エリアのSSRには「200で空ページを返すのが最悪
+  //    （2026-06-30の全API停止→空ページ配信→インデックス崩落）」と書いて503にしてあったが、
+  //    **トップページだけ古いまま**だった。しかもGSCの実測では
+  //    索引されている数少ないページの1つがトップ＝一番やられてはいけない場所。
+  //
+  // ⚠️ 一律503にはしない。取得は2段あり、後段だけ失敗したときは
+  //    ヒーローと母数は取れている＝部分的にでも出せるものは200で出す。
+  //    「全部空」のときだけ503にする。
+  // ⚠️ 404ではなく503。404はURLの消滅を宣言することになる。
+  //    503は「今は出せない・あとで来て」なのでURLは保持される。
+  const gotNothing = initialHero.length === 0 && reviewsByPref.length === 0 && !liveCounts;
+  if (gotNothing) {
+    res.statusCode = 503;
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Retry-After', '120');
   }
 
   return { props: { initialHero, reviewsByPref, liveCounts } };

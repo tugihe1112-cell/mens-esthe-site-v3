@@ -161,6 +161,22 @@ requireMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/, 'ブランド一�
 requireMatch(searchPage, /const shopDetailUrl = brandCanonicalPath\(shop\)/,
   '検索結果のリンクが本命URL規則(brandCanonicalPath)を通っていません（301を1回余計に踏ませます）');
 
+// ── DB障害のときに「200で空ページ」を配信しない（2026-09-15）────────────
+// 🚩 店舗・ブランド・人物・エリアのSSRは 2026-06-30 の全API停止を受けて503にしてあったが、
+//    **トップページだけ取得失敗時に空配列のまま200を返していた**。
+//    GSCの実測では索引されている数少ないページの1つがトップ＝一番やられてはいけない場所。
+// ⚠️ 一律503ではない。取得が2段あり後段だけ失敗した場合は部分的に出せるので、
+//    「全部空」のときだけ503にする、という条件ごと見張る。
+{
+  const homeWrapper = strip(read('pages/index.jsx'));
+  requireMatch(homeWrapper, /const gotNothing = initialHero\.length === 0 && reviewsByPref\.length === 0 && !liveCounts/,
+    'トップページが「中身が全部空か」を判定していません（空ページを200で配信します）');
+  requireMatch(homeWrapper, /if \(gotNothing\)[\s\S]{0,120}res\.statusCode = 503/,
+    'トップページが中身ゼロのときに503を返していません（2026-06-30の空ページ配信と同じ型）');
+  rejectMatch(homeWrapper, /notFound: true/,
+    'トップページが404を返そうとしています（URLの消滅を宣言することになります）');
+}
+
 // ── D-014 複数ルームのブランドへの集約（2026-09-14）──────────────────
 // 301・サイトマップ・内部リンクは**同時に**動かないと壊れる。片方だけ直す事故を機械で止める。
 {
