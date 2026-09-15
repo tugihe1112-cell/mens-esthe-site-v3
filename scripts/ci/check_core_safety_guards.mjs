@@ -364,6 +364,49 @@ requireText(read('src/utils/registerAnalytics.js'), /export const REGISTER_CTA_S
   }
 }
 
+// ── 利用者に内部の例外文を出さない（2026-09-15）────────────────────────
+// 🚩 2026-09-08 に登録・ログイン画面で確立した線引き＝
+//    「4xxと503はAPIの文言をそのまま出す／500と通信失敗だけ固定文言に写す」。
+//    ところが**お問い合わせ画面だけ古いまま**で、(1)`catch` で `e.message` を出しており
+//    通信失敗時に「Failed to fetch」が利用者に出る (2)4xxを全部同じ固定文言に潰しており、
+//    APIが書いた「何を直せばいいか」が消える、の2つが同時に起きていた。
+//    さらにAPI側の400本文が英語の内部文字列（'Invalid email'）だったので、
+//    画面だけ直すと今度は英語が出る＝**両方**直す必要があった。
+{
+  const contactPage = fs.readFileSync('src/pages/ContactPage.jsx', 'utf8');
+  const contactApi = fs.readFileSync('api/contact.js', 'utf8');
+  const stripJs = (src) => src
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/^[ \t]*\/\/.*$/gm, '');
+  const pageCode = stripJs(contactPage);
+  const apiCode = stripJs(contactApi);
+
+  if (/setError\([^)]*\be\.message/.test(pageCode)) {
+    failures.push(
+      'お問い合わせ画面が例外の message を利用者に出しています（通信失敗時に「Failed to fetch」が出ます）。\n' +
+      '      → 500と通信失敗は固定文言に写すこと（RegisterPage と同じ線引き）。'
+    );
+  }
+  if (!/const SAFE_API_MESSAGE_STATUS =/.test(pageCode)) {
+    failures.push(
+      'お問い合わせ画面が4xxの案内文言を握りつぶしています。\n' +
+      '      → SAFE_API_MESSAGE_STATUS で「そのまま出してよい状態コード」を定義すること\n' +
+      '        （2026-09-08、全部を固定文言に潰して原因が誰にも分からなくなった型）。'
+    );
+  }
+  // 🚩 4xxの本文は利用者がそのまま読む。英語の内部文言を返していないか。
+  const engFourXX = apiCode.match(/res\.status\(4\d\d\)\.json\(\{ error: '[ -~]+' \}\)/g) || [];
+  const userFacing = engFourXX.filter((m) => !/Method not allowed/.test(m));
+  if (userFacing.length) {
+    failures.push(
+      'お問い合わせAPIの4xxが英語の内部文言を返しています:\n' +
+      userFacing.map((m) => `      - ${m}`).join('\n') +
+      '\n      → 4xxの本文は画面にそのまま出る。日本語の案内にすること。'
+    );
+  }
+}
+
 // ── 人物の同定は reviewIdentity に一本化する（2026-09-15）──────────────
 // 🚩 2026-09-08(F04)で人物照合を `reviewIdentity.js` に集約したはずだったが、
 //    画面側に**自前の正規化が6か所残っていた**（`(t.name||'').replace(/[\s　]/g,'')`）。

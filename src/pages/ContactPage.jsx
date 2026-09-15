@@ -4,6 +4,11 @@ import { AlertCircle, CheckCircle2, Mail, Send } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 
+// 4xx と 503 の本文は利用者向けに書かれているのでそのまま出してよい状態コード。
+// 500 と通信失敗は内部の例外文が混ざるので固定文言に写す（RegisterPage と同じ考え方）。
+const SAFE_API_MESSAGE_STATUS = new Set([400, 401, 403, 404, 409, 422, 429, 503]);
+const SEND_FAILED_TEXT = '送信できませんでした。入力内容はそのままで、時間をおいてもう一度お試しください。';
+
 const initialForm = {
   name: '',
   email: '',
@@ -38,14 +43,29 @@ export default function ContactPage() {
       });
 
       if (!response.ok) {
-        throw new Error('送信に失敗しました。入力内容をご確認ください。');
+        // 🚩 4xx/503 の本文は**利用者が読むための案内**なのでそのまま出す。
+        //    500 と通信失敗だけ固定文言に写す（本文に内部の例外文が混ざるため）。
+        //    2026-09-08、登録画面で「4xxの案内まで握りつぶして原因が誰にも分からなくなった」
+        //    のと同じ型が、この画面にだけ残っていた。
+        let apiMessage = '';
+        try {
+          const body = await response.json();
+          apiMessage = typeof body?.error === 'string' ? body.error : '';
+        } catch {
+          // JSONが返らないことがある（Nextの静的500など）。その場合は固定文言に倒す。
+        }
+        setStatus('error');
+        setError(SAFE_API_MESSAGE_STATUS.has(response.status) && apiMessage ? apiMessage : SEND_FAILED_TEXT);
+        return;
       }
 
       setForm(initialForm);
       setStatus('success');
-    } catch (e) {
+    } catch {
+      // ⚠️ ここで e.message を出さない。通信失敗の message は
+      //    「Failed to fetch」などブラウザ内部の英語文言で、利用者には意味がない。
       setStatus('error');
-      setError(e.message || '送信に失敗しました。時間をおいて再度お試しください。');
+      setError(SEND_FAILED_TEXT);
     }
   };
 

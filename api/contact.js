@@ -47,15 +47,17 @@ export default async function handler(req, res) {
   const message = normalizeText(rawMessage).slice(0, MAX_MESSAGE_LENGTH);
 
   if (!name || !email || !message) {
-    return res.status(400).json({ error: 'Missing required fields' });
+    // ⚠️ 4xxの本文は**利用者がそのまま読む案内**。英語の内部文言を返さない（2026-09-08に
+    //    登録APIで直したのと同じ型。画面側は安全な状態コードの本文をそのまま表示する）。
+    return res.status(400).json({ error: 'お名前・メールアドレス・お問い合わせ内容は必須です。' });
   }
 
   if (!isValidEmail(email)) {
-    return res.status(400).json({ error: 'Invalid email' });
+    return res.status(400).json({ error: 'メールアドレスの形式が正しくありません。' });
   }
 
   if (normalizeText(rawMessage).length > MAX_MESSAGE_LENGTH) {
-    return res.status(400).json({ error: 'Message too long' });
+    return res.status(400).json({ error: `お問い合わせ内容が長すぎます（${MAX_MESSAGE_LENGTH}文字まで）。` });
   }
 
   try {
