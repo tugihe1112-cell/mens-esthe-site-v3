@@ -364,6 +364,26 @@ requireText(read('src/utils/registerAnalytics.js'), /export const REGISTER_CTA_S
   }
 }
 
+// ── 口コミ保存の失敗文言に内部の例外文を混ぜない（2026-09-15）──────────
+// 🚩 `authErrorText.js` に「返す文字列に err.message を混ぜないこと。混ぜた瞬間に
+//    『Supabaseの英語文がそのまま出る』状態へ戻る」と書いてあるのに、
+//    `DataContext.addReview` の**分類漏れの分岐だけ**が
+//    `口コミの保存に失敗しました（${error.message}）` と括弧書きで混ぜていた。
+//    RLS違反なら `... for table "reviews"`、制約違反なら制約名まで利用者の画面に出る。
+//    投稿はこのサイトの一次コンテンツを作る唯一の経路なので、ここが一番出てはいけない。
+{
+  const dataContext = fs.readFileSync('src/contexts/DataContext.jsx', 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^[ \t]*\/\/.*$/gm, '');
+  // 利用者に見せる message を組み立てる箇所に error.message を差し込んでいないか
+  if (/message\s*=\s*[`'"][^`'"]*\$\{\s*error\.message/.test(dataContext)) {
+    failures.push(
+      '口コミ保存の失敗文言に error.message を混ぜています（Supabaseの英語文とテーブル名が利用者に出ます）。\n' +
+      '      → 固定の日本語文に写すこと。技術的な詳細は console.error と e.cause に残っています。'
+    );
+  }
+}
+
 // ── 利用者に内部の例外文を出さない（2026-09-15）────────────────────────
 // 🚩 2026-09-08 に登録・ログイン画面で確立した線引き＝
 //    「4xxと503はAPIの文言をそのまま出す／500と通信失敗だけ固定文言に写す」。

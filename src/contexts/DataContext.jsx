@@ -226,8 +226,20 @@ export const DataProvider = ({ children }) => {
           + '書いた内容は下書きとして残していますので、少し時間をおいて再度お試しください。';
       } else if (isRls) {
         message = 'ログインの有効期限が切れている可能性があります。再度ログインしてから投稿してください。';
+      } else if (/Failed to fetch|NetworkError|fetch failed|ERR_NETWORK/i.test(detail)) {
+        message = '通信できませんでした。書いた内容は下書きとして残していますので、'
+          + '電波の良い場所で、もう一度お試しください。';
       } else {
-        message = `口コミの保存に失敗しました（${error.message || '原因不明'}）`;
+        // 🚩 ここに error.message を混ぜない（2026-09-15）。
+        //    authErrorText.js に「返す文字列に err.message を混ぜないこと。
+        //    混ぜた瞬間に『Supabaseの英語文がそのまま出る』状態へ戻る」と書いたのに、
+        //    この分岐だけ `（${error.message}）` と括弧書きで混ぜていた。
+        //    RLS違反なら `new row violates row-level security policy for table "reviews"`、
+        //    制約違反ならテーブル名・制約名まで利用者の画面に出る。
+        //    ⚠️ 技術的な詳細は console.error と e.cause に**既に残している**ので、
+        //       原因追跡の材料は失われない。画面に出す必要がない。
+        message = '口コミを保存できませんでした。書いた内容は下書きとして残していますので、'
+          + '時間をおいて再度お試しください。解決しない場合はお問い合わせからご連絡ください。';
       }
 
       const e = new Error(message);
