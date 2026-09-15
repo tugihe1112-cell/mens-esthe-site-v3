@@ -85,6 +85,23 @@ export const getDisplayName = (name, shop = null) => {
     out = out.slice(0, -place.length).replace(/[\s　・|/-]+$/u, '').trim();
   }
 
+  // 括弧の**中**で読み仮名に地名が溶けている形: "Aroma Lunabelle (アロマルナベール秋葉原)"
+  // 括弧ごと外すと読み仮名まで消え、空白で切ることもできない（区切りが無い）。
+  // → 括弧の中身の**末尾**がこの店の地名なら、その部分だけ抜いて括弧は残す。
+  // ⚠️ 中身が地名そのもののとき（"(吉祥寺)"）は上の paren で既に括弧ごと外れている。
+  // ⚠️ カタカナの読みと地名は文字種が違うので、"(トウキョウ)" が "東京" に一致することはない。
+  //    一致するのは「読み仮名＋漢字の地名」が連結された実データの形だけ。
+  const inner = out.match(/^(.*?)[\s　]*[（(]([^）)]+)[）)]$/u);
+  if (inner) {
+    const head = inner[1].trim();
+    const body = inner[2].trim();
+    const hit = ordered.find((p) => body.endsWith(p) && body.length - p.length >= MIN_KEEP);
+    if (hit) {
+      const kept = body.slice(0, -hit.length).replace(/[\s　・|/-]+$/u, '').trim();
+      out = head ? `${head} (${kept})` : kept;
+    }
+  }
+
   // 先頭の地名は**区切りがあるときだけ**外す: "武蔵小杉 ROYCE (ロイス)"
   // 区切りが在ること自体が「ここまでが地名」という書き手の合図なので、誤削除になりにくい。
   const lead = out.match(/^([^\s　]+)[\s　]+(.*\S)$/u);
