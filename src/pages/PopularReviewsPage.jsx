@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { authHeaders } from '../utils/supabaseRest';
 import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
@@ -60,7 +61,9 @@ export default function PopularReviewsPage({
   // ⚠️ 2026-08-12: anonキー固定をやめ、fetch直前に await authHeaders() で
   //    セッションJWT（未ログイン時はanon）を載せる。
 
-  const normName = (s) => (s || '').replace(/[\s　]/g, '');
+  // ⚠️ 人物の同定は reviewIdentity に一本化する（独自の正規化を書かない）。
+  //    空白を除くだけでは半角/全角・大文字小文字が畳まれず、「ｱｲ」と「アイ」が別人になる。
+  const normName = (s) => normalizeTherapistName(s);
 
   /**
    * ⚠️ 2026-08修正: 以前は shops / therapists を limit無しで全件取得していた。

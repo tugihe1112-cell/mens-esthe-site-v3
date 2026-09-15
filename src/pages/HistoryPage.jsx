@@ -84,12 +84,12 @@ export default function HistoryPage() {
                           <h3 className="text-base md:text-lg font-black text-white mb-1 group-hover:text-pink-400 transition">{item.name}</h3>
                           <div className="flex items-center gap-2 mb-2">
                              <span className="text-[10px] font-bold bg-white/5 text-slate-400 px-2 py-0.5 rounded border border-white/5 group-hover:border-pink-500/20 group-hover:text-pink-300 transition">
-                               {item.shopName || 'Unknown Shop'}
+                               {item.shopName || '店舗名不明'}
                              </span>
                           </div>
                         </div>
                         <span className="text-[10px] text-pink-500 font-bold bg-pink-500/10 px-2 py-1 rounded-full">
-                          {i === 0 ? 'LATEST' : 'VIEWED'}
+                          {i === 0 ? '最近見た' : '閲覧済み'}
                         </span>
                       </div>
                       

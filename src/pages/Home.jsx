@@ -1,5 +1,6 @@
 
 import React, { useMemo, useState, useEffect } from 'react';
+import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import Head from 'next/head';
 import { getDisplayName } from '../utils/shopHelpers';
 import { optimizeImageUrl } from '../utils/imageUrl';
@@ -110,7 +111,8 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
         const seenNames = new Set();
         const uniquePool = [];
         for (const t of pool) {
-          const key = (t.name || '').replace(/[\s　]/g, '');
+          // ⚠️ 独自の正規化を書かない。reviewIdentity に一本化する。
+          const key = normalizeTherapistName(t.name);
           if (!key || seenNames.has(key)) continue;
           seenNames.add(key);
           uniquePool.push(t);

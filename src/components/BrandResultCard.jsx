@@ -55,7 +55,7 @@ export default function BrandResultCard({ summary, shops }) {
         onClick={() => setIsOpen(!isOpen)}
         className="md:hidden w-full py-4 text-center text-sm font-bold text-slate-300 border-t border-white/5 bg-white/5 active:bg-white/10 transition"
       >
-        {isOpen ? 'CLOSE LIST ▲' : 'VIEW ALL SHOPS ▼'}
+        {isOpen ? '閉じる ▲' : '店舗をすべて見る ▼'}
       </button>
 
       {/* 展開される店舗リスト */}

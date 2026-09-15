@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
@@ -23,7 +24,8 @@ function timeAgo(dateStr) {
 function dedupeByName(list) {
   const seen = new Set();
   return list.filter(t => {
-    const key = (t.name || '').replace(/[\s　]/g, '');
+    // ⚠️ 独自の正規化を書かない（「ｱｲ」と「アイ」が別人になる）。reviewIdentity に一本化。
+    const key = normalizeTherapistName(t.name);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;

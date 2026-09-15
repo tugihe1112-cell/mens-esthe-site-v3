@@ -3,7 +3,7 @@ import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { useSearchParams, Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { supabase } from '../lib/supabase';
-import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews } from '../utils/reviewIdentity.js';
+import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews, normalizeTherapistName } from '../utils/reviewIdentity.js';
 import LazyImage from '../components/LazyImage.jsx';
 import { TherapistCardSkeleton } from '../components/ui/Skeleton.jsx';
 import Header from '../components/Header.jsx';
@@ -214,7 +214,8 @@ function buildFeaturedTherapistPool(rows, shops, limit = 240) {
       const therapist = pool[round];
       if (!therapist) continue;
       added = true;
-      const normalizedName = therapist.name.replace(/[\s　]/g, '');
+      // ⚠️ 人物の同定は reviewIdentity に一本化（半角/全角・大文字小文字も畳む）。
+      const normalizedName = normalizeTherapistName(therapist.name);
       if (!normalizedName || seenNames.has(normalizedName)) continue;
       seenNames.add(normalizedName);
       result.push(therapist);

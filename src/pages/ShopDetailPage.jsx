@@ -247,7 +247,9 @@ export default function ShopDetailPage({
   }
 
   // 名前で絞り込み → 並び替え → 表示件数で切る（SearchPageと同じ流れ）
-  const normName = (s) => (s || '').replace(/[\s　]/g, '');
+  // ⚠️ 人物の同定は reviewIdentity に一本化する（独自の正規化を書かない）。
+  //    空白を除くだけでは半角/全角・大文字小文字が畳まれず、「ｱｲ」と「アイ」が別人になる。
+  const normName = (s) => normalizeTherapistName(s);
   const tagCounts = React.useMemo(() => {
     const counts = {};
     TAG_CATEGORIES.forEach(cat => cat.tags.forEach(t => { counts[t] = 0; }));
@@ -657,8 +659,8 @@ export default function ShopDetailPage({
               </dl>
               
               <div className="mt-8">
-                 <a href={shop.url || shop.website_url || shop.raw_data?.url || shop.raw_data?.websiteUrl || '#'} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_outbound', { link_type: 'official', shop_id: shop.id, shop_name: shop.name })} className="block w-full bg-white text-slate-900 hover:bg-slate-200 py-4 rounded-xl text-sm font-black text-center transition shadow-lg tracking-widest uppercase">
-                   Official Website ↗
+                 <a href={shop.url || shop.website_url || shop.raw_data?.url || shop.raw_data?.websiteUrl || '#'} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_outbound', { link_type: 'official', shop_id: shop.id, shop_name: shop.name })} className="block w-full bg-white text-slate-900 hover:bg-slate-200 py-4 rounded-xl text-sm font-black text-center transition shadow-lg tracking-widest">
+                   公式サイトで最新情報を見る ↗
                  </a>
               </div>
             </div>
@@ -902,7 +904,7 @@ export default function ShopDetailPage({
             <div className="flex items-center justify-between mb-6 px-1">
                <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
-                 REVIEWS
+                 口コミ
                </h3>
                <button 
                   onClick={handlePostReview}
@@ -963,7 +965,7 @@ export default function ShopDetailPage({
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                SCHEDULE
+                出勤スケジュール
               </h3>
             </div>
             {/* ⚠️ 2026-09-08（FIXES.md F07）: ここは常時75vhの外部iframeだった。

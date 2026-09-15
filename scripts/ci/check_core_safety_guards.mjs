@@ -364,6 +364,42 @@ requireText(read('src/utils/registerAnalytics.js'), /export const REGISTER_CTA_S
   }
 }
 
+// ── 人物の同定は reviewIdentity に一本化する（2026-09-15）──────────────
+// 🚩 2026-09-08(F04)で人物照合を `reviewIdentity.js` に集約したはずだったが、
+//    画面側に**自前の正規化が6か所残っていた**（`(t.name||'').replace(/[\s　]/g,'')`）。
+//    空白を除くだけでは半角/全角・大文字小文字が畳まれないので、
+//    「ｱｲ」と「アイ」、「似鳥 芹香」と「似鳥芹香」の片方が別人として扱われる。
+//    オーナーの指摘（「苗字名前が一緒なら一緒でいい」）はまさにこの型。
+//    ⚠️ 検索用の正規化（normalizeForSearch、カタカナ→ひらがな）は別物なので対象外。
+{
+  const PERSON_NAME_SCREENS = [
+    'src/pages/Home.jsx',
+    'src/pages/SearchPage.jsx',
+    'src/pages/ShopDetailPage.jsx',
+    'src/pages/NewTherapistsPage.jsx',
+    'src/pages/PopularReviewsPage.jsx',
+  ];
+  const offenders = [];
+  for (const file of PERSON_NAME_SCREENS) {
+    const code = fs.readFileSync(file, 'utf8');
+    if (!/normalizeTherapistName/.test(code)) {
+      offenders.push(`${file} が normalizeTherapistName を使っていない`);
+      continue;
+    }
+    // `t.name` / `therapist.name` に直接 空白除去だけを掛けている書き方を禁止する
+    const adhoc = code.match(/\(?\s*[A-Za-z_$][\w$]*\.name\s*\|\|\s*''\s*\)\s*\.replace\(\/\[\\s　\]\/g/g)
+      || code.match(/[A-Za-z_$][\w$]*\.name\.replace\(\/\[\\s　\]\/g/g);
+    if (adhoc) offenders.push(`${file} に自前の人物名正規化が残っている（${adhoc.length}箇所）`);
+  }
+  if (offenders.length) {
+    failures.push(
+      '人物名の正規化が reviewIdentity に一本化されていません:\n' +
+      offenders.map((o) => `      - ${o}`).join('\n') +
+      '\n      → normalizeTherapistName を使うこと。空白除去だけでは「ｱｲ」と「アイ」が別人になります。'
+    );
+  }
+}
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));
