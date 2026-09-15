@@ -207,11 +207,16 @@ export default function ShopListPage() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-90"></div>
                       
-                      {/* エリアバッジ */}
+                      {/* エリアバッジ
+                          ⚠️ D-009: 📍を直書きしない。住所を持たない店が614店（56%）あり、
+                             直書きすると中身が空でも「📍」だけの丸いバッジが浮く。
+                             LocationLabel は中身が空なら null を返すので、バッジごと出ない。
+                             （LocationLabel はこの型を潰すために作ったのに、この画面だけ直書きが残っていた） */}
                       <div className="hidden md:block absolute top-3 left-3">
-                          <span className="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                            <span>📍</span> {shop.prefecture} {shop.city} {shop.area && `(${shop.area})`}
-                          </span>
+                          <LocationLabel
+                            parts={[shop.prefecture, shop.city, shop.area]}
+                            className="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold px-2 py-1 rounded-full inline-flex items-center gap-1"
+                          />
                       </div>
 
                       <div className="hidden md:block absolute bottom-0 left-0 p-4 w-full">

@@ -189,14 +189,47 @@ function read(path) {
       .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
       .replace(/^\s*\/\/.*$/gm, '');
 
-    // (a) 📍 の直後に店舗フィールドを直書きしている＝データが空だとピンだけ残る
-    if (/📍\s*\{\s*shop\./.test(codeOnly)) {
-      violations.push(
-        `[D-009] ${p} が「📍 {shop.xxx}」を直書きしている。\n` +
-        `        住所が無い店舗が614店（全体の56%）あり、ピンだけが宙に浮く。\n` +
-        `        → <LocationLabel parts={[shop.prefecture, shop.city]} /> を使うこと\n` +
-        `          （中身が空なら要素ごと描画されない。呼び出し側の条件分岐は不要）。`
-      );
+    // (a) 📍 を直書きしている＝データが空だとピンだけ残る
+    // 🚩 2026-09-15: ここは以前 `/📍\s*\{\s*shop\./` だけを見ており、
+    //    **📍の直後に `{shop.` が来る書き方しか検出できなかった**。
+    //    ShopListPage は `<span>📍</span> {shop.prefecture}` と📍をspanで包んでいたため、
+    //    間に `</span>` が挟まって素通りし、住所の無い店で丸いバッジにピンだけが浮いていた。
+    //    ＝ガードが「特定の書き方」を見ていて「性質（空でも出てしまう）」を見ていなかった。
+    //    → 📍のリテラルそのものを禁止し、**同じ行か直前2行に明示のガード**
+    //      （`&&` / 三項 / LocationLabel）がある場合だけ許す形にした。
+    if (!p.endsWith('LocationLabel.jsx')) {
+      // ⚠️ コメントは**行番号を保ったまま**空白化する。
+      //    codeOnly のようにコメントごと消すと行がずれて、報告する行番号が嘘になる。
+      //    逆に生のまま走査すると、この検査を説明したコメント内の📍に自分で反応する
+      //    （2026-09-15、実際に4件の誤検知が出た）。
+      const blank = (m) => m.replace(/[^\n]/g, ' ');
+      const lineSafe = src
+        .replace(/\{\/\*[\s\S]*?\*\/\}/g, blank)
+        .replace(/\/\*[\s\S]*?\*\//g, blank)
+        .replace(/^([ \t]*)\/\/.*$/gm, (m) => blank(m));
+      const lines = lineSafe.split('\n');
+      const rawLines = src.split('\n');
+      for (let i = 0; i < lines.length; i += 1) {
+        if (!lines[i].includes('📍')) continue;
+        // 直前2行まで見る＝ガードが `{x && (` と別行に書かれている形（掲示板）を通すため。
+        // 🚩 ガードの根拠は**コードから**取り、例外マーカーだけコメントから取る。
+        //    2026-09-15、ここを生の行だけで見ていたため、📍の直前に置いた
+        //    「→ LocationLabel を使うこと」という**自分の説明コメント**を
+        //    「ガード済み」と読んで素通りした（前日 strip() で直したのと同じ型）。
+        const codeWindow = lines.slice(Math.max(0, i - 2), i + 1).join('\n');
+        const guarded = /&&|\?\s*\(|LocationLabel/.test(codeWindow);
+        // `D-009-ok:` は**必ず空でない値**だと分かっている場所のための明示の例外。
+        // 理由をコメントに書かせることで、黙って直書きに戻るのを防ぐ。
+        const excused = /D-009-ok/.test(rawLines.slice(Math.max(0, i - 4), i + 1).join('\n'));
+        if (guarded || excused) continue;
+        violations.push(
+          `[D-009] ${p}:${i + 1} が📍を無条件に描画している。\n` +
+          `        住所が無い店舗が614店（全体の56%）あり、ピンだけが宙に浮く。\n` +
+          `        → <LocationLabel parts={[shop.prefecture, shop.city]} /> を使うこと\n` +
+          `          （中身が空なら要素ごと描画されない。呼び出し側の条件分岐は不要）。`
+        );
+        break;
+      }
     }
 
     // (b) DBに存在しないフィールド。参照した時点で必ず undefined になる

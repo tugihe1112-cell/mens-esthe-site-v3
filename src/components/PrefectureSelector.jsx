@@ -28,6 +28,8 @@ const TOKYO_GROUPS = [
     return (
       <div className="mt-4 w-full bg-gradient-to-r from-pink-950/60 to-purple-950/60 rounded-xl border-t-2 border-pink-500 shadow-2xl overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-top-4">
         <div className="p-4">
+          {/* D-009-ok: ここの city は「市区を選んだとき」にだけ描画される見出しで、
+              空になることがない（店舗レコードの欠損しうる住所とは別）。 */}
           <div className="text-pink-400 text-sm font-bold mb-4 flex items-center gap-2">
             <span className="animate-pulse">📍</span> {city}のエリア
           </div>
