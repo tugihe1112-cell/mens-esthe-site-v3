@@ -31,6 +31,14 @@
  *   <shop_id>\t<都道府県>\t<市区>\t<エリア>\t<住所>
  *   例: tokyo_ota_kamata_doigt_de_fee\t東京都\t大田区\t蒲田\t東京都大田区蒲田エリア
  *
+ * 【エリアは「|」で複数書ける】
+ *   例: kanagawa_atsugi_code4030\t神奈川県\t厚木市\t本厚木|横浜東口|関内|上大岡\t-
+ *   ルームが9つあるのにレコードが2件しかない、というブランドが実在する（リオラ・オトナコード）。
+ *   レコードを増やさずに**全ルームの地名を検索に残す**ための逃げ道。
+ *   ⚠️ 先頭がエリア一覧(/area/:pref)の振り分けに使われる（brandGroups.js の groupBrandsByArea）。
+ *      代表として出したい地名を先頭に書くこと。
+ *   ⚠️ 表示の地名(areaLabels)にも全部出るので、関係ない地名を混ぜない。
+ *
  * 実行:
  *   node scripts/maintenance/update_shop_location.mjs --file=locations.tsv
  *   node scripts/maintenance/update_shop_location.mjs --file=locations.tsv --apply
@@ -97,8 +105,13 @@ for (const r of rows) {
   const put = (key, val, current) => {
     if (val == null || val === '' || val === KEEP) return;
     const cur = show(current);
-    // エリアは配列で持っている店がある。既存が配列なら配列のまま1件で置き換える。
-    const newVal = key === 'area' && Array.isArray(current) ? [val] : val;
+    // エリアは「|」で複数指定できる。複数なら必ず配列、単数でも既存が配列なら配列のまま。
+    let newVal = val;
+    if (key === 'area') {
+      const parts = String(val).split('|').map((v) => v.trim()).filter(Boolean);
+      if (parts.length === 0) return;
+      newVal = parts.length > 1 || Array.isArray(current) ? parts : parts[0];
+    }
     if (cur === show(newVal)) return;
     next[key] = newVal;
     diffs.push(`     ${key}: ${cur} → ${show(newVal)}`);
