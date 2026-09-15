@@ -296,6 +296,23 @@ function read(path) {
     }
   }
 
+  // B-2. 店舗詳細：口コミ0件の店に「★ New」を出さない（2026-09-15）
+  //     ShopListPage では 2026-09-08 に消したが、**店舗詳細には残っていた**＝
+  //     `★ {avgRating || 'New'}` で0件の店に「★ New」が出ていた。
+  //     ★は評価の記号なのに評価ではなく、これらの店は新規でもない（「0件」の言い換え）。
+  //     営業を確認できていない店にも付いて矛盾していた（実際に本番で出た）。
+  {
+    const p = 'src/pages/ShopDetailPage.jsx';
+    const code = strip(read(p));
+    if (/★\s*\{[^}]*\|\|\s*'New'/.test(code) || /★\s*New/.test(code)) {
+      violations.push(
+        `[F06-B] ${p} が口コミ0件の店に「★ New」を出している。\n` +
+        `        ★は評価の記号で、評価が無いなら出さない。「新規」でもなく0件の言い換えにすぎない。\n` +
+        `        → playbook/decisions.md D-010（根拠のない数字を画面に出さない）。`
+      );
+    }
+  }
+
   // C. 店舗詳細：同県の店を並べながら「近く」「元の地域名」と書かない
   {
     const p = 'src/pages/ShopDetailPage.jsx';

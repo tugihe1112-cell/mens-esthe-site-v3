@@ -442,7 +442,14 @@ export default function ShopDetailPage({
                  {/* ⚠️ 収集元サイトの `raw_data.rating` は使わない（shapeShopRow が構造的に落としている）。
                      ★>0 を持つ39店は当サイトの口コミが全て0件で、出すと「口コミ0件なのに★4.7」になる。
                      必ず**実際の口コミから算出した平均**だけを表示する。 */}
-                 <span className="text-yellow-400 font-bold shrink-0">★ {avgRating || 'New'}</span>
+                 {/* 🚩 口コミが0件のときは★を出さない（2026-09-15）。
+                     以前は `★ {avgRating || 'New'}` と書いており、**0件の店に「★ New」**が出ていた。
+                     ★は評価の記号なのに評価ではなく、しかもこれらの店は新規ではない＝
+                     「口コミ0件」を「New」と言い換えていただけ。すぐ上のコメントで
+                     「根拠のない数字を作らない」と書いた直後に作っていた（D-010と同じ型）。
+                     営業を確認できていない店にも「New」が付いていて矛盾していた。
+                     ブランドページは既に0件なら件数も★も出さない。画面を揃える。 */}
+                 {avgRating && <span className="text-yellow-400 font-bold shrink-0">★ {avgRating}</span>}
                </div>
              </div>
 
