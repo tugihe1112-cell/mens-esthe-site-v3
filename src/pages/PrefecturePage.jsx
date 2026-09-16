@@ -17,6 +17,7 @@ const PREF_MAP = PREF_SLUG_MAP;
 export default function PrefecturePage({
   initialPrefName = null,
   initialShops = [],
+  initialRoomCounts = {},
   initialShopCount = 0,
   renderSeo = true,
 }) {
@@ -43,10 +44,12 @@ export default function PrefecturePage({
   //    県をまたぐブランド（例: THE HALF は東京4ルーム＋横浜1ルーム）では
   //    prefBrands の roomCount が実際より小さくなる。
   //    そのまま本命URLを決めると「押した瞬間に301で飛ぶリンク」になる（2026-09-16に実際に出た）。
-  const allRoomCounts = useMemo(
-    () => countRoomsByBrand(shops && shops.length ? shops : initialShops),
-    [shops, initialShops],
-  );
+  //    ⚠️ SSRで渡ってくる initialShops は**ブランド要約**なので、ここから数えても意味が無い
+  //       （全部が1ルームになる）。SSRが全店で数えた initialRoomCounts を使う。
+  const allRoomCounts = useMemo(() => {
+    if (shops && shops.length) return countRoomsByBrand(shops);
+    return new Map(Object.entries(initialRoomCounts || {}));
+  }, [shops, initialRoomCounts]);
 
   const displayedShopCount = shops?.length > 0 ? prefBrands.length : (initialShopCount || prefBrands.length);
 

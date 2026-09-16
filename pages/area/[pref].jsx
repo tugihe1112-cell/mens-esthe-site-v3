@@ -11,7 +11,7 @@ import { createClient } from '@supabase/supabase-js';
 import PrefecturePage from '../../src/pages/PrefecturePage';
 import { PREF_SLUG_MAP } from '../../src/data/areaLinks';
 import { getDisplayName } from '../../src/utils/shopHelpers';
-import { buildBrands } from '../../src/utils/brandGroups.js';
+import { buildBrands, countRoomsByBrand } from '../../src/utils/brandGroups.js';
 
 // 県リストは src/data/areaLinks.js に集約（4箇所に散らばって soft404 を生んだため）
 const PREF_MAP = PREF_SLUG_MAP;
@@ -40,8 +40,28 @@ export async function getServerSideProps({ params, res }) {
     //    （実測: AROMA EMERALD は中身が完全に同じ4レコード）。
     //    セラピストは店舗ではなくブランドに属するので、一覧もブランド単位にする。
     // ⚠️ この県のルームだけが渡るので、地名もこの県ぶんになる（エリアページとして正しい）。
+    // 🚩 ルーム数は**全店**で数える（2026-09-16）。
+    //    この画面はその県の店だけを引くので、ここで数えると県をまたぐブランドが
+    //    「1ルーム」になり、本命URLが店舗URLになる。ところが301の判定は全体のルーム数で
+    //    見るので、**押した瞬間に301でブランドページへ飛ぶリンク**ができる
+    //    （THE HALF に横浜ルームを足して実際に出た）。
+    //    ⚠️ PostgRESTは1回に最大1000行。店舗は1,000件を超えているので必ず繰ること。
+    const allRooms = [];
+    for (let from = 0; ; from += 1000) {
+      const page = await supabase.from('shops').select('id, group_id').range(from, from + 999);
+      if (page.error) throw page.error;
+      allRooms.push(...(page.data || []));
+      if (!page.data || page.data.length < 1000) break;
+    }
+    const roomCountMap = countRoomsByBrand(allRooms);
+    // ⚠️ propsはJSONにされるので Map は渡せない。素のオブジェクトにする。
+    const initialRoomCounts = Object.fromEntries(roomCountMap);
+
     const shopList = buildBrands(shops || []).map((b) => ({
       id: b.primaryShopId || b.id,
+      // 🚩 group_id を落とさないこと。落とすと画面側で組み直したとき全部が単独店になり、
+      //    本命URLが店舗URLに倒れる（＝押すと301する）。
+      group_id: b.id,
       name: b.name,
       // 全ルームの地名。「渋谷にもあるブランド」が渋谷で見つかるために要る。
       city: (b.areaLabels || []).join('・') || b.city || '',
@@ -76,7 +96,7 @@ export async function getServerSideProps({ params, res }) {
       }));
     }
 
-    return { props: { ssr: { prefName, pref, shopCount, topAreas, shopList: shopList.slice(0, 60), latestReviews } } };
+    return { props: { ssr: { prefName, pref, shopCount, topAreas, shopList: shopList.slice(0, 60), latestReviews, initialRoomCounts } } };
   } catch (e) {
     console.error('[SSR Area]', e.message);
     // DB障害を「店舗0件」の正常ページとしてキャッシュしない。実在ページは保持し、
@@ -92,7 +112,7 @@ export default function AreaSSRPage({ ssr }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
   if (!ssr) return <PrefecturePage />;
 
-  const { prefName, pref, shopCount, topAreas, shopList, latestReviews } = ssr;
+  const { prefName, pref, shopCount, topAreas, shopList, latestReviews, initialRoomCounts = {} } = ssr;
   const canonical = `${SITE}/area/${pref}`;
   const title = `${prefName}のメンズエステ${shopCount}店舗・口コミ | メンエスマップ`;
   const description = `${prefName}のメンズエステ${shopCount}店舗（${topAreas.slice(0, 3).join('・')}など）を掲載。セラピスト情報・口コミ・料金・出勤スケジュールをチェック。`;
@@ -126,6 +146,7 @@ export default function AreaSSRPage({ ssr }) {
       <PrefecturePage
         initialPrefName={prefName}
         initialShops={shopList}
+        initialRoomCounts={initialRoomCounts}
         initialShopCount={shopCount}
         renderSeo={false}
       />

@@ -223,8 +223,22 @@ requireMatch(searchPage, /const shopDetailUrl = brandCanonicalPath\(shop\)/,
   //    （2026-09-16、THE HALF に横浜ルームを足して実際に出た）。
   requireMatch(prefPage, /to=\{brandCanonicalPath\(shop,\s*allRoomCounts\)\}/,
     'エリア一覧のリンクが全店のルーム数を使っていません（押した瞬間に301で飛ぶリンクになります）');
-  requireMatch(prefPage, /countRoomsByBrand\(\s*shops[\s\S]{0,80}?initialShops\s*\)/,
+  requireMatch(prefPage, /countRoomsByBrand\(shops\)/,
     'エリア一覧が全店からルーム数を数えていません（県で切った数だと301するリンクを作ります）');
+  // 🚩 SSRで渡る initialShops は**ブランド要約**なので、そこから数えても全部1ルームになる。
+  //    SSR側が全店で数えた表を渡すこと。
+  // ⚠️ `initialRoomCounts` という**語**を探すと、この件を説明したコメントに当たって通ってしまう
+  //    （2026-09-16、妨害テストで実際に素通りした）。**コメントを剥がした上で使い方を見る。**
+  const prefPageCode = strip(prefPage);
+  requireMatch(prefPageCode, /Object\.entries\(initialRoomCounts/,
+    'エリア一覧がSSRのルーム数表を使っていません（初期HTMLのリンクが301するURLになります）');
+  const areaWrapper = strip(read('pages/area/[pref].jsx'));
+  requireMatch(areaWrapper, /countRoomsByBrand\(allRooms\)/,
+    'エリアSSRが全店からルーム数を数えていません');
+  requireMatch(areaWrapper, /group_id: b\.id/,
+    'エリアSSRが渡す店舗一覧から group_id が落ちています（画面側で全部が単独店になります）');
+  requireMatch(areaWrapper, /range\(from, from \+ 999\)/,
+    'エリアSSRのルーム数集計がページ送りしていません（1,000件で頭打ちになります）');
 }
 requireMatch(postReviewPage, /data\.shopId \? `\/shops\/\$\{data\.shopId\}`/, '指名なし投稿後のリンクが正規店舗URLではありません');
 for (const [name, source] of [['表彰台', podiumCard], ['ランキング一覧', rankingListItem]]) {
