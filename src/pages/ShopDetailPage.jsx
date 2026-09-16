@@ -109,9 +109,16 @@ export default function ShopDetailPage({
             therapistShopIds = groupShops.map(s => s.id);
           }
         }
-        // 写真グリッドでは、画像を確認できる在籍プロフィールだけを返す。
-        // 写真なし行は口コミ投稿フォーム側では引き続き選択できる。
-        const therapistQuery = `shop_id=in.(${therapistShopIds.join(',')})&image_url=not.is.null`;
+        // 🚩 **写真の有無で絞らない**（2026-09-16）。
+        //    以前は `image_url=not.is.null` で写真がある人だけ取っていた。その結果、
+        //    店舗情報の「在籍N人」（SSRの全行カウント）と一覧の「全N人」（写真ありだけ）が
+        //    **同じ画面で食い違い**、極端な例では Finale (フィナーレ) が
+        //    「在籍 356 人」と「全0人／在籍セラピスト情報はありません」を並べて出していた。
+        //    実測: 店舗ページが出る725店のうち355店でずれ、**112店・4,418人ぶんが一覧ゼロ**。
+        //    その4,418行は非表示0・最終確認日なし0・180日超は42行だけ＝**確認できている実在の人**で、
+        //    写真が無いだけだった。口コミ投稿フォームでは前から選べる人たちでもある。
+        //    ⇒ 表に出す。写真が無い行は LazyImage が頭文字のプレースホルダを出す。
+        const therapistQuery = `shop_id=in.(${therapistShopIds.join(',')})`;
 
         // 2. group_id がある場合は系列店全店の口コミを取得（最新20件のみ）
         const reviewShopIds = therapistShopIds;
@@ -140,7 +147,9 @@ export default function ShopDetailPage({
 
         if (isMounted) {
           if (Array.isArray(tData)) {
-            setCloudTherapists(tData.filter((t) => t.image_url?.trim() && t.is_active !== false));
+            // ⚠️ ここでも画像で絞らない（上の therapistQuery と同じ理由）。
+            //    絞ると取得を直した意味が消える＝「直したつもりで直っていない」になる。
+            setCloudTherapists(tData.filter((t) => t.is_active !== false));
           }
           if (Array.isArray(rData)) {
             setCloudReviews(rData);
@@ -225,8 +234,15 @@ export default function ShopDetailPage({
     const source = Array.isArray(cloudTherapists) && cloudTherapists.length > 0
       ? cloudTherapists
       : (getTherapistsByShopId ? getTherapistsByShopId(shopId) : []);
+    // 🚩 **重複排除より前に、写真ありを先頭へ並べる。**
+    //    下の filter は同じ名前の**先に来たほうを残す**（先勝ち）。
+    //    写真なしの行が先に来ると、同じ人の写真あり行が捨てられて
+    //    **写真を持っている人が写真なしで表示される**。
+    //    写真の有無で絞るのをやめた（2026-09-16）ことで初めて起こるようになった事故。
+    const hasImage = (t) => Boolean(String(t?.image_url ?? t?.image ?? '').trim());
+    const ordered = [...(source || [])].sort((a, b) => Number(hasImage(b)) - Number(hasImage(a)));
     const seen = new Set();
-    return (source || []).filter((therapist) => {
+    return ordered.filter((therapist) => {
       // ⚠️ 独自の正規化を書かない。ここだけ半角/全角・大文字小文字を畳まないと
       //    「ｱｲ」と「アイ」が別人として2枚並ぶ。人物同定は reviewIdentity に一本化する。
       const key = normalizeTherapistName(therapist.name);
@@ -295,6 +311,11 @@ export default function ShopDetailPage({
       list.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ja'));
     } else if (castSortOrder === 'reviews') {
       list.sort((a, b) => (therapistReviewCounts[b.id] || 0) - (therapistReviewCounts[a.id] || 0));
+    } else {
+      // 既定（標準）は写真ありを先に。プレースホルダばかりが先頭に並ぶのを避ける。
+      // ⚠️ 五十音・口コミ順のときは**並べ替えない**。利用者が指定した順を写真の有無で崩さない。
+      list.sort((a, b) => Number(Boolean(String(b?.image_url ?? b?.image ?? '').trim()))
+        - Number(Boolean(String(a?.image_url ?? a?.image ?? '').trim())));
     }
     return list;
   }, [therapists, castNameFilter, castSortOrder, therapistReviewCounts, selectedTags, reviewTagMap]);
