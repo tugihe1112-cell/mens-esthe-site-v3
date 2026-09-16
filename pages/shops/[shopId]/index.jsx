@@ -96,6 +96,18 @@ export async function getServerSideProps({ params, res }) {
     // ⚠️ 単独店（group_idなし・ルーム1つ）はここを素通りする。506店が該当。
     const redirectTo = shopRedirectPath(shop, countRoomsByBrand(groupRes.data || []));
     if (redirectTo) {
+      // 🚩 **301はブラウザに永久に残る。** この行が無いと取り消せない。
+      //    20行目の `public, s-maxage=60, stale-while-revalidate=120` には `max-age` が無い。
+      //    `s-maxage` はCDNなど共有キャッシュにしか効かないので、ブラウザは指示が無いと判断し、
+      //    **301を「恒久的な移動」として無期限にキャッシュする**（RFCが認めている挙動）。
+      //    その結果、まとめ方を後で直しても、一度その301を受け取った人は
+      //    **二度とその店舗ページに辿り着けない**。
+      //    2026-09-16に実際に起きた: group_id が `other` だったせいで
+      //    `/shops/tokyo_candy_spa` が THE HALF へ301していた。group_idを直した後も、
+      //    先に開いていたブラウザでは404のままで、クエリを足して初めて正しく表示された。
+      //    ⇒ CDN側の60秒は残したまま、**ブラウザには毎回確かめさせる**。
+      //    ⚠️ s-maxage を伸ばさないこと（長いSWRで個別ページが真っ黒になった事故がある）。
+      res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=120');
       // ⚠️ `permanent: true` と書いてはいけない。Next は **308** を返す
       //    （next/dist/lib/redirect-status.js: permanent ? PermanentRedirect(308) : 307）。
       //    SEO上は301と308は同じ扱いだが、外形監視・ログ・他社クローラは301を前提にしている。

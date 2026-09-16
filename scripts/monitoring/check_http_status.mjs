@@ -156,6 +156,18 @@ for (const [path, expected] of MUST_301) {
       if (!loc.endsWith(expected)) {
         failures.push(`[301の行き先が違う] ${path} → ${loc}（${expected} であるべき）。`);
       }
+      // 🚩 301はブラウザに**永久に**残る。`s-maxage` は共有キャッシュにしか効かないので、
+      //    `max-age` の指示が無いとブラウザは301を無期限にキャッシュしてよい。
+      //    まとめ方を後で直しても、一度301を受け取った人は**二度と店舗ページに辿り着けない**
+      //    （2026-09-16、キャンディスパで実際に起きた）。
+      //    静的ガードはコードを見るだけなので、CDNや基盤が上書きした場合はここでしか分からない。
+      const cc = res.headers.get('cache-control') || '';
+      if (!/(^|,)\s*max-age=0(\s*,|\s*$)/.test(cc)) {
+        failures.push(
+          `[301がブラウザに残り続ける] ${path} の Cache-Control が「${cc || '（無し）'}」で max-age=0 がない。\n` +
+          `          この301を一度受け取った人は、まとめ方を直しても二度とその店舗ページに辿り着けない。`
+        );
+      }
     }
   } catch (e) {
     failures.push(`[301確認] ${path} の取得に失敗: ${e.message}`);

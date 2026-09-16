@@ -188,6 +188,11 @@ requireMatch(searchPage, /const shopDetailUrl = brandCanonicalPath\(shop\)/,
 
   requireMatch(shopWrapper, /redirect: \{ destination: redirectTo, statusCode: 301 \}/,
     '店舗ページからブランドページへの301が消えています（D-014）');
+  // 🚩 301はブラウザに**永久に**残る。`s-maxage` は共有キャッシュにしか効かず、`max-age` が無いと
+  //    ブラウザは301を無期限にキャッシュしてよい。まとめ方を後で直しても、一度301を受け取った人は
+  //    二度とその店舗ページに辿り着けなくなる（2026-09-16、キャンディスパで実際に起きた）。
+  requireMatch(shopWrapper, /if \(redirectTo\) \{[\s\S]{0,300}?setHeader\('Cache-Control',\s*'[^']*max-age=0[^']*'\)[\s\S]{0,300}?return \{ redirect:/,
+    '301を返す前にブラウザ向けのキャッシュ指示(max-age=0)を出していません（一度301を受けた人が二度と店舗ページに戻れなくなります）');
   // 🚩 `permanent: true` は Next では **308** になる。外形監視は301を期待しているので、
   //    この書き方に戻すと15分ごとに「301が効いていない」で赤くなる。
   rejectMatch(shopWrapper, /redirect: \{[^}]*permanent:/,
