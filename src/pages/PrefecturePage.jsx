@@ -7,7 +7,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import { PREF_SLUG_MAP } from '../data/areaLinks';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
-import { buildBrands, groupBrandsByArea, brandCanonicalPath } from '../utils/brandGroups.js';
+import { buildBrands, groupBrandsByArea, brandCanonicalPath, countRoomsByBrand } from '../utils/brandGroups.js';
 
 // URL slug → 都道府県名（src/data/areaLinks.js に集約）
 // ⚠️ 以前はここに独自のリストを持っていたため ibaraki / tochigi / gunma が抜け、
@@ -38,6 +38,15 @@ export default function PrefecturePage({
   // ⚠️ 支店レコードをそのまま並べると同じブランドが何度も出る。
   //    セラピストは店舗ではなくブランドに属するので、一覧もブランド単位にする。
   const prefBrands = useMemo(() => buildBrands(prefShops), [prefShops]);
+
+  // 🚩 ルーム数は**全店**で数える。この画面はその県の店だけでブランドを組むので、
+  //    県をまたぐブランド（例: THE HALF は東京4ルーム＋横浜1ルーム）では
+  //    prefBrands の roomCount が実際より小さくなる。
+  //    そのまま本命URLを決めると「押した瞬間に301で飛ぶリンク」になる（2026-09-16に実際に出た）。
+  const allRoomCounts = useMemo(
+    () => countRoomsByBrand(shops && shops.length ? shops : initialShops),
+    [shops, initialShops],
+  );
 
   const displayedShopCount = shops?.length > 0 ? prefBrands.length : (initialShopCount || prefBrands.length);
 
@@ -132,7 +141,7 @@ export default function PrefecturePage({
                 {areaShops.map(shop => (
                   <Link
                     key={shop.id}
-                    to={brandCanonicalPath(shop)}
+                    to={brandCanonicalPath(shop, allRoomCounts)}
                     className="group bg-slate-900/60 border border-white/5 hover:border-pink-500/30 rounded-2xl overflow-hidden transition-all hover:-translate-y-0.5"
                   >
                     {shop.image_url && (
@@ -155,9 +164,11 @@ export default function PrefecturePage({
                           （2026-09-14 本番で実際にそう見えた）。
                           セクション見出しが既にエリアを言っているので、
                           ここは「ルームが他にもある」ことだけ伝える。 */}
-                      {shop.roomCount > 1 && (
+                      {/* ⚠️ ルーム数も全店で数えたほうを出す。県で切った数を出すと
+                          「5ルームのブランドが1ルーム」と表示されて実際と食い違う。 */}
+                      {(allRoomCounts.get(shop.id) ?? shop.roomCount) > 1 && (
                         <p className="text-slate-500 text-[11px] mt-0.5 truncate">
-                          {shop.roomCount}ルーム
+                          {allRoomCounts.get(shop.id) ?? shop.roomCount}ルーム
                         </p>
                       )}
                     </div>

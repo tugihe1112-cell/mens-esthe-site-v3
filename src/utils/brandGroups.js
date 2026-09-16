@@ -228,10 +228,25 @@ export function buildBrandRoster(rows, { limit = 24 } = {}) {
  *    別々に条件を書くと、リンクは /brands を指しているのに301は効いていない
  *    （あるいはその逆）という食い違いが静かに生まれる。
  */
-export function brandCanonicalPath(brand) {
+/**
+ * ブランドの本命URL。
+ *
+ * 🚩【第2引数を省いてよいのは、全店から組んだブランドのときだけ】（2026-09-16）
+ *   `brand.roomCount` は**そのブランドを組んだ母集団の中での**ルーム数。
+ *   エリア一覧(/area/:pref)は**その県の店だけ**でブランドを組むので、
+ *   県をまたぐブランドではここが**実際より小さくなる**。
+ *   実際に起きたこと: THE HALF に横浜ルーム（神奈川）を足したら、
+ *   `/area/kanagawa` の roomCount が 1 になり `/shops/kanagawa_..._the_half` を指した。
+ *   ところが 301 の判定（shopRedirectPath）は**全体の5ルーム**で見るので、
+ *   **押した瞬間に301でブランドページへ飛ぶリンク**になっていた。
+ *   ⇒ 母集団を絞ってブランドを組む画面は、`countRoomsByBrand(全店)` を第2引数に渡すこと。
+ */
+export function brandCanonicalPath(brand, roomCounts = null) {
   const id = brand?.id ?? '';
   const primary = brand?.primaryShopId || id;
-  return Number(brand?.roomCount) > 1 ? `/brands/${id}` : `/shops/${primary}`;
+  const fromMap = roomCounts instanceof Map ? roomCounts.get(id) : roomCounts?.[id];
+  const rooms = Number(fromMap ?? brand?.roomCount);
+  return rooms > 1 ? `/brands/${id}` : `/shops/${primary}`;
 }
 
 /** group_id ごとのルーム数。店舗行（id, group_id）だけあれば作れる。 */

@@ -1130,6 +1130,27 @@ const check = (name, fn) => {
     });
   }
 
+  // ── 本命URLは**全体の**ルーム数で決める（2026-09-16）────────────────
+  // エリア一覧(/area/:pref)はその県の店だけでブランドを組むので、県をまたぐブランドでは
+  // brand.roomCount が実際より小さい。そのまま使うと `/shops/...` を指し、
+  // その店舗URLは全体のルーム数で301するので**押した瞬間に飛ぶリンク**になる。
+  check('⭐本命URL: 母集団を絞った roomCount より、渡されたルーム数を優先する', () => {
+    const brand = { id: 'g_brand_the_half', primaryShopId: 'kanagawa_yokohama_nishi_the_half', roomCount: 1 };
+    const counts = new Map([['g_brand_the_half', 5]]);
+    const got = brandCanonicalPath(brand, counts);
+    return got === '/brands/g_brand_the_half' ? null : `「${got}」になった`;
+  });
+  check('本命URL: ルーム数を渡さなければ brand.roomCount を使う（従来どおり）', () => {
+    const solo = brandCanonicalPath({ id: 'g_solo_x', primaryShopId: 'shop_x', roomCount: 1 });
+    const multi = brandCanonicalPath({ id: 'g_b', primaryShopId: 'shop_y', roomCount: 3 });
+    if (solo !== '/shops/shop_x') return `単独が「${solo}」`;
+    return multi === '/brands/g_b' ? null : `複数が「${multi}」`;
+  });
+  check('本命URL: 渡した表にそのブランドが無ければ brand.roomCount に落ちる', () => {
+    const got = brandCanonicalPath({ id: 'g_b', primaryShopId: 'shop_y', roomCount: 3 }, new Map());
+    return got === '/brands/g_b' ? null : `「${got}」になった`;
+  });
+
   check('ブランド: 空配列・nullで落ちない', () => {
     if (buildBrands([]).length !== 0) return '空配列が0件でない';
     if (buildBrands(null).length !== 0) return 'nullが0件でない';

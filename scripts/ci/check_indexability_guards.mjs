@@ -216,8 +216,15 @@ requireMatch(searchPage, /const shopDetailUrl = brandCanonicalPath\(shop\)/,
   // 🚩 ルームをリンクにすると「押す→301→同じページ」の往復になる。
   rejectMatch(brandPage2, /to=\{`\/shops\/\$\{r\.id\}`\}/,
     'ブランドページのルームが店舗ページへリンクしています（301でこのページへ戻る往復になります）');
-  requireMatch(prefPage, /to=\{brandCanonicalPath\(shop\)\}/,
-    'エリア一覧のリンクが本命URL規則を通っていません');
+  // 🚩 第2引数（全店で数えたルーム数）を必ず渡す。
+  //    この画面は**その県の店だけ**でブランドを組むので、県をまたぐブランドでは
+  //    brand.roomCount が実際より小さくなり、`/shops/...` を指してしまう。
+  //    その店舗URLは全体のルーム数で301するので、**押した瞬間に飛ぶリンク**になる
+  //    （2026-09-16、THE HALF に横浜ルームを足して実際に出た）。
+  requireMatch(prefPage, /to=\{brandCanonicalPath\(shop,\s*allRoomCounts\)\}/,
+    'エリア一覧のリンクが全店のルーム数を使っていません（押した瞬間に301で飛ぶリンクになります）');
+  requireMatch(prefPage, /countRoomsByBrand\(\s*shops[\s\S]{0,80}?initialShops\s*\)/,
+    'エリア一覧が全店からルーム数を数えていません（県で切った数だと301するリンクを作ります）');
 }
 requireMatch(postReviewPage, /data\.shopId \? `\/shops\/\$\{data\.shopId\}`/, '指名なし投稿後のリンクが正規店舗URLではありません');
 for (const [name, source] of [['表彰台', podiumCard], ['ランキング一覧', rankingListItem]]) {
