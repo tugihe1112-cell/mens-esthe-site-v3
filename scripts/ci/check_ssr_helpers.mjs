@@ -1029,13 +1029,36 @@ const check = (name, fn) => {
       return new Set(names).size === names.length ? null : `重複: ${names.join(',')}`;
     });
     // ⚠️ 人数は「写真あり」に限定してはいけない（店舗ページの在籍数と母数が変わる）。
-    check('⭐名簿: 写真が無い人も人数には数える（名簿には出さない）', () => {
+    // 2026-09-16: **名簿にも写真が無い人を出す**方針に変えた（店舗ページと揃える）。
+    //   以前は「人数には数えるが名簿には出さない」だった。その結果、店舗ページで
+    //   「在籍356人」と「全0人」が食い違う事故が起きた。
+    check('⭐名簿: 写真が無い人も人数に数え、名簿にも出す', () => {
       const r = buildBrandRoster([
         { id: 'a', name: '咲', image_url: 'i', shop_id: 'r1' },
         { id: 'b', name: '写真なしの人', image_url: '', shop_id: 'r1' },
       ]);
       if (r.personCount !== 2) return `personCount が ${r.personCount}`;
-      return r.roster.length === 1 ? null : `名簿が ${r.roster.length}件`;
+      if (r.roster.length !== 2) return `名簿が ${r.roster.length}件（写真なしが落ちている）`;
+      return r.roster.some((t) => t.name === '写真なしの人') ? null : '写真なしの人が名簿にいない';
+    });
+    // 🚩 写真ありを先に出す。プレースホルダばかりが先頭に並ぶと一覧が読めなくなる。
+    check('⭐名簿: 写真ありを先に並べる（写真なしが先頭を占めない）', () => {
+      const rows = [
+        { id: 'n1', name: '写真なし1', image_url: '', shop_id: 'r1' },
+        { id: 'n2', name: '写真なし2', image_url: null, shop_id: 'r1' },
+        { id: 'p1', name: '写真あり1', image_url: 'i', shop_id: 'r1' },
+      ];
+      const r = buildBrandRoster(rows);
+      return r.roster[0]?.name === '写真あり1' ? null : `先頭が ${r.roster[0]?.name}`;
+    });
+    // 🚩 limit で打ち切るとき、写真ありが打ち切りに負けて消えてはいけない。
+    check('⭐名簿: limitで打ち切っても写真ありが優先して残る', () => {
+      const rows = [
+        ...Array.from({ length: 30 }, (_, i) => ({ id: `n${i}`, name: `写真なし${i}`, image_url: '', shop_id: 'r1' })),
+        { id: 'p', name: '写真あり', image_url: 'i', shop_id: 'r1' },
+      ];
+      const r = buildBrandRoster(rows, { limit: 5 });
+      return r.roster.some((t) => t.name === '写真あり') ? null : '写真ありが打ち切りで消えた';
     });
     // ⚠️ 同一人物が「写真なしの行」と「写真ありの行」を持つ実データがある。
     //    写真なしの行で人物キーを予約すると、その人が名簿から丸ごと消える。

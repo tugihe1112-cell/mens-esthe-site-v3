@@ -10,8 +10,10 @@
  * 【3つの数え方が並存している】
  *   ① 店舗情報の「在籍N人」… SSRの count。**その店の全行**（写真なしも含む／系列は含まない）
  *      pages/shops/[shopId]/index.jsx の therapistCountRes
- *   ② 一覧の「全N人」… クライアント取得。**写真がある行だけ**／**系列店ぜんぶ**
- *      src/pages/ShopDetailPage.jsx の therapists.length（`image_url=not.is.null`）
+ *   ② 一覧の「全N人」… クライアント取得／**系列店ぜんぶ**
+ *      src/pages/ShopDetailPage.jsx の therapists.length
+ *      ⚠️ **2026-09-16に `image_url=not.is.null` を外した**ので、今は①との差は
+ *         「系列店を含むかどうか」だけになっている。この道具はその後の再発監視に使う。
  *   ③ ブランドページの「セラピストN名」… **人単位で重複排除**（写真の有無は問わない）／系列ぜんぶ
  *      src/utils/brandGroups.js の buildBrandRoster の personCount
  *

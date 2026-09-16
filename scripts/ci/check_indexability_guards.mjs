@@ -133,6 +133,10 @@ requireMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/, 'ブランド一�
     'ブランドページSSRの在籍セラピストが buildBrandRoster を通っていません');
   requireMatch(brandPage, /buildBrandRoster\(/,
     'ブランドページの在籍セラピストが buildBrandRoster を通っていません');
+  // 🚩 名簿は写真の有無で絞っていない（2026-09-16に店舗ページと揃えた）。
+  //    「写真を確認できるセラピストを表示しています」と書くと**画面が嘘をつく**。
+  rejectMatch(brandPage, /写真を確認できるセラピストを表示/,
+    'ブランドページが「写真を確認できるセラピストを表示しています」と書いています（名簿は写真で絞っていないので嘘になります）');
   requireMatch(strip(read('src/utils/brandGroups.js')), /normalizeTherapistName\(t\.name\)/,
     '在籍セラピストの人物同定が normalizeTherapistName を使っていません（表記ゆれが別人に戻ります）');
   // 🚩 在籍数は**行数ではなく実人数**。

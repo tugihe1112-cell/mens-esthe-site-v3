@@ -177,28 +177,41 @@ export function pickNearbyBrands(rows, { area = null, excludeIds = [], limit = 8
  *    すぐ下の名簿は重複除去しているのに、見出しの数字だけ3倍という状態だった。
  *
  * ⚠️ 人数は**写真の有無・在籍フラグに関わらず**数える（店舗ページの在籍数と同じ母数）。
- *    名簿に出すのは写真を確認できる行だけ、という区別は写真グリッド側の都合。
  *
- * ⚠️ 同一人物が「写真なしの行」と「写真ありの行」を持つことがあるので、
- *    写真が無い行で人物キーを予約してはいけない（名簿から消える）。
+ * 【2026-09-16 写真が無い人も名簿に出すようにした】
+ *  以前は写真がある行だけ並べていた。その結果、店舗ページで
+ *  「在籍356人」と「全0人」が食い違う事故が起き、**写真が無い人も名前で出す**方針に決まった
+ *  （okabayashi 判断。実測で112店・4,418人ぶんが一覧ゼロだった。その4,418行は
+ *  非表示0・最終確認日なし0＝確認できている実在の人で、写真が無いだけだった）。
+ *  ブランドページも同じ方針に揃える。写真が無い行は LazyImage が頭文字を出す。
+ *
+ * 🚩 同一人物が「写真なしの行」と「写真ありの行」を持つことがある。
+ *    下の重複除去は**先勝ち**なので、写真が無い行が先に来ると
+ *    **写真を持っている人が写真なしで表示される**。
+ *    以前は「写真なしを先に弾く」ことで結果的に防げていたが、弾くのをやめた今は
+ *    **並べ替えでしか防げない**。だから走査の前に写真ありを先頭へ持ってくる。
+ *    ⚠️ この並べ替えを消すと、テスト「写真なしの行が先にあっても、写真ありの行で名簿に出る」が落ちる。
  */
 export function buildBrandRoster(rows, { limit = 24 } = {}) {
   const people = new Set();
   const shown = new Set();
   const roster = [];
-  for (const t of Array.isArray(rows) ? rows : []) {
+  const hasImage = (t) => Boolean(String(t?.image_url ?? '').trim());
+  // 人数(people)は並び順に影響されないので、ここで並べ替えても母数は変わらない。
+  const ordered = (Array.isArray(rows) ? [...rows] : [])
+    .sort((a, b) => Number(hasImage(b)) - Number(hasImage(a)));
+  for (const t of ordered) {
     if (!t) continue;
     const key = normalizeTherapistName(t.name);
     if (!key) continue;
     people.add(key);
     if (roster.length >= limit) continue;
     if (t.is_active === false) continue;
-    if (!String(t.image_url ?? '').trim()) continue;
     if (shown.has(key)) continue;
     shown.add(key);
     // ⚠️ SSRで焼いた行（shopId）と、クライアントが持つDB行（shop_id）の両方を受ける。
     //    片方だけ見ると、同じ関数を通したのにリンク先が消える。
-    roster.push({ id: t.id, name: t.name || '', image_url: t.image_url, shopId: t.shopId ?? t.shop_id ?? null });
+    roster.push({ id: t.id, name: t.name || '', image_url: t.image_url || null, shopId: t.shopId ?? t.shop_id ?? null });
   }
   return { roster, personCount: people.size };
 }

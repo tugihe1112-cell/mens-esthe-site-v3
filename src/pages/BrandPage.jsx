@@ -221,8 +221,13 @@ export default function BrandPage({
                 </Link>
               ))}
             </div>
+            {/* ⚠️ ここに「写真を確認できるセラピストを表示しています」と書いてはいけない（2026-09-16）。
+                名簿は写真の有無で絞っていない（buildBrandRoster）。書くと**画面が嘘をつく**。
+                打ち切っている理由は写真ではなく**24人という上限**。理由のほうを書く。 */}
             {ssrRosterTruncated && roster.length <= (ssrRoster || []).length && (
-              <p className="text-xs text-slate-500 mt-2">写真を確認できるセラピストを表示しています。</p>
+              <p className="text-xs text-slate-500 mt-2">
+                在籍セラピストの一部（{roster.length}名）を表示しています。
+              </p>
             )}
           </section>
         )}
