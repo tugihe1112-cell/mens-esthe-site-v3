@@ -239,6 +239,13 @@ requireMatch(searchPage, /const shopDetailUrl = brandCanonicalPath\(shop\)/,
     'エリアSSRが渡す店舗一覧から group_id が落ちています（画面側で全部が単独店になります）');
   requireMatch(areaWrapper, /range\(from, from \+ 999\)/,
     'エリアSSRのルーム数集計がページ送りしていません（1,000件で頭打ちになります）');
+  // 🚩 クロール経路のリンクを `/shops/${s.id}` と直書きしない。
+  //    D-014以降、複数ルームのブランドの店舗URLは301でブランドページへ飛ぶ。
+  //    孤立ページ解消のための経路が**リダイレクトを指す**ことになる（2026-09-16、実際にそうなっていた）。
+  rejectMatch(areaWrapper, /href=\{`\/shops\/\$\{s\.id\}`\}/,
+    'エリアSSRのクロール経路が店舗URLを直書きしています（複数ルームのブランドでは301するURLを出します）');
+  requireMatch(areaWrapper, /href: brandCanonicalPath\(/,
+    'エリアSSRがリンク先を brandCanonicalPath で決めていません');
 }
 requireMatch(postReviewPage, /data\.shopId \? `\/shops\/\$\{data\.shopId\}`/, '指名なし投稿後のリンクが正規店舗URLではありません');
 for (const [name, source] of [['表彰台', podiumCard], ['ランキング一覧', rankingListItem]]) {

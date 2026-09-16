@@ -11,7 +11,7 @@ import { createClient } from '@supabase/supabase-js';
 import PrefecturePage from '../../src/pages/PrefecturePage';
 import { PREF_SLUG_MAP } from '../../src/data/areaLinks';
 import { getDisplayName } from '../../src/utils/shopHelpers';
-import { buildBrands, countRoomsByBrand } from '../../src/utils/brandGroups.js';
+import { buildBrands, countRoomsByBrand, brandCanonicalPath } from '../../src/utils/brandGroups.js';
 
 // 県リストは src/data/areaLinks.js に集約（4箇所に散らばって soft404 を生んだため）
 const PREF_MAP = PREF_SLUG_MAP;
@@ -63,6 +63,15 @@ export async function getServerSideProps({ params, res }) {
       //    本命URLが店舗URLに倒れる（＝押すと301する）。
       group_id: b.id,
       name: b.name,
+      // 🚩 リンク先はここで決める（2026-09-16）。下のクロール経路は以前 `/shops/${s.id}` を
+      //    **直書き**していて `brandCanonicalPath` を通っていなかった。
+      //    D-014以降、複数ルームのブランドの店舗URLは**301でブランドページへ飛ぶ**ので、
+      //    孤立ページ解消のために作ったクロール経路が**リダイレクトを指していた**。
+      //    ⚠️ ルーム数は全店で数えた表から取る（この県の店だけでは県をまたぐブランドが1になる）。
+      href: brandCanonicalPath(
+        { id: b.id, primaryShopId: b.primaryShopId || b.id, roomCount: b.roomCount },
+        roomCountMap,
+      ),
       // 全ルームの地名。「渋谷にもあるブランド」が渋谷で見つかるために要る。
       city: (b.areaLabels || []).join('・') || b.city || '',
     }));
@@ -165,7 +174,7 @@ export default function AreaSSRPage({ ssr }) {
               {shopList.slice(0, 30).map((s) => (
                 <li key={s.id}>
                   <a
-                    href={`/shops/${s.id}`}
+                    href={s.href || `/shops/${s.id}`}
                     className="inline-block text-xs text-slate-300 hover:text-pink-300 bg-slate-800 hover:bg-slate-700 border border-white/10 rounded-full px-3 py-1.5 transition"
                   >
                     {getDisplayName(s.name, s)}
