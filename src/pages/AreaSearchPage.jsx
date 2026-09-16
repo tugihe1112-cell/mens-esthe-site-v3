@@ -122,11 +122,22 @@ export default function AreaSearchPage() {
                       </span>
                     ))}
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black text-white leading-none tracking-tight mb-1">
+                  {/* 🚩 見出しは**日本語の地名**にする（2026-09-15）。
+                      以前は h2（画面で一番大きい文字）が `SHINJUKU` などのローマ字で、
+                      実際の地名「新宿」が小さい副題だった。
+                      利用者が探すのも、機械が読むのも「新宿」であって "SHINJUKU" ではない。
+                      2026-09-09にホームで直した「画面で一番大きい文字と機械が読む見出しが
+                      食い違っている」のと同じ型。
+                      ⚠️ ローマ字は見た目の要素として残す（消すとデザインが変わる）。
+                         ただし見出しではなく、地名に添える小さいラベルへ降ろす。 */}
+                  <p className="text-[10px] md:text-xs font-black text-white/50 tracking-[0.2em] leading-none mb-1">
                     {area.en}
+                  </p>
+                  <h2 className="text-2xl md:text-3xl font-black text-white leading-none tracking-tight mb-1">
+                    {area.name}
                   </h2>
                   <p className="text-xs md:text-sm font-bold text-slate-300 group-hover:text-white transition">
-                    {area.name} <span className="mx-1 opacity-50">|</span> <span className="opacity-70 font-normal">{area.desc}</span>
+                    {area.desc}
                   </p>
                 </div>
                 

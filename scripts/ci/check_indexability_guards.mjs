@@ -223,6 +223,26 @@ requireMatch(sitemap, /lastmod:\s*shopLastmod\.get\(s\.id\)/, '店舗sitemapのl
 requireMatch(integrityMonitor, /根拠のないlastmodが付いている/, '本番監視がsitemapの偽lastmodを検出しません');
 requireMatch(integrityMonitor, /口コミの実更新日が無い/, '本番監視が口コミURLのlastmod欠落を検出しません');
 
+// ── エリア一覧の見出しは日本語の地名にする（2026-09-15）─────────────
+// 画面で一番大きい文字が `SHINJUKU` などのローマ字で、実際の地名「新宿」は
+// その下の小さい副題だった。利用者が探すのも機械が読むのも「新宿」のほう。
+// 2026-09-09にホームで直した「一番大きい文字と見出しが食い違う」のと同じ型。
+{
+  const areaSearch = strip(read('src/pages/AreaSearchPage.jsx'));
+  const heading = areaSearch.match(/<h2[\s\S]{0,400}?<\/h2>/);
+  if (!heading) {
+    failures.push('エリア一覧に見出し(h2)が見つかりません（見出しの検査が素通りします）');
+  } else {
+    requireMatch(heading[0], /\{area\.name\}/,
+      'エリア一覧の見出しが日本語の地名ではありません（2026-09-15に直した「見出しがローマ字」に戻っています）');
+    rejectMatch(heading[0], /\{area\.en\}/,
+      'エリア一覧の見出しがローマ字(area.en)です（利用者も機械も「新宿」で探します）');
+  }
+  // ⚠️ ローマ字そのものは消さない約束。見出しから降ろして小さいラベルとして残す。
+  requireMatch(areaSearch, /\{area\.en\}/,
+    'エリア一覧からローマ字表記が消えています（見出しから降ろすだけで、削除はしない約束です）');
+}
+
 if (failures.length) {
   console.error('❌ インデックス導線の回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));
