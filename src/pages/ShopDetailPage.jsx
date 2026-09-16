@@ -10,7 +10,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import ModernReviewCard from '../components/ModernReviewCard.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import Header from '../components/Header.jsx';
-import { getDisplayName } from '../utils/shopHelpers';
+import { getDisplayName, getTherapistDisplayName } from '../utils/shopHelpers';
 import LocationLabel from '../components/LocationLabel.jsx';
 import { joinFields, shapeShopRow } from '../utils/shopFields';
 import { trackEvent } from '../utils/analytics';
@@ -885,7 +885,10 @@ export default function ShopDetailPage({
                          <div className="absolute bottom-0 left-0 w-full p-3">
                            <div className="flex items-end justify-between">
                              <div>
-                               <h4 className="text-white font-bold text-base leading-tight">{t.name}</h4>
+                               {/* ⚠️ 店名は外して出す。この一覧はその店のページなので、
+                                   全カードに同じ店名が繰り返されるだけで人名が読みにくい
+                                   （「瑠香 -るか- Marvelous -マーベラス-」が180行あった）。 */}
+                               <h4 className="text-white font-bold text-base leading-tight">{getTherapistDisplayName(t.name, shop?.name)}</h4>
                                <p className="text-xs text-slate-400 mt-0.5">T{t.tall || '-'} / B{t.cup || '-'}</p>
                              </div>
                              {t.isNew && <span className="text-xs font-bold text-yellow-400 bg-yellow-400/10 px-1.5 py-0.5 rounded border border-yellow-400/20">NEW</span>}

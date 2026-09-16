@@ -463,6 +463,43 @@ requireText(read('src/utils/registerAnalytics.js'), /export const REGISTER_CTA_S
   }
 }
 
+// ── 在籍者は therapists テーブルだけから作る（2026-09-16）────────────
+// 以前 DataContext.getTherapistsByShopId は **`[...fromTable, ...fromRaw]`** ＝足し算で、
+// `raw_data.therapists`（`1137_1137-1` のようなIDだけの行や `dejavu_tokyo_望月 うらら` の
+// 接頭辞つきの行）から作った偽の行が**本物の在籍者に足されて**返っていた。
+// 実測: raw を持つ367店のうち360店がテーブルに無い名前を含み、該当22,937件。
+//       そして **raw にしか在籍が無い店は0件**＝足し算は何も足していなかった。
+{
+  const ctx = stripSrc(read('src/contexts/DataContext.jsx'));
+  const fn = ctx.match(/getTherapistsByShopId = useCallback\([\s\S]{0,1200}?\}, \[/);
+  if (!fn) {
+    failures.push('DataContext に getTherapistsByShopId が見つかりません（在籍者の作り方を検査できません）');
+  } else {
+    if (/raw_data\?\.therapists|raw_data\.therapists|raw_data\?\.threads|raw_data\.threads/.test(fn[0])) {
+      failures.push(
+        'DataContext の在籍者に raw_data.therapists / raw_data.threads が戻っています。'
+        + '\n      → 取り込み元の文字列から作った**実在しない名前**が在籍者に足されます。'
+        + '\n        raw にしか在籍が無い店は0件なので、読む必要はありません。'
+      );
+    }
+  }
+}
+
+// ── セラピスト名から店名を外して表示する（2026-09-16）──────────────
+// 「瑠香 -るか- Marvelous -マーベラス-」が180行。実在の人なので消さず、表示名から店名を外す。
+for (const [path, label] of [
+  ['src/pages/ShopDetailPage.jsx', '店舗ページ'],
+  ['src/pages/BrandPage.jsx', 'ブランドページ'],
+]) {
+  const src = stripSrc(read(path));
+  if (!/getTherapistDisplayName\(/.test(src)) {
+    failures.push(
+      `${label}がセラピスト名をそのまま出しています（${path}）。`
+      + '\n      → getTherapistDisplayName で店名を外すこと。全カードに同じ店名が並んで人名が読めません。'
+    );
+  }
+}
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

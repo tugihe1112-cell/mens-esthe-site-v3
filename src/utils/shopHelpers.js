@@ -111,3 +111,61 @@ export const getDisplayName = (name, shop = null) => {
 
   return out.trim();
 };
+
+/**
+ * getTherapistDisplayName — セラピスト名から**その店の名前**を外す
+ *
+ * 【なぜ必要か（2026-09-16 実測）】
+ * 在籍一覧のカードに「瑠香 -るか- Marvelous -マーベラス-」のような表示が **180行**（うち画面に出ているのは178行）あった。
+ * 取り込み元が「人名＋店名」で1つの名前にしているためで、**実在の人**なので消してはいけない。
+ * 一覧はその店のページなので、店名は全カードに同じものが繰り返されるだけ＝人名が読みにくい。
+ *
+ * 🚩【読み仮名の区切りを壊さないこと】
+ *   「瑠香 -るか-」の `-` は**読み仮名の囲み**で、区切り記号ではない。
+ *   末尾の記号を無条件に削ると「瑠香 -るか」になって**名前が壊れる**。
+ *   ⇒ 記号を削るのは**店名の語を外すときだけ**（語の前後にくっついている分だけ）。
+ *
+ * ⚠️ 外すのは**その店の名前に出てくる語**だけ。よその店名や一般語は外さない。
+ * ⚠️ 残りが2文字未満になる削り方はしない（店名と同じ名前の行を空にしない）。
+ *    名前が店名そのものの行は「人ではない」側の話で、delete_therapists.mjs の担当。
+ */
+const THERAPIST_NAME_MIN_KEEP = 2;
+const escapeForRegExp = (v) => String(v).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+export function getTherapistDisplayName(therapistName, shopName) {
+  const raw = String(therapistName ?? '').trim();
+  if (!raw) return '';
+  const shop = String(shopName ?? '').normalize('NFKC').trim();
+  if (!shop) return raw;
+
+  // 店名を語に割る。括弧・空白・中黒で切る。1文字の語は人名に当たるので使わない。
+  const tokens = shop
+    .split(/[（()）\s　・|/]+/u)
+    .map((v) => v.trim())
+    .filter((v) => v.length >= 2)
+    .sort((a, b) => b.length - a.length);
+  if (!tokens.length) return raw;
+
+  const SEP = '[\\s　・|/\\-‐－–—~〜]';
+  let out = raw.normalize('NFKC');
+  for (let pass = 0; pass < tokens.length + 2; pass += 1) {
+    let hit = false;
+    for (const token of tokens) {
+      // 語の前後にくっついている記号ごと外す。
+      // 🚩 **語の前の記号は1文字まで**。`*` にすると貪欲に食べて読み仮名の囲みを壊す。
+      //    実測: 「瑠香 -るか- Marvelous」で `[記号]*Marvelous$` が **"- Marvelous"** に一致し、
+      //    結果が「瑠香 -るか」になった（閉じの `-` が消えて名前が壊れる）。
+      //    語の後ろは `*` でよい（末尾なので巻き込む先が無い）。
+      const re = new RegExp(`${SEP}?${escapeForRegExp(token)}${SEP}*$`, 'iu');
+      const m = out.match(re);
+      if (!m) continue;
+      const next = out.slice(0, out.length - m[0].length).trim();
+      if (next.length < THERAPIST_NAME_MIN_KEEP) continue;
+      out = next;
+      hit = true;
+      break;
+    }
+    if (!hit) break;
+  }
+  return out.trim() || raw;
+}

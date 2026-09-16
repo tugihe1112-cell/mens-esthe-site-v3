@@ -261,38 +261,29 @@ export const DataProvider = ({ children }) => {
     return therapists.reduce((acc, t) => { if (t.id) acc[t.id] = t; return acc; }, {});
   }, [therapists]);
   
+  /**
+   * 在籍セラピストは **therapists テーブルだけ**から作る。
+   *
+   * 🚩【2026-09-16 raw_data.therapists の足し算をやめた】
+   *   以前はここが **`return [...fromTable, ...fromRaw];`** ＝ フォールバックではなく**足し算**だった。
+   *   `raw_data.therapists` は取り込み元の文字列（`1137_1137-1` のようなIDだけの行や
+   *   `dejavu_tokyo_望月 うらら` のような接頭辞つきの行）で、そこから作った偽の行が
+   *   **本物の在籍者に足されて**返っていた。
+   *   ShopDetailPage はクライアント取得が0件・失敗のときにこれを使うので、
+   *   **実在しない名前が在籍者として画面に出うる**経路だった。
+   *
+   *   実測（inspect_raw_therapists.mjs）: raw_data.therapists を持つ367店のうち
+   *   **360店**がテーブルに無い名前を含み、該当は **22,937件**。
+   *   そして **raw にしか在籍が無い店は 0件**＝この足し算は**何も足していない**。
+   *   ⇒ 消してもどの店の在籍も減らない。DBのデータは触っていない（残骸は残っているが読まない）。
+   *
+   *   ⚠️ ここに raw_data.therapists / raw_data.threads を戻さないこと。
+   *      戻すと同じ経路が復活する。check_core_safety_guards.mjs が検査している。
+   */
   const getTherapistsByShopId = useCallback((shopId) => {
     const brandIds = getBrandShopIds(shopId);
-    const fromTable = therapists.filter(t => brandIds.includes(t.shop_id) || brandIds.includes(t.shopId));
-    
-    const shop = shopById[shopId];
-    let fromRaw = [];
-    
-    // 🌟 ここが最大の修正ポイント: 箱の中(raw_data)ではなく、直接展開された(shop.therapists)を最優先で探す！
-    const shopTherapists = shop?.therapists || shop?.raw_data?.therapists;
-    const shopThreads = shop?.threads || shop?.raw_data?.threads;
-    
-    if (shopTherapists && Array.isArray(shopTherapists)) {
-      fromRaw = shopTherapists.map(t => {
-        if (typeof t === 'string') {
-          const nameParts = t.split('_');
-          const cleanName = nameParts.length > 1 ? nameParts.pop() : t;
-          return { 
-            id: t, 
-            name: cleanName, 
-            therapistName: cleanName, 
-            shopName: shop?.name || '',
-            image: therapists.find(dbT => dbT.name === cleanName || dbT.id === t)?.image || therapists.find(dbT => dbT.name === cleanName || dbT.id === t)?.image_url || null
-          };
-        }
-        return t;
-      });
-    } else if (shopThreads && Array.isArray(shopThreads)) {
-      fromRaw = shopThreads;
-    }
-
-    return [...fromTable, ...fromRaw];
-  }, [therapists, getBrandShopIds, shopById]);
+    return therapists.filter((t) => brandIds.includes(t.shop_id) || brandIds.includes(t.shopId));
+  }, [therapists, getBrandShopIds]);
 
   // 🌟【データ隠蔽セキュリティ】画面に渡す直前にダミー文字へすり替える！
   // ⚠️ 2026-08-12: ここに「2件目以降 かつ 無料会員 なら本文をプレミアム誘導文に差し替える」

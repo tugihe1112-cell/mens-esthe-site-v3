@@ -999,6 +999,46 @@ const check = (name, fn) => {
     });
   }
 
+  // ── セラピスト名から店名を外す（2026-09-16）──────────────────────
+  // 在籍一覧に「瑠香 -るか- Marvelous -マーベラス-」が180行あった。実在の人なので消さず、
+  // その店のページでは店名を外して出す。
+  {
+    const { getTherapistDisplayName } = await loadModule('src/utils/shopHelpers.js');
+    const SHOP = 'Marvelous (マーベラス)';
+    // 🚩 読み仮名の囲み `-るか-` を壊さないこと。
+    //    語の前の記号を `*` で取ると貪欲に `"- Marvelous"` に一致し、閉じの `-` が消えて
+    //    「瑠香 -るか」になる（2026-09-16、実際にそうなった）。前は1文字までにしてある。
+    check('⭐人物名: 店名を外しても読み仮名の囲みを壊さない', () => {
+      const got = getTherapistDisplayName('瑠香 -るか- Marvelous -マーベラス-', SHOP);
+      return got === '瑠香 -るか-' ? null : `「${got}」になった`;
+    });
+    check('人物名: 区切りが無い形でも外せる', () => {
+      const got = getTherapistDisplayName('涼音-すずね- Marvelous -マーベラス-', SHOP);
+      return got === '涼音-すずね-' ? null : `「${got}」になった`;
+    });
+    check('人物名: 店名が入っていない人はそのまま', () => {
+      const got = getTherapistDisplayName('葉月ゆうら', 'THE HALF (ザ・ハーフ)');
+      return got === '葉月ゆうら' ? null : `「${got}」になった`;
+    });
+    // ⚠️ 名前が店名そのものの行を空にしない（それは「人ではない」側の話）。
+    check('人物名: 名前が店名そのものなら削らない', () => {
+      const a = getTherapistDisplayName('Marvelous', SHOP);
+      const b = getTherapistDisplayName('マーベラス', SHOP);
+      return (a === 'Marvelous' && b === 'マーベラス') ? null : `「${a}」「${b}」になった`;
+    });
+    check('人物名: 店名が無い・空でも落ちない', () => {
+      if (getTherapistDisplayName('さくら', '') !== 'さくら') return '店名なしで変化した';
+      if (getTherapistDisplayName('', SHOP) !== '') return '空文字が変化した';
+      if (getTherapistDisplayName(null, SHOP) !== '') return 'nullで落ちた';
+      return null;
+    });
+    // ⚠️ 2文字未満にはしない。
+    check('人物名: 削ると2文字未満になるなら削らない', () => {
+      const got = getTherapistDisplayName('あ Marvelous', SHOP);
+      return got === 'あ Marvelous' ? null : `「${got}」になった`;
+    });
+  }
+
   // ── 在籍者の名簿と実人数（2026-09-14 本番実測で発覚）──────────────
   // 🚩 ユニゾンスパ: 店舗ページ(相模原1室)は「在籍140人」なのにブランドページは「420名」＝
   //    同じ140人を3ルームぶん3回数えていた。すぐ下の名簿は重複除去しているのに数字だけ3倍。

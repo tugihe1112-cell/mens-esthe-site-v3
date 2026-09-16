@@ -23,6 +23,7 @@ import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
 import { buildBrands, buildBrandRoster, brandCanonicalPath } from '../utils/brandGroups.js';
+import { getTherapistDisplayName } from '../utils/shopHelpers.js';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
 const fmtDate = (v) => {
@@ -217,7 +218,8 @@ export default function BrandPage({
                   <div className="aspect-[3/4] overflow-hidden bg-slate-800">
                     <LazyImage src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
                   </div>
-                  <p className="text-[11px] text-slate-300 group-hover:text-pink-300 font-bold px-2 py-1.5 truncate">{t.name}</p>
+                  {/* ⚠️ ブランド名は外して出す（店舗ページと同じ。人名が読みにくくなるため） */}
+                  <p className="text-[11px] text-slate-300 group-hover:text-pink-300 font-bold px-2 py-1.5 truncate">{getTherapistDisplayName(t.name, brand?.name)}</p>
                 </Link>
               ))}
             </div>
