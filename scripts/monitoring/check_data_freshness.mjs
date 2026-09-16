@@ -1,9 +1,17 @@
 /**
  * 店舗の公式URL欠落と、在籍セラピスト名簿の最終確認日を毎日監視する。
  * 画像が配信できるかだけでなく「古い在籍情報を正常に表示し続ける」事故を検知する。
+ *
+ * 【2026-09-16 追加】無関係な店が1つのブランドに混ざっていないかも毎日見る。
+ *  `group_id` が `other` という文字列だったせいで、本番の `/brands/other` が
+ *  「THE HALF ／ 2ルーム ／ セラピスト229名」（THE HALF 113名 + キャンディスパ 116名）に
+ *  なっていた。D-014により `/shops/tokyo_candy_spa` はその THE HALF のページへ301していた。
+ *  **壊れた形でも画面は正常に描画される**ので、ページを見ても気づけない。
+ *  取り込みがまた置き場所の無い値を書いたら翌日ここで出す。
  */
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
+import { classifyGroup, selfTestMatching } from '../lib/brandNameMatch.mjs';
 
 function env(key) {
   if (process.env[key]) return process.env[key];
@@ -26,6 +34,17 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
+// 🚩 突き合わせ方の自己診断は**DBに触る前**。壊れていたら監視そのものを失敗させる。
+//    「同じブランドを無関係と言う」監視は、黙って通る監視より害が大きい。
+{
+  const problems = selfTestMatching();
+  if (problems.length) {
+    console.error('❌ ブランド突き合わせの判定が壊れています（scripts/lib/brandNameMatch.mjs）:');
+    problems.forEach((p) => console.error(`  - ${p}`));
+    process.exit(1);
+  }
+}
+
 const WEBSITE_MISSING_MAX_PCT = Number(process.env.SHOP_WEBSITE_MISSING_MAX_PCT || 1);
 const STALE_180_MAX_PCT = Number(process.env.THERAPIST_STALE_180_MAX_PCT || 5);
 
@@ -35,6 +54,36 @@ async function countOf(table, configure = (query) => query) {
   );
   if (error) throw new Error(`${table}: ${error.message}`);
   return count || 0;
+}
+
+// ⚠️ PostgREST は1回に最大1000行しか返さない。range で最後まで繰る。
+async function fetchAllShops() {
+  const out = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await supabase.from('shops').select('id, group_id, name').range(from, from + 999);
+    if (error) throw new Error(`shops: ${error.message}`);
+    out.push(...(data || []));
+    if (!data || data.length < 1000) break;
+  }
+  return out;
+}
+
+async function findMixedGroups() {
+  const shops = await fetchAllShops();
+  const groups = new Map();
+  for (const s of shops) {
+    if (!s.group_id) continue;
+    if (!groups.has(s.group_id)) groups.set(s.group_id, []);
+    groups.get(s.group_id).push(s);
+  }
+  const mixed = [];
+  for (const [gid, rooms] of groups) {
+    // ⚠️ 'renamed'（改名・2ブランド運営の疑い）では**落とさない**。
+    //    人が公式サイトを見て決めることで、機械が毎日赤くする種類の話ではない。
+    //    落とすのは 'mixed'（名前もidも共通部分が無い＝明らかな混入）だけ。
+    if (classifyGroup({ gid, rooms }).verdict === 'mixed') mixed.push({ gid, rooms });
+  }
+  return mixed;
 }
 
 async function main() {
@@ -71,7 +120,20 @@ async function main() {
   console.log(`  最終確認日なし ${missingLastSeen}/${activeTotal}名`);
   console.log(`  180日超未確認 ${stale180}/${activeTotal}名 (${stale180Pct.toFixed(1)}%)`);
 
+  const mixedGroups = await findMixedGroups();
+  console.log('■ ブランドのまとまり');
+  console.log(`  無関係な店が混ざっているブランド ${mixedGroups.length}件`);
+  for (const g of mixedGroups) {
+    console.log(`    group_id=${g.gid}: ${g.rooms.map((r) => r.name).join(' ／ ')}`);
+  }
+
   const failures = [];
+  for (const g of mixedGroups) {
+    failures.push(
+      `group_id=${g.gid} に無関係な店が混ざっています（${g.rooms.map((r) => `${r.name}[${r.id}]`).join(' / ')}）`
+      + ' … /brands/' + g.gid + ' で在籍者が混ざり、店舗URLが別の店へ301します',
+    );
+  }
   if (websiteMissingPct > WEBSITE_MISSING_MAX_PCT) {
     failures.push(`公式URLなしが${websiteMissingPct.toFixed(1)}%（上限${WEBSITE_MISSING_MAX_PCT}%）`);
   }

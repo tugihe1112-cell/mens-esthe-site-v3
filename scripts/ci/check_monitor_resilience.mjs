@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { fetchWithRetry, isTransientMonitorStatus } from '../lib/monitorFetch.mjs';
 import { classifyDnsFailure, isClosureEvidence } from '../lib/dnsVerdict.mjs';
+import { classifyGroup, selfTestMatching, normId } from '../lib/brandNameMatch.mjs';
 
 const noWait = async () => {};
 const response = (status, contentType = 'text/plain') => new Response('', {
@@ -82,4 +83,44 @@ assert.equal(isTransientMonitorStatus(404), false);
   assert.equal(isClosureEvidence('alive'), false, '生きているドメインは当然根拠にならない');
 }
 
+
+// ── ブランドのまとまり判定（2026-09-16）────────────────────────────
+// `group_id=other` のせいで無関係な店が1ブランドに混ざり、
+// /brands/other が「THE HALF ／ セラピスト229名」になっていた。
+// 毎日の監視(check_data_freshness)と洗い出し(inspect_group_id_mixups)が
+// **同じ判定**を使う。ここが緩むと両方が同時に緩むので、境目を固定する。
+{
+  assert.deepEqual(selfTestMatching(), [], '突き合わせ方の自己診断が失敗している');
+
+  // 🚩 括弧の中を落とすと落ちるケース。英字と仮名が括弧の内と外で入れ替わる書き方。
+  assert.equal(classifyGroup({ gid: 'g_brand_dejavu_tokyo', rooms: [
+    { id: 'tokyo_setagaya_sangenjaya_dejavu_tokyo', name: 'Dejavu TOKYO (デジャヴ東京) 三軒茶屋店' },
+    { id: 'tokyo_minato_nishiazabu_dejavu_tokyo', name: 'デジャヴ東京 (Dejavu TOKYO)' },
+  ] }).verdict, 'ok', '同一ブランドを無関係と誤検知している（括弧の中を落としていないか）');
+
+  // 🚩 idの県を落とさないと `tokyo_` で一致して mixed を見逃す。
+  assert.equal(classifyGroup({ gid: 'other', rooms: [
+    { id: 'tokyo_shinagawa_gotanda_the_half', name: 'THE HALF' },
+    { id: 'tokyo_candy_spa', name: 'キャンディスパ' },
+  ] }).verdict, 'mixed', '無関係な店の混入を見逃している');
+  assert.equal(normId('tokyo_candy_spa'), 'candy_spa', 'idの先頭の都道府県を落としていない');
+
+  // 名前が違ってもidが揃っていれば改名の疑い。混入として毎日赤くはしない。
+  assert.equal(classifyGroup({ gid: 'g_brand_jesse', rooms: [
+    { id: 'tokyo_chofu_jesse', name: 'Jesse (ジェシー 調布店)' },
+    { id: 'kanagawa_kawasaki_noborito_jesse', name: 'Tigger (ティガー 登戸店)' },
+  ] }).verdict, 'renamed', '改名の疑いを混入と混同している');
+
+  // 置き場所の無い値は、名前が似ていても混入として出す。
+  assert.equal(classifyGroup({ gid: 'unknown', rooms: [
+    { id: 'tokyo_a_spa', name: 'SPA' }, { id: 'osaka_b_spa', name: 'SPA' },
+  ] }).verdict, 'mixed', '置き場所の無い group_id を素通りさせている');
+
+  // 1ルームだけのブランドは対象外（単独店を毎日赤くしない）。
+  assert.equal(classifyGroup({ gid: 'g_solo_x', rooms: [{ id: 'tokyo_x', name: 'X' }] }).verdict, 'ok',
+    '単独店を混入として扱っている');
+}
+
+// ⚠️ 合格の表示はファイルの**一番最後**に置く。途中に置くと、後ろに足した検査が落ちても
+//    先に「OK」が出てしまう（2026-09-16、実際にそうなっていた）。
 console.log('✅ 外形監視の再試行・恒久障害判定チェック OK');
