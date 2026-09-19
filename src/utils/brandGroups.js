@@ -268,6 +268,24 @@ export function countRoomsByBrand(shops) {
  * ⚠️ ルーム数が分からないとき（Mapに無い）は**送らない**。
  *    判断材料が無いときに301を出すのは、消えていないページを消えたと宣言するのと同じ。
  */
+/**
+ * shopHref — 店舗行から**押しても飛ばされない**リンク先を作る。
+ *
+ * 【なぜ必要か（2026-09-16）】
+ * 一覧やカードが `/shops/${shop.id}` を直書きしていた。D-014以降、複数ルームのブランドの
+ * 店舗URLは**301でブランドページへ飛ぶ**ので、それらは**押した瞬間に飛ぶリンク**だった。
+ * 実測: `/area/kanagawa` のクロール経路30本のうち**7本**がそれだった（＝約23%）。
+ * `BrandResultCard` の「店舗をすべて見る」に至っては、**ブランドのルーム一覧なので全部**が該当し、
+ * 「押す → 301 → さっきと同じページ」の往復になる
+ * （ブランドページ側では既に同じ事故を止めている＝check_indexability_guards の brandPage2）。
+ *
+ * ⚠️ 判定は `shopRedirectPath` に一本化する。ここで別の条件を書くと301の実装と食い違う。
+ * ⚠️ `roomCounts` は**全店**から作ること（県や検索結果で切った母集団だと1ルームに見える）。
+ */
+export function shopHref(shop, roomCounts) {
+  return shopRedirectPath(shop, roomCounts) || `/shops/${shop?.id ?? ''}`;
+}
+
 export function shopRedirectPath(shop, roomCounts) {
   const gid = shop?.group_id;
   if (!gid) return null;

@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase';
 import { shapeShopRow } from '../utils/shopFields';
+import { countRoomsByBrand } from '../utils/brandGroups.js';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
 const ShopContext = createContext();
@@ -298,8 +299,20 @@ export const DataProvider = ({ children }) => {
     return reviews.filter(r => brandIds.includes(r.shop_id) || brandIds.includes(r.shopId));
   }, [reviews, getBrandShopIds]);
 
+  /**
+   * ブランドごとのルーム数。**リンク先を決めるのに要る**。
+   *
+   * 🚩 D-014以降、複数ルームのブランドの店舗URLは**301でブランドページへ飛ぶ**。
+   *    一覧やカードが `/shops/${shop.id}` を直書きすると**押した瞬間に飛ぶリンク**になる。
+   *    実測: `/area/kanagawa` のクロール経路30本のうち7本がそれだった。
+   *    ⚠️ 必ず**全店**から数えること。検索結果や県で絞った母集団から数えると
+   *       複数ルームのブランドが1ルームに見えて、また直書きと同じ結果になる。
+   *    リンクを作るときは `shopHref(shop, roomCounts)` を使う。
+   */
+  const roomCounts = useMemo(() => countRoomsByBrand(shops), [shops]);
+
   const value = {
-    shops, therapists, reviews, loading,
+    shops, therapists, reviews, loading, roomCounts,
     shopById, therapistById, getTherapistsByShopId, getReviewsByShopId,
     version, addReview, loadTherapistsForShop, loadReviewsForShop
   };

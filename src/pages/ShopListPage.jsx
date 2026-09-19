@@ -10,11 +10,12 @@ import SeoHead from "../components/SeoHead.jsx";
 import Header from "../components/Header.jsx";
 import LocationLabel from "../components/LocationLabel.jsx";
 import { joinFields } from "../utils/shopFields";
+import { shopHref } from "../utils/brandGroups.js";
 
 const ITEMS_PER_PAGE = 18;
 
 export default function ShopListPage() {
-  const { shops, loading } = useShopData();
+  const { shops, loading, roomCounts } = useShopData();
   const [searchParams, setSearchParams] = useSearchParams();
   
   // URLからクエリ取得
@@ -22,6 +23,8 @@ export default function ShopListPage() {
 
   // 検索フック
   const { query, setQuery, result: rawResult, mode, summary, isSearching } = useSearch(shops, initialQuery);
+  // ⚠️ リンク先は shopHref で決める。`/shops/${id}` を直書きすると
+  //    複数ルームのブランドで「押した瞬間に301」になる。
 
   // ★ 重複排除ロジック（店舗名 + group_id + 表示名）
   const result = React.useMemo(() => {
@@ -180,7 +183,7 @@ export default function ShopListPage() {
             {/* ブランド検索結果の場合のサマリーカード */}
             {mode === 'brand' && summary && (
               <div className="mb-8 animate-in fade-in slide-in-from-top-4">
-                <BrandResultCard summary={summary} shops={result} />
+                <BrandResultCard summary={summary} shops={result} roomCounts={roomCounts} />
               </div>
             )}
 
@@ -196,7 +199,7 @@ export default function ShopListPage() {
                   //    問題は起きない。
                   <Link
                     key={shop.id}
-                    to={`/shops/${shop.id}`}
+                    to={shopHref(shop, roomCounts)}
                     className="group bg-slate-900 rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 hover:shadow-2xl hover:shadow-pink-900/10 transition-all duration-300 flex md:block min-h-[132px] md:min-h-0 transform md:hover:-translate-y-1 active:scale-[0.98]"
                   >
                     <div className="w-28 sm:w-36 md:w-full min-h-[132px] md:min-h-0 md:h-48 relative overflow-hidden shrink-0">

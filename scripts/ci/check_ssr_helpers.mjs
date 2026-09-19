@@ -754,7 +754,7 @@ const check = (name, fn) => {
 //    ブランド1枚にまとめるとき地名を引き継ぎ損ねると、**代々木で検索しても出なくなる**。
 //    ここはオーナーが明示的に確認した要件なので、実データで固定する。
 {
-  const { buildBrands, groupBrandsByArea, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, countRoomsByBrand, shopRedirectPath } = await loadModule('src/utils/brandGroups.js');
+  const { buildBrands, groupBrandsByArea, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, countRoomsByBrand, shopRedirectPath, shopHref } = await loadModule('src/utils/brandGroups.js');
   const { rankShops } = await loadModule('src/utils/searchMatch.js');
 
   // 本番DBの実データ（Chocolate 3ルーム / Aroma Levante 3ルーム / 単独店1）
@@ -1126,6 +1126,35 @@ const check = (name, fn) => {
     check('名簿: 空・nullで落ちない', () => {
       if (buildBrandRoster([]).personCount !== 0) return '空配列が0でない';
       if (buildBrandRoster(null).roster.length !== 0) return 'nullが0件でない';
+      return null;
+    });
+  }
+
+  // ── 一覧・カードのリンク先（2026-09-16）──────────────────────────
+  // 直書きの `/shops/${id}` は、複数ルームのブランドでは**押した瞬間に301**で飛ぶ。
+  // 実測: /area/kanagawa のクロール経路30本のうち7本がそれだった。
+  {
+    const counts = new Map([['g_brand_x', 3], ['g_solo_y', 1]]);
+    check('⭐リンク先: 複数ルームのブランドはブランドページへ', () => {
+      const got = shopHref({ id: 'room_a', group_id: 'g_brand_x' }, counts);
+      return got === '/brands/g_brand_x' ? null : `「${got}」になった`;
+    });
+    check('リンク先: 単独店は店舗ページのまま', () => {
+      const got = shopHref({ id: 'shop_b', group_id: 'g_solo_y' }, counts);
+      return got === '/shops/shop_b' ? null : `「${got}」になった`;
+    });
+    check('リンク先: group_idが無い・表に無いなら店舗ページ', () => {
+      if (shopHref({ id: 'c' }, counts) !== '/shops/c') return 'group_idなしで店舗URLにならない';
+      return shopHref({ id: 'd', group_id: 'g_zzz' }, counts) === '/shops/d' ? null : '未知のgroup_idで店舗URLにならない';
+    });
+    // ⚠️ 判定は shopRedirectPath と同じでなければならない（301の実装と食い違わせない）。
+    check('⭐リンク先: 301の判定と必ず一致する', () => {
+      for (const shop of [{ id: 'a', group_id: 'g_brand_x' }, { id: 'b', group_id: 'g_solo_y' }, { id: 'c' }]) {
+        const redirect = shopRedirectPath(shop, counts);
+        const href = shopHref(shop, counts);
+        if (redirect && href !== redirect) return `${shop.id}: 301は${redirect} なのにリンクは${href}`;
+        if (!redirect && href !== `/shops/${shop.id}`) return `${shop.id}: 301しないのにリンクが${href}`;
+      }
       return null;
     });
   }

@@ -1,3 +1,4 @@
+import { shopHref } from '../utils/brandGroups.js';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useShopData } from '../contexts/DataContext.jsx';
@@ -14,7 +15,7 @@ import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
 export default function FavoritesPage() {
   const { favorites, favTherapists } = useAppContext();
-  const { shopById, therapistById } = useShopData();
+  const { shopById, therapistById, roomCounts } = useShopData();
   const { user, loading: authLoading } = useAuth();
   // まだユーザーがタブを選んでいない間は、保存件数がある側を自動表示する。
   // 店舗だけ保存した直後に「推しメンがまだいません」が出ると、保存に失敗したように見える。
@@ -185,7 +186,7 @@ export default function FavoritesPage() {
                 {favShopList.map(shop => (
                   <Link 
                     key={shop.id} 
-                    to={`/shops/${shop.id}`}
+                    to={shopHref(shop, roomCounts)}
                     className="flex items-center gap-5 bg-slate-900/50 p-4 rounded-3xl border border-white/5 hover:border-blue-500/50 hover:bg-slate-900 transition-all duration-300 group shadow-lg"
                   >
                     <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 border border-white/5 shadow-inner">

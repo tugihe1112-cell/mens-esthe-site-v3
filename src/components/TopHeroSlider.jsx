@@ -1,3 +1,4 @@
+import { shopHref } from '../utils/brandGroups.js';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectCoverflow, A11y, Keyboard } from 'swiper/modules';
@@ -33,7 +34,7 @@ function HeroPlaceholder() {
 }
 
 export default function TopHeroSlider({ initialHero = [] }) {
-  const { shops } = useShopData();
+  const { shops, roomCounts } = useShopData();
   const [activeProgress, setActiveProgress] = useState(0);
 
   // クライアントで全shopが読めたら固定5件（不足分はランダム補完）で組み直す。
@@ -208,7 +209,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
                           星は口コミページ側で実データから出すので、ここでは出さない。 */}
                     </div>
                     <div className="flex items-center gap-3">
-                      <Link to={`/shops/${shop.id}`} className="bg-white text-slate-900 font-black px-6 py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 text-sm">
+                      <Link to={shopHref(shop, roomCounts)} className="bg-white text-slate-900 font-black px-6 py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 text-sm">
                         店舗を見る
                       </Link>
                       <LikeButton id={shop.id} className="w-11 h-11 bg-black/40 backdrop-blur-md rounded-xl p-2.5 text-white border border-white/20 hover:bg-white/20 transition active:scale-95" />

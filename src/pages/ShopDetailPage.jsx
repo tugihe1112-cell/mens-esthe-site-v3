@@ -1,3 +1,4 @@
+import { shopHref } from '../utils/brandGroups.js';
 import React, { useState, useEffect } from 'react';
 import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { authHeaders } from '../utils/supabaseRest';
@@ -40,7 +41,7 @@ export default function ShopDetailPage({
 }) {
   const { shopId } = useParams();
   const navigate = useNavigate();
-  const { shopById, getTherapistsByShopId, getReviewsByShopId, loadTherapistsForShop, loadReviewsForShop } = useShopData();
+  const { shopById, getTherapistsByShopId, getReviewsByShopId, loadTherapistsForShop, loadReviewsForShop, roomCounts } = useShopData();
   const { toggleFavorite, favorites, toggleFavTherapist, favTherapists } = useAppContext();
   
   const { user, userPlan } = useAuth();
@@ -719,7 +720,7 @@ export default function ShopDetailPage({
                   {ssrNearbyShops.map((s) => (
                     <Link
                       key={s.id}
-                      to={`/shops/${s.id}`}
+                      to={shopHref(s, roomCounts)}
                       className="flex items-center justify-between bg-slate-800/50 hover:bg-slate-700/60 border border-white/5 hover:border-pink-500/30 rounded-xl px-4 py-3 text-xs font-bold text-slate-200 hover:text-white transition"
                     >
                       <span className="truncate">{getDisplayName(s.name, s)}</span>

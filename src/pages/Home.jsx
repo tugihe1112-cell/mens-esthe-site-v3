@@ -1,4 +1,5 @@
 
+import { shopHref } from '../utils/brandGroups.js';
 import React, { useMemo, useState, useEffect } from 'react';
 import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import Head from 'next/head';
@@ -33,7 +34,7 @@ const RANK_STYLES = [
 ];
 
 export default function HomePage({ initialHero = [], reviewsByPref = [], liveCounts = null }) {
-  const { shops, loading } = useShopData();
+  const { shops, loading, roomCounts } = useShopData();
   const displayedCounts = {
     totalShops: liveCounts?.totalShops ?? siteStats.coverage?.totalShops ?? 0,
     totalTherapists: liveCounts?.totalTherapists ?? siteStats.coverage?.totalTherapists ?? 0,
@@ -510,7 +511,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
             {recommendedShops.map((shop) => (
               <Link
                 key={shop.id}
-                to={`/shops/${shop.id}`}
+                to={shopHref(shop, roomCounts)}
                 className="snap-center flex-shrink-0 w-[160px] md:w-[240px] group"
               >
                 {/* ⚠️ 店舗画像は横長のロゴ／キャンペーンバナーが多い（実測で245/756枚が aspect≥2.2）。
@@ -592,7 +593,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
               {sidebarShops.map(shop => (
                   <Link
                     key={shop.id}
-                    to={`/shops/${shop.id}`}
+                    to={shopHref(shop, roomCounts)}
                     className="group flex items-center gap-3 bg-slate-900/60 hover:bg-slate-800/80 border border-white/5 hover:border-pink-500/20 rounded-2xl p-3 transition-all duration-200"
                   >
                     {/* ⚠️ 16x16の小さなサムネでも、横長ロゴを cover で入れると

@@ -77,9 +77,34 @@ requireMatch(popularPage, /const shopLink = r\.shop_id \? `\/shops\/\$\{r\.shop_
 
 requireMatch(threadWrapper, /renderSeo=\{false\}/, 'セラピストページのSEO出力がSSR側へ一本化されていません');
 requireMatch(threadWrapper, /'@type': 'ProfilePage'/, 'セラピストをProfilePageとして構造化していません');
-requireMatch(threadPage, /to=\{`\/shops\/\$\{shopId\}`\}/, 'セラピスト画面の店舗リンクが正規店舗URLではありません');
+// 🚩 2026-09-19: 綴り `/shops/${shopId}` の固定をやめ、**飛ばされないURL**を要求する形にした。
+//    元の意図は「検索クエリ(/search?shop=名前)ではなく実体のあるURLを指すこと」。それは保つ。
+//    ただし複数ルームのブランドでは店舗URL自体が301でブランドページへ飛ぶ（D-014）ので、
+//    綴りを固定すると「押した瞬間に飛ぶリンク」を強制することになる。
+//    shopHref は shopRedirectPath と同じ判定を通すので、301先が分かっているときは最初からそこを指す。
+requireMatch(threadPage, /to=\{shopHref\(/, 'セラピスト画面の店舗リンクが shopHref を通っていません（複数ルームのブランドで301するURLになります）');
+rejectMatch(threadPage, /to=\{`\/search\?shop=/, 'セラピスト画面の店舗リンクが検索クエリに戻っています（実体のあるURLを指すこと）');
 requireMatch(homeReview, /const shopLink = `\/shops\/\$\{r\.shopId\}`/, 'ホーム口コミの店舗リンクが正規店舗URLではありません');
-requireMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/, 'ブランド一覧の店舗リンクが正規店舗URLではありません');
+// 🚩 2026-09-16: 規則が変わった。**このガード自身が直書きを要求していた。**
+//    D-014以降、複数ルームのブランドの店舗URLは301でブランドページへ飛ぶ。
+//    BrandResultCard の展開リストは**ブランドのルーム一覧**なので、
+//    直書きすると全部が「押す → 301 → さっきと同じページ」の往復になる。
+//    ⇒ 正規URLの判断は shopHref（＝shopRedirectPath）に一本化する。
+requireMatch(brandResult, /to=\{shopHref\(shop, roomCounts\)\}/,
+  'ブランド一覧の店舗リンクが shopHref を通っていません（ルーム一覧の全リンクが301の往復になります）');
+rejectMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/,
+  'ブランド一覧が店舗URLを直書きしています（複数ルームのブランドでは押した瞬間に301します）');
+// 一覧・カード面は全部 shopHref を通すこと。直書きは押した瞬間に301する。
+for (const [path, label] of [
+  ['src/pages/ShopListPage.jsx', '店舗一覧'],
+  ['src/pages/Home.jsx', 'ホーム'],
+  ['src/components/TopHeroSlider.jsx', 'トップのスライダー'],
+  ['src/pages/FavoritesPage.jsx', 'お気に入り'],
+]) {
+  const src = strip(read(path));
+  rejectMatch(src, /to=\{`\/shops\/\$\{shop\.id\}`\}/,
+    `${label}が店舗URLを直書きしています（${path}）。shopHref(shop, roomCounts) を使うこと`);
+}
 // ⚠️ 2026-09-14: 検索結果をブランド単位にまとめたため、行の id は group_id になった。
 //    そのままURLにすると `/shops/g_brand_xxx` で404するので primaryShopId を使う。
 //    守りたいのは「中継ページを挟まず正規の店舗URLへ直接リンクすること」なので、

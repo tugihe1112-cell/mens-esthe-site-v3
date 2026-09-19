@@ -1,10 +1,11 @@
+import { shopHref } from '../utils/brandGroups.js';
 import React, { useState } from 'react';
 import { Link } from '../compat/router';
 import LazyImage from './LazyImage';
 import { getDisplayName } from '../utils/shopHelpers';
 import LocationLabel from './LocationLabel.jsx';
 
-export default function BrandResultCard({ summary, shops }) {
+export default function BrandResultCard({ summary, shops, roomCounts = null }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // 代表画像がない場合のフォールバック
@@ -65,7 +66,9 @@ export default function BrandResultCard({ summary, shops }) {
             {shops.map((shop) => (
               <Link 
                 key={shop.id} 
-                to={`/shops/${shop.id}`}
+                /* 🚩 ここはブランドの**ルーム一覧**。直書きすると全部が301で、
+                       「押す → さっきと同じページ」の往復になる（ブランドページ側では既に止めている）。 */
+                to={shopHref(shop, roomCounts)}
                 className="flex items-center gap-4 p-3 rounded-xl bg-slate-800/50 border border-white/5 hover:border-pink-500/50 hover:bg-slate-800 transition group"
               >
                 <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
