@@ -161,6 +161,26 @@ for (const [path, label] of [
     'ブランドページに「もっと見る」がありません（名簿が打ち切られたままになります）');
   rejectMatch(brandPage, /buildBrandRoster\([\s\S]{0,120}?\{\s*limit:\s*24\s*\}/,
     'ブランドページの名簿が24名で打ち切られています（店舗ページから301で来た人が全員を見られません）');
+  // 🚩 名簿の残りを**このページ自身で取りに行く**こと。
+  //    DataContext の therapists は最初から空で、loadTherapistsForShop を呼んだ店の分しか入らない。
+  //    そこに頼ると「もっと見る」を置いてもSSRの24名のままになる（2026-09-19、本番で発覚）。
+  requireMatch(brandPage, /rest\/v1\/therapists\?select=/,
+    'ブランドページが在籍セラピストを自前で取得していません（24名から増えません）');
+  requireMatch(brandPage, /Range: `\$\{from\}-\$\{from \+ 999\}`/,
+    'ブランドページの在籍取得がページ送りしていません（1,000名で頭打ちになります）');
+  // 🚩 宣言の順序。`const` は巻き上がらないので、使用より後ろに書くと**実行時に落ちる**。
+  //    ⚠️ これは `npm run build` でも eslint(no-undef) でも**検出できない**
+  //       （スコープ内には在るため）。2026-09-19、実際に使用より後ろに書いてしまった。
+  //    ⚠️ 本当の検出手段はページを開くこと。この検査はあくまで再発の網。
+  {
+    const decl = brandPage.indexOf('const [cloudRoster');
+    const use = brandPage.indexOf('cloudRoster && cloudRoster.length');
+    if (decl < 0 || use < 0) {
+      failures.push('ブランドページの cloudRoster の宣言か使用が見つかりません（順序を検査できません）');
+    } else if (decl > use) {
+      failures.push('ブランドページで cloudRoster を宣言より前に使っています（実行時に落ちます。buildもeslintも検出しません）');
+    }
+  }
   // 🚩 人単位の重複除去は buildBrandRoster に一本化する。
   //    SSRと画面で別々に畳むと、片方だけ「咲さんが3ルームぶん3回出る」に戻る。
   requireMatch(brandWrapper, /buildBrandRoster\(/,

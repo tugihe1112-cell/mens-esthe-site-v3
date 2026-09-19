@@ -25,6 +25,7 @@ import LocationLabel from '../components/LocationLabel.jsx';
 import { buildBrands, buildBrandRoster, brandCanonicalPath } from '../utils/brandGroups.js';
 import { getTherapistDisplayName } from '../utils/shopHelpers.js';
 import { normalizeTherapistName } from '../utils/reviewIdentity.js';
+import { authHeaders } from '../utils/supabaseRest';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
 const fmtDate = (v) => {
@@ -60,14 +61,54 @@ export default function BrandPage({
     return rooms.length ? buildBrands(rooms)[0] : null;
   }, [ssrBrand, shops, brandId]);
 
+  // 🚩 在籍セラピストを**このページ自身で取りに行く**（2026-09-19）。
+  //    SSRが焼くのは先頭24名だけ（420名規模のブランドがありHTMLを膨らませない）。
+  //    以前は残りを DataContext の getTherapistsByShopId から拾うつもりだったが、
+  //    **DataContext の therapists は最初から空**で、`loadTherapistsForShop` を呼んだ店の分しか入らない。
+  //    ブランドページはそれを呼んでいないので、**「もっと見る」を入れても24名のままだった**
+  //    （2026-09-19、本番で確かめて発覚。手元のガードでは分からない種類の欠落）。
+  //    ⚠️ DataContext 側の取得は `image_url` があるものだけを拾う作りなので、呼んでも写真なしの人は落ちる。
+  //       「写真が無い人も出す」（2026-09-16の決定）と食い違うため、ここでは自前で取る。
+  //    ⚠️ PostgRESTは1回に最大1000行。420名規模のブランドがあるのでページ送りする。
+  const [cloudRoster, setCloudRoster] = React.useState(null);
+  React.useEffect(() => {
+    const ids = ssrBrand?.shopIds || brand?.shopIds || (brand?.rooms || []).map((r) => r.id);
+    if (!ids || !ids.length) return undefined;
+    let alive = true;
+    (async () => {
+      try {
+        const base = process.env.VITE_SUPABASE_URL;
+        const headers = await authHeaders();
+        const inList = ids.map((v) => `"${v}"`).join(',');
+        const rows = [];
+        for (let from = 0; ; from += 1000) {
+          const res = await fetch(
+            `${base}/rest/v1/therapists?select=id,name,image_url,shop_id,is_active&shop_id=in.(${inList})`,
+            { headers: { ...headers, Range: `${from}-${from + 999}` }, cache: 'no-store' },
+          );
+          if (!res.ok) break;
+          const page = await res.json();
+          if (!Array.isArray(page) || !page.length) break;
+          rows.push(...page);
+          if (page.length < 1000) break;
+        }
+        if (alive && rows.length) setCloudRoster(rows);
+      } catch {
+        // 取れなくてもSSRの24名は出ている。ここで画面を壊さない。
+      }
+    })();
+    return () => { alive = false; };
+  }, [ssrBrand, brand]);
+
   // 在籍セラピスト。SSRは先頭24名だけ焼いてある（420名規模のブランドがあるためHTMLを膨らませない）。
   // クライアントでは全ルームぶんを集めて**人単位**で重複除去する。
   // ⚠️ 咲さんは渋谷店にも代々木店にも行を持つ。素直に並べると同じ人が並ぶ。
   const roster = React.useMemo(() => {
     const ids = ssrBrand?.shopIds || brand?.shopIds || (brand?.rooms || []).map((r) => r.id);
-    const fromContext = getTherapistsByShopId
-      ? (ids || []).flatMap((id) => getTherapistsByShopId(id) || [])
-      : [];
+    // 自前で取れていればそれを使う。まだなら DataContext にあるぶんで間に合わせる。
+    const fromContext = cloudRoster && cloudRoster.length
+      ? cloudRoster
+      : (getTherapistsByShopId ? (ids || []).flatMap((id) => getTherapistsByShopId(id) || []) : []);
     // ⚠️ SSRで焼いた分を先に置く（初期表示と並びを変えない）。
     //    重複除去は buildBrandRoster に一本化する＝画面側で別の畳み方を書くと
     //    「咲さんが3ルームぶん3回出る」が片側だけ復活する。
@@ -78,7 +119,7 @@ export default function BrandPage({
     //    ⚠️ SSRが焼くのは先頭24名のまま（420名規模のブランドがあるためHTMLを膨らませない）。
     //       画面側は displayCount で伸ばす。初期値を24にしてあるので初期表示は変わらない。
     return buildBrandRoster([...(ssrRoster || []), ...fromContext], { limit: Number.MAX_SAFE_INTEGER }).roster;
-  }, [ssrRoster, ssrBrand, brand, getTherapistsByShopId]);
+  }, [ssrRoster, ssrBrand, brand, getTherapistsByShopId, cloudRoster]);
 
   // ── 名簿の絞り込みと並び替え（店舗ページから移植）─────────────────
   // ⚠️ 人物名の正規化は reviewIdentity に一本化する。独自に書くと
