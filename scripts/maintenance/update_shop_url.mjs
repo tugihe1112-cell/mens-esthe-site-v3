@@ -30,8 +30,14 @@
  *  同じ埼玉県にある「今日子の姉妹 大宮」と見分けがつかなくなる。
  *  一覧に同じ名前が並ぶのは、利用者から見れば重複と同じこと。
  *
+ * 【どの列を直すか（2026-09-19 追加）】既定は `website_url`。`--field=schedule_url` で出勤URLも直せる。
+ *  ⚠️ 対象列はこの2つだけ。打ち間違いで別の列を書き換えないよう、決め打ちの一覧と照合する。
+ *  きっかけ: HANASPA の出勤URLが `b-s-kiwami.com/schedule`（**改名前の美・セラ極のドメイン**）のまま
+ *  残っていた。公式URLだけ直して出勤URLを見落としていた＝**同じ種類の値が複数列にある**型。
+ *
  * 実行:
  *   node scripts/maintenance/update_shop_url.mjs <shop_id>=<新URL> [...]          # 下見
+ *   node scripts/maintenance/update_shop_url.mjs <shop_id>=<新URL> --field=schedule_url
  *   node scripts/maintenance/update_shop_url.mjs --file=urls.tsv                  # 一括
  *   node scripts/maintenance/update_shop_url.mjs <shop_id>=<新URL> --apply        # 実行
  */
@@ -61,6 +67,13 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
 });
 
 const args = process.argv.slice(2);
+// ⚠️ 書き換えてよい列はこの2つだけ。打ち間違いで別の列を壊さない。
+const ALLOWED_FIELDS = ['website_url', 'schedule_url'];
+const FIELD = (args.find((a) => a.startsWith('--field=')) || '--field=website_url').slice('--field='.length);
+if (!ALLOWED_FIELDS.includes(FIELD)) {
+  console.error(`❌ --field は ${ALLOWED_FIELDS.join(' / ')} のどれかにしてください（指定: ${FIELD}）`);
+  process.exit(1);
+}
 const APPLY = args.includes('--apply');
 const fileArg = args.find((a) => a.startsWith('--file='));
 
@@ -128,7 +141,7 @@ async function run() {
     if (error) throw error;
     if (!shop) { console.error(`❌ 見つかりません: ${shopId}`); failed += 1; continue; }
 
-    const current = (shop.website_url || '').trim();
+    const current = (shop[FIELD] || '').trim();
     const nameChanges = !!newName && newName !== shop.name;
     if (current === url && !nameChanges) { console.log(`⏭️  変更なし: ${shop.name} [${shopId}]`); continue; }
 
@@ -171,7 +184,7 @@ async function run() {
   console.log(`📦 バックアップ: ${backupPath}`);
 
   for (const { shop, url, newName } of planned) {
-    const patch = { website_url: url };
+    const patch = { [FIELD]: url };
     if (newName) patch.name = newName;
     const { error } = await supabase.from('shops').update(patch).eq('id', shop.id);
     if (error) { console.error(`❌ 更新失敗: ${shop.name} [${shop.id}] — ${error.message}`); process.exitCode = 1; continue; }

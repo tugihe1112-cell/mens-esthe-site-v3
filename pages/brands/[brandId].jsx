@@ -34,8 +34,8 @@ export async function getServerSideProps({ params, res }) {
   try {
     // group_id で引く。単独店（group_idなし）は id そのものがブランドの鍵になる。
     const [byGroup, byId] = await Promise.all([
-      supabase.from('shops').select('id, name, group_id, image_url, website_url, raw_data').eq('group_id', brandId),
-      supabase.from('shops').select('id, name, group_id, image_url, website_url, raw_data').eq('id', brandId).maybeSingle(),
+      supabase.from('shops').select('id, name, group_id, image_url, website_url, schedule_url, business_hours, price_system, raw_data').eq('group_id', brandId),
+      supabase.from('shops').select('id, name, group_id, image_url, website_url, schedule_url, business_hours, price_system, raw_data').eq('id', brandId).maybeSingle(),
     ]);
     if (byGroup.error) throw byGroup.error;
     if (byId.error) throw byId.error;

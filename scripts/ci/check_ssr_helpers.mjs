@@ -754,7 +754,7 @@ const check = (name, fn) => {
 //    ブランド1枚にまとめるとき地名を引き継ぎ損ねると、**代々木で検索しても出なくなる**。
 //    ここはオーナーが明示的に確認した要件なので、実データで固定する。
 {
-  const { buildBrands, groupBrandsByArea, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, countRoomsByBrand, shopRedirectPath, shopHref } = await loadModule('src/utils/brandGroups.js');
+  const { buildBrands, groupBrandsByArea, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, countRoomsByBrand, shopRedirectPath, shopHref, brandCommonValue } = await loadModule('src/utils/brandGroups.js');
   const { rankShops } = await loadModule('src/utils/searchMatch.js');
 
   // 本番DBの実データ（Chocolate 3ルーム / Aroma Levante 3ルーム / 単独店1）
@@ -1179,6 +1179,40 @@ const check = (name, fn) => {
     const got = brandCanonicalPath({ id: 'g_b', primaryShopId: 'shop_y', roomCount: 3 }, new Map());
     return got === '/brands/g_b' ? null : `「${got}」になった`;
   });
+
+  // ── 店舗情報は「揃っていれば1つ、割れていれば異なると言う」（2026-09-19）──────
+  // D-014で店舗ページをブランドページへ301した結果、営業時間・料金・公式・出勤が
+  // 丸ごと失われていた。移植にあたり、割れているのに1つ選んで出すのは禁止（D-010）。
+  {
+    const g = (r) => r.v;
+    // 🚩 表記ゆれを衝突に数えない。実測（100ブランド）で、割れて見えるものの大半がこれだった。
+    check('⭐店舗情報: 末尾スラッシュだけの違いは「揃っている」', () => {
+      const r = brandCommonValue([{ v: 'https://aroma-ella.com' }, { v: 'https://aroma-ella.com/' }], g);
+      return r.status === 'same' ? null : `status が ${r.status}`;
+    });
+    check('⭐店舗情報: 波ダッシュだけの違いは「揃っている」', () => {
+      const r = brandCommonValue([{ v: '10:00~翌5:00' }, { v: '10:00〜翌5:00' }], g);
+      return r.status === 'same' ? null : `status が ${r.status}`;
+    });
+    // ⚠️ 緩めすぎない。本当に違う値まで「揃っている」にしてはいけない。
+    check('⭐店舗情報: 本当に違う料金は「割れている」', () => {
+      const r = brandCommonValue([{ v: '90分19,000円~' }, { v: '90分20,000円~' }], g);
+      return r.status === 'varies' ? null : `status が ${r.status}`;
+    });
+    check('店舗情報: どのルームにも無ければ none（何も出さない）', () => {
+      const r = brandCommonValue([{ v: '' }, { v: null }], g);
+      return r.status === 'none' ? null : `status が ${r.status}`;
+    });
+    check('店舗情報: 片方だけ値があれば、その値で「揃っている」', () => {
+      const r = brandCommonValue([{ v: '11:00~翌5:00' }, { v: '' }], g);
+      return (r.status === 'same' && r.value === '11:00~翌5:00') ? null : `status ${r.status} / value ${r.value}`;
+    });
+    check('店舗情報: 空・nullで落ちない', () => {
+      if (brandCommonValue([], g).status !== 'none') return '空配列が none でない';
+      if (brandCommonValue(null, g).status !== 'none') return 'null が none でない';
+      return null;
+    });
+  }
 
   check('ブランド: 空配列・nullで落ちない', () => {
     if (buildBrands([]).length !== 0) return '空配列が0件でない';

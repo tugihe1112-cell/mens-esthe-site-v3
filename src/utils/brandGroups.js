@@ -95,6 +95,13 @@ export function buildBrands(shops) {
         prefecture: s.prefecture ?? s.raw_data?.prefecture ?? null,
         city: s.city ?? s.raw_data?.city ?? null,
         address: s.address ?? s.raw_data?.address ?? null,
+        // ⚠️ ブランドページの「店舗情報」はこれらをルーム間で突き合わせて出す
+        //    （揃っていれば1つ、割れていれば「ルームにより異なります」）。
+        //    ここに載せ忘れると全部 none 扱いになり、**静かに何も出なくなる**。
+        businessHours: s.business_hours ?? s.raw_data?.hours ?? null,
+        priceSystem: s.price_system ?? s.raw_data?.price ?? null,
+        websiteUrl: s.website_url ?? s.raw_data?.websiteUrl ?? null,
+        scheduleUrl: s.schedule_url ?? null,
         area: areaListOf(s),
       })),
     });
@@ -282,6 +289,50 @@ export function countRoomsByBrand(shops) {
  * ⚠️ 判定は `shopRedirectPath` に一本化する。ここで別の条件を書くと301の実装と食い違う。
  * ⚠️ `roomCounts` は**全店**から作ること（県や検索結果で切った母集団だと1ルームに見える）。
  */
+/**
+ * normalizeFieldValue — ルーム間で値が同じかを見るための「ならし」。
+ *
+ * 🚩【表記ゆれを衝突と数えない】（2026-09-19 実測）
+ *   100ブランドを数えたら、割れているように見えたものの多くが**書き方の違いだけ**だった。
+ *     公式URL   `https://aroma-ella.com` と `https://aroma-ella.com/`（末尾スラッシュだけ）
+ *     出勤URL   `code4030.com/schedule/` と `code4030.com/schedule`（同上）
+ *     営業時間  `10:00~翌5:00` と `10:00〜翌5:00`（波ダッシュだけ）
+ *   ならさずに数えると、公式URLの衝突が14%に見えるが、実際に別ドメインなのはごく一部。
+ *   ⚠️ ここを緩めすぎない。`90分19,000円~` と `90分20,000円~` は**本当に違う**ので残すこと。
+ */
+export function normalizeFieldValue(v) {
+  return String(v ?? '')
+    .normalize('NFKC')
+    .replace(/[〜～]/g, '~')
+    .replace(/\s+/g, '')
+    .replace(/\/+$/, '')
+    .trim();
+}
+
+/**
+ * brandCommonValue — ブランドの全ルームで、その項目が揃っているかを返す。
+ *
+ * 【方針（2026-09-19 オーナー決定）】**揃っていれば1つ出す。割れていれば「ルームにより異なります」と出す。**
+ *   割れているのに1つだけ選んで出すのは、根拠のない値を画面に出すのと同じ（D-010の考え方）。
+ *
+ * @returns {{status:'same'|'varies'|'none', value: string|null, count: number}}
+ *   same  … 全ルームで同じ（value に原文を返す）
+ *   varies… 2種類以上ある（value は null。画面は「ルームにより異なります」と出す）
+ *   none  … どのルームにも値が無い（画面は何も出さない）
+ */
+export function brandCommonValue(rooms, get) {
+  const raw = (Array.isArray(rooms) ? rooms : []).map((r) => {
+    try { return get(r); } catch { return null; }
+  });
+  const pairs = raw
+    .map((v) => ({ raw: v, key: normalizeFieldValue(v) }))
+    .filter((p) => p.key);
+  const keys = [...new Set(pairs.map((p) => p.key))];
+  if (keys.length === 0) return { status: 'none', value: null, count: 0 };
+  if (keys.length === 1) return { status: 'same', value: pairs[0].raw, count: 1 };
+  return { status: 'varies', value: null, count: keys.length };
+}
+
 export function shopHref(shop, roomCounts) {
   return shopRedirectPath(shop, roomCounts) || `/shops/${shop?.id ?? ''}`;
 }

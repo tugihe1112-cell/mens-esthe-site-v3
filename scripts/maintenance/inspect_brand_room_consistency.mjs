@@ -17,6 +17,9 @@
  */
 import fs from 'node:fs';
 import { createClient } from '@supabase/supabase-js';
+// ⚠️ 判定は画面と同じものを使う。ここで別の ならし を書くと
+//    「画面は揃っていると言い、ツールは割れていると言う」になる（2026-09-19に実際そうなりかけた）。
+import { brandCommonValue } from '../../src/utils/brandGroups.js';
 
 function env(name) {
   for (const line of fs.readFileSync('.env', 'utf8').split('\n')) {
@@ -54,7 +57,9 @@ const FIELDS = [
   ['address', '住所', (s) => s.raw_data?.address],
 ];
 
-const norm = (v) => String(v ?? '').normalize('NFKC').replace(/\s+/g, '').trim();
+// 🚩 末尾スラッシュ・波ダッシュの違いは**衝突に数えない**（表記ゆれであって値の違いではない）。
+//    最初の版はこれを揃えずに数え、公式URLの衝突を14%と出していたが、
+//    中身は `https://aroma-ella.com` と `https://aroma-ella.com/` のような差が大半だった。
 const stats = Object.fromEntries(FIELDS.map(([k]) => [k, { 衝突: 0, 全員同じ: 0, 誰も無い: 0, 一部だけ有る: 0, 例: [] }]));
 let multi = 0;
 
@@ -62,14 +67,17 @@ for (const [gid, rooms] of groups) {
   if (rooms.length < 2) continue;
   multi += 1;
   for (const [key, label, get] of FIELDS) {
-    const vals = rooms.map(get).map(norm);
-    const filled = [...new Set(vals.filter(Boolean))];
     const st = stats[key];
-    if (filled.length === 0) st.誰も無い += 1;
-    else if (filled.length === 1) { if (vals.every(Boolean)) st.全員同じ += 1; else st.一部だけ有る += 1; }
+    const r = brandCommonValue(rooms, get);
+    const raw = rooms.map(get);
+    if (r.status === 'none') st.誰も無い += 1;
+    else if (r.status === 'same') { if (raw.every((v) => String(v ?? '').trim())) st.全員同じ += 1; else st.一部だけ有る += 1; }
     else {
       st.衝突 += 1;
-      if (st.例.length < 3) st.例.push({ gid, name: rooms[0].name, 種類数: filled.length, 値: filled.slice(0, 3).map((v) => v.slice(0, 40)) });
+      if (st.例.length < 3) {
+        const uniq = [...new Set(raw.filter(Boolean).map((v) => String(v).replace(/\s+/g, '')))];
+        st.例.push({ gid, name: rooms[0].name, 種類数: r.count, 値: uniq.slice(0, 3).map((v) => v.slice(0, 40)) });
+      }
     }
   }
 }

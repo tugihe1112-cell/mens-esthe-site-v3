@@ -22,7 +22,7 @@ import Header from '../components/Header.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
-import { buildBrands, buildBrandRoster, brandCanonicalPath } from '../utils/brandGroups.js';
+import { buildBrands, buildBrandRoster, brandCanonicalPath, brandCommonValue } from '../utils/brandGroups.js';
 import { getTherapistDisplayName } from '../utils/shopHelpers.js';
 import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews, normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
@@ -212,6 +212,25 @@ export default function BrandPage({
   }
 
   const rooms = brand.rooms || [];
+
+  // 店舗情報。**揃っていれば1つ、割れていれば「ルームにより異なります」**（2026-09-19 オーナー決定）。
+  // ⚠️ 判定は brandCommonValue に一本化する。ここで別の比較を書くと、
+  //    測定ツール（inspect_brand_room_consistency）と食い違って「画面と数字が合わない」になる。
+  // ⚠️ 表記ゆれ（末尾スラッシュ・波ダッシュ）は衝突に数えない。実測でそれが大半だった。
+  const shopInfo = (() => {
+    const out = [];
+    const add = (label, get, asLink) => {
+      const r = brandCommonValue(rooms, get);
+      if (r.status === 'none') return;
+      if (r.status === 'varies') { out.push({ label, varies: true }); return; }
+      out.push({ label, varies: false, text: r.value, href: asLink ? r.value : null });
+    };
+    add('営業時間', (r) => r.businessHours);
+    add('料金', (r) => r.priceSystem);
+    add('公式サイト', (r) => r.websiteUrl, true);
+    add('出勤', (r) => r.scheduleUrl, true);
+    return out;
+  })();
   const areaLabels = brand.areaLabels || [];
   // 口コミ投稿の宛先は実在の店舗ID。ブランドIDを渡すと投稿画面が店舗を引けない。
   const reviewShopId = brand.primaryShopId || rooms[0]?.id || brand.id;
@@ -449,6 +468,31 @@ export default function BrandPage({
           </section>
         )}
 
+        {/* 店舗情報（店舗ページから移植・2026-09-19）。
+            【方針】**揃っていれば1つ出す。割れていれば「ルームにより異なります」と出す。**
+            ⚠️ 割れているのに1つだけ選んで出すのは、根拠のない値を画面に出すのと同じ（D-010）。
+            ⚠️ 住所はここに出さない。実測で**71%のブランドがルームごとに違う**＝共通にできない。
+               住所は下の「ルーム」欄に各ルームで添える。 */}
+        {shopInfo.length > 0 && (
+          <section>
+            <h2 className="text-base font-black text-white mb-3">店舗情報</h2>
+            <dl className="bg-slate-900/60 border border-white/10 rounded-2xl p-4 space-y-3">
+              {shopInfo.map((row) => (
+                <div key={row.label} className="grid grid-cols-[84px_1fr] items-baseline gap-2">
+                  <dt className="text-[11px] font-black text-slate-500 tracking-widest">{row.label}</dt>
+                  <dd className="text-sm text-white whitespace-pre-wrap break-words">
+                    {row.varies
+                      ? <span className="text-slate-400">ルームにより異なります（公式サイトでご確認ください）</span>
+                      : (row.href
+                          ? <a href={row.href} target="_blank" rel="noopener noreferrer nofollow" className="text-pink-300 hover:text-pink-200 underline break-all">{row.text}</a>
+                          : row.text)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
         {/* ルームは「どこにあるか」が分かればよい。支店を主役にしない。 */}
         {rooms.length > 0 && (
           <section>
@@ -464,6 +508,8 @@ export default function BrandPage({
                   className="inline-block text-xs text-slate-300 bg-slate-900 border border-white/10 rounded-full px-3 py-1.5"
                 >
                   {r.area || r.city || r.prefecture || 'ルーム'}
+                  {/* ⚠️ 住所はルームごと（実測で71%が違う）。ここでしか出せない。 */}
+                  {r.address && <span className="ml-1.5 text-slate-500">{r.address}</span>}
                 </li>
               ))}
             </ul>

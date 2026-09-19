@@ -182,6 +182,34 @@ for (const [path, label] of [
   // ⚠️ キーは therapist_id。名前キーは系列店の**同名の別人**を1人に束ねる（F04）。
   requireMatch(brandPage, /select=therapist_id,shop_id,therapist_name,tags/,
     'ブランドページの口コミ集計が therapist_id を取っていません（同名の別人が混ざります）');
+  // 🚩 店舗情報（営業時間・料金・公式・出勤）。D-014で301した先に無いと、利用者は見る手段を失う。
+  requireMatch(brandPage, /brandCommonValue\(/,
+    'ブランドページが店舗情報をルーム間で突き合わせていません（営業時間・料金が出ません）');
+  // ⚠️ 割れているのに1つ選んで出さない（D-010）。「ルームにより異なります」と言うこと。
+  requireMatch(brandPage, /ルームにより異なります/,
+    'ブランドページが「ルームにより異なります」を出していません（割れている値を1つだけ出すと嘘になります）');
+  // 🚩 住所はブランド共通にしない。実測で71%のブランドがルームごとに違う。
+  rejectMatch(brandPage, /add\('住所'/,
+    'ブランドページが住所をブランド共通として出そうとしています（71%のブランドでルームごとに違います）');
+  // ⚠️ 同じ select が2か所ある（group_id で引く場合と id で引く場合）。
+  //    「どこかに1つあればOK」にすると**片方だけ落ちた事故を見逃す**
+  //    （2026-09-19、妨害テストで実際に素通りした）。**該当する全部**を見る。
+  const brandWrapper2 = strip(read('pages/brands/[brandId].jsx'));
+  {
+    const selects = [...brandWrapper2.matchAll(/from\('shops'\)\.select\('([^']*)'\)/g)]
+      .map((m) => m[1])
+      .filter((cols) => cols.includes('group_id') && cols.includes('image_url'));
+    if (!selects.length) {
+      failures.push('ブランドSSRの店舗取得が見つかりません（店舗情報の列を検査できません）');
+    }
+    for (const cols of selects) {
+      for (const need of ['schedule_url', 'business_hours', 'price_system']) {
+        if (!cols.includes(need)) {
+          failures.push(`ブランドSSRの店舗取得に ${need} がありません（店舗情報が静かに空になります）: select('${cols}')`);
+        }
+      }
+    }
+  }
   // 🚩 宣言の順序。`const` は巻き上がらないので、使用より後ろに書くと**実行時に落ちる**。
   //    ⚠️ これは `npm run build` でも eslint(no-undef) でも**検出できない**
   //       （スコープ内には在るため）。2026-09-19、実際に使用より後ろに書いてしまった。
