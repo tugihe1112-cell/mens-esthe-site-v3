@@ -24,7 +24,8 @@ import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
 import { buildBrands, buildBrandRoster, brandCanonicalPath } from '../utils/brandGroups.js';
 import { getTherapistDisplayName } from '../utils/shopHelpers.js';
-import { normalizeTherapistName } from '../utils/reviewIdentity.js';
+import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews, normalizeTherapistName } from '../utils/reviewIdentity.js';
+import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { authHeaders } from '../utils/supabaseRest';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
@@ -34,6 +35,7 @@ const fmtDate = (v) => {
 };
 
 const ROSTER_PAGE = 24;
+const TAG_CATEGORIES = TAG_SOURCE.map((c) => ({ id: c.id, title: c.titleEn, tags: c.tags }));
 
 export default function BrandPage({
   ssrBrand = null,
@@ -71,6 +73,8 @@ export default function BrandPage({
   //       「写真が無い人も出す」（2026-09-16の決定）と食い違うため、ここでは自前で取る。
   //    ⚠️ PostgRESTは1回に最大1000行。420名規模のブランドがあるのでページ送りする。
   const [cloudRoster, setCloudRoster] = React.useState(null);
+  const [therapistReviewCounts, setTherapistReviewCounts] = React.useState({});
+  const [reviewTagMap, setReviewTagMap] = React.useState({});
   React.useEffect(() => {
     const ids = ssrBrand?.shopIds || brand?.shopIds || (brand?.rooms || []).map((r) => r.id);
     if (!ids || !ids.length) return undefined;
@@ -93,6 +97,30 @@ export default function BrandPage({
           if (page.length < 1000) break;
         }
         if (alive && rows.length) setCloudRoster(rows);
+
+        // 🚩 タグと口コミ順に要る「人物ごとの口コミ件数・タグ」を作る。
+        //    ⚠️ キーは therapist_id。名前キーは系列店の**同名の別人**を1人に束ねる（F04）。
+        //    ⚠️ 本文は要らないので列を絞る（名簿と違いここは件数とタグだけ）。
+        const cRes = await fetch(
+          `${base}/rest/v1/reviews?shop_id=in.(${inList})&select=therapist_id,shop_id,therapist_name,tags`,
+          { headers, cache: 'no-store' },
+        );
+        if (cRes.ok) {
+          const cData = await cRes.json();
+          if (alive && Array.isArray(cData)) {
+            const list = (rows.length ? rows : []).map((t) => ({ id: t.id, shop_id: t.shop_id, name: t.name }));
+            const index = buildTherapistReviewIndex(cData, list);
+            const counts = {};
+            const tagMap = {};
+            for (const t of list) {
+              const summary = summarizeReviews(reviewsForTherapist(index, t.id));
+              counts[t.id] = summary.count;
+              tagMap[t.id] = summary.tags;
+            }
+            setTherapistReviewCounts(counts);
+            setReviewTagMap(tagMap);
+          }
+        }
       } catch {
         // 取れなくてもSSRの24名は出ている。ここで画面を壊さない。
       }
@@ -127,20 +155,41 @@ export default function BrandPage({
   const [displayCount, setDisplayCount] = React.useState(ROSTER_PAGE);
   const [castNameFilter, setCastNameFilter] = React.useState('');
   const [castSortOrder, setCastSortOrder] = React.useState('default');
+  const [selectedTags, setSelectedTags] = React.useState([]);
+  const [isTagOpen, setIsTagOpen] = React.useState(false);
+
+  // 付いているタグの件数。0件のタグも出す（店舗ページと同じ＝選べる幅を隠さない）。
+  const tagCounts = React.useMemo(() => {
+    const counts = {};
+    TAG_CATEGORIES.forEach((cat) => cat.tags.forEach((t) => { counts[t] = 0; }));
+    for (const t of roster) {
+      const tags = reviewTagMap[t.id] || new Set();
+      for (const tag of tags) if (counts[tag] !== undefined) counts[tag] += 1;
+    }
+    return counts;
+  }, [roster, reviewTagMap]);
 
   const sortedRoster = React.useMemo(() => {
     let list = [...roster];
+    if (selectedTags.length > 0) {
+      list = list.filter((t) => {
+        const tags = reviewTagMap[t.id] || new Set();
+        return selectedTags.every((sel) => tags.has(sel));
+      });
+    }
     if (castNameFilter.trim()) {
       const f = normalizeTherapistName(castNameFilter);
       list = list.filter((t) => normalizeTherapistName(t.name).includes(f));
     }
     if (castSortOrder === 'aiueo') {
       list.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ja'));
+    } else if (castSortOrder === 'reviews') {
+      list.sort((a, b) => (therapistReviewCounts[b.id] || 0) - (therapistReviewCounts[a.id] || 0));
     }
     // ⚠️ 既定（標準）は並べ替えない。buildBrandRoster が写真ありを先に並べた順を保つ
     //    （崩すとプレースホルダばかりが先頭に来る）。
     return list;
-  }, [roster, castNameFilter, castSortOrder]);
+  }, [roster, castNameFilter, castSortOrder, selectedTags, reviewTagMap, therapistReviewCounts]);
 
   const visibleRoster = sortedRoster.slice(0, displayCount);
   const hasMoreRoster = displayCount < sortedRoster.length;
@@ -285,9 +334,59 @@ export default function BrandPage({
               </h2>
               {/* ⚠️ 絞り込み中は「N / 全M人」。店舗ページと同じ出し方に揃える。 */}
               <span className="bg-white/10 px-2 py-0.5 rounded text-xs font-bold text-slate-300 shrink-0">
-                {castNameFilter ? `${sortedRoster.length} / ` : ''}全{roster.length}人
+                {(castNameFilter || selectedTags.length > 0) ? `${sortedRoster.length} / ` : ''}全{roster.length}人
               </span>
             </div>
+
+            {/* タグで絞り込む（店舗ページから移植・2026-09-19）。
+                ⚠️ タグは**口コミに付いたもの**で、人物ごとに集計している。
+                   キーは therapist_id（名前キーは系列店の同名の別人を束ねる＝F04）。
+                ⚠️ 0件のタグも出す。件数で隠すと「選べる幅」が見えなくなる（店舗ページと同じ約束）。 */}
+            {roster.length > 6 && (
+              <div className="mb-4">
+                <button
+                  onClick={() => setIsTagOpen((v) => !v)}
+                  className="text-xs font-black text-slate-300 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 hover:border-white/30 transition"
+                >
+                  🔎 タグで絞り込む{selectedTags.length > 0 ? `（${selectedTags.length}）` : ''} {isTagOpen ? '▲' : '▼'}
+                </button>
+                {isTagOpen && (
+                  <div className="mt-3 space-y-3 bg-slate-900/60 border border-white/10 rounded-2xl p-3">
+                    {TAG_CATEGORIES.map((cat) => (
+                      <div key={cat.id}>
+                        <p className="text-[10px] font-black text-slate-500 tracking-widest mb-1.5">{cat.title}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {cat.tags.map((tag) => {
+                            const isSelected = selectedTags.includes(tag);
+                            return (
+                              <button
+                                key={tag}
+                                onClick={() => {
+                                  setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+                                  setDisplayCount(ROSTER_PAGE);
+                                }}
+                                className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition ${isSelected ? 'bg-pink-600 text-white border-pink-500' : 'bg-slate-800 text-slate-300 border-white/10 hover:border-white/30'}`}
+                              >
+                                {tag}
+                                <span className="ml-1 text-[10px] opacity-60">{tagCounts[tag] || 0}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                    {selectedTags.length > 0 && (
+                      <button
+                        onClick={() => { setSelectedTags([]); setDisplayCount(ROSTER_PAGE); }}
+                        className="text-[11px] font-bold text-slate-400 hover:text-white underline"
+                      >
+                        すべて解除
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* 名前で絞り込み＋並び替え（店舗ページから移植・2026-09-19）。
                 D-014で店舗ページをここへ301した結果、多ルームのブランドでは
@@ -302,7 +401,7 @@ export default function BrandPage({
                   className="flex-1 min-w-0 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-pink-500/50"
                 />
                 <div className="flex gap-1 shrink-0">
-                  {[{ v: 'default', label: '標準' }, { v: 'aiueo', label: '五十音' }].map((o) => (
+                  {[{ v: 'default', label: '標準' }, { v: 'aiueo', label: '五十音' }, { v: 'reviews', label: '💬 口コミ' }].map((o) => (
                     <button
                       key={o.v}
                       onClick={() => setCastSortOrder(o.v)}
@@ -344,8 +443,8 @@ export default function BrandPage({
                 </button>
               </div>
             )}
-            {castNameFilter && sortedRoster.length === 0 && (
-              <p className="text-xs text-slate-500 mt-3">「{castNameFilter}」に一致するセラピストはいません。</p>
+            {(castNameFilter || selectedTags.length > 0) && sortedRoster.length === 0 && (
+              <p className="text-xs text-slate-500 mt-3">条件に一致するセラピストはいません。</p>
             )}
           </section>
         )}
