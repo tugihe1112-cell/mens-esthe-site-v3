@@ -150,8 +150,17 @@ for (const [path, label] of [
   //    名簿に要る列（name と image_url）を取っていることまで見る。
   requireMatch(brandWrapper, /from\('therapists'\)\.select\('id, name, image_url/,
     'ブランドページが在籍セラピストを取得していません（店舗ページにある本体の中身が欠けます）');
-  requireMatch(brandPage, /roster\.map\(/,
+  // ⚠️ 変数名を固定しない。守りたいのは「名簿を描いていること」であって綴りではない。
+  //    2026-09-19、`roster.map` に固定していたため「もっと見る」導入で
+  //    `visibleRoster.map` にしただけで落ちた（今週6件目の同じ型）。
+  requireMatch(brandPage, /\b(visible)?[Rr]oster\.map\(/,
     'ブランドページが在籍セラピストを描画していません');
+  // 🚩 名簿を打ち切ったままにしない。126名いて24名しか見られない状態に戻さない
+  //    （D-014で店舗ページをここへ301したので、ここが唯一の閲覧口になっている）。
+  requireMatch(brandPage, /もっと見る/,
+    'ブランドページに「もっと見る」がありません（名簿が打ち切られたままになります）');
+  rejectMatch(brandPage, /buildBrandRoster\([\s\S]{0,120}?\{\s*limit:\s*24\s*\}/,
+    'ブランドページの名簿が24名で打ち切られています（店舗ページから301で来た人が全員を見られません）');
   // 🚩 人単位の重複除去は buildBrandRoster に一本化する。
   //    SSRと画面で別々に畳むと、片方だけ「咲さんが3ルームぶん3回出る」に戻る。
   requireMatch(brandWrapper, /buildBrandRoster\(/,

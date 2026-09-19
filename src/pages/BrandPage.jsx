@@ -24,12 +24,15 @@ import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
 import { buildBrands, buildBrandRoster, brandCanonicalPath } from '../utils/brandGroups.js';
 import { getTherapistDisplayName } from '../utils/shopHelpers.js';
+import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
 const fmtDate = (v) => {
   const d = new Date(v);
   return Number.isNaN(d.getTime()) ? '' : `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
 };
+
+const ROSTER_PAGE = 24;
 
 export default function BrandPage({
   ssrBrand = null,
@@ -68,8 +71,38 @@ export default function BrandPage({
     // ⚠️ SSRで焼いた分を先に置く（初期表示と並びを変えない）。
     //    重複除去は buildBrandRoster に一本化する＝画面側で別の畳み方を書くと
     //    「咲さんが3ルームぶん3回出る」が片側だけ復活する。
-    return buildBrandRoster([...(ssrRoster || []), ...fromContext], { limit: 24 }).roster;
+    // 🚩 打ち切らずに全員を作る（2026-09-19）。
+    //    以前はここで24名に切っており、**126名いても24名しか見られなかった**。
+    //    D-014で店舗ページをここへ301した結果、店舗ページにあった「もっと見る」が
+    //    多ルームのブランド（1,095店中370店）で丸ごと失われていた。
+    //    ⚠️ SSRが焼くのは先頭24名のまま（420名規模のブランドがあるためHTMLを膨らませない）。
+    //       画面側は displayCount で伸ばす。初期値を24にしてあるので初期表示は変わらない。
+    return buildBrandRoster([...(ssrRoster || []), ...fromContext], { limit: Number.MAX_SAFE_INTEGER }).roster;
   }, [ssrRoster, ssrBrand, brand, getTherapistsByShopId]);
+
+  // ── 名簿の絞り込みと並び替え（店舗ページから移植）─────────────────
+  // ⚠️ 人物名の正規化は reviewIdentity に一本化する。独自に書くと
+  //    「ｱｲ」と「アイ」が別人になる（店舗ページと同じ約束）。
+  const [displayCount, setDisplayCount] = React.useState(ROSTER_PAGE);
+  const [castNameFilter, setCastNameFilter] = React.useState('');
+  const [castSortOrder, setCastSortOrder] = React.useState('default');
+
+  const sortedRoster = React.useMemo(() => {
+    let list = [...roster];
+    if (castNameFilter.trim()) {
+      const f = normalizeTherapistName(castNameFilter);
+      list = list.filter((t) => normalizeTherapistName(t.name).includes(f));
+    }
+    if (castSortOrder === 'aiueo') {
+      list.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ja'));
+    }
+    // ⚠️ 既定（標準）は並べ替えない。buildBrandRoster が写真ありを先に並べた順を保つ
+    //    （崩すとプレースホルダばかりが先頭に来る）。
+    return list;
+  }, [roster, castNameFilter, castSortOrder]);
+
+  const visibleRoster = sortedRoster.slice(0, displayCount);
+  const hasMoreRoster = displayCount < sortedRoster.length;
 
   if (!brand && loading) {
     return (<><SeoHead title="店舗ブランド" noindex /><div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 text-sm">読み込み中...</div></>);
@@ -204,12 +237,45 @@ export default function BrandPage({
             ⚠️ SSR分だけでも初期HTMLに名前とリンクが載る（D-013: JS実行前に本文と内部リンク）。 */}
         {roster.length > 0 && (
           <section>
-            <h2 className="text-base font-black text-white mb-3">
-              在籍セラピスト
-              {ssrTherapistCount > 0 && <span className="ml-2 text-xs font-bold text-slate-500">{ssrTherapistCount}名</span>}
-            </h2>
+            <div className="flex items-center justify-between mb-3 gap-2">
+              <h2 className="text-base font-black text-white">
+                在籍セラピスト
+                {ssrTherapistCount > 0 && <span className="ml-2 text-xs font-bold text-slate-500">{ssrTherapistCount}名</span>}
+              </h2>
+              {/* ⚠️ 絞り込み中は「N / 全M人」。店舗ページと同じ出し方に揃える。 */}
+              <span className="bg-white/10 px-2 py-0.5 rounded text-xs font-bold text-slate-300 shrink-0">
+                {castNameFilter ? `${sortedRoster.length} / ` : ''}全{roster.length}人
+              </span>
+            </div>
+
+            {/* 名前で絞り込み＋並び替え（店舗ページから移植・2026-09-19）。
+                D-014で店舗ページをここへ301した結果、多ルームのブランドでは
+                この操作が丸ごと失われていた。 */}
+            {roster.length > 6 && (
+              <div className="flex flex-col sm:flex-row gap-2 mb-4">
+                <input
+                  type="search"
+                  value={castNameFilter}
+                  onChange={(e) => { setCastNameFilter(e.target.value); setDisplayCount(ROSTER_PAGE); }}
+                  placeholder="セラピスト名で絞り込み"
+                  className="flex-1 min-w-0 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-pink-500/50"
+                />
+                <div className="flex gap-1 shrink-0">
+                  {[{ v: 'default', label: '標準' }, { v: 'aiueo', label: '五十音' }].map((o) => (
+                    <button
+                      key={o.v}
+                      onClick={() => setCastSortOrder(o.v)}
+                      className={`px-3 py-2 rounded-xl text-xs font-bold border transition ${castSortOrder === o.v ? 'bg-pink-600 text-white border-pink-500' : 'bg-slate-900 text-slate-300 border-white/10 hover:border-white/30'}`}
+                    >
+                      {o.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-              {roster.map((t) => (
+              {visibleRoster.map((t) => (
                 <Link
                   key={t.id}
                   to={`/shops/${t.shopId || reviewShopId}/threads/${t.id}`}
@@ -225,11 +291,20 @@ export default function BrandPage({
             </div>
             {/* ⚠️ ここに「写真を確認できるセラピストを表示しています」と書いてはいけない（2026-09-16）。
                 名簿は写真の有無で絞っていない（buildBrandRoster）。書くと**画面が嘘をつく**。
-                打ち切っている理由は写真ではなく**24人という上限**。理由のほうを書く。 */}
-            {ssrRosterTruncated && roster.length <= (ssrRoster || []).length && (
-              <p className="text-xs text-slate-500 mt-2">
-                在籍セラピストの一部（{roster.length}名）を表示しています。
-              </p>
+                ⚠️ 「一部を表示しています」も、もっと見るで全員見られる今は不正確。
+                   残りが何人かを出して、押せば見られることを示す。 */}
+            {hasMoreRoster && (
+              <div className="mt-4 text-center">
+                <button
+                  onClick={() => setDisplayCount((n) => n + ROSTER_PAGE)}
+                  className="px-6 py-2.5 rounded-full bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700 hover:text-white transition border border-white/5"
+                >
+                  もっと見る (+{sortedRoster.length - displayCount})
+                </button>
+              </div>
+            )}
+            {castNameFilter && sortedRoster.length === 0 && (
+              <p className="text-xs text-slate-500 mt-3">「{castNameFilter}」に一致するセラピストはいません。</p>
             )}
           </section>
         )}
