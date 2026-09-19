@@ -73,7 +73,12 @@ requireMatch(shopPage, /\{renderSeo\s*&&\s*\([\s\S]*?<SeoHead/, '店舗画面の
 requireMatch(popularWrapper, /export async function getServerSideProps/, '/popular-reviews がSSRではありません');
 requireMatch(popularWrapper, /initialReviews:\s*reviews\s*\|\|\s*\[\]/, '/popular-reviews がSSR口コミを渡していません');
 requireMatch(popularPage, /useState\(\(\)\s*=>\s*initialReviews\s*\|\|\s*\[\]\)/, '/popular-reviews がSSR口コミを初期表示に使っていません');
-requireMatch(popularPage, /const shopLink = r\.shop_id \? `\/shops\/\$\{r\.shop_id\}`/, '口コミ一覧の店舗リンクが正規店舗URLではありません');
+// 🚩 2026-09-19: 綴りの固定をやめ、**飛ばされないURL**を要求する形にした（今週7件目の同じ型）。
+//    元の意図は「検索クエリではなく実体のあるURLを指すこと」。それは reject 側で保つ。
+//    ⚠️ shopHref は group_id が引けないと店舗URLに倒れる。店舗の索引から引くこと。
+requireMatch(popularPage, /shopLink = r\.shop_id[\s\S]{0,200}?shopHref\(/, '口コミ一覧の店舗リンクが shopHref を通っていません（複数ルームのブランドで301します）');
+requireMatch(popularPage, /shopById\?\.\[r\.shop_id\]\?\.group_id/, '口コミ一覧が店舗の group_id を引いていません（shopHref が店舗URLに倒れて直書きと同じになります）');
+rejectMatch(popularPage, /shopLink = [^;]*`\/search\?shop=/, '口コミ一覧の店舗リンクが検索クエリに戻っています');
 
 requireMatch(threadWrapper, /renderSeo=\{false\}/, 'セラピストページのSEO出力がSSR側へ一本化されていません');
 requireMatch(threadWrapper, /'@type': 'ProfilePage'/, 'セラピストをProfilePageとして構造化していません');

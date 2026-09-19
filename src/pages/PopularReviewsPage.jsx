@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { normalizeTherapistName } from '../utils/reviewIdentity.js';
+import { shopHref } from '../utils/brandGroups.js';
+import { useShopData } from '../contexts/DataContext.jsx';
 import { authHeaders } from '../utils/supabaseRest';
 import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
@@ -43,6 +45,10 @@ export default function PopularReviewsPage({
   initialTherapistMap = {},
   initialHasMore = false,
 }) {
+  // ⚠️ リンク先は shopHref で決める。`/shops/${id}` を直書きすると、
+  //    複数ルームのブランドでは**押した瞬間に301でブランドページへ飛ぶ**（D-014）。
+  //    2026-09-19、一斉置換で `to={`/shops/${` の形しか探しておらず、ここだけ漏れていた。
+  const { roomCounts, shopById } = useShopData();
   const hasServerData = Array.isArray(initialReviews);
   const [reviews, setReviews] = useState(() => initialReviews || []);
   const [shopMap, setShopMap] = useState(() => initialShopMap || {});
@@ -253,7 +259,11 @@ export default function PopularReviewsPage({
                   const threadLink = (r.shop_id && r.therapist_id)
                     ? `/shops/${r.shop_id}/threads/${r.therapist_id}`
                     : `/search?cast=${encodeURIComponent(r.therapist_name || '')}`;
-                  const shopLink = r.shop_id ? `/shops/${r.shop_id}` : '/search';
+                  // ⚠️ 口コミ行は group_id を持たない。店舗の索引から引く。
+                  //    引けないと shopHref は店舗URLに倒れる＝直書きと同じになる。
+                  const shopLink = r.shop_id
+                    ? shopHref({ id: r.shop_id, group_id: shopById?.[r.shop_id]?.group_id }, roomCounts)
+                    : '/search';
 
                   return (
                     <article
