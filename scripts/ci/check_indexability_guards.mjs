@@ -119,6 +119,10 @@ requireMatch(brandResultCode, /summary\?\.rooms/,
 // ⚠️ 受け取るだけでなく、**それを並べているか**まで見る（受け取って使わない書き方があり得る）。
 requireMatch(brandResultCode, /\{rooms\.map\(/,
   'ブランドカードが rooms を並べていません（shops を並べると1枚しか出ません）');
+// 🚩 ルーム欄の存在理由は「どこにあるか」。県と市区だけだと同じブランドのルームが
+//    全部「東京都 大田区」になって見分けがつかない（店名を揃えたので名前でも区別できない）。
+requireMatch(brandResultCode, /parts=\{\[[^\]]*shop\.area/,
+  'ブランドカードのルームが地名（area）を出していません（ルームを見分けられなくなります）');
 // 🚩 数えられない人数を出さない（D-010）。店舗行はセラピストを持たないので足すと必ず0になる。
 requireMatch(brandResultCode, /Number\(summary\.therapistCount\)\s*>\s*0/,
   'ブランドカードが在籍人数を条件なしで出しています（「総勢0名」が出ます）');

@@ -105,7 +105,14 @@ export default function BrandResultCard({ summary, shops, roomCounts = null }) {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-white font-bold text-sm truncate">{getDisplayName(shop.name, shop)}</h3>
-                  <LocationLabel as="p" className="text-slate-500 text-xs truncate" parts={[shop.prefecture, shop.city]} />
+                  {/* 🚩 地名は area から。県と市区だけだと**3ルームが全部「東京都 大田区」**になり、
+                         どれが大森でどれが蒲田か分からない（2026-09-20、店名を揃えた結果そうなった）。
+                         ルーム欄の存在理由は「どこにあるか」なので、ここが潰れると欄ごと無意味になる。 */}
+                  <LocationLabel
+                    as="p"
+                    className="text-slate-500 text-xs truncate"
+                    parts={[Array.isArray(shop.area) ? shop.area[0] : shop.area, shop.prefecture, shop.city]}
+                  />
                 </div>
               </div>
             ))}
