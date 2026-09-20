@@ -26,6 +26,8 @@ const PREFECTURE_NAMES = new Set([
   '大分', '大分県', '宮崎', '宮崎県', '鹿児島', '鹿児島県', '沖縄', '沖縄県',
 ]);
 
+import { buildBrands } from './brandGroups.js';
+
 export const performSearch = (shops, query) => {
   // 1. クエリが空の場合
   if (!query || typeof query !== 'string' || query.trim() === '') {
@@ -111,21 +113,33 @@ export const performSearch = (shops, query) => {
   if (isBrandMode && dominantGroupId) {
     const groupShops = matchedShops.filter(s => s.group_id === dominantGroupId);
     const representativeShop = groupShops[0];
-    
-    // セラピスト総数の概算
-    const totalTherapists = groupShops.reduce((sum, s) => {
-        return sum + (s.therapists ? s.therapists.length : 0);
-    }, 0);
+
+    // 🚩 ルームは**検索に当たったものだけ**ではなく、そのブランドの全ルーム。
+    //    「蒲田」で検索したら蒲田のルームしか当たらないが、利用者が見たいのは
+    //    そのブランドがどこにあるか。件数もここから数える。
+    const allRooms = shops.filter(s => s.group_id === dominantGroupId);
+    const rooms = allRooms.length ? allRooms : groupShops;
+
+    // 🚩 見出しは buildBrands に作らせる＝**ブランドページと同じ名前**になる。
+    //    2026-09-20 まで `representativeShop.brandId` をそのまま出していて、
+    //    取り込み時の内部キー（`gokujou`）が見出しと <title> に出ていた。
+    //    ⚠️ ここで別の作り方を書くと、また画面ごとに違う名前が出る。
+    const brand = buildBrands(rooms)[0];
 
     return {
       type: 'brand',
       data: matchedShops,
       summary: {
         groupId: dominantGroupId,
-        brandName: representativeShop.brandId || representativeShop.name.split(' ')[0],
-        shopCount: groupShops.length,
-        therapistCount: totalTherapists,
-        representativeImage: representativeShop.image_url || representativeShop.image
+        brandName: brand?.name || representativeShop.name,
+        shopCount: rooms.length,
+        // ⚠️ ルームは**生の店舗行**のまま渡す（カードが写真と所在地を使う）。
+        rooms,
+        // ⚠️ 在籍人数は**ここでは数えられない**。店舗行はセラピストを持っていないので、
+        //    足すと必ず0になる。「総勢0名」と書くのは根拠のない数字を出すのと同じ（D-010）。
+        //    数えられるのはブランドページ（SSRが人単位で数える）だけ。
+        therapistCount: null,
+        representativeImage: brand?.image_url || representativeShop.image_url || representativeShop.image
       }
     };
   }

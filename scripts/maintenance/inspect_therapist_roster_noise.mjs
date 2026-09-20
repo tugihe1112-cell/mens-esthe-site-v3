@@ -49,6 +49,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import { normName } from '../lib/brandNameMatch.mjs';
+// 🚩 判定は rosterNoiseRules.mjs に一本化してある（2026-09-20）。
+//    ここに書き戻すと、別のやり方と正答率を比べるとき**写しを測ることになる**。
+import {
+  COMMON_NAME_MIN_SHOPS, BUCKET_LABELS, classifyRosterName, selfTestRosterRules,
+} from '../lib/rosterNoiseRules.mjs';
 
 function env(name) {
   for (const line of fs.readFileSync('.env', 'utf8').split('\n')) {
@@ -73,6 +78,10 @@ async function fetchAll(table, columns) {
 
 const tsvArg = process.argv.slice(2).find((a) => a.startsWith('--tsv='));
 
+// ⚠️ 判定そのものの自己診断を**DBに触る前**に置く。
+//    壊れた判定で一覧を出すくらいなら、何も出さないほうが害が小さい。
+selfTestRosterRules();
+
 const shops = await fetchAll('shops', 'id, name');
 const therapists = await fetchAll('therapists', 'id, shop_id, name, image_url, is_active');
 
@@ -95,40 +104,25 @@ for (const t of therapists) {
   if (!shopsUsingName.has(n)) shopsUsingName.set(n, new Set());
   shopsUsingName.get(n).add(t.shop_id);
 }
-const COMMON_NAME_MIN_SHOPS = 3;
-
-const BRANCH_SUFFIX = /(店|ルーム|room|支店)$/i;
-// ⚠️ 語のリスト＝**網羅ではない**。取り込み元のページ部品がそのまま名前になったもの。
-//    増やすときは、必ず実際に見つけたものだけを足すこと（想像で足さない）。
-const ASSET_WORDS = /^(背景画像|背景|メイン画像|トップ画像|ロゴ|バナー|サンプル|画像|写真|no ?image|noimage|dummy|ダミー)$/i;
-
 const shown = (t) => t.is_active !== false && String(t.image_url ?? '').trim() !== '';
 
 const buckets = { room: [], asset: [], decorated: [], otherShop: [] };
 for (const t of therapists) {
   const n = normName(t.name);
   if (!n) continue;
-  // ① 部屋・店舗の呼び名。
-  if (BRANCH_SUFFIX.test(String(t.name ?? '').trim())) { buckets.room.push(t); continue; }
-  // ④ 取り込み元のページ部品がそのまま名前になったもの。
-  if (ASSET_WORDS.test(String(t.name ?? '').trim())) { buckets.asset.push(t); continue; }
-  // ② 人名に自分の店の名前が付いている。消さずに表示名から外す。
-  const own = normName(shopNameById.get(t.shop_id));
-  if (own.length >= 3 && n !== own && n.includes(own)) { buckets.decorated.push(t); continue; }
-  // ③ 他店の名前と完全一致。ただし**よくある源氏名は除く**。
-  const hit = shopNameIndex.get(n);
-  const spread = shopsUsingName.get(n)?.size || 0;
-  if (hit && !hit.includes(t.shop_id) && spread < COMMON_NAME_MIN_SHOPS) { buckets.otherShop.push(t); }
+  const bucket = classifyRosterName({
+    name: t.name,
+    shopId: t.shop_id,
+    shopName: shopNameById.get(t.shop_id) || '',
+    shopIdsWithSameName: shopNameIndex.get(n) || [],
+    shopsUsingName: shopsUsingName.get(n)?.size || 0,
+  });
+  if (bucket) buckets[bucket].push(t);
 }
 
 console.log(`shops ${shops.length}件 ／ therapists ${therapists.length}行（うち画面に出る条件を満たす ${therapists.filter(shown).length}行）\n`);
 
-const labels = {
-  room: '① 部屋・店舗の呼び名が人として並んでいる … **消す対象**',
-  asset: '④ 素材・部品の名前が人として並んでいる … **消す対象**（語のリスト＝網羅ではない）',
-  decorated: '② 人名に店名が付いている … **消さない。表示名から店名を外す**',
-  otherShop: '③ 他店の名前と完全一致（よくある源氏名は除外済み）… 要確認',
-};
+const labels = BUCKET_LABELS;
 for (const key of ['room', 'asset', 'decorated', 'otherShop']) {
   const list = buckets[key];
   const visible = list.filter(shown);

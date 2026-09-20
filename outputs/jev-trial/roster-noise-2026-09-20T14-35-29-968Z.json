@@ -1,0 +1,1526 @@
+{
+  "endpoint": "https://api.typesafe.ai/v1/systemone",
+  "cases": 95,
+  "results": [
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_nerima_nerima_cannele_練馬Dルーム",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "練馬Dルーム",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_c6ec565c88b1b4fb74b0.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.66,
+        "isPerson": 0.38,
+        "inputTokens": 538
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_shibuya_the_half_THE_HALF五反田店",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "THE HALF五反田店",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_d9ce8cc7b44c50a87860.png",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "shop",
+        "kindConfidence": 0.33,
+        "isPerson": 0.44,
+        "inputTokens": 556
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_nerima_nerima_cannele_練馬Cルーム",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "練馬Cルーム",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_d6adb78f5d802ffd7f25.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.58,
+        "isPerson": 0.47,
+        "inputTokens": 538
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_背景画像",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "背景画像",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_3dea8804612648929624.jpg",
+      "is_active": true,
+      "heuristicBucket": "asset",
+      "jev": {
+        "kind": "asset",
+        "kindConfidence": 0.83,
+        "isPerson": 0.41,
+        "inputTokens": 554
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_suginami_ogikubo_a-laise_中野ROOM",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "中野ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_71c726511bbc7b0a8664.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 0.71,
+        "isPerson": 0.55,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_suginami_ogikubo_a-laise_荻窪南口ROOM",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "荻窪南口ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_6010d41850f063f67693.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.79,
+        "isPerson": 0.55,
+        "inputTokens": 561
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_suginami_ogikubo_a-laise_荻窪FCROOM",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "荻窪FCROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_3e2d7b9a983da493f050.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.63,
+        "isPerson": 0.5,
+        "inputTokens": 560
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_suginami_ogikubo_a-laise_荻窪北口ROOM",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "荻窪北口ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_6a0c64a9a359346fc72a.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.84,
+        "isPerson": 0.54,
+        "inputTokens": 561
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_nerima_nerima_cannele_練馬Aルーム",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "練馬Aルーム",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_f562880aa077e1390309.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.65,
+        "isPerson": 0.39,
+        "inputTokens": 538
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_nerima_nerima_cannele_江古田ルーム",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "江古田ルーム",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_46d09d5281bb4dea6e3e.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.6,
+        "isPerson": 0.47,
+        "inputTokens": 538
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_shinagawa_gotanda_the_half_THE_HALF五反田店",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "THE HALF五反田店",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_d9ce8cc7b44c50a87860.png",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "shop",
+        "kindConfidence": 0.37,
+        "isPerson": 0.33,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_nerima_nerima_cannele_練馬Bルーム",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "練馬Bルーム",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_8c07dd98f83a5f137666.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.66,
+        "isPerson": 0.39,
+        "inputTokens": 538
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_駒込ROOM",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "駒込ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_f5420eac33016b2c9bc6.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.62,
+        "isPerson": 0.49,
+        "inputTokens": 554
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_suginami_ogikubo_a-laise_背景画像",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "背景画像",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_aadc0ef269fa3f78a447.jpg",
+      "is_active": true,
+      "heuristicBucket": "asset",
+      "jev": {
+        "kind": "asset",
+        "kindConfidence": 0.8,
+        "isPerson": 0.4,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_大塚北口ROOM",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "大塚北口ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_00ee19e292f168ae5bc4.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.67,
+        "isPerson": 0.58,
+        "inputTokens": 556
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_池袋西口_FC_ROOM",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "池袋西口 FC ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_8949f1b593592fe44611.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.83,
+        "isPerson": 0.44,
+        "inputTokens": 556
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_大塚南口ROOM",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "大塚南口ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_73dcf433a31dcc6a63cf.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.51,
+        "isPerson": 0.62,
+        "inputTokens": 556
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_十条_FC_ROOM",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "十条 FC ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_9651576c3162c3db17ec.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.43,
+        "isPerson": 0.5,
+        "inputTokens": 554
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_日暮里ROOM",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "日暮里ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_afc532fcc99c763e0c17.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.61,
+        "isPerson": 0.5,
+        "inputTokens": 554
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "tokyo_suginami_ogikubo_a-laise_高田馬場ROOM",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "高田馬場ROOM",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_6107d7b7d0de9805462f.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "room",
+        "kindConfidence": 0.74,
+        "isPerson": 0.48,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "A 消した行",
+      "truth": "noise",
+      "id": "aichi_meieki_milk_repos_ミルクルポルーム",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "ミルクルポルーム",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_61bda091266480a00adc.jpg",
+      "is_active": true,
+      "heuristicBucket": "room",
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 0.37,
+        "isPerson": 0.6,
+        "inputTokens": 538
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_すみれ",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "すみれ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_e641bbae2e6104d19ad9.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.58,
+        "inputTokens": 534
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_かれん",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "かれん",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_f9420e713534b583f6dd.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.61,
+        "inputTokens": 534
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_えま",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "えま",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.54,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_みく",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "みく",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_ab2c4943917cc304af65.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.62,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_せいか",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "せいか",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_46991c037ba5482508a2.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.62,
+        "inputTokens": 534
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_ことり",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "ことり",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_5767793ad5c8c7097212.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.62,
+        "inputTokens": 534
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_みつき",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "みつき",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_67d5d55d2bb39b9df967.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.66,
+        "inputTokens": 534
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_りつ",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "りつ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_6444cec091888381ffff.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.64,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_あや",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "あや",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_2df86ec4c404fb00fc91.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.62,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_りん",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "りん",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_5095e5759a58c0d47d32.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.63,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_おとは",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "おとは",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_574f00ea4a332ba86fab.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.62,
+        "inputTokens": 534
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_nerima_nerima_cannele_るな",
+      "shop_id": "tokyo_nerima_nerima_cannele",
+      "name": "るな",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_52f8dbaa73c13b7276ac.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.61,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_最上もね",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "最上もね",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.48,
+        "inputTokens": 555
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_名井サナ",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "名井サナ",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.46,
+        "inputTokens": 556
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_藍羽しおん",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "藍羽しおん",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.51,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_水瀬るな",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "水瀬るな",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.52,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_真夏ニーナ",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "真夏ニーナ",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.48,
+        "inputTokens": 556
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_清水あゆむ",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "清水あゆむ",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.53,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_水川うみか",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "水川うみか",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_3d1cfdf1386383dbb46f.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.6,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_胡桃ひかる",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "胡桃ひかる",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.55,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_乃々香もか",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "乃々香もか",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_61d8bb7c97deb6eb4330.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.62,
+        "inputTokens": 556
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_楪りつ",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "楪りつ",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.47,
+        "inputTokens": 555
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_御子柴りょう",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "御子柴りょう",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.54,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shibuya_the_half_羽田あゆみ",
+      "shop_id": "tokyo_shibuya_the_half",
+      "name": "羽田あゆみ",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.55,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_夕日みや",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "夕日みや",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_96adf7175960fbb700b2.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.65,
+        "inputTokens": 553
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_橋本すみれ",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "橋本すみれ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_57a1668de95dae01379b.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.67,
+        "inputTokens": 555
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_水野かすみ",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "水野かすみ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_eb55ab015c63c1f32b88.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.68,
+        "inputTokens": 555
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_西川なな",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "西川なな",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_6b4dd7bf8c324f7dd262.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.66,
+        "inputTokens": 553
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_安藤なつみ",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "安藤なつみ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_8c2bd4cdd7e9df7c8b56.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.68,
+        "inputTokens": 555
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_山村さくら",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "山村さくら",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_fcd0868334a5aacf5b44.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.69,
+        "inputTokens": 555
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_今井さな",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "今井さな",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_5a1ac8fa8d5d14dd4c92.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.69,
+        "inputTokens": 553
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_速見ありさ",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "速見ありさ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_f10338a92f2d3c91e414.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.68,
+        "inputTokens": 554
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_永山あき",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "永山あき",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_faaeead9287c2216e810.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.68,
+        "inputTokens": 554
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_青木りず",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "青木りず",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_095df6dddee7706f9928.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.64,
+        "inputTokens": 554
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_石原えま",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "石原えま",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_e245ff5d79d9e4a8745c.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.66,
+        "inputTokens": 553
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_toshima_ikebukuro_le_reve_ck_小西りほ",
+      "shop_id": "tokyo_toshima_ikebukuro_le_reve_ck",
+      "name": "小西りほ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_b6aa2ab8a3edbb230cf0.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.67,
+        "inputTokens": 554
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_風吹じゅりあ",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "風吹じゅりあ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_e7ee54d9396d2160afef.png",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.65,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_泉あんじゅ",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "泉あんじゅ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_37ca384b9a36194d4115.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.66,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_宮世あかり",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "宮世あかり",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_a005f0101ad368cfe8f2.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.67,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_木村あおい",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "木村あおい",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_96114f9ea99d4a26b71f.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.65,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_柏木みお",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "柏木みお",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_2fcb624cab5defa44650.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.67,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_永山あき",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "永山あき",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_9d94a9047050ebf02502.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.66,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_白川ゆずは",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "白川ゆずは",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_79299cd4ada90fa55cdd.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.65,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_佐久間かほ",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "佐久間かほ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_e1c3b812ce6aabc4d577.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.67,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_遠野あゆみ",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "遠野あゆみ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_b491c811ba0f7075d812.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.67,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_夏木ひとみ",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "夏木ひとみ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_bf93c22d4effc91b8234.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.65,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_安藤なつみ",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "安藤なつみ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_7f5b55ca2c69093d5f7b.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.67,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_深田さくら",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "深田さくら",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.42,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_suginami_ogikubo_a-laise_本城あずさ",
+      "shop_id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "本城あずさ",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_3d2e45c6b90adead5ea9.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.65,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_愛詩乃もか",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "愛詩乃もか",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.44,
+        "inputTokens": 560
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_花宮なのは",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "花宮なのは",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.41,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_天音りおな新人",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "天音りおな🔰新人🔰",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.44,
+        "inputTokens": 564
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_要ゆうき",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "要ゆうき",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_0ff77f17e72797034ce5.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.56,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_桃野るみ",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "桃野るみ",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.44,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "cef5fcf9d83e40851b70fe62eba116e6",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "百合川なな",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_58754c928630868f3952.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.53,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "8cf055755162636f2610ce89d09b638b",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "白金みう",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_a9de0a927118a121ac7a.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.54,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_九条りん",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "九条りん",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.37,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_一咲ひなた",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "一咲ひなた",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.42,
+        "inputTokens": 559
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_最上もね",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "最上もね",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.39,
+        "inputTokens": 557
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "tokyo_shinagawa_gotanda_the_half_渚あおい",
+      "shop_id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "渚あおい",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.41,
+        "inputTokens": 558
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_咲嵐",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "咲嵐",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_1bd85de78e6998f67618.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.66,
+        "inputTokens": 535
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_百咲",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "百咲",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_d3169e6b43c83c6b2bf3.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.66,
+        "inputTokens": 534
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_環",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "環",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_b1b6fad052cb32be7f2d.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.68,
+        "inputTokens": 534
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_瞳",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "瞳",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_deff7ebf5740b240980c.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.69,
+        "inputTokens": 532
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_美里",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "美里",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.62,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_一花",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "一花",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.57,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_遥杏",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "遥杏",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_8194d811f974246a07c5.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.64,
+        "inputTokens": 534
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_幸音",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "幸音",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.6,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_來夢",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "來夢",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.61,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_スタッフR",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "スタッフR",
+      "image_url": null,
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.53,
+        "inputTokens": 535
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_綾乃",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "綾乃",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_af7d9802d31e34000850.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.66,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "B 目視済みの店の在籍者",
+      "truth": "person",
+      "id": "aichi_meieki_milk_repos_詩乃",
+      "shop_id": "aichi_meieki_milk_repos",
+      "name": "詩乃",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_c55e2d0ca3c623e11739.jpg",
+      "is_active": true,
+      "heuristicBucket": null,
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 1,
+        "isPerson": 0.68,
+        "inputTokens": 533
+      }
+    },
+    {
+      "set": "C 人名＋店名",
+      "truth": "person",
+      "id": "ibaraki_tsukuba_tsukuba_marvelous_羽衣 -うい- Marvelous -マーベラス-",
+      "shop_id": "ibaraki_tsukuba_tsukuba_marvelous",
+      "name": "羽衣 -うい- Marvelous -マーベラス-",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_aa150389c4bbe349ef07.jpg",
+      "is_active": true,
+      "heuristicBucket": "decorated",
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 0.9,
+        "isPerson": 0.63,
+        "inputTokens": 566
+      }
+    },
+    {
+      "set": "C 人名＋店名",
+      "truth": "person",
+      "id": "ibaraki_tsukuba_tsukuba_marvelous_優希 -ゆき- Marvelous -マーベラス-",
+      "shop_id": "ibaraki_tsukuba_tsukuba_marvelous",
+      "name": "優希 -ゆき- Marvelous -マーベラス-",
+      "image_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/mig_9562b4752c135d14c37d.jpg",
+      "is_active": true,
+      "heuristicBucket": "decorated",
+      "jev": {
+        "kind": "person",
+        "kindConfidence": 0.96,
+        "isPerson": 0.63,
+        "inputTokens": 566
+      }
+    }
+  ]
+}

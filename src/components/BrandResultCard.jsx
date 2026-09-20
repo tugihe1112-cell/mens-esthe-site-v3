@@ -8,12 +8,18 @@ import LocationLabel from './LocationLabel.jsx';
 export default function BrandResultCard({ summary, shops, roomCounts = null }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  // 🚩 並べるのは**このブランドの全ルーム**（summary.rooms）。
+  //    `shops` は一覧表示用に**重複排除済み**で、ブランドにつき1行しか残っていない。
+  //    それを渡していたので「店舗をすべて見る ▼」を開いても**1枚しか出なかった**
+  //    （2026-09-20、本番で確認。見出しは「3店舗 展開中」なのに中身は1枚）。
+  const rooms = (summary?.rooms?.length ? summary.rooms : shops) || [];
+
   // 代表画像がない場合のフォールバック
-  const heroImage = summary.representativeImage || shops[0]?.image;
+  const heroImage = summary.representativeImage || rooms[0]?.image_url || rooms[0]?.image;
 
   // 🚩 このブランドの行き先は1つ。判定は増やさず shopHref に任せる
   //    （多ルームなら /brands/<group_id>、単独店なら /shops/<id>）。
-  const brandHref = shops && shops.length ? shopHref(shops[0], roomCounts) : null;
+  const brandHref = rooms.length ? shopHref(rooms[0], roomCounts) : null;
 
   return (
     <div className="w-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl overflow-hidden border border-pink-500/30 shadow-2xl shadow-pink-900/20 mb-8 animate-in fade-in zoom-in-95 duration-300">
@@ -31,15 +37,22 @@ export default function BrandResultCard({ summary, shops, roomCounts = null }) {
           <div className="flex items-end justify-between">
             <div>
               <span className="inline-block px-3 py-1 bg-pink-600 text-white text-[10px] font-bold rounded-full mb-2 shadow-lg shadow-pink-600/40">
-                BRAND GROUP
+                系列ブランド
               </span>
               <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight shadow-black drop-shadow-md">
                 {summary.brandName}
               </h2>
               <p className="text-slate-300 text-sm mt-1 font-medium">
                 <span className="text-pink-400 font-bold">{summary.shopCount}店舗</span> 展開中
-                <span className="mx-2 opacity-50">|</span>
-                総勢 <span className="text-pink-400 font-bold">{summary.therapistCount}名</span> のセラピスト
+                {/* ⚠️ 在籍人数は**店舗行からは数えられない**（セラピストを持っていないので必ず0になる）。
+                       「総勢0名」は根拠のない数字を画面に出すのと同じ（D-010）。数えられないものは出さない。
+                       人数を出せるのはブランドページだけ（SSRが人単位で数えている）。 */}
+                {Number(summary.therapistCount) > 0 && (
+                  <>
+                    <span className="mx-2 opacity-50">|</span>
+                    総勢 <span className="text-pink-400 font-bold">{summary.therapistCount}名</span> のセラピスト
+                  </>
+                )}
               </p>
             </div>
             
@@ -82,7 +95,7 @@ export default function BrandResultCard({ summary, shops, roomCounts = null }) {
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* ⚠️ ルームは「どこにあるか」の表示。リンクにしない（ブランドページのルーム欄と同じ判断）。 */}
-            {shops.map((shop) => (
+            {rooms.map((shop) => (
               <div
                 key={shop.id}
                 className="flex items-center gap-4 p-3 rounded-xl bg-slate-800/50 border border-white/5"

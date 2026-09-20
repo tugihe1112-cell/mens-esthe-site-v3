@@ -1253,6 +1253,49 @@ const check = (name, fn) => {
   });
 }
 
+// ── 検索のブランド要約（2026-09-20）─────────────────────────────
+// 🚩 本番で見つけた3つ。見出しが内部キー `gokujou`／「総勢0名」／
+//    「店舗をすべて見る」を開いても1枚。**通しで測る**（検索の入力から要約まで）。
+{
+  const { performSearch } = await loadModule('src/utils/searchLogic.js');
+  const rows = [
+    { id: 'tokyo_a_testspa', group_id: 'g_test', brandId: 'testspa_internal', name: 'テストスパ (蒲田ルーム)',
+      prefecture: '東京都', city: '大田区', area: '蒲田', image_url: 'https://x/a.jpg', address: '東京都大田区蒲田1' },
+    { id: 'tokyo_b_testspa', group_id: 'g_test', brandId: 'testspa_internal', name: 'テストスパ (大森ルーム)',
+      prefecture: '東京都', city: '大田区', area: '大森' },
+    { id: 'tokyo_c_testspa', group_id: 'g_test', brandId: 'testspa_internal', name: 'テストスパ (大井町ルーム)',
+      prefecture: '東京都', city: '品川区', area: '大井町' },
+  ];
+
+  check('⭐検索のブランド見出しに内部キーを出さない', () => {
+    const r = performSearch(rows, 'テストスパ');
+    if (r.type !== 'brand') return `brandモードにならない（${r.type}）`;
+    if (!r.summary) return 'summary が無い';
+    if (r.summary.brandName === 'testspa_internal') return '内部キー（brandId）が見出しに出ている';
+    if (!String(r.summary.brandName).includes('テストスパ')) return `見出しが「${r.summary.brandName}」`;
+    return null;
+  });
+
+  check('⭐検索のブランド要約に全ルームが入る', () => {
+    // ⚠️ 「大田区」で当たるのは3ルーム中2つ。それでも並べるのは**そのブランドの全ルーム**。
+    //    （当たったものだけ並べると「蒲田で探したら蒲田しか出ない」になる）
+    //    ※1件しか当たらない語は brand モードに入らない仕様なので、2件当たる語で測る。
+    const r = performSearch(rows, '大田区');
+    if (r.type !== 'brand') return `brandモードにならない（${r.type}）`;
+    if (r.summary.rooms?.length !== 3) return `rooms が ${r.summary.rooms?.length} 件`;
+    if (r.summary.shopCount !== 3) return `shopCount が ${r.summary.shopCount}`;
+    return null;
+  });
+
+  check('⭐検索のブランド要約は数えられない人数を出さない', () => {
+    const r = performSearch(rows, 'テストスパ');
+    // 店舗行はセラピストを持たない。足すと必ず0になり「総勢0名」と表示される（D-010）。
+    if (r.summary.therapistCount === 0) return '0名を数字として返している（画面に「総勢0名」と出る）';
+    if (r.summary.therapistCount != null) return `therapistCount が ${r.summary.therapistCount}`;
+    return null;
+  });
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

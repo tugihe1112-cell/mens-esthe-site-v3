@@ -108,10 +108,35 @@ requireMatch(brandResultCode, /const brandHref = [\s\S]{0,160}?shopHref\(/,
   'ブランドカードの行き先が shopHref を通っていません（301の判断を二重に書かないこと）');
 requireMatch(brandResultCode, /to=\{brandHref\}/,
   'ブランドカードにブランドページへの入口がありません（検索結果から進めない行き止まりになります）');
-rejectMatch(brandResultCode, /shops\.map\([\s\S]{0,400}?<Link/,
+// ⚠️ 2026-09-20: ここは `shops.map(` と綴りを固定していた。**同じ日に `rooms.map(` へ変えた瞬間、
+//    このガードは何も見なくなった**（14本は緑のまま）。今週何度も踏んでいる型なので、
+//    どちらの綴りでも見るようにする。守りたいのは「ルーム1件ずつをリンクにしない」こと。
+rejectMatch(brandResultCode, /(shops|rooms)\.map\([\s\S]{0,400}?<Link/,
   'ブランドカードがルームを1つずつリンクにしています（多ルームでは全部同じページへ飛びます）');
+// 🚩 並べる対象は**全ルーム**。一覧用の `shops` は重複排除済みでブランド1行しか残らない。
+requireMatch(brandResultCode, /summary\?\.rooms/,
+  'ブランドカードが summary.rooms を使っていません（重複排除済みの一覧を並べると1枚しか出ません）');
+// ⚠️ 受け取るだけでなく、**それを並べているか**まで見る（受け取って使わない書き方があり得る）。
+requireMatch(brandResultCode, /\{rooms\.map\(/,
+  'ブランドカードが rooms を並べていません（shops を並べると1枚しか出ません）');
+// 🚩 数えられない人数を出さない（D-010）。店舗行はセラピストを持たないので足すと必ず0になる。
+requireMatch(brandResultCode, /Number\(summary\.therapistCount\)\s*>\s*0/,
+  'ブランドカードが在籍人数を条件なしで出しています（「総勢0名」が出ます）');
 rejectMatch(brandResultCode, /to=\{`\/shops\/\$\{shop\.id\}`\}/,
   'ブランド一覧が店舗URLを直書きしています（複数ルームのブランドでは押した瞬間に301します）');
+// 🚩 ブランドの見出しは buildBrands に作らせる＝ブランドページと同じ名前にする。
+//    2026-09-20 まで `representativeShop.brandId` をそのまま出しており、
+//    取り込み時の内部キー `gokujou` が**見出しと <title> に出ていた**。
+{
+  const searchLogic = strip(read('src/utils/searchLogic.js'));
+  requireMatch(searchLogic, /buildBrands\(/,
+    '検索のブランド要約が buildBrands を通っていません（画面ごとに違う名前が出ます）');
+  rejectMatch(searchLogic, /brandName:[^,\n]*\.brandId/,
+    '検索のブランド名に内部キー（brandId）を使っています（`gokujou` のような取り込み用の値が見出しに出ます）');
+  rejectMatch(searchLogic, /therapistCount:\s*totalTherapists/,
+    '検索のブランド要約が在籍人数を足しています（店舗行は人を持たないので必ず0になります）');
+}
+
 // 一覧・カード面は全部 shopHref を通すこと。直書きは押した瞬間に301する。
 for (const [path, label] of [
   ['src/pages/ShopListPage.jsx', '店舗一覧'],
