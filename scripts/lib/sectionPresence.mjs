@@ -63,9 +63,18 @@ export function sectionsInHtml(path, html, rules = SECTION_RULES) {
 export function evaluateSections(pages, rules = SECTION_RULES) {
   const failures = [];
   const warnings = [];
+  const counts = {};
   for (const rule of rules) {
     const group = (pages || []).filter((p) => p && rule.match(p.path));
-    if (group.length < MIN_PAGES) continue;
+    counts[rule.group] = group.length;
+    // 🚩 母数が足りないときは判定しないが、**黙ってスキップしない**。
+    //    「27ページ見た」と出ていても、その内訳がブランド2枚なら
+    //    **いちばん見張りたいページを見張れていない**。今日の事故（節が黙って消える）と同じ形なので、
+    //    見張れていないこと自体を口に出す。
+    if (group.length < MIN_PAGES) {
+      warnings.push(`${rule.group}が${group.length}枚しか取れていない（${MIN_PAGES}枚未満は判定しない＝この種類は見張れていない）`);
+      continue;
+    }
     for (const name of Object.keys(rule.sections)) {
       const hit = group.filter((p) => p.sections?.has(name)).length;
       if (hit === 0) {
@@ -78,7 +87,7 @@ export function evaluateSections(pages, rules = SECTION_RULES) {
       }
     }
   }
-  return { failures, warnings };
+  return { failures, warnings, counts };
 }
 
 /** 判定そのものの自己診断。**ネットワークに出る前**に呼ぶ。 */
@@ -98,7 +107,8 @@ export function selfTestSectionPresence() {
     pages[0].sections = new Set(['在籍セラピスト', 'ルーム', 'タグで絞り込む']);
     const r = evaluateSections(pages);
     if (r.failures.length) bad.push('1枚欠けで落ちている');
-    if (r.warnings.length) bad.push('1枚欠けで警告が出ている');
+    // ⚠️ 警告は2種類ある（母数不足／欠けの割合）。ここで見たいのは後者だけ。
+    if (r.warnings.some((w) => w.includes('枚にしかない'))) bad.push('1枚欠けで警告が出ている');
   }
   // ③ ほとんど欠けたら警告（落とさない）
   {
@@ -108,10 +118,12 @@ export function selfTestSectionPresence() {
     if (r.failures.length) bad.push('1枚でも在れば落としてはいけない');
     if (!r.warnings.some((w) => w.includes('店舗情報'))) bad.push('ほぼ欠けで警告が出ていない');
   }
-  // ④ 母数が足りないときは判断しない
+  // ④ 母数が足りないときは判断しないが、**黙らない**
   {
     const r = evaluateSections(brand(2, []));
-    if (r.failures.length || r.warnings.length) bad.push('母数2枚で判断している');
+    if (r.failures.length) bad.push('母数2枚で落としている');
+    if (!r.warnings.some((w) => w.includes('見張れていない'))) bad.push('母数不足を黙ってスキップしている');
+    if (r.counts['ブランドページ'] !== 2) bad.push('内訳（枚数）を返していない');
   }
   // ⑤ 空・不正で落ちない
   {

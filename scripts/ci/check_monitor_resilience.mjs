@@ -143,9 +143,14 @@ assert.equal(isTransientMonitorStatus(404), false);
   one[0].sections = new Set(['在籍セラピスト', 'ルーム', 'タグで絞り込む']);
   const partial = evaluateSections(one);
   assert.equal(partial.failures.length, 0, '1枚欠けで落ちている（監視が信用されなくなる）');
-  assert.equal(partial.warnings.length, 0, '1枚欠けで警告が出ている');
+  // ⚠️ 警告は2種類（母数不足／欠けの割合）。1枚欠けで出てはいけないのは後者。
+  assert.equal(partial.warnings.filter((w) => w.includes('枚にしかない')).length, 0, '1枚欠けで警告が出ている');
+  // 🚩 母数不足は**黙ってスキップしない**。見張れていないこと自体を言う。
+  const thin = evaluateSections(brand(MIN_PAGES - 1, []));
+  assert.equal(thin.failures.length, 0, '母数不足で落としている');
+  assert.ok(thin.warnings.some((w) => w.includes('見張れていない')), '母数不足を黙ってスキップしている');
+  assert.equal(thin.counts['ブランドページ'], MIN_PAGES - 1, '内訳（枚数）を返していない');
 
-  assert.equal(evaluateSections(brand(MIN_PAGES - 1, [])).failures.length, 0, '母数不足で判断している');
   assert.equal(evaluateSections([]).failures.length, 0, '空配列で落ちている');
   assert.equal(evaluateSections(null).failures.length, 0, 'nullで落ちている');
 

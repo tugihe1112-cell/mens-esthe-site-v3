@@ -37,6 +37,7 @@ const failures = [];
 const warnings = [];
 // path → その種類のページに期待される節のうち**在ったもの**
 const pageSections = [];
+let sectionSummary = '';
 
 // ⚠️ 判定そのものの自己診断を、ネットワークに出る前に。
 //    壊れた判定で赤くする（あるいは静かに緑にする）くらいなら、実行しないほうがよい。
@@ -285,6 +286,8 @@ await mapLimit(checkedLinks, CONCURRENCY, async (path) => {
   const verdict = evaluateSections(pageSections);
   failures.push(...verdict.failures);
   warnings.push(...verdict.warnings);
+  // 🚩 合計だけ出しても「どの種類を見張れているか」が分からない。内訳を出す。
+  sectionSummary = Object.entries(verdict.counts).map(([g, n]) => `${g}${n}`).join(' / ');
 }
 
 if (failures.length) {
@@ -294,4 +297,4 @@ if (failures.length) {
 }
 
 warnings.forEach((warning) => console.warn(`⚠️ ${warning}`));
-console.log(`✅ サイト完全性正常（主要+sitemap ${routes.length}ページ / 内部リンク ${checkedLinks.length}件 / 節の検査 ${pageSections.length}ページ）`);
+console.log(`✅ サイト完全性正常（主要+sitemap ${routes.length}ページ / 内部リンク ${checkedLinks.length}件 / 節の検査 ${pageSections.length}ページ: ${sectionSummary || '内訳なし'}）`);
