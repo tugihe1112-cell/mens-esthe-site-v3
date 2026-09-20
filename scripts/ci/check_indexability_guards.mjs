@@ -95,9 +95,22 @@ requireMatch(homeReview, /const shopLink = `\/shops\/\$\{r\.shopId\}`/, 'ホー�
 //    BrandResultCard の展開リストは**ブランドのルーム一覧**なので、
 //    直書きすると全部が「押す → 301 → さっきと同じページ」の往復になる。
 //    ⇒ 正規URLの判断は shopHref（＝shopRedirectPath）に一本化する。
-requireMatch(brandResult, /to=\{shopHref\(shop, roomCounts\)\}/,
-  'ブランド一覧の店舗リンクが shopHref を通っていません（ルーム一覧の全リンクが301の往復になります）');
-rejectMatch(brandResult, /to=\{`\/shops\/\$\{shop\.id\}`\}/,
+// 🚩 2026-09-20: 規則がまた変わった。今度は**リンクの数**。
+//    ルームを1つずつリンクにすると、多ルームのブランドでは
+//    **3つ選べるように見えて行き先は全部同じブランドページ**になる（301の先が1枚だから）。
+//    「大森」を押した人は大森のページに行くつもりで押している。
+//    ⇒ 入口は1つ。ルームは「どこにあるか」の表示だけにする。
+//    ⚠️ **リンクを全部外してもいけない。** このカードは他にリンクを持たないので、
+//       外すと検索結果から一歩も進めない行き止まりになる（実際その作りだった）。
+//       だから「1つだけ在ること」を**両側から**見る。
+const brandResultCode = strip(brandResult);
+requireMatch(brandResultCode, /const brandHref = [\s\S]{0,160}?shopHref\(/,
+  'ブランドカードの行き先が shopHref を通っていません（301の判断を二重に書かないこと）');
+requireMatch(brandResultCode, /to=\{brandHref\}/,
+  'ブランドカードにブランドページへの入口がありません（検索結果から進めない行き止まりになります）');
+rejectMatch(brandResultCode, /shops\.map\([\s\S]{0,400}?<Link/,
+  'ブランドカードがルームを1つずつリンクにしています（多ルームでは全部同じページへ飛びます）');
+rejectMatch(brandResultCode, /to=\{`\/shops\/\$\{shop\.id\}`\}/,
   'ブランド一覧が店舗URLを直書きしています（複数ルームのブランドでは押した瞬間に301します）');
 // 一覧・カード面は全部 shopHref を通すこと。直書きは押した瞬間に301する。
 for (const [path, label] of [

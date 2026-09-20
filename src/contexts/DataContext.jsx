@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase';
 import { shapeShopRow } from '../utils/shopFields';
 import { countRoomsByBrand } from '../utils/brandGroups.js';
+import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
 const ShopContext = createContext();
@@ -113,28 +114,61 @@ export const DataProvider = ({ children }) => {
     if (!shopId || loadedShopIds.has(shopId)) return;
     const brandIds = getBrandShopIds(shopId);
     try {
-      const { data, error } = await supabase
-        .from('therapists')
-        .select('*')
-        .in('shop_id', brandIds)
-        .not('image_url', 'is', null)
-        .neq('image_url', '')
-        .or('is_active.is.null,is_active.eq.true');
-      if (error) throw error;
-      if (data) {
-        const newTherapists = data.map(d => ({ ...(d.raw_data || {}), ...d }));
+      // 🚩 写真の有無で**絞らない**（2026-09-16 オーナー決定「写真が無い人も名前で出す」）。
+      //    ここは店舗ページの**受け皿**（自前取得が0件・失敗のときだけ使われる）なので、
+      //    古いままでも普段は画面に出ず、**取得が失敗したときだけ古い方針に戻っていた**。
+      //    ＝「普段は見えないので気づけない」型。2026-09-20 に揃えた。
+      // ⚠️ 絞るのをやめると行数が増える。PostgREST は1回1000行なので**繰って取り切る**
+      //    （12ルームで2,181行のブランドが実在する。取り切らないと黙って人が欠ける）。
+      const PAGE = 1000;
+      const MAX = 4000;
+      const rows = [];
+      for (let from = 0; from < MAX; from += PAGE) {
+        const { data, error } = await supabase
+          .from('therapists')
+          .select('*')
+          .in('shop_id', brandIds)
+          .or('is_active.is.null,is_active.eq.true')
+          .order('id', { ascending: true })
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        if (!data || data.length === 0) break;
+        rows.push(...data);
+        if (data.length < PAGE) break;
+      }
+      if (rows.length) {
+        const newTherapists = rows.map(d => ({ ...(d.raw_data || {}), ...d }));
+        // ⚠️ 人物キーは normalizeTherapistName に一本化する（F04・2026-09-13）。
+        //    生の名前で畳むと「ｱｲ」と「アイ」が**別人のまま**残る。
+        // 🚩 ただし**ブランドをまたいで畳まない**。「みやび」のようによくある源氏名は
+        //    無関係な店に何人も居るので、名前だけで畳むと**他店のその人が消える**。
+        const brandOf = new Map((shops || []).map((s) => [s.id, s.group_id || s.id]));
+        const hasImage = (t) => Boolean(String(t?.image_url ?? '').trim());
+        const keyOf = (t) => {
+          const person = normalizeTherapistName(t.name || '') || String(t.name || '').trim();
+          return `${brandOf.get(t.shop_id) || t.shop_id || ''}::${person}`;
+        };
         setTherapists(prev => {
-          const merged = [...prev, ...newTherapists];
-          return Array.from(new Map(merged.filter(t => t.name).map(t => [t.name, t])).values());
-        });
-        setLoadedShopIds(prev => {
-          const newSet = new Set(prev);
-          brandIds.forEach(id => newSet.add(id));
-          return newSet;
+          const byPerson = new Map();
+          for (const t of [...prev, ...newTherapists]) {
+            if (!t.name) continue;
+            const key = keyOf(t);
+            const kept = byPerson.get(key);
+            // 🚩 写真のある行を優先して残す。写真で絞るのをやめた以上、素朴な後勝ちにすると
+            //    **写真を持っている人が写真なしで表示される**（buildBrandRoster で踏んだ罠と同型）。
+            if (!kept || (!hasImage(kept) && hasImage(t))) byPerson.set(key, t);
+          }
+          return Array.from(byPerson.values());
         });
       }
+      // ⚠️ 0件でも「引き終えた」ことは記録する（記録しないと開くたびに引き直す）。
+      setLoadedShopIds(prev => {
+        const newSet = new Set(prev);
+        brandIds.forEach(id => newSet.add(id));
+        return newSet;
+      });
     } catch (error) { console.error(`❌ セラピスト取得エラー:`, error); }
-  }, [loadedShopIds, getBrandShopIds]);
+  }, [loadedShopIds, getBrandShopIds, shops]);
 
   const loadReviewsForShop = useCallback(async (shopId) => {
     if (!shopId || loadedReviewShopIds.has(shopId)) return;

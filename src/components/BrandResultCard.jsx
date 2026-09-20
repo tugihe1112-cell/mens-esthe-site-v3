@@ -11,6 +11,10 @@ export default function BrandResultCard({ summary, shops, roomCounts = null }) {
   // 代表画像がない場合のフォールバック
   const heroImage = summary.representativeImage || shops[0]?.image;
 
+  // 🚩 このブランドの行き先は1つ。判定は増やさず shopHref に任せる
+  //    （多ルームなら /brands/<group_id>、単独店なら /shops/<id>）。
+  const brandHref = shops && shops.length ? shopHref(shops[0], roomCounts) : null;
+
   return (
     <div className="w-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl overflow-hidden border border-pink-500/30 shadow-2xl shadow-pink-900/20 mb-8 animate-in fade-in zoom-in-95 duration-300">
       <div className="relative h-48 md:h-64">
@@ -62,23 +66,35 @@ export default function BrandResultCard({ summary, shops, roomCounts = null }) {
       {/* 展開される店舗リスト */}
       <div className={`grid transition-all duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100 p-6' : 'grid-rows-[0fr] opacity-0 p-0'}`}>
         <div className="overflow-hidden">
+          {/* 🚩 入口は**1つ**にする（2026-09-20 オーナー決定）。
+                 D-014 で多ルームの店舗ページはブランドページへ301するので、
+                 ルームを1つずつリンクにすると**3つ選べるように見えて行き先は全部同じ**になる。
+                 「大森」を押した人は大森のページに行くつもりで押している。
+              ⚠️ ここを消すだけにしてはいけない。このカードは**他にリンクを持っていない**ので、
+                 リンクを全部外すと検索結果から一歩も進めない行き止まりになる。 */}
+          {brandHref && (
+            <Link
+              to={brandHref}
+              className="inline-flex items-center gap-2 mb-4 bg-pink-600 hover:bg-pink-500 text-white font-bold text-sm px-5 py-2.5 rounded-full transition"
+            >
+              {summary.brandName}のページを見る →
+            </Link>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* ⚠️ ルームは「どこにあるか」の表示。リンクにしない（ブランドページのルーム欄と同じ判断）。 */}
             {shops.map((shop) => (
-              <Link 
-                key={shop.id} 
-                /* 🚩 ここはブランドの**ルーム一覧**。直書きすると全部が301で、
-                       「押す → さっきと同じページ」の往復になる（ブランドページ側では既に止めている）。 */
-                to={shopHref(shop, roomCounts)}
-                className="flex items-center gap-4 p-3 rounded-xl bg-slate-800/50 border border-white/5 hover:border-pink-500/50 hover:bg-slate-800 transition group"
+              <div
+                key={shop.id}
+                className="flex items-center gap-4 p-3 rounded-xl bg-slate-800/50 border border-white/5"
               >
                 <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                  <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+                  <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-white font-bold text-sm truncate group-hover:text-pink-400 transition">{getDisplayName(shop.name, shop)}</h3>
+                  <h3 className="text-white font-bold text-sm truncate">{getDisplayName(shop.name, shop)}</h3>
                   <LocationLabel as="p" className="text-slate-500 text-xs truncate" parts={[shop.prefecture, shop.city]} />
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>

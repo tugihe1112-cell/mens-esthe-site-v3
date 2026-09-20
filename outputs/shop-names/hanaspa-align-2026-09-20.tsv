@@ -1,0 +1,6 @@
+# HANASPA 3ルームの店名を揃える（2026-09-20・オーナー決定「A: HANASPA (ハナスパ) に揃える」）
+# ⚠️ 旧名「GOKUJOU 極嬢」が表示名から外れる＝「極嬢」で検索しても出なくなる（承知のうえ）。
+# 大森 tokyo_ota_omori_gokujou は既に `HANASPA (ハナスパ)` なので対象外（=書き換えない）。
+# 形式: <shop_id>\t<今の名前>\t<新しい名前>
+tokyo_ota_kamata_gokujou	HANASPA (ハナスパ) 旧GOKUJOU 極嬢	HANASPA (ハナスパ)
+tokyo_shinagawa_oimachi_gokujou	HANASPA (ハナスパ) 旧GOKUJOU 極嬢	HANASPA (ハナスパ)

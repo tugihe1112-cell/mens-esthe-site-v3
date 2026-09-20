@@ -485,6 +485,43 @@ requireText(read('src/utils/registerAnalytics.js'), /export const REGISTER_CTA_S
   }
 }
 
+// ── 在籍者の「受け皿」も本命と同じ方針に揃える（2026-09-20）──────────
+// 店舗ページの在籍者は**2経路**ある。①ページ自身の取得（F06-C で写真の絞りを外した）と、
+// ②それが0件・失敗のときに使う DataContext.loadTherapistsForShop。
+// ②だけ古いままで、`.not('image_url','is',null)` ＝**写真のある人しか取らない**、
+// 重複を消すキーが**生の名前**（「ｱｲ」と「アイ」が別人のまま）だった。
+// ⚠️ ②は普段は使われないので**画面に出ない**＝取得が失敗したときだけ古い方針に戻る。
+//    「普段は見えないので気づけない」型。ここは人が気づけないので機械で止める。
+{
+  const ctx = stripSrc(read('src/contexts/DataContext.jsx'));
+  const fn = ctx.match(/loadTherapistsForShop = useCallback\([\s\S]{0,4000}?\}, \[/);
+  if (!fn) {
+    failures.push('DataContext に loadTherapistsForShop が見つかりません（在籍者の受け皿を検査できません）');
+  } else {
+    const body = fn[0];
+    if (/\.not\(\s*'image_url'|\.neq\(\s*'image_url'/.test(body)) {
+      failures.push(
+        'DataContext の受け皿が写真の有無で在籍者を絞っています。'
+        + '\n      → 2026-09-16の決定「写真が無い人も名前で出す」と食い違います。'
+        + '\n        取得が失敗したときだけ古い方針に戻るので、**画面を見ても気づけません**。'
+      );
+    }
+    if (!/\.range\(/.test(body)) {
+      failures.push(
+        'DataContext の受け皿にページ送りがありません（PostgRESTは1回1000行）。'
+        + '\n      → 写真で絞らなくなった分だけ行数が増えます。12ルームで2,181行のブランドが実在し、'
+        + '\n        打ち切られると**黙って在籍者が欠けます**。'
+      );
+    }
+    if (!/normalizeTherapistName\(/.test(body)) {
+      failures.push(
+        'DataContext の受け皿が生の名前で重複を消しています。'
+        + '\n      → normalizeTherapistName を使うこと。「ｱｲ」と「アイ」が別人のまま残ります（F04）。'
+      );
+    }
+  }
+}
+
 // ── セラピスト名から店名を外して表示する（2026-09-16）──────────────
 // 「瑠香 -るか- Marvelous -マーベラス-」が180行。実在の人なので消さず、表示名から店名を外す。
 for (const [path, label] of [
