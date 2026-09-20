@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import { fetchWithRetry, isTransientMonitorStatus } from '../lib/monitorFetch.mjs';
 import { classifyDnsFailure, isClosureEvidence } from '../lib/dnsVerdict.mjs';
 import { classifyGroup, selfTestMatching, normId } from '../lib/brandNameMatch.mjs';
+import { evaluateSections, sectionsInHtml, MIN_PAGES } from '../lib/sectionPresence.mjs';
 
 const noWait = async () => {};
 const response = (status, contentType = 'text/plain') => new Response('', {
@@ -119,6 +121,46 @@ assert.equal(isTransientMonitorStatus(404), false);
   // 1ルームだけのブランドは対象外（単独店を毎日赤くしない）。
   assert.equal(classifyGroup({ gid: 'g_solo_x', rooms: [{ id: 'tokyo_x', name: 'X' }] }).verdict, 'ok',
     '単独店を混入として扱っている');
+}
+
+// ── 節が在るか（2026-09-20）────────────────────────────────────────
+// ブランドページの「店舗情報」が本番で一度も出ていなかった。条件付きの節は壊れても
+// 例外を出さず**何も出さずに消える**ので、200のまま画面は正常に見える。
+// ⚠️ 守りたいのは2つで、**両方とも外せない**。
+//    (a) 全枚で欠けたら落とす＝実装の事故は全ページで同時に起きる
+//    (b) 1枚欠けでは落とさない＝データの都合で欠ける1枚を毎日赤くしない
+//        （2026-09-04、古い期待値で1日96通のメールが飛んだ。赤が信用されなくなるほうが高くつく）
+{
+  const brand = (n, has) => Array.from({ length: n }, (_, i) => ({ path: `/brands/g${i}`, sections: new Set(has) }));
+  const all = ['在籍セラピスト', 'ルーム', 'タグで絞り込む', '店舗情報'];
+
+  const gone = evaluateSections(brand(5, ['在籍セラピスト', 'ルーム', 'タグで絞り込む']));
+  assert.equal(gone.failures.length, 1, '全枚で節が消えているのに落ちていない');
+  assert.ok(gone.failures[0].includes('店舗情報'), '落ちた理由に節の名前が出ていない');
+
+  const one = brand(5, all);
+  one[0].sections = new Set(['在籍セラピスト', 'ルーム', 'タグで絞り込む']);
+  const partial = evaluateSections(one);
+  assert.equal(partial.failures.length, 0, '1枚欠けで落ちている（監視が信用されなくなる）');
+  assert.equal(partial.warnings.length, 0, '1枚欠けで警告が出ている');
+
+  assert.equal(evaluateSections(brand(MIN_PAGES - 1, [])).failures.length, 0, '母数不足で判断している');
+  assert.equal(evaluateSections([]).failures.length, 0, '空配列で落ちている');
+  assert.equal(evaluateSections(null).failures.length, 0, 'nullで落ちている');
+
+  // 綴りではなく見出しで見る（本文の「ルームにより異なります」に当てない）
+  assert.ok(!sectionsInHtml('/brands/x', '<p>ルームにより異なります</p>').has('ルーム'),
+    '本文の「ルームにより異なります」を節と誤認している');
+  assert.ok(sectionsInHtml('/brands/x', '<h2 class="a">ルーム</h2>').has('ルーム'),
+    '見出しの「ルーム」を見つけられない');
+  assert.equal(sectionsInHtml('/area/tokyo', '在籍セラピスト'), null, '対象外のパスを判定している');
+
+  // 🚩 判定が正しくても、**監視が呼んでいなければ意味がない**。配線まで見る。
+  //    （今日いちばん高くついたのが「関数は正しいのに繋がっていない」だった）
+  const src = fs.readFileSync('scripts/monitoring/check_site_integrity.mjs', 'utf8');
+  assert.ok(/sectionsInHtml\(/.test(src), '外形監視が節の在り方を拾っていない');
+  assert.ok(/evaluateSections\(/.test(src), '外形監視が節の判定を呼んでいない');
+  assert.ok(/selfTestSectionPresence\(\)/.test(src), '外形監視が判定の自己診断を呼んでいない');
 }
 
 // ⚠️ 合格の表示はファイルの**一番最後**に置く。途中に置くと、後ろに足した検査が落ちても

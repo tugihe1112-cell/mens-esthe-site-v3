@@ -8,6 +8,8 @@
  */
 
 import { fetchWithRetry } from '../lib/monitorFetch.mjs';
+// 🚩 「節が在るか」の判定は1か所に置く（監視と自己診断が同じ関数を通る）。
+import { sectionsInHtml, evaluateSections, selfTestSectionPresence } from '../lib/sectionPresence.mjs';
 
 const option = (name) => process.argv.find((arg) => arg.startsWith(`${name}=`))?.slice(name.length + 1);
 const BASE = new URL(option('--base-url') || process.env.BASE_URL || 'https://www.mens-esthe-map.jp');
@@ -30,6 +32,12 @@ const fixedRoutes = [
 
 const failures = [];
 const warnings = [];
+// path → その種類のページに期待される節のうち**在ったもの**
+const pageSections = [];
+
+// ⚠️ 判定そのものの自己診断を、ネットワークに出る前に。
+//    壊れた判定で赤くする（あるいは静かに緑にする）くらいなら、実行しないほうがよい。
+selfTestSectionPresence();
 
 async function get(url, { redirect = 'follow' } = {}) {
   return fetchWithRetry(url, {
@@ -201,6 +209,9 @@ await mapLimit(routes, CONCURRENCY, async (path) => {
     }
     const html = await response.text();
     const meta = inspectHtml(path, html, { indexable: sitemapPaths.includes(path) });
+    // 🚩 条件付きの節は壊れても例外を出さず**何も出さずに消える**。在ることを外から見る。
+    const found = sectionsInHtml(path, html);
+    if (found) pageSections.push({ path, sections: found });
     if (sitemapPaths.includes(path)) {
       if (meta.title) {
         if (titles.has(meta.title)) failures.push(`${path}: titleが${titles.get(meta.title)}と重複`);
@@ -249,6 +260,29 @@ await mapLimit(checkedLinks, CONCURRENCY, async (path) => {
   }
 });
 
+// ── 節が在るか（2026-09-20）────────────────────────────────────────
+// sitemapに載っているブランドページは2枚しかないので、**内部リンクから拾って母数を作る**。
+// ⚠️ URLをベタ書きで固定しない。固定すると、畳まれた・名前が変わった瞬間に
+//    「サイトは正常なのに監視だけが赤い」になる（2026-09-04の1日96通と同じ型）。
+{
+  const already = new Set(pageSections.map((p) => p.path));
+  const pool = [...discoveredLinks].filter((p) => !already.has(p));
+  const pick = (re, n) => spreadSample(pool.filter((p) => re.test(p)).sort(), n);
+  const extra = [...pick(/^\/brands\/[^/]+$/, 8), ...pick(/^\/shops\/[^/]+$/, 8)];
+  await mapLimit(extra, Math.min(CONCURRENCY, 6), async (path) => {
+    try {
+      const response = await get(new URL(path, BASE), { redirect: 'manual' });
+      if (response.status !== 200) return; // 301や404は上の検査の担当。ここでは数えない。
+      const found = sectionsInHtml(path, await response.text());
+      if (found) pageSections.push({ path, sections: found });
+    } catch { /* 取れなかったページは「節が無い」ではない。数えない（応答しない≠存在しない）。 */ }
+  });
+
+  const verdict = evaluateSections(pageSections);
+  failures.push(...verdict.failures);
+  warnings.push(...verdict.warnings);
+}
+
 if (failures.length) {
   console.error(`\n🚨 サイト完全性監視で${failures.length}件の異常を検出:\n`);
   failures.forEach((failure) => console.error(`  - ${failure}`));
@@ -256,4 +290,4 @@ if (failures.length) {
 }
 
 warnings.forEach((warning) => console.warn(`⚠️ ${warning}`));
-console.log(`✅ サイト完全性正常（主要+sitemap ${routes.length}ページ / 内部リンク ${checkedLinks.length}件）`);
+console.log(`✅ サイト完全性正常（主要+sitemap ${routes.length}ページ / 内部リンク ${checkedLinks.length}件 / 節の検査 ${pageSections.length}ページ）`);
