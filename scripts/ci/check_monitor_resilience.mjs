@@ -4,6 +4,7 @@ import { fetchWithRetry, isTransientMonitorStatus } from '../lib/monitorFetch.mj
 import { classifyDnsFailure, isClosureEvidence } from '../lib/dnsVerdict.mjs';
 import { classifyGroup, selfTestMatching, normId } from '../lib/brandNameMatch.mjs';
 import { evaluateSections, sectionsInHtml, MIN_PAGES } from '../lib/sectionPresence.mjs';
+import { expectsLastmod } from '../lib/sitemapRules.mjs';
 
 const noWait = async () => {};
 const response = (status, contentType = 'text/plain') => new Response('', {
@@ -154,6 +155,17 @@ assert.equal(isTransientMonitorStatus(404), false);
   assert.ok(sectionsInHtml('/brands/x', '<h2 class="a">ルーム</h2>').has('ルーム'),
     '見出しの「ルーム」を見つけられない');
   assert.equal(sectionsInHtml('/area/tokyo', '在籍セラピスト'), null, '対象外のパスを判定している');
+
+  // ── サイトマップの lastmod（2026-09-20）──────────────────────────
+  // ⚠️ D-014でブランドページが「口コミを持つページ」になったのに、監視だけ古い形のままで、
+  //    **正しいサイトマップを毎回「根拠のないlastmod」と言い続けていた**。
+  //    2026-09-04の「1日96通」と同じ型＝サイトは正常、監視だけが古い。
+  assert.ok(expectsLastmod('/brands/g_brand_the_half'), 'ブランドページのlastmodを根拠なしと誤判定する');
+  assert.ok(expectsLastmod('/shops/tokyo_x'), '店舗ページのlastmodを根拠なしと誤判定する');
+  assert.ok(expectsLastmod('/shops/tokyo_x/threads/tokyo_x_あい'), '人物ページのlastmodを根拠なしと誤判定する');
+  assert.ok(!expectsLastmod('/area/tokyo'), 'エリアページにlastmodを許している（更新日の根拠が無い）');
+  assert.ok(!expectsLastmod('/'), 'トップにlastmodを許している');
+  assert.ok(!expectsLastmod(null), 'nullで落ちる／許している');
 
   // 🚩 判定が正しくても、**監視が呼んでいなければ意味がない**。配線まで見る。
   //    （今日いちばん高くついたのが「関数は正しいのに繋がっていない」だった）

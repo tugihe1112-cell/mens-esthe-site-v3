@@ -10,6 +10,9 @@
 import { fetchWithRetry } from '../lib/monitorFetch.mjs';
 // 🚩 「節が在るか」の判定は1か所に置く（監視と自己診断が同じ関数を通る）。
 import { sectionsInHtml, evaluateSections, selfTestSectionPresence } from '../lib/sectionPresence.mjs';
+// 🚩 lastmod を付けてよいページの判定。D-014でブランドページが加わったのに、
+//    ここだけ古い形のままで**正しいサイトマップを毎回赤くしていた**（2026-09-20 に発覚）。
+import { expectsLastmod, selfTestSitemapRules } from '../lib/sitemapRules.mjs';
 
 const option = (name) => process.argv.find((arg) => arg.startsWith(`${name}=`))?.slice(name.length + 1);
 const BASE = new URL(option('--base-url') || process.env.BASE_URL || 'https://www.mens-esthe-map.jp');
@@ -38,6 +41,7 @@ const pageSections = [];
 // ⚠️ 判定そのものの自己診断を、ネットワークに出る前に。
 //    壊れた判定で赤くする（あるいは静かに緑にする）くらいなら、実行しないほうがよい。
 selfTestSectionPresence();
+selfTestSitemapRules();
 
 async function get(url, { redirect = 'follow' } = {}) {
   return fetchWithRetry(url, {
@@ -180,7 +184,7 @@ if (option('--skip-sitemap') !== '1' && !process.argv.includes('--skip-sitemap')
   if (sitemapPaths.length < 15) failures.push(`sitemapのURL数が少なすぎる: ${sitemapPaths.length}`);
   if (new Set(sitemapPaths).size !== sitemapPaths.length) failures.push('sitemapに重複URLがある');
   for (const row of sitemapRows) {
-    const isReviewPage = /^\/shops\/[^/]+(?:\/threads\/[^/]+)?$/.test(row.path);
+    const isReviewPage = expectsLastmod(row.path);
     if (isReviewPage && !row.lastmod) failures.push(`sitemap ${row.path}: 口コミの実更新日が無い`);
     if (!isReviewPage && row.lastmod) failures.push(`sitemap ${row.path}: 根拠のないlastmodが付いている`);
     if (row.lastmod && (!Number.isFinite(Date.parse(row.lastmod)) || Date.parse(row.lastmod) > Date.now() + 300_000)) {
