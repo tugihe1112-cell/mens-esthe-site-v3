@@ -26,6 +26,7 @@ import { buildBrands, buildBrandRoster, brandCanonicalPath, brandCommonValue } f
 import { getTherapistDisplayName } from '../utils/shopHelpers.js';
 import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews, normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
+import { TagFilterSidebar, TagFilterButton } from '../components/TagFilterSidebar.jsx';
 import { authHeaders } from '../utils/supabaseRest';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 
@@ -156,7 +157,8 @@ export default function BrandPage({
   const [castNameFilter, setCastNameFilter] = React.useState('');
   const [castSortOrder, setCastSortOrder] = React.useState('default');
   const [selectedTags, setSelectedTags] = React.useState([]);
-  const [isTagOpen, setIsTagOpen] = React.useState(false);
+  // スマホでタグの列を開くシート（PCでは常に左に出ている）
+  const [isFilterOpen, setIsFilterOpen] = React.useState(false);
 
   // 付いているタグの件数。0件のタグも出す（店舗ページと同じ＝選べる幅を隠さない）。
   const tagCounts = React.useMemo(() => {
@@ -346,6 +348,26 @@ export default function BrandPage({
             ⚠️ SSR分だけでも初期HTMLに名前とリンクが載る（D-013: JS実行前に本文と内部リンク）。 */}
         {roster.length > 0 && (
           <section>
+            {/* 🚩 左にタグの列・真ん中にキャスト一覧（D-001・オーナー確定デザイン）。
+                D-014でここへ301した以上、店舗ページと**同じ見え方**でなければ畳んだ意味がない。
+                ⚠️ 2026-09-19の「移植」では機能だけ移して形を移しておらず、
+                   370店（34%）がこの列を失っていた。二度とやらないため**同じ部品**を描く。
+                ⚠️ 条件で出し分けない（タグ0件でも名簿が何人でも常に出す）。 */}
+            <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-6">
+            <TagFilterSidebar
+              tagCounts={tagCounts}
+              selectedTags={selectedTags}
+              isOpen={isFilterOpen}
+              onClose={() => setIsFilterOpen(false)}
+              onToggle={(tag) => {
+                setDisplayCount(ROSTER_PAGE);
+                setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+              }}
+              onClear={() => { setSelectedTags([]); setDisplayCount(ROSTER_PAGE); }}
+            />
+
+            <div className="min-w-0">
+            <TagFilterButton selectedCount={selectedTags.length} onOpen={() => setIsFilterOpen(true)} />
             <div className="flex items-center justify-between mb-3 gap-2">
               <h2 className="text-base font-black text-white">
                 在籍セラピスト
@@ -357,60 +379,11 @@ export default function BrandPage({
               </span>
             </div>
 
-            {/* タグで絞り込む（店舗ページから移植・2026-09-19）。
-                ⚠️ タグは**口コミに付いたもの**で、人物ごとに集計している。
-                   キーは therapist_id（名前キーは系列店の同名の別人を束ねる＝F04）。
-                ⚠️ 0件のタグも出す。件数で隠すと「選べる幅」が見えなくなる（店舗ページと同じ約束）。 */}
-            {roster.length > 6 && (
-              <div className="mb-4">
-                <button
-                  onClick={() => setIsTagOpen((v) => !v)}
-                  className="text-xs font-black text-slate-300 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 hover:border-white/30 transition"
-                >
-                  🔎 タグで絞り込む{selectedTags.length > 0 ? `（${selectedTags.length}）` : ''} {isTagOpen ? '▲' : '▼'}
-                </button>
-                {isTagOpen && (
-                  <div className="mt-3 space-y-3 bg-slate-900/60 border border-white/10 rounded-2xl p-3">
-                    {TAG_CATEGORIES.map((cat) => (
-                      <div key={cat.id}>
-                        <p className="text-[10px] font-black text-slate-500 tracking-widest mb-1.5">{cat.title}</p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {cat.tags.map((tag) => {
-                            const isSelected = selectedTags.includes(tag);
-                            return (
-                              <button
-                                key={tag}
-                                onClick={() => {
-                                  setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
-                                  setDisplayCount(ROSTER_PAGE);
-                                }}
-                                className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition ${isSelected ? 'bg-pink-600 text-white border-pink-500' : 'bg-slate-800 text-slate-300 border-white/10 hover:border-white/30'}`}
-                              >
-                                {tag}
-                                <span className="ml-1 text-[10px] opacity-60">{tagCounts[tag] || 0}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                    {selectedTags.length > 0 && (
-                      <button
-                        onClick={() => { setSelectedTags([]); setDisplayCount(ROSTER_PAGE); }}
-                        className="text-[11px] font-bold text-slate-400 hover:text-white underline"
-                      >
-                        すべて解除
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* 名前で絞り込み＋並び替え（店舗ページから移植・2026-09-19）。
                 D-014で店舗ページをここへ301した結果、多ルームのブランドでは
                 この操作が丸ごと失われていた。 */}
-            {roster.length > 6 && (
+            {/* ⚠️ 条件で出し分けない（D-001）。人数が少ない店だけ別レイアウトにしない。 */}
+            {true && (
               <div className="flex flex-col sm:flex-row gap-2 mb-4">
                 <input
                   type="search"
@@ -465,6 +438,8 @@ export default function BrandPage({
             {(castNameFilter || selectedTags.length > 0) && sortedRoster.length === 0 && (
               <p className="text-xs text-slate-500 mt-3">条件に一致するセラピストはいません。</p>
             )}
+            </div>
+            </div>
           </section>
         )}
 

@@ -52,10 +52,50 @@ function read(path) {
         `        → 実装せず okabayashi に確認すること。`
       );
     }
-    if (!/TAG_CATEGORIES/.test(src)) {
+    if (!/TAG_CATEGORIES|TagFilterSidebar/.test(src)) {
       violations.push(
-        `[D-001] ${p} からタグ絞り込みサイドバー（TAG_CATEGORIES）が消えている。\n` +
+        `[D-001] ${p} からタグ絞り込みサイドバーが消えている。\n` +
         `        SearchPageと同じ左サイドバー構成を維持すること。`
+      );
+    }
+  }
+}
+
+// ── D-001（2026-09-20 追加）: ブランドページも同じレイアウトであること ────────
+// 🚩 D-014で多ルームの店舗ページを /brands/:id へ301した。**畳んだ先が同じ見え方でなければ
+//    畳んだ意味がない。**ところが9/19の「移植」は機能だけで形を移しておらず、
+//    ブランドページは開閉ボタン1つになっていた＝**370店・全体の34%がタグの列を失っていた**。
+//    ガードが ShopDetailPage しか見ていなかったので、14本緑のまま4日間気づかなかった。
+// ⚠️ 両方のページが**同じ部品**を描くこと。片方だけ作り直せる状態にしない。
+{
+  const shared = 'src/components/TagFilterSidebar.jsx';
+  const sharedSrc = read(shared);
+  if (sharedSrc === null) {
+    violations.push(`[D-001] ${shared} が無い。タグの列は共通部品に一本化してある。`);
+  } else if (!/タグで絞り込む/.test(sharedSrc)) {
+    violations.push(`[D-001] ${shared} から「タグで絞り込む」の文言が消えている。`);
+  }
+  for (const p of ['src/pages/ShopDetailPage.jsx', 'src/pages/BrandPage.jsx']) {
+    const src = read(p);
+    if (src === null) { violations.push(`${p} が見つからない`); continue; }
+    const codeOnly = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    if (!/<TagFilterSidebar/.test(codeOnly)) {
+      violations.push(
+        `[D-001] ${p} がタグの列（TagFilterSidebar）を描いていない。\n` +
+        `        店舗ページとブランドページは**同じ見え方**にすること（D-014で301した先だから）。`
+      );
+    }
+    if (!/lg:grid-cols-\[220px_1fr\]/.test(codeOnly)) {
+      violations.push(
+        `[D-001] ${p} に「左にタグの列・右に一覧」の2列レイアウトが無い。\n` +
+        `        開閉ボタン1つに置き換えるのは過去に却下されている（2026-09-20）。`
+      );
+    }
+    // 🚫 部品を使わず、ページ側でタグの一覧を作り直していないか
+    if (/TAG_CATEGORIES\.map\(/.test(codeOnly)) {
+      violations.push(
+        `[D-001] ${p} がタグの一覧を自前で描いている（TAG_CATEGORIES.map）。\n` +
+        `        共通部品 TagFilterSidebar を使うこと。自前で描くと片方だけ古くなる。`
       );
     }
   }
