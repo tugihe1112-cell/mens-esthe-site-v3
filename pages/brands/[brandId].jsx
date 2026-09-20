@@ -17,7 +17,7 @@ import React from 'react';
 import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import BrandPage from '../../src/pages/BrandPage';
-import { buildBrands, pickNearbyBrands, buildBrandRoster, brandCanonicalPath } from '../../src/utils/brandGroups.js';
+import { buildBrands, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, brandRoomProps } from '../../src/utils/brandGroups.js';
 
 // PostgREST は1回に最大1000行。人数を数えるので取り切る必要がある。
 const THERAPIST_PAGE = 1000;
@@ -139,10 +139,10 @@ export async function getServerSideProps({ params, res }) {
           primaryShopId,
           areaLabels: brand.areaLabels || [],
           // ⚠️ raw_data は丸ごと渡さない（1店約11.9KBでHTMLが膨れる）。必要な項目だけ平らにする。
-          rooms: (brand.rooms || []).map((r) => ({
-            id: r.id, prefecture: r.prefecture, city: r.city, address: r.address,
-            area: Array.isArray(r.area) ? r.area[0] || null : r.area || null,
-          })),
+          // 🚩 平らにする形は brandRoomProps に一本化する。ここで手書きすると、
+          //    buildBrands に項目を足しても props で落ちて**画面には届かない**。
+          //    2026-09-20、店舗情報がまさにこれで、本番では一度も出ていなかった。
+          rooms: (brand.rooms || []).map(brandRoomProps),
         },
         ssrTherapistCount: rosterTruncated ? null : personCount,
         ssrReviewedTherapists: reviewedTherapists,

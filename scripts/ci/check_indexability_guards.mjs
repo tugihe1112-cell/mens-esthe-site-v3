@@ -209,6 +209,15 @@ for (const [path, label] of [
         }
       }
     }
+    // 🚩 列を選んでいても、**props に平らにする所で落ちれば画面には届かない。**
+    //    2026-09-20、上の列の検査も下の描画の検査も通っていたのに、
+    //    間のこの1行が4項目を落としていて店舗情報は本番で空だった＝**両端だけ見ても足りない。**
+    //    役割分担: 「brandRoomProps が項目を保つか」は check_ssr_helpers が通しで測る。
+    //    ここは「ブランドSSRがその関数を使っているか」だけを見る。
+    requireMatch(brandWrapper2, /\.map\(brandRoomProps\)/,
+      'ブランドSSRが rooms を brandRoomProps で平らにしていません（手書きすると項目が落ちて店舗情報が静かに空になります）');
+    requireMatch(brandWrapper2, /import\s*\{[^}]*brandRoomProps[^}]*\}\s*from\s*'[^']*brandGroups\.js'/,
+      'ブランドSSRが brandRoomProps を読み込んでいません');
   }
   // 🚩 宣言の順序。`const` は巻き上がらないので、使用より後ろに書くと**実行時に落ちる**。
   //    ⚠️ これは `npm run build` でも eslint(no-undef) でも**検出できない**

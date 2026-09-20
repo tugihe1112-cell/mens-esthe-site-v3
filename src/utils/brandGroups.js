@@ -110,6 +110,34 @@ export function buildBrands(shops) {
 }
 
 /**
+ * ブランドページの **props に載せるルームの形**。
+ *
+ * 🚩 ここに書いた項目だけが本番の画面に届く。
+ *    `raw_data` を丸ごと渡さない（1店約11.9KBでHTMLが膨れる）ために平らにしているので、
+ *    **buildBrands に項目を足しても、ここに足さなければ画面には何も出ない。**
+ *
+ * ⚠️ 2026-09-20、店舗情報（営業時間・料金・公式・出勤）がこれで静かに空だった。
+ *    SSRの select も brandCommonValue も BrandPage の描画も正しく、
+ *    ガードも両端（列・描画）を見ていたが、**間のここだけ**が4項目を落としていた。
+ *    以後、平らにする形はこの関数だけ。呼び出し側で手書きしない。
+ */
+export function brandRoomProps(room) {
+  const r = room || {};
+  return {
+    id: r.id ?? null,
+    prefecture: r.prefecture ?? null,
+    city: r.city ?? null,
+    address: r.address ?? null,
+    area: Array.isArray(r.area) ? r.area[0] || null : r.area || null,
+    // ⚠️ 店舗情報（揃っていれば1つ、割れていれば「ルームにより異なります」）の素材。
+    businessHours: r.businessHours ?? null,
+    priceSystem: r.priceSystem ?? null,
+    websiteUrl: r.websiteUrl ?? null,
+    scheduleUrl: r.scheduleUrl ?? null,
+  };
+}
+
+/**
  * ブランドをエリア（市区）ごとに振り分ける。
  *
  * 🚩 1ブランドが複数エリアにルームを持つときは、**そのすべてのエリアに出す**。

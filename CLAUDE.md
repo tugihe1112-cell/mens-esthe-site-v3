@@ -27,6 +27,13 @@
 
 > **ルール：作業を始めるたびに「何をやっているか」をここに記録する。完了したら✅に変える。**
 
+### 2026-09-20
+
+| 状態 | 作業内容 | メモ |
+|------|----------|------|
+| ⏳ | **🚨移植③「店舗情報」は本番で一度も出ていなかった＝propsで4項目が落ちていた（要build→push→本番実測）** | 前日の約束どおり**デプロイ後の画面を開いて確かめた**ところ、`/shops/tokyo_ota_omori_gokujou` が301した先のブランドページ（HANASPA・3ルーム）に**店舗情報の節ごと無かった**。**【昨日の時点で緑だったもの】** `npm run build`／ガード14本／`brandCommonValue` の単体テスト6本／**SSRの `select` に4列があるかの検査**／**画面が `brandCommonValue` を呼んでいるかの検査**。**全部通っていて、本番では何も出ていない。****【原因はその間】** ブランドSSRが props に載せるとき `rooms` を `{id, prefecture, city, address, area}` に平らにしており、**`businessHours` `priceSystem` `websiteUrl` `scheduleUrl` を落としていた**（`raw_data` を丸ごと渡さないための処理）。`BrandPage` は `if (ssrBrand) return ssrBrand;` でSSRを優先するので、画面が見るのは常にこの痩せた形。4項目とも `none` になり、`shopInfo.length > 0` の節は**エラーも空欄も出さず丸ごと消える**＝**ページは正常に見える**。**⚠️ガードが鎖の両端（列・描画）だけを見て、間を見ていなかった。**「ガードが性質ではなく書き方を見ている」の変種で**今週8件目**。**【直し方】** 平らにする形を **`brandRoomProps`** としてヘルパーに切り出し、SSRはそれを呼ぶだけにした＝手書きをやめたので `buildBrands` に項目を足しても props で落ちない。**【ガードを「通し」に変えた】** `check_ssr_helpers.mjs` に **DBの行 → `buildBrands` → `brandRoomProps` → `brandCommonValue`** を1本で通す検査を追加（表記ゆれを含む2ルームで4項目とも `same` になること）。`check_indexability_guards.mjs` 側は「SSRがその関数を使っているか」だけに留めた。**妨害2種で確認**＝①`brandRoomProps` から `businessHours` を1行消す→通しの検査が「営業時間 が none（propsで落ちている）」で落ちる ②SSRを手書きに戻す→インデックスガードが落ちる。md5で復元確認。ガード14本OK。**【本番実測】** ⏳デプロイ後に確認する。**それまでこの件を「直した」と呼ばない。** |
+| ✅ | **🔗HANASPA 大森の出勤URLが改名前のドメインのままだった（本番DB更新済み）** | 前日 `美・セラ極` → `HANASPA` へ名前を直した3ルームのうち、**大森だけ `schedule_url` が `b-s-kiwami.com/schedule`＝改名前のドメイン**だった（蒲田・大井町は `esthe-hanaspa.com/schedule/`）。`update_shop_url.mjs` に `--field=` を追加して対応（`ALLOWED_FIELDS` は `website_url` と `schedule_url` の2つだけ＝打ち間違いで別の列を書き換えない）。下見→適用、バックアップJSONあり。**【なぜ画面に効くか】** ブランドページの店舗情報は**揃っていれば1つ、割れていれば「ルームにより異なります」**なので、1ルームだけ古いドメインだと**3ルーム共通の出勤リンクが出せなくなる**。 |
+
 ### 2026-09-19
 
 | 状態 | 作業内容 | メモ |

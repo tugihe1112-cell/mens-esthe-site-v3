@@ -754,7 +754,7 @@ const check = (name, fn) => {
 //    ブランド1枚にまとめるとき地名を引き継ぎ損ねると、**代々木で検索しても出なくなる**。
 //    ここはオーナーが明示的に確認した要件なので、実データで固定する。
 {
-  const { buildBrands, groupBrandsByArea, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, countRoomsByBrand, shopRedirectPath, shopHref, brandCommonValue } = await loadModule('src/utils/brandGroups.js');
+  const { buildBrands, groupBrandsByArea, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, countRoomsByBrand, shopRedirectPath, shopHref, brandCommonValue, brandRoomProps } = await loadModule('src/utils/brandGroups.js');
   const { rankShops } = await loadModule('src/utils/searchMatch.js');
 
   // 本番DBの実データ（Chocolate 3ルーム / Aroma Levante 3ルーム / 単独店1）
@@ -1210,6 +1210,38 @@ const check = (name, fn) => {
     check('店舗情報: 空・nullで落ちない', () => {
       if (brandCommonValue([], g).status !== 'none') return '空配列が none でない';
       if (brandCommonValue(null, g).status !== 'none') return 'null が none でない';
+      return null;
+    });
+
+    // 🚩 **通しで測る。** 本番で出るかどうかは「関数が正しいか」では決まらない。
+    //    2026-09-20、brandCommonValue も SSRの select も BrandPage の描画も正しく、
+    //    ガードも両端を見ていたのに、**props に平らにする所**が4項目を落としていて
+    //    店舗情報は本番で一度も出ていなかった（ブランドページを開いて初めて分かった）。
+    //    以後ここは「DBの行 → buildBrands → props → 画面が読む形」を1本で通す。
+    check('⭐店舗情報: DBの行からpropsまで通して、営業時間・料金・公式・出勤が残る', () => {
+      const rows = [
+        { id: 'x_omori', group_id: 'g_x', name: 'X 大森', prefecture: '東京都', city: '大田区', area: ['大森'],
+          business_hours: '11:00~翌5:00', price_system: '60分12,000円~',
+          website_url: 'https://x.example.com', schedule_url: 'https://x.example.com/schedule/' },
+        { id: 'x_kamata', group_id: 'g_x', name: 'X 蒲田', prefecture: '東京都', city: '大田区', area: ['蒲田'],
+          business_hours: '11:00〜翌5:00', price_system: '60分12,000円~',
+          website_url: 'https://x.example.com/', schedule_url: 'https://x.example.com/schedule' },
+      ];
+      const brand = buildBrands(rows)[0];
+      if (!brand) return 'buildBrands が0件';
+      // ⚠️ SSRが props に載せるのと同じ形にしてから測る。ここを素の brand.rooms でやると
+      //    「ヘルパーは正しいのに本番は空」をまた見逃す。
+      const rooms = (brand.rooms || []).map(brandRoomProps);
+      const fields = [
+        ['営業時間', (r) => r.businessHours],
+        ['料金', (r) => r.priceSystem],
+        ['公式サイト', (r) => r.websiteUrl],
+        ['出勤', (r) => r.scheduleUrl],
+      ];
+      for (const [label, get] of fields) {
+        const r = brandCommonValue(rooms, get);
+        if (r.status !== 'same') return `${label} が ${r.status}（propsで落ちている）`;
+      }
       return null;
     });
   }
