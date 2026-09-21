@@ -5,6 +5,7 @@ import { classifyDnsFailure, isClosureEvidence } from '../lib/dnsVerdict.mjs';
 import { classifyGroup, selfTestMatching, normId } from '../lib/brandNameMatch.mjs';
 import { evaluateSections, sectionsInHtml, MIN_PAGES } from '../lib/sectionPresence.mjs';
 import { expectsLastmod } from '../lib/sitemapRules.mjs';
+import { planReconcile, selfTestReconcile } from '../lib/rosterReconcile.mjs';
 
 const noWait = async () => {};
 const response = (status, contentType = 'text/plain') => new Response('', {
@@ -178,6 +179,57 @@ assert.equal(isTransientMonitorStatus(404), false);
   assert.ok(/sectionsInHtml\(/.test(src), '外形監視が節の在り方を拾っていない');
   assert.ok(/evaluateSections\(/.test(src), '外形監視が節の判定を呼んでいない');
   assert.ok(/selfTestSectionPresence\(\)/.test(src), '外形監視が判定の自己診断を呼んでいない');
+}
+
+// ── 在籍名簿の再確認（2026-09-21）──────────────────────────────
+// 毎日の監視は「180日再確認されていない在籍者」を数えるのに、**再確認を記録する経路が
+// 無かった**。last_seen_at を書いていたのは新規登録スクリプトだけで、退店照合は
+// is_active しか触らない。＝監視は正しく鳴るが、運用側に消す手段が無い形だった。
+// 実測(2026-09-21本番): 180日超 4392/57850=7.6%（上限5%）／90日後には 99.8% が該当する。
+{
+  const problems = selfTestReconcile();
+  assert.equal(problems.length, 0, `在籍照合の判定が壊れている: ${problems.join(' / ')}`);
+
+  // 🚩 確認印は「名簿に名前が在った人」だけに付く。店ごと一括で配ると
+  //    監視だけ緑になり、中身は何も確認されていない状態を正常として黙認することになる。
+  const rows = [{ id: 1, name: 'あい', is_active: true }, { id: 2, name: 'うみ', is_active: true }];
+  const plan = planReconcile({ rows, activeNames: ['あい'] });
+  assert.deepEqual(plan.confirm.map((t) => t.id), [1], '名簿に無い人にも確認印を付けている');
+  assert.deepEqual(plan.depart.map((t) => t.id), [2], '名簿に無い人を退店にしていない');
+
+  // スクレイプ失敗で空リストが渡ったとき、その店の全員を退店にしない
+  assert.ok(planReconcile({ rows, activeNames: [] }).refused, '空の在籍リストで全員を退店にしようとしている');
+  assert.ok(planReconcile({ rows, activeNames: ['　', ''] }).refused, '空白だけの名簿を有効扱いしている');
+
+  // 🚩 判定が正しくても、照合ツールが呼んでいなければ last_seen_at は永久に進まない。
+  //    （2026-09-20 に最も高くついたのが「関数は正しいのに繋がっていない」だった）
+  // ⚠️ **コメントを外してから見る。**
+  //    最初の版は本文まるごとに正規表現を当てていたため、コードから 42703 を消しても
+  //    **解説コメントに残った 42703 に一致して素通り**した（サボタージュ④で発覚）。
+  //    lessons.md の型②「ガードが性質ではなく書き方を見ている」そのもの。
+  const stripComments = (src) => src
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter((line) => !/^\s*(\/\/|\*)/.test(line)).join('\n');
+  const roster = stripComments(fs.readFileSync('scripts/maintenance/reconcile_therapists.mjs', 'utf8'));
+  assert.ok(/from '\.\.\/lib\/rosterReconcile\.mjs'/.test(roster), '在籍照合ツールが判定を読み込んでいない');
+  assert.ok(/planReconcile\(/.test(roster), '在籍照合ツールが判定を呼んでいない');
+  assert.ok(/selfTestReconcile\(\)/.test(roster), '在籍照合ツールが判定の自己診断を呼んでいない');
+
+  // ⚠️ ここだけは綴りを見ている（更新の中身はDBに繋がないと実行できないため）。
+  //    見ているのは「in_active の値ごとに last_seen_at が付くか」という性質で、変数名ではない。
+  const literals = (re) => [...roster.matchAll(re)].map((m) => m[0]);
+  const confirmPatches = literals(/\{[^{}]*is_active:\s*true[^{}]*\}/g);
+  const departPatches = literals(/\{[^{}]*is_active:\s*false[^{}]*\}/g);
+  assert.ok(confirmPatches.length, '在籍確認の更新内容が見つからない（書き方を変えたらこの検査も直すこと）');
+  assert.ok(confirmPatches.every((u) => /last_seen_at/.test(u)),
+    '在籍を確認できた人に last_seen_at を記録していない（監視の180日判定が永久に進まない）');
+  assert.ok(departPatches.length, '退店マークの更新内容が見つからない（書き方を変えたらこの検査も直すこと）');
+  assert.ok(departPatches.every((u) => !/last_seen_at/.test(u)),
+    '退店マークに last_seen_at を付けている（確認していない人に確認印が付く）');
+
+  // 「応答しない」を「列が無い」と読まない（ネットワーク断で黙って劣化させない）
+  assert.ok(/error\.code/.test(roster) && /42703/.test(roster),
+    '列の有無を error の有無だけで判定している（接続失敗を「列なし」と誤読する）');
 }
 
 // ⚠️ 合格の表示はファイルの**一番最後**に置く。途中に置くと、後ろに足した検査が落ちても
