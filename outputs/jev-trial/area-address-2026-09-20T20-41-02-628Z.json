@@ -1,0 +1,2800 @@
+{
+  "band": "all",
+  "asked": 127,
+  "results": [
+    {
+      "id": "tokyo_shinjuku_aroma_levante_shinjuku",
+      "name": "Aroma Levante (新宿ルーム)",
+      "group_id": "g_brand_aroma_levante",
+      "prefecture": "東京都",
+      "city": "新宿御苑",
+      "area": "新宿御苑",
+      "address": "東京都新宿区 (最寄: 新宿三丁目駅E1出口 徒歩3分)",
+      "detailed": true,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.43,
+        "probs": {
+          "same_place": 0.08,
+          "vague_address": 0.1,
+          "different": 0.25,
+          "nearby": 0.57
+        },
+        "isWrong": 0.76,
+        "inputTokens": 643
+      }
+    },
+    {
+      "id": "kanagawa_atsugi_code4030",
+      "name": "CODE:4030 (オトナコード)",
+      "group_id": "g_brand_otona_code",
+      "prefecture": "神奈川県",
+      "city": "厚木市",
+      "area": "本厚木・横浜東口・横浜みなみ西口・関内・上大岡",
+      "address": "神奈川県厚木市中町1丁目",
+      "detailed": true,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.22,
+        "probs": {
+          "different": 0.4,
+          "nearby": 0.41,
+          "same_place": 0.17,
+          "vague_address": 0.02
+        },
+        "isWrong": 0.49,
+        "inputTokens": 650
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_chocolate_shinjuku",
+      "name": "Chocolate (新宿ルーム)",
+      "group_id": "g_brand_chocolate",
+      "prefecture": "東京都",
+      "city": "新宿御苑",
+      "area": "新宿御苑",
+      "address": "東京都新宿区新宿2丁目6−4 (最寄: 新宿三丁目駅)",
+      "detailed": true,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.42,
+        "probs": {
+          "different": 0.38,
+          "nearby": 0.57,
+          "vague_address": 0.01,
+          "same_place": 0.04
+        },
+        "isWrong": 0.78,
+        "inputTokens": 639
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_kabukicho_aromacharm",
+      "name": "AromaCharm (アロマチャーム)",
+      "group_id": "g_brand_aromacharm",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "歌舞伎町",
+      "address": "東京都新宿区新宿3丁目 (最寄: 新宿三丁目・新宿・代々木)",
+      "detailed": true,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.66,
+        "probs": {
+          "different": 0.16,
+          "same_place": 0.09,
+          "nearby": 0.74,
+          "vague_address": 0.01
+        },
+        "isWrong": 0.37,
+        "inputTokens": 647
+      }
+    },
+    {
+      "id": "tokyo_meguro_meguro_otona_kakurega",
+      "name": "大人の隠れ家",
+      "group_id": "g_brand_otona_kakurega",
+      "prefecture": "東京都",
+      "city": "目黒区",
+      "area": "目黒",
+      "address": "東京都 (最寄: 渋谷駅, 恵比寿駅)",
+      "detailed": true,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.24,
+        "probs": {
+          "different": 0.07,
+          "vague_address": 0.24,
+          "nearby": 0.26,
+          "same_place": 0.43
+        },
+        "isWrong": 0.26,
+        "inputTokens": 632
+      }
+    },
+    {
+      "id": "tokyo_shibuya_urasanes",
+      "name": "UraSanEsu (ウラサネス)",
+      "group_id": "g_solo_tokyo_shibuya_urasanes",
+      "prefecture": "東京都",
+      "city": "代々木",
+      "area": "代々木・原宿",
+      "address": "東京都渋谷区 (最寄: 北参道駅)",
+      "detailed": true,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.7,
+        "probs": {
+          "same_place": 0.09,
+          "different": 0.1,
+          "vague_address": 0.03,
+          "nearby": 0.78
+        },
+        "isWrong": 0.42,
+        "inputTokens": 637
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_okubo_clarice-dao",
+      "name": "クラリスDAO",
+      "group_id": "g_brand_clarice-dao",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "大久保",
+      "address": "東京都新宿区百人町1丁目(詳細は要確認)",
+      "detailed": true,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.62,
+        "probs": {
+          "different": 0.22,
+          "vague_address": 0.04,
+          "nearby": 0.72,
+          "same_place": 0.02
+        },
+        "isWrong": 0.53,
+        "inputTokens": 630
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_sanchome_peach_next",
+      "name": "ピーチネクスト 新宿三丁目ルーム",
+      "group_id": "g_brand_peach_next",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿三丁目",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.42,
+        "probs": {
+          "same_place": 0.57,
+          "vague_address": 0.38,
+          "nearby": 0.05,
+          "different": 0
+        },
+        "isWrong": 0.19,
+        "inputTokens": 631
+      }
+    },
+    {
+      "id": "tokyo_suginami_ogikubo_crest",
+      "name": "CREST SPA TOKYO (荻窪)",
+      "group_id": "g_crest_spa",
+      "prefecture": "東京都",
+      "city": "杉並区",
+      "area": "荻窪",
+      "address": "東京都杉並区(詳細は予約時)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.57,
+        "probs": {
+          "different": 0.01,
+          "nearby": 0.11,
+          "vague_address": 0.67,
+          "same_place": 0.21
+        },
+        "isWrong": 0.18,
+        "inputTokens": 631
+      }
+    },
+    {
+      "id": "osaka_shinosaka_spalot_mrs",
+      "name": "SPALOT.Mrs (スパロットミセス)",
+      "group_id": "g_solo_osaka_shinosaka_spalot_mrs",
+      "prefecture": "大阪府",
+      "city": "新大阪",
+      "area": "新大阪",
+      "address": "大阪府大阪市中央区・淀川区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.11,
+        "probs": {
+          "same_place": 0.26,
+          "vague_address": 0.33,
+          "nearby": 0.11,
+          "different": 0.3
+        },
+        "isWrong": 0.59,
+        "inputTokens": 635
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_kabukicho_fiorespa",
+      "name": "FioreSpa (フィオーレスパ)",
+      "group_id": "g_brand_fiorespa",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "歌舞伎町",
+      "address": "東京都豊島区・新宿区・渋谷区 (各線駅近)",
+      "detailed": true,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.08,
+        "probs": {
+          "nearby": 0.31,
+          "same_place": 0.11,
+          "vague_address": 0.3,
+          "different": 0.28
+        },
+        "isWrong": 0.54,
+        "inputTokens": 640
+      }
+    },
+    {
+      "id": "tokyo_chiyoda_akihabara_prispa",
+      "name": "Prispa (プリスパ)",
+      "group_id": "g_brand_prispa",
+      "prefecture": "東京都",
+      "city": "千代田区",
+      "area": "秋葉原",
+      "address": "東京都千代田区神田佐久間町エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.54,
+        "probs": {
+          "different": 0.18,
+          "vague_address": 0.03,
+          "nearby": 0.65,
+          "same_place": 0.14
+        },
+        "isWrong": 0.55,
+        "inputTokens": 632
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_higashishinjuku_aroma_jewels",
+      "name": "Aroma Jewels 東新宿ルーム",
+      "group_id": "g_brand_aroma_jewels",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "東新宿",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.31,
+        "probs": {
+          "vague_address": 0.48,
+          "same_place": 0.41,
+          "nearby": 0.1,
+          "different": 0.01
+        },
+        "isWrong": 0.22,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "osaka_sakaisujihonmachi_tenjoubito_pr",
+      "name": "天上人PREMIUM",
+      "group_id": "g_solo_osaka_sakaisujihonmachi_tenjoubito_pr",
+      "prefecture": "大阪府",
+      "city": "堺筋本町",
+      "area": "堺筋本町",
+      "address": "大阪府大阪市中央区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.25,
+        "probs": {
+          "same_place": 0.43,
+          "vague_address": 0.34,
+          "different": 0.11,
+          "nearby": 0.12
+        },
+        "isWrong": 0.46,
+        "inputTokens": 627
+      }
+    },
+    {
+      "id": "kanagawa_yokohama_liora",
+      "name": "リオラ (旧マリラ)",
+      "group_id": "g_brand_liora",
+      "prefecture": "神奈川県",
+      "city": "横浜市西区",
+      "area": "横浜西・横浜北東・関内・あざみ野・藤沢・沼津・三島",
+      "address": "神奈川県横浜市西区北幸",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.29,
+        "probs": {
+          "vague_address": 0.02,
+          "same_place": 0.15,
+          "different": 0.45999999999999996,
+          "nearby": 0.37
+        },
+        "isWrong": 0.53,
+        "inputTokens": 652
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_gyoen_rise",
+      "name": "Rise～リゼ～ 新宿御苑店",
+      "group_id": "g_brand_rise",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿御苑",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.22,
+        "probs": {
+          "same_place": 0.18,
+          "vague_address": 0.4,
+          "different": 0.01,
+          "nearby": 0.41
+        },
+        "isWrong": 0.34,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_sanchome_queens_collection",
+      "name": "QUEEN'S COLLECTION 新宿三丁目ルーム",
+      "group_id": "g_brand_queens_collection",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿三丁目",
+      "address": "東京都新宿区新宿",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.32,
+        "probs": {
+          "nearby": 0.29,
+          "same_place": 0.49,
+          "vague_address": 0.19,
+          "different": 0.03
+        },
+        "isWrong": 0.23,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "kanagawa_musashikosugi_aroma_ella",
+      "name": "Aroma ELLA (アロマエラ)",
+      "group_id": "g_brand_aroma_ella",
+      "prefecture": "神奈川県",
+      "city": "武蔵小杉",
+      "area": "武蔵小杉",
+      "address": "東京・神奈川エリア(詳細は予約時)",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.33,
+        "probs": {
+          "different": 0.03,
+          "vague_address": 0.44,
+          "same_place": 0.49,
+          "nearby": 0.04
+        },
+        "isWrong": 0.26,
+        "inputTokens": 638
+      }
+    },
+    {
+      "id": "1076",
+      "name": "SEACRET ROOM ひまわり",
+      "group_id": "g_brand_sr_himawari",
+      "prefecture": "大阪府",
+      "city": "堺東",
+      "area": "堺東",
+      "address": "大阪府内各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.89,
+        "probs": {
+          "different": 0.05,
+          "vague_address": 0.92,
+          "nearby": 0,
+          "same_place": 0.03
+        },
+        "isWrong": 0.63,
+        "inputTokens": 621
+      }
+    },
+    {
+      "id": "tokyo_shibuya_ebisu_liora",
+      "name": "リオラ (旧マリラ)",
+      "group_id": "g_brand_liora",
+      "prefecture": "東京都",
+      "city": "渋谷区",
+      "area": "恵比寿",
+      "address": "東京都・神奈川県・静岡県 各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.44,
+        "probs": {
+          "different": 0.06,
+          "nearby": 0.06,
+          "vague_address": 0.58,
+          "same_place": 0.3
+        },
+        "isWrong": 0.38,
+        "inputTokens": 635
+      }
+    },
+    {
+      "id": "osaka_shinosaka_mokukindo",
+      "name": "感謝 旧愛燦燦",
+      "group_id": "g_solo_osaka_shinosaka_mokukindo",
+      "prefecture": "大阪府",
+      "city": "堺筋本町",
+      "area": "堺筋本町",
+      "address": "大阪府大阪市(中央区・北区・西区)各ルーム",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.69,
+        "probs": {
+          "different": 0.05,
+          "same_place": 0.12,
+          "nearby": 0.06,
+          "vague_address": 0.77
+        },
+        "isWrong": 0.54,
+        "inputTokens": 640
+      }
+    },
+    {
+      "id": "osaka_tanimachi9_mrs_moonr",
+      "name": "ミセスムーンR 大阪",
+      "group_id": "g_solo_osaka_tanimachi9_mrs_moonr",
+      "prefecture": "大阪府",
+      "city": "谷町九丁目",
+      "area": "谷町九丁目",
+      "address": "大阪府大阪市中央区・堺市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.3,
+        "probs": {
+          "nearby": 0.08,
+          "same_place": 0.14,
+          "vague_address": 0.47,
+          "different": 0.31
+        },
+        "isWrong": 0.64,
+        "inputTokens": 637
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_nishishinjuku_aroma_jewels",
+      "name": "Aroma Jewels 西新宿ルーム",
+      "group_id": "g_brand_aroma_jewels",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "西新宿",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.49,
+        "probs": {
+          "different": 0.01,
+          "same_place": 0.61,
+          "vague_address": 0.34,
+          "nearby": 0.04
+        },
+        "isWrong": 0.17,
+        "inputTokens": 622
+      }
+    },
+    {
+      "id": "osaka_umeda_majimespa",
+      "name": "マ・ジ・メSPA（マジメスパ）",
+      "group_id": "g_solo_osaka_umeda_majimespa",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪府大阪市各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.84,
+        "probs": {
+          "same_place": 0.1,
+          "vague_address": 0.88,
+          "nearby": 0,
+          "different": 0.02
+        },
+        "isWrong": 0.49,
+        "inputTokens": 625
+      }
+    },
+    {
+      "id": "tokyo_tama_tamacenter_trendy_spa",
+      "name": "TRENDY SPA (多摩センター店)",
+      "group_id": "g_brand_trendy_spa",
+      "prefecture": "東京都",
+      "city": "多摩市",
+      "area": "多摩センター",
+      "address": "東京都多摩市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.31,
+        "probs": {
+          "different": 0.01,
+          "nearby": 0.1,
+          "vague_address": 0.41,
+          "same_place": 0.48
+        },
+        "isWrong": 0.15,
+        "inputTokens": 630
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_nishishinjuku_yunispa",
+      "name": "Yuni Spa (ユニスパ)",
+      "group_id": "g_brand_yunispa",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "西新宿",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.36,
+        "probs": {
+          "nearby": 0.09,
+          "different": 0.01,
+          "vague_address": 0.51,
+          "same_place": 0.39
+        },
+        "isWrong": 0.25,
+        "inputTokens": 620
+      }
+    },
+    {
+      "id": "kyoto_senbon_sanjo_pure_white",
+      "name": "Pure White (ピュアホワイト)",
+      "group_id": "g_solo_kyoto_senbon_sanjo_pure_white",
+      "prefecture": "京都府",
+      "city": "千本三条",
+      "area": "千本三条",
+      "address": "京都府京都市",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.3,
+        "probs": {
+          "different": 0.04,
+          "vague_address": 0.45,
+          "nearby": 0.03,
+          "same_place": 0.48
+        },
+        "isWrong": 0.47,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "osaka_tanimachi9_cream",
+      "name": "C.r.e.a.m (クリーム)",
+      "group_id": "g_solo_osaka_tanimachi9_cream",
+      "prefecture": "大阪府",
+      "city": "谷町九丁目",
+      "area": "谷町九丁目",
+      "address": "大阪府大阪市(中央区・天王寺区)各ルーム",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.57,
+        "probs": {
+          "same_place": 0.15,
+          "vague_address": 0.68,
+          "different": 0.1,
+          "nearby": 0.07
+        },
+        "isWrong": 0.6,
+        "inputTokens": 640
+      }
+    },
+    {
+      "id": "kanagawa_musashikosugi_royce",
+      "name": "武蔵小杉 ROYCE (ロイス)",
+      "group_id": "g_solo_kanagawa_musashikosugi_royce",
+      "prefecture": "神奈川県",
+      "city": "武蔵小杉",
+      "area": "武蔵小杉",
+      "address": "神奈川県川崎市中原区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.6,
+        "probs": {
+          "same_place": 0.7,
+          "vague_address": 0.1,
+          "nearby": 0.1,
+          "different": 0.1
+        },
+        "isWrong": 0.32,
+        "inputTokens": 635
+      }
+    },
+    {
+      "id": "1189_2",
+      "name": "Kobe Eslino (神戸エスリノ)",
+      "group_id": "g_brand_eslino",
+      "prefecture": "兵庫県",
+      "city": "加納町",
+      "area": "加納町",
+      "address": "兵庫県神戸市中央区",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.48,
+        "probs": {
+          "same_place": 0.11,
+          "different": 0.61,
+          "nearby": 0.02,
+          "vague_address": 0.26
+        },
+        "isWrong": 0.8,
+        "inputTokens": 626
+      }
+    },
+    {
+      "id": "tokyo_shinagawa_gotanda_the_half",
+      "name": "THE HALF",
+      "group_id": "g_brand_the_half",
+      "prefecture": "東京都",
+      "city": "品川区",
+      "area": "五反田",
+      "address": "東京都品川区・港区・目黒区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.24,
+        "probs": {
+          "nearby": 0.2,
+          "vague_address": 0.31,
+          "different": 0.06,
+          "same_place": 0.43
+        },
+        "isWrong": 0.32,
+        "inputTokens": 625
+      }
+    },
+    {
+      "id": "tokyo_meguro_jiyugaoka_mens_esthe_group",
+      "name": "メンエスグループ",
+      "group_id": "g_brand_mens_esthe_group",
+      "prefecture": "東京都",
+      "city": "目黒区",
+      "area": "自由が丘",
+      "address": "東京都内各所(詳細は予約時)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.82,
+        "probs": {
+          "nearby": 0.04,
+          "different": 0.02,
+          "same_place": 0.08,
+          "vague_address": 0.86
+        },
+        "isWrong": 0.44,
+        "inputTokens": 630
+      }
+    },
+    {
+      "id": "hyogo_sannomiya_kobe_queen",
+      "name": "KOBE QUEEN (コウベクイーン)",
+      "group_id": "g_solo_hyogo_sannomiya_kobe_queen",
+      "prefecture": "兵庫県",
+      "city": "三宮",
+      "area": "三宮",
+      "address": "兵庫県神戸市",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.36,
+        "probs": {
+          "nearby": 0.02,
+          "different": 0.01,
+          "same_place": 0.52,
+          "vague_address": 0.45
+        },
+        "isWrong": 0.27,
+        "inputTokens": 621
+      }
+    },
+    {
+      "id": "tokyo_musashino_kichijoji_esthe_bijin_madam",
+      "name": "エステ美人マダム 三鷹店",
+      "group_id": "g_brand_esthe_bijin_madam",
+      "prefecture": "東京都",
+      "city": "武蔵野市",
+      "area": "吉祥寺",
+      "address": "東京都三鷹市・武蔵野市・国分寺市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.51,
+        "probs": {
+          "same_place": 0.05,
+          "different": 0.26,
+          "nearby": 0.63,
+          "vague_address": 0.06
+        },
+        "isWrong": 0.66,
+        "inputTokens": 647
+      }
+    },
+    {
+      "id": "osaka_umeda_lirica",
+      "name": "LIRICA OSAKA (リリカ大阪)",
+      "group_id": "g_solo_osaka_umeda_lirica",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪府大阪市中央区・北区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.55,
+        "probs": {
+          "same_place": 0.66,
+          "vague_address": 0.27,
+          "nearby": 0.03,
+          "different": 0.04
+        },
+        "isWrong": 0.41,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "tokyo_shibuya_sasazuka_reve_spa",
+      "name": "REVE SPA (レーヴスパ)",
+      "group_id": "g_brand_reve_spa",
+      "prefecture": "東京都",
+      "city": "渋谷区",
+      "area": "笹塚",
+      "address": "東京都渋谷区・世田谷区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.25,
+        "probs": {
+          "same_place": 0.21,
+          "nearby": 0.43,
+          "different": 0.07,
+          "vague_address": 0.29
+        },
+        "isWrong": 0.37,
+        "inputTokens": 632
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_gyoen_tokyopla",
+      "name": "トキョプラ 旧T+Plus (ティープラス) 新宿",
+      "group_id": "g_brand_tokyopla",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿御苑",
+      "address": "東京都新宿・立川・八王子エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.22,
+        "probs": {
+          "same_place": 0.16,
+          "nearby": 0.41,
+          "vague_address": 0.22,
+          "different": 0.21
+        },
+        "isWrong": 0.59,
+        "inputTokens": 645
+      }
+    },
+    {
+      "id": "aichi_tsurumai_mrs_crystal",
+      "name": "Mrs Crystal (ミセスクリスタル) 名古屋",
+      "group_id": "g_solo_aichi_tsurumai_mrs_crystal",
+      "prefecture": "愛知県",
+      "city": "鶴舞",
+      "area": "鶴舞",
+      "address": "愛知県名古屋市・一宮市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.34,
+        "probs": {
+          "vague_address": 0.33,
+          "nearby": 0.08,
+          "same_place": 0.09,
+          "different": 0.5
+        },
+        "isWrong": 0.5,
+        "inputTokens": 637
+      }
+    },
+    {
+      "id": "chiba_funabashi_begin",
+      "name": "美吟 (ビギン) 船橋店",
+      "group_id": "g_solo_chiba_funabashi_begin",
+      "prefecture": "千葉県",
+      "city": "西船橋",
+      "area": "西船橋",
+      "address": "千葉県船橋市",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.36,
+        "probs": {
+          "different": 0.06,
+          "same_place": 0.53,
+          "nearby": 0.17,
+          "vague_address": 0.24
+        },
+        "isWrong": 0.37,
+        "inputTokens": 626
+      }
+    },
+    {
+      "id": "tokyo_meguro_toritsudaigaku_tokyo_mensesthe",
+      "name": "東京メンズエステ 目黒 池袋",
+      "group_id": "g_brand_tokyo_mensesthe",
+      "prefecture": "東京都",
+      "city": "目黒区",
+      "area": "都立大学",
+      "address": "東京都目黒区",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.19,
+        "probs": {
+          "vague_address": 0.31,
+          "different": 0.14,
+          "nearby": 0.4,
+          "same_place": 0.15
+        },
+        "isWrong": 0.77,
+        "inputTokens": 630
+      }
+    },
+    {
+      "id": "kanagawa_kawasaki_musashikosugi_aroma_ella",
+      "name": "Aroma ELLA (アロマエラ 武蔵小杉店)",
+      "group_id": "g_brand_aroma_ella",
+      "prefecture": "神奈川県",
+      "city": "川崎市",
+      "area": "武蔵小杉",
+      "address": "神奈川県川崎市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.51,
+        "probs": {
+          "same_place": 0.3,
+          "vague_address": 0.63,
+          "different": 0.01,
+          "nearby": 0.06
+        },
+        "isWrong": 0.15,
+        "inputTokens": 637
+      }
+    },
+    {
+      "id": "hyogo_sannomiya_mrs_melty",
+      "name": "Mrs.melty (ミセスメルティー)",
+      "group_id": "g_solo_hyogo_sannomiya_mrs_melty",
+      "prefecture": "兵庫県",
+      "city": "三宮",
+      "area": "三宮",
+      "address": "兵庫県神戸市/姫路市",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.22,
+        "probs": {
+          "different": 0.42,
+          "vague_address": 0.38,
+          "nearby": 0.03,
+          "same_place": 0.17
+        },
+        "isWrong": 0.54,
+        "inputTokens": 626
+      }
+    },
+    {
+      "id": "osaka_umeda_first_class",
+      "name": "FIRST CLASS (ファーストクラス) 大阪",
+      "group_id": "g_brand_first",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪市内各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.91,
+        "probs": {
+          "same_place": 0.04,
+          "nearby": 0,
+          "vague_address": 0.93,
+          "different": 0.02
+        },
+        "isWrong": 0.44,
+        "inputTokens": 625
+      }
+    },
+    {
+      "id": "tokyo_shinagawa_musashikoyama_mens_esthe_group",
+      "name": "メンエスグループ",
+      "group_id": "g_brand_mens_esthe_group",
+      "prefecture": "東京都",
+      "city": "品川区",
+      "area": "武蔵小山",
+      "address": "東京都内各所(詳細は予約時)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.81,
+        "probs": {
+          "different": 0.03,
+          "nearby": 0.03,
+          "same_place": 0.08,
+          "vague_address": 0.86
+        },
+        "isWrong": 0.42,
+        "inputTokens": 632
+      }
+    },
+    {
+      "id": "saitama_urawa_offsuit",
+      "name": "オフスート (Offsuit) 旧ランクプラス",
+      "group_id": "g_solo_saitama_urawa_offsuit",
+      "prefecture": "埼玉県",
+      "city": "浦和",
+      "area": "浦和",
+      "address": "埼玉県さいたま市",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.87,
+        "probs": {
+          "different": 0,
+          "nearby": 0,
+          "same_place": 0.91,
+          "vague_address": 0.09
+        },
+        "isWrong": 0.26,
+        "inputTokens": 633
+      }
+    },
+    {
+      "id": "osaka_shinsaibashi_skit",
+      "name": "Skit (スキット)",
+      "group_id": "g_solo_osaka_shinsaibashi_skit",
+      "prefecture": "大阪府",
+      "city": "心斎橋",
+      "area": "心斎橋",
+      "address": "大阪府大阪市中央区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.49,
+        "probs": {
+          "vague_address": 0.28,
+          "same_place": 0.62,
+          "different": 0.04,
+          "nearby": 0.06
+        },
+        "isWrong": 0.4,
+        "inputTokens": 627
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_gyoen_aroma_jewels",
+      "name": "Aroma Jewels 新宿御苑ルーム",
+      "group_id": "g_brand_aroma_jewels",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿御苑",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.23,
+        "probs": {
+          "different": 0.01,
+          "nearby": 0.43,
+          "same_place": 0.21,
+          "vague_address": 0.35
+        },
+        "isWrong": 0.37,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "tokyo_setagaya_chitose_karasuyama_unison_spa",
+      "name": "ユニゾンスパ (千歳烏山店)",
+      "group_id": "g_brand_unison_spa",
+      "prefecture": "東京都",
+      "city": "世田谷区",
+      "area": "千歳烏山",
+      "address": "東京都世田谷区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.3,
+        "probs": {
+          "different": 0.01,
+          "vague_address": 0.48,
+          "nearby": 0.14,
+          "same_place": 0.37
+        },
+        "isWrong": 0.21,
+        "inputTokens": 634
+      }
+    },
+    {
+      "id": "aichi_shinsakae_madame_seiko",
+      "name": "MADAME聖子 (マダムセイコ)",
+      "group_id": "g_solo_aichi_shinsakae_madame_seiko",
+      "prefecture": "愛知県",
+      "city": "新栄",
+      "area": "新栄",
+      "address": "愛知県名古屋市・一宮市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.43,
+        "probs": {
+          "same_place": 0.09,
+          "vague_address": 0.3,
+          "different": 0.57,
+          "nearby": 0.04
+        },
+        "isWrong": 0.6,
+        "inputTokens": 632
+      }
+    },
+    {
+      "id": "osaka_umeda_darlin_premium",
+      "name": "ダーリンプレミアム",
+      "group_id": "g_solo_osaka_umeda_darlin_premium",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪市北区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.75,
+        "probs": {
+          "same_place": 0.8,
+          "vague_address": 0.18,
+          "different": 0.01,
+          "nearby": 0.01
+        },
+        "isWrong": 0.29,
+        "inputTokens": 620
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_nishishinjuku_tokyo_mensesthe",
+      "name": "東京メンズエステ 西新宿ルーム",
+      "group_id": "g_brand_tokyo_mensesthe",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "西新宿",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.46,
+        "probs": {
+          "same_place": 0.59,
+          "vague_address": 0.37,
+          "nearby": 0.04,
+          "different": 0
+        },
+        "isWrong": 0.16,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "tokyo_meguro_nakameguro_aqua",
+      "name": "AQUA (アクア) 中目黒",
+      "group_id": "g_brand_aqua",
+      "prefecture": "東京都",
+      "city": "恵比寿",
+      "area": "恵比寿",
+      "address": "東京都目黒区中目黒",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.48,
+        "probs": {
+          "nearby": 0.38,
+          "different": 0.62,
+          "same_place": 0,
+          "vague_address": 0
+        },
+        "isWrong": 0.86,
+        "inputTokens": 628
+      }
+    },
+    {
+      "id": "tokyo_setagaya_meidaimae_queens_collection",
+      "name": "QUEEN'S COLLECTION 明大前ルーム",
+      "group_id": "g_brand_queens_collection",
+      "prefecture": "東京都",
+      "city": "世田谷区",
+      "area": "明大前",
+      "address": "東京都世田谷区松原",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.77,
+        "probs": {
+          "vague_address": 0.01,
+          "same_place": 0.13,
+          "nearby": 0.83,
+          "different": 0.03
+        },
+        "isWrong": 0.22,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "tokyo_chiyoda_akihabara_hiran_next",
+      "name": "ADEN (アデン)",
+      "group_id": "g_brand_hiran_next",
+      "prefecture": "東京都",
+      "city": "千代田区",
+      "area": "秋葉原",
+      "address": "東京都千代田区神田佐久間町エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.45,
+        "probs": {
+          "vague_address": 0.02,
+          "different": 0.28,
+          "nearby": 0.59,
+          "same_place": 0.11
+        },
+        "isWrong": 0.6,
+        "inputTokens": 631
+      }
+    },
+    {
+      "id": "kanagawa_shinyurigaoka_redeye",
+      "name": "GREEN APPLE (グリーンアップル)",
+      "group_id": "g_brand_greenapple",
+      "prefecture": "神奈川県",
+      "city": "新百合ヶ丘",
+      "area": "新百合ヶ丘",
+      "address": "神奈川県川崎市多摩区・麻生区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.13,
+        "probs": {
+          "different": 0.18,
+          "same_place": 0.33999999999999997,
+          "nearby": 0.31,
+          "vague_address": 0.17
+        },
+        "isWrong": 0.49,
+        "inputTokens": 638
+      }
+    },
+    {
+      "id": "tokyo_meguro_meguro_mens_esthe_group",
+      "name": "メンエスグループ",
+      "group_id": "g_brand_mens_esthe_group",
+      "prefecture": "東京都",
+      "city": "目黒区",
+      "area": "目黒",
+      "address": "東京都内各所(詳細は予約時)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.9,
+        "probs": {
+          "nearby": 0,
+          "same_place": 0.07,
+          "vague_address": 0.93,
+          "different": 0
+        },
+        "isWrong": 0.38,
+        "inputTokens": 627
+      }
+    },
+    {
+      "id": "osaka_sakaisujihonmachi_queen_spumante",
+      "name": "Queen Spumante (クイーンスプマンテ)",
+      "group_id": "g_solo_osaka_sakaisujihonmachi_queen_spumante",
+      "prefecture": "大阪府",
+      "city": "堺筋本町",
+      "area": "堺筋本町",
+      "address": "大阪府大阪市中央区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.19,
+        "probs": {
+          "nearby": 0.15,
+          "vague_address": 0.37,
+          "same_place": 0.4,
+          "different": 0.08
+        },
+        "isWrong": 0.45,
+        "inputTokens": 634
+      }
+    },
+    {
+      "id": "tokyo_chuo_ginza_aromamore",
+      "name": "AROMA more (アロマモア)",
+      "group_id": "g_brand_aromamore",
+      "prefecture": "東京都",
+      "city": "中央区",
+      "area": "銀座",
+      "address": "東京都新宿区・渋谷区・港区・中央区・豊島区",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.57,
+        "probs": {
+          "same_place": 0.04,
+          "vague_address": 0.26,
+          "different": 0.68,
+          "nearby": 0.02
+        },
+        "isWrong": 0.69,
+        "inputTokens": 638
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_higashishinjuku_gyokurou",
+      "name": "玉楼",
+      "group_id": "g_brand_gyokurou",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "東新宿",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.28,
+        "probs": {
+          "vague_address": 0.3,
+          "same_place": 0.45,
+          "nearby": 0.22,
+          "different": 0.03
+        },
+        "isWrong": 0.35,
+        "inputTokens": 616
+      }
+    },
+    {
+      "id": "hyogo_sannomiya_lemonade",
+      "name": "lemonade (レモネード) 神戸",
+      "group_id": "g_solo_hyogo_sannomiya_lemonade",
+      "prefecture": "兵庫県",
+      "city": "三宮",
+      "area": "三宮",
+      "address": "兵庫県神戸市中央区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.36,
+        "probs": {
+          "different": 0.09,
+          "vague_address": 0.23,
+          "nearby": 0.16,
+          "same_place": 0.52
+        },
+        "isWrong": 0.42,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "tokyo_shibuya_yoyogi_harajuku_grand_gaia",
+      "name": "グランドガイア (Grand Gaia)",
+      "group_id": "g_brand_grand_gaia",
+      "prefecture": "東京都",
+      "city": "渋谷区",
+      "area": "代々木・原宿",
+      "address": "東京都渋谷区",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.35,
+        "probs": {
+          "nearby": 0.5,
+          "vague_address": 0.26,
+          "same_place": 0.17,
+          "different": 0.07
+        },
+        "isWrong": 0.39,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "tokyo_meguro_nakameguro_tenkai_no_spa",
+      "name": "天界のスパ 中目黒",
+      "group_id": "g_brand_tenkai_no_spa",
+      "prefecture": "東京都",
+      "city": "恵比寿",
+      "area": "恵比寿",
+      "address": "東京都目黒区中目黒",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.41,
+        "probs": {
+          "nearby": 0.44,
+          "same_place": 0.01,
+          "different": 0.55,
+          "vague_address": 0
+        },
+        "isWrong": 0.87,
+        "inputTokens": 627
+      }
+    },
+    {
+      "id": "tokyo_minato_roppongi_aromamore",
+      "name": "AROMA more (アロマモア)",
+      "group_id": "g_brand_aromamore",
+      "prefecture": "東京都",
+      "city": "港区",
+      "area": "六本木",
+      "address": "東京都新宿区・渋谷区・港区・中央区・豊島区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.32,
+        "probs": {
+          "different": 0.11,
+          "vague_address": 0.32,
+          "nearby": 0.09,
+          "same_place": 0.48
+        },
+        "isWrong": 0.5,
+        "inputTokens": 638
+      }
+    },
+    {
+      "id": "tokyo_chiyoda_akihabara_aroma_jewels",
+      "name": "Aroma Jewels 秋葉原ルーム",
+      "group_id": "g_brand_aroma_jewels",
+      "prefecture": "東京都",
+      "city": "千代田区",
+      "area": "秋葉原",
+      "address": "東京都千代田区神田",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.29,
+        "probs": {
+          "vague_address": 0.13,
+          "different": 0.02,
+          "nearby": 0.47,
+          "same_place": 0.38
+        },
+        "isWrong": 0.22,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "osaka_takatsuki_tamanegi",
+      "name": "タマネギ 大阪",
+      "group_id": "g_solo_osaka_takatsuki_tamanegi",
+      "prefecture": "大阪府",
+      "city": "高槻",
+      "area": "高槻",
+      "address": "大阪府内各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.72,
+        "probs": {
+          "different": 0.06,
+          "vague_address": 0.8,
+          "nearby": 0,
+          "same_place": 0.14
+        },
+        "isWrong": 0.52,
+        "inputTokens": 620
+      }
+    },
+    {
+      "id": "osaka_sakuragawa_leonspa_gold",
+      "name": "LEON SPA Gold (レオンスパゴールド)",
+      "group_id": "g_solo_osaka_sakuragawa_leonspa_gold",
+      "prefecture": "大阪府",
+      "city": "桜川",
+      "area": "桜川",
+      "address": "大阪府大阪市・堺市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.16,
+        "probs": {
+          "vague_address": 0.36,
+          "nearby": 0.01,
+          "same_place": 0.26,
+          "different": 0.37
+        },
+        "isWrong": 0.76,
+        "inputTokens": 631
+      }
+    },
+    {
+      "id": "kanagawa_musashikosugi_bed_of_roses",
+      "name": "ベッドオブローゼス（Bed of Roses） 旧スリーピングシープ",
+      "group_id": "g_solo_kanagawa_musashikosugi_bed_of_roses",
+      "prefecture": "神奈川県",
+      "city": "武蔵小杉",
+      "area": "武蔵小杉",
+      "address": "神奈川県川崎市中原区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.43,
+        "probs": {
+          "same_place": 0.57,
+          "vague_address": 0.04,
+          "different": 0.16,
+          "nearby": 0.23
+        },
+        "isWrong": 0.37,
+        "inputTokens": 647
+      }
+    },
+    {
+      "id": "osaka_sakaihigashi_leonspa",
+      "name": "LEON SPA (レオンスパ)",
+      "group_id": "g_solo_osaka_sakaihigashi_leonspa",
+      "prefecture": "大阪府",
+      "city": "堺東",
+      "area": "堺東",
+      "address": "大阪府堺市堺区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.25,
+        "probs": {
+          "same_place": 0.43,
+          "vague_address": 0.4,
+          "different": 0.11,
+          "nearby": 0.06
+        },
+        "isWrong": 0.46,
+        "inputTokens": 625
+      }
+    },
+    {
+      "id": "tokyo_tama_seisekisakuragaoka_trendy_spa",
+      "name": "TRENDY SPA (聖蹟桜ヶ丘店)",
+      "group_id": "g_brand_trendy_spa",
+      "prefecture": "東京都",
+      "city": "多摩市",
+      "area": "聖蹟桜ヶ丘",
+      "address": "東京都多摩市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.15,
+        "probs": {
+          "different": 0.13,
+          "vague_address": 0.35,
+          "nearby": 0.17,
+          "same_place": 0.35
+        },
+        "isWrong": 0.32,
+        "inputTokens": 634
+      }
+    },
+    {
+      "id": "osaka_umeda_kokoronoyurikago",
+      "name": "こころのゆりかご 大阪",
+      "group_id": "g_solo_osaka_umeda_kokoronoyurikago",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪市内各ルーム",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.84,
+        "probs": {
+          "different": 0.01,
+          "nearby": 0.01,
+          "same_place": 0.1,
+          "vague_address": 0.88
+        },
+        "isWrong": 0.45,
+        "inputTokens": 622
+      }
+    },
+    {
+      "id": "tokyo_setagaya_shimokitazawa_eren",
+      "name": "EREN (エレン)",
+      "group_id": "g_brand_eren",
+      "prefecture": "東京都",
+      "city": "世田谷区",
+      "area": "下北沢",
+      "address": "東京都世田谷区・渋谷区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.2,
+        "probs": {
+          "different": 0.13,
+          "vague_address": 0.4,
+          "same_place": 0.11,
+          "nearby": 0.36
+        },
+        "isWrong": 0.5,
+        "inputTokens": 628
+      }
+    },
+    {
+      "id": "osaka_umeda_sr_himawari",
+      "name": "SEACRET ROOM ひまわり",
+      "group_id": "g_brand_sr_himawari",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪府下各エリア(吹田・高槻・市内)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.62,
+        "probs": {
+          "vague_address": 0.72,
+          "nearby": 0.01,
+          "different": 0.23,
+          "same_place": 0.04
+        },
+        "isWrong": 0.61,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "osaka_umeda_kakurega",
+      "name": "隠れ家~大人の癒し空間~",
+      "group_id": "g_solo_osaka_umeda_kakurega",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪府大阪市各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.85,
+        "probs": {
+          "same_place": 0.1,
+          "vague_address": 0.88,
+          "different": 0.02,
+          "nearby": 0
+        },
+        "isWrong": 0.49,
+        "inputTokens": 626
+      }
+    },
+    {
+      "id": "tokyo_setagaya_shimokitazawa_jd_spa",
+      "name": "JDスパ (女子大生エステ) 下北沢",
+      "group_id": "g_brand_jd_spa",
+      "prefecture": "東京都",
+      "city": "世田谷区",
+      "area": "下北沢",
+      "address": "東京都世田谷区・渋谷区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.21,
+        "probs": {
+          "vague_address": 0.41000000000000003,
+          "different": 0.01,
+          "nearby": 0.24,
+          "same_place": 0.34
+        },
+        "isWrong": 0.22,
+        "inputTokens": 638
+      }
+    },
+    {
+      "id": "hyogo_sannomiya_mrs_tenor",
+      "name": "MRS.TENOR (ミセステノール)",
+      "group_id": "g_solo_hyogo_sannomiya_mrs_tenor",
+      "prefecture": "兵庫県",
+      "city": "三宮",
+      "area": "三宮",
+      "address": "兵庫県神戸市中央区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.38,
+        "probs": {
+          "vague_address": 0.35,
+          "different": 0.03,
+          "same_place": 0.53,
+          "nearby": 0.09
+        },
+        "isWrong": 0.37,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "tokyo_shibuya_ebisu_aqua",
+      "name": "AQUA (アクア)",
+      "group_id": "g_brand_aqua",
+      "prefecture": "東京都",
+      "city": "恵比寿",
+      "area": "恵比寿",
+      "address": "東京都目黒区中目黒",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.5,
+        "probs": {
+          "nearby": 0.63,
+          "different": 0.34,
+          "vague_address": 0.01,
+          "same_place": 0.02
+        },
+        "isWrong": 0.74,
+        "inputTokens": 623
+      }
+    },
+    {
+      "id": "tokyo_setagaya_futakotamagawa_jesse",
+      "name": "Tigger (ティガー)",
+      "group_id": "g_brand_jesse",
+      "prefecture": "東京都",
+      "city": "世田谷区",
+      "area": "二子玉川",
+      "address": "東京都世田谷区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.49,
+        "probs": {
+          "vague_address": 0.61,
+          "different": 0.03,
+          "nearby": 0.08,
+          "same_place": 0.28
+        },
+        "isWrong": 0.28,
+        "inputTokens": 625
+      }
+    },
+    {
+      "id": "osaka_umeda_goat",
+      "name": "GOAT(ゴート) 旧琥珀",
+      "group_id": "g_solo_osaka_umeda_goat",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪市内各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.86,
+        "probs": {
+          "vague_address": 0.9,
+          "nearby": 0,
+          "same_place": 0.08,
+          "different": 0.02
+        },
+        "isWrong": 0.48,
+        "inputTokens": 623
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_nishishinjuku_koakuma_spa_tokyo",
+      "name": "小悪魔スパトウキョウ 西新宿ルーム",
+      "group_id": "g_brand_koakuma_spa_tokyo",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "西新宿",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.61,
+        "probs": {
+          "same_place": 0.71,
+          "vague_address": 0.24,
+          "nearby": 0.05,
+          "different": 0
+        },
+        "isWrong": 0.17,
+        "inputTokens": 631
+      }
+    },
+    {
+      "id": "osaka_umeda_bimajo_therapy",
+      "name": "美魔女セラピー大阪",
+      "group_id": "g_solo_osaka_umeda_bimajo_therapy",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪市内各ルーム",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.89,
+        "probs": {
+          "nearby": 0,
+          "same_place": 0.07,
+          "different": 0.01,
+          "vague_address": 0.92
+        },
+        "isWrong": 0.43,
+        "inputTokens": 621
+      }
+    },
+    {
+      "id": "osaka_tanimachi9_amaou",
+      "name": "ミセスあまおうセラピ 旧ミセスマドンナ",
+      "group_id": "g_solo_osaka_tanimachi9_amaou",
+      "prefecture": "大阪府",
+      "city": "谷町九丁目",
+      "area": "谷町九丁目",
+      "address": "大阪府大阪市中央区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.26,
+        "probs": {
+          "nearby": 0.07,
+          "different": 0.14,
+          "vague_address": 0.35,
+          "same_place": 0.44
+        },
+        "isWrong": 0.51,
+        "inputTokens": 642
+      }
+    },
+    {
+      "id": "shiga_otsu_station_yurikago",
+      "name": "ゆりかご 京都",
+      "group_id": "g_brand_yurikago_kyoto",
+      "prefecture": "京都府",
+      "city": "京都市",
+      "area": "四条西洞院",
+      "address": "京都府京都市",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.62,
+        "probs": {
+          "nearby": 0.03,
+          "same_place": 0.25,
+          "different": 0,
+          "vague_address": 0.72
+        },
+        "isWrong": 0.29,
+        "inputTokens": 621
+      }
+    },
+    {
+      "id": "osaka_shinosaka_komoriuta",
+      "name": "ミセスの子守唄",
+      "group_id": "g_solo_osaka_shinosaka_komoriuta",
+      "prefecture": "大阪府",
+      "city": "新大阪",
+      "area": "新大阪",
+      "address": "大阪府内各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.79,
+        "probs": {
+          "same_place": 0.08,
+          "vague_address": 0.85,
+          "nearby": 0,
+          "different": 0.07
+        },
+        "isWrong": 0.54,
+        "inputTokens": 621
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_higashishinjuku_peach_next",
+      "name": "ピーチネクスト 東新宿ルーム",
+      "group_id": "g_brand_peach_next",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "東新宿",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.4,
+        "probs": {
+          "vague_address": 0.31,
+          "nearby": 0.12,
+          "different": 0.01,
+          "same_place": 0.56
+        },
+        "isWrong": 0.22,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "kanagawa_musashikosugi_agu",
+      "name": "Agu (アグ) 武蔵小杉",
+      "group_id": "g_solo_kanagawa_musashikosugi_agu",
+      "prefecture": "神奈川県",
+      "city": "武蔵小杉",
+      "area": "武蔵小杉",
+      "address": "神奈川県川崎市中原区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.21,
+        "probs": {
+          "different": 0.15,
+          "vague_address": 0.15,
+          "same_place": 0.41,
+          "nearby": 0.29
+        },
+        "isWrong": 0.41,
+        "inputTokens": 633
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_ichigaya_be_majo",
+      "name": "be-majo (ビマージョ) 市ヶ谷",
+      "group_id": "g_brand_be_majo",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "市ヶ谷",
+      "address": "東京都新宿区市谷エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.97,
+        "probs": {
+          "nearby": 0,
+          "same_place": 0.98,
+          "vague_address": 0.02,
+          "different": 0
+        },
+        "isWrong": 0.19,
+        "inputTokens": 633
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_okubo_rise",
+      "name": "Rise～リゼ～ 大久保店",
+      "group_id": "g_brand_rise",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "大久保",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.39,
+        "probs": {
+          "nearby": 0.19,
+          "different": 0.06,
+          "same_place": 0.54,
+          "vague_address": 0.21
+        },
+        "isWrong": 0.2,
+        "inputTokens": 622
+      }
+    },
+    {
+      "id": "aichi_meieki_galaxy_nagoya",
+      "name": "Galaxy-NAGOYA (ギャラクシーナゴヤ)",
+      "group_id": "g_solo_aichi_meieki_galaxy_nagoya",
+      "prefecture": "愛知県",
+      "city": "名駅",
+      "area": "名駅",
+      "address": "愛知県名古屋市中村区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.34,
+        "probs": {
+          "same_place": 0.51,
+          "vague_address": 0.25,
+          "nearby": 0.1,
+          "different": 0.14
+        },
+        "isWrong": 0.42,
+        "inputTokens": 633
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_sanchome_aroma_jewels",
+      "name": "Aroma Jewels 新宿三丁目ルーム",
+      "group_id": "g_brand_aroma_jewels",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿三丁目",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.35,
+        "probs": {
+          "different": 0,
+          "nearby": 0.04,
+          "same_place": 0.52,
+          "vague_address": 0.44
+        },
+        "isWrong": 0.21,
+        "inputTokens": 626
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_takadanobaba_aroma-mrs",
+      "name": "AROMA MRS",
+      "group_id": "g_brand_aroma-mrs",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "高田馬場",
+      "address": "東京都新宿区(詳細は要確認)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.56,
+        "probs": {
+          "vague_address": 0.67,
+          "same_place": 0.13,
+          "nearby": 0.13,
+          "different": 0.07
+        },
+        "isWrong": 0.28,
+        "inputTokens": 625
+      }
+    },
+    {
+      "id": "tokyo_suginami_ogikubo_a-laise",
+      "name": "a laise",
+      "group_id": "g_alaise",
+      "prefecture": "東京都",
+      "city": "杉並区",
+      "area": "荻窪",
+      "address": "東京都杉並区(詳細は要確認)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.68,
+        "probs": {
+          "nearby": 0.05,
+          "different": 0.02,
+          "vague_address": 0.77,
+          "same_place": 0.16
+        },
+        "isWrong": 0.4,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "tokyo_suginami_ogikubo_mens_esthe_jj",
+      "name": "メンズエステJJ",
+      "group_id": "g_jj",
+      "prefecture": "東京都",
+      "city": "杉並区",
+      "area": "荻窪",
+      "address": "東京都杉並区(詳細は予約時)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.54,
+        "probs": {
+          "same_place": 0.27,
+          "nearby": 0.06,
+          "vague_address": 0.66,
+          "different": 0.01
+        },
+        "isWrong": 0.24,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_takadanobaba_grand-chariot",
+      "name": "GRAND CHARIOT",
+      "group_id": "g_brand_grand-chariot",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "高田馬場",
+      "address": "東京都新宿区(詳細は要確認)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.57,
+        "probs": {
+          "different": 0.1,
+          "nearby": 0.16,
+          "same_place": 0.06,
+          "vague_address": 0.68
+        },
+        "isWrong": 0.33,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "tokyo_toshima_ikebukuro_aroma_tiamo",
+      "name": "AROMA TIAMO (アロマティアーモ) 池袋店",
+      "group_id": "g_brand_aroma_tiamo",
+      "prefecture": "東京都",
+      "city": "豊島区",
+      "area": "池袋",
+      "address": "東京都豊島区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.41,
+        "probs": {
+          "different": 0.01,
+          "same_place": 0.56,
+          "vague_address": 0.29,
+          "nearby": 0.14
+        },
+        "isWrong": 0.1,
+        "inputTokens": 634
+      }
+    },
+    {
+      "id": "chiba_nishifunabashi_aroma_charis",
+      "name": "AROMA CHARIS (アロマカリス)",
+      "group_id": "g_solo_chiba_nishifunabashi_aroma_charis",
+      "prefecture": "千葉県",
+      "city": "西船橋",
+      "area": "西船橋",
+      "address": "千葉県船橋市",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.65,
+        "probs": {
+          "vague_address": 0.15,
+          "nearby": 0.07,
+          "same_place": 0.74,
+          "different": 0.04
+        },
+        "isWrong": 0.28,
+        "inputTokens": 625
+      }
+    },
+    {
+      "id": "osaka_umeda_furyu",
+      "name": "Furyu 風流 (フウリュウ)",
+      "group_id": "g_solo_osaka_umeda_furyu",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪府大阪市各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.82,
+        "probs": {
+          "vague_address": 0.87,
+          "different": 0.01,
+          "nearby": 0,
+          "same_place": 0.12
+        },
+        "isWrong": 0.47,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "kanagawa_kannai_lynx",
+      "name": "Lynx (リンクス) 横浜関内店",
+      "group_id": "g_brand_lynx",
+      "prefecture": "神奈川県",
+      "city": "横浜市中区",
+      "area": "関内",
+      "address": "神奈川県横浜市中区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.7,
+        "probs": {
+          "vague_address": 0.11,
+          "same_place": 0.78,
+          "different": 0.01,
+          "nearby": 0.1
+        },
+        "isWrong": 0.16,
+        "inputTokens": 632
+      }
+    },
+    {
+      "id": "tokyo_shibuya_gokuraku_esthe",
+      "name": "KIWAMI TOKYO",
+      "group_id": "g_solo_tokyo_shibuya_gokuraku_esthe",
+      "prefecture": "東京都",
+      "city": "代々木",
+      "area": "代々木・原宿",
+      "address": "東京都新宿区新宿",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.5,
+        "probs": {
+          "different": 0.31,
+          "vague_address": 0.04,
+          "nearby": 0.62,
+          "same_place": 0.03
+        },
+        "isWrong": 0.65,
+        "inputTokens": 622
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_higashishinjuku_aroma_modeste",
+      "name": "Aroma Modeste (アロマモデスト)",
+      "group_id": "g_brand_aroma_modeste",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "東新宿",
+      "address": "東京都練馬区・新宿区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.24,
+        "probs": {
+          "nearby": 0.3,
+          "same_place": 0.12,
+          "vague_address": 0.43,
+          "different": 0.15
+        },
+        "isWrong": 0.52,
+        "inputTokens": 632
+      }
+    },
+    {
+      "id": "tokyo_nerima_nerima_mens_esthe_group",
+      "name": "メンエスグループ",
+      "group_id": "g_brand_mens_esthe_group",
+      "prefecture": "東京都",
+      "city": "練馬区",
+      "area": "練馬",
+      "address": "東京都内各所(詳細は予約時)",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.89,
+        "probs": {
+          "different": 0.01,
+          "vague_address": 0.92,
+          "same_place": 0.07,
+          "nearby": 0
+        },
+        "isWrong": 0.42,
+        "inputTokens": 629
+      }
+    },
+    {
+      "id": "tokyo_tachikawa_crest_spa_tokyo",
+      "name": "CREST SPA TOKYO (クレストスパ)",
+      "group_id": "g_crest_spa",
+      "prefecture": "東京都",
+      "city": "立川市",
+      "area": "立川市",
+      "address": "東京都立川・赤羽・荻窪エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.27,
+        "probs": {
+          "same_place": 0.43,
+          "vague_address": 0.46,
+          "nearby": 0.01,
+          "different": 0.1
+        },
+        "isWrong": 0.49,
+        "inputTokens": 634
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_sanchome_tokyo_mensesthe",
+      "name": "東京メンズエステ 新宿三丁目ルーム",
+      "group_id": "g_brand_tokyo_mensesthe",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿三丁目",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.44,
+        "probs": {
+          "nearby": 0.02,
+          "same_place": 0.59,
+          "different": 0,
+          "vague_address": 0.39
+        },
+        "isWrong": 0.2,
+        "inputTokens": 633
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_higashishinjuku_tokyo_mensesthe",
+      "name": "東京メンズエステ 東新宿ルーム",
+      "group_id": "g_brand_tokyo_mensesthe",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "東新宿",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.42,
+        "probs": {
+          "nearby": 0.1,
+          "same_place": 0.56,
+          "vague_address": 0.33,
+          "different": 0.01
+        },
+        "isWrong": 0.2,
+        "inputTokens": 631
+      }
+    },
+    {
+      "id": "osaka_umeda_bunny_room",
+      "name": "うさぎのお部屋",
+      "group_id": "g_solo_osaka_umeda_bunny_room",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪市内・堺市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.31,
+        "probs": {
+          "different": 0.2,
+          "nearby": 0.06,
+          "same_place": 0.26,
+          "vague_address": 0.48
+        },
+        "isWrong": 0.55,
+        "inputTokens": 621
+      }
+    },
+    {
+      "id": "osaka_umeda_beauty_and_beast",
+      "name": "ビューティーアンドビースト",
+      "group_id": "g_solo_osaka_umeda_beauty_and_beast",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪市北区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.84,
+        "probs": {
+          "nearby": 0,
+          "different": 0,
+          "same_place": 0.89,
+          "vague_address": 0.11
+        },
+        "isWrong": 0.29,
+        "inputTokens": 624
+      }
+    },
+    {
+      "id": "osaka_umeda_dsp",
+      "name": "DSP",
+      "group_id": "g_solo_osaka_umeda_dsp",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪府大阪市各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.85,
+        "probs": {
+          "nearby": 0,
+          "different": 0.02,
+          "same_place": 0.09,
+          "vague_address": 0.89
+        },
+        "isWrong": 0.49,
+        "inputTokens": 613
+      }
+    },
+    {
+      "id": "hyogo_sannomiya_10ct_resort",
+      "name": "10ct RESORT (テンカラットリゾート)",
+      "group_id": "g_solo_hyogo_sannomiya_10ct_resort",
+      "prefecture": "兵庫県",
+      "city": "三宮",
+      "area": "三宮",
+      "address": "兵庫県神戸市",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.41,
+        "probs": {
+          "same_place": 0.55,
+          "vague_address": 0.42,
+          "nearby": 0.02,
+          "different": 0.01
+        },
+        "isWrong": 0.3,
+        "inputTokens": 625
+      }
+    },
+    {
+      "id": "kanagawa_kawasaki_rere",
+      "name": "RERE GROUP (リリグループ)",
+      "group_id": "g_brand_rere",
+      "prefecture": "神奈川県",
+      "city": "戸塚",
+      "area": "戸塚",
+      "address": "東京都・神奈川県 各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.65,
+        "probs": {
+          "same_place": 0.2,
+          "vague_address": 0.73,
+          "different": 0.06,
+          "nearby": 0.01
+        },
+        "isWrong": 0.43,
+        "inputTokens": 632
+      }
+    },
+    {
+      "id": "hyogo_ninomiya_eslino",
+      "name": "Kobe Eslino (神戸エスリノ)",
+      "group_id": "g_brand_eslino",
+      "prefecture": "兵庫県",
+      "city": "二宮",
+      "area": "二宮",
+      "address": "兵庫県神戸市中央区",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.75,
+        "probs": {
+          "nearby": 0.03,
+          "same_place": 0.06,
+          "different": 0.81,
+          "vague_address": 0.1
+        },
+        "isWrong": 0.81,
+        "inputTokens": 622
+      }
+    },
+    {
+      "id": "aichi_yabacho_yurikago",
+      "name": "ゆりかご FC名古屋",
+      "group_id": "g_solo_aichi_yabacho_yurikago",
+      "prefecture": "愛知県",
+      "city": "矢場町",
+      "area": "矢場町",
+      "address": "愛知県名古屋市・一宮市・刈谷市・岐阜県岐阜市",
+      "detailed": false,
+      "jev": {
+        "verdict": "different",
+        "confidence": 0.33,
+        "probs": {
+          "nearby": 0.22,
+          "same_place": 0.19,
+          "different": 0.5,
+          "vague_address": 0.09
+        },
+        "isWrong": 0.64,
+        "inputTokens": 644
+      }
+    },
+    {
+      "id": "tokyo_hachioji_tokyopla",
+      "name": "トキョプラ 旧T+Plus (ティープラス) 新宿",
+      "group_id": "g_brand_tokyopla",
+      "prefecture": "東京都",
+      "city": "八王子市",
+      "area": "八王子市",
+      "address": "東京都新宿・立川・八王子エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.59,
+        "probs": {
+          "same_place": 0.7,
+          "different": 0.12,
+          "nearby": 0.01,
+          "vague_address": 0.17
+        },
+        "isWrong": 0.75,
+        "inputTokens": 646
+      }
+    },
+    {
+      "id": "1189_1",
+      "name": "Kobe Eslino (神戸エスリノ)",
+      "group_id": "g_brand_eslino",
+      "prefecture": "兵庫県",
+      "city": "旭通",
+      "area": "旭通",
+      "address": "兵庫県神戸市中央区",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.26,
+        "probs": {
+          "different": 0.28,
+          "nearby": 0.06,
+          "vague_address": 0.45,
+          "same_place": 0.21
+        },
+        "isWrong": 0.71,
+        "inputTokens": 622
+      }
+    },
+    {
+      "id": "osaka_sakaisujihonmachi_frog_spa",
+      "name": "FROG SPA (フロッグスパ)",
+      "group_id": "g_solo_osaka_sakaisujihonmachi_frog_spa",
+      "prefecture": "大阪府",
+      "city": "堺筋本町",
+      "area": "堺筋本町",
+      "address": "大阪府大阪市中央区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.16,
+        "probs": {
+          "same_place": 0.36,
+          "vague_address": 0.38,
+          "different": 0.1,
+          "nearby": 0.16
+        },
+        "isWrong": 0.5,
+        "inputTokens": 631
+      }
+    },
+    {
+      "id": "tokyo_hachioji_rere",
+      "name": "RERE GROUP (リリグループ)",
+      "group_id": "g_brand_rere",
+      "prefecture": "東京都",
+      "city": "八王子市",
+      "area": "八王子市",
+      "address": "東京都・神奈川県 各エリア(八王子・町田・川崎など)",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.5,
+        "probs": {
+          "same_place": 0.62,
+          "different": 0.03,
+          "nearby": 0.01,
+          "vague_address": 0.34
+        },
+        "isWrong": 0.35,
+        "inputTokens": 644
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_sanchome_rise",
+      "name": "Rise～リゼ～ 新宿三丁目店",
+      "group_id": "g_brand_rise",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿三丁目",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.41,
+        "probs": {
+          "same_place": 0.41,
+          "vague_address": 0.56,
+          "nearby": 0.03,
+          "different": 0
+        },
+        "isWrong": 0.18,
+        "inputTokens": 626
+      }
+    },
+    {
+      "id": "kanagawa_kawasaki_noborito_jesse",
+      "name": "Tigger (ティガー 登戸店)",
+      "group_id": "g_brand_jesse",
+      "prefecture": "神奈川県",
+      "city": "川崎市",
+      "area": "登戸",
+      "address": "神奈川県川崎市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.27,
+        "probs": {
+          "nearby": 0.09,
+          "different": 0.01,
+          "same_place": 0.45,
+          "vague_address": 0.45
+        },
+        "isWrong": 0.2,
+        "inputTokens": 628
+      }
+    },
+    {
+      "id": "kanagawa_kawasaki_mizonokuchi_jesse",
+      "name": "Tigger (ティガー 溝の口店)",
+      "group_id": "g_brand_jesse",
+      "prefecture": "神奈川県",
+      "city": "川崎市",
+      "area": "溝の口",
+      "address": "神奈川県川崎市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.3,
+        "probs": {
+          "same_place": 0.39,
+          "nearby": 0.12,
+          "vague_address": 0.48,
+          "different": 0.01
+        },
+        "isWrong": 0.16,
+        "inputTokens": 630
+      }
+    },
+    {
+      "id": "kanagawa_kawasaki_musashikosugi_jesse",
+      "name": "Tigger (ティガー 武蔵小杉店)",
+      "group_id": "g_brand_jesse",
+      "prefecture": "神奈川県",
+      "city": "川崎市",
+      "area": "武蔵小杉",
+      "address": "神奈川県川崎市エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.46,
+        "probs": {
+          "vague_address": 0.59,
+          "nearby": 0.06,
+          "different": 0.01,
+          "same_place": 0.34
+        },
+        "isWrong": 0.17,
+        "inputTokens": 634
+      }
+    },
+    {
+      "id": "fukuoka_kurume_mothers",
+      "name": "MOTHERS (マザーズ)",
+      "group_id": "g_brand_mothers_fukuoka",
+      "prefecture": "福岡県",
+      "city": "博多",
+      "area": "博多",
+      "address": "福岡県福岡市/久留米市",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.32,
+        "probs": {
+          "vague_address": 0.49,
+          "same_place": 0.28,
+          "different": 0.22,
+          "nearby": 0.01
+        },
+        "isWrong": 0.48,
+        "inputTokens": 625
+      }
+    },
+    {
+      "id": "tokyo_tachikawa_tokyopla",
+      "name": "トキョプラ 旧T+Plus (ティープラス) 新宿",
+      "group_id": "g_brand_tokyopla",
+      "prefecture": "東京都",
+      "city": "立川市",
+      "area": "立川市",
+      "address": "東京都新宿・立川・八王子エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.45,
+        "probs": {
+          "same_place": 0.59,
+          "different": 0.13,
+          "vague_address": 0.26,
+          "nearby": 0.02
+        },
+        "isWrong": 0.73,
+        "inputTokens": 644
+      }
+    },
+    {
+      "id": "osaka_umeda_celeb_spa",
+      "name": "セレブスパプレミアム",
+      "group_id": "g_solo_osaka_umeda_celeb_spa",
+      "prefecture": "大阪府",
+      "city": "梅田",
+      "area": "梅田",
+      "address": "大阪府大阪市各エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.89,
+        "probs": {
+          "different": 0.02,
+          "vague_address": 0.92,
+          "same_place": 0.06,
+          "nearby": 0
+        },
+        "isWrong": 0.45,
+        "inputTokens": 623
+      }
+    },
+    {
+      "id": "tokyo_setagaya_meidaimae_reve_spa",
+      "name": "REVE SPA (レーヴスパ)",
+      "group_id": "g_brand_reve_spa",
+      "prefecture": "東京都",
+      "city": "世田谷区",
+      "area": "明大前",
+      "address": "東京都渋谷区・世田谷区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "nearby",
+        "confidence": 0.2,
+        "probs": {
+          "nearby": 0.4,
+          "same_place": 0.1,
+          "different": 0.15,
+          "vague_address": 0.35
+        },
+        "isWrong": 0.4,
+        "inputTokens": 632
+      }
+    },
+    {
+      "id": "tokyo_setagaya_chitose_karasuyama_reve_spa",
+      "name": "REVE SPA (レーヴスパ)",
+      "group_id": "g_brand_reve_spa",
+      "prefecture": "東京都",
+      "city": "世田谷区",
+      "area": "千歳烏山",
+      "address": "東京都渋谷区・世田谷区エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.23,
+        "probs": {
+          "vague_address": 0.42,
+          "nearby": 0.26,
+          "same_place": 0.27,
+          "different": 0.05
+        },
+        "isWrong": 0.42,
+        "inputTokens": 634
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_higashishinjuku_koakuma_spa_tokyo",
+      "name": "小悪魔スパトウキョウ 東新宿ルーム",
+      "group_id": "g_brand_koakuma_spa_tokyo",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "東新宿",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "same_place",
+        "confidence": 0.35,
+        "probs": {
+          "nearby": 0.15,
+          "different": 0.01,
+          "same_place": 0.52,
+          "vague_address": 0.32
+        },
+        "isWrong": 0.22,
+        "inputTokens": 633
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_kabukicho_aromamore",
+      "name": "AROMA more (アロマモア)",
+      "group_id": "g_brand_aromamore",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "歌舞伎町",
+      "address": "東京都新宿区・渋谷区・港区・中央区・豊島区",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.21,
+        "probs": {
+          "vague_address": 0.41,
+          "same_place": 0.4,
+          "nearby": 0.1,
+          "different": 0.09
+        },
+        "isWrong": 0.42,
+        "inputTokens": 641
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_sanchome_aroma_tiamo",
+      "name": "AROMA TIAMO (アロマティアーモ) 新宿三丁目店",
+      "group_id": "g_brand_aroma_tiamo",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿三丁目",
+      "address": "東京都新宿区",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.35,
+        "probs": {
+          "vague_address": 0.51,
+          "nearby": 0.04,
+          "same_place": 0.44,
+          "different": 0.01
+        },
+        "isWrong": 0.21,
+        "inputTokens": 637
+      }
+    },
+    {
+      "id": "tokyo_shinjuku_shinjuku_sanchome_tokyopla",
+      "name": "トキョプラ 旧T+Plus (ティープラス) 新宿",
+      "group_id": "g_brand_tokyopla",
+      "prefecture": "東京都",
+      "city": "新宿区",
+      "area": "新宿三丁目",
+      "address": "東京都新宿・立川・八王子エリア",
+      "detailed": false,
+      "jev": {
+        "verdict": "vague_address",
+        "confidence": 0.13,
+        "probs": {
+          "same_place": 0.29,
+          "nearby": 0.14,
+          "different": 0.22,
+          "vague_address": 0.35
+        },
+        "isWrong": 0.43,
+        "inputTokens": 646
+      }
+    }
+  ]
+}

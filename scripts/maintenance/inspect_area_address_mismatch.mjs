@@ -96,3 +96,14 @@ for (const r of weak.slice(0, 15)) {
   console.log(`     エリア: ${r.area}   ／   住所: ${r.address}`);
 }
 if (weak.length > 15) console.log(`  …他 ${weak.length - 15}件（①を先に片付けてから見る）`);
+
+// 🚩 機械で読める形でも書き出せるようにした（2026-09-21）。
+//    判定（どれを候補とみなすか）は**この道具だけが持つ**。比較する側は結果を読むだけにして、
+//    規則の写しを作らない（写しを測ると、本物と食い違っても誰も気づけない）。
+const jsonArg = process.argv.find((a) => a.startsWith('--json='));
+if (jsonArg) {
+  const out = jsonArg.slice('--json='.length);
+  fs.mkdirSync(out.replace(/\/[^/]+$/, ''), { recursive: true });
+  fs.writeFileSync(out, JSON.stringify({ generatedAt: new Date().toISOString(), total: rows.length, strong, weak }, null, 2));
+  console.log(`\n📦 ${out} に書き出しました（① ${strong.length}件 / ② ${weak.length}件）`);
+}
