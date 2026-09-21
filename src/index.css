@@ -427,6 +427,26 @@ a {
   pointer-events: auto;
 }
 
+/* ⚠️ 2026-09-21「店舗を見る」が押しても開かない（2回目）。
+   症状: 最初に出ている1枚（LINDA SPA）だけ開き、スライドが送られた後の4枚は無反応。
+   原因: 押した位置の当たり判定が <a> ではなく .swiper-wrapper に取られていた
+         （実クリックの pointerdown/click の target が DIV.swiper-wrapper。
+          elementsFromPoint では <a> が返るので、JSで調べると正常に見える）。
+         coverflow は wrapper とスライドが同じ 3D 空間（preserve-3d）に置かれ、
+         送った後のアクティブは奥行きが 0 ちょうどに戻らない（実測 -0.2〜-0.3px）。
+   直し方: wrapper 自身を当たり判定から外す。スライドの中身は下の2行で制御済み。
+   ⚠️ 1回目（a673684）は「両隣のスライドがボタンを横取り」で、上の
+      .swiper-slide{pointer-events:none} がその対策。**これを auto に戻すと1回目が再発する。**
+   ⚠️ 中身を translateZ で手前に出す方法は効かなかった（実測。wrapper のまま）。
+   確認（本番DOMにこの1行だけを当てて実測）: 送った後の東京アロマエステで
+         pointerdown/click とも <a> に届き /brands/g_brand_tokyo_aroma_este へ遷移。
+         中央カードのドラッグで 3→4 に送れる（Swiperの touchStart/sliderMove も発火）。
+         両隣カードから始めるドラッグは**この変更の前から**効いていない
+         （target が .swiper になり、touchEventsTarget:'wrapper' が無視する）。別件。 */
+.hero-coverflow .swiper-wrapper {
+  pointer-events: none;
+}
+
 .hero-coverflow .swiper-button-next,
 .hero-coverflow .swiper-button-prev {
   color: white !important;

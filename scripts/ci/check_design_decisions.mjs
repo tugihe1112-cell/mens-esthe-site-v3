@@ -115,6 +115,55 @@ function read(path) {
   }
 }
 
+// ── D-002 付随: ヒーローの「店舗を見る」が押せること ─────────────────────
+// 同じ「押しても開かない」が**2回**起きている。どちらもビルド・ガード緑のまま本番だけ壊れていた。
+//   1回目（a673684）: 両隣のスライドが中央のボタンに覆いかぶさってクリックを横取り
+//                     → 非アクティブの .swiper-slide を pointer-events:none、アクティブを auto
+//   2回目（2026-09-21）: 最初の1枚だけ開き、送った後の4枚は無反応。当たり判定を
+//                     .swiper-wrapper が取っていた（coverflow の 3D 空間で、送った後の
+//                     アクティブが奥行き 0 に戻らない）→ wrapper を pointer-events:none
+// 3行のどれが欠けても、どちらかが再発する。見るのは CSS のコメントを外した実コード。
+{
+  const p = 'src/index.css';
+  const src = read(p);
+  if (src === null) {
+    violations.push(`[D-002/押せる] ${p} が見つからない。`);
+  } else {
+    const css = src.replace(/\/\*[\s\S]*?\*\//g, '');
+    // 指定したセレクタ「そのもの」の宣言ブロックを返す（.swiper-slide で -active に当てない）
+    const ruleBody = (selector) => {
+      const esc = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const m = css.match(new RegExp(`(?:^|[,}\\s])${esc}\\s*\\{([^}]*)\\}`));
+      return m ? m[1] : null;
+    };
+    const pe = (body) => (body && (body.match(/pointer-events\s*:\s*([a-z-]+)/) || [])[1]) || null;
+    const checks = [
+      ['.hero-coverflow .swiper-wrapper', 'none',
+        '当たり判定を .swiper-wrapper が取り、送った後のスライドで「店舗を見る」が無反応になる（2026-09-21）'],
+      ['.hero-coverflow .swiper-slide', 'none',
+        '両隣のスライドが中央のボタンを横取りする（1回目・a673684）'],
+      ['.hero-coverflow .swiper-slide-active', 'auto',
+        'アクティブのスライドまで押せなくなる'],
+    ];
+    for (const [sel, want, why] of checks) {
+      const got = pe(ruleBody(sel));
+      if (got !== want) {
+        violations.push(
+          `[D-002/押せる] ${p} の ${sel} が pointer-events:${want} になっていない（実際: ${got ?? '指定なし'}）。\n` +
+          `        → ${why}。`
+        );
+      }
+    }
+  }
+  const slider = read('src/components/TopHeroSlider.jsx') || '';
+  if (!/pauseOnMouseEnter\s*:\s*true/.test(slider)) {
+    violations.push(
+      '[D-002/押せる] TopHeroSlider の autoplay から pauseOnMouseEnter が消えている。\n' +
+      '        → 狙っている間にボタンが動いて外れる（1回目・a673684 の対策の半分）。'
+    );
+  }
+}
+
 // ── D-004: 課金前に価格を出さない ────────────────────────────────────
 {
   const p = 'src/pages/PremiumPage.jsx';
