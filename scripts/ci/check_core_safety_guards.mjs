@@ -53,6 +53,29 @@ if (/frame-src/.test(csp)) {
   failures.push("CSPに frame-src が追加されています（F07: 外部埋め込みのためにCSPを緩めない）");
 }
 requireText(csp, /default-src 'self'/, "CSPの default-src 'self' が外れています");
+
+// ── GA4の送信先とCSP（2026-09-22）──────────────────────────────────────
+// 【事故】2026-08-22 にCSPを入れたとき connect-src に google-analytics.com しか入れず、
+//   GA4 の今の送信先（analytics.google.com / www.google.com の /g/collect）を**全部拒否**していた。
+//   本番のコンソールで page_view・scroll・カスタムイベントとも "violates the following Content Security Policy" で止まり、
+//   metrics-log の「GA4 U」（28日）は CSP 導入後の28日で 33→2 に落ちた（同じ期間の検索クリックは横ばい）。
+//   ＝アクセスが減ったのではなく、**計測が止まっていた**。1か月気づかなかった。
+// ⚠️ 直し方は「送信先を名指しで足す」。connect-src に https: や * を入れて全部通すことはしない。
+{
+  const gaLoaded = /googletagmanager\.com\/gtag\/js/.test(read('pages/_app.jsx'));
+  const connect = (csp.match(/connect-src ([^;"]*)/) || [])[1] || '';
+  const sources = connect.trim().split(/\s+/);
+  if (gaLoaded) {
+    for (const host of ['https://*.google-analytics.com', 'https://analytics.google.com', 'https://*.analytics.google.com', 'https://www.google.com']) {
+      if (!sources.includes(host)) {
+        failures.push(`CSPの connect-src に GA4 の送信先 ${host} がありません（gtag は読み込むのに送信だけ拒否され、計測が0になる）`);
+      }
+    }
+  }
+  if (sources.some((src) => src === '*' || src === 'https:' || src === 'http:' || src === 'https://*' || src === 'wss:')) {
+    failures.push('CSPの connect-src が全部の送信先を許しています（名指しで足すこと）');
+  }
+}
 requireText(shopDetail, /id="sec-schedule"/, '出勤セクションのアンカー(sec-schedule)が消えています');
 requireText(shopDetail, /公式サイトで出勤を確認/, '出勤セクションの公式サイト導線が消えています');
 requireText(shopDetail, /schedule_url[\s\S]{0,400}rel="noopener noreferrer"/, '出勤リンクの rel="noopener noreferrer" がありません');
