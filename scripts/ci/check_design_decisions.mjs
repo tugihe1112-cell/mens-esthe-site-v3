@@ -679,8 +679,18 @@ function read(path) {
     if (!home.includes('home-pref-select')) {
       violations.push('[U02] ホームの地域別口コミが select（口コミの地域）を失っている。全県を縦積みに戻さない。');
     }
-    if (!/\.slice\(0,\s*2\)/.test(home)) {
-      violations.push('[U02] ホームの地域別口コミが最大2件に絞られていない。');
+    // ⚠️ 2026-09-22: 以前は `.slice(0, 2)` という綴りを探していたが、同じファイルの注目セラピスト
+    //    （shuffled.slice(0, 2)）にも当たるので、**地域別の絞り込みを消しても通っていた**。
+    //    件数は src/utils/homeReviews.js の関数で決め、check_ssr_helpers が挙動（最大2件・最新1件を除く・
+    //    東京が1件に減らない）を検査する。ここでは画面とSSRがその関数を通っていることを見る。
+    if (!/pickRegionReviews\(/.test(home) || !/pickLeadReview\(/.test(home)) {
+      violations.push('[U02] ホームの口コミ欄が homeReviews.js の関数を通っていない（地域別の件数・最新1件の除外がずれる）。');
+    }
+    {
+      const ssr = strip(read('pages/index.jsx'));
+      if (!/groupReviewsByPref\(/.test(ssr)) {
+        violations.push('[U02] ホームSSRが groupReviewsByPref を通っていない（画面が1件除く分を見込まずに県ごとの件数を切る）。');
+      }
     }
     // U02下部5: 期限のない「読み放題」表現を使わない
     if (/1件書けば口コミ読み放題|1件で読み放題/.test(home)) {

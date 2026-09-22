@@ -1316,6 +1316,60 @@ const check = (name, fn) => {
   });
 }
 
+// ── ホーム「最新の実体験口コミ」欄（2026-09-22）──────────────────────
+// 初期表示の地域（東京）が1件しか出ていなかった。SSRが各県2件に切って渡し、画面が
+// 「最新1件と同じ口コミ」を除いていたので 2−1＝1。東京は21件あり、足りないのではない。
+// SSRと画面が通る関数を、実データと同じ形の並びで通しで確かめる。
+{
+  const hr = await loadModule('src/utils/homeReviews.js');
+  const day = (n) => new Date(Date.UTC(2026, 8, 30 - n)).toISOString();
+  let seq = 0;
+  const mk = (pref, n) => Array.from({ length: n }, () => ({ id: `r${seq}`, prefecture: pref, createdAt: day(seq++) }));
+  // 新しい順：東京21件が先頭（実データと同じく最新は東京）
+  const mapped = [...mk('東京都', 21), ...mk('大阪府', 3), ...mk('神奈川県', 3), ...mk('広島県', 2), ...mk('埼玉県', 1)];
+  const blocks = hr.groupReviewsByPref(mapped, { slugOf: (p) => (p === '東京都' ? 'tokyo' : null) });
+  const lead = hr.pickLeadReview(blocks);
+  const tokyo = blocks.find((b) => b.pref === '東京都');
+
+  check('⭐ホーム口コミ: 最新1件は全県でいちばん新しい口コミ', () => (lead?.id === 'r0' ? null : `lead が ${lead?.id}`));
+  check('⭐ホーム口コミ: 最新1件と同じ県（東京）でも地域別に2件出る（2−1＝1件に減らない）', () => {
+    const region = hr.pickRegionReviews(tokyo, lead.id);
+    if (region.length < 2) return `${region.length}件（SSRが除く分を見込まずに切っている）`;
+    return region.length === 2 ? null : `${region.length}件（最大2件を超えている）`;
+  });
+  check('⭐ホーム口コミ: 地域別に最新1件と同じ口コミを出さない', () => {
+    const region = hr.pickRegionReviews(tokyo, lead.id);
+    return region.some((r) => r.id === lead.id) ? '最新1件が地域別にも出ている' : null;
+  });
+  check('ホーム口コミ: 地域別は最大2件（U02）', () => {
+    const osaka = blocks.find((b) => b.pref === '大阪府');
+    const region = hr.pickRegionReviews(osaka, lead.id);
+    return region.length === 2 ? null : `大阪が ${region.length}件`;
+  });
+  check('ホーム口コミ: 口コミが本当に1件しかない地域は1件のまま（他の地域で埋めない）', () => {
+    const only = hr.groupReviewsByPref([{ id: 'x', prefecture: '沖縄県', createdAt: day(1) }]);
+    const region = hr.pickRegionReviews(only[0], 'lead-elsewhere');
+    return region.length === 1 ? null : `${region.length}件`;
+  });
+  check('ホーム口コミ: 最新1件しか無い地域は0件（空のまま・水増ししない）', () => {
+    const only = hr.groupReviewsByPref([{ id: 'x', prefecture: '沖縄県', createdAt: day(1) }]);
+    return hr.pickRegionReviews(only[0], 'x').length === 0 ? null : '最新1件を地域別にも出している';
+  });
+  check('ホーム口コミ: 県は口コミ数の多い順・最大4県、県不明は入れない', () => {
+    const order = blocks.map((b) => b.pref).join(',');
+    if (blocks.length !== 4) return `${blocks.length}県`;
+    if (blocks[0].pref !== '東京都' || blocks[3].pref !== '広島県') return `順序 ${order}`;
+    const withNull = hr.groupReviewsByPref([{ id: 'n', prefecture: null, createdAt: day(1) }]);
+    return withNull.length === 0 ? null : '県不明の口コミで県ブロックを作っている';
+  });
+  check('ホーム口コミ: 県の件数(count)は切る前の件数', () => (tokyo.count === 21 ? null : `東京の count が ${tokyo.count}`));
+  check('ホーム口コミ: 空・nullで落ちない', () => {
+    if (hr.groupReviewsByPref(null).length !== 0) return 'null';
+    if (hr.pickLeadReview([]) !== null) return 'lead が null でない';
+    return hr.pickRegionReviews(null, 'x').length === 0 ? null : 'block=null で件数が出た';
+  });
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

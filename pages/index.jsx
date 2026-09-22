@@ -10,6 +10,7 @@ import { createClient } from '@supabase/supabase-js';
 import Home from '../src/pages/Home';
 import { HERO_SHOP_IDS, buildInitialHero } from '../src/data/heroShops';
 import { PREF_TO_SLUG } from '../src/data/areaLinks';
+import { groupReviewsByPref } from '../src/utils/homeReviews';
 
 export default function IndexPage({ initialHero, reviewsByPref, liveCounts }) {
   return <Home initialHero={initialHero} reviewsByPref={reviewsByPref} liveCounts={liveCounts} />;
@@ -90,16 +91,9 @@ export async function getServerSideProps({ res }) {
       course: r.course || null,
       createdAt: r.created_at || null,
     }));
-    // 都道府県でグルーピング→各県 最新2件→県は口コミ総数の降順→最大4県（0件の県は構造的に出ない）
-    const byPref = {};
-    for (const rv of mapped) {
-      if (!rv.prefecture) continue;
-      (byPref[rv.prefecture] = byPref[rv.prefecture] || []).push(rv);
-    }
-    reviewsByPref = Object.entries(byPref)
-      .map(([pref, list]) => ({ pref, slug: PREF_TO_SLUG[pref] || null, count: list.length, reviews: list.slice(0, 2) }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 4);
+    // 都道府県でまとめる→県は口コミ総数の降順→最大4県（0件の県は構造的に出ない）。
+    // ⚠️ 各県「表示件数＋1」件を渡す（画面が最新1件と同じ口コミを除くため）。src/utils/homeReviews.js
+    reviewsByPref = groupReviewsByPref(mapped, { slugOf: (pref) => PREF_TO_SLUG[pref] });
   } catch (e) {
     console.error('getServerSideProps home fetch failed:', e);
   }

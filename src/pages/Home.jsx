@@ -23,6 +23,7 @@ import siteStats from '../data/stats-latest.json';
 import { useAuth } from '../contexts/AuthContext';
 import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
+import { pickLeadReview, pickRegionReviews } from '../utils/homeReviews';
 
 // 順位ごとの表示スタイル
 const RANK_STYLES = [
@@ -40,9 +41,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
     totalTherapists: liveCounts?.totalTherapists ?? siteStats.coverage?.totalTherapists ?? 0,
   };
   const [featuredTherapists, setFeaturedTherapists] = useState([]);
-  const leadReview = useMemo(() => reviewsByPref
-    .flatMap((block) => block.reviews || [])
-    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))[0] || null, [reviewsByPref]);
+  const leadReview = useMemo(() => pickLeadReview(reviewsByPref), [reviewsByPref]);
 
   // ── 都道府県ブロック: SSR初期HTMLは全ユーザー共通。マウント後にlocalStorageの好みで一致県を先頭へ（UIなしの自動並べ替え） ──
   const [orderedPrefs, setOrderedPrefs] = useState(reviewsByPref);
@@ -70,9 +69,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
   // 選択中の地域ブロック（最大2件・最新カードと同じ口コミは除く）
   const activePref = selectedPref || orderedPrefs[0]?.pref || '';
   const activeBlock = orderedPrefs.find((b) => b.pref === activePref) || orderedPrefs[0] || null;
-  const activeBlockReviews = (activeBlock?.reviews || [])
-    .filter((review) => review.id !== leadReview?.id)
-    .slice(0, 2);
+  const activeBlockReviews = pickRegionReviews(activeBlock, leadReview?.id);
 
   // 注目セラピスト取得（店舗分散・地域分散ロジック）
   useEffect(() => {
