@@ -37,10 +37,15 @@ export async function getServerSideProps({ params, res }) {
         // ⚠️ single() は「0件」もエラー扱いになり、本物のDB障害と区別できない。
         //    404を出す判断をするので maybeSingle()（0件は data=null / error=null）にする。
         .maybeSingle(),
+      // ⚠️ 2026-09-22: 在籍数は**一覧と同じ定義**（is_active が null か true）で数える。
+      //    以前は店の全行を数えていたため、在籍照合で退店マークを付けた直後の AromaCharm が
+      //    「在籍 56 人」と「全37人」を同じページに並べた（退店マーク19名ぶん）。
+      //    この数字は SEO の説明文（在籍セラピストN名）にも使われる。
       supabase
         .from('therapists')
         .select('id', { count: 'exact', head: true })
-        .eq('shop_id', shopId),
+        .eq('shop_id', shopId)
+        .or('is_active.is.null,is_active.eq.true'),
     ]);
     if (shopRes.error) throw shopRes.error;
     if (therapistCountRes.error) throw therapistCountRes.error;

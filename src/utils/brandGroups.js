@@ -237,11 +237,14 @@ export function buildBrandRoster(rows, { limit = 24 } = {}) {
     .sort((a, b) => Number(hasImage(b)) - Number(hasImage(a)));
   for (const t of ordered) {
     if (!t) continue;
+    // ⚠️ 2026-09-22: 退店マークの行は**人数にも**数えない。以前は人数(people)に足してから
+    //    在籍判定をしていたため、名簿からは消えるのに「セラピストN名」には残っていた
+    //    （店舗ページの「在籍56人／全37人」と同じ型）。同じ人が別ルームで在籍なら、そちらの行で数える。
+    if (t.is_active === false) continue;
     const key = normalizeTherapistName(t.name);
     if (!key) continue;
     people.add(key);
     if (roster.length >= limit) continue;
-    if (t.is_active === false) continue;
     if (shown.has(key)) continue;
     shown.add(key);
     // ⚠️ SSRで焼いた行（shopId）と、クライアントが持つDB行（shop_id）の両方を受ける。

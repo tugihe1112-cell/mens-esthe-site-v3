@@ -430,6 +430,18 @@ requireMatch(integrityMonitor, /口コミの実更新日が無い/, '本番監�
     'エリア一覧からローマ字表記が消えています（見出しから降ろすだけで、削除はしない約束です）');
 }
 
+// ── 在籍数の定義（2026-09-22）──────────────────────────────────────
+// 店舗ページの「在籍N人」とSEO説明文の人数が、一覧（在籍だけ）と違う母数で数えられていた。
+// 在籍照合で退店マークを付けた直後、AromaCharm が「在籍 56 人」「全37人」を同時に出した。
+{
+  const shopSsr = strip(read('pages/shops/[shopId]/index.jsx'));
+  const countChain = (shopSsr.match(/\.from\('therapists'\)[^;]*?count:\s*'exact'[\s\S]*?(?=,\s*\n\s*\]\);|;)/) || [''])[0];
+  requireMatch(countChain, /\.from\('therapists'\)/,
+    '店舗ページの在籍数の取得が見つかりません（書き方を変えたらこの検査も直すこと）');
+  requireMatch(countChain, /\.or\('is_active\.is\.null,is_active\.eq\.true'\)/,
+    '店舗ページの在籍数が退店マークの人まで数えています（一覧と同じ is_active の条件で数えること）');
+}
+
 if (failures.length) {
   console.error('❌ インデックス導線の回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

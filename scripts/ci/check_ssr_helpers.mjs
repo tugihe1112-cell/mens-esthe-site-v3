@@ -1113,6 +1113,26 @@ const check = (name, fn) => {
       const r = buildBrandRoster([{ id: 'a', name: '咲', image_url: 'i', shop_id: 'r1', is_active: false }]);
       return r.roster.length === 0 ? null : '在籍外が名簿に出た';
     });
+    // 🚩 2026-09-22: 退店マークの人を「セラピストN名」に数えていた（名簿からは消えるのに数字に残る）。
+    check('⭐名簿: 在籍でない人は人数にも数えない', () => {
+      const r = buildBrandRoster([
+        { id: 'a', name: '咲', image_url: 'i', shop_id: 'r1' },
+        { id: 'b', name: '花', image_url: 'i', shop_id: 'r1', is_active: false },
+      ]);
+      return r.personCount === 1 ? null : `personCount が ${r.personCount}（退店マークの人を数えている）`;
+    });
+    check('⭐名簿: 片方のルームで退店・もう片方で在籍の人は、在籍側で1人として数えて名簿に出す', () => {
+      const r = buildBrandRoster([
+        { id: 'a', name: '咲', image_url: 'i', shop_id: 'r1', is_active: false },
+        { id: 'b', name: '咲', image_url: 'i', shop_id: 'r2', is_active: true },
+      ]);
+      if (r.personCount !== 1) return `personCount が ${r.personCount}`;
+      return r.roster.length === 1 && r.roster[0].shopId === 'r2' ? null : `名簿 ${JSON.stringify(r.roster)}`;
+    });
+    check('名簿: is_active が null の行は在籍として数える（サイト全体の定義）', () => {
+      const r = buildBrandRoster([{ id: 'a', name: '咲', image_url: 'i', shop_id: 'r1', is_active: null }]);
+      return r.personCount === 1 && r.roster.length === 1 ? null : `人数${r.personCount}/名簿${r.roster.length}`;
+    });
     check('名簿: SSRが焼いた形(shopId)でもリンク先が消えない', () => {
       const r = buildBrandRoster([{ id: 'a', name: '咲', image_url: 'i', shopId: 'r9' }]);
       return r.roster[0]?.shopId === 'r9' ? null : `shopId が ${r.roster[0]?.shopId}`;
