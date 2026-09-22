@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import os from 'node:os';
+import path from 'node:path';
 import { fetchWithRetry, isTransientMonitorStatus } from '../lib/monitorFetch.mjs';
 import { classifyDnsFailure, isClosureEvidence } from '../lib/dnsVerdict.mjs';
 import { classifyGroup, selfTestMatching, normId } from '../lib/brandNameMatch.mjs';
@@ -227,9 +230,53 @@ assert.equal(isTransientMonitorStatus(404), false);
   assert.ok(departPatches.every((u) => !/last_seen_at/.test(u)),
     '退店マークに last_seen_at を付けている（確認していない人に確認印が付く）');
 
-  // 「応答しない」を「列が無い」と読まない（ネットワーク断で黙って劣化させない）
-  assert.ok(/error\.code/.test(roster) && /42703/.test(roster),
-    '列の有無を error の有無だけで判定している（接続失敗を「列なし」と誤読する）');
+  // 書き換える前にバックアップを書くこと（2026-08-20、バックアップを後回しにしてDBを112件壊した）。
+  //    順序まで見る: 最初の書き換え呼び出しより前に writeFileSync があること。
+  const firstWrite = roster.indexOf('await updateInChunks(');
+  const backupAt = roster.indexOf('writeFileSync(');
+  assert.ok(firstWrite > 0, '在籍照合ツールの書き換え呼び出しが見つからない（書き方を変えたらこの検査も直すこと）');
+  assert.ok(backupAt > 0 && backupAt < firstWrite, '在籍照合ツールが書き換えの前にバックアップを書いていない');
+
+  // 退店日は分からない（照合した日は退店日ではない）。オーナー「退店日なんてわからないでしょ」。
+  // 分かっているのは last_seen_at（最後に在籍を確認した日）だけで、それは既に持っている。
+  assert.ok(!/departed_at/.test(roster),
+    '在籍照合ツールが departed_at を書いている（照合した日は退店日ではない。数か月ずれた日付になる）');
+}
+
+// ── 名簿の鮮度を画像監視から分けたこと（2026-09-21）────────────────
+// 「180日超未確認」を画像監視（毎日）の中に置いていたため、名簿を取り直すまで毎日赤になり、
+// **本当に画像が壊れても同じ失敗メールで見分けがつかなかった**（通知はゴミ箱に溜まっていた）。
+// 分けた形を守る。どちらの基準も緩めていないことも見る。
+{
+  const yamlCode = (path) => (fs.existsSync(path) ? fs.readFileSync(path, 'utf8') : '')
+    .split('\n').map((line) => line.replace(/(^|\s)#.*$/, '')).join('\n');
+  const image = yamlCode('.github/workflows/image-health.yml');
+  const roster = yamlCode('.github/workflows/roster-freshness.yml');
+
+  // ⚠️ 値は**完全一致**で見る。`\b` だと `--checks=integrity,staleness` が通ってしまう（書いた直後に気づいた）。
+  assert.ok(/check_data_freshness\.mjs\s+--checks=integrity(?=\s|$)/m.test(image),
+    '画像監視が毎日のデータ検査（公式URL・最終確認日なし・店の混入）を走らせていない');
+  assert.ok(!/check_data_freshness\.mjs(?!\s+--checks=integrity(?=\s|$))/m.test(image),
+    '画像監視が名簿の鮮度まで走らせている（--checks 無し＝全部）。名簿の赤で画像の赤が見えなくなる');
+  assert.ok(/SHOP_WEBSITE_MISSING_MAX_PCT:\s*'1'/.test(image), '公式URLなしの上限（1%）が変わっている');
+
+  assert.ok(roster, '名簿の鮮度の監視（roster-freshness.yml）が無い＝180日超未確認を誰も見ていない');
+  assert.ok(/schedule:\s*\n\s*-\s*cron:/.test(roster), '名簿の鮮度の監視に定時実行が無い');
+  assert.ok(/check_data_freshness\.mjs\s+--checks=staleness(?=\s|$)/m.test(roster), '名簿の鮮度の監視が 180日超の判定を走らせていない');
+  assert.ok(/THERAPIST_STALE_180_MAX_PCT:\s*'5'/.test(roster),
+    '180日超未確認の上限（5%）が変わっている。閾値を上げて緑にしないこと');
+
+  // 知らない指定はその場で止まること（指定したつもりの検査が黙って走らない、を防ぐ）。
+  // 認証情報より前に判定するので、CI（.envなし）でも同じ結果になる。
+  for (const bad of ['--checks=bogus', '--check=integrity', '--checks=']) {
+    // ⚠️ .env の無い場所から走らせる。手元（.envあり）だと、認証を先に見る実装に戻しても通ってしまう。
+    const r = spawnSync(process.execPath, [path.resolve('scripts/monitoring/check_data_freshness.mjs'), bad], {
+      encoding: 'utf8', timeout: 20000, cwd: os.tmpdir(),
+      env: { ...process.env, VITE_SUPABASE_URL: '', SUPABASE_SERVICE_ROLE_KEY: '' },
+    });
+    assert.equal(r.status, 1, `check_data_freshness.mjs が不正な指定 ${bad} で止まらない`);
+    assert.ok(/不正|知らない引数/.test(r.stderr || ''), `check_data_freshness.mjs が不正な指定 ${bad} を認証エラーと区別できていない`);
+  }
 }
 
 // ⚠️ 合格の表示はファイルの**一番最後**に置く。途中に置くと、後ろに足した検査が落ちても

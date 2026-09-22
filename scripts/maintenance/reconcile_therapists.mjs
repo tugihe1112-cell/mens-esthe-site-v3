@@ -14,7 +14,7 @@
 //   これは閾値の問題ではなく「名簿の鮮度を保つ手段が無い」という形だった。
 //   判定は scripts/lib/rosterReconcile.mjs に置く（洗い出しと監視の両方から使えるように）。
 //
-// 前提: is_active 列。departed_at は無ければ自動で外す（下記）。service role必須。
+// 前提: is_active 列。service role必須。退店日（departed_at）は**書かない**（下記）。
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import { planReconcile, selfTestReconcile } from '../lib/rosterReconcile.mjs';
@@ -22,6 +22,11 @@ import { planReconcile, selfTestReconcile } from '../lib/rosterReconcile.mjs';
 const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
 const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('SUPABASE_SERVICE_ROLE_KEY'));
+
+// 書き換える前の行をここに残す（他の書き込み道具と同じ置き場の作り: outputs/<名前>/）。
+// ⚠️ 2026-08-20 に破壊的スクリプトでDBを112件壊した。本質は「バックアップを後回しにした」こと。
+//    バックアップが書けなければ**1行も書き換えない**。
+const BACKUP_DIR = 'outputs/roster-reconcile';
 
 const args = process.argv.slice(2);
 const DRY = args.includes('--dry-run');
@@ -39,27 +44,15 @@ if (!jsonPath) { console.error('使い方: node scripts/maintenance/reconcile_th
   }
 }
 
-// departed_at 列はマイグレーション（09_therapist_status.sql）が当たっていない環境がある。
-// 黙って毎回エラーを吐き続けるより、最初に1度だけ見て、無ければ外したと明言する。
-//
-// 🚩 **「応答しない」を「列が無い」と読まないこと。**
-//    最初の実装は error があれば全部「列なし」にしていたため、ネットワーク断でも
-//    「departed_at 列がありません」と表示して、そのまま処理を続けようとした。
-//    列が無いことを示すのは PostgREST の 42703（undefined_column）だけ。
-//    それ以外のエラーは**接続できていない**ので、黙って劣化させず止める。
-const UNDEFINED_COLUMN = '42703';
-async function hasDepartedAt() {
-  const { error } = await supabase.from('therapists').select('departed_at').limit(1);
-  if (!error) return true;
-  if (error.code === UNDEFINED_COLUMN || /departed_at/.test(error.message || '')) {
-    console.log(`⚠️ departed_at 列がありません（${error.message}）`);
-    console.log('   → 退店日は記録せず is_active=false だけ付けます。日付も要るなら列を追加してください。');
-    return false;
-  }
-  console.error(`❌ DBに接続できません（${error.message}）。列の有無を判定できないので中止します。`);
-  process.exit(1);
-}
-const WITH_DEPARTED_AT = await hasDepartedAt();
+// ⚠️【2026-09-21】退店日（departed_at）は記録しない。
+//   オーナー「退店日なんてわからないでしょ」。その通りで、このツールが知っているのは
+//   「照合した日に名簿に居なかった」ことだけ。照合は数か月おきにもなりうるので、
+//   照合した日を退店日として書くと**何か月もずれた日付**になる（根拠のない値＝D-010と同じ話）。
+//   分かっている事実は2つだけで、どちらも既に持っている:
+//     ・last_seen_at … 最後に在籍を確認した日（退店はこの日より後）
+//     ・is_active=false … その後の照合で名簿に居なかった
+//   `supabase_migrations/09_therapist_status.sql` は departed_at 列を足す内容だが、
+//   本番には当たっておらず（2026-09-21 information_schema で確認）、足さないことにした。
 
 async function updateInChunks(rows, patch, label) {
   let failed = 0;
@@ -73,7 +66,7 @@ async function updateInChunks(rows, patch, label) {
 
 async function reconcileShop(shopId, activeNames) {
   const { data: rows, error } = await supabase
-    .from('therapists').select('id, name, is_active').eq('shop_id', shopId);
+    .from('therapists').select('id, name, is_active, last_seen_at').eq('shop_id', shopId);
   if (error) { console.log(`  ❌ 取得失敗 ${shopId}: ${error.message}`); return; }
   if (!rows || !rows.length) { console.log(`  ⚠️ ${shopId}: DBにセラピスト無し`); return; }
 
@@ -94,11 +87,25 @@ async function reconcileShop(shopId, activeNames) {
   }
 
   const now = new Date().toISOString();
+  try {
+    fs.mkdirSync(BACKUP_DIR, { recursive: true });
+    const stamp = now.replace(/[:.]/g, '-');
+    const backupPath = `${BACKUP_DIR}/${shopId}-${stamp}.json`;
+    fs.writeFileSync(backupPath, JSON.stringify({
+      shop_id: shopId,
+      at: now,
+      confirm_ids: plan.confirm.map((t) => t.id),
+      depart_ids: plan.depart.map((t) => t.id),
+      before: rows,
+    }, null, 1));
+    console.log(`    📦 バックアップ: ${backupPath}`);
+  } catch (e) {
+    console.log(`    ❌ バックアップを書けないので中止（1行も書き換えていない）: ${e.message}`);
+    return;
+  }
   // ⚠️ last_seen_at が付くのは confirm だけ。退店側に付けると「確認していない人の確認印」になる。
   const confirmPatch = { is_active: true, last_seen_at: now };
-  if (WITH_DEPARTED_AT) confirmPatch.departed_at = null;
   const departPatch = { is_active: false };
-  if (WITH_DEPARTED_AT) departPatch.departed_at = now;
 
   const confirmed = await updateInChunks(plan.confirm, confirmPatch, '在籍確認');
   const departed = await updateInChunks(plan.depart, departPatch, '退店マーク');

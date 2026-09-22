@@ -109,7 +109,7 @@ requireMatch('supabase_migrations/22_enforce_shop_integrity_and_view_rls.sql', /
 requireMatch('supabase_migrations/22_enforce_shop_integrity_and_view_rls.sql', /security_invoker\s*=\s*true/, '集計viewが基表RLSを継承していない');
 requireMatch('.github/workflows/monitor.yml', /check_site_integrity\.mjs/, 'ページ・内部リンクの定期監視がない');
 requireMatch('.github/workflows/monitor.yml', /check_api_contracts\.mjs/, 'API契約の定期監視がない');
-for (const workflow of ['.github/workflows/ci.yml', '.github/workflows/monitor.yml', '.github/workflows/image-health.yml']) {
+for (const workflow of ['.github/workflows/ci.yml', '.github/workflows/monitor.yml', '.github/workflows/image-health.yml', '.github/workflows/roster-freshness.yml']) {
   requireMatch(workflow, /actions\/checkout@v7/, 'Node 20版checkout actionへ戻さない');
   requireMatch(workflow, /actions\/setup-node@v7/, 'Node 20版setup-node actionへ戻さない');
 }

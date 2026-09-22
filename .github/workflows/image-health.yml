@@ -64,16 +64,19 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SHOPS_NULL_MAX: '20'
 
-      # 写真が表示できても、在籍名簿や公式URLが古ければ利用者には誤情報になる。
-      # 180日以上再確認されない名簿と、公式URLの欠落を別軸で検知する。
-      - name: Check roster and source freshness
+      # 写真が表示できても、店舗データが壊れていれば利用者には誤情報になる。
+      # ここで毎日見るのは「取り込み1回で壊れうるもの」だけ:
+      #   公式URLなし率／在籍中なのに最終確認日なし／無関係な店が1ブランドに混ざる
+      # ⚠️ 2026-09-21 分割: 「180日超未確認」はゆっくり進む劣化なので roster-freshness.yml（週1）へ移した。
+      #    ここに置いたままだと名簿を取り直すまで毎日赤になり、**本当に画像が壊れても同じ失敗メールで
+      #    見分けがつかない**（実際、失敗通知はゴミ箱に溜まっていた）。基準（5%）は向こうでそのまま。
+      - name: Check data integrity
         if: always()
-        run: node scripts/monitoring/check_data_freshness.mjs
+        run: node scripts/monitoring/check_data_freshness.mjs --checks=integrity
         env:
           VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SHOP_WEBSITE_MISSING_MAX_PCT: '1'
-          THERAPIST_STALE_180_MAX_PCT: '5'
 
       # ── 履歴JSONをリポジトリに書き戻す ──
       # これが無いと、スクリプトが書いた履歴はランナー破棄と共に消え、

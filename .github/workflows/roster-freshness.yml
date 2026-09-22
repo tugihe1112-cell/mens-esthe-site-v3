@@ -1,0 +1,47 @@
+# 在籍名簿の鮮度監視 — 週1回。「在籍」と表示している人を、どれだけ前に確認したか。
+#
+# 【なぜ画像監視から分けたか（2026-09-21）】
+# 以前は image-health.yml の1ステップとして毎日走らせていた。この判定は名簿を取り直さない限り
+# 日ごとに悪化していくだけなので、毎日赤になり続け、**同じワークフローの画像の異常を覆い隠していた**。
+# 基準は緩めていない（180日超が5%を超えたら赤）。見る頻度だけを実態に合わせた。
+#
+# 【赤になったら】
+#   名簿の取り直しは scripts/maintenance/reconcile_therapists.mjs。
+#   名簿に名前があった人だけ last_seen_at（最後に在籍を確認した日）が進む。
+#   ⚠️ 閾値を上げて緑にしないこと。確認していない人の「確認日」を進めることも、しないこと。
+#
+# 必要なSecrets: SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY（image-health.yml と同じもの）
+name: Monitor (roster freshness)
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # 毎週月曜 09:00 JST（UTC 月曜 00:00）
+  workflow_dispatch:
+
+concurrency:
+  group: monitor-roster-freshness
+  cancel-in-progress: true
+
+jobs:
+  roster-freshness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # supabase-js のみ必要
+      - name: Install deps
+        run: npm install @supabase/supabase-js --no-save --no-audit --no-fund
+
+      - name: Check roster staleness
+        run: node scripts/monitoring/check_data_freshness.mjs --checks=staleness
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          THERAPIST_STALE_180_MAX_PCT: '5'

@@ -13,6 +13,36 @@ import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 import { classifyGroup, selfTestMatching } from '../lib/brandNameMatch.mjs';
 
+// ── 何を見るか（2026-09-21 分割）────────────────────────────────────
+// 以前は4つの判定を毎日まとめて走らせ、画像監視（image-health.yml）の1ステップにしていた。
+// ところが「180日超未確認」は**ゆっくり進む劣化**で、名簿を取り直すまで毎日赤になる。
+// 同じワークフローの赤なので、**本当に画像が壊れても同じ失敗メールになって見分けがつかない**
+// （実際、失敗通知はゴミ箱に溜まっていた）。基準は緩めずに、見る頻度で分ける:
+//   integrity … 取り込み1回で壊れうるもの（毎日）: 公式URLなし率／最終確認日なし／無関係な店の混入
+//   staleness … 日単位では動かないもの（週1・roster-freshness.yml）: 180日超未確認の率
+// 指定なしは両方（手元で全部見るとき）。**知らない値はその場で止める**
+// （2026-09-20、知らない引数を黙って捨てる道具で、指定したつもりの検査が走らなかった）。
+const CHECK_GROUPS = ['integrity', 'staleness'];
+function parseChecks(argv) {
+  const arg = argv.find((a) => a.startsWith('--checks='));
+  const unknownFlags = argv.filter((a) => a.startsWith('--') && !a.startsWith('--checks='));
+  if (unknownFlags.length) throw new Error(`知らない引数: ${unknownFlags.join(' ')}（使えるのは --checks=${CHECK_GROUPS.join(',')}）`);
+  if (!arg) return new Set(CHECK_GROUPS);
+  const picked = arg.slice('--checks='.length).split(',').map((v) => v.trim()).filter(Boolean);
+  const bad = picked.filter((v) => !CHECK_GROUPS.includes(v));
+  if (!picked.length || bad.length) {
+    throw new Error(`--checks の値が不正: ${bad.join(',') || '(空)'}（使えるのは ${CHECK_GROUPS.join(',')}）`);
+  }
+  return new Set(picked);
+}
+let CHECKS;
+try {
+  CHECKS = parseChecks(process.argv.slice(2));
+} catch (error) {
+  console.error(`❌ ${error.message}`);
+  process.exit(1);
+}
+
 function env(key) {
   if (process.env[key]) return process.env[key];
   try {
@@ -113,18 +143,26 @@ async function main() {
   const websiteMissingPct = shopTotal ? missingWebsite / shopTotal * 100 : 0;
   const stale180Pct = activeTotal ? stale180 / activeTotal * 100 : 0;
 
-  console.log('■ 店舗ソース');
-  console.log(`  公式URLなし ${missingWebsite}/${shopTotal}店 (${websiteMissingPct.toFixed(1)}%)`);
-  console.log(`  スケジュールURLなし ${missingSchedule}/${shopTotal}店`);
-  console.log('■ 在籍名簿の鮮度');
-  console.log(`  最終確認日なし ${missingLastSeen}/${activeTotal}名`);
-  console.log(`  180日超未確認 ${stale180}/${activeTotal}名 (${stale180Pct.toFixed(1)}%)`);
+  console.log(`■ 見る範囲: ${[...CHECKS].join(', ')}`);
+  if (CHECKS.has('integrity')) {
+    console.log('■ 店舗ソース');
+    console.log(`  公式URLなし ${missingWebsite}/${shopTotal}店 (${websiteMissingPct.toFixed(1)}%)`);
+    console.log(`  スケジュールURLなし ${missingSchedule}/${shopTotal}店`);
+    console.log('■ 在籍名簿（取り込みの不備）');
+    console.log(`  最終確認日なし ${missingLastSeen}/${activeTotal}名`);
+  }
+  if (CHECKS.has('staleness')) {
+    console.log('■ 在籍名簿の鮮度');
+    console.log(`  180日超未確認 ${stale180}/${activeTotal}名 (${stale180Pct.toFixed(1)}%)`);
+  }
 
-  const mixedGroups = await findMixedGroups();
-  console.log('■ ブランドのまとまり');
-  console.log(`  無関係な店が混ざっているブランド ${mixedGroups.length}件`);
-  for (const g of mixedGroups) {
-    console.log(`    group_id=${g.gid}: ${g.rooms.map((r) => r.name).join(' ／ ')}`);
+  const mixedGroups = CHECKS.has('integrity') ? await findMixedGroups() : [];
+  if (CHECKS.has('integrity')) {
+    console.log('■ ブランドのまとまり');
+    console.log(`  無関係な店が混ざっているブランド ${mixedGroups.length}件`);
+    for (const g of mixedGroups) {
+      console.log(`    group_id=${g.gid}: ${g.rooms.map((r) => r.name).join(' ／ ')}`);
+    }
   }
 
   const failures = [];
@@ -134,12 +172,15 @@ async function main() {
       + ' … /brands/' + g.gid + ' で在籍者が混ざり、店舗URLが別の店へ301します',
     );
   }
-  if (websiteMissingPct > WEBSITE_MISSING_MAX_PCT) {
-    failures.push(`公式URLなしが${websiteMissingPct.toFixed(1)}%（上限${WEBSITE_MISSING_MAX_PCT}%）`);
+  if (CHECKS.has('integrity')) {
+    if (websiteMissingPct > WEBSITE_MISSING_MAX_PCT) {
+      failures.push(`公式URLなしが${websiteMissingPct.toFixed(1)}%（上限${WEBSITE_MISSING_MAX_PCT}%）`);
+    }
+    if (missingLastSeen > 0) failures.push(`在籍中なのにlast_seen_atが無いセラピストが${missingLastSeen}名`);
   }
-  if (missingLastSeen > 0) failures.push(`在籍中なのにlast_seen_atが無いセラピストが${missingLastSeen}名`);
-  if (stale180Pct > STALE_180_MAX_PCT) {
-    failures.push(`180日超未確認の在籍セラピストが${stale180Pct.toFixed(1)}%（上限${STALE_180_MAX_PCT}%）`);
+  if (CHECKS.has('staleness') && stale180Pct > STALE_180_MAX_PCT) {
+    failures.push(`180日超未確認の在籍セラピストが${stale180Pct.toFixed(1)}%（上限${STALE_180_MAX_PCT}%）`
+      + ' … 名簿の取り直しは scripts/maintenance/reconcile_therapists.mjs（確認できた人の last_seen_at が進む）');
   }
 
   if (failures.length) {
