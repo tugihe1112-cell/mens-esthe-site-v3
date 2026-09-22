@@ -156,6 +156,22 @@ function read(path) {
     }
   }
   const slider = read('src/components/TopHeroSlider.jsx') || '';
+  // 3回目（2026-09-22）: 押せる対策（上の3行）で両隣のカードと wrapper が当たり判定から外れたため、
+  //   両隣から始めたドラッグの target が外側の .swiper になり、Swiper 既定の touchEventsTarget:'wrapper'
+  //   （「target が wrapper の中か」を見る）が無視していた＝両隣のカードをドラッグしても動かない。
+  //   'container' で .swiper ごと受ける。本番で「wrapper＝動かない／container＝1枚進む」と
+  //   「5枚とも送った後に店舗を見るが開く」を実クリックで確認済み。
+  {
+    const code = slider.replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    // Swiper の開始タグ（<Swiper 〜 className="… hero-coverflow"）の中にあること。属性の順番は問わない。
+    const tag = (code.match(/<Swiper\b[\s\S]*?hero-coverflow"/) || [''])[0];
+    if (!/touchEventsTarget="container"/.test(tag)) {
+      violations.push(
+        '[D-002/押せる] TopHeroSlider の Swiper に touchEventsTarget="container" が無い。\n' +
+        '        → 両隣のカードからドラッグしても動かなくなる（両隣と wrapper は pointer-events:none のため、target が .swiper になる）。'
+      );
+    }
+  }
   if (!/pauseOnMouseEnter\s*:\s*true/.test(slider)) {
     violations.push(
       '[D-002/押せる] TopHeroSlider の autoplay から pauseOnMouseEnter が消えている。\n' +

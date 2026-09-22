@@ -121,8 +121,15 @@ export default function TopHeroSlider({ initialHero = [] }) {
         <HeroPlaceholder />
       ) : (
       <>
+      {/* ⚠️ 2026-09-22 両隣のカードからドラッグしても動かなかった（okabayashi 指摘）。
+          押せる不具合の対策で .swiper-slide（非アクティブ）と .swiper-wrapper を pointer-events:none に
+          しているため（index.css）、両隣を押した時の target は外側の .swiper になる。
+          Swiper の既定 touchEventsTarget:'wrapper' は「target が wrapper の中か」を見て、外なら
+          ドラッグを始めない（swiper-core の onTouchStart）。→ 'container' にして .swiper で受ける。
+          ⚠️ pointer-events:none の3行は外さない（外すと「店舗を見る」が押せない不具合が2種類とも戻る）。 */}
       <Swiper
         modules={[Autoplay, Navigation, EffectCoverflow, A11y, Keyboard]}
+        touchEventsTarget="container"
         effect="coverflow"
         coverflowEffect={{
           rotate: 10,
