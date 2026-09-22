@@ -17,3 +17,12 @@ export function ratingGradientClass(score) {
   if (n >= 3.0) return 'from-amber-500 to-orange-600 shadow-amber-900/40';
   return 'from-rose-600 to-red-700 shadow-rose-900/40';
 }
+
+// 淡い面のバッジ（ホームの口コミ欄）。色の境目は上の2つと同じ＝辛口は同じ赤系で出る。
+//   塗りつぶしのバッジを1画面に7個並べると★ばかりが目立ち、本文より先に色が読まれるため。
+export function ratingSoftClass(score) {
+  const n = Number(score);
+  if (n >= 4.0) return 'bg-emerald-500/15 text-emerald-300';
+  if (n >= 3.0) return 'bg-amber-500/15 text-amber-300';
+  return 'bg-rose-500/15 text-rose-300';
+}

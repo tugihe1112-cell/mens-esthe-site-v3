@@ -1316,57 +1316,130 @@ const check = (name, fn) => {
   });
 }
 
-// ── ホーム「最新の実体験口コミ」欄（2026-09-22）──────────────────────
-// 初期表示の地域（東京）が1件しか出ていなかった。SSRが各県2件に切って渡し、画面が
-// 「最新1件と同じ口コミ」を除いていたので 2−1＝1。東京は21件あり、足りないのではない。
-// SSRと画面が通る関数を、実データと同じ形の並びで通しで確かめる。
+// ── ホーム「最新の実体験口コミ」欄＝呼水（2026-09-22 作り直し）──────────────
+// 以前は「最新1件＋選んだ県の最大2件」で、しかも東京は1件に減っていた（SSRが2件に切り、画面が最新と同じ1件を除いた）。
+// 作り直した形: すべて／県のチップ → 最新1件 → 新着6件。1店舗2件まで。件数は数えられた数字だけ。
+// SSRと画面が通る関数を、実データと同じ偏り（1店が同日に6件）を持つ並びで通しで確かめる。
 {
   const hr = await loadModule('src/utils/homeReviews.js');
-  const day = (n) => new Date(Date.UTC(2026, 8, 30 - n)).toISOString();
+  const day = (n) => new Date(Date.UTC(2026, 8, 30) - n * 3600000).toISOString(); // n時間前
   let seq = 0;
-  const mk = (pref, n) => Array.from({ length: n }, () => ({ id: `r${seq}`, prefecture: pref, createdAt: day(seq++) }));
-  // 新しい順：東京21件が先頭（実データと同じく最新は東京）
-  const mapped = [...mk('東京都', 21), ...mk('大阪府', 3), ...mk('神奈川県', 3), ...mk('広島県', 2), ...mk('埼玉県', 1)];
-  const blocks = hr.groupReviewsByPref(mapped, { slugOf: (p) => (p === '東京都' ? 'tokyo' : null) });
-  const lead = hr.pickLeadReview(blocks);
-  const tokyo = blocks.find((b) => b.pref === '東京都');
+  const mk = (pref, shopId, n) => Array.from({ length: n }, () => {
+    const i = seq++;
+    return { id: `r${i}`, prefecture: pref, shopId, createdAt: day(i) };
+  });
+  // 新しい順。実データと同じく、最新は東京で、1店（虎ノ門）が続けて6件ある。
+  const mapped = [
+    ...mk('東京都', 'ueno', 2), ...mk('東京都', 'toranomon', 6), ...mk('東京都', 'gotanda', 5),
+    ...mk('東京都', 'shinbashi', 5), ...mk('埼玉県', 'warabi', 1), ...mk('広島県', 'hiroshima', 2),
+    ...mk('大阪府', 'umeda', 3), ...mk('神奈川県', 'sagamihara', 3), ...mk('東京都', 'sasazuka', 6),
+    ...mk('北海道', 'susukino', 1), ...mk('福岡県', 'hakata', 1), ...mk('愛知県', 'sakae', 1),
+    { id: 'nopref', prefecture: null, shopId: 'unknown', createdAt: day(999) },
+  ];
+  const perShop = (list) => list.reduce((m, r) => m.set(r.shopId, (m.get(r.shopId) || 0) + 1), new Map());
+  const latest = hr.buildLatestFeed(mapped);
+  const lead = hr.pickLeadReview(latest);
+  const feed = hr.pickFeedReviews(latest, lead?.id);
 
-  check('⭐ホーム口コミ: 最新1件は全県でいちばん新しい口コミ', () => (lead?.id === 'r0' ? null : `lead が ${lead?.id}`));
-  check('⭐ホーム口コミ: 最新1件と同じ県（東京）でも地域別に2件出る（2−1＝1件に減らない）', () => {
-    const region = hr.pickRegionReviews(tokyo, lead.id);
-    if (region.length < 2) return `${region.length}件（SSRが除く分を見込まずに切っている）`;
-    return region.length === 2 ? null : `${region.length}件（最大2件を超えている）`;
+  check('⭐呼水: 「すべて」は最新1件＋新着6件（口コミが3件しか出ない形に戻らない）', () => {
+    if (lead?.id !== 'r0') return `最新1件が ${lead?.id}（全県でいちばん新しい口コミではない）`;
+    if (feed.length !== hr.FEED_CARDS || hr.FEED_CARDS !== 6) return `新着が ${feed.length}件`;
+    return feed.some((r) => r.id === lead.id) ? '最新1件が新着にも出ている' : null;
   });
-  check('⭐ホーム口コミ: 地域別に最新1件と同じ口コミを出さない', () => {
-    const region = hr.pickRegionReviews(tokyo, lead.id);
-    return region.some((r) => r.id === lead.id) ? '最新1件が地域別にも出ている' : null;
+  check('⭐呼水: 1店舗2件まで（同じ店が続けて投稿しても欄が1店で埋まらない）', () => {
+    const over = [...perShop(latest)].filter(([, n]) => n > hr.PER_SHOP_MAX);
+    return over.length ? `上限超え: ${over.map(([k, n]) => `${k}=${n}`).join(', ')}` : null;
   });
-  check('ホーム口コミ: 地域別は最大2件（U02）', () => {
+  check('呼水: 1店舗2件でも新しい順は崩さない', () => {
+    const ids = latest.map((r) => r.id).join(',');
+    return ids === 'r0,r1,r2,r3,r8,r9,r13' ? null : `並び ${ids}`;
+  });
+
+  const totals = { 東京都: 24, 大阪府: 3, 神奈川県: 3, 広島県: 2, 埼玉県: 1, 北海道: 1, 福岡県: 1, 愛知県: 1 };
+  const blocks = hr.groupReviewsByPref(mapped, { slugOf: (p) => (p === '東京都' ? 'tokyo' : null), totals });
+  const tokyo = blocks.find((b) => b.pref === '東京都');
+  check('⭐呼水: 県を選ぶと最新1件もその県の口コミになり、新着も6件出る', () => {
+    const tLead = hr.pickLeadReview(tokyo?.reviews);
+    const tFeed = hr.pickFeedReviews(tokyo?.reviews, tLead?.id);
+    if (tLead?.prefecture !== '東京都') return `最新1件の県が ${tLead?.prefecture}`;
+    if (tFeed.length !== 6) return `東京の新着が ${tFeed.length}件`;
+    const over = [...perShop(tokyo.reviews)].filter(([, n]) => n > hr.PER_SHOP_MAX);
+    return over.length ? `東京で1店舗2件を超えている: ${over.map(([k]) => k).join(',')}` : null;
+  });
+  check('⭐呼水: 口コミの少ない県は1店舗の上限で削らない（大阪3件が全部出る）', () => {
     const osaka = blocks.find((b) => b.pref === '大阪府');
-    const region = hr.pickRegionReviews(osaka, lead.id);
-    return region.length === 2 ? null : `大阪が ${region.length}件`;
+    return osaka?.reviews.length === 3 ? null : `大阪が ${osaka?.reviews.length}件（1店しか無い県を2件に削っている）`;
   });
-  check('ホーム口コミ: 口コミが本当に1件しかない地域は1件のまま（他の地域で埋めない）', () => {
-    const only = hr.groupReviewsByPref([{ id: 'x', prefecture: '沖縄県', createdAt: day(1) }]);
-    const region = hr.pickRegionReviews(only[0], 'lead-elsewhere');
-    return region.length === 1 ? null : `${region.length}件`;
+  check('呼水: 口コミが1件しかない県は最新1件だけ（他の県で埋めない）', () => {
+    const saitama = blocks.find((b) => b.pref === '埼玉県');
+    const sLead = hr.pickLeadReview(saitama?.reviews);
+    const sFeed = hr.pickFeedReviews(saitama?.reviews, sLead?.id);
+    if (sLead?.prefecture !== '埼玉県') return `最新1件が ${sLead?.prefecture}`;
+    return sFeed.length === 0 ? null : `新着が ${sFeed.length}件（他の県の口コミで埋めている）`;
   });
-  check('ホーム口コミ: 最新1件しか無い地域は0件（空のまま・水増ししない）', () => {
-    const only = hr.groupReviewsByPref([{ id: 'x', prefecture: '沖縄県', createdAt: day(1) }]);
-    return hr.pickRegionReviews(only[0], 'x').length === 0 ? null : '最新1件を地域別にも出している';
-  });
-  check('ホーム口コミ: 県は口コミ数の多い順・最大4県、県不明は入れない', () => {
+  check('呼水: 県は全件数の多い順・最大6県、県不明は入れない', () => {
     const order = blocks.map((b) => b.pref).join(',');
-    if (blocks.length !== 4) return `${blocks.length}県`;
-    if (blocks[0].pref !== '東京都' || blocks[3].pref !== '広島県') return `順序 ${order}`;
-    const withNull = hr.groupReviewsByPref([{ id: 'n', prefecture: null, createdAt: day(1) }]);
-    return withNull.length === 0 ? null : '県不明の口コミで県ブロックを作っている';
+    if (blocks.length !== hr.MAX_PREFS || hr.MAX_PREFS !== 6) return `${blocks.length}県`;
+    if (blocks[0].pref !== '東京都') return `順序 ${order}`;
+    // 大阪と神奈川は同数（3）→ 新しい口コミがある大阪が先
+    if (order.indexOf('大阪府') > order.indexOf('神奈川県')) return `同数のときの順序 ${order}`;
+    return blocks.some((b) => !b.pref) ? '県不明のブロックがある' : null;
   });
-  check('ホーム口コミ: 県の件数(count)は切る前の件数', () => (tokyo.count === 21 ? null : `東京の count が ${tokyo.count}`));
-  check('ホーム口コミ: 空・nullで落ちない', () => {
-    if (hr.groupReviewsByPref(null).length !== 0) return 'null';
-    if (hr.pickLeadReview([]) !== null) return 'lead が null でない';
-    return hr.pickRegionReviews(null, 'x').length === 0 ? null : 'block=null で件数が出た';
+  check('⭐呼水: 県の件数は「数えた全件数」。数えられなかったら null（画面に数字を出さない）', () => {
+    if (tokyo.total !== 24) return `東京の total が ${tokyo.total}（読んだ範囲の件数を全件数として出している）`;
+    const unknown = hr.groupReviewsByPref(mapped, { totals: null });
+    return unknown.every((b) => b.total === null) ? null : 'totals が無いのに件数を出している';
+  });
+  check('⭐呼水: SSRが渡す値に undefined や並べ替え用の値が混ざらない（Next.jsはundefinedを渡すと500）', () => {
+    const bad = [];
+    const walk = (v, path) => {
+      if (v === undefined) bad.push(path);
+      else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) walk(x, `${path}.${k}`);
+    };
+    walk({ blocks, latest }, 'props');
+    if (bad.length) return `undefined: ${bad.slice(0, 3).join(', ')}`;
+    return blocks.some((b) => '_rank' in b || '_newest' in b) ? '並べ替え用の値がpropsに残っている' : null;
+  });
+
+  // 件数（索引）: 34件・直近30日19件・東京25件（2026-09-22 の実データと同じ形）
+  const now = Date.UTC(2026, 8, 22, 9);
+  const idx = (n, daysAgo, shop) => Array.from({ length: n }, () => ({ shop_id: shop, created_at: new Date(now - daysAgo * 86400000).toISOString() }));
+  const index = [...idx(19, 15, 's_tokyo'), ...idx(6, 60, 's_tokyo'), ...idx(3, 90, 's_osaka'), ...idx(6, 120, 's_kanagawa')];
+  const prefOf = (id) => ({ s_tokyo: '東京都', s_osaka: '大阪府', s_kanagawa: '神奈川県' })[id] || null;
+  check('⭐呼水: 件数は索引を全部読めたときだけ全部出す', () => {
+    const sum = hr.summarizeReviewIndex(index, { total: 34, prefOf, now });
+    if (sum.total !== 34 || sum.recent !== 19) return `total=${sum.total} recent=${sum.recent}`;
+    return sum.prefTotals?.東京都 === 25 ? null : `東京 ${sum.prefTotals?.東京都}`;
+  });
+  check('⭐呼水: 取得上限で切れたら県別の件数は出さない（上限の数字を件数にしない）', () => {
+    const sum = hr.summarizeReviewIndex(index.slice(0, 22), { total: 34, prefOf, now });
+    if (sum.prefTotals !== null) return '途中までしか読めていないのに県別の件数を出している';
+    // 22件目は60日前＝30日の範囲は読み切れているので、直近件数は正確
+    return sum.recent === 19 ? null : `直近 ${sum.recent}（範囲を読み切れているのに出していない）`;
+  });
+  check('呼水: 直近30日の範囲を読み切れていなければ直近件数も出さない', () => {
+    const sum = hr.summarizeReviewIndex(index.slice(0, 10), { total: 34, prefOf, now });
+    return sum.recent === null ? null : `直近 ${sum.recent}（10件しか読めていないのに数字を出している）`;
+  });
+  check('呼水: 全件数が取れなければ何の件数も出さない', () => {
+    const sum = hr.summarizeReviewIndex(index, { total: null, prefOf, now });
+    return sum.total === null && sum.recent === null && sum.prefTotals === null ? null : JSON.stringify(sum);
+  });
+
+  check('呼水: 前に開いた県のチップを「すべて」の次へ（元の配列は変えない）', () => {
+    const before = blocks.map((b) => b.pref).join(',');
+    const moved = hr.orderPrefs(blocks, '広島県');
+    if (moved[0]?.pref !== '広島県') return `先頭が ${moved[0]?.pref}`;
+    if (blocks.map((b) => b.pref).join(',') !== before) return '元の配列を並べ替えている';
+    return hr.orderPrefs(blocks, '存在しない県') === blocks ? null : '知らない県で並びが変わった';
+  });
+  check('呼水: 空・nullで落ちない', () => {
+    if (hr.groupReviewsByPref(null).length !== 0) return 'groupReviewsByPref(null)';
+    if (hr.buildLatestFeed(null).length !== 0) return 'buildLatestFeed(null)';
+    if (hr.pickLeadReview(null) !== null) return 'pickLeadReview(null)';
+    if (hr.pickFeedReviews(null, 'x').length !== 0) return 'pickFeedReviews(null)';
+    const sum = hr.summarizeReviewIndex(null, { total: null });
+    return sum.total === null ? null : 'summarizeReviewIndex(null)';
   });
 }
 

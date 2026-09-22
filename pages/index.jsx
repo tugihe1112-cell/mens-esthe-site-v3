@@ -10,10 +10,21 @@ import { createClient } from '@supabase/supabase-js';
 import Home from '../src/pages/Home';
 import { HERO_SHOP_IDS, buildInitialHero } from '../src/data/heroShops';
 import { PREF_TO_SLUG } from '../src/data/areaLinks';
-import { groupReviewsByPref } from '../src/utils/homeReviews';
+import {
+  groupReviewsByPref, buildLatestFeed, summarizeReviewIndex, FEED_FETCH, REVIEW_INDEX_LIMIT,
+} from '../src/utils/homeReviews';
+import { getDisplayName } from '../src/utils/shopHelpers';
 
-export default function IndexPage({ initialHero, reviewsByPref, liveCounts }) {
-  return <Home initialHero={initialHero} reviewsByPref={reviewsByPref} liveCounts={liveCounts} />;
+export default function IndexPage({ initialHero, reviewsByPref, latestReviews, reviewStats, liveCounts }) {
+  return (
+    <Home
+      initialHero={initialHero}
+      reviewsByPref={reviewsByPref}
+      latestReviews={latestReviews}
+      reviewStats={reviewStats}
+      liveCounts={liveCounts}
+    />
+  );
 }
 
 export async function getServerSideProps({ res }) {
@@ -23,6 +34,8 @@ export async function getServerSideProps({ res }) {
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
   let initialHero = [];
   let reviewsByPref = [];
+  let latestReviews = [];
+  let reviewStats = null;
   let liveCounts = null;
   try {
     // 公開データ（shops）はRLSで匿名read可。クライアントと同じanon keyで取得。
@@ -34,6 +47,7 @@ export async function getServerSideProps({ res }) {
     const [
       { data },
       { data: revs },
+      { data: indexRows, count: reviewTotal, error: indexError },
       { count: shopCount },
       { count: activeTherapistCount },
     ] = await Promise.all([
@@ -43,7 +57,15 @@ export async function getServerSideProps({ res }) {
         .eq('is_public', true)
         .not('therapist_id', 'is', null)
         .order('created_at', { ascending: false })
-        .limit(30),
+        .limit(FEED_FETCH),
+      // 件数を数えるための索引（本文は読まない）。全件数は count:'exact' で取り、
+      // 県別・直近の件数は読めた範囲で数える（上限で切れたら数えきれない数字は出さない＝homeReviews.js）。
+      // ⚠️ 絞り込みは /popular-reviews の一覧と同じ is_public だけ（「すべての口コミ（N件）」の N が行き先の件数と一致する）。
+      supabase.from('reviews')
+        .select('shop_id, created_at', { count: 'exact' })
+        .eq('is_public', true)
+        .order('created_at', { ascending: false })
+        .limit(REVIEW_INDEX_LIMIT),
       supabase.from('shops').select('id', { count: 'exact', head: true }),
       supabase.from('therapists')
         .select('id', { count: 'exact', head: true })
@@ -55,33 +77,39 @@ export async function getServerSideProps({ res }) {
     }
 
     // 店名/エリア解決 と セラピスト写真 は②に依存するがお互い独立 → 並列
-    const shopIds = [...new Set((revs || []).map((r) => r.shop_id).filter(Boolean))];
+    const safeIndex = indexError ? [] : (indexRows || []);
+    const shopIds = [...new Set([...(revs || []), ...safeIndex].map((r) => r.shop_id).filter(Boolean))];
     const therapistIds = [...new Set((revs || []).map((r) => r.therapist_id).filter(Boolean))];
-    const [{ data: shopRows } = {}, { data: tRows } = {}] = await Promise.all([
-      shopIds.length ? supabase.from('shops').select('id, name, raw_data').in('id', shopIds) : Promise.resolve({ data: [] }),
+    // 店舗は所在地だけ引く（raw_data 丸ごとは1店で最大14KB。索引の店が増えるとSSRが重くなる）。
+    // `.in()` はURLに全idが載るので分けて引く。
+    const SHOP_CHUNK = 150;
+    const shopChunks = [];
+    for (let i = 0; i < shopIds.length; i += SHOP_CHUNK) shopChunks.push(shopIds.slice(i, i + SHOP_CHUNK));
+    const [shopResults, { data: tRows } = {}] = await Promise.all([
+      Promise.all(shopChunks.map((ids) => supabase.from('shops')
+        .select('id, name, prefecture:raw_data->>prefecture, area:raw_data->area, city:raw_data->>city')
+        .in('id', ids))),
       therapistIds.length ? supabase.from('therapists').select('id, image_url, is_active').in('id', therapistIds) : Promise.resolve({ data: [] }),
     ]);
-    const shopNameById = Object.fromEntries((shopRows || []).map((s) => [s.id, s.name]));
-    const shopLocById = Object.fromEntries((shopRows || []).map((s) => {
-      const rd = s.raw_data || {};
-      const area = Array.isArray(rd.area) ? rd.area[0] : (rd.area || null);
-      return [s.id, { prefecture: rd.prefecture || null, area: area || null }];
-    }));
+    const shopLookupOk = shopResults.every((r) => !r?.error);
+    const shopById = Object.fromEntries(shopResults.flatMap((r) => r?.data || []).map((s) => [s.id, s]));
+    const areaOf = (s) => (Array.isArray(s?.area) ? s.area[0] : s?.area) || null;
     const imgById = Object.fromEntries((tRows || []).map((t) => [t.id, t.image_url]));
     // ⚠️ 2026-09-09: 在籍一覧から外れた人のカードにも印を出す（ホームから現役として送らない）。
     //    名簿に行が無い＝取得できなかった人も「在籍一覧にない」として扱う。
     const notListedById = Object.fromEntries((tRows || []).map((t) => [t.id, t.is_active === false]));
     // ペンネーム表示用: user_nameがシステム上のプレースホルダなら出さない（実在感を損なうため）
     const PLACEHOLDER_NAMES = new Set(['owner_manual', 'mensest_user', 'menesthe_import', 'menesthe_rewritten', '匿名', '']);
-    // ⚠️ 本文全文/300字はSSRに載せない（重複コンテンツ回避）。ティーザー(snippet 120字)のみ。展開時の300字はクライアントがidフェッチ。
+    // ⚠️ 本文全文はSSRに載せない（人物ページとの重複コンテンツ回避）。ティーザー(snippet 120字)のみ。全文は人物ページの該当口コミで読む。
     const mapped = (revs || []).map((r) => ({
       id: r.id,
       shopId: r.shop_id,
       therapistId: r.therapist_id,
       therapistName: r.therapist_name || '',
-      shopName: shopNameById[r.shop_id] || '',
-      prefecture: shopLocById[r.shop_id]?.prefecture || null,
-      area: shopLocById[r.shop_id]?.area || null,
+      // U08: 一覧では支店名・その店自身の地名を外した表示名（DBの name は変えない）
+      shopName: shopById[r.shop_id]?.name ? getDisplayName(shopById[r.shop_id].name, shopById[r.shop_id]) : '',
+      prefecture: shopById[r.shop_id]?.prefecture || null,
+      area: areaOf(shopById[r.shop_id]),
       rating: r.rating || null,
       image: imgById[r.therapist_id] || null,
       notListed: notListedById[r.therapist_id] === true,
@@ -91,9 +119,19 @@ export async function getServerSideProps({ res }) {
       course: r.course || null,
       createdAt: r.created_at || null,
     }));
-    // 都道府県でまとめる→県は口コミ総数の降順→最大4県（0件の県は構造的に出ない）。
-    // ⚠️ 各県「表示件数＋1」件を渡す（画面が最新1件と同じ口コミを除くため）。src/utils/homeReviews.js
-    reviewsByPref = groupReviewsByPref(mapped, { slugOf: (pref) => PREF_TO_SLUG[pref] });
+    // 件数（全件・直近30日・県別）。数えきれなかった数字は null（画面は数字を出さない）。
+    const summary = summarizeReviewIndex(indexError ? null : indexRows, {
+      total: indexError ? null : reviewTotal,
+      prefOf: (shopId) => shopById[shopId]?.prefecture || null,
+    });
+    reviewStats = { total: summary.total, recent: summary.recent };
+    // 「すべて」の並び（最新1件＋新着6件・1店舗2件まで）と、県ごとの並び（同じ形・最大6県）。
+    latestReviews = buildLatestFeed(mapped);
+    reviewsByPref = groupReviewsByPref(mapped, {
+      slugOf: (pref) => PREF_TO_SLUG[pref],
+      // 店の所在地を引けなかった分があると県別の数が欠けるので、そのときは件数を出さない
+      totals: shopLookupOk ? summary.prefTotals : null,
+    });
   } catch (e) {
     console.error('getServerSideProps home fetch failed:', e);
   }
@@ -109,12 +147,12 @@ export async function getServerSideProps({ res }) {
   //    「全部空」のときだけ503にする。
   // ⚠️ 404ではなく503。404はURLの消滅を宣言することになる。
   //    503は「今は出せない・あとで来て」なのでURLは保持される。
-  const gotNothing = initialHero.length === 0 && reviewsByPref.length === 0 && !liveCounts;
+  const gotNothing = initialHero.length === 0 && reviewsByPref.length === 0 && !liveCounts && latestReviews.length === 0;
   if (gotNothing) {
     res.statusCode = 503;
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Retry-After', '120');
   }
 
-  return { props: { initialHero, reviewsByPref, liveCounts } };
+  return { props: { initialHero, reviewsByPref, latestReviews, reviewStats, liveCounts } };
 }

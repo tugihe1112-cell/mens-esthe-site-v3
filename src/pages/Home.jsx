@@ -12,7 +12,7 @@ import TopHeroSlider from '../components/TopHeroSlider.jsx';
 import RankingSection from '../components/RankingSection.jsx';
 import RecentlyViewed from '../components/RecentlyViewed.jsx';
 import LazyImage from '../components/LazyImage.jsx';
-import HomeReviewCard from '../components/HomeReviewCard.jsx';
+import HomeReviewsSection from '../components/HomeReviewsSection.jsx';
 import { trackEvent } from '../utils/analytics';
 import Header from '../components/Header.jsx';
 import PrefectureSelector from '../components/PrefectureSelector.jsx';
@@ -23,7 +23,6 @@ import siteStats from '../data/stats-latest.json';
 import { useAuth } from '../contexts/AuthContext';
 import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
-import { pickLeadReview, pickRegionReviews } from '../utils/homeReviews';
 
 // 順位ごとの表示スタイル
 const RANK_STYLES = [
@@ -34,42 +33,14 @@ const RANK_STYLES = [
   { size: 'col-span-1 row-span-1', color: 'from-red-600 to-orange-900', tag: '🔥 注目' },        // 5位
 ];
 
-export default function HomePage({ initialHero = [], reviewsByPref = [], liveCounts = null }) {
+export default function HomePage({ initialHero = [], reviewsByPref = [], latestReviews = [], reviewStats = null, liveCounts = null }) {
   const { shops, loading, roomCounts } = useShopData();
   const displayedCounts = {
     totalShops: liveCounts?.totalShops ?? siteStats.coverage?.totalShops ?? 0,
     totalTherapists: liveCounts?.totalTherapists ?? siteStats.coverage?.totalTherapists ?? 0,
   };
   const [featuredTherapists, setFeaturedTherapists] = useState([]);
-  const leadReview = useMemo(() => pickLeadReview(reviewsByPref), [reviewsByPref]);
-
-  // ── 都道府県ブロック: SSR初期HTMLは全ユーザー共通。マウント後にlocalStorageの好みで一致県を先頭へ（UIなしの自動並べ替え） ──
-  const [orderedPrefs, setOrderedPrefs] = useState(reviewsByPref);
-  const [reordering, setReordering] = useState(false);
-  // ⚠️ U02: 全県分を縦に並べると、ホームが「口コミの倉庫」になって読み終われない。
-  //    見出し＋select＋選択地域の最大2件にする。空文字＝先頭（SSRと初回レンダーを一致させる）。
-  const [selectedPref, setSelectedPref] = useState('');
   const { user } = useAuth();
-
-  useEffect(() => {
-    setOrderedPrefs(reviewsByPref);
-    try {
-      const saved = localStorage.getItem('preferredReviewPref');
-      if (!saved) return;
-      const idx = reviewsByPref.findIndex((b) => b.pref === saved);
-      if (idx > 0) {
-        // 一度クリックした県を先頭に移動（transition-opacityでフェード＝CLSを出さない）
-        setReordering(true);
-        setOrderedPrefs([reviewsByPref[idx], ...reviewsByPref.filter((_, i) => i !== idx)]);
-        setTimeout(() => setReordering(false), 60);
-      }
-    } catch {}
-  }, [reviewsByPref]);
-
-  // 選択中の地域ブロック（最大2件・最新カードと同じ口コミは除く）
-  const activePref = selectedPref || orderedPrefs[0]?.pref || '';
-  const activeBlock = orderedPrefs.find((b) => b.pref === activePref) || orderedPrefs[0] || null;
-  const activeBlockReviews = pickRegionReviews(activeBlock, leadReview?.id);
 
   // 注目セラピスト取得（店舗分散・地域分散ロジック）
   useEffect(() => {
@@ -287,84 +258,14 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], liveCou
       {/* ===== メインカラム ===== */}
       <div className="flex-1 min-w-0 space-y-24">
 
-        {/* 検索直後に最新の実体験を1件提示。その後に中立性と地域別口コミを続ける。 */}
-        {reviewsByPref.length > 0 ? (
-          <section>
-            <div className="flex items-center justify-between mb-5 px-2">
-              <div>
-                <h3 className="text-xl md:text-2xl font-black text-white tracking-tight">最新の実体験口コミ</h3>
-                <p className="mt-1 text-xs font-medium text-slate-400">来店情報と評価を確認してから本文を読めます</p>
-              </div>
-              <Link to="/popular-reviews" className="text-xs font-bold text-pink-400 hover:text-pink-300 transition py-3 -my-3 pl-3">もっと見る →</Link>
-            </div>
-
-            {leadReview && (
-              <HomeReviewCard r={leadReview} variant="hero" position="latest_lead" pref={leadReview.prefecture} />
-            )}
-
-            {/* 中立宣言と母数。口コミを一度見せた直後に信頼の根拠を補う。 */}
-            <div className="my-6 rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-3 text-xs font-medium leading-relaxed text-slate-400">
-              <span className="font-bold text-slate-200">掲載店舗から広告費・掲載料を受け取っていません。</span>
-              <span className="ml-1">辛口の評価もそのまま掲載。</span>
-              <span className="ml-2 text-slate-300">掲載 {Number(displayedCounts.totalShops).toLocaleString()}店舗／在籍 {Number(displayedCounts.totalTherapists).toLocaleString()}人</span>
-              <Link to="/stats" className="ml-2 inline-flex min-h-11 items-center font-bold text-pink-400 hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">集計を見る →</Link>
-            </div>
-
-            {/* 地域別の口コミ（U02下部2〜3）
-                ⚠️ 全県分を縦に並べない。見出し＋select＋選択地域の**最大2件**。
-                   足りない場合は他地域の口コミで埋めない（「その地域の口コミ」ではなくなる）。
-                   全エリアの内部リンクは下の「すべてのエリア」とフッターに残っている。 */}
-            <div className={`transition-opacity duration-300 ${reordering ? 'opacity-50' : 'opacity-100'}`}>
-              <div className="flex flex-wrap items-end justify-between gap-3 mb-3 px-1">
-                <h4 className="text-lg font-black text-white">地域別の口コミ</h4>
-                <div className="flex items-center gap-2">
-                  <label htmlFor="home-pref-select" className="ui-label">口コミの地域</label>
-                  <select
-                    id="home-pref-select"
-                    value={activePref}
-                    onChange={(e) => setSelectedPref(e.target.value)}
-                    className="rounded-xl border border-white/10 bg-slate-800 px-3 font-bold text-white focus:outline-none focus:ring-2 focus:ring-pink-500"
-                    style={{ minHeight: '44px', fontSize: '14px' }}
-                  >
-                    {orderedPrefs.map((block) => (
-                      <option key={block.pref} value={block.pref}>{block.pref}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {activeBlock && (
-                <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {activeBlockReviews.map((r, i) => (
-                      <HomeReviewCard key={r.id || i} r={r} variant="small" position={i} pref={activeBlock.pref} />
-                    ))}
-                  </div>
-                  {activeBlockReviews.length === 0 && (
-                    <p className="ui-muted px-1">この地域の口コミはまだ準備中です。</p>
-                  )}
-                  <Link
-                    to={activeBlock.slug ? `/area/${activeBlock.slug}` : '/popular-reviews'}
-                    onClick={() => trackEvent('click_pref_more', { pref: activeBlock.pref })}
-                    className="ui-link mt-3 inline-flex min-h-11 items-center font-bold"
-                    style={{ fontSize: '13px' }}
-                  >
-                    この地域の口コミを見る →
-                  </Link>
-                </>
-              )}
-            </div>
-          </section>
-        ) : (
-          /* ⚠️ U02: 口コミが0件でも架空のカードを作らない。探せる場所へ送る。 */
-          <section className="ui-card p-5 text-center">
-            <p className="text-white font-black text-lg">まだ公開口コミがありません</p>
-            <div className="mt-4 flex flex-col sm:flex-row justify-center gap-3">
-              <Link to="/popular-reviews" className="ui-link inline-flex min-h-11 items-center justify-center px-2">公開口コミを探す</Link>
-              <Link to="/shops" className="ui-link inline-flex min-h-11 items-center justify-center px-2">店舗を探す</Link>
-            </div>
-          </section>
-        )}
+        {/* 呼水：最新の実体験口コミ（件数・地域チップ・最新1件・新着6件・中立宣言）。
+            組み立ては src/utils/homeReviews.js、画面は src/components/HomeReviewsSection.jsx。 */}
+        <HomeReviewsSection
+          latestReviews={latestReviews}
+          reviewsByPref={reviewsByPref}
+          reviewStats={reviewStats}
+          displayedCounts={displayedCounts}
+        />
 
         {/* ⚠️ 2026-09-08（U02下部4）削除: 4機能ショートカット。
             共通ナビ（ホーム/探す/口コミ/投稿/登録）と検索カードで同じ導線を既に持っており、

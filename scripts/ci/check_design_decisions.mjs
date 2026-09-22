@@ -675,21 +675,48 @@ function read(path) {
     if (/rounded-\[2\.5rem\]|md:p-10/.test(home)) {
       violations.push(`[U02-2] ${p} の検索カードが以前の40px角丸・40px余白へ戻っている。`);
     }
-    // U02下部2: 地域別は select で1地域ずつ。全県を縦に並べる形へ戻さない。
-    if (!home.includes('home-pref-select')) {
-      violations.push('[U02] ホームの地域別口コミが select（口コミの地域）を失っている。全県を縦積みに戻さない。');
+    // U02下部2: 地域は1地域ずつ。全県ぶんを縦に並べる形へ戻さない。
+    // ⚠️ 2026-09-22 呼水の作り直しで形を変えた: select（口コミの地域）→「チップで欄全体を1地域に絞る」。
+    //    欄は src/components/HomeReviewsSection.jsx に移したので、そちらを見る。
+    //    以前は `.slice(0, 2)` という綴りを探していたが、同じファイルの注目セラピスト（shuffled.slice(0, 2)）
+    //    にも当たり、地域別の絞り込みを消しても通っていた。件数は homeReviews.js の関数で決め、
+    //    check_ssr_helpers が挙動（1店舗2件まで・最新1件を除く・数えきれない件数は出さない）を検査する。
+    if (!/<HomeReviewsSection\b/.test(home)) {
+      violations.push('[U02] ホームが口コミ欄（HomeReviewsSection）を描いていない。');
     }
-    // ⚠️ 2026-09-22: 以前は `.slice(0, 2)` という綴りを探していたが、同じファイルの注目セラピスト
-    //    （shuffled.slice(0, 2)）にも当たるので、**地域別の絞り込みを消しても通っていた**。
-    //    件数は src/utils/homeReviews.js の関数で決め、check_ssr_helpers が挙動（最大2件・最新1件を除く・
-    //    東京が1件に減らない）を検査する。ここでは画面とSSRがその関数を通っていることを見る。
-    if (!/pickRegionReviews\(/.test(home) || !/pickLeadReview\(/.test(home)) {
-      violations.push('[U02] ホームの口コミ欄が homeReviews.js の関数を通っていない（地域別の件数・最新1件の除外がずれる）。');
+    {
+      const sp = 'src/components/HomeReviewsSection.jsx';
+      const sec = strip(read(sp));
+      if (!sec) {
+        violations.push(`[U02] ${sp} が無い（ホームの口コミ欄）。`);
+      } else {
+        // 地域の切り替えは「押した状態」が読み上げでも分かるボタン群
+        if (!/role="group"/.test(sec) || !/aria-label="口コミの地域"/.test(sec) || !/aria-pressed=\{/.test(sec)) {
+          violations.push(`[U02] ${sp} の地域の切り替えが「口コミの地域」のボタン群（aria-pressed）になっていない。`);
+        }
+        // カードを描くのは「最新1件」と「新着の並び」の2か所だけ（県ごとにカードを並べる＝縦積みに戻さない）
+        const cardCount = (sec.match(/<HomeReviewCard\b/g) || []).length;
+        if (cardCount !== 2 || !/feed\.map\([\s\S]{0,200}?<HomeReviewCard/.test(sec)) {
+          violations.push(`[U02] ${sp} のカードが「最新1件＋新着の並び」の形になっていない（<HomeReviewCard が ${cardCount} か所）。全県の縦積みに戻さない。`);
+        }
+        if (!/pickLeadReview\(/.test(sec) || !/pickFeedReviews\(/.test(sec)) {
+          violations.push(`[U02] ${sp} が homeReviews.js の関数を通っていない（最新1件の重複・件数がずれる）。`);
+        }
+        // D-003: 中立宣言は消さない（Home/Footer）。口コミが0件の画面にも出す。
+        if ((sec.match(/<NeutralStatement\b/g) || []).length < 2 || !sec.includes('掲載店舗から広告費・掲載料を受け取っていません。')) {
+          violations.push(`[D-003] ${sp} の中立宣言が消えている（口コミがある画面・0件の画面の両方に出す）。`);
+        }
+      }
     }
     {
       const ssr = strip(read('pages/index.jsx'));
-      if (!/groupReviewsByPref\(/.test(ssr)) {
-        violations.push('[U02] ホームSSRが groupReviewsByPref を通っていない（画面が1件除く分を見込まずに県ごとの件数を切る）。');
+      if (!/groupReviewsByPref\(/.test(ssr) || !/buildLatestFeed\(/.test(ssr)) {
+        violations.push('[U02] ホームSSRが homeReviews.js の組み立て（buildLatestFeed / groupReviewsByPref）を通っていない（1店舗2件の上限・件数がずれる）。');
+      }
+      // 件数は数えられた数字だけ出す。全件数は exact で取り、数えきれない数字は summarizeReviewIndex が null にする。
+      // 🚩「キャスト 1000件」は実際の母数ではなく `.limit(1000)` そのものだった。同じ型にしない。
+      if (!/summarizeReviewIndex\(/.test(ssr) || !/select\('shop_id, created_at', \{ count: 'exact' \}\)/.test(ssr)) {
+        violations.push('[U05] ホームSSRの口コミ件数が exact の全件数と summarizeReviewIndex を通っていない（取得上限の数字を件数として出してしまう）。');
       }
     }
     // U02下部5: 期限のない「読み放題」表現を使わない
@@ -719,6 +746,20 @@ function read(path) {
     // 全文リンクは該当口コミのアンカー付き
     if (!/#review-\$\{/.test(card)) {
       violations.push(`[U02] ${p} の全文リンクが該当口コミのアンカー（#review-<id>）を失っている。`);
+    }
+    // スマホ幅では index.css が全ての a に min-height:44px を付ける。行の中の文字リンクがそのまま44pxの箱になると
+    // 名前と店名の間が20px以上空く（2026-09-22 描画して発見）。押せる範囲はカード全体（after）か
+    // py-3 -my-3（見た目の位置を変えずに上下へ広げる）で取り、文字リンク自体は min-h-0 にする。
+    {
+      const classLists = [...card.matchAll(/className="([^"]*)"/g)].map((m) => m[1].split(/\s+/));
+      const stretched = classLists.filter((c) => c.includes('after:inset-0'));
+      const expanded = classLists.filter((c) => c.includes('py-3') && c.includes('-my-3'));
+      if (stretched.length !== 1 || !stretched[0].includes('min-h-0')) {
+        violations.push(`[U02] ${p} の新着カードが「カード全体で1つのリンク（after:inset-0 ＋ min-h-0）」になっていない。`);
+      }
+      if (expanded.length < 2 || expanded.some((c) => !c.includes('min-h-0'))) {
+        violations.push(`[U02] ${p} の最新1件の店名・人物名リンクが min-h-0 と py-3 -my-3 を失っている（スマホで行が44pxに膨らむ）。`);
+      }
     }
   }
 
