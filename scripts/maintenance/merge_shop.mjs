@@ -28,6 +28,8 @@
  *     （shop_id の付け替え。行のidは変えない）。居る人は同じ人なので消す。
  *     消す側の中で同じ名前が2行以上あれば、在籍→最終確認日→写真の有無の順で1行だけ移す。
  *     名前の比較は normalizeTherapistName（表示側・merge_duplicate_therapists と同じもの。写しを作らない）。
+ *     ⚠️ 人ではない行（「〇〇ルーム」「ノーイメージ」等）は移さずに消す。判定は rosterNoiseRules の
+ *        classifyRosterName（名簿ノイズの洗い出しと同じ関数）。2026-09-23 の下見で「ノーイメージ」を移しかけた。
  *  4. 消す側の店舗行を消す。
  *     🚩 therapists.shop_id は **ON DELETE CASCADE**。移す前に店舗を消すと、移すはずの人まで消える。
  *        必ず「移す → 残りを消す → 店舗を消す」の順。
@@ -50,6 +52,8 @@ import { fileURLToPath } from 'node:url';
 import { createClient } from '@supabase/supabase-js';
 // ⚠️ 名前の正規化は表示側と同じものを使う。写しを作ると片方だけ直したときにズレる。
 import { normalizeTherapistName } from '../../src/utils/reviewIdentity.js';
+// ⚠️ 「人ではない行」の判定も名簿ノイズの洗い出しと同じ関数を使う（写しを作らない）
+import { classifyRosterName, DELETABLE_BUCKETS, selfTestRosterRules } from '../lib/rosterNoiseRules.mjs';
 
 /** 残す側が空のときだけ、消す側の値で埋める列 */
 const SHOP_FIELDS = ['image_url', 'phone_number', 'business_hours', 'price_system', 'website_url', 'schedule_url'];
@@ -78,7 +82,7 @@ const pickBest = (rows) => [...rows].sort((a, b) =>
 
 /**
  * 1組の計画（純粋関数。DBには触らない）
- * @returns {{ patch: object, filled: string[], move: object[], drop: object[] }}
+ * @returns {{ patch: object, filled: string[], move: object[], drop: object[], noise: object[] }}
  */
 export function planMerge({ del, keep, delTherapists, keepTherapists }) {
   const patch = {};
@@ -96,8 +100,14 @@ export function planMerge({ del, keep, delTherapists, keepTherapists }) {
   if (!inBrand(keep.group_id) && inBrand(del.group_id)) patch.group_id = del.group_id;
 
   const keepKeys = new Set((keepTherapists || []).map((t) => normalizeTherapistName(t.name)));
+  // 人ではない行（部屋・素材の名前）は移さない。消す側と一緒に消える。
+  const isNoise = (t) => DELETABLE_BUCKETS.includes(
+    classifyRosterName({ name: t.name, shopId: del.id, shopName: del.name }),
+  );
+  const noise = (delTherapists || []).filter(isNoise);
   const byKey = new Map();
   for (const t of delTherapists || []) {
+    if (isNoise(t)) continue;
     const k = normalizeTherapistName(t.name);
     if (!byKey.has(k)) byKey.set(k, []);
     byKey.get(k).push(t);
@@ -109,13 +119,15 @@ export function planMerge({ del, keep, delTherapists, keepTherapists }) {
   }
   const moveIds = new Set(move.map((t) => t.id));
   const drop = (delTherapists || []).filter((t) => !moveIds.has(t.id));
-  return { patch, filled, move, drop };
+  return { patch, filled, move, drop, noise };
 }
 
 /** 掲示板のスレッドが付いているか（raw_data.threads が中身のある配列） */
 export const hasThreads = (shop) => Array.isArray(shop?.raw_data?.threads) && shop.raw_data.threads.length > 0;
 
 async function main() {
+  // 判定の自己診断（壊れていたら DB に触る前に止まる）
+  selfTestRosterRules();
   const env = fs.readFileSync('.env', 'utf-8');
   const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
   const url = getEnv('VITE_SUPABASE_URL');
@@ -215,6 +227,7 @@ async function main() {
     console.log(`   セラピスト: 消す側 ${pl.delTherapists.length}人 → 移す ${pl.move.length}人・同じ人なので消す ${pl.drop.length}人（残す側 ${pl.keepCount}人 → ${pl.keepCount + pl.move.length}人）`);
     if (pl.filled.length) console.log(`   空だった項目を埋める: ${pl.filled.join(', ')}`);
     if (pl.patch.group_id) console.log(`   系列に入れる: ${pl.keep.group_id || '（なし）'} → ${pl.patch.group_id}`);
+    if (pl.noise.length) console.log(`   人ではない行なので移さずに消す: ${pl.noise.map((t) => t.name).join('、')}`);
     if (pl.move.length) {
       console.log(`   移す人: ${pl.move.slice(0, 12).map((t) => t.name).join('、')}${pl.move.length > 12 ? ` …ほか${pl.move.length - 12}人` : ''}`);
     }

@@ -19,7 +19,8 @@ export const BRANCH_SUFFIX = /(店|ルーム|room|支店)$/i;
 
 /** ④ 取り込み元のページ部品がそのまま名前になったもの。
  *  ⚠️ **語のリスト＝網羅ではない。** 増やすときは実際に見つけたものだけを足す（想像で足さない）。 */
-export const ASSET_WORDS = /^(背景画像|背景|メイン画像|トップ画像|ロゴ|バナー|サンプル|画像|写真|no ?image|noimage|dummy|ダミー)$/i;
+//  「ノーイメージ」は 2026-09-23、Marine（綱島）の二重レコードをまとめる下見で実際に見つけた（全店で1行）。
+export const ASSET_WORDS = /^(背景画像|背景|メイン画像|トップ画像|ロゴ|バナー|サンプル|画像|写真|no ?image|noimage|ノーイメージ|dummy|ダミー)$/i;
 
 /** 同じ名前がこの数以上の無関係な店に居たら「よくある源氏名」とみなす（実測: 36行すべて「みやび」だった）。 */
 export const COMMON_NAME_MIN_SHOPS = 3;
@@ -67,6 +68,7 @@ export function selfTestRosterRules() {
     [{ name: 'THE HALF五反田店', shopId: 's2', shopName: 'THE HALF (ザ・ハーフ)' }, 'room'],
     [{ name: '荻窪北口ROOM', shopId: 's3', shopName: 'a laise' }, 'room'],
     [{ name: '背景画像', shopId: 's4', shopName: 'ルレーヴ' }, 'asset'],
+    [{ name: 'ノーイメージ', shopId: 's8', shopName: 'Marine (マリン) 綱島' }, 'asset'],
     // 実在の人。消してはいけない
     [{ name: '瑠香 -るか- Marvelous -マーベラス-', shopId: 's5', shopName: 'Marvelous -マーベラス-' }, 'decorated'],
     [{ name: '花森みい', shopId: 's4', shopName: 'ルレーヴ' }, null],
