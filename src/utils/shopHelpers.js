@@ -21,6 +21,8 @@ export const getGroupKey = (shop) => {
  * ⚠️ 末尾の1語を無条件に外してはいけない。ブランド名の一部を削る
  *    （"美・セラ極～KIWAMI～" や "トキョプラ 旧T+Plus (ティープラス) 新宿" のような名前がある）。
  *    **必ずその店自身の所在地と照合してから**外す。
+ * ⚠️ 外した残りが「メンズエステ」「スパ」のような**業種の一般名詞だけ**になるなら外さない。
+ *    「メンズエステ辻堂」は地名まで含めて店名＝外すと何の店か分からなくなる（下の GENERIC_SHOP_WORDS）。
  *
  * @param name 店舗名（DBの値）
  * @param shop 任意。渡すとその店の市区・エリア名に一致する地名も外す
@@ -45,24 +47,53 @@ const ownPlaceWords = (shop) => {
   return out;
 };
 
+/**
+ * 業種を表す一般名詞（これだけが残る外し方はしない）
+ *
+ * 【なぜ必要か（2026-09-23 実測）】
+ * 所在地の修正でエリアに「辻堂」が入り、「メンズエステ辻堂」が「メンズエステ」と表示されるようになった。
+ * 同じ形は他にもあった（メンズエステ一宮・メンズエステ大阪・メンズエステ恵比寿。同日の全件走査で計4件）。
+ * こういう店は**地名まで含めて店名**。外すと検索結果に「メンズエステ」が並び、どの店か区別できない。
+ * ⇒ 下の MIN_KEEP（残りが2文字未満になる外し方はしない）と同じ考え方で、
+ *    **残りがこの一覧の語だけになる外し方はしない**。
+ * ⚠️ 比較は NFKC・空白/中黒/アポストロフィ除去・小文字化してから
+ *    （"ＳＰＡ" "ｽﾊﾟ" "Men's Esthe" も同じ扱いにするため）。
+ */
+const GENERIC_SHOP_WORDS = new Set([
+  'メンズエステ', 'メンエス', 'エステ', 'エステサロン', 'メンズエステサロン',
+  'メンズスパ', 'スパ', 'アロマ', 'アロマエステ', 'アロマスパ', 'メンズアロマ',
+  'リラクゼーション', 'リラクゼーションサロン', 'マッサージ', 'サロン', 'メンズサロン',
+  'spa', 'esthe', 'mensesthe', 'mensspa', 'aroma', 'aromaspa', 'aromaesthe',
+  'relaxation', 'massage', 'salon',
+]);
+const isGenericShopWord = (v) =>
+  GENERIC_SHOP_WORDS.has(
+    String(v ?? '').normalize('NFKC').replace(/[\s・'’]/gu, '').toLowerCase(),
+  );
+/** 外した結果（after）が一般名詞だけなら外さない（before のまま）。 */
+const keepNamed = (before, after) => (isGenericShopWord(after) ? before : after);
+
 export const getDisplayName = (name, shop = null) => {
   if (!name) return name;
-  let out = name
-    // 括弧付き: （新宿ルーム）(新宿店) 等
-    .replace(/[\s　]*[（(][^）)]*(?:店|ルーム)[）)]/gu, '')
-    // スペース区切りの末尾: "〇〇店" or "〇〇ルーム"
-    .replace(/[\s　]+\S+(?:店|ルーム)$/u, '')
-    .trim();
+  let out = keepNamed(
+    name.trim(),
+    name
+      // 括弧付き: （新宿ルーム）(新宿店) 等
+      .replace(/[\s　]*[（(][^）)]*(?:店|ルーム)[）)]/gu, '')
+      // スペース区切りの末尾: "〇〇店" or "〇〇ルーム"
+      .replace(/[\s　]+\S+(?:店|ルーム)$/u, '')
+      .trim(),
+  );
   if (!shop) return out;
 
   const places = ownPlaceWords(shop);
   if (places.size === 0) return out;
   // 末尾の括弧: "CREST SPA TOKYO (吉祥寺)" — 中身がこの店の地名のときだけ外す
   const paren = out.match(/^(.*?)[\s　]*[（(]([^）)]+)[）)]$/u);
-  if (paren && places.has(paren[2].trim())) out = paren[1].trim();
+  if (paren && places.has(paren[2].trim())) out = keepNamed(out, paren[1].trim());
   // 末尾のスペース区切り: "Pepe Spa (ペペスパ) 下北沢"
   const bare = out.match(/^(.*\S)[\s　]+([^\s　]+)$/u);
-  if (bare && places.has(bare[2].trim())) out = bare[1].trim();
+  if (bare && places.has(bare[2].trim())) out = keepNamed(out, bare[1].trim());
 
   // 区切りなしで地名がくっついている形（2026-09-14 オーナー確認）
   //   "Aroma ELLA武蔵小杉" / "doigt de fee (ドゥワドフェ)溝の口" / "エステ美人マダム武蔵小杉"
@@ -82,7 +113,10 @@ export const getDisplayName = (name, shop = null) => {
       (p) => out.endsWith(p) && out.length - p.length >= MIN_KEEP,
     );
     if (!place) break;
-    out = out.slice(0, -place.length).replace(/[\s　・|/-]+$/u, '').trim();
+    const next = out.slice(0, -place.length).replace(/[\s　・|/-]+$/u, '').trim();
+    // ⚠️ 残りが一般名詞だけになるなら外さない（「メンズエステ辻堂」を「メンズエステ」にしない）
+    if (isGenericShopWord(next)) break;
+    out = next;
   }
 
   // 括弧の**中**で読み仮名に地名が溶けている形: "Aroma Lunabelle (アロマルナベール秋葉原)"
@@ -98,7 +132,7 @@ export const getDisplayName = (name, shop = null) => {
     const hit = ordered.find((p) => body.endsWith(p) && body.length - p.length >= MIN_KEEP);
     if (hit) {
       const kept = body.slice(0, -hit.length).replace(/[\s　・|/-]+$/u, '').trim();
-      out = head ? `${head} (${kept})` : kept;
+      out = keepNamed(out, head ? `${head} (${kept})` : kept);
     }
   }
 
@@ -106,7 +140,7 @@ export const getDisplayName = (name, shop = null) => {
   // 区切りが在ること自体が「ここまでが地名」という書き手の合図なので、誤削除になりにくい。
   const lead = out.match(/^([^\s　]+)[\s　]+(.*\S)$/u);
   if (lead && places.has(lead[1].trim()) && lead[2].trim().length >= MIN_KEEP) {
-    out = lead[2].trim();
+    out = keepNamed(out, lead[2].trim());
   }
 
   return out.trim();
