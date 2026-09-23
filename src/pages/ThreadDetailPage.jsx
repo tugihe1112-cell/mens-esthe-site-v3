@@ -18,6 +18,7 @@ import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 import { filterReviewsForPerson } from '../utils/reviewIdentity.js';
 import { isNotListed, NOT_LISTED_LABEL, NOT_LISTED_NOTE } from '../utils/therapistStatus.js';
+import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
 
 // ローディング中の骨組み（全画面テキスト→スケルトンで"個人サイト感"を除去）
 function ThreadSkeleton() {
@@ -478,6 +479,8 @@ export default function ThreadDetailPage({
               <span>✍️</span> 書く
             </button>
           </div>
+          {/* D-003: 口コミを読む場所で「広告ではない」と分かるように（2026-09-23） */}
+          <NeutralReviewNote className="px-1" />
 
           {therapistReviews.length > 0 ? (
             <ReviewListWithRestriction reviews={therapistReviews} shopId={shopId} therapistId={threadId} />

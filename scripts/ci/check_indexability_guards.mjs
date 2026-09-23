@@ -442,6 +442,21 @@ requireMatch(integrityMonitor, /口コミの実更新日が無い/, '本番監�
     '店舗ページの在籍数が退店マークの人まで数えています（一覧と同じ is_active の条件で数えること）');
 }
 
+// ── トップの WebSite 構造化データ（2026-09-23）────────────────────────────
+// Google は検索結果の「サイト名」を、トップの WebSite 構造化データから最優先で読む。
+// 店舗・ブランド・エリアには構造化データがあったが、トップには1つも無かった。
+{
+  const index = strip(read('pages/index.jsx'));
+  requireMatch(index, /'@type': 'WebSite'/,
+    'トップ（pages/index.jsx）に WebSite の構造化データがありません（検索結果のサイト名の指定が消えます）');
+  requireMatch(index, /name: 'メンエスマップ'/,
+    'トップの WebSite 構造化データのサイト名が「メンエスマップ」ではありません（og:site_name と揃える）');
+  requireMatch(index, /<Head>[\s\S]*?application\/ld\+json[\s\S]*?WEBSITE_LD[\s\S]*?<\/Head>/,
+    'トップの WebSite 構造化データが <Head> の中で出力されていません（初期HTMLに入りません）');
+  rejectMatch(index, /SearchAction/,
+    'トップの構造化データに SearchAction があります（Googleはサイトリンク検索ボックスの表示をやめています。付けない）');
+}
+
 if (failures.length) {
   console.error('❌ インデックス導線の回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

@@ -5,6 +5,7 @@ import { useViewingCredits } from '../hooks/useViewingCredits';
 import { trackEvent } from '../utils/analytics';
 import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
+import { FREE_READ_NOTE } from '../data/siteCopy.js';
 
 /**
  * 口コミを読み終えた地点に置く共通の案内（DESIGN.md U04）。
@@ -33,7 +34,7 @@ export default function RegisterInvite({ source = 'review_end', returnTo = '', s
       <div data-cta="review-end" className="ui-card p-5 lg:p-6 text-center">
         <h4 className="text-white font-black text-lg leading-snug">気になる口コミを、もっと読む</h4>
         <p className="text-pink-300 font-bold text-sm mt-2">無料登録で3日間、口コミ読み放題</p>
-        <p className="ui-help mt-1.5">メール確認後に利用できます。閲覧期間は登録手続き時から3日間です</p>
+        <p className="ui-help mt-1.5">{FREE_READ_NOTE}</p>
         <div className="mt-5 flex flex-col items-center gap-3">
           <Link
             to={withReturnTo('/register', returnTo, { source })}

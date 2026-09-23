@@ -684,6 +684,12 @@ function read(path) {
     if (!home.includes('口コミを読んで、店選びの不安を減らす。')) {
       violations.push(`[U02-1] ${p} の検索カード見出しが価値説明になっていない。`);
     }
+    // U02-1（2026-09-23）: 見出し文はHTMLに1回だけ。スマホ用・PC用の<span>を2つ並べて出し分けると、
+    //   画面には1回でも HTML の H1 に同じ文が2回入り「見出しが重複」に見える（外部の指摘で発覚）。
+    {
+      const n = home.split('口コミを読んで、店選びの不安を減らす。').length - 1;
+      if (n !== 1) violations.push(`[U02-1] ${p} の見出し文がHTMLに ${n} 回ある（大きさの違いは1つの要素のクラスで切り替える）。`);
+    }
     // U02-2: カード幅880px（PC40px余白・40px角丸へ戻さない）
     if (!/max-w-\[880px\]/.test(home)) {
       violations.push(`[U02-2] ${p} の検索カードが幅880pxではない。`);
@@ -719,7 +725,7 @@ function read(path) {
           violations.push(`[U02] ${sp} が homeReviews.js の関数を通っていない（最新1件の重複・件数がずれる）。`);
         }
         // D-003: 中立宣言は消さない（Home/Footer）。口コミが0件の画面にも出す。
-        if ((sec.match(/<NeutralStatement\b/g) || []).length < 2 || !sec.includes('掲載店舗から広告費・掲載料を受け取っていません。')) {
+        if ((sec.match(/<NeutralStatement\b/g) || []).length < 2 || !/\{NEUTRAL_REVIEW_NOTE\}/.test(sec)) {
           violations.push(`[D-003] ${sp} の中立宣言が消えている（口コミがある画面・0件の画面の両方に出す）。`);
         }
       }
@@ -1051,9 +1057,13 @@ function read(path) {
   // U02: 390×844の初期画面に「特典・登録CTA・検索操作」が入る。
   // 実測で検索欄が851px（7pxはみ出し）だった原因は、補助文2行を検索欄の**上**に置いていたこと。
   const home = strip(read('src/pages/Home.jsx'));
-  const noteIdx = home.indexOf('閲覧期間は登録手続き時から3日間です。メール確認後に利用できます。自動課金はありません');
+  // ⚠️ 2026-09-23: 注記の文言は siteCopy.js の FREE_READ_NOTE に移したので、目印（data-role）で探す。
+  //    文言で探したままだと indexOf が -1 になり、この検査が**黙って素通り**する。見つからなければ失敗にする。
+  const noteIdx = home.indexOf('data-role="home-free-note"');
   const searchIdx = home.indexOf('<SearchBar />');
-  if (noteIdx >= 0 && searchIdx >= 0 && noteIdx < searchIdx) {
+  if (noteIdx < 0 || searchIdx < 0) {
+    violations.push('[U02] ホームの補助文（data-role="home-free-note"）か検索欄が見つからない（位置の検査ができない）。');
+  } else if (noteIdx < searchIdx) {
     violations.push('[U02] ホームの補助文が検索欄より前にある。2行ぶん押し下げて390×844の初期画面から検索操作が外れる。');
   }
   // 計測が確実にカード内のCTAを掴めるようにする（ヘッダーの登録ボタンを誤って掴むと判定が死ぬ）
@@ -1073,6 +1083,52 @@ function read(path) {
   }
   if (!/resultCapped \? '以上' : ''/.test(search)) {
     violations.push('[U05] 検索の件数表示が上限到達時に「以上」を付けていない。');
+  }
+}
+
+// ── 画面をまたいで同じ文で出す案内（2026-09-23）──────────────────────────────
+// 🚩 無料登録の注記は5か所に書き写されていて、「自動課金はありません」はホームの1か所にしか無かった
+//    （登録画面そのものには無かった）。文は src/data/siteCopy.js の1か所に置き、書き写しを禁止する。
+{
+  const strip = (src) => (src || '')
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+  const copy = read('src/data/siteCopy.js') || '';
+  const free = (copy.match(/export const FREE_READ_NOTE = '([^']*)'/) || [])[1] || '';
+  if (!free.includes('登録手続き時から3日間') || !free.includes('自動課金はありません')) {
+    violations.push('[U02-6] siteCopy.js の FREE_READ_NOTE に「登録手続き時から3日間」「自動課金はありません」が無い。');
+  }
+  const neutral = (copy.match(/export const NEUTRAL_REVIEW_NOTE = '([^']*)'/) || [])[1] || '';
+  if (!neutral.includes('掲載店舗から広告費・掲載料を受け取っていません')) {
+    violations.push('[D-003] siteCopy.js の NEUTRAL_REVIEW_NOTE が中立宣言になっていない。');
+  }
+  // 書き写しの禁止（コメントは除く）
+  const dirs = ['src/pages', 'src/components', 'pages'];
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => {
+    const f = `${d}/${e.name}`;
+    if (e.isDirectory()) return f.includes('_archive') ? [] : walk(f);
+    return /\.(jsx?|tsx?)$/.test(e.name) ? [f] : [];
+  });
+  for (const f of dirs.filter((d) => fs.existsSync(d)).flatMap(walk)) {
+    if (strip(read(f)).includes('閲覧期間は登録手続き時から3日間')) {
+      violations.push(`[U02-6] ${f} に無料登録の注記が書き写されている（siteCopy.js の FREE_READ_NOTE を使う）。`);
+    }
+  }
+  // 登録の案内がある場所は全部 FREE_READ_NOTE を出す
+  for (const [f, min] of [['src/pages/Home.jsx', 3], ['src/pages/RegisterPage.jsx', 1], ['src/components/RegisterInvite.jsx', 1]]) {
+    const n = (strip(read(f)).match(/\{FREE_READ_NOTE\}/g) || []).length;
+    if (n < min) violations.push(`[U02-6] ${f} の無料登録の注記が ${n} か所（${min} か所は要る）。登録ボタンの近くで「自動課金はありません」が消える。`);
+  }
+  // 口コミを読む場所の中立宣言（D-003）
+  const note = strip(read('src/components/NeutralReviewNote.jsx') || '');
+  if (!/\{NEUTRAL_REVIEW_NOTE\}/.test(note)) {
+    violations.push('[D-003] NeutralReviewNote.jsx が siteCopy の NEUTRAL_REVIEW_NOTE を出していない。');
+  }
+  for (const f of ['src/pages/ShopDetailPage.jsx', 'src/pages/BrandPage.jsx', 'src/pages/ThreadDetailPage.jsx']) {
+    if (!/<NeutralReviewNote\b/.test(strip(read(f)))) {
+      violations.push(`[D-003] ${f} の口コミ欄から中立宣言（NeutralReviewNote）が消えている。`);
+    }
   }
 }
 

@@ -18,6 +18,7 @@ import { joinFields, shapeShopRow } from '../utils/shopFields';
 import { trackEvent } from '../utils/analytics';
 import siteStats from '../data/stats-latest.json';
 import ShopStatusBanner from '../components/ShopStatusBanner.jsx';
+import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
 
 // 左サイドバーのタグ絞り込み（SearchPage と同一定義。表記を割らないため必ず揃える）
 // ⚠️ タグ定義をここに書き戻さないこと（src/data/constants.js が唯一の定義元）。
@@ -892,6 +893,8 @@ export default function ShopDetailPage({
                  <span>✍️</span> 投稿する
                </button>
             </div>
+            {/* D-003: 口コミを読む場所で「広告ではない」と分かるように（2026-09-23） */}
+            <NeutralReviewNote className="-mt-3 mb-5 px-1" />
 
             {reviews.length > 0 ? (
                <div className="space-y-4 relative">

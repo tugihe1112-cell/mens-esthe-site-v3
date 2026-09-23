@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
+import { NEUTRAL_REVIEW_NOTE } from '../data/siteCopy.js';
 import { Link } from '../compat/router';
 import HomeReviewCard from './HomeReviewCard.jsx';
 import { trackEvent } from '../utils/analytics';
@@ -56,7 +57,7 @@ function NeutralStatement({ displayedCounts }) {
         </span>
         <div className="min-w-0">
           <p className="font-bold text-slate-50" style={{ fontSize: '14px', lineHeight: 1.6 }}>
-            掲載店舗から広告費・掲載料を受け取っていません。辛口の評価もそのまま掲載。
+            {NEUTRAL_REVIEW_NOTE}
           </p>
           <p className="mt-0.5 font-semibold text-slate-400" style={{ fontSize: '12px' }}>
             掲載 {fmt(displayedCounts.totalShops)}店舗／在籍 {fmt(displayedCounts.totalTherapists)}人

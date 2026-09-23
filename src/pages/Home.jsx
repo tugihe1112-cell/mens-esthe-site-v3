@@ -23,6 +23,7 @@ import siteStats from '../data/stats-latest.json';
 import { useAuth } from '../contexts/AuthContext';
 import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
+import { FREE_READ_NOTE } from '../data/siteCopy.js';
 
 // 順位ごとの表示スタイル
 const RANK_STYLES = [
@@ -209,9 +210,13 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
             {/* ⚠️ U02-1: ページのH1はここ1つだけ。以前は sr-only のH1が別にあり、
                    画面に見えている一番大きな文字（＝利用者が読む見出し）と食い違っていた。
                    このカード内のH1はスマホ22px・PC28pxで、汎用H1より小さくする（U02-2）。 */}
-            <h1 className="font-black text-white tracking-tight" style={{ fontSize: '22px', lineHeight: 1.3 }}>
-              <span className="md:hidden">口コミを読んで、店選びの不安を減らす。</span>
-              <span className="hidden md:inline" style={{ fontSize: '28px' }}>口コミを読んで、店選びの不安を減らす。</span>
+            {/* ⚠️ 2026-09-23: 以前はスマホ用とPC用の<span>を2つ並べて出し分けていたため、
+                   HTML上はH1の中に同じ文が2回あった（画面に出るのは1回だが、本文として読む
+                   クローラーや読み上げ以外の抽出では「見出しが重複」に見える。外部の指摘で発覚）。
+                   文字の大きさだけの違いなので、1つの要素のまま幅で切り替える。
+                   ⚠️ index.css に「768px以下の h1 は 1.5rem」があるが、クラス指定のほうが強いので 22px が勝つ。 */}
+            <h1 className="font-black text-white tracking-tight text-[22px] md:text-[28px]" style={{ lineHeight: 1.3 }}>
+              口コミを読んで、店選びの不安を減らす。
             </h1>
 
             {!user ? (
@@ -246,7 +251,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
                    390×844の初期画面から検索欄がはみ出す（実測851px）。受入条件は
                    「特典・登録CTA・検索操作まで初期画面に入る」なので、操作を優先する。 */}
             {!user && (
-              <p className="ui-help mt-3">閲覧期間は登録手続き時から3日間です。メール確認後に利用できます。自動課金はありません</p>
+              <p data-role="home-free-note" className="ui-help mt-3">{FREE_READ_NOTE}</p>
             )}
           </div>
         </div>
@@ -448,7 +453,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
           {!user ? (
             <div className="ui-card p-5 lg:p-6 text-center">
               <h4 className="text-white font-black text-lg">無料登録で3日間、口コミ読み放題</h4>
-              <p className="ui-help mt-2">閲覧期間は登録手続き時から3日間です。メール確認後に利用できます</p>
+              <p className="ui-help mt-2">{FREE_READ_NOTE}</p>
               <Link
                 to={withReturnTo('/register', '', { source: 'home' })}
                 onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
@@ -525,7 +530,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
           {!user ? (
             <div className="ui-card p-5">
               <h4 className="text-white font-black text-sm leading-snug">無料登録で3日間、口コミ読み放題</h4>
-              <p className="ui-help mt-2">閲覧期間は登録手続き時から3日間です。メール確認後に利用できます</p>
+              <p className="ui-help mt-2">{FREE_READ_NOTE}</p>
               <Link
                 to={withReturnTo('/register', '', { source: 'home' })}
                 onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}

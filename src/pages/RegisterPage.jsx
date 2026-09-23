@@ -7,6 +7,7 @@ import {
   trackRegisterView, trackRegisterStart, trackRegisterSubmit,
   trackRegisterEmailSent, trackRegisterError,
 } from '../utils/registerAnalytics';
+import { FREE_READ_NOTE } from '../data/siteCopy.js';
 
 // ⚠️ 内部の例外メッセージを利用者にそのまま出さない（DESIGN.md U03-10）。
 //    ただし **4xx はAPIが利用者向けに書いた文言**（「メールアドレスの形式が正しくありません」等）で、
@@ -172,7 +173,7 @@ export default function RegisterPage() {
           <h1 className="ui-h1 mt-4">無料会員登録</h1>
           <p className="text-pink-300 font-bold text-sm mt-2">登録で3日間、口コミ読み放題</p>
           {/* ⚠️ 「メール確認完了から丸3日」とは書かない。起算はAPIがアカウントを作る時点から72時間。 */}
-          <p className="ui-muted mt-1.5">メール確認後に利用できます。閲覧期間は登録手続き時から3日間です。</p>
+          <p className="ui-muted mt-1.5">{FREE_READ_NOTE}</p>
         </div>
 
         <div className="ui-card p-5 lg:p-6">

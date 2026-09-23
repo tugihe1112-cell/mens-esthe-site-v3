@@ -29,6 +29,7 @@ import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { TagFilterSidebar, TagFilterButton } from '../components/TagFilterSidebar.jsx';
 import { authHeaders } from '../utils/supabaseRest';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
+import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
 
 const fmtDate = (v) => {
   const d = new Date(v);
@@ -323,6 +324,8 @@ export default function BrandPage({
         {ssrReviews.length > 0 && (
           <section>
             <h2 className="text-base font-black text-white mb-3">口コミ</h2>
+            {/* D-003: 口コミを読む場所で「広告ではない」と分かるように（2026-09-23） */}
+            <NeutralReviewNote className="-mt-1 mb-3" />
             <div className="space-y-3">
               {ssrReviews.map((r) => (
                 <article key={r.id} className="bg-slate-900 border border-white/5 rounded-2xl p-4">

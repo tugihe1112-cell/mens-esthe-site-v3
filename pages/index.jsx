@@ -6,6 +6,7 @@
 // これによりCSRのデータ取得待ち（LCP 14.6s/CLSの主因）を排除する。
 // ※ISR(getStaticProps)はVercel永続キャッシュが古い版を配信し続ける問題があったためSSR+Cache-Controlに変更。
 import React from 'react';
+import Head from 'next/head';
 import { createClient } from '@supabase/supabase-js';
 import Home from '../src/pages/Home';
 import { HERO_SHOP_IDS, buildInitialHero } from '../src/data/heroShops';
@@ -15,15 +16,35 @@ import {
 } from '../src/utils/homeReviews';
 import { getDisplayName } from '../src/utils/shopHelpers';
 
+const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
+
+/**
+ * 検索結果に出す「サイト名」の指定（Google の site name は WebSite の構造化データを最優先で読む）。
+ * 2026-09-23 に追加。店舗・ブランド・エリアの各ページは構造化データを持っていたが、トップには1つも無かった。
+ * ⚠️ url は canonical（SeoHead がトップに出すもの）と同じ形にする。name は og:site_name と同じ。
+ * ⚠️ 検索窓（SearchAction）は付けない。Google は2024年にサイトリンク検索ボックスの表示をやめている。
+ */
+const WEBSITE_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'メンエスマップ',
+  url: SITE,
+};
+
 export default function IndexPage({ initialHero, reviewsByPref, latestReviews, reviewStats, liveCounts }) {
   return (
-    <Home
-      initialHero={initialHero}
-      reviewsByPref={reviewsByPref}
-      latestReviews={latestReviews}
-      reviewStats={reviewStats}
-      liveCounts={liveCounts}
-    />
+    <>
+      <Head>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_LD) }} />
+      </Head>
+      <Home
+        initialHero={initialHero}
+        reviewsByPref={reviewsByPref}
+        latestReviews={latestReviews}
+        reviewStats={reviewStats}
+        liveCounts={liveCounts}
+      />
+    </>
   );
 }
 
