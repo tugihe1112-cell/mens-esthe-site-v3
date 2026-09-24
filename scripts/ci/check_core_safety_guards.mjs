@@ -591,6 +591,28 @@ for (const [path, label] of [
   }
 }
 
+// ── ホームのエリア選択（2026-09-24）──────────────────────────────
+// ①「よく検索されるエリア」の件数が手書きの固定値（新宿区42件など）で、実数と合っていなかった。
+// ② shop.area だけを見ていたため、エリアが配列の店（複数ルーム）がエリア選択に出なかった。
+{
+  const src = stripSrc(read('src/components/PrefectureSelector.jsx'));
+  const popular = src.match(/const POPULAR_WARDS = \[([\s\S]*?)\];/)?.[1];
+  if (popular === undefined) {
+    failures.push('PrefectureSelector の POPULAR_WARDS が見つかりません（検査が何も見ていない状態）。');
+  } else if (/count\s*:/.test(popular)) {
+    failures.push(
+      'ホームのエリア選択の件数が固定値に戻っています（POPULAR_WARDS の count）。'
+      + '\n      → 件数は shops から数えること。手書きの数字は実数と食い違います（根拠のない数字）。'
+    );
+  }
+  if (!/shopAreaList\(/.test(src)) {
+    failures.push(
+      'ホームのエリア選択が shopAreaList を使っていません。'
+      + '\n      → shop.area だけだと、エリアが配列の店（複数ルーム）がエリア選択に出ません。'
+    );
+  }
+}
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

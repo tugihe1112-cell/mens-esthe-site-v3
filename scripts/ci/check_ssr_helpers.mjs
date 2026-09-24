@@ -112,6 +112,15 @@ const check = (name, fn) => {
     (f.shopLocationText({ raw_data: { prefecture: '栃木県', city: '宇都宮' } }) === '栃木県 宇都宮' ? null : 'フォールバックしない'));
   check('shopLocationText は全部無ければ空', () =>
     (f.shopLocationText({ raw_data: {} }) === '' ? null : '空にならない'));
+  // 2026-09-24: 複数エリア（配列）の店がエリア選択に出ていなかった。shapeShopRow を通しても全エリアが取れること。
+  check('shopAreaList は配列の area を全部返す（shapeShopRow 経由でも）', () => {
+    const shaped = f.shapeShopRow({ id: 'x', raw_data: { area: ['梅田', ' 北新地 ', ''] } });
+    const got = f.shopAreaList(shaped);
+    return JSON.stringify(got) === JSON.stringify(['梅田', '北新地']) ? null : `取れたのは ${JSON.stringify(got)}`;
+  });
+  check('shopAreaList は文字列の area を1件で返し、無ければ空', () =>
+    (JSON.stringify(f.shopAreaList({ raw_data: { area: '渋谷' } })) === '["渋谷"]'
+      && f.shopAreaList({ raw_data: {} }).length === 0 && f.shopAreaList(null).length === 0 ? null : '形が違う'));
 }
 
 // ── URLクエリ更新（無限ループ再発防止） ────────────────────────────────

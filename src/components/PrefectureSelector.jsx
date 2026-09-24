@@ -1,24 +1,28 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from '../compat/router';
 import { REGIONS, PREF_CITY_MAP, WARDS } from '../data/locations.js';
+import { shopAreaList } from '../utils/shopFields';
 
 
 
+// 件数は固定値を持たない。以前は「新宿区 42件」のような手書きの数字が入っており、
+// 実数（2026-09-24 時点で新宿区は約70店）と食い違っていた＝根拠のない数字（D-010と同じ考え方）。
+// 件数は shops から数え、読み込み前は出さない。
 const POPULAR_WARDS = [
-  { name: "新宿区", count: 42, icon: "🏙️" },
-  { name: "渋谷区", count: 38, icon: "✨" },
-  { name: "港区", count: 35, icon: "🍸" },
-  { name: "豊島区", count: 24, icon: "🦉" },
-  { name: "千代田区", count: 18, icon: "🏢" },
-  { name: "中央区", count: 15, icon: "🍣" }
+  { name: "新宿区", icon: "🏙️" },
+  { name: "渋谷区", icon: "✨" },
+  { name: "港区", icon: "🍸" },
+  { name: "豊島区", icon: "🦉" },
+  { name: "千代田区", icon: "🏢" },
+  { name: "中央区", icon: "🍣" }
 ];
 const TOKYO_GROUPS = [
-  { label: "城東", items: ["墨田区", "江東区", "足立区", "荒川区", "台東区"], colorClass: "border-blue-500 text-blue-400" },
+  { label: "城東", items: ["墨田区", "江東区", "足立区", "荒川区", "台東区", "葛飾区", "江戸川区"], colorClass: "border-blue-500 text-blue-400" },
   { label: "城南", items: ["世田谷区", "品川区", "大田区", "目黒区"], colorClass: "border-emerald-500 text-emerald-400" },
   { label: "城西", items: ["中野区", "新宿区", "杉並区", "渋谷区"], colorClass: "border-purple-500 text-purple-400" },
   { label: "城北", items: ["北区", "練馬区", "豊島区"], colorClass: "border-yellow-500 text-yellow-400" },
   { label: "都心", items: ["中央区", "千代田区", "港区"], colorClass: "border-pink-500 text-pink-400" },
-  { label: "市部", items: ["三鷹市", "八王子市", "調布市", "立川市", "国分寺市", "小金井市", "府中市", "武蔵野市", "多摩市", "23区出張"], colorClass: "border-slate-500 text-slate-400" }
+  { label: "市部", items: ["三鷹市", "八王子市", "調布市", "立川市", "国分寺市", "小金井市", "府中市", "武蔵野市", "多摩市", "町田市", "23区出張"], colorClass: "border-slate-500 text-slate-400" }
 ];
 
   const AreaPanel = ({ city, pref, areas, activePlaces }) => {
@@ -63,13 +67,28 @@ export default function PrefectureSelector({ shops = [] }) {
   // 実際に店舗が存在する場所のセット（city・area 両方を収録）
   // PREF_CITY_MAP の値はエリア名（例: "川越"）で、
   // shop.city は行政名（例: "川越市"）の場合があるため area も含める
+  // raw_data.area は複数ルームの店で配列になる（65店・2026-09-24）。shapeShopRow は配列の area を
+  // undefined にするため、shop.area だけを見るとこの店たちがエリア選択に一切出なかった。
   const activePlaces = useMemo(() => {
     const set = new Set();
     for (const shop of shops) {
       if (shop.city) set.add(shop.city);
-      if (shop.area) set.add(shop.area);
+      for (const a of shopAreaList(shop)) set.add(a);
     }
     return set;
+  }, [shops]);
+
+  // 「よく検索されるエリア」の件数。区そのもの（city）か、その区のエリア（WARDS）に当たる東京の店を数える。
+  const wardCounts = useMemo(() => {
+    const counts = {};
+    for (const { name } of POPULAR_WARDS) {
+      const places = new Set([name, ...(WARDS[name] || [])]);
+      counts[name] = shops.filter(shop =>
+        shop.prefecture === '東京都' &&
+        (places.has(shop.city) || shopAreaList(shop).some(a => places.has(a)))
+      ).length;
+    }
+    return counts;
   }, [shops]);
 
   const toggleRegion = (id) => setActiveRegion(activeRegion === id ? null : id);
@@ -147,7 +166,9 @@ export default function PrefectureSelector({ shops = [] }) {
                                 >
                                   <span className="text-sm">{ward.icon}</span>
                                   <span className="font-bold text-sm tracking-wider">{ward.name}</span>
-                                  <span className="bg-black/50 text-xs px-2 py-0.5 rounded-full text-slate-300 border border-white/10">{ward.count}件</span>
+                                  {wardCounts[ward.name] > 0 && (
+                                    <span className="bg-black/50 text-xs px-2 py-0.5 rounded-full text-slate-300 border border-white/10">{wardCounts[ward.name]}件</span>
+                                  )}
                                 </button>
                               ))}
                             </div>

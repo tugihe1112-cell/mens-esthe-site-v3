@@ -113,6 +113,17 @@ export function shapeShopRow(row) {
   return shaped;
 }
 
+/**
+ * 店舗のエリアを配列で返す（文字列・配列のどちらでも。空は除く）。
+ * raw_data.area は複数ルームの店で配列になる（2026-09-24 時点で65店）が、shapeShopRow は
+ * 配列の area を undefined にする。shop.area だけを見ると、この店たちはエリア選択に一切出ない。
+ */
+export function shopAreaList(shop) {
+  const raw = shop?.raw_data?.area ?? shop?.area;
+  const list = Array.isArray(raw) ? raw : [raw];
+  return list.filter((a) => typeof a === 'string' && a.trim() !== '').map((a) => a.trim());
+}
+
 /** 店舗の所在地表示（詳細な住所を優先し、無ければ 都道府県/市区/エリア にフォールバック） */
 export function shopLocationText(shop) {
   if (!shop) return '';
