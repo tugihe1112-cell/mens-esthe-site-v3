@@ -23,6 +23,7 @@
  * よって長めのキャッシュで事故は再発しない。店舗データの更新頻度は日単位なので10分で十分。
  */
 import { createClient } from '@supabase/supabase-js';
+import { sendSiteCounts } from '../server/siteCounts.js';
 
 const PAGE = 1000;
 
@@ -31,6 +32,9 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'GET, HEAD');
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
+  // 🚩 トップの件数（掲載N店舗／在籍N人）は ?view=counts で返す（2026-09-24・server/siteCounts.js の注記）。
+  //    件数だけの関数を足したら Vercel 無料プランの「1デプロイ12関数まで」を超えてデプロイが失敗したので、ここに同居させる。
+  if (req.query && req.query.view === 'counts') return sendSiteCounts(req, res);
   if (!process.env.VITE_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return res.status(500).json({ error: 'server configuration error' });
   }

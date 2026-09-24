@@ -52,7 +52,7 @@ export default function IndexPage({ initialHero, reviewsByPref, latestReviews, r
 // 🚩 件数（掲載N店舗／在籍N人）は表示のたびに数えない（2026-09-24）。
 //    セラピスト56,625行の数え上げがDBの実行時間全体の53%を占め（店舗の数え上げと合わせて6割超）、冷えた状態では2〜4秒かかって
 //    トップ全体の待ち時間になっていた（UptimeRobot が5分おきに開くたびに冷えた状態で走っていた）。
-// 🚩 数えるのは /api/site-counts（CDNに置く）。ここは読むだけ（api/site-counts.js の注記）。
+// 🚩 数えるのは /api/shops-lite?view=counts（CDNに置く）。ここは読むだけ（server/siteCounts.js の注記）。
 //    この関数のメモリに持って数え直す方式（b00e150・8f901c0）は、返答のあと関数が止まると結果が失われ、
 //    期限切れのあと数え直しを繰り返していた（本番のログで05:52〜06:19に6回）。
 // ⚠️ getServerSideProps の中で件数だけの問い合わせ（head: true）を書かないこと（check_ssr_helpers が検査する）。
@@ -64,7 +64,7 @@ const LIVE_COUNTS_TTL_MS = 5 * 60 * 1000;
 const LIVE_COUNTS_GRACE_MS = 3000;
 
 async function loadLiveCounts() {
-  const r = await fetch(`${SITE}/api/site-counts`, { headers: { accept: 'application/json' } });
+  const r = await fetch(`${SITE}/api/shops-lite?view=counts`, { headers: { accept: 'application/json' } });
   if (!r.ok) return null;
   const j = await r.json();
   return Number.isInteger(j?.totalShops) && Number.isInteger(j?.totalTherapists)

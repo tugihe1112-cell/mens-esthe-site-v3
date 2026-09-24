@@ -1663,25 +1663,27 @@ const check = (name, fn) => {
     if (/head:\s*true/.test(gssp)) return 'getServerSideProps の中に件数だけの問い合わせ（head: true）がある＝表示のたびに数えている';
     if (!/liveCountsCache\.waitFor\(/.test(gssp)) return '件数を liveCountsCache から取っていない';
     if (!/createCountsCache\(\{\s*ttlMs:/.test(before)) return 'liveCountsCache を作っていない';
-    // 数えるのは /api/site-counts（CDNに置く）。トップの関数のメモリで数え直すと、返答後に止まって結果が失われる（2026-09-24）。
-    if (!/fetch\(`\$\{SITE\}\/api\/site-counts`/.test(before)) return '件数を /api/site-counts（CDN）から読んでいない';
-    const api = fs.readFileSync(path.join(ROOT, 'api/site-counts.js'), 'utf-8')
+    // 数えるのは /api/shops-lite?view=counts（CDNに置く）。トップの関数のメモリで数え直すと、返答後に止まって結果が失われる（2026-09-24）。
+    if (!/fetch\(`\$\{SITE\}\/api\/shops-lite\?view=counts`/.test(before)) return '件数を /api/shops-lite?view=counts（CDN）から読んでいない';
+    const lite = fs.readFileSync(path.join(ROOT, 'api/shops-lite.js'), 'utf-8');
+    if (!/req\.query\.view === 'counts'\) return sendSiteCounts\(req, res\)/.test(lite)) return 'api/shops-lite.js が ?view=counts を server/siteCounts.js に渡していない';
+    const api = fs.readFileSync(path.join(ROOT, 'server/siteCounts.js'), 'utf-8')
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/^\s*\/\/.*$/gm, '');
-    if (!/from\('shops'\)\.select\('id', \{ count: 'exact', head: true \}\)/.test(api)) return '/api/site-counts が店舗を数えていない';
+    if (!/from\('shops'\)\.select\('id', \{ count: 'exact', head: true \}\)/.test(api)) return 'server/siteCounts.js が店舗を数えていない';
     return /from\('therapists'\)[\s\S]{0,120}\.or\('is_active\.is\.null,is_active\.eq\.true'\)/.test(api)
       ? null
       : '在籍数の数え方（is_active が null か true）が変わった（一覧の「在籍」と食い違う）';
   });
 }
 
-// ── CDNに置くAPI（店舗一覧 api/shops-lite.js・件数 api/site-counts.js）が本当にCDNに溜まること（2026-09-24 本番実測）──────────
+// ── CDNに置くAPI（店舗一覧 api/shops-lite.js・件数 server/siteCounts.js）が本当にCDNに溜まること（2026-09-24 本番実測）──────────
 // 🚩 res.send() / res.json() は ETag を付ける。一度来たことのある人のブラウザは次から
 //    If-None-Match 付きで取りに来るので、CDNに手元の版が無いとき（デプロイ直後・期限切れ）は
 //    元のサーバーまで行って **304（中身なし）** が返り、304 はCDNに溜まらない。
 //    ＝来たことのある人だけで回している限りCDNがずっと空のまま、毎回0.7〜3秒（実測 x-vercel-cache: MISS の連続）。
 //    成功の応答は res.end(body) で返し、ETag を付けないこと。
-for (const apiFile of ['api/shops-lite.js', 'api/site-counts.js']) check(`${apiFile}: 成功の応答に ETag を付けない（304ばかりでCDNが空のままになるのを防ぐ）`, () => {
+for (const apiFile of ['api/shops-lite.js', 'server/siteCounts.js']) check(`${apiFile}: 成功の応答に ETag を付けない（304ばかりでCDNが空のままになるのを防ぐ）`, () => {
   const src = fs.readFileSync(path.join(ROOT, apiFile), 'utf-8')
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/^\s*\/\/.*$/gm, '');

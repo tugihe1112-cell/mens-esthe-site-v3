@@ -387,6 +387,37 @@ requireText(read('src/utils/registerAnalytics.js'), /export const REGISTER_CTA_S
   }
 }
 
+// ── Vercel 無料プラン（Hobby）: api/ の関数は1デプロイ12本まで（2026-09-24）──────────
+// 🚩 api/site-counts.js を足したら13本になり、「No more than 12 Serverless Functions can be added to a
+//    Deployment on the Hobby plan」で本番デプロイが失敗した（本番は前の版のまま残った）。
+//    手元の `npm run build` は api/ を見ないので通っていた＝ここで止めるしかない。
+// ⚠️ api/ の下のファイルは1つ1つが別の関数になる（_ や . で始まるものは除かれる）。
+//    新しい処理は既存の関数に同居させるか、共有部分を server/ に置くこと（server/siteCounts.js と同じ形）。
+{
+  const HOBBY_FUNCTION_LIMIT = 12;
+  const fns = [];
+  const walkFns = (dir) => {
+    let entries;
+    try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+    for (const e of entries) {
+      if (e.name.startsWith('_') || e.name.startsWith('.')) continue;
+      const full = `${dir}/${e.name}`;
+      if (e.isDirectory()) { walkFns(full); continue; }
+      if (/\.(js|mjs|cjs|ts)$/.test(e.name) && !/\.d\.ts$/.test(e.name)) fns.push(full);
+    }
+  };
+  walkFns('api');
+  if (fns.length === 0) {
+    failures.push('api/ の関数が1本も見つかりません（検査が壊れています）');
+  } else if (fns.length > HOBBY_FUNCTION_LIMIT) {
+    failures.push(
+      `api/ の関数が ${fns.length} 本あります（Vercel の無料プランは1デプロイ${HOBBY_FUNCTION_LIMIT}本まで。超えると本番デプロイが失敗します）:\n` +
+      fns.map((f) => `      - ${f}`).join('\n') +
+      '\n      → 新しい処理は既存の関数に同居させるか、共有部分を server/ に置くこと（server/siteCounts.js と同じ形）。'
+    );
+  }
+}
+
 // ── 口コミ保存の失敗文言に内部の例外文を混ぜない（2026-09-15）──────────
 // 🚩 `authErrorText.js` に「返す文字列に err.message を混ぜないこと。混ぜた瞬間に
 //    『Supabaseの英語文がそのまま出る』状態へ戻る」と書いてあるのに、

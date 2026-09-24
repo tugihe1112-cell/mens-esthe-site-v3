@@ -13,7 +13,7 @@
  *   同時に走るほかの取得も巻き込まれて遅くなっていた。
  *
  * 【使い方（2026-09-24 以降）】
- * トップでは load が /api/site-counts（CDNに置いた件数）を読むだけ。数える本体はそちら（api/site-counts.js の注記）。
+ * トップでは load が /api/shops-lite?view=counts（CDNに置いた件数）を読むだけ。数える本体はそちら（server/siteCounts.js の注記）。
  * ここはトップの関数のメモリに短く持つ一段目で、CDNへの問い合わせを減らすためのもの。
  *
  * 【やること】

@@ -1,6 +1,11 @@
 /**
- * Vercel サーバーレス関数 — トップの「掲載N店舗／在籍N人」の件数
- * GET /api/site-counts
+ * トップの「掲載N店舗／在籍N人」の件数を数えてCDNに置く（GET /api/shops-lite?view=counts の中身）
+ *
+ * 🚩 独立した関数（api/site-counts.js）にしない（2026-09-24 本番のデプロイ失敗）。
+ *    Vercel の無料プラン（Hobby）は `api/` の関数が1デプロイ12本まで。既に12本あり、13本目を足したら
+ *    「No more than 12 Serverless Functions」でデプロイが失敗した（本番は前の版のまま）。
+ *    ⇒ 同じ仕組み（CDNに置く）で返せる店舗一覧の関数に同居させる。`api/` にファイルを足す前に本数を数えること
+ *      （check_core_safety_guards が12本を超えたら止める）。
  *
  * 【なぜ作ったか（2026-09-24 本番のDB記録で確認）】
  * トップのSSRは表示のたびにセラピスト56,625行を数えていた。この数え上げ1本で
@@ -25,11 +30,8 @@
  */
 import { createClient } from '@supabase/supabase-js';
 
-export default async function handler(req, res) {
-  if (req.method !== 'GET' && req.method !== 'HEAD') {
-    res.setHeader('Allow', 'GET, HEAD');
-    return res.status(405).json({ error: 'Method Not Allowed' });
-  }
+/** api/shops-lite.js から呼ぶ（GET/HEAD の確認は呼び出し側で済んでいる）。 */
+export async function sendSiteCounts(req, res) {
   if (!process.env.VITE_SUPABASE_URL || !process.env.VITE_SUPABASE_ANON_KEY) {
     return res.status(500).json({ error: 'server configuration error' });
   }
@@ -59,7 +61,7 @@ export default async function handler(req, res) {
     res.statusCode = 200;
     return res.end(body);
   } catch (e) {
-    console.error('[api/site-counts]', e && e.message);
+    console.error('[api/shops-lite?view=counts]', e && e.message);
     res.setHeader('Cache-Control', 'no-store');
     return res.status(503).json({ error: 'count failed' });
   }
