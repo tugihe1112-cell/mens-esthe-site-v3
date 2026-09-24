@@ -24,14 +24,17 @@ import { useAuth } from '../contexts/AuthContext';
 import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 import { FREE_READ_NOTE } from '../data/siteCopy.js';
+import { shopAreaList } from '../utils/shopFields';
 
 // 順位ごとの表示スタイル
+// ⚠️ バッジは「掲載店舗数の順位」だけを書く。以前は「👑 店舗数No.1」「✨ 人気」「🔥 注目」だったが、
+// 並びは当サイトの掲載数であって人気でも市場規模でもない（8/17 に見出しを「掲載店舗数の多い順」へ直した方針）。
 const RANK_STYLES = [
-  { size: 'col-span-2 row-span-2', color: 'from-purple-600 to-indigo-900', tag: '👑 店舗数No.1' }, // 1位
-  { size: 'col-span-1 row-span-1', color: 'from-pink-600 to-rose-900', tag: '🥈 No.2' },       // 2位
-  { size: 'col-span-1 row-span-1', color: 'from-blue-600 to-cyan-900', tag: '🥉 No.3' },        // 3位
-  { size: 'col-span-1 row-span-2', color: 'from-emerald-600 to-teal-900', tag: '✨ 人気' },      // 4位
-  { size: 'col-span-1 row-span-1', color: 'from-red-600 to-orange-900', tag: '🔥 注目' },        // 5位
+  { size: 'col-span-2 row-span-2', color: 'from-purple-600 to-indigo-900', tag: '掲載数 1位' },
+  { size: 'col-span-1 row-span-1', color: 'from-pink-600 to-rose-900', tag: '掲載数 2位' },
+  { size: 'col-span-1 row-span-1', color: 'from-blue-600 to-cyan-900', tag: '掲載数 3位' },
+  { size: 'col-span-1 row-span-2', color: 'from-emerald-600 to-teal-900', tag: '掲載数 4位' },
+  { size: 'col-span-1 row-span-1', color: 'from-red-600 to-orange-900', tag: '掲載数 5位' },
 ];
 
 export default function HomePage({ initialHero = [], reviewsByPref = [], latestReviews = [], reviewStats = null, liveCounts = null }) {
@@ -142,8 +145,8 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
 
     const counts = {};
     shops.forEach(shop => {
-      // エリア(area)があればそれをキーにする。なければ市区町村(city)を使う。
-      const key = shop.area || shop.city; 
+      // エリアがあればそれをキーにする（複数エリアの店は先頭＝本拠地）。なければ市区町村(city)を使う。
+      const key = shopAreaList(shop)[0] || shop.city;
       
       // 無効な文字列を除外
       if (key && key !== "エリア指定なし" && key !== "指定なし") {

@@ -605,10 +605,35 @@ for (const [path, label] of [
       + '\n      → 件数は shops から数えること。手書きの数字は実数と食い違います（根拠のない数字）。'
     );
   }
+  // 区が「よく検索されるエリア」と区の一覧の両方にあると、地名パネルが2か所に同時に開いていた。
+  // どこから開いたか（activeCitySource）で出し分けること。
+  const gatedPopular = /activeCitySource === 'popular' && POPULAR_WARDS\.some\(/.test(src);
+  const gatedGroup = /activeCitySource === 'group' && group\.items\.includes\(/.test(src);
+  if (!gatedPopular || !gatedGroup) {
+    failures.push(
+      '東京の地名パネルが「どこから開いたか」で出し分けられていません（PrefectureSelector）。'
+      + '\n      → 渋谷区などが両方の一覧にあるので、同じパネルが2回出ます。'
+    );
+  }
   if (!/shopAreaList\(/.test(src)) {
     failures.push(
       'ホームのエリア選択が shopAreaList を使っていません。'
       + '\n      → shop.area だけだと、エリアが配列の店（複数ルーム）がエリア選択に出ません。'
+    );
+  }
+}
+
+// ── ホームの人気エリアのバッジ（2026-09-24）──────────────────────────
+// 並びは当サイトの掲載店舗数。以前は「👑 店舗数No.1」「✨ 人気」「🔥 注目」と、人気や市場規模の順位に読める札が付いていた。
+{
+  const home = stripSrc(read('src/pages/Home.jsx'));
+  const styles = home.match(/const RANK_STYLES = \[([\s\S]*?)\];/)?.[1];
+  if (styles === undefined) {
+    failures.push('Home.jsx の RANK_STYLES が見つかりません（検査が何も見ていない状態）。');
+  } else if (/No\.\s*\d|人気|注目|ランキング/.test(styles)) {
+    failures.push(
+      'ホームの人気エリアのバッジに「No.1」「人気」「注目」などが戻っています（RANK_STYLES）。'
+      + '\n      → 並びは掲載店舗数なので「掲載数 N位」とだけ書くこと。'
     );
   }
 }

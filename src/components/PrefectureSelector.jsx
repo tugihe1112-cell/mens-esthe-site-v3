@@ -63,6 +63,9 @@ export default function PrefectureSelector({ shops = [] }) {
   const [activeRegion, setActiveRegion] = useState(null); // 全地方を同列表示
   const [activePref, setActivePref] = useState(null);
   const [activeCity, setActiveCity] = useState(null);
+  // どこから開いたか（'popular' | 'group'）。渋谷区などは「よく検索されるエリア」と区の一覧の両方にあるので、
+  // これを持たないと地名パネルが2か所に同時に開いていた。
+  const [activeCitySource, setActiveCitySource] = useState(null);
 
   // 実際に店舗が存在する場所のセット（city・area 両方を収録）
   // PREF_CITY_MAP の値はエリア名（例: "川越"）で、
@@ -96,7 +99,11 @@ export default function PrefectureSelector({ shops = [] }) {
     setActivePref(activePref === pref ? null : pref);
     setActiveCity(null);
   };
-  const toggleCity = (city) => setActiveCity(activeCity === city ? null : city);
+  const toggleCity = (city, source = null) => {
+    const closing = activeCity === city && activeCitySource === source;
+    setActiveCity(closing ? null : city);
+    setActiveCitySource(closing ? null : source);
+  };
 
   return (
     <div className="w-full space-y-3">
@@ -157,7 +164,7 @@ export default function PrefectureSelector({ shops = [] }) {
                               {POPULAR_WARDS.map(ward => (
                                 <button
                                   key={`popular-${ward.name}`}
-                                  onClick={() => toggleCity(ward.name)}
+                                  onClick={() => toggleCity(ward.name, 'popular')}
                                   className={`flex-shrink-0 snap-start flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 border ${
                                     activeCity === ward.name 
                                       ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-[0_0_15px_rgba(236,72,153,0.8)] scale-105 border-pink-300' 
@@ -173,7 +180,7 @@ export default function PrefectureSelector({ shops = [] }) {
                               ))}
                             </div>
                             {/* 【新規】よく検索されるエリアが選択された場合のインライン展開 */}
-                            {activeCity && POPULAR_WARDS.some(w => w.name === activeCity) && (
+                            {activeCity && activeCitySource === 'popular' && POPULAR_WARDS.some(w => w.name === activeCity) && (
                               <AreaPanel city={activeCity} pref={pref} areas={WARDS[activeCity] || []} activePlaces={activePlaces} />
                             )}
                           </div>
@@ -195,7 +202,7 @@ export default function PrefectureSelector({ shops = [] }) {
                                       {group.items.map(city => (
                                         <button
                                           key={`group-${group.label}-${city}`}
-                                          onClick={() => toggleCity(city)}
+                                          onClick={() => toggleCity(city, 'group')}
                                           className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border ${
                                             activeCity === city 
                                               ? 'bg-pink-600 border-pink-400 text-white shadow-[0_0_12px_rgba(236,72,153,0.8)]' 
@@ -208,7 +215,7 @@ export default function PrefectureSelector({ shops = [] }) {
                                     </div>
                                   </div>
                                   {/* 【新規】このグループ内のエリアが選択された場合のインライン展開 */}
-                                  {activeCity && group.items.includes(activeCity) && (
+                                  {activeCity && activeCitySource === 'group' && group.items.includes(activeCity) && (
                                     <AreaPanel city={activeCity} pref={pref} areas={WARDS[activeCity] || []} activePlaces={activePlaces} />
                                   )}
                                 </div>
