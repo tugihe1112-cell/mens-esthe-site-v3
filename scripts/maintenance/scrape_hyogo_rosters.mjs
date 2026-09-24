@@ -96,10 +96,12 @@ const SHOPS = [
       const href = $(e).find('a').attr('href') || '';
       return { name: clean($(e).find('h2').text()), castId: href.split('/').filter(Boolean).pop(), imgUrl: $(e).find('[data-back]').attr('data-back') || null };
     }).get() },
-  { key: 'uchiage', shop: { id: 'hyogo_sannomiya_uchiage_hanabi', name: '打上花火 兵庫店', website_url: 'https://uchiagemenseste.jp/top', prefecture: '兵庫県', city: '三宮', area: '三宮' },
+  { key: 'uchiage', shop: { id: 'hyogo_sannomiya_uchiage_hanabi', name: '打上花火 神戸三宮・姫路ルーム', website_url: 'https://uchiagemenseste.jp/top', prefecture: '兵庫県', city: '三宮', area: ['三宮', '姫路'] },
     rosterUrl: 'https://uchiagemenseste.jp/cast/',
-    // 大阪・兵庫・岡山の全ルームが1ページ。alt 末尾のルーム名が「神戸三宮」の人だけ拾う。
-    parse: castThumb('https://uchiagemenseste.jp/', (alt) => alt.replace(/^打上花火\s*/, '').replace(/\s*神戸三宮.*$/, ''), (alt) => /神戸三宮/.test(alt)) },
+    // 大阪・兵庫・岡山の全ルームが1ページで、人ごとにルーム名が付いている（alt 末尾）。
+    // ブランドは梅田ルーム（登録済み）と同じ1つにまとめる（D-014）。このレコードには兵庫の2ルーム
+    // （神戸三宮・姫路）の人を入れる。大阪の人は梅田レコード側の名簿（2026-06時点・要照合）にいる。
+    parse: castThumb('https://uchiagemenseste.jp/', (alt) => alt.replace(/^打上花火\s*/, '').replace(/\s*(神戸三宮|姫路)\s*$/, ''), (alt) => /(神戸三宮|姫路)\s*$/.test(alt)) },
   // ── 姫路 ──
   { key: 'melty_himeji', shop: { id: 'hyogo_himeji_mrs_melty', name: 'Mrs.melty 姫路 (ミセスメルティー)', website_url: 'https://melty-himeji.com/', prefecture: '兵庫県', city: '姫路', area: '姫路' },
     rosterUrl: 'https://melty-himeji.com/gals/', parse: wcmsGals('https://melty-himeji.com/') },

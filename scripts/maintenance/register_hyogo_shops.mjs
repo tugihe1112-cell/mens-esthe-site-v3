@@ -14,6 +14,10 @@
  *  5. 書いた店舗 id・セラピスト id を outputs/added-shops/ に JSON で残す（消すときの手掛かり）。
  *  6. 書いたあと読み直して、店舗数・人数が予定と合うか確かめる。
  *
+ * 【ブランドのまとめ方（D-014・2026-09-24 追記）】
+ *  名簿はブランドで1つ。ルームの地名は検索用。同じブランドの既存レコードは同じ group_id にまとめ、
+ *  県外のルームは地名だけのレコード（名簿なし）を同じ group_id で置く。下の PLAN に書く。
+ *
  * 【入れないもの】営業時間・料金・電話は空のまま（確かめていない値を作らない＝D-010の考え方）。
  */
 import fs from 'node:fs';
@@ -41,8 +45,28 @@ if (failed.length) {
   process.exit(1);
 }
 
+// ── ブランドのまとめ（D-014）────────────────────────────────
+// key → group_id。書いていない店は単独店（g_solo_<id>）。
+const GROUP_OF = {
+  uchiage: 'g_brand_uchiage_hanabi', // 梅田ルーム（登録済み）と同じブランド。人ごとにルームが明記されている
+  prince: 'g_brand_prince',          // 梅田・尼崎の共通名簿
+  knit: 'g_brand_knit',              // 三宮・尼崎・大阪北浜
+  melty_himeji: 'g_brand_mrs_melty', // 神戸（登録済み・melty-salon.com）と公式サイトが互いにリンク
+};
+// 県外のルーム＝地名のためだけのレコード（名簿なし）。
+const EXTRA_ROOMS = [
+  { id: 'osaka_umeda_prince', name: 'PRINCE (プリンス) 梅田ルーム', website_url: 'https://www.osaka-prince.com/', prefecture: '大阪府', city: '梅田', area: '梅田', group_id: 'g_brand_prince' },
+  { id: 'osaka_kitahama_knit', name: 'KNIT (ニット) 北浜ルーム', website_url: 'https://knit-esthe.com/', prefecture: '大阪府', city: '北浜', area: '北浜', group_id: 'g_brand_knit' },
+];
+// 既存レコードの group_id だけを変える（他の列は触らない）。from が今の値と違えば全体を止める。
+const EXISTING_GROUP_UPDATES = [
+  { id: 'osaka_umeda_打上花火梅田ルーム', from: null, to: 'g_brand_uchiage_hanabi' },
+  { id: 'hyogo_sannomiya_mrs_melty', from: 'g_solo_hyogo_sannomiya_mrs_melty', to: 'g_brand_mrs_melty' },
+];
+const groupOf = (s) => GROUP_OF[s.key] || `g_solo_${s.shop.id}`;
+
 // ── 事前チェック（DBを読むだけ）─────────────────────────────
-const ids = shops.map((s) => s.shop.id);
+const ids = [...shops.map((s) => s.shop.id), ...EXTRA_ROOMS.map((r) => r.id)];
 const { data: sameId, error: e1 } = await supabase.from('shops').select('id').in('id', ids);
 if (e1) { console.error('❌ DBを読めません:', e1.message); process.exit(1); }
 const allShops = [];
@@ -61,8 +85,8 @@ const conflicts = [];
 for (const s of shops) {
   if (sameId?.some((r) => r.id === s.shop.id)) conflicts.push(`${s.shop.id}: 同じ id が既にある`);
   const d = rootDomainOf(s.shop.website_url);
-  // 打上花火は梅田ルームが同じ公式サイトで登録済み（別ルームとして足すのは確認済み）。
-  const known = (byDomain.get(d) || []).filter((r) => !(s.key === 'uchiage' && r.id === 'osaka_umeda_打上花火梅田ルーム'));
+  // 同じブランドにまとめる既存レコード（EXISTING_GROUP_UPDATES）は衝突ではない。
+  const known = (byDomain.get(d) || []).filter((r) => !EXISTING_GROUP_UPDATES.some((u) => u.id === r.id));
   if (known.length) conflicts.push(`${s.shop.id}: 同じ公式サイトの店がある（${known.map((r) => r.id).join(', ')}）`);
   try {
     assertOfficialRosterSource({ officialWebsiteUrl: s.shop.website_url, rosterUrl: s.rosterUrl });
@@ -73,6 +97,22 @@ for (const s of shops) {
     names.add(t.name);
   }
 }
+for (const r of EXTRA_ROOMS) {
+  if (sameId?.some((x) => x.id === r.id)) conflicts.push(`${r.id}: 同じ id が既にある`);
+  const d = rootDomainOf(r.website_url);
+  if ((byDomain.get(d) || []).length) conflicts.push(`${r.id}: 同じ公式サイトの店がある（${byDomain.get(d).map((x) => x.id).join(', ')}）`);
+}
+const { data: existingRows, error: e2 } = await supabase.from('shops').select('id,group_id').in('id', EXISTING_GROUP_UPDATES.map((u) => u.id));
+if (e2) { console.error('❌ DBを読めません:', e2.message); process.exit(1); }
+for (const u of EXISTING_GROUP_UPDATES) {
+  const row = existingRows.find((r) => r.id === u.id);
+  if (!row) conflicts.push(`${u.id}: まとめる相手の既存レコードが無い`);
+  else if ((row.group_id ?? null) !== u.from) conflicts.push(`${u.id}: group_id が想定（${u.from}）と違う（${row.group_id}）`);
+}
+const newGroups = [...new Set([...Object.values(GROUP_OF), ...EXTRA_ROOMS.map((r) => r.group_id)])];
+const { data: groupUsers } = await supabase.from('shops').select('id,group_id').in('group_id', newGroups);
+for (const g of groupUsers || []) conflicts.push(`${g.group_id}: 既に別の店（${g.id}）が使っている group_id`);
+
 if (conflicts.length) {
   console.error('❌ 書き込みを中止します（1件も書いていません）:');
   conflicts.forEach((c) => console.error('  -', c));
@@ -87,9 +127,13 @@ for (const s of shops) {
   const area = Array.isArray(s.shop.area) ? s.shop.area.join('|') : s.shop.area;
   const n = s.therapists.length;
   const img = s.therapists.filter((t) => t.imgUrl).length;
-  console.log(`  ${s.shop.id.padEnd(32)} ${String(n).padStart(3)}名（写真${String(img).padStart(3)}） ${s.shop.prefecture} ${s.shop.city} [${area}]  ${s.shop.name}`);
+  console.log(`  ${s.shop.id.padEnd(32)} ${String(n).padStart(3)}名（写真${String(img).padStart(3)}） ${s.shop.prefecture} ${s.shop.city} [${area}]  ${s.shop.name}${GROUP_OF[s.key] ? `  ← ${GROUP_OF[s.key]}` : ''}`);
   console.log(`      例: ${s.therapists.slice(0, 8).map((t) => t.name).join('、')}`);
 }
+console.log('\n  県外ルーム（地名だけ・名簿なし）:');
+for (const r of EXTRA_ROOMS) console.log(`  ${r.id.padEnd(32)}   0名            ${r.prefecture} ${r.city}  ${r.name}  ← ${r.group_id}`);
+console.log('\n  既存レコードの group_id を変える（他の列は触らない）:');
+for (const u of EXISTING_GROUP_UPDATES) console.log(`  ${u.id}: ${u.from} → ${u.to}`);
 if (!LIVE) {
   console.log('\n→ 本番に書くときは --live を付けて同じコマンドを流す。');
   process.exit(0);
@@ -107,7 +151,7 @@ const ogImage = async (url) => {
 };
 
 const now = new Date().toISOString();
-const created = { at: now, file: FILE, shops: [], therapists: [] };
+const created = { at: now, file: FILE, shops: [], therapists: [], groupUpdates: [] };
 const backupDir = 'outputs/added-shops';
 fs.mkdirSync(backupDir, { recursive: true });
 const backupPath = path.join(backupDir, `hyogo-${now.replace(/[:.]/g, '-')}.json`);
@@ -130,7 +174,7 @@ for (const s of shops) {
   if (shop.address) raw.address = shop.address;
   const { error: se } = await supabase.from('shops').insert({
     id: shop.id, name: shop.name, website_url: shop.website_url, image_url: logo,
-    group_id: `g_solo_${shop.id}`, raw_data: raw,
+    group_id: groupOf(s), raw_data: raw,
   });
   if (se) { console.error(`❌ ${shop.id}: 店舗を書けませんでした（${se.message}）。ここで止めます。`); saveBackup(); process.exit(1); }
   created.shops.push(shop.id);
@@ -153,6 +197,26 @@ for (const s of shops) {
   console.log(`✅ ${shop.id}: ${rows.length}名（写真 ${rows.filter((r) => r.image_url).length}）・店の画像 ${logo ? 'あり' : 'なし'}`);
 }
 
+for (const r of EXTRA_ROOMS) {
+  const { error } = await supabase.from('shops').insert({
+    id: r.id, name: r.name, website_url: r.website_url, group_id: r.group_id,
+    raw_data: { prefecture: r.prefecture, city: r.city, area: r.area },
+  });
+  if (error) { console.error(`❌ ${r.id}: 書けませんでした（${error.message}）。ここで止めます。`); saveBackup(); process.exit(1); }
+  created.shops.push(r.id);
+  saveBackup();
+  console.log(`✅ ${r.id}: 県外ルーム（地名だけ）`);
+}
+for (const u of EXISTING_GROUP_UPDATES) {
+  let q = supabase.from('shops').update({ group_id: u.to }).eq('id', u.id);
+  q = u.from === null ? q.is('group_id', null) : q.eq('group_id', u.from);
+  const { data: upd, error } = await q.select('id');
+  if (error || !upd?.length) { console.error(`❌ ${u.id}: group_id を変えられませんでした（${error?.message || '0件'}）。ここで止めます。`); saveBackup(); process.exit(1); }
+  created.groupUpdates.push(u);
+  saveBackup();
+  console.log(`✅ ${u.id}: group_id ${u.from} → ${u.to}`);
+}
+
 // ── 読み直して照合 ─────────────────────────────────────
 const { count: shopCount } = await supabase.from('shops').select('id', { count: 'exact', head: true }).in('id', ids);
 let therapistCount = 0;
@@ -160,7 +224,9 @@ for (const id of ids) {
   const { count } = await supabase.from('therapists').select('id', { count: 'exact', head: true }).eq('shop_id', id);
   therapistCount += count || 0;
 }
-console.log(`\n読み直し: 店舗 ${shopCount}/${shops.length}・セラピスト ${therapistCount}/${total}`);
+const { data: grp } = await supabase.from('shops').select('id,group_id').in('id', EXISTING_GROUP_UPDATES.map((u) => u.id));
+const groupsOk = EXISTING_GROUP_UPDATES.every((u) => grp?.find((r) => r.id === u.id)?.group_id === u.to);
+console.log(`\n読み直し: 店舗 ${shopCount}/${ids.length}・セラピスト ${therapistCount}/${total}・既存の group_id ${groupsOk ? 'OK' : 'NG'}`);
 console.log(`バックアップ: ${backupPath}`);
-if (shopCount !== shops.length || therapistCount !== total) { console.error('❌ 予定と合いません。上の記録を確認すること。'); process.exit(1); }
+if (shopCount !== ids.length || therapistCount !== total || !groupsOk) { console.error('❌ 予定と合いません。上の記録を確認すること。'); process.exit(1); }
 console.log('✅ 予定どおり');
