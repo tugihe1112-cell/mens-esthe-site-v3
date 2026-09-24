@@ -49,33 +49,27 @@ export default function IndexPage({ initialHero, reviewsByPref, latestReviews, r
   );
 }
 
-// 🚩 件数（掲載N店舗／在籍N人）は表示のたびに数えない（2026-09-24・src/utils/liveCountsCache.js の注記）。
+// 🚩 件数（掲載N店舗／在籍N人）は表示のたびに数えない（2026-09-24）。
 //    セラピスト56,625行の数え上げがDBの実行時間全体の53%を占め（店舗の数え上げと合わせて6割超）、冷えた状態では2〜4秒かかって
 //    トップ全体の待ち時間になっていた（UptimeRobot が5分おきに開くたびに冷えた状態で走っていた）。
-//    数えた結果を30分持つ。期限切れ・起動直後のときだけ、表示の中で数え直しを上限つきで待つ。
+// 🚩 数えるのは /api/site-counts（CDNに置く）。ここは読むだけ（api/site-counts.js の注記）。
+//    この関数のメモリに持って数え直す方式（b00e150・8f901c0）は、返答のあと関数が止まると結果が失われ、
+//    期限切れのあと数え直しを繰り返していた（本番のログで05:52〜06:19に6回）。
 // ⚠️ getServerSideProps の中で件数だけの問い合わせ（head: true）を書かないこと（check_ssr_helpers が検査する）。
-const LIVE_COUNTS_TTL_MS = 30 * 60 * 1000;
-// 期限切れ・起動直後のときだけ、ほかの取得のあとに最大これだけ数え直しを待つ。間に合わなければ手元の古い数、
+// この関数のメモリにも5分持つ（CDNへの問い合わせを減らすだけ。CDN側は30分で取り直し、期限切れでも即返す）。
+const LIVE_COUNTS_TTL_MS = 5 * 60 * 1000;
+// 手元の数が古い・無いときだけ、ほかの取得のあとに最大これだけ待つ。CDNにあれば数十ミリ秒で返るので、
+// 待つのは実質デプロイ直後（CDNがまだ空）の1回だけ。間に合わなければ手元の古い数、
 // 古い数も無ければ今回は出さない（Home は stats-latest.json の数に落ちる＝今までの「数えきれなかったとき」と同じ）。
-// ⚠️ 返答のあとに裏で数え直させるだけにしない（liveCountsCache.js の注記＝関数が止まると結果が失われる）。
-const LIVE_COUNTS_GRACE_MS = 1200;
+const LIVE_COUNTS_GRACE_MS = 3000;
 
 async function loadLiveCounts() {
-  // 公開データ（shops・therapists）はRLSで匿名read可。以前と同じanon keyで同じ条件を数える。
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL || '',
-    process.env.VITE_SUPABASE_ANON_KEY || ''
-  );
-  const [shopsRes, therapistsRes] = await Promise.all([
-    supabase.from('shops').select('id', { count: 'exact', head: true }),
-    supabase.from('therapists')
-      .select('id', { count: 'exact', head: true })
-      .or('is_active.is.null,is_active.eq.true'),
-  ]);
-  if (shopsRes?.error || therapistsRes?.error) return null;
-  const totalShops = shopsRes?.count;
-  const totalTherapists = therapistsRes?.count;
-  return Number.isInteger(totalShops) && Number.isInteger(totalTherapists) ? { totalShops, totalTherapists } : null;
+  const r = await fetch(`${SITE}/api/site-counts`, { headers: { accept: 'application/json' } });
+  if (!r.ok) return null;
+  const j = await r.json();
+  return Number.isInteger(j?.totalShops) && Number.isInteger(j?.totalTherapists)
+    ? { totalShops: j.totalShops, totalTherapists: j.totalTherapists }
+    : null;
 }
 
 const liveCountsCache = createCountsCache({ ttlMs: LIVE_COUNTS_TTL_MS, load: loadLiveCounts });

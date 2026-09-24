@@ -42,9 +42,10 @@ async function expectStatus(name, path, expected, init) {
   }
 }
 
-const [sitemap, shops] = await Promise.all([
+const [sitemap, shops, siteCounts] = await Promise.all([
   expectStatus('sitemap GET', '/api/sitemap.xml', [200], { method: 'GET' }),
   expectStatus('shops-lite GET', '/api/shops-lite', [200], { method: 'GET' }),
+  expectStatus('site-counts GET', '/api/site-counts', [200], { method: 'GET' }),
 ]);
 if (sitemap) {
   const body = await sitemap.text();
@@ -57,6 +58,17 @@ if (shops) {
     const body = await shops.json();
     if (!Array.isArray(body) || body.length < 900) failures.push(`shops-lite: 店舗配列が不正 (${body?.length ?? 'not-array'})`);
   } catch { failures.push('shops-lite: JSONが不正'); }
+}
+
+// トップの「掲載N店舗／在籍N人」はここ（CDN）から読む。壊れるとトップは古い集計（stats-latest.json）の数に黙って落ちる。
+if (siteCounts) {
+  try {
+    const body = await siteCounts.json();
+    if (!Number.isInteger(body?.totalShops) || body.totalShops < 900 || !Number.isInteger(body?.totalTherapists) || body.totalTherapists < 1000) {
+      failures.push(`site-counts: 件数が不正 (${JSON.stringify({ totalShops: body?.totalShops, totalTherapists: body?.totalTherapists })})`);
+    }
+    if (siteCounts.headers.get('etag')) failures.push('site-counts: ETag が付いている（304ばかりでCDNに溜まらない）');
+  } catch { failures.push('site-counts: JSONが不正'); }
 }
 
 await Promise.all([
@@ -72,7 +84,7 @@ await Promise.all([
 ]);
 
 await Promise.all([
-  '/api/sitemap.xml', '/api/shops-lite', '/api/admin-grant-credit', '/api/notify-credit',
+  '/api/sitemap.xml', '/api/shops-lite', '/api/site-counts', '/api/admin-grant-credit', '/api/notify-credit',
   '/api/notify-review', '/api/auth-email-hook', '/api/auth/signup', '/api/contact', '/api/track-view',
 ].map((path) => expectStatus(`method制限 ${path}`, path, [405], { method: 'DELETE' })));
 
