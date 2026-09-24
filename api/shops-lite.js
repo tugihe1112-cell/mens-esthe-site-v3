@@ -105,8 +105,13 @@ export default async function handler(req, res) {
       return hit ? { ...r, raw_data: rest } : r;
     });
 
-    // 10分キャッシュ + 30分 stale許容（データJSONなのでHTMLのようなビルドID結合が無い＝安全）
-    res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1800');
+    // 10分キャッシュ + 1日 stale許容（データJSONなのでHTMLのようなビルドID結合が無い＝安全）
+    // ⚠️ 2026-09-23: stale の窓を30分→1日に広げた。
+    //    アクセスの少ない時間帯に40分以上あくと、次の1人目はサーバー（止まっていれば起動待ち込み）まで
+    //    取りに行き、実測で **5,061ms** 待った。この間、検索結果とホームの注目セラピストは
+    //    店舗一覧を待っているので何も出ない。stale の窓の中なら、CDNが手元の版を即返しつつ裏で取り直す
+    //    （待つのは誰もいない）。店舗の追加・削除は1日数回なので、1人目が1回古い一覧を見るだけで済む。
+    res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=86400');
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     // 効果測定用（ブラウザのレスポンスヘッダで削減量と現在のサイズが見える）
     // ⚠️ ここが再び1MBを超えたら、raw_data に重いキーが増えた合図。

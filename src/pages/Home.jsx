@@ -43,10 +43,15 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
   const [featuredTherapists, setFeaturedTherapists] = useState([]);
   const { user } = useAuth();
 
-  // 注目セラピスト取得（店舗分散・地域分散ロジック）
+  // 注目セラピストの元データ。
+  // ⚠️ 2026-09-23（速度）: **店舗一覧（DataContext）を待たずに**取りに行く。
+  //    以前は店舗一覧が届いてから取り始めていたので、注目セラピストが出るまで
+  //    「店舗一覧の取得」＋「この取得」を順番に待っていた（実測で店舗一覧が5秒かかった回があった）。
+  //    店舗一覧は選び方（店舗・地域を散らす）にだけ要るので、揃ってから下で選ぶ。
+  const [featuredPool, setFeaturedPool] = useState(null);
   useEffect(() => {
-    if (!shops || shops.length === 0) return;
-    const fetchFeatured = async () => {
+    let cancelled = false;
+    (async () => {
       try {
         const { data, error } = await supabase
           .from('therapists')
@@ -58,7 +63,20 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
           .not('image_url', 'like', '%noimage%')
           .not('image_url', 'like', '%no_image%')
           .limit(300);
-        if (error || !data) return;
+        if (!cancelled && !error && data) setFeaturedPool(data);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  // 注目セラピストを選ぶ（店舗分散・地域分散ロジック）。元データと店舗一覧の両方が揃ってから。
+  useEffect(() => {
+    if (!featuredPool || !shops || shops.length === 0) return;
+    const pickFeatured = () => {
+      try {
+        const data = featuredPool;
 
         // 店舗マップ
         const shopMap = Object.fromEntries(shops.map(s => [s.id, s]));
@@ -115,8 +133,8 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
         console.error(e);
       }
     };
-    fetchFeatured();
-  }, [shops]);
+    pickFeatured();
+  }, [featuredPool, shops]);
 
   // ★自動集計ロジック (詳細エリア優先)
   const topAreas = useMemo(() => {

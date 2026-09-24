@@ -204,6 +204,10 @@ export async function getServerSideProps({ params, res }) {
         ssrPrefecture: prefecture,
         ssrArea: area,
         ssrNearbyScope: nearbyScope,
+        // 🚩 2026-09-23（速度）: 在籍一覧を取るための店舗ID（系列があれば系列全店）。
+        //    画面側はこれが無いと「店舗を取る→系列を取る→在籍を取る」の3往復を順番に待ち、
+        //    在籍一覧（このページの主役）が出るのが2往復ぶん遅れていた。
+        ssrGroupShopIds: reviewShopIds,
       },
     };
   } catch (e) {
@@ -218,6 +222,7 @@ export async function getServerSideProps({ params, res }) {
       props: {
         ssrShop: null, ssrReviewCount: 0, ssrReviews: [], ssrAvgRating: null, ssrSample: '',
         ssrTherapistCount: 0, ssrReviewedTherapists: [], ssrNearbyShops: [], ssrPrefecture: null, ssrArea: null, ssrNearbyScope: 'prefecture',
+        ssrGroupShopIds: [],
       },
     };
   }
@@ -226,6 +231,7 @@ export async function getServerSideProps({ params, res }) {
 export default function ShopDetailSSRPage({
   ssrShop, ssrReviewCount, ssrReviews = [], ssrAvgRating, ssrSample,
   ssrTherapistCount = 0, ssrReviewedTherapists = [], ssrNearbyShops = [], ssrPrefecture = null, ssrArea = null,
+  ssrGroupShopIds = [],
 }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
   const shopName = ssrShop?.name || '';
@@ -325,6 +331,7 @@ export default function ShopDetailSSRPage({
         ssrArea={ssrArea}
         ssrReviewCount={ssrReviewCount}
         ssrAvgRating={ssrAvgRating}
+        ssrGroupShopIds={ssrGroupShopIds}
         renderSeo={false}
       />
     </>

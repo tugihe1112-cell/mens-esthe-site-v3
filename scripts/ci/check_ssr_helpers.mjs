@@ -1459,6 +1459,116 @@ const check = (name, fn) => {
   });
 }
 
+// ── リンクに触れた瞬間の先取り（2026-09-23・src/utils/pageDataPrefetch.js）──────────
+// 🚩 先取りしたデータを Next.js の取得に渡すので、URLの作り方がずれると**黙って効かなくなる**
+//    （壊れはしない＝気づけない型）。ページの一覧・URLの形・同一判定を実際に呼んで固定する。
+{
+  const pdp = await loadModule('src/utils/pageDataPrefetch.js');
+
+  // 1. GSSP_ROUTES は pages/ の getServerSideProps を持つページと完全に一致すること
+  //    （足し忘れ＝そのページだけ先取りされない。消し忘れ＝静的ページに404を打ち続ける）
+  check('先取り: GSSP_ROUTES が pages/ の getServerSideProps と一致', () => {
+    const found = [];
+    const walk = (dir) => {
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const f = path.join(dir, e.name);
+        if (e.isDirectory()) { if (e.name !== 'api') walk(f); continue; }
+        if (!/\.(jsx?|tsx?)$/.test(e.name)) continue;
+        const src = fs.readFileSync(f, 'utf-8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+        if (!/export\s+(async\s+)?function\s+getServerSideProps|export\s+const\s+getServerSideProps/.test(src)) continue;
+        let route = '/' + path.relative(path.join(ROOT, 'pages'), f).replace(/\\/g, '/').replace(/\.(jsx?|tsx?)$/, '');
+        route = route.replace(/\/index$/, '') || '/';
+        found.push(route);
+      }
+    };
+    walk(path.join(ROOT, 'pages'));
+    const want = [...found].sort().join(' ');
+    const have = [...pdp.GSSP_ROUTES].sort().join(' ');
+    if (!found.length) return 'pages/ から getServerSideProps が1つも見つからない（検査が壊れている）';
+    if (found.some((r) => r.includes('[...'))) return `全部取りのページ（[...x]）がある。matchGsspRoute が対応していない: ${found.join(', ')}`;
+    return want === have ? null : `pages/ は「${want}」、GSSP_ROUTES は「${have}」`;
+  });
+
+  // 2. どのページに当たるか
+  const cases = [
+    ['/', '/', {}],
+    ['/search', '/search', {}],
+    ['/popular-reviews', '/popular-reviews', {}],
+    ['/area/tokyo', '/area/[pref]', { pref: 'tokyo' }],
+    ['/area/tokyo/', '/area/[pref]', { pref: 'tokyo' }],
+    ['/brands/g_brand_tiger_gate', '/brands/[brandId]', { brandId: 'g_brand_tiger_gate' }],
+    ['/shops/tokyo_shibuya_silk', '/shops/[shopId]', { shopId: 'tokyo_shibuya_silk' }],
+    ['/shops/tokyo_x/threads/tokyo_x_%E5%A4%A9%E9%9F%B3%20%E3%81%97%E3%81%8A%E3%82%8A', '/shops/[shopId]/threads/[threadId]',
+      { shopId: 'tokyo_x', threadId: 'tokyo_x_天音 しおり' }],
+  ];
+  for (const [pathname, route, params] of cases) {
+    check(`先取り: ${pathname} は ${route}`, () => {
+      const m = pdp.matchGsspRoute(pathname);
+      if (!m) return '当たらなかった';
+      if (m.route !== route) return `「${m.route}」に当たった`;
+      return JSON.stringify(m.params) === JSON.stringify(params) ? null : `値が ${JSON.stringify(m.params)}`;
+    });
+  }
+  check('先取り: 静的ページ・存在しないページには当たらない（404を打たない）', () => {
+    for (const p of ['/shops', '/register', '/shops/x/review', '/board/1', '/shops/x/threads/y/review', '/area']) {
+      const m = pdp.matchGsspRoute(p);
+      if (m) return `${p} が ${m.route} に当たった`;
+    }
+    return null;
+  });
+
+  // 3. Next.js が実際に取りに行くURLと「同じデータ」と判定できること
+  //    本番の実測（2026-09-23）: 人物ページは次の形で取りに行っていた。
+  //    /_next/data/<build>/shops/<shop>/threads/<id>.json?shopId=<shop>&threadId=<id>（空白はクエリで +）
+  check('先取り: 人物ページのURLが Next.js の取得と同じ鍵になる（エンコード・空白・順番の違いを吸収）', () => {
+    const anchorPath = '/shops/tokyo_x/threads/tokyo_x_%E5%A4%A9%E9%9F%B3%20%E3%81%97%E3%81%8A%E3%82%8A';
+    const m = pdp.matchGsspRoute(anchorPath);
+    const ours = pdp.buildDataHref('BUILD', anchorPath, '', m);
+    const router = '/_next/data/BUILD/shops/tokyo_x/threads/tokyo_x_%E5%A4%A9%E9%9F%B3%20%E3%81%97%E3%81%8A%E3%82%8A.json?shopId=tokyo_x&threadId=tokyo_x_%E5%A4%A9%E9%9F%B3+%E3%81%97%E3%81%8A%E3%82%8A';
+    const reordered = '/_next/data/BUILD/shops/tokyo_x/threads/tokyo_x_天音 しおり.json?threadId=tokyo_x_天音%20しおり&shopId=tokyo_x';
+    // 16進の大文字・小文字の違い（%E5 と %e5）も同じとみなす（URLの正規化はここを揃えない）
+    const lowerHex = router.replace(/%[0-9A-F]{2}/g, (h) => h.toLowerCase());
+    const a = pdp.dataKey(ours);
+    if (!a) return `鍵が作れない: ${ours}`;
+    if (a !== pdp.dataKey(router)) return `Next.js の取得と鍵が違う: ${a} / ${pdp.dataKey(router)}`;
+    if (a !== pdp.dataKey(lowerHex)) return '16進の大文字・小文字の違いで別物になる';
+    return a === pdp.dataKey(reordered) ? null : '順番・エンコードの違いで別物になる';
+  });
+  check('先取り: トップは /index.json、リンクのクエリは残して URL の値を足す', () => {
+    const top = pdp.buildDataHref('B', '/', '', pdp.matchGsspRoute('/'));
+    if (top !== '/_next/data/B/index.json') return top;
+    const search = pdp.buildDataHref('B', '/search', '?shop=%E6%96%B0%E5%AE%BF', pdp.matchGsspRoute('/search'));
+    if (pdp.dataKey(search) !== pdp.dataKey('/_next/data/B/search.json?shop=新宿')) return search;
+    const shop = pdp.buildDataHref('B', '/shops/s1', '?tab=x', pdp.matchGsspRoute('/shops/s1'));
+    return shop === '/_next/data/B/shops/s1.json?tab=x&shopId=s1' ? null : shop;
+  });
+  check('先取り: 別のページ・別の値は別の鍵', () => {
+    const k1 = pdp.dataKey('/_next/data/B/shops/a.json?shopId=a');
+    const k2 = pdp.dataKey('/_next/data/B/shops/b.json?shopId=b');
+    const k3 = pdp.dataKey('/_next/data/OTHER/shops/a.json?shopId=a');
+    if (k1 === k2) return '別の店が同じ鍵';
+    if (k1 === k3) return '別のビルドが同じ鍵（デプロイ前後の取り違え）';
+    return pdp.dataKey('/api/shops-lite') === null ? null : '/_next/data 以外に鍵を作った';
+  });
+
+  // 4. 書き込みがあったら先取りを捨てる相手
+  check('先取り: 自分のAPIとSupabaseのデータへの書き込みだけを「書き込み」とみなす', () => {
+    const o = 'https://www.mens-esthe-map.jp';
+    const yes = [['POST', '/api/notify-review'], ['POST', 'https://abc.supabase.co/rest/v1/reviews'], ['PATCH', 'https://abc.supabase.co/rest/v1/reviews?id=eq.1'], ['DELETE', '/api/x']];
+    const no = [['GET', '/api/shops-lite'], ['HEAD', '/_next/data/B/x.json'], ['POST', 'https://abc.supabase.co/auth/v1/token?grant_type=refresh_token'], ['POST', 'https://www.google-analytics.com/g/collect']];
+    for (const [m, u] of yes) if (!pdp.isDataMutation(m, u, o)) return `${m} ${u} を書き込みとみなさない`;
+    for (const [m, u] of no) if (pdp.isDataMutation(m, u, o)) return `${m} ${u} を書き込みとみなした`;
+    return null;
+  });
+
+  // 5. 画面の土台で必ず有効になっていること（部品だけ残って呼ばれていない、を防ぐ）
+  check('先取り: _app で installPageDataPrefetch を呼んでいる', () => {
+    const app = fs.readFileSync(path.join(ROOT, 'pages/_app.jsx'), 'utf-8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    if (!/useEffect\(\(\)\s*=>\s*\{\s*installPageDataPrefetch\(\);\s*\},\s*\[\]\)/.test(app)) return 'useEffect の中で呼んでいない';
+    return /<PageDataPrefetch\s*\/>/.test(app) ? null : '<PageDataPrefetch /> を描いていない';
+  });
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

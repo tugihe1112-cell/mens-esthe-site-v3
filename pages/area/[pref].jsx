@@ -29,12 +29,39 @@ export async function getServerSideProps({ params, res }) {
     process.env.SUPABASE_SERVICE_ROLE_KEY || ''
   );
   try {
-    const { data: shops, error: shopsError } = await supabase
-      .from('shops')
-      .select('id, name, group_id, raw_data')
-      .eq('raw_data->>prefecture', prefName)
-      .limit(1000);
-    if (shopsError) throw shopsError;
+    // ── 速度（2026-09-23 実測）──────────────────────────────────────
+    // 以前は ①この県の店を raw_data 丸ごと ②全店のルーム数 ③口コミ を**順番に**取っていた。
+    // raw_data は1店あたり約1.5KB（東京は497店で約750KB）あり、使うのは地名の4項目だけ。
+    // 押してからの待ちは実測 391〜931ms（ほかのページは200〜300ms）。
+    // ⇒ 地名の4項目だけを取り（中身の形は同じ raw_data に組み直す）、①と②を同時に取る。
+    // ⚠️ 取り出した値が null の項目は raw_data に入れない（以前の「キーが無い」と同じ形にする）。
+    const fetchAllRooms = async () => {
+      // ⚠️ PostgRESTは1回に最大1000行。店舗は1,000件を超えているので必ず繰ること。
+      const rows = [];
+      for (let from = 0; ; from += 1000) {
+        const page = await supabase.from('shops').select('id, group_id').range(from, from + 999);
+        if (page.error) throw page.error;
+        rows.push(...(page.data || []));
+        if (!page.data || page.data.length < 1000) break;
+      }
+      return rows;
+    };
+    const [shopsRes, allRooms] = await Promise.all([
+      supabase
+        .from('shops')
+        .select('id, name, group_id, prefecture:raw_data->prefecture, city:raw_data->city, area:raw_data->area, address:raw_data->address')
+        .eq('raw_data->>prefecture', prefName)
+        .limit(1000),
+      fetchAllRooms(),
+    ]);
+    if (shopsRes.error) throw shopsRes.error;
+    const shops = (shopsRes.data || []).map(({ prefecture, city, area, address, ...row }) => {
+      const raw_data = {};
+      for (const [k, v] of Object.entries({ prefecture, city, area, address })) {
+        if (v != null) raw_data[k] = v;
+      }
+      return { ...row, raw_data };
+    });
 
     // ⚠️ 支店レコードをそのまま並べると、同じブランドが何度も出る
     //    （実測: AROMA EMERALD は中身が完全に同じ4レコード）。
@@ -45,14 +72,7 @@ export async function getServerSideProps({ params, res }) {
     //    「1ルーム」になり、本命URLが店舗URLになる。ところが301の判定は全体のルーム数で
     //    見るので、**押した瞬間に301でブランドページへ飛ぶリンク**ができる
     //    （THE HALF に横浜ルームを足して実際に出た）。
-    //    ⚠️ PostgRESTは1回に最大1000行。店舗は1,000件を超えているので必ず繰ること。
-    const allRooms = [];
-    for (let from = 0; ; from += 1000) {
-      const page = await supabase.from('shops').select('id, group_id').range(from, from + 999);
-      if (page.error) throw page.error;
-      allRooms.push(...(page.data || []));
-      if (!page.data || page.data.length < 1000) break;
-    }
+    //    （全店のルーム数は上で県の店と同時に取っている＝ fetchAllRooms）
     const roomCountMap = countRoomsByBrand(allRooms);
     // ⚠️ propsはJSONにされるので Map は渡せない。素のオブジェクトにする。
     const initialRoomCounts = Object.fromEntries(roomCountMap);

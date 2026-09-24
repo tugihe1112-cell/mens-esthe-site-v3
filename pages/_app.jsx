@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import Script from 'next/script';
 import Head from 'next/head';
 import { GA_ID } from '../src/utils/analytics';
+import { installPageDataPrefetch } from '../src/utils/pageDataPrefetch';
 import '../src/index.css';
 
 const HIDE_NAV_PATHS = ['/login', '/register', '/404'];
@@ -80,6 +81,13 @@ function ChunkErrorGuard() {
   return null;
 }
 
+// リンクに触れた瞬間に次のページのデータを取り始める（2026-09-23・src/utils/pageDataPrefetch.js）。
+// 押したあとの「サーバーの返事待ち」を、触れてから押すまでの間に済ませておく。
+function PageDataPrefetch() {
+  React.useEffect(() => { installPageDataPrefetch(); }, []);
+  return null;
+}
+
 // ページ遷移中に上部プログレスバーを出す＝タップ直後に必ず反応が見える
 // （SSRページはgetServerSidePropsのサーバー往復で数百msかかり、無表示だと「押しても無反応」に感じるため）
 function RouteProgress() {
@@ -128,6 +136,7 @@ function Layout({ children, liveCounts }) {
     //    clip はスクロールコンテナを作らずに切るだけなので sticky に影響しない。
     <div className="flex flex-col min-h-screen bg-slate-950 text-slate-200 overflow-x-clip">
       <ChunkErrorGuard />
+      <PageDataPrefetch />
       <RouteProgress />
       <ScrollToTop />
       <main className="flex-grow">{children}</main>

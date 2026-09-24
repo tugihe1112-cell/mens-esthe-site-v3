@@ -39,6 +39,7 @@ export default function ShopDetailPage({
   ssrNearbyScope = 'prefecture',
   ssrReviewCount = 0,
   ssrAvgRating = null,
+  ssrGroupShopIds = null,
   renderSeo = true,
 }) {
   const { shopId } = useParams();
@@ -92,24 +93,36 @@ export default function ShopDetailPage({
         //    12_適用後に本人・credits保有者・VIPへ非公開口コミが返らなくなる。
         const headers = await authHeaders();
 
-        // 1. 先に店舗データだけを取得してブランドIDを確定させる
-        const shopRes = await fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers, cache: 'no-store' });
-        const shopData = await shopRes.json();
+        // 1. 店舗データ（住所などの表示用）。後続の処理が失敗しても表示できるよう、届き次第セットする。
+        const shopPromise = fetch(`${url}/rest/v1/shops?id=eq.${shopId}&select=*`, { headers, cache: 'no-store' })
+          .then((r) => r.json())
+          .then((shopData) => {
+            if (isMounted && Array.isArray(shopData) && shopData.length > 0) setCloudShop(shopData[0]);
+            return shopData;
+          })
+          // ⚠️ SSRのIDで先へ進む経路ではこの結果を待たないので、失敗を握っておく（未処理の例外にしない）。
+          //    店舗データが取れなくても在籍一覧は取りに行く（表示は SSR と共有箱の店舗情報で足りる）。
+          .catch((err) => { console.error('shop fetch failed', err); return null; });
 
-        // 店舗データは即座にセット（後続の処理が失敗しても表示できるように）
-        if (isMounted && Array.isArray(shopData) && shopData.length > 0) {
-          setCloudShop(shopData[0]);
-        }
-
-        const groupId = shopData?.[0]?.group_id;
-
-        // group_idが同じ店舗のIDを先に取得してからセラピストを取得
+        // 2. 在籍を取る店舗ID（系列があれば系列全店）
+        // 🚩 2026-09-23（速度）: SSRが同じIDを計算済みなら、それを使って**すぐ**在籍を取りに行く。
+        //    以前は「店舗→系列→在籍」を順番に待ち、在籍一覧（このページの主役）が2往復ぶん遅れていた。
+        //    ⚠️ SSRの値は「この店のページとして描いたもの」だけ使う（別の店へ移った直後の古いpropsを使わない）。
+        //    無いとき（SSR失敗・別経路から来た）は従来どおり店舗→系列の順に取る。
         let therapistShopIds = [shopId];
-        if (groupId) {
-          const groupShopsRes = await fetch(`${url}/rest/v1/shops?group_id=eq.${groupId}&select=id`, { headers, cache: 'no-store' });
-          const groupShops = await groupShopsRes.json();
-          if (Array.isArray(groupShops) && groupShops.length > 0) {
-            therapistShopIds = groupShops.map(s => s.id);
+        const ssrIdsUsable = ssrShop?.id === shopId
+          && Array.isArray(ssrGroupShopIds) && ssrGroupShopIds.length > 0 && ssrGroupShopIds.includes(shopId);
+        if (ssrIdsUsable) {
+          therapistShopIds = ssrGroupShopIds;
+        } else {
+          const shopData = await shopPromise;
+          const groupId = shopData?.[0]?.group_id;
+          if (groupId) {
+            const groupShopsRes = await fetch(`${url}/rest/v1/shops?group_id=eq.${groupId}&select=id`, { headers, cache: 'no-store' });
+            const groupShops = await groupShopsRes.json();
+            if (Array.isArray(groupShops) && groupShops.length > 0) {
+              therapistShopIds = groupShops.map(s => s.id);
+            }
           }
         }
         // 🚩 **写真の有無で絞らない**（2026-09-16）。

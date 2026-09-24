@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { authHeaders } from '../utils/supabaseRest';
+import { supabase } from '../lib/supabase';
 import { useParams, Link, useNavigate } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
 import { useAppContext } from '../context/AppContext.tsx';
@@ -77,6 +78,15 @@ export default function ThreadDetailPage({
       // SSRデータが無いときだけスケルトンを出す（SSRデータがあれば裏で静かに更新＝チラつかせない）
       if (!ssrTherapist) setIsLoading(true);
       try {
+        // ⚠️ 2026-09-23（速度）: **未ログインでSSRの中身があるときは取り直さない。**
+        //    この取り直しは「ログイン中の人にだけ見える口コミ」（本人・閲覧権・管理者。RLSで決まる）を
+        //    足すためのもの。未ログインで取れるのはSSRと同じ公開口コミだけなので、
+        //    開くたびに通信6本（実測で最後の応答まで約1.2秒）が丸ごと無駄になっていた。
+        //    ログイン中は今までどおり取り直す（下の authHeaders がセッションのJWTを載せる）。
+        if (ssrTherapist) {
+          const { data: sessionData } = await supabase.auth.getSession();
+          if (!sessionData?.session) return;
+        }
         const url = process.env.VITE_SUPABASE_URL;
         const key = process.env.VITE_SUPABASE_ANON_KEY;
         if (!url || !key) return;
