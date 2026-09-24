@@ -15,6 +15,7 @@ import {
   groupReviewsByPref, buildLatestFeed, summarizeReviewIndex, FEED_FETCH, REVIEW_INDEX_LIMIT,
 } from '../src/utils/homeReviews';
 import { getDisplayName } from '../src/utils/shopHelpers';
+import { createCountsCache } from '../src/utils/liveCountsCache';
 
 const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
@@ -48,6 +49,36 @@ export default function IndexPage({ initialHero, reviewsByPref, latestReviews, r
   );
 }
 
+// 🚩 件数（掲載N店舗／在籍N人）は表示のたびに数えない（2026-09-24・src/utils/liveCountsCache.js の注記）。
+//    セラピスト56,625行の数え上げがDBの実行時間全体の53%を占め（店舗の数え上げと合わせて6割超）、冷えた状態では2〜4秒かかって
+//    トップ全体の待ち時間になっていた（UptimeRobot が5分おきに開くたびに冷えた状態で走っていた）。
+//    数えた結果を30分持ち、期限が切れたら手元の数で返しつつ裏で数え直す。
+// ⚠️ getServerSideProps の中で件数だけの問い合わせ（head: true）を書かないこと（check_ssr_helpers が検査する）。
+const LIVE_COUNTS_TTL_MS = 30 * 60 * 1000;
+// 起動直後（手元に数が無いとき）だけ、ほかの取得のあとにこれだけ待つ。間に合わなければ今回は出さない
+// （Home は stats-latest.json の数に落ちる＝今までの「数えきれなかったとき」と同じ）。
+const LIVE_COUNTS_GRACE_MS = 500;
+
+async function loadLiveCounts() {
+  // 公開データ（shops・therapists）はRLSで匿名read可。以前と同じanon keyで同じ条件を数える。
+  const supabase = createClient(
+    process.env.VITE_SUPABASE_URL || '',
+    process.env.VITE_SUPABASE_ANON_KEY || ''
+  );
+  const [shopsRes, therapistsRes] = await Promise.all([
+    supabase.from('shops').select('id', { count: 'exact', head: true }),
+    supabase.from('therapists')
+      .select('id', { count: 'exact', head: true })
+      .or('is_active.is.null,is_active.eq.true'),
+  ]);
+  if (shopsRes?.error || therapistsRes?.error) return null;
+  const totalShops = shopsRes?.count;
+  const totalTherapists = therapistsRes?.count;
+  return Number.isInteger(totalShops) && Number.isInteger(totalTherapists) ? { totalShops, totalTherapists } : null;
+}
+
+const liveCountsCache = createCountsCache({ ttlMs: LIVE_COUNTS_TTL_MS, load: loadLiveCounts });
+
 export async function getServerSideProps({ res }) {
   // ISR(getStaticProps)の永続キャッシュが古い版を配信し続ける問題を回避するためSSR化。
   // ⚠️SWRを1日にするとデプロイ後に古いHTMLが配信され、消えた古いJSチャンクを指して404→真っ黒になる（ビルドIDが毎回変わるため）。
@@ -64,13 +95,13 @@ export async function getServerSideProps({ res }) {
       process.env.VITE_SUPABASE_URL || '',
       process.env.VITE_SUPABASE_ANON_KEY || ''
     );
-    // ヒーロー・公開口コミ・表示母数は独立 → 並列（Vercel関数↔Supabaseの往復回数を削減）
+    // 件数は手元の数を使う。古い・無いときは裏で数え直しを始めるだけで、ここでは待たない（上の注記）。
+    liveCountsCache.peek();
+    // ヒーロー・公開口コミは独立 → 並列（Vercel関数↔Supabaseの往復回数を削減）
     const [
       { data },
       { data: revs },
       { data: indexRows, count: reviewTotal, error: indexError },
-      { count: shopCount },
-      { count: activeTherapistCount },
     ] = await Promise.all([
       supabase.from('shops').select('id, group_id, name, raw_data, image_url').in('id', HERO_SHOP_IDS),
       supabase.from('reviews')
@@ -87,15 +118,8 @@ export async function getServerSideProps({ res }) {
         .eq('is_public', true)
         .order('created_at', { ascending: false })
         .limit(REVIEW_INDEX_LIMIT),
-      supabase.from('shops').select('id', { count: 'exact', head: true }),
-      supabase.from('therapists')
-        .select('id', { count: 'exact', head: true })
-        .or('is_active.is.null,is_active.eq.true'),
     ]);
     initialHero = buildInitialHero(data);
-    if (Number.isInteger(shopCount) && Number.isInteger(activeTherapistCount)) {
-      liveCounts = { totalShops: shopCount, totalTherapists: activeTherapistCount };
-    }
 
     // 店名/エリア解決 と セラピスト写真 は②に依存するがお互い独立 → 並列
     const safeIndex = indexError ? [] : (indexRows || []);
@@ -156,6 +180,8 @@ export async function getServerSideProps({ res }) {
   } catch (e) {
     console.error('getServerSideProps home fetch failed:', e);
   }
+  // 件数＝手元の数（古くても待たずに使う）。起動直後で手元に無いときだけ少し待ち、間に合わなければ null。
+  liveCounts = await liveCountsCache.waitFor(LIVE_COUNTS_GRACE_MS);
 
   // 🚩 中身が何も取れなかったときに **200で空ページを配信しない**（2026-09-15）。
   //    店舗・ブランド・人物・エリアのSSRには「200で空ページを返すのが最悪

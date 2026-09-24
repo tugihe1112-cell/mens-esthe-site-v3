@@ -1569,6 +1569,111 @@ const check = (name, fn) => {
   });
 }
 
+// ── トップの件数（掲載N店舗／在籍N人）を表示のたびに数えない（2026-09-24・src/utils/liveCountsCache.js）──────────
+// 🚩 セラピスト56,625行の数え上げが、DBの実行時間全体の53%を占めていた（平均1.3秒・冷えた状態で2〜4秒・打ち切り1日17回）。
+//    トップは取得を全部待ってから返すので、それがそのままトップの待ち時間だった。数えた数を持ち回す仕組みを実際に動かして固定する。
+{
+  const lcc = await loadModule('src/utils/liveCountsCache.js');
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  let t = 1_000;
+  let calls = 0;
+  let mode = 'ok';
+  const load = async () => {
+    calls += 1;
+    await sleep(5);
+    if (mode === 'fail') throw new Error('db down');
+    if (mode === 'hang') return new Promise(() => {});
+    return { totalShops: calls, totalTherapists: calls * 10 };
+  };
+  const cache = lcc.createCountsCache({ ttlMs: 1_000, load, timeoutMs: 50, now: () => t });
+  const cold = cache.peek();
+  cache.peek();
+  await sleep(30);
+  const first = cache.peek();
+  const callsAfterFirst = calls;
+  t += 500;
+  const within = cache.peek();
+  await sleep(30); // 数え直しが始まっていれば、ここまでに回数が増える
+  const callsWithin = calls;
+  t += 600;
+  const stale = cache.peek();
+  await sleep(30);
+  const refreshed = cache.peek();
+  mode = 'fail';
+  t += 2_000;
+  cache.peek();
+  await sleep(30);
+  const afterFail = cache.peek();
+  mode = 'hang';
+  t += 2_000;
+  cache.peek();
+  await sleep(90);
+  mode = 'ok';
+  cache.peek();
+  await sleep(30);
+  const afterHang = cache.peek();
+  const slow = lcc.createCountsCache({ ttlMs: 1_000, load: async () => { await sleep(120); return { totalShops: 7, totalTherapists: 70 }; }, now: () => t });
+  const gaveUp = await slow.waitFor(10);
+  await sleep(150);
+  const later = slow.peek();
+  const t0 = Date.now();
+  const cached = await slow.waitFor(5_000);
+  const waitedMs = Date.now() - t0;
+
+  check('トップの件数: 起動直後は待たずに null を返し、同時に呼ばれても数えるのは1回', () => {
+    if (cold !== null) return `起動直後に ${JSON.stringify(cold)} を返した`;
+    return callsAfterFirst === 1 && first?.totalShops === 1 ? null : `数えた回数 ${callsAfterFirst}・値 ${JSON.stringify(first)}`;
+  });
+  check('トップの件数: 期限内は数え直さない', () => (callsWithin === 1 && within === first ? null : `期限内に ${callsWithin} 回数えた`));
+  check('トップの件数: 期限切れは手元の数で返しつつ裏で数え直す', () => {
+    if (stale !== first) return '期限切れの時点で手元の数を返さなかった（待たせている）';
+    return refreshed?.totalShops === 2 ? null : `数え直しが反映されない: ${JSON.stringify(refreshed)}`;
+  });
+  check('トップの件数: 数え直しが失敗しても前の数を持ち続ける（数字が消えない）', () => (afterFail?.totalShops === 2 ? null : `失敗後の値 ${JSON.stringify(afterFail)}`));
+  check('トップの件数: 返ってこない数え直しで詰まらない（打ち切って次に数え直せる）', () => (afterHang?.totalShops >= 3 ? null : `詰まったまま: ${JSON.stringify(afterHang)}`));
+  check('トップの件数: 手元に無いときは決めた時間だけ待ち、間に合わなければ null・届いたら次から使う', () => {
+    if (gaveUp !== null) return `間に合わないのに ${JSON.stringify(gaveUp)} を返した`;
+    if (later?.totalShops !== 7) return `あとから届いた数が使われない: ${JSON.stringify(later)}`;
+    return waitedMs < 50 ? null : `手元にあるのに ${waitedMs}ms 待った`;
+  });
+  check('トップの件数: getServerSideProps の中で件数だけの問い合わせをしない（手元の数を使う）', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'pages/index.jsx'), 'utf-8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/^\s*\/\/.*$/gm, '');
+    const at = src.indexOf('export async function getServerSideProps');
+    if (at < 0) return 'getServerSideProps が見つからない（検査が壊れている）';
+    const gssp = src.slice(at);
+    const before = src.slice(0, at);
+    if (/head:\s*true/.test(gssp)) return 'getServerSideProps の中に件数だけの問い合わせ（head: true）がある＝表示のたびに数えている';
+    if (!/liveCountsCache\.waitFor\(/.test(gssp)) return '件数を liveCountsCache から取っていない';
+    if (!/createCountsCache\(\{\s*ttlMs:/.test(before)) return 'liveCountsCache を作っていない';
+    return /from\('therapists'\)[\s\S]{0,120}\.or\('is_active\.is\.null,is_active\.eq\.true'\)/.test(before)
+      ? null
+      : '在籍数の数え方（is_active が null か true）が変わった（一覧の「在籍」と食い違う）';
+  });
+}
+
+// ── 店舗一覧API（api/shops-lite.js）が本当にCDNに溜まること（2026-09-24 本番実測）──────────
+// 🚩 res.send() / res.json() は ETag を付ける。一度来たことのある人のブラウザは次から
+//    If-None-Match 付きで取りに来るので、CDNに手元の版が無いとき（デプロイ直後・期限切れ）は
+//    元のサーバーまで行って **304（中身なし）** が返り、304 はCDNに溜まらない。
+//    ＝来たことのある人だけで回している限りCDNがずっと空のまま、毎回0.7〜3秒（実測 x-vercel-cache: MISS の連続）。
+//    成功の応答は res.end(body) で返し、ETag を付けないこと。
+check('店舗一覧API: 成功の応答に ETag を付けない（304ばかりでCDNが空のままになるのを防ぐ）', () => {
+  const src = fs.readFileSync(path.join(ROOT, 'api/shops-lite.js'), 'utf-8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+  // 成功の経路＝try の中だけを見る（405・設定エラー・失敗時の res.json はキャッシュされないので対象外）
+  const tryAt = src.search(/\btry\s*\{/);
+  const catchAt = src.search(/\}\s*catch\s*\(/);
+  if (tryAt < 0 || catchAt < tryAt) return '成功の経路（try の中）が見つからない（検査が壊れている）';
+  const ok = src.slice(tryAt, catchAt);
+  if (!/['"]Cache-Control['"]\s*,\s*['"][^'"]*s-maxage=\d+/.test(ok)) return 'Cache-Control に s-maxage が無い（CDNに溜まらない）';
+  if (/\.(send|json)\s*\(/.test(ok)) return '成功の経路で res.send / res.json を使っている（ETag が付く）';
+  if (/setHeader\(\s*['"]etag['"]/i.test(ok)) return 'ETag を自分で付けている';
+  return /res\.end\(\s*body\s*\)/.test(ok) ? null : 'res.end(body) で返していない';
+});
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

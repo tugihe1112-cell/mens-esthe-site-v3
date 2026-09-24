@@ -14,6 +14,7 @@
  * 1. Service Role でサーバー側（hnd1＝Supabaseと同じ東京）で全店取得
  * 2. `raw_data.threads` を落とす（それ以外のキーは触らない＝画面の shape は不変）
  * 3. CDN にキャッシュさせて返す → 2回目以降のユーザーは Supabase に触らず CDN から即取得
+ *    ⚠️ 成功の応答は res.end で返し、ETag を付けない（下の return の注記。2026-09-24 実測）。
  *
  * 【キャッシュを長めにしてよい理由】
  * 2026-07の「真っ黒ページ」事故は *HTML* を長く stale にしたのが原因（HTMLはビルドIDに紐づく
@@ -120,7 +121,17 @@ export default async function handler(req, res) {
     res.setHeader('X-Shops-Count', String(shops.length));
     res.setHeader('X-Stripped-KB', String(Math.round(strippedBytes / 1024)));
     res.setHeader('X-Payload-KB', String(Math.round(body.length / 1024)));
-    return res.status(200).send(body);
+    // 🚩 res.send() で返さない（2026-09-24 本番実測）。
+    //    res.send() は ETag を付ける。すると一度でも来たことのある人のブラウザは、次から
+    //    「If-None-Match: <ETag>」付きで取りに来る。CDNに手元の版が無いとき（デプロイ直後・期限切れ）は
+    //    元のサーバーまで行き、全店を取り直したうえで **304（中身なし）** が返る。304 はCDNに溜まらないので、
+    //    次に来た人もまたサーバーまで行く＝**来たことのある人だけで回している限り、CDNがずっと空のまま**。
+    //    実測: 再訪問のブラウザで x-vercel-cache: MISS が毎回続き 0.7〜3秒（304・中身0KB）。
+    //          ETag を送らない取り方にすると1回目 MISS のあと HIT 33ms になった。
+    //    ⇒ ETag を付けない。ブラウザは毎回ふつうに取りに来て、CDNが手元の版を即返す（約30ms）。
+    //    ⚠️ ここを res.send / res.json に戻さないこと（check_ssr_helpers が検査する）。
+    res.statusCode = 200;
+    return res.end(body);
   } catch (e) {
     console.error('[api/shops-lite]', e && e.message);
     // 失敗時はキャッシュさせない（クライアントは直接Supabaseにフォールバックする）
