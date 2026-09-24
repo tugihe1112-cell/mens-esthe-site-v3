@@ -1619,6 +1619,18 @@ const check = (name, fn) => {
   const t0 = Date.now();
   const cached = await slow.waitFor(5_000);
   const waitedMs = Date.now() - t0;
+  // 期限切れのときは表示の中で待つ（間に合えば新しい数・間に合わなければ古い数）。裏に任せきりにしない。
+  let expN = 0;
+  const exp = lcc.createCountsCache({
+    ttlMs: 1_000,
+    load: async () => { expN += 1; await sleep(expN === 1 ? 5 : expN === 2 ? 40 : 200); return { totalShops: 100 + expN, totalTherapists: 1 }; },
+    now: () => t,
+  });
+  await exp.waitFor(100);
+  t += 2_000;
+  const expFresh = await exp.waitFor(100);
+  t += 2_000;
+  const expLate = await exp.waitFor(50);
 
   check('トップの件数: 起動直後は待たずに null を返し、同時に呼ばれても数えるのは1回', () => {
     if (cold !== null) return `起動直後に ${JSON.stringify(cold)} を返した`;
@@ -1634,7 +1646,11 @@ const check = (name, fn) => {
   check('トップの件数: 手元に無いときは決めた時間だけ待ち、間に合わなければ null・届いたら次から使う', () => {
     if (gaveUp !== null) return `間に合わないのに ${JSON.stringify(gaveUp)} を返した`;
     if (later?.totalShops !== 7) return `あとから届いた数が使われない: ${JSON.stringify(later)}`;
-    return waitedMs < 50 ? null : `手元にあるのに ${waitedMs}ms 待った`;
+    return waitedMs < 50 ? null : `期限内の数が手元にあるのに ${waitedMs}ms 待った`;
+  });
+  check('トップの件数: 期限切れのときは数え直しを待つ（間に合えば新しい数・間に合わなければ古い数で、null にしない）', () => {
+    if (expFresh?.totalShops !== 102) return `期限切れで数え直しを待たずに古い数を返した: ${JSON.stringify(expFresh)}`;
+    return expLate?.totalShops === 102 ? null : `間に合わなかったときに古い数を返さなかった: ${JSON.stringify(expLate)}`;
   });
   check('トップの件数: getServerSideProps の中で件数だけの問い合わせをしない（手元の数を使う）', () => {
     const src = fs.readFileSync(path.join(ROOT, 'pages/index.jsx'), 'utf-8')

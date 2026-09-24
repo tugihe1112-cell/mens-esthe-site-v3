@@ -52,12 +52,13 @@ export default function IndexPage({ initialHero, reviewsByPref, latestReviews, r
 // 🚩 件数（掲載N店舗／在籍N人）は表示のたびに数えない（2026-09-24・src/utils/liveCountsCache.js の注記）。
 //    セラピスト56,625行の数え上げがDBの実行時間全体の53%を占め（店舗の数え上げと合わせて6割超）、冷えた状態では2〜4秒かかって
 //    トップ全体の待ち時間になっていた（UptimeRobot が5分おきに開くたびに冷えた状態で走っていた）。
-//    数えた結果を30分持ち、期限が切れたら手元の数で返しつつ裏で数え直す。
+//    数えた結果を30分持つ。期限切れ・起動直後のときだけ、表示の中で数え直しを上限つきで待つ。
 // ⚠️ getServerSideProps の中で件数だけの問い合わせ（head: true）を書かないこと（check_ssr_helpers が検査する）。
 const LIVE_COUNTS_TTL_MS = 30 * 60 * 1000;
-// 起動直後（手元に数が無いとき）だけ、ほかの取得のあとにこれだけ待つ。間に合わなければ今回は出さない
-// （Home は stats-latest.json の数に落ちる＝今までの「数えきれなかったとき」と同じ）。
-const LIVE_COUNTS_GRACE_MS = 500;
+// 期限切れ・起動直後のときだけ、ほかの取得のあとに最大これだけ数え直しを待つ。間に合わなければ手元の古い数、
+// 古い数も無ければ今回は出さない（Home は stats-latest.json の数に落ちる＝今までの「数えきれなかったとき」と同じ）。
+// ⚠️ 返答のあとに裏で数え直させるだけにしない（liveCountsCache.js の注記＝関数が止まると結果が失われる）。
+const LIVE_COUNTS_GRACE_MS = 1200;
 
 async function loadLiveCounts() {
   // 公開データ（shops・therapists）はRLSで匿名read可。以前と同じanon keyで同じ条件を数える。
@@ -95,7 +96,7 @@ export async function getServerSideProps({ res }) {
       process.env.VITE_SUPABASE_URL || '',
       process.env.VITE_SUPABASE_ANON_KEY || ''
     );
-    // 件数は手元の数を使う。古い・無いときは裏で数え直しを始めるだけで、ここでは待たない（上の注記）。
+    // 件数は手元の数を使う。古い・無いときはここで数え直しを始め、ほかの取得と並べて進める（待つのは下の waitFor）。
     liveCountsCache.peek();
     // ヒーロー・公開口コミは独立 → 並列（Vercel関数↔Supabaseの往復回数を削減）
     const [
@@ -180,7 +181,7 @@ export async function getServerSideProps({ res }) {
   } catch (e) {
     console.error('getServerSideProps home fetch failed:', e);
   }
-  // 件数＝手元の数（古くても待たずに使う）。起動直後で手元に無いときだけ少し待ち、間に合わなければ null。
+  // 件数＝期限内の手元の数は待たずに使う。古い・無いときだけ最大 LIVE_COUNTS_GRACE_MS 待ち、間に合わなければ古い数（無ければ null）。
   liveCounts = await liveCountsCache.waitFor(LIVE_COUNTS_GRACE_MS);
 
   // 🚩 中身が何も取れなかったときに **200で空ページを配信しない**（2026-09-15）。
