@@ -1,7 +1,7 @@
 /**
  * brand_roster_audit.mjs — ブランドの公式名簿を読んで、DB の在籍者と照合する（読むだけ・DBに書かない）
  *
- *   node scripts/maintenance/brand_roster_audit.mjs [--top=100] [--days=120] [--domain=example.com]
+ *   node scripts/maintenance/brand_roster_audit.mjs [--top=100] [--days=120] [--domain=example.com] [--render]
  *
  * 出力: outputs/roster-audit/audit-<日付>.json（照合ツール reconcile_brand_rosters.mjs が読む）
  *
@@ -21,6 +21,12 @@
  *   ・DB の在籍者のうち公式で見つかった人が 40% 以上、かつ 5人以上
  *   ・公式で読めた人数が DB の在籍者数の 30% 以上
  *  満たさないサイトは「要確認」として一覧に残す（自動では何もしない）。
+ *
+ * 【--render（2026-09-25 追加）】 1回目で「要確認」「読めない」になったサイトだけ、手元の Chrome を裏で動かし
+ *  画面を組み立て終わった状態で読み直す（後から画面を組み立てるサイト＝Aroma Lunabelle・小悪魔スパ など）。
+ *  照合は名前をタグから拾わず、**DB の名前が公式ページの文字の中に出てくるか**で見る（書き方の違いに左右されにくい）。
+ *  1文字の名前は他の文字に紛れて判定できないので、確認にも退店にも入れない。読んだ文字は texts/<domain>.txt に残し、
+ *  reconcile_brand_rosters.mjs の念押し確認にも使う。
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -29,10 +35,11 @@ import { createClient } from '@supabase/supabase-js';
 import { rootDomainOf } from '../lib/sourceProvenance.mjs';
 
 const args = process.argv.slice(2);
-for (const a of args) if (!/^(--top=\d+|--days=\d+|--domain=[\w.-]+)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+for (const a of args) if (!/^(--top=\d+|--days=\d+|--domain=[\w.-]+|--render)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
 const TOP = Number(args.find((a) => a.startsWith('--top='))?.slice(6) || 100);
 const DAYS = Number(args.find((a) => a.startsWith('--days='))?.slice(7) || 120);
 const ONLY = args.find((a) => a.startsWith('--domain='))?.slice(9);
+const RENDER = args.includes('--render');
 
 const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
@@ -172,6 +179,72 @@ await Promise.all(Array.from({ length: 4 }, async () => {
     console.log(`${mark} ${g.domain.padEnd(34)} DB ${String(res.dbPeople).padStart(4)}人(${res.shops.length}ルーム) 公式 ${String(res.officialPeople ?? '-').padStart(4)} 一致 ${String(res.matchedPeople ?? '-').padStart(4)} (${res.matchRate ?? '-'})${res.error ? ' ' + res.error : ''}`);
   }
 }));
+
+// ── 2回目: 画面を組み立ててから読み、名前が文字に出てくるかで照合（--render）──────────
+const flatT = (v) => String(v || '').normalize('NFKC').replace(/[\s\u3000]/g, '').toLowerCase();
+const variants = (name) => {
+  const a = flatT(name);
+  const b = a.replace(/[（(【\[〔～~〜].*?[）)】\]〕～~〜]/g, '').replace(/\d+$/, '');
+  return [...new Set([a, b, nameKey(name)])].filter((x) => x.length >= 2);
+};
+async function renderTexts(browser, website) {
+  const page = await browser.newPage();
+  await page.setUserAgent(UA);
+  const texts = [];
+  const visited = [];
+  const grab = async (url) => {
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 45000 });
+    for (let k = 0; k < 6; k++) { await page.evaluate(() => window.scrollBy(0, document.body.scrollHeight)); await new Promise((r) => setTimeout(r, 600)); }
+    visited.push(page.url());
+    texts.push(await page.evaluate(() => document.body.innerText + '\n' + [...document.images].map((i) => i.alt || '').join('\n')));
+  };
+  try {
+    await grab(website);
+    const origin = new URL(page.url()).origin;
+    const links = [...new Set(await page.$$eval('a', (as) => as.map((a) => a.href)))]
+      .filter((h) => h.startsWith(origin) && ROSTER_HINT.test(h.replace(origin, '')) && !/(recruit|blog|diary|news|schedule|system|price|access|review|uid=|id=\d|\/\d{2,}\/?$|detail|GirlInfo)/i.test(h))
+      .sort((x, y) => x.length - y.length).slice(0, 3);
+    for (const l of links) { try { await grab(l); } catch { /* 次へ */ } }
+  } finally { await page.close(); }
+  return { text: texts.join('\n'), pages: visited };
+}
+if (RENDER) {
+  const puppeteer = (await import('puppeteer-core')).default;
+  const browser = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: 'new' });
+  fs.mkdirSync('outputs/roster-audit/texts', { recursive: true });
+  const retry = results.filter((r) => !r.usable && !/HTTP 40[134]/.test(r.error || ''));
+  console.log(`\n── 2回目（画面を組み立ててから読む）: ${retry.length}サイト`);
+  let j = 0;
+  await Promise.all(Array.from({ length: 2 }, async () => {
+    while (j < retry.length) {
+      const res = retry[j++];
+      const g = targets.find((t) => t.domain === res.domain);
+      try {
+        const { text, pages } = await renderTexts(browser, g.website);
+        const T = flatT(text);
+        fs.writeFileSync(path.join('outputs/roster-audit/texts', `${res.domain}.txt`), T);
+        const people = new Map();
+        for (const r of g.rows) { const k = nameKey(r.name); if (k) (people.get(k) || people.set(k, { rows: [], vs: variants(r.name) }).get(k)).rows.push(r); }
+        const judged = [...people.entries()].filter(([, v]) => v.vs.length > 0);
+        const found = judged.filter(([, v]) => v.vs.some((x) => T.includes(x)));
+        const notFound = judged.filter(([, v]) => !v.vs.some((x) => T.includes(x)));
+        const rate = judged.length ? +(found.length / judged.length).toFixed(2) : 0;
+        Object.assign(res, {
+          method: 'text', pages, error: undefined,
+          officialPeople: null, matchedPeople: found.length, matchRate: rate,
+          usable: found.length >= 5 && rate >= 0.4,
+          confirmRows: found.flatMap(([, v]) => v.rows.map((r) => r.id)),
+          departRows: notFound.flatMap(([, v]) => v.rows.map((r) => r.id)),
+          missingPeople: notFound.map(([k]) => k), newPeople: [],
+          unjudgedPeople: people.size - judged.length,
+        });
+      } catch (e) { res.renderError = e.message; }
+      const mark = res.usable ? '✅' : '⚠️';
+      console.log(`${mark} ${res.domain.padEnd(34)} DB ${String(res.dbPeople).padStart(4)}人 文字に出る ${String(res.matchedPeople ?? '-').padStart(4)} (${res.matchRate ?? '-'})${res.renderError ? ' ' + res.renderError : ''}`);
+    }
+  }));
+  await browser.close();
+}
 
 const usable = results.filter((r) => r.usable);
 const sum = (arr, k) => arr.reduce((n, r) => n + (r[k]?.length ?? r[k] ?? 0), 0);

@@ -14,6 +14,8 @@
  *  2. 退店扱いにする前に公式ページの文字をもう一度全部見て、**名前がどこにも出てこない人だけ**を退店扱いにする。
  *     どこかに出てくる人は読み取りの取りこぼしの可能性があるので何も変えない。
  *  3. 1サイトで退店扱いが在籍者の60%を超えたらそのサイトは何もしない（読み取りの失敗を疑う）。
+ *  3b.（2026-09-25 追加）一致率が60%未満のサイトは**在籍確認だけ**にして退店扱いはしない。
+ *     一覧が「もっと見る」で分かれていて読み切れていない可能性があり、誤って退店扱いにするほうが害が大きい。
  *  4. 書き換える前の行（id・is_active・last_seen_at）を outputs/roster-reconcile/ に保存。書けなければ中止。
  *  5. 書いたあと読み直して件数を照合。既定は下見。
  */
@@ -66,7 +68,9 @@ let i = 0;
 await Promise.all(Array.from({ length: 4 }, async () => {
   while (i < usable.length) {
     const r = usable[i++];
-    const texts = (await Promise.all((r.pages || []).map(pageText))).map(flat).join('\n');
+    // 画面を組み立ててから読んだサイト（--render）は、そのとき読んだ文字も念押し確認に使う
+    const rendered = (() => { try { return fs.readFileSync(path.join('outputs/roster-audit/texts', `${r.domain}.txt`), 'utf-8'); } catch { return ''; } })();
+    const texts = [(await Promise.all((r.pages || []).map(pageText))).map(flat).join('\n'), r.method === 'text' ? rendered : ''].join('\n');
     const confirm = r.confirmRows.map((id) => current.get(id)).filter((t) => t && t.is_active !== false);
     const departCand = r.departRows.map((id) => current.get(id)).filter((t) => t && t.is_active !== false);
     const keep = [];
@@ -77,7 +81,8 @@ await Promise.all(Array.from({ length: 4 }, async () => {
     }
     const activeRows = confirm.length + departCand.length;
     const skip = !texts || (activeRows && depart.length / activeRows > 0.6);
-    plan.push({ domain: r.domain, shops: r.shops.length, confirm: skip ? [] : confirm, depart: skip ? [] : depart, keep, skipped: skip ? (!texts ? '公式ページを読み直せない' : '退店扱いが60%超') : null });
+    const confirmOnly = !skip && (r.matchRate ?? 0) < 0.6;
+    plan.push({ domain: r.domain, shops: r.shops.length, confirm: skip ? [] : confirm, depart: skip || confirmOnly ? [] : depart, keep: confirmOnly ? [...keep, ...depart] : keep, skipped: skip ? (!texts ? '公式ページを読み直せない' : '退店扱いが60%超') : confirmOnly ? `一致率${r.matchRate}＝在籍確認だけ` : null });
   }
 }));
 plan.sort((a, b) => (b.confirm.length + b.depart.length) - (a.confirm.length + a.depart.length));
@@ -104,7 +109,7 @@ const staleAt = (rows, daysAhead) => {
 const after = all.filter((t) => !departSet.has(t.id)).map((t) => (confirmSet.has(t.id) ? { ...t, last_seen_at: new Date().toISOString() } : t));
 
 console.log(`\n${LIVE ? '🔴 本番書き込み' : '🟢 下見（何も書きません）'}  対象 ${usable.length}サイト（audit: ${FILE}）`);
-console.log(`在籍を確認: ${confirmRows.length}行 ／ 退店扱い: ${departRows.length}行 ／ 名前が公式ページのどこかに出るので変えない: ${keepRows.length}行 ／ 何もしないサイト: ${plan.filter((p) => p.skipped).length}`);
+console.log(`在籍を確認: ${confirmRows.length}行 ／ 退店扱い: ${departRows.length}行 ／ 名前が公式ページのどこかに出るので変えない: ${keepRows.length}行 ／ 何もしないサイト: ${plan.filter((p) => p.skipped && !/在籍確認だけ/.test(p.skipped)).length} ／ 在籍確認だけのサイト: ${plan.filter((p) => /在籍確認だけ/.test(p.skipped || '')).length}`);
 console.log(`180日超の割合  いま ${staleAt(all, 0)} → 書いた後 ${staleAt(after, 0)}`);
 console.log(`              30日後 ${staleAt(all, 30)} → ${staleAt(after, 30)}・60日後 ${staleAt(all, 60)} → ${staleAt(after, 60)}・90日後 ${staleAt(all, 90)} → ${staleAt(after, 90)}`);
 console.log('\n  サイト                              ルーム  在籍確認  退店扱い  変えない');
