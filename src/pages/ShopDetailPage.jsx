@@ -14,7 +14,7 @@ import SeoHead from '../components/SeoHead.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName, getTherapistDisplayName } from '../utils/shopHelpers';
 import LocationLabel from '../components/LocationLabel.jsx';
-import { joinFields, shapeShopRow } from '../utils/shopFields';
+import { joinFields, shapeShopRow, shopAreaList } from '../utils/shopFields';
 import { trackEvent } from '../utils/analytics';
 import siteStats from '../data/stats-latest.json';
 import ShopStatusBanner from '../components/ShopStatusBanner.jsx';
@@ -453,9 +453,9 @@ export default function ShopDetailPage({
                <div className="flex flex-wrap gap-2 mb-3">
                  {/* ⚠️ 市区・エリアが両方とも無い店舗が65店ある。
                      無条件で描くと中身の無い「空のピンクの箱」だけが出る（2026-08-22に本番で発生）。 */}
-                 {joinFields(shop.city, shop.area) && (
+                 {joinFields(shop.city, shopAreaList(shop)) && (
                    <span className="px-2.5 py-0.5 rounded-md bg-pink-600/80 backdrop-blur text-white text-xs font-bold tracking-widest uppercase border border-white/10">
-                     {joinFields(shop.city, shop.area)}
+                     {joinFields(shop.city, shopAreaList(shop))}
                    </span>
                  )}
                  {shop.group_id && (
@@ -476,7 +476,7 @@ export default function ShopDetailPage({
                      住所が無くても都道府県・市区までは出せることが多いのでフォールバックする。 */}
                  <LocationLabel
                    className="line-clamp-2"
-                   parts={[shop.address || joinFields(shop.prefecture, shop.city, shop.area)]}
+                   parts={[shop.address || joinFields(shop.prefecture, shop.city, shopAreaList(shop))]}
                  />
                  {/* ⚠️ 収集元サイトの `raw_data.rating` は使わない（shapeShopRow が構造的に落としている）。
                      ★>0 を持つ39店は当サイトの口コミが全て0件で、出すと「口コミ0件なのに★4.7」になる。
@@ -685,11 +685,11 @@ export default function ShopDetailPage({
                 {/* ⚠️ 住所が無い店舗が614店（56%）。無条件で出すと
                     「ACCESS」というラベルの右が空白のままになる（営業時間・TELと同じ扱いに揃える）。
                     住所が無くても都道府県・市区までは出せることが多いのでフォールバックする。 */}
-                {joinFields(shop.address || joinFields(shop.prefecture, shop.city, shop.area)) && (
+                {joinFields(shop.address || joinFields(shop.prefecture, shop.city, shopAreaList(shop))) && (
                   <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
                     <dt className="text-xs md:text-xs font-bold text-slate-500 uppercase tracking-widest">所在地</dt>
                     <dd className="text-sm md:text-base text-slate-300 leading-relaxed">
-                      {shop.address || joinFields(shop.prefecture, shop.city, shop.area)}
+                      {shop.address || joinFields(shop.prefecture, shop.city, shopAreaList(shop))}
                     </dd>
                   </div>
                 )}

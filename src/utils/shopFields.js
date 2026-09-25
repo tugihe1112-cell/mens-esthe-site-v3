@@ -42,7 +42,8 @@ export function cleanField(v) {
  */
 export function joinFields(...parts) {
   const out = [];
-  for (const p of parts) {
+  // 配列は展開して全部並べる（複数ルームの店の area は配列。先頭だけにすると2つ目以降の地名が表示から消える）。
+  for (const p of parts.flat()) {
     const s = cleanField(p);
     if (!s) continue;
     const dupAt = out.findIndex((x) => sameLocality(x, s));

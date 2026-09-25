@@ -1,3 +1,4 @@
+import { shopAreaList } from '../utils/shopFields';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { shopHref } from '../utils/brandGroups.js';
@@ -253,7 +254,7 @@ export default function PopularReviewsPage({
                   const preview = content.length > 120 ? content.slice(0, 120) + '…' : content;
                   const rating = r.rating != null ? Number(r.rating) : null;
                   const time = relTime(r.created_at);
-                  const loc = [shop.prefecture, shop.area].filter(Boolean).join('・');
+                  const loc = [shop.prefecture, ...shopAreaList(shop)].filter(Boolean).join('・');
                   // (c) 各口コミ自身のセラピストページへ。旧実装は /search?shop=&cast= で
                   //     「続きが読めない・内部リンクが本命に流れない」行き止まりだった。
                   const threadLink = (r.shop_id && r.therapist_id)

@@ -112,6 +112,13 @@ const check = (name, fn) => {
     (f.shopLocationText({ raw_data: { prefecture: '栃木県', city: '宇都宮' } }) === '栃木県 宇都宮' ? null : 'フォールバックしない'));
   check('shopLocationText は全部無ければ空', () =>
     (f.shopLocationText({ raw_data: {} }) === '' ? null : '空にならない'));
+  // 2026-09-25: 所在地の表示も配列の先頭だけだった（ゆりかご＝三宮・尼崎が「三宮」だけ）。
+  check('joinFields は配列を展開して全部並べる（重複は畳む）', () =>
+    (f.joinFields('兵庫県', '三宮', ['三宮', '尼崎']) === '兵庫県 三宮 尼崎' ? null : `「${f.joinFields('兵庫県', '三宮', ['三宮', '尼崎'])}」`));
+  check('shopLocationText は住所が無い複数エリアの店で全部の地名を出す（shapeShopRow 経由）', () => {
+    const got = f.shopLocationText(f.shapeShopRow({ id: 'x', raw_data: { prefecture: '兵庫県', city: '三宮', area: ['三宮', '尼崎'] } }));
+    return got === '兵庫県 三宮 尼崎' ? null : `「${got}」`;
+  });
   // 2026-09-24: 複数エリア（配列）の店がエリア選択に出ていなかった。shapeShopRow を通しても全エリアが取れること。
   check('shopAreaList は配列の area を全部返す（shapeShopRow 経由でも）', () => {
     const shaped = f.shapeShopRow({ id: 'x', raw_data: { area: ['梅田', ' 北新地 ', ''] } });

@@ -8,7 +8,7 @@ import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
-import { joinFields } from '../utils/shopFields';
+import { joinFields, shopAreaList } from '../utils/shopFields';
 import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
@@ -194,9 +194,9 @@ export default function FavoritesPage() {
                     </div>
                     <div className="flex-1 min-w-0 py-1">
                       {/* ⚠️ エリアが無い店舗では中身の無い青い箱だけが出ていた */}
-                      {joinFields(shop.area, shop.city) && (
+                      {joinFields(shopAreaList(shop), shop.city) && (
                         <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">{joinFields(shop.area, shop.city)}</span>
+                            <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">{joinFields(shopAreaList(shop), shop.city)}</span>
                         </div>
                       )}
                       <h3 className="text-lg font-black text-white truncate group-hover:text-blue-400 transition">{getDisplayName(shop.name, shop)}</h3>

@@ -25,6 +25,8 @@
  *   node scripts/maintenance/refill_null_shop_images.mjs            # dry-run（DB更新なし・件数だけ見る）
  *   node scripts/maintenance/refill_null_shop_images.mjs --live     # 本実行
  *   オプション: --limit=20（少数テスト） --concurrency=4 --allow-icon
+ *             --prefix=hyogo_（id がこれで始まる店だけ。2026-09-24 追加＝新しく登録した店だけ埋めるため）
+ *             --skip=id1,id2（候補を目で見て店の画像として不適だった店を外す。割引バナー・地図など）
  */
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
@@ -34,6 +36,12 @@ const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
 
 const args = process.argv.slice(2);
+// 知らない引数は止める（指定したつもりで別のものが動く事故を防ぐ＝lessons.md 2026-09-20）
+for (const a of args) {
+  if (!/^(--live|--allow-icon|--limit=\d+|--concurrency=\d+|--prefix=[A-Za-z0-9_]+|--skip=[A-Za-z0-9_,]+)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+}
+const PREFIX = (args.find((a) => a.startsWith('--prefix=')) || '').split('=')[1] || '';
+const SKIP = new Set(((args.find((a) => a.startsWith('--skip=')) || '').split('=')[1] || '').split(',').filter(Boolean));
 const LIVE = args.includes('--live');
 const ALLOW_ICON = args.includes('--allow-icon');
 const LIMIT = Number((args.find((a) => a.startsWith('--limit=')) || '').split('=')[1]) || 0;
@@ -123,14 +131,15 @@ async function fetchImageBuffer(imageUrl, referer) {
 }
 
 async function main() {
-  const { data: shops, error } = await supabase
+  let q = supabase
     .from('shops')
     .select('id, name, website_url')
-    .is('image_url', null)
-    .order('id');
+    .is('image_url', null);
+  if (PREFIX) q = q.like('id', `${PREFIX}%`);
+  const { data: shops, error } = await q.order('id');
   if (error) { console.error('❌ 取得失敗:', error.message); process.exit(1); }
 
-  const targets = (shops || []).filter((s) => s.website_url && /^https?:\/\//.test(s.website_url));
+  const targets = (shops || []).filter((s) => s.website_url && /^https?:\/\//.test(s.website_url) && !SKIP.has(s.id));
   const list = LIMIT ? targets.slice(0, LIMIT) : targets;
 
   console.log(`=== 店舗サムネイル再取得 ===`);

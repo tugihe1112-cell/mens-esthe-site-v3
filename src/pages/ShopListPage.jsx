@@ -217,7 +217,7 @@ export default function ShopListPage() {
                              （LocationLabel はこの型を潰すために作ったのに、この画面だけ直書きが残っていた） */}
                       <div className="hidden md:block absolute top-3 left-3">
                           <LocationLabel
-                            parts={[shop.prefecture, shop.city, shop.area]}
+                            parts={[shop.prefecture, shop.city, shopAreaList(shop)]}
                             className="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold px-2 py-1 rounded-full inline-flex items-center gap-1"
                           />
                       </div>
@@ -233,7 +233,7 @@ export default function ShopListPage() {
                       <LocationLabel
                         as="div"
                         className="md:hidden text-[10px] font-bold text-pink-300 truncate"
-                        parts={[shop.prefecture, shop.city, shop.area]}
+                        parts={[shop.prefecture, shop.city, shopAreaList(shop)]}
                       />
                       <h3 className="md:hidden text-base font-black text-white leading-tight line-clamp-2">
                         {getDisplayName(shop.name, shop)}
@@ -243,7 +243,7 @@ export default function ShopListPage() {
                             以前は過半の店舗で「アクセス情報なし」という行き止まりが出ていた。
                             住所が無くても都道府県・市区は出せることが多いのでフォールバックする。 */}
                         <span className="text-slate-400 text-xs truncate min-w-0">
-                           {shop.address || joinFields(shop.prefecture, shop.city, shop.area)}
+                           {shop.address || joinFields(shop.prefecture, shop.city, shopAreaList(shop))}
                         </span>
                         {/* ⚠️ 収集元サイトの評価は出さない。実測で★4.5/4.7が出ていた店は
                             いずれも当サイトの口コミ0件だった＝根拠のない★だった（D-010）。
