@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useShopData } from '../contexts/DataContext.jsx';
+import { shopAreaList } from '../utils/shopFields';
 import { useRankingData } from '../features/ranking/hooks/useRankingData';
 import { PodiumCard } from '../features/ranking/components/PodiumCard';
 import { RankingListItem } from '../features/ranking/components/RankingListItem';
@@ -39,7 +40,7 @@ export default function RankingPage() {
       const shop = shops.find(s => s.id === item.shopId);
       if (!shop) return false;
       
-      const area = (shop.area || '').toLowerCase();
+      const area = shopAreaList(shop).join(' ').toLowerCase();
       const city = (shop.city || '').toLowerCase();
       const pref = (shop.prefecture || '').toLowerCase();
       const target = selectedArea.toLowerCase();

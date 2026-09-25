@@ -30,6 +30,7 @@
  *    → `brandReadings.js` の読み辞書で展開し、辞書に無い語は音写（ローマ字）で拾う。
  */
 import { BRAND_READINGS } from '../data/brandReadings';
+import { shopAreaList } from './shopFields.js';
 
 const SMALL_KATA = { 'ァ':'ア','ィ':'イ','ゥ':'ウ','ェ':'エ','ォ':'オ','ッ':'ツ','ャ':'ヤ','ュ':'ユ','ョ':'ヨ','ヮ':'ワ','ヵ':'カ','ヶ':'ケ' };
 const SMALL_HIRA = { 'ぁ':'あ','ぃ':'い','ぅ':'う','ぇ':'え','ぉ':'お','っ':'つ','ゃ':'や','ゅ':'ゆ','ょ':'よ','ゎ':'わ' };
@@ -132,7 +133,8 @@ export function splitAddressWords(address) {
 }
 
 export function buildSearchTarget(shop) {
-  const areaStr = Array.isArray(shop.area) ? shop.area.join(' ') : (shop.area || '');
+  // shapeShopRow 済みの店は配列の area が undefined になっているので raw_data まで見る（shopAreaList）。
+  const areaStr = shopAreaList(shop).join(' ');
   const addressStr = splitAddressWords(shop.address);
   // ⚠️ searchText はブランドにまとめたときの「全ルームぶんの地名」。
   //    表示用の項目（city/address）は代表ルームのままなので、

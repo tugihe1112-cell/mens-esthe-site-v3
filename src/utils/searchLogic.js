@@ -27,6 +27,7 @@ const PREFECTURE_NAMES = new Set([
 ]);
 
 import { buildBrands } from './brandGroups.js';
+import { shopAreaList } from './shopFields.js';
 
 export const performSearch = (shops, query) => {
   // 1. クエリが空の場合
@@ -46,7 +47,9 @@ export const performSearch = (shops, query) => {
 
     const name = safeStr(shop.name);
     const brand = safeStr(shop.brandId);
-    const area = safeStr(shop.area);
+    // area は複数ルームの店で配列（shapeShopRow は配列の area を undefined にする）。
+    // shop.area だけを見ると2つ目以降の地名で検索に出ない（2026-09-24、尼崎で ゆりかご が出なかった）。
+    const area = safeStr(shopAreaList(shop).join(' '));
     const pref = safeStr(shop.prefecture);
     const city = safeStr(shop.city);
     

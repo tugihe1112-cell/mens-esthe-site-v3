@@ -9,7 +9,7 @@ import BrandResultCard from "../components/BrandResultCard";
 import SeoHead from "../components/SeoHead.jsx";
 import Header from "../components/Header.jsx";
 import LocationLabel from "../components/LocationLabel.jsx";
-import { joinFields } from "../utils/shopFields";
+import { joinFields, shopAreaList } from "../utils/shopFields";
 import { shopHref } from "../utils/brandGroups.js";
 
 const ITEMS_PER_PAGE = 18;
@@ -45,7 +45,7 @@ export default function ShopListPage() {
 
       // 2. 同一 group_id の複数ヒット → area がマッチする店舗を優先
       if (shop.group_id && terms.length > 0) {
-        const areaStr = (shop.area || '').toLowerCase();
+        const areaStr = shopAreaList(shop).join(' ').toLowerCase();
         const areaMatches = terms.some(t => areaStr.includes(t));
 
         if (seenGroups.has(shop.group_id)) {
@@ -67,7 +67,7 @@ export default function ShopListPage() {
       // area が検索ワードにマッチする店舗は除外しない（「川口」で Lynx 川口店を正しく出す）
       if (terms.length > 0) {
         const displayName = getDisplayName(shop.name || '').replace(/[\s　]+/g, '').toLowerCase();
-        const areaStr = (shop.area || '').toLowerCase();
+        const areaStr = shopAreaList(shop).join(' ').toLowerCase();
         const areaMatches = terms.some(t => areaStr.includes(t));
 
         if (seenDisplayNames.has(displayName) && !areaMatches) {

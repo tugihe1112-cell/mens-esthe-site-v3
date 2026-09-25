@@ -1341,6 +1341,30 @@ const check = (name, fn) => {
   });
 }
 
+// ── 複数エリアの店を2つ目以降の地名で探せる（2026-09-24）──────────────────
+// 🚩 兵庫の登録を本番で確かめたら「尼崎」で ゆりかご（エリア＝三宮・尼崎）が出なかった。
+//    shapeShopRow は配列の area を undefined にするので、shop.area だけを見る検索は
+//    複数ルームの店（65店＋）の2つ目以降の地名を**ずっと見ていなかった**。通しで測る（DBの行→shapeShopRow→検索）。
+{
+  const { performSearch } = await loadModule('src/utils/searchLogic.js');
+  const { buildSearchTarget } = await loadModule('src/utils/searchMatch.js');
+  const { shapeShopRow } = await loadModule('src/utils/shopFields.js');
+  const rows = [
+    shapeShopRow({ id: 'hyogo_x', name: 'ゆりかごテスト', raw_data: { prefecture: '兵庫県', city: '三宮', area: ['三宮', '尼崎'] } }),
+    shapeShopRow({ id: 'hyogo_y', name: '別の店', raw_data: { prefecture: '兵庫県', city: '姫路', area: '姫路' } }),
+  ];
+  check('⭐店舗一覧の検索は配列エリアの2つ目の地名でも当たる（shapeShopRow 経由）', () => {
+    const r = performSearch(rows, '尼崎');
+    const ids = (r.data || []).map((x) => x.id);
+    return ids.includes('hyogo_x') && !ids.includes('hyogo_y') ? null : `当たったのは ${JSON.stringify(ids)}`;
+  });
+  check('⭐上部検索の対象文字列に配列エリアの全地名が入る（shapeShopRow 経由）', () => {
+    const t = buildSearchTarget(rows[0]);
+    const text = typeof t === 'string' ? t : JSON.stringify(t);
+    return text.includes('尼崎') ? null : '2つ目の地名が検索対象に入っていない';
+  });
+}
+
 // ── ホーム「最新の実体験口コミ」欄＝呼水（2026-09-22 作り直し）──────────────
 // 以前は「最新1件＋選んだ県の最大2件」で、しかも東京は1件に減っていた（SSRが2件に切り、画面が最新と同じ1件を除いた）。
 // 作り直した形: すべて／県のチップ → 最新1件 → 新着6件。1店舗2件まで。件数は数えられた数字だけ。
