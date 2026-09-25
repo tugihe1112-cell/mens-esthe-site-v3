@@ -638,6 +638,30 @@ for (const [path, label] of [
   }
 }
 
+// ── 店舗一覧の検索語とハイドレーション（2026-09-25）──────────────────
+// /shops は静的ページ（ビルド時に検索語なし）。ブラウザの最初の表示で URL の検索語を使うと
+// 見出しがサーバーと食い違い React #418 になる。最初は空で描き、表示後に URL から入れる。
+// ⚠️ URL への書き戻しは準備（ready）の後だけ。先に動くと ?q= を消してしまう。
+// （本当の確認は手元の Chrome で /shops?q=… を開くこと。この検査は形が戻っていないかを見るだけ）
+{
+  const src = stripSrc(read('src/pages/ShopListPage.jsx'));
+  if (!/useSearch\(\s*shops\s*,\s*''\s*\)/.test(src)) {
+    failures.push(
+      '店舗一覧が最初から URL の検索語で描いています（useSearch の初期値）。'
+      + '\n      → 静的ページなのでサーバーの画面と食い違い React #418 になる。初期値は空にし、表示後に setQueryNow で入れること。'
+    );
+  }
+  // 書き戻しの行の**直前の useEffect** だけを見る（ファイルの先頭から取ると別の処理の ready 待ちを拾って素通りする）
+  const at = src.indexOf('setSearchParams(query ? { q: query } : {}');
+  const writer = at >= 0 ? src.slice(src.lastIndexOf('useEffect(', at), at) : '';
+  if (!writer || !/if \(!ready\) return;/.test(writer)) {
+    failures.push(
+      '店舗一覧の「検索語を URL に書き戻す」処理が、準備（ready）を待っていません。'
+      + '\n      → 検索語を読む前に動くと、開いた瞬間に URL の ?q= を消してしまう。'
+    );
+  }
+}
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from '../compat/router';
 import { useShopData } from "../contexts/DataContext.jsx";
 import { useSearch } from "../hooks/useSearch";
@@ -18,11 +18,20 @@ export default function ShopListPage() {
   const { shops, loading, roomCounts } = useShopData();
   const [searchParams, setSearchParams] = useSearchParams();
   
-  // URLからクエリ取得
-  const initialQuery = searchParams.get('q') || '';
+  // URLの検索語
+  const urlQuery = searchParams.get('q') || '';
 
-  // 検索フック
-  const { query, setQuery, result: rawResult, mode, summary, isSearching } = useSearch(shops, initialQuery);
+  // ⚠️ 2026-09-25: /shops は静的ページ（ビルド時に検索語なしで作る）。ところがブラウザの最初の表示では
+  //    URL の検索語を読んで見出しを「店舗の検索結果」にしていたため、サーバーの「店舗を探す」と食い違い
+  //    React #418（ハイドレーションの不一致）が出ていた。最初の1回は**検索語なし**で描き、
+  //    表示し終わってから URL の検索語を入れる（ready）。
+  const [ready, setReady] = useState(false);
+  const { query, setQuery, setQueryNow, result: rawResult, mode, summary, isSearching } = useSearch(shops, '');
+  const queryRef = useRef(query);
+  queryRef.current = query;
+  // 自分が URL に書き戻した値。その URL の変化を「外からの変化」と取り違えると、
+  // 入力中の文字が古い値に戻される（書き戻しが追いつく前に次の文字を打った場合）。
+  const echoesRef = useRef(new Set());
   // ⚠️ リンク先は shopHref で決める。`/shops/${id}` を直書きすると
   //    複数ルームのブランドで「押した瞬間に301」になる。
 
@@ -82,13 +91,25 @@ export default function ShopListPage() {
 
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
 
-  // ★重要: URLのクエリパラメータが変わったら、内部の検索ステートも更新する
-  // これにより、ランキング等からの遷移で正しくリストが切り替わる
+  // 表示し終わったら URL の検索語を入れる（1回だけ）。値は実URLから読む。
   useEffect(() => {
-    if (initialQuery !== query) {
-      setQuery(initialQuery);
+    const q = typeof window === 'undefined' ? '' : (new URLSearchParams(window.location.search).get('q') || '');
+    setQueryNow(q);
+    setReady(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // URL が外から変わったら（エリアのリンクなどで /shops?q=… に来た）検索語を合わせる。
+  // ⚠️ 依存に query を入れない。入れると入力のたびに URL の古い値へ戻される。
+  useEffect(() => {
+    if (!ready) return;
+    if (echoesRef.current.has(urlQuery)) {
+      // 自分で書き戻した値。URL が今の入力に追いついたら記録を捨てる。
+      if (urlQuery === queryRef.current) echoesRef.current.clear();
+      return;
     }
-  }, [initialQuery, query, setQuery]);
+    if (urlQuery !== queryRef.current) setQueryNow(urlQuery);
+  }, [ready, urlQuery, setQueryNow]);
 
   // 検索結果が変わったら表示件数をリセット
   useEffect(() => {
@@ -96,17 +117,14 @@ export default function ShopListPage() {
   }, [result]); 
 
   // 検索ボックスへの入力(State)をURLに反映させる
-  // デバウンスはuseSearch内で行われているが、URL同期は入力確定ごとに行う
+  // ⚠️ ready の前は動かさない。先に動くと、検索語を読む前の空の状態で URL の ?q= を消してしまう。
   useEffect(() => {
-    const params = {};
-    if (query) {
-      params.q = query;
-      setSearchParams(params, { replace: true });
-    } else {
-      // クエリが空ならパラメータ削除
-      setSearchParams({}, { replace: true });
-    }
-  }, [query, setSearchParams]);
+    if (!ready) return;
+    if (query === urlQuery) return;
+    echoesRef.current.add(query);
+    setSearchParams(query ? { q: query } : {}, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, query, setSearchParams]);
 
   const handleLoadMore = () => {
     setDisplayCount(prev => prev + ITEMS_PER_PAGE);

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { performSearch } from '../utils/searchLogic';
 
 export const useSearch = (shops, initialQuery = '') => {
@@ -31,9 +31,17 @@ export const useSearch = (shops, initialQuery = '') => {
     return result;
   }, [shops, debouncedQuery]);
 
+  // 入力ではなく URL から検索語を入れるとき用。デバウンスを待たずに結果まで切り替える
+  // （待つと「全件→絞り込み」が一瞬見える）。
+  const setQueryNow = useCallback((q) => {
+    setQuery(q);
+    setDebouncedQuery(q);
+  }, []);
+
   return {
     query,
     setQuery,
+    setQueryNow,
     result: searchResult.data,    // 店舗リスト
     mode: searchResult.type,      // 'brand' | 'shop' | 'all' | 'empty'
     summary: searchResult.summary,// ブランド情報 (brandモード時のみ)
