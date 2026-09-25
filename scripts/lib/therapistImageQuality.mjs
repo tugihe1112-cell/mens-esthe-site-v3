@@ -36,6 +36,8 @@ const KNOWN_BAD_FILENAMES = [
   'mig_27c74b32535db835babd.png', // THE ESTHE: NO PHOTO
   'mig_9d57bb4009a883ddba3d.png', // Aroma Miely: newface代替画像
   'mig_dedaeba698addfa21c16.jpg', // 動画をjpgとして保存した誤データ
+  // 2026-09-25 新人追加で入った画像を目視確認
+  'cast_tokyo_shinjuku_higashishinjuku_limited_spa_profile_8938ad6ba71a.jpg', // Limited Spa: NO IMAGE（/images/01.jpg）
 ];
 
 export const KNOWN_BAD_THERAPIST_IMAGE_URLS = Object.freeze(
@@ -48,6 +50,7 @@ const KNOWN_BAD_URL_SET = new Set(KNOWN_BAD_THERAPIST_IMAGE_URLS);
 // 「同じ人物を別人へ誤割当した2画像」は、本人に正しく使われる可能性があるため
 // 内容ハッシュでは拒否せず、DB上の大量使い回し監視で検出する。
 export const KNOWN_PLACEHOLDER_IMAGE_SHA256 = new Set([
+  'f2f9af0d7080c56d139dd66d0750fbc18c4d646f3da9dcf1cb73442e7d2f90ca', // Limited Spa: NO IMAGE（2026-09-25）
   '5091f2817b8cf57d0ad7323a469e52d0d3076b314756348021138f39e87734a4',
   'c39efe0464ecb07e892ddc3037ca9a837179f76718b56d71d35f3efa49a35ccf',
   '25a8f593d6dadd293252d6dba10af1bebb5ede35727ba070448d78e1738d1c16',
