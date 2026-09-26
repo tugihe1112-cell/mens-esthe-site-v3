@@ -24,11 +24,13 @@ import { assertOfficialRosterSource, scopedImageKey, rootDomainOf } from '../lib
 import { cleanRosterName, detectSitePrefix, selfTestRosterNameClean } from '../lib/rosterNameClean.mjs';
 
 const args = process.argv.slice(2);
-for (const a of args) if (!/^(--live|--file=.+)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+for (const a of args) if (!/^(--live|--file=.+|--max-per-site=\d+)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
 const LIVE = args.includes('--live');
 const FILE = args.find((a) => a.startsWith('--file='))?.slice(7);
 if (!FILE) { console.error('使い方: --file=outputs/roster-audit/new-therapists-YYYY-MM-DD.json [--live]'); process.exit(1); }
-const MAX_PER_SITE = 60;
+// 既定60人。verify_listing_candidates.mjs で「公式の在籍一覧の画面に見える」と確かめた候補だけのファイルでは上げてよい
+const MAX_PER_SITE = Number(args.find((a) => a.startsWith('--max-per-site='))?.slice(15) || 60);
+if (MAX_PER_SITE > 60 && !/\.verified\.json$/.test(FILE)) { console.error('❌ --max-per-site を60より上げるのは、verify_listing_candidates.mjs で確かめたファイル（.verified.json）だけ'); process.exit(1); }
 {
   const problems = selfTestRosterNameClean();
   if (problems.length) { console.error('❌ 名前の整え方が壊れています:', problems); process.exit(1); }

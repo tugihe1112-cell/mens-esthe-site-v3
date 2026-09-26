@@ -69,7 +69,7 @@ const MIN_TEMPLATE_MATCHES = 3;
 function castIdOf(href) {
   try {
     const u = new URL(href);
-    return u.searchParams.get('id') || u.searchParams.get('uid') || u.searchParams.get('cast') || u.pathname.split('/').filter(Boolean).pop();
+    return u.searchParams.get('id') || u.searchParams.get('uid') || u.searchParams.get('sid') || u.searchParams.get('gid') || u.searchParams.get('lid') || u.searchParams.get('cast') || u.pathname.split('/').filter(Boolean).pop();
   } catch { return null; }
 }
 function pairsFromHtml(html, base) {
