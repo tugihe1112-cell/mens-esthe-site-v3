@@ -17,6 +17,9 @@
  * 【caskan 以外の一覧（2026-09-27）】 `--link=<人物ページのリンクの正規表現（番号を()で囲む）>` を付けると、そのリンクの中の画像の説明文（無ければリンクの文字）を名前にする。
  *  例: MADAME聖子 `--list=https://madame-seiko.com/girl --link='profile\?lid=(\d+)'`（説明文「あんり　9/24入店」→「あんり」）。
  *
+ * 【--strip=<正規表現>（2026-09-27）】 そのサイトだけの飾り（「れあ 先生」の「 先生」、「ーひとみ」の頭の「ー」など）を、名前を整える前に外す。
+ * 【--render（2026-09-27）】 後から画面を組み立てるサイトは、手元の Chrome で組み立ててから（下までスクロールして）読む。
+ *
  * 【安全装置】 知らない引数は止める。公式が5人未満なら中止。退店扱いが在籍の60%超は --allow-mass-depart が無ければ中止。
  *  書く前に今の行をJSONへ保存。書いた後に読み直して公式と照合。写真が準備中画像（comingsoon など）なら付けない。
  */
@@ -30,12 +33,15 @@ import { cleanRosterName, selfTestRosterNameClean } from '../lib/rosterNameClean
 import { loadReviewedKeys, splitDeparting, applyDeparture, selfTestDepartRows } from '../lib/departRows.mjs';
 
 const args = process.argv.slice(2);
-for (const a of args) if (!/^(--shop=[\w-]+|--list=https?:\/\/\S+|--link=.+|--live|--allow-mass-depart)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+for (const a of args) if (!/^(--shop=[\w-]+|--list=https?:\/\/\S+|--link=.+|--strip=.+|--live|--allow-mass-depart|--render)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
 const SHOP_ID = args.find((a) => a.startsWith('--shop='))?.slice(7);
 const LIST = args.find((a) => a.startsWith('--list='))?.slice(7);
 const LIVE = args.includes('--live');
 const MASS = args.includes('--allow-mass-depart');
 const LINK = args.find((a) => a.startsWith('--link='))?.slice(7);
+const RENDER = args.includes('--render');
+const STRIP = args.find((a) => a.startsWith('--strip='))?.slice(8);
+const STRIP_RE = STRIP ? new RegExp(STRIP, 'g') : null;
 const LINK_RE = LINK ? new RegExp(LINK) : null;
 if (!SHOP_ID || !LIST) { console.error('使い方: --shop=<shop_id> --list=<在籍一覧のURL> [--live] [--allow-mass-depart]'); process.exit(1); }
 selfTestRosterNameClean();
@@ -46,6 +52,16 @@ const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().rep
 const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('SUPABASE_SERVICE_ROLE_KEY'), { auth: { autoRefreshToken: false, persistSession: false } });
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36';
 const key = (s) => String(s || '').normalize('NFKC').replace(/[（(【\[].*?[）)】\]]/g, '').replace(/[\s　・]/g, '').toLowerCase();
+// 1文字の名前（泉・渚・蛍★ほたる・蒼【あおい】）。cleanRosterName は拾い物の雑音を避けるため2文字以上しか通さないが、
+// 人物ページへのリンクに付いた名前なら1文字でも本物（ミセス美オーラ・倉敷Roman で実際に捨てていた＝2026-09-27）。
+// 1文字の名前を捨てると、DB にいるその人が「公式にいない」と判定されて消えてしまう。
+const nameOf = (raw0) => {
+  const raw = STRIP_RE ? String(raw0 || '').normalize('NFKC').replace(STRIP_RE, '').trim() : raw0;
+  const c = cleanRosterName(raw);
+  if (c) return c;
+  const t = String(raw || '').normalize('NFKC').replace(/[（(【\[].*?[）)】\]]/g, '').split(/[★☆♡♥〜~\s　]/u)[0].trim();
+  return /^[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]$/u.test(t) ? t : null;
+};
 
 // ── 店 ────────────────────────────────────────
 const { data: shop, error: se } = await supabase.from('shops').select('id,name,website_url').eq('id', SHOP_ID).maybeSingle();
@@ -54,9 +70,31 @@ if (!shop) { console.error(`❌ 店がありません: ${SHOP_ID}`); process.exi
 assertOfficialRosterSource({ officialWebsiteUrl: shop.website_url, rosterUrl: LIST });
 
 // ── 公式の在籍一覧 ─────────────────────────────
-const res = await fetch(LIST, { headers: { 'User-Agent': UA } });
-if (!res.ok) { console.error(`❌ 公式の一覧を開けません: ${res.status}`); process.exit(1); }
-const $ = cheerio.load(await res.text());
+let listHtml;
+if (RENDER) {
+  const puppeteer = (await import('puppeteer-core')).default;
+  const browser = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: 'new' });
+  try {
+    const page = await browser.newPage();
+    page.on('dialog', (d) => d.dismiss().catch(() => {}));
+    await page.setUserAgent(UA);
+    const r = await page.goto(LIST, { waitUntil: 'networkidle2', timeout: 60000 });
+    if (!r || r.status() >= 400) { console.error(`❌ 公式の一覧を開けません: ${r?.status()}`); process.exit(1); }
+    for (let i = 0; i < 20; i++) { await page.evaluate(() => window.scrollBy(0, 2500)); await new Promise((x) => setTimeout(x, 300)); }
+    listHtml = await page.content();
+  } finally { await browser.close(); }
+} else {
+  const res = await fetch(LIST, { headers: { 'User-Agent': UA } });
+  if (!res.ok) { console.error(`❌ 公式の一覧を開けません: ${res.status}`); process.exit(1); }
+  // 文字コードを見分けて読む（2026-09-27）: ミセス美オーラ浜松は Shift_JIS で、UTF-8 として読んだ昔の取り込みの名前が DB で文字化けしていた
+  const buf = Buffer.from(await res.arrayBuffer());
+  const head = buf.subarray(0, 4000).toString('latin1');
+  const cs = ((res.headers.get('content-type') || '').match(/charset=([\w-]+)/i)?.[1] || head.match(/<meta[^>]+charset=["']?([\w-]+)/i)?.[1] || 'utf-8').toLowerCase();
+  const enc = /shift[_-]?jis|sjis|x-sjis|windows-31j|cp932/.test(cs) ? 'shift_jis' : /euc-?jp/.test(cs) ? 'euc-jp' : 'utf-8';
+  listHtml = new TextDecoder(enc).decode(buf);
+  if (enc !== 'utf-8') console.log(`  文字コード: ${enc}`);
+}
+const $ = cheerio.load(listHtml);
 const official = []; const seen = new Set(); const rejected = [];
 if (LINK_RE) $('a[href]').each((_, el) => {
   const href = $(el).attr('href') || '';
@@ -64,7 +102,7 @@ if (LINK_RE) $('a[href]').each((_, el) => {
   if (!castId) return;
   const img = $(el).find('img').first();
   const raw = (img.attr('alt') || $(el).text() || '').trim();
-  const name = cleanRosterName(raw);
+  const name = nameOf(raw);
   if (seen.has(castId)) { const o = official.find((x) => x.castId === castId); if (o && !o.imgUrl) { const src2 = img.attr('data-src') || img.attr('data-original') || img.attr('src') || ''; if (src2 && !/comingsoon|noimage|now[-_ ]?printing|no_image|spacer/i.test(src2)) o.imgUrl = new URL(src2, LIST).href; } return; }
   seen.add(castId);
   if (!name) { if (raw) rejected.push(raw); return; }
@@ -78,7 +116,7 @@ else $('.therapist-datas-each').each((_, el) => {
   const raw = a.text().trim() || $(el).find('img.therapist-data-each-tmb').attr('alt') || '';
   if (!castId || seen.has(castId)) return;
   seen.add(castId);
-  const name = cleanRosterName(raw);
+  const name = nameOf(raw);
   if (!name) { rejected.push(raw); return; }
   const src = $(el).find('img.therapist-data-each-tmb').attr('src') || '';
   const imgUrl = src && !/comingsoon|noimage|now[-_ ]?printing|no_image/i.test(src) ? new URL(src, LIST).href : null;
