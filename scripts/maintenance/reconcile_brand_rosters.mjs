@@ -6,7 +6,8 @@
  *
  * 【やること】（D-014: 名簿はブランドで1つ。公式サイト単位で全ルームの行を照合する）
  *  ・公式で見つかった人 → 在籍を確認（is_active=true / last_seen_at=今）
- *  ・公式で見つからない人 → 退店扱い（is_active=false）。削除しない・last_seen_at は触らない（最後に確認した日のまま）
+ *  ・公式で見つからない人 → **D-016（2026-09-27 オーナー決定）で行を消す**。ただし口コミが付いている人は消さず退店扱い（is_active=false・個別ページに帯）。
+ *    消す行は全項目をJSONに保存してから消す（scripts/lib/departRows.mjs）。それまでの版は消さずに退店扱いにしていた。
  *  ・公式にだけいる人 → 追加しない（写真の取り込みが要るので別の作業）
  *
  * 【安全装置】
@@ -22,6 +23,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
+import { loadReviewedKeys, splitDeparting, applyDeparture, selfTestDepartRows } from '../lib/departRows.mjs';
 
 const args = process.argv.slice(2);
 for (const a of args) if (!/^(--live|--file=.+)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
@@ -56,7 +58,7 @@ const shopIds = [...new Set(usable.flatMap((r) => r.shops))];
 const current = new Map();
 for (const sid of shopIds) {
   for (let from = 0; ; from += 1000) {
-    const { data, error } = await supabase.from('therapists').select('id,name,is_active,last_seen_at').eq('shop_id', sid).range(from, from + 999);
+    const { data, error } = await supabase.from('therapists').select('id,shop_id,name,is_active,last_seen_at').eq('shop_id', sid).range(from, from + 999);
     if (error) { console.error('❌ DBを読めません:', error.message); process.exit(1); }
     for (const r of data) current.set(r.id, r);
     if (data.length < 1000) break;
@@ -108,7 +110,11 @@ const staleAt = (rows, daysAhead) => {
 };
 const after = all.filter((t) => !departSet.has(t.id)).map((t) => (confirmSet.has(t.id) ? { ...t, last_seen_at: new Date().toISOString() } : t));
 
+selfTestDepartRows();
+const reviewed = await loadReviewedKeys(supabase);
+const split = splitDeparting(departRows, reviewed);
 console.log(`\n${LIVE ? '🔴 本番書き込み' : '🟢 下見（何も書きません）'}  対象 ${usable.length}サイト（audit: ${FILE}）`);
+console.log(`退店の扱い（D-016）: 消す ${split.remove.length}行 ／ 口コミがあるので消さず退店扱い ${split.mark.length}行${split.mark.length ? '（' + split.mark.map((t) => t.name).join('・') + '）' : ''}`);
 console.log(`在籍を確認: ${confirmRows.length}行 ／ 退店扱い: ${departRows.length}行 ／ 名前が公式ページのどこかに出るので変えない: ${keepRows.length}行 ／ 何もしないサイト: ${plan.filter((p) => p.skipped && !/在籍確認だけ/.test(p.skipped)).length} ／ 在籍確認だけのサイト: ${plan.filter((p) => /在籍確認だけ/.test(p.skipped || '')).length}`);
 console.log(`180日超の割合  いま ${staleAt(all, 0)} → 書いた後 ${staleAt(after, 0)}`);
 console.log(`              30日後 ${staleAt(all, 30)} → ${staleAt(after, 30)}・60日後 ${staleAt(all, 60)} → ${staleAt(after, 60)}・90日後 ${staleAt(all, 90)} → ${staleAt(after, 90)}`);
@@ -130,18 +136,22 @@ const chunk = async (list, patch, label) => {
   }
 };
 await chunk(confirmRows, { is_active: true, last_seen_at: now }, '在籍確認');
-await chunk(departRows, { is_active: false }, '退店扱い');
+let dep;
+try { dep = await applyDeparture(supabase, departRows, reviewed, backupPath.replace(/\.json$/, '-departed.json')); }
+catch (e) { console.error(`❌ ${e.message}`); process.exit(1); }
+const markSet = new Set(dep.mark.map((t) => t.id)); const removeSet = new Set(dep.remove.map((t) => t.id));
 // 読み直し
-let okC = 0, okD = 0;
+let okC = 0, okD = 0, left = 0;
 const check = [...confirmRows, ...departRows].map((t) => t.id);
 for (let k = 0; k < check.length; k += 40) {
   const { data } = await supabase.from('therapists').select('id,is_active,last_seen_at').in('id', check.slice(k, k + 40));
   for (const r of data) {
     if (confirmSet.has(r.id) && r.is_active === true && r.last_seen_at && r.last_seen_at.slice(0, 16) === now.slice(0, 16)) okC++;
-    if (departSet.has(r.id) && r.is_active === false) okD++;
+    if (markSet.has(r.id) && r.is_active === false) okD++;
+    if (removeSet.has(r.id)) left++;
   }
 }
-console.log(`\n読み直し: 在籍確認 ${okC}/${confirmRows.length}・退店扱い ${okD}/${departRows.length}`);
-console.log(`バックアップ: ${backupPath}`);
-if (okC !== confirmRows.length || okD !== departRows.length) { console.error('❌ 予定と合いません'); process.exit(1); }
+console.log(`\n読み直し: 在籍確認 ${okC}/${confirmRows.length}・退店扱い（口コミあり） ${okD}/${dep.mark.length}・消した ${dep.remove.length - left}/${dep.remove.length}`);
+console.log(`バックアップ: ${backupPath}（消した行: ${backupPath.replace(/\.json$/, '-departed.json')}）`);
+if (okC !== confirmRows.length || okD !== dep.mark.length || left !== 0) { console.error('❌ 予定と合いません'); process.exit(1); }
 console.log('✅ 予定どおり');

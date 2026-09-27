@@ -27,6 +27,7 @@ import { createClient } from '@supabase/supabase-js';
 import { uploadImage } from '../lib/r2Upload.mjs';
 import { scopedImageKey, assertOfficialRosterSource } from '../lib/sourceProvenance.mjs';
 import { cleanRosterName, selfTestRosterNameClean } from '../lib/rosterNameClean.mjs';
+import { loadReviewedKeys, splitDeparting, applyDeparture, selfTestDepartRows } from '../lib/departRows.mjs';
 
 const args = process.argv.slice(2);
 for (const a of args) if (!/^(--shop=[\w-]+|--list=https?:\/\/\S+|--link=.+|--live|--allow-mass-depart)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
@@ -38,6 +39,7 @@ const LINK = args.find((a) => a.startsWith('--link='))?.slice(7);
 const LINK_RE = LINK ? new RegExp(LINK) : null;
 if (!SHOP_ID || !LIST) { console.error('使い方: --shop=<shop_id> --list=<在籍一覧のURL> [--live] [--allow-mass-depart]'); process.exit(1); }
 selfTestRosterNameClean();
+selfTestDepartRows();
 
 const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
@@ -88,7 +90,7 @@ const dup = official.map((o) => key(o.name)).filter((k, i, arr) => arr.indexOf(k
 if (dup.length) { console.error(`❌ 公式に同じ名前が複数: ${[...new Set(dup)].join(',')}`); process.exit(1); }
 
 // ── DB ────────────────────────────────────────
-const { data: rows, error: te } = await supabase.from('therapists').select('id,name,image_url,is_active,last_seen_at').eq('shop_id', SHOP_ID);
+const { data: rows, error: te } = await supabase.from('therapists').select('id,shop_id,name,image_url,is_active,last_seen_at').eq('shop_id', SHOP_ID);
 if (te) { console.error('❌ 名簿を読めません', te.message); process.exit(1); }
 const byKey = new Map();
 for (const r of rows) { const k = key(r.name); (byKey.get(k) || byKey.set(k, []).get(k)).push(r); }
@@ -108,6 +110,9 @@ console.log(`DB: 在籍 ${activeNow}行（全 ${rows.length}行）`);
 console.log(`在籍確認 ${confirm.length}（退店扱いから戻す ${confirm.filter((o) => byKey.get(key(o.name)).some((r) => r.is_active === false)).length}）`);
 console.log(`追加 ${add.length}（写真あり ${add.filter((o) => o.imgUrl).length}）: ${add.map((o) => o.name).join('・')}`);
 console.log(`退店扱い ${depart.length}（在籍の ${activeNow ? Math.round((depart.length / activeNow) * 100) : 0}%）${depart.some((r) => reviewed.has(r.id)) ? ` ・口コミあり: ${depart.filter((r) => reviewed.has(r.id)).map((r) => r.name).join('・')}` : '・口コミあり 0'}`);
+const reviewedKeys = await loadReviewedKeys(supabase);
+const split = splitDeparting(depart, reviewedKeys);
+console.log(`  退店の扱い（D-016）: 消す ${split.remove.length}行 ／ 口コミがあるので消さず退店扱い ${split.mark.length}行`);
 if (activeNow && depart.length / activeNow > 0.6 && !MASS) { console.error('❌ 退店扱いが在籍の60%超。オーナーが「公式に揃えて」と決めた店だけ --allow-mass-depart で書く'); process.exit(1); }
 if (!LIVE) { console.log('🟢 下見です。書くときは --live'); process.exit(0); }
 
@@ -133,13 +138,16 @@ for (const o of confirm) {
 const newRows = [];
 for (const o of add) newRows.push({ id: `${SHOP_ID}_${o.name}`, shop_id: SHOP_ID, name: o.name, image_url: await img(o), is_active: true, last_seen_at: now });
 if (newRows.length) { const { error } = await supabase.from('therapists').insert(newRows); if (error) { console.error('❌ 追加できません', error.message); process.exit(1); } }
-if (depart.length) { const { error } = await supabase.from('therapists').update({ is_active: false }).in('id', depart.map((r) => r.id)); if (error) { console.error('❌ 退店扱いを書けません', error.message); process.exit(1); } }
+if (depart.length) {
+  try { await applyDeparture(supabase, depart, reviewedKeys, backup.replace(/\.json$/, '-departed.json')); }
+  catch (e) { console.error(`❌ ${e.message}`); process.exit(1); }
+}
 
 // ── 読み直し ──────────────────────────────────
 const { data: after } = await supabase.from('therapists').select('id,name,image_url,is_active').eq('shop_id', SHOP_ID);
 const active = after.filter((r) => r.is_active !== false);
 const activeKeys = new Set(active.map((r) => key(r.name)));
 const ok = official.every((o) => activeKeys.has(key(o.name))) && active.every((r) => officialKeys.has(key(r.name)));
-console.log(`読み直し: 在籍 ${active.length}行（公式 ${official.length}人）・写真あり ${active.filter((r) => r.image_url).length}・退店扱い ${after.length - active.length}`);
+console.log(`読み直し: 在籍 ${active.length}行（公式 ${official.length}人）・写真あり ${active.filter((r) => r.image_url).length}・退店扱いで残っている行 ${after.length - active.length}（今回消した ${split.remove.length}）`);
 console.log(ok ? '✅ 公式と一致' : '❌ 公式と一致しません');
 if (!ok) process.exit(1);

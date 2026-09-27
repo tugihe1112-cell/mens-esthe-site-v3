@@ -10,6 +10,7 @@ import { evaluateSections, sectionsInHtml, MIN_PAGES } from '../lib/sectionPrese
 import { expectsLastmod } from '../lib/sitemapRules.mjs';
 import { planReconcile, selfTestReconcile } from '../lib/rosterReconcile.mjs';
 import { rosterSiteKeyFactory } from '../lib/sourceProvenance.mjs';
+import { selfTestDepartRows } from '../lib/departRows.mjs';
 
 const noWait = async () => {};
 const response = (status, contentType = 'text/plain') => new Response('', {
@@ -295,5 +296,8 @@ assert.equal(isTransientMonitorStatus(404), false);
   assert.equal(key('https://esthe-lynx-gotanda.com/'), 'esthe-lynx-gotanda.com');
   assert.equal(key(null), null);
 }
+
+// 退店の扱い（D-016）: 口コミが付いている人は消さない・それ以外は消す・shop_id の無い行は止める
+selfTestDepartRows();
 
 console.log('✅ 外形監視の再試行・恒久障害判定チェック OK');

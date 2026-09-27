@@ -27,6 +27,7 @@ import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import puppeteer from 'puppeteer-core';
 import { scopedImageKey } from '../lib/sourceProvenance.mjs';
+import { loadReviewedKeys, applyDeparture, selfTestDepartRows } from '../lib/departRows.mjs';
 
 const args = process.argv.slice(2);
 for (const a of args) if (!/^(--live|--sites=[\w@:/.,-]+|--add-to=[\w-]+)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
@@ -107,6 +108,8 @@ if (!LIVE) { console.log('\n→ 本番に書くときは --live を付けて同�
 
 // ── 書き込み ─────────────────────────────────────────
 const { uploadImage } = await import('../lib/r2Upload.mjs');
+selfTestDepartRows();
+const reviewedKeys = await loadReviewedKeys(supabase);
 const now = new Date().toISOString();
 fs.mkdirSync('outputs/roster-reconcile', { recursive: true });
 const backupPath = path.join('outputs/roster-reconcile', `lynx-${ADD_TO}-${now.replace(/[:.]/g, '-')}.json`);
@@ -119,9 +122,10 @@ for (const p of plans) {
     const { error } = await supabase.from('therapists').update({ is_active: true, last_seen_at: now }).in('id', p.confirm.slice(k, k + 40).map((t) => t.id));
     if (error) fail(`在籍確認を書けません: ${error.message}`);
   }
-  for (let k = 0; k < p.depart.length; k += 40) {
-    const { error } = await supabase.from('therapists').update({ is_active: false }).in('id', p.depart.slice(k, k + 40).map((t) => t.id));
-    if (error) fail(`退店扱いを書けません: ${error.message}`);
+  // D-016（2026-09-27 オーナー決定）: 退店の人は消す。口コミが付いている人だけ退店扱い（帯）で残す
+  if (p.depart.length) {
+    try { await applyDeparture(supabase, p.depart, reviewedKeys, backupPath.replace(/\.json$/, `-${p.shopId}-departed.json`)); }
+    catch (e) { fail(e.message); }
   }
 }
 const addRows = [];

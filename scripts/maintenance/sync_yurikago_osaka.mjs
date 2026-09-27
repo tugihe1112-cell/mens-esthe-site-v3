@@ -23,6 +23,7 @@ import * as cheerio from 'cheerio';
 import { createClient } from '@supabase/supabase-js';
 import { uploadImage } from '../lib/r2Upload.mjs';
 import { scopedImageKey } from '../lib/sourceProvenance.mjs';
+import { loadReviewedKeys, applyDeparture, selfTestDepartRows } from '../lib/departRows.mjs';
 
 const args = process.argv.slice(2);
 for (const a of args) if (a !== '--live') { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
@@ -65,7 +66,7 @@ if (dupNames.length) { console.error(`❌ 公式に同じ名前が複数: ${dupN
 // ── DB ────────────────────────────────────────
 const { data: shop, error: se } = await supabase.from('shops').select('id,name,website_url,schedule_url').eq('id', SHOP_ID).maybeSingle();
 if (se || !shop) { console.error('❌ 店を読めません', se?.message || ''); process.exit(1); }
-const { data: rows, error: te } = await supabase.from('therapists').select('id,name,image_url,is_active,last_seen_at').eq('shop_id', SHOP_ID);
+const { data: rows, error: te } = await supabase.from('therapists').select('id,shop_id,name,image_url,is_active,last_seen_at').eq('shop_id', SHOP_ID);
 if (te) { console.error('❌ 名簿を読めません', te.message); process.exit(1); }
 const byName = new Map(rows.map((r) => [flat(r.name), r]));
 const officialNames = new Set(official.map((o) => flat(o.name)));
@@ -107,7 +108,12 @@ for (const o of confirm) {
 const newRows = [];
 for (const o of add) newRows.push({ id: `${SHOP_ID}_${o.name}`, shop_id: SHOP_ID, name: o.name, image_url: await img(o), is_active: true, last_seen_at: now });
 if (newRows.length) { const { error } = await supabase.from('therapists').insert(newRows); if (error) { console.error('❌ 追加できません', error.message); process.exit(1); } }
-if (depart.length) { const { error } = await supabase.from('therapists').update({ is_active: false }).in('id', depart.map((r) => r.id)); if (error) { console.error('❌ 退店扱いを書けません', error.message); process.exit(1); } }
+// D-016（2026-09-27 オーナー決定）: 退店の人は消す。口コミが付いている人だけ退店扱い（帯）で残す
+if (depart.length) {
+  selfTestDepartRows();
+  try { await applyDeparture(supabase, depart, await loadReviewedKeys(supabase), backup.replace(/\.json$/, '-departed.json')); }
+  catch (e) { console.error(`❌ ${e.message}`); process.exit(1); }
+}
 
 // ── 読み直し ──────────────────────────────────
 const { data: after } = await supabase.from('therapists').select('id,name,image_url,is_active').eq('shop_id', SHOP_ID);
