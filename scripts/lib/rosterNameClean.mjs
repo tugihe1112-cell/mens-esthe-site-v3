@@ -29,6 +29,8 @@ export function cleanRosterName(raw, sitePrefix = '') {
   let s = String(raw || '').normalize('NFKC').replace(/[\s　]+/g, ' ').trim();
   if (!s) return null;
   if (sitePrefix && s.startsWith(sitePrefix)) s = s.slice(sitePrefix.length).trim();
+  // 「あんり 9/24入店」の入店日（MADAME聖子・2026-09-27）。下の「/」で切る前に外す（切ると「あんり 9」が残って捨てていた）
+  s = s.replace(/\s*\d{1,2}\s*[\/月]\s*\d{1,2}\s*日?\s*(入店|デビュー)\s*$/, '');
   // ⚠️ キャッチコピーを先に外してから「名前でないもの」を判定する（「叶 恭子♡Iカップ」を名前ごと捨てないため）
   s = s.split(/[〜~♡♥❤★☆♪♦◆◇※｜|／/🔰]/u)[0];                       // ここから後ろはキャッチコピー
   if (REJECT_ANY.test(s)) return null;
@@ -72,7 +74,7 @@ export function selfTestRosterNameClean() {
     ['三浦あきのその他SNS', '三浦あき'], ['JカップSランクAV女優', null], ['近日公開390-520', null], ['Tigger', null],
     ['メンズリラク版はコチラ', null], ['ノーイメージ', null], ['セラピスト一覧', null], ['エステ魂', null],
     ['清楚系', null], ['未経験', null], ['イチオシ', null], ['スリム', null], ['美少女', null], ['キレイ系', null], ['たか 様', null],
-    ['本日店休日', null], ['友華 セラピスト写真', '友華'], ['美月 セラピスト写真', '美月'], ['可愛川 ゆの', '可愛川 ゆの'], ['西野さん', '西野さん'], ['アバター', null],
+    ['本日店休日', null], ['友華 セラピスト写真', '友華'], ['美月 セラピスト写真', '美月'], ['可愛川 ゆの', '可愛川 ゆの'], ['西野さん', '西野さん'], ['アバター', null], ['あんり　9/24入店', 'あんり'], ['さわ 9月22日デビュー', 'さわ'], ['体験入店', null],
     ['榛名(はるな)あこ', '榛名あこ'], ['癒流 みお(ゆる みお)', '癒流 みお'], ['翠〜SS美女待望デビュー', null], ['星野りんご×月野いちご', null],
   ];
   const problems = [];

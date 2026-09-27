@@ -54,7 +54,7 @@ $('li.c-list-therapist__item').each((_, li) => {
   if (/ゆりかご|[｜|]|ルーム/.test(alt)) return; // 「ゆりかご大阪｜新大阪」などルームの紹介枠は人ではない
   seen.add(castId);
   const src = img.attr('src');
-  const imgUrl = src && !/noimage|now_?printing|no_image/i.test(src) ? new URL(src, SITE).href : null;
+  const imgUrl = src && !/noimage|now[-_ ]?printing|no_image/i.test(src) ? new URL(src, SITE).href : null;
   official.push({ castId, name, reading: alt.match(/[～〜~](.+?)[～〜~]/)?.[1] || '', imgUrl, profileUrl: new URL(a.attr('href'), SITE).href });
 });
 console.log(`公式の在籍一覧: ${official.length}人（写真あり ${official.filter((o) => o.imgUrl).length}）`);

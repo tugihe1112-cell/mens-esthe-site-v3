@@ -15,6 +15,10 @@
  *  2. 公式にいて、Lynx のどのルームにも在籍中として入っていない人 → 千葉店（chiba_chiba_lynx）に写真付きで追加
  *  3. 「×」で2人を組んだ枠・「新人セラピスト出勤予定」の枠は人ではないので使わない
  *
+ * 【ほかの Lynx の店にも使う（2026-09-27）】 `--sites=<shop_id>@<公式のURL>[,...]` と `--add-to=<shop_id>` で店を指定できる（指定しなければ千葉エリア4店）。
+ *  例: node scripts/maintenance/fix_lynx_chiba_area.mjs --sites=tokyo_shinagawa_gotanda_lynx@https://esthe-lynx-gotanda.com --add-to=tokyo_shinagawa_gotanda_lynx
+ *  五反田（DB 270行）・横浜関内（93行）が 4〜6月の取り込みのまま一度も確認されていなかった。
+ *
  * 【安全装置】 既定は下見／書く前の行を outputs/roster-reconcile/ に保存／公式の人数が30人未満なら中止
  *  （読み取りの失敗を疑う）／書いたあと読み直して照合。
  */
@@ -25,18 +29,22 @@ import puppeteer from 'puppeteer-core';
 import { scopedImageKey } from '../lib/sourceProvenance.mjs';
 
 const args = process.argv.slice(2);
-for (const a of args) if (a !== '--live') { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+for (const a of args) if (!/^(--live|--sites=[\w@:/.,-]+|--add-to=[\w-]+)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
 const LIVE = args.includes('--live');
 
-const SITES = [
-  { shopId: 'chiba_chiba_lynx', host: 'https://esthe-lynx-chiba.com' },
-  { shopId: 'chiba_funabashi_lynx', host: 'https://esthe-lynx-funabashi.com' },
-  { shopId: 'chiba_matsudo_lynx', host: 'https://esthe-lynx-matsudo.com' },
-  { shopId: 'chiba_nishi_funabashi_lynx', host: 'https://www.esthe-lynx-koiwa.com' },
-];
-const ADD_TO = 'chiba_chiba_lynx';
+const SITES_ARG = args.find((a) => a.startsWith('--sites='))?.slice(8);
+const SITES = SITES_ARG
+  ? SITES_ARG.split(',').map((x) => { const i = x.indexOf('@'); return { shopId: x.slice(0, i), host: x.slice(i + 1).replace(/\/+$/, '') }; })
+  : [
+    { shopId: 'chiba_chiba_lynx', host: 'https://esthe-lynx-chiba.com' },
+    { shopId: 'chiba_funabashi_lynx', host: 'https://esthe-lynx-funabashi.com' },
+    { shopId: 'chiba_matsudo_lynx', host: 'https://esthe-lynx-matsudo.com' },
+    { shopId: 'chiba_nishi_funabashi_lynx', host: 'https://www.esthe-lynx-koiwa.com' },
+  ];
+const ADD_TO = args.find((a) => a.startsWith('--add-to='))?.slice(9) || (SITES_ARG ? SITES[0].shopId : 'chiba_chiba_lynx');
+if (!SITES.every((x) => x.shopId && /^https?:\/\//.test(x.host)) || !SITES.some((x) => x.shopId === ADD_TO)) { console.error('❌ --sites は <shop_id>@<URL>、--add-to は --sites のどれか'); process.exit(1); }
 const GROUP = 'g_brand_lynx';
-const NOT_PERSON = /×|新人セラピスト|出勤予定|出勤中/;
+const NOT_PERSON = /×|[＆&]|新人セラピスト|出勤予定|出勤中|イベント|LYNX|Lynx|店/; // ＆で2人を組んだ枠・「LYNX横浜関内店 9月イベント」のお知らせも人ではない（2026-09-27）
 const flat = (s) => String(s || '').normalize('NFKC').replace(/[\s　]/g, '');
 
 const env = fs.readFileSync('.env', 'utf-8');
@@ -101,7 +109,7 @@ if (!LIVE) { console.log('\n→ 本番に書くときは --live を付けて同�
 const { uploadImage } = await import('../lib/r2Upload.mjs');
 const now = new Date().toISOString();
 fs.mkdirSync('outputs/roster-reconcile', { recursive: true });
-const backupPath = path.join('outputs/roster-reconcile', `lynx-chiba-${now.replace(/[:.]/g, '-')}.json`);
+const backupPath = path.join('outputs/roster-reconcile', `lynx-${ADD_TO}-${now.replace(/[:.]/g, '-')}.json`);
 try {
   fs.writeFileSync(backupPath, JSON.stringify({ at: now, rows: plans.flatMap((p) => [...p.confirm, ...p.depart]).map((t) => ({ id: t.id, is_active: t.is_active, last_seen_at: t.last_seen_at })), add: toAdd.map((x) => x.name) }, null, 1));
 } catch (e) { console.error('❌ バックアップを書けないので中止:', e.message); process.exit(1); }

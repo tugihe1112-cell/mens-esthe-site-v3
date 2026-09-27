@@ -14,6 +14,9 @@
  *  DB の同じ店の行と名前で突き合わせる（空白・全角半角・括弧の中を無視）。
  *  いる人＝在籍確認（退店扱いなら戻す・写真が無ければ付ける）／いない人＝追加（写真は店ごとのキーでR2へ）／DBにしかいない人＝退店扱い（削除しない）。
  *
+ * 【caskan 以外の一覧（2026-09-27）】 `--link=<人物ページのリンクの正規表現（番号を()で囲む）>` を付けると、そのリンクの中の画像の説明文（無ければリンクの文字）を名前にする。
+ *  例: MADAME聖子 `--list=https://madame-seiko.com/girl --link='profile\?lid=(\d+)'`（説明文「あんり　9/24入店」→「あんり」）。
+ *
  * 【安全装置】 知らない引数は止める。公式が5人未満なら中止。退店扱いが在籍の60%超は --allow-mass-depart が無ければ中止。
  *  書く前に今の行をJSONへ保存。書いた後に読み直して公式と照合。写真が準備中画像（comingsoon など）なら付けない。
  */
@@ -26,11 +29,13 @@ import { scopedImageKey, assertOfficialRosterSource } from '../lib/sourceProvena
 import { cleanRosterName, selfTestRosterNameClean } from '../lib/rosterNameClean.mjs';
 
 const args = process.argv.slice(2);
-for (const a of args) if (!/^(--shop=[\w-]+|--list=https?:\/\/\S+|--live|--allow-mass-depart)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+for (const a of args) if (!/^(--shop=[\w-]+|--list=https?:\/\/\S+|--link=.+|--live|--allow-mass-depart)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
 const SHOP_ID = args.find((a) => a.startsWith('--shop='))?.slice(7);
 const LIST = args.find((a) => a.startsWith('--list='))?.slice(7);
 const LIVE = args.includes('--live');
 const MASS = args.includes('--allow-mass-depart');
+const LINK = args.find((a) => a.startsWith('--link='))?.slice(7);
+const LINK_RE = LINK ? new RegExp(LINK) : null;
 if (!SHOP_ID || !LIST) { console.error('使い方: --shop=<shop_id> --list=<在籍一覧のURL> [--live] [--allow-mass-depart]'); process.exit(1); }
 selfTestRosterNameClean();
 
@@ -51,7 +56,21 @@ const res = await fetch(LIST, { headers: { 'User-Agent': UA } });
 if (!res.ok) { console.error(`❌ 公式の一覧を開けません: ${res.status}`); process.exit(1); }
 const $ = cheerio.load(await res.text());
 const official = []; const seen = new Set(); const rejected = [];
-$('.therapist-datas-each').each((_, el) => {
+if (LINK_RE) $('a[href]').each((_, el) => {
+  const href = $(el).attr('href') || '';
+  const castId = href.match(LINK_RE)?.[1];
+  if (!castId) return;
+  const img = $(el).find('img').first();
+  const raw = (img.attr('alt') || $(el).text() || '').trim();
+  const name = cleanRosterName(raw);
+  if (seen.has(castId)) { const o = official.find((x) => x.castId === castId); if (o && !o.imgUrl) { const src2 = img.attr('data-src') || img.attr('data-original') || img.attr('src') || ''; if (src2 && !/comingsoon|noimage|now[-_ ]?printing|no_image|spacer/i.test(src2)) o.imgUrl = new URL(src2, LIST).href; } return; }
+  seen.add(castId);
+  if (!name) { if (raw) rejected.push(raw); return; }
+  const src = img.attr('data-src') || img.attr('data-original') || img.attr('src') || '';
+  const imgUrl = src && !/comingsoon|noimage|now[-_ ]?printing|no_image|spacer/i.test(src) ? new URL(src, LIST).href : null;
+  official.push({ castId, name, imgUrl, profileUrl: new URL(href, LIST).href });
+});
+else $('.therapist-datas-each').each((_, el) => {
   const a = $(el).find('a.therapist-datas-name').first();
   const castId = (a.attr('href') || '').match(/\/therapist\/(\d+)/)?.[1];
   const raw = a.text().trim() || $(el).find('img.therapist-data-each-tmb').attr('alt') || '';
@@ -60,7 +79,7 @@ $('.therapist-datas-each').each((_, el) => {
   const name = cleanRosterName(raw);
   if (!name) { rejected.push(raw); return; }
   const src = $(el).find('img.therapist-data-each-tmb').attr('src') || '';
-  const imgUrl = src && !/comingsoon|noimage|now_?printing|no_image/i.test(src) ? new URL(src, LIST).href : null;
+  const imgUrl = src && !/comingsoon|noimage|now[-_ ]?printing|no_image/i.test(src) ? new URL(src, LIST).href : null;
   official.push({ castId, name, imgUrl, profileUrl: new URL(a.attr('href'), LIST).href });
 });
 console.log(`■ ${shop.name} [${SHOP_ID}]\n公式の一覧: ${official.length}人（写真あり ${official.filter((o) => o.imgUrl).length}）${rejected.length ? `・名前でないので外した ${rejected.length}: ${rejected.join(' / ')}` : ''}`);

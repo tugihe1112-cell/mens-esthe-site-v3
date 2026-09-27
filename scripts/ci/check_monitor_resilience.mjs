@@ -9,6 +9,7 @@ import { classifyGroup, selfTestMatching, normId } from '../lib/brandNameMatch.m
 import { evaluateSections, sectionsInHtml, MIN_PAGES } from '../lib/sectionPresence.mjs';
 import { expectsLastmod } from '../lib/sitemapRules.mjs';
 import { planReconcile, selfTestReconcile } from '../lib/rosterReconcile.mjs';
+import { rosterSiteKeyFactory } from '../lib/sourceProvenance.mjs';
 
 const noWait = async () => {};
 const response = (status, contentType = 'text/plain') => new Response('', {
@@ -281,4 +282,18 @@ assert.equal(isTransientMonitorStatus(404), false);
 
 // ⚠️ 合格の表示はファイルの**一番最後**に置く。途中に置くと、後ろに足した検査が落ちても
 //    先に「OK」が出てしまう（2026-09-16、実際にそうなっていた）。
+// 名簿の照合の「1つのサイト」の単位（2026-09-27）: 1つのドメインに別の店が相乗りしていればアドレスごと、それ以外はドメイン。
+{
+  const key = rosterSiteKeyFactory([
+    'https://a.senju-lamp.com', 'https://omiya.senju-lamp.com', 'https://www.senju-lamp.com/',
+    'https://aroma-giraffe.com', 'https://www.aroma-giraffe.com/therapist',
+    'https://esthe-lynx-gotanda.com/',
+  ]);
+  assert.equal(key('https://omiya.senju-lamp.com/cast'), 'omiya.senju-lamp.com', '相乗りのドメインはアドレスごとに分ける');
+  assert.equal(key('https://www.senju-lamp.com/'), 'senju-lamp.com', 'www は付けない');
+  assert.equal(key('https://www.aroma-giraffe.com/therapist'), 'aroma-giraffe.com', '1店だけのドメインはドメインのまま（www の有無で分けない）');
+  assert.equal(key('https://esthe-lynx-gotanda.com/'), 'esthe-lynx-gotanda.com');
+  assert.equal(key(null), null);
+}
+
 console.log('✅ 外形監視の再試行・恒久障害判定チェック OK');

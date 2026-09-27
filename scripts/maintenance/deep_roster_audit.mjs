@@ -26,21 +26,22 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import puppeteer from 'puppeteer-core';
-import { rootDomainOf } from '../lib/sourceProvenance.mjs';
+import { rosterSiteKeyFactory } from '../lib/sourceProvenance.mjs';
 
 const args = process.argv.slice(2);
-for (const a of args) if (!/^(--from=.+|--domain=[\w.-]+|--skip=[\w.,-]+|--resume)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+for (const a of args) if (!/^(--from=.+|--domain=[\w.-]+|--domains=[\w.,-]+|--skip=[\w.,-]+|--days=\d+|--resume)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
 const FROM = args.find((a) => a.startsWith('--from='))?.slice(7);
 const ONLY = args.find((a) => a.startsWith('--domain='))?.slice(9);
+const MANY = args.find((a) => a.startsWith('--domains='))?.slice(10).split(',').filter(Boolean);
 const RESUME = args.includes('--resume');
 const SKIP = new Set((args.find((a) => a.startsWith('--skip='))?.slice(7) || '').split(',').filter(Boolean));
-if (!FROM && !ONLY) { console.error('使い方: --from=outputs/roster-audit/audit-YYYY-MM-DD.json（要確認・読めないサイトを対象）または --domain=...'); process.exit(1); }
+if (!FROM && !ONLY && !MANY) { console.error('使い方: --from=outputs/roster-audit/audit-YYYY-MM-DD.json（要確認・読めないサイトを対象）または --domain=...'); process.exit(1); }
 
 const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
 const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('SUPABASE_SERVICE_ROLE_KEY'), { auth: { autoRefreshToken: false, persistSession: false } });
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36';
-const DAYS = 120;
+const DAYS = Number(args.find((a) => a.startsWith('--days='))?.slice(7) || 120);
 
 // brand_roster_audit.mjs と同じ整え方
 function nameKey(raw) {
@@ -79,10 +80,11 @@ for (let from = 0; ; from += 1000) {
   shops.push(...data); if (data.length < 1000) break;
 }
 const shopById = new Map(shops.map((s) => [s.id, s]));
+const siteKey = rosterSiteKeyFactory(shops.map((s) => s.website_url)); // 1つのドメインに別の店が相乗りしていればアドレスごと
 const cutoff = Date.now() - DAYS * 86400000;
 const byDomain = new Map();
 for (const r of rows) {
-  const s = shopById.get(r.shop_id); const d = rootDomainOf(s?.website_url);
+  const s = shopById.get(r.shop_id); const d = siteKey(s?.website_url);
   if (!d) continue;
   const g = byDomain.get(d) || { domain: d, website: s.website_url, rows: [], old: 0 };
   g.rows.push(r);
@@ -91,6 +93,7 @@ for (const r of rows) {
 }
 let domains;
 if (ONLY) domains = [ONLY];
+else if (MANY) domains = MANY;
 else domains = JSON.parse(fs.readFileSync(FROM, 'utf-8')).results.filter((r) => !r.usable).map((r) => r.domain);
 domains = domains.filter((d) => !SKIP.has(d) && byDomain.get(d)?.old > 0);
 
@@ -121,7 +124,7 @@ async function render(url) {
 const hitsOf = (T, people) => people.filter(([, v]) => v.vs.some((x) => T.includes(x))).length;
 
 fs.mkdirSync('outputs/roster-audit/texts', { recursive: true });
-const out = path.join('outputs/roster-audit', `audit-${new Date().toISOString().slice(0, 10)}-deep${ONLY ? '-' + ONLY : ''}.json`);
+const out = path.join('outputs/roster-audit', `audit-${new Date().toISOString().slice(0, 10)}-deep${ONLY ? '-' + ONLY : MANY ? '-shared' : ''}.json`);
 const results = [];
 if (RESUME && fs.existsSync(out)) {
   results.push(...JSON.parse(fs.readFileSync(out, 'utf-8')).results.filter((r) => !r.error));

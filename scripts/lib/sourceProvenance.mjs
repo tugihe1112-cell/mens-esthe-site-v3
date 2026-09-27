@@ -30,6 +30,27 @@ export function rootDomainOf(value) {
 }
 
 /**
+ * 名簿の照合で「1つのサイト」とみなす単位を返す関数を作る（2026-09-27）。
+ * ふだんはドメイン（例: aroma-giraffe.com）。ただし **1つのドメインの下に店ごとに別のアドレスがある**とき
+ * （例: らんぷ＝a.senju-lamp.com・omiya.senju-lamp.com…、men-este.com＝aroma-terrace.men-este.com・tokyo-fairy-land.men-este.com…）は
+ * アドレス（www を除いたホスト名）ごとに分ける。ドメインでまとめると1店分しか読まず、残りの店が一致0になっていた。
+ * @param {string[]} urls 全店の公式URL
+ */
+export function rosterSiteKeyFactory(urls) {
+  const hostsByRoot = new Map();
+  for (const u of urls || []) {
+    const h = hostnameOf(u); const r = rootDomainOf(u);
+    if (!h || !r) continue;
+    (hostsByRoot.get(r) || hostsByRoot.set(r, new Set()).get(r)).add(h);
+  }
+  return (u) => {
+    const r = rootDomainOf(u);
+    if (!r) return null;
+    return (hostsByRoot.get(r)?.size || 0) > 1 ? hostnameOf(u) : r;
+  };
+}
+
+/**
  * 名簿を取得するページが店舗公式サイト配下であることを確認する。
  * 画像自体はS3/CDNでもよいため、image URLではなく「画像を列挙したページ」を検査する。
  */

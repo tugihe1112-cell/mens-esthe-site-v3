@@ -32,7 +32,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as cheerio from 'cheerio';
 import { createClient } from '@supabase/supabase-js';
-import { rootDomainOf } from '../lib/sourceProvenance.mjs';
+import { rosterSiteKeyFactory } from '../lib/sourceProvenance.mjs';
 
 const args = process.argv.slice(2);
 for (const a of args) if (!/^(--top=\d+|--days=\d+|--domain=[\w.-]+|--render)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
@@ -132,11 +132,12 @@ for (let from = 0; ; from += 1000) {
   if (data.length < 1000) break;
 }
 const shopById = new Map(shops.map((s) => [s.id, s]));
+const siteKey = rosterSiteKeyFactory(shops.map((s) => s.website_url)); // 1つのドメインに別の店が相乗りしていればアドレスごと（2026-09-27）
 const cutoff = Date.now() - DAYS * 86400000;
 const byDomain = new Map();
 for (const r of rows) {
   const s = shopById.get(r.shop_id);
-  const d = rootDomainOf(s?.website_url);
+  const d = siteKey(s?.website_url);
   if (!d) continue;
   const g = byDomain.get(d) || { domain: d, website: s.website_url, rows: [], old: 0 };
   g.rows.push(r);
@@ -187,17 +188,24 @@ const variants = (name) => {
   const b = a.replace(/[（(【\[〔～~〜].*?[）)】\]〕～~〜]/g, '').replace(/\d+$/, '');
   return [...new Set([a, b, nameKey(name)])].filter((x) => x.length >= 2);
 };
+// 【固まらないように（2026-09-27）】 deep_roster_audit で1サイトが page.evaluate から6時間返らず、最後にまとめて書く作りのせいで
+//  済んだ42サイト分も消えかけた。同じ作りだったので、ダイアログは閉じる・1ページ90秒・1サイト4分で打ち切る・1サイトごとに保存する。
+const withTimeout = (p, ms, label) => {
+  let t;
+  return Promise.race([p, new Promise((_, rej) => { t = setTimeout(() => rej(new Error(`${label}（${ms / 1000}秒）で打ち切り`)), ms); })]).finally(() => clearTimeout(t));
+};
 async function renderTexts(browser, website) {
   const page = await browser.newPage();
+  page.on('dialog', (d) => d.dismiss().catch(() => {}));
   await page.setUserAgent(UA);
   const texts = [];
   const visited = [];
-  const grab = async (url) => {
+  const grab = (url) => withTimeout((async () => {
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 45000 });
     for (let k = 0; k < 6; k++) { await page.evaluate(() => window.scrollBy(0, document.body.scrollHeight)); await new Promise((r) => setTimeout(r, 600)); }
     visited.push(page.url());
     texts.push(await page.evaluate(() => document.body.innerText + '\n' + [...document.images].map((i) => i.alt || '').join('\n')));
-  };
+  })(), 90000, 'ページの読み込み');
   try {
     await grab(website);
     const origin = new URL(page.url()).origin;
@@ -205,9 +213,13 @@ async function renderTexts(browser, website) {
       .filter((h) => h.startsWith(origin) && ROSTER_HINT.test(h.replace(origin, '')) && !/(recruit|blog|diary|news|schedule|system|price|access|review|uid=|id=\d|\/\d{2,}\/?$|detail|GirlInfo)/i.test(h))
       .sort((x, y) => x.length - y.length).slice(0, 3);
     for (const l of links) { try { await grab(l); } catch { /* 次へ */ } }
-  } finally { await page.close(); }
+  } finally { await withTimeout(page.close(), 10000, 'ページを閉じる').catch(() => {}); }
   return { text: texts.join('\n'), pages: visited };
 }
+fs.mkdirSync('outputs/roster-audit', { recursive: true });
+const out = path.join('outputs/roster-audit', `audit-${new Date().toISOString().slice(0, 10)}${ONLY ? '-' + ONLY : ''}.json`);
+const save = () => fs.writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), days: DAYS, results }, null, 1));
+save(); // 1回目（普通に読む）の結果をまず書く
 if (RENDER) {
   const puppeteer = (await import('puppeteer-core')).default;
   const browser = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: 'new' });
@@ -220,7 +232,7 @@ if (RENDER) {
       const res = retry[j++];
       const g = targets.find((t) => t.domain === res.domain);
       try {
-        const { text, pages } = await renderTexts(browser, g.website);
+        const { text, pages } = await withTimeout(renderTexts(browser, g.website), 4 * 60000, '1サイト');
         const T = flatT(text);
         fs.writeFileSync(path.join('outputs/roster-audit/texts', `${res.domain}.txt`), T);
         const people = new Map();
@@ -239,6 +251,7 @@ if (RENDER) {
           unjudgedPeople: people.size - judged.length,
         });
       } catch (e) { res.renderError = e.message; }
+      save();
       const mark = res.usable ? '✅' : '⚠️';
       console.log(`${mark} ${res.domain.padEnd(34)} DB ${String(res.dbPeople).padStart(4)}人 文字に出る ${String(res.matchedPeople ?? '-').padStart(4)} (${res.matchRate ?? '-'})${res.renderError ? ' ' + res.renderError : ''}`);
     }
@@ -250,7 +263,5 @@ const usable = results.filter((r) => r.usable);
 const sum = (arr, k) => arr.reduce((n, r) => n + (r[k]?.length ?? r[k] ?? 0), 0);
 console.log(`\n対象 ${results.length}サイト: 使える ${usable.length}／要確認 ${results.filter((r) => !r.usable && !r.error).length}／読めない ${results.filter((r) => r.error).length}`);
 console.log(`使えるサイトで: 在籍確認できる行 ${sum(usable, 'confirmRows')}・公式にいない行 ${sum(usable, 'departRows')}（DBの古い行 ${usable.reduce((n, r) => n + r.oldRows, 0)}）`);
-fs.mkdirSync('outputs/roster-audit', { recursive: true });
-const out = path.join('outputs/roster-audit', `audit-${new Date().toISOString().slice(0, 10)}${ONLY ? '-' + ONLY : ''}.json`);
-fs.writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), days: DAYS, results }, null, 1));
+save();
 console.log(`→ ${out}`);
