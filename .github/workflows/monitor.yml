@@ -54,12 +54,15 @@ jobs:
 
       # 主要ページとsitemap掲載ページ、その内部リンクを毎回たどり、
       # 4xx・壊れたcanonical・SEO文のundefined・不正JSON-LDを検出する。
+      # 同時に開くのは3ページまで（2026-09-27）。8だと1回の巡回で DB への問い合わせが
+      # 43秒に約1,000件集中していた（無料の Nano の DB。同日早朝に DB が固まって約2時間止まった＝原因とは確定していない保険）。
+      # 3にすると同じ件数が約2分に散る。巡回するページは変えない。
       - name: Check page and internal-link integrity
         if: always()
         run: node scripts/monitoring/check_site_integrity.mjs
         env:
           BASE_URL: https://www.mens-esthe-map.jp
-          CONCURRENCY: 8
+          CONCURRENCY: 3
 
       # 副作用のない入力だけで、公開API・認証拒否・メソッド制限を検証する。
       - name: Check API contracts
