@@ -7,7 +7,7 @@
 // ※ISR(getStaticProps)はVercel永続キャッシュが古い版を配信し続ける問題があったためSSR+Cache-Controlに変更。
 import React from 'react';
 import Head from 'next/head';
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabase } from '../server/supabaseServer';
 import Home from '../src/pages/Home';
 import { HERO_SHOP_IDS, buildInitialHero } from '../src/data/heroShops';
 import { PREF_TO_SLUG } from '../src/data/areaLinks';
@@ -86,10 +86,7 @@ export async function getServerSideProps({ res }) {
   let liveCounts = null;
   try {
     // 公開データ（shops）はRLSで匿名read可。クライアントと同じanon keyで取得。
-    const supabase = createClient(
-      process.env.VITE_SUPABASE_URL || '',
-      process.env.VITE_SUPABASE_ANON_KEY || ''
-    );
+    const supabase = createServerSupabase(process.env.VITE_SUPABASE_ANON_KEY);
     // 件数は手元の数を使う。古い・無いときはここで数え直しを始め、ほかの取得と並べて進める（待つのは下の waitFor）。
     liveCountsCache.peek();
     // ヒーロー・公開口コミは独立 → 並列（Vercel関数↔Supabaseの往復回数を削減）

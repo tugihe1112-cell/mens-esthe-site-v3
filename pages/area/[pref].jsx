@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import Head from 'next/head';
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabase } from '../../server/supabaseServer';
 import PrefecturePage from '../../src/pages/PrefecturePage';
 import { PREF_SLUG_MAP } from '../../src/data/areaLinks';
 import { getDisplayName } from '../../src/utils/shopHelpers';
@@ -24,10 +24,7 @@ export async function getServerSideProps({ params, res }) {
   const prefName = PREF_MAP[pref] || null;
   if (!prefName) return { notFound: true };
 
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-  );
+  const supabase = createServerSupabase(process.env.SUPABASE_SERVICE_ROLE_KEY);
   try {
     // ── 速度（2026-09-23 実測）──────────────────────────────────────
     // 以前は ①この県の店を raw_data 丸ごと ②全店のルーム数 ③口コミ を**順番に**取っていた。

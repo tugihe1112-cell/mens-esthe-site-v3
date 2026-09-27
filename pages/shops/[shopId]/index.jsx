@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import Head from 'next/head';
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabase } from '../../../server/supabaseServer';
 import ShopDetailPage from '../../../src/pages/ShopDetailPage';
 import { pickNearbyShops } from '../../../src/utils/nearbyShops.mjs';
 import { shopRedirectPath, countRoomsByBrand } from '../../../src/utils/brandGroups.js';
@@ -18,10 +18,7 @@ export async function getServerSideProps({ params, res }) {
   // CDNキャッシュ＝一度誰かが開いたページは次から即返る。SSR HTMLは全員共通・ユーザー固有部分はクライアント描画なので安全。
   // ⚠️SWRを1日にするとデプロイ後に古いHTML→消えた古いJSチャンク404→真っ黒になる。stale窓は短く（最大2分）。
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-  );
+  const supabase = createServerSupabase(process.env.SUPABASE_SERVICE_ROLE_KEY);
   try {
     // ── 速度改善(2026-08-09): 直列6クエリ → 3ウェーブに並列化 ──
     // 以前は shop → group → reviews → count → revT → nearby を全部 await で直列に回しており、

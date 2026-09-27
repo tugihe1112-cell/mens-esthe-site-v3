@@ -15,7 +15,7 @@
  */
 import React from 'react';
 import Head from 'next/head';
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabase } from '../../server/supabaseServer';
 import BrandPage from '../../src/pages/BrandPage';
 import { buildBrands, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, brandRoomProps } from '../../src/utils/brandGroups.js';
 
@@ -27,10 +27,7 @@ export async function getServerSideProps({ params, res }) {
   const { brandId } = params;
   // ⚠️ SWRは最大2分。長くするとデプロイ後に古いHTML→消えたJSチャンク404→真っ黒になる。
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-  );
+  const supabase = createServerSupabase(process.env.SUPABASE_SERVICE_ROLE_KEY);
   try {
     // group_id で引く。単独店（group_idなし）は id そのものがブランドの鍵になる。
     const [byGroup, byId] = await Promise.all([

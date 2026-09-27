@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import Head from 'next/head';
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabase } from '../../../../server/supabaseServer';
 import ThreadDetailPage from '../../../../src/pages/ThreadDetailPage.jsx';
 import { filterReviewsForPerson, samePersonTherapistIds } from '../../../../src/utils/reviewIdentity.js';
 
@@ -23,10 +23,7 @@ export async function getServerSideProps({ params, res }) {
   // ⚠️SWRを1日にするとデプロイ後に古いHTML→消えた古いJSチャンク404→真っ黒になる。stale窓は短く（最大2分）。
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
 
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-  );
+  const supabase = createServerSupabase(process.env.SUPABASE_SERVICE_ROLE_KEY);
 
   try {
     // 1〜2. 店舗とセラピストは互いに依存しないので並列取得（TTFB短縮）

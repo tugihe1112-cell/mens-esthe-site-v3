@@ -1738,6 +1738,54 @@ for (const apiFile of ['api/shops-lite.js', 'server/siteCounts.js']) check(`${ap
   return /res\.end\(\s*body\s*\)/.test(ok) ? null : 'res.end(body) で返していない';
 });
 
+// ── SSR の DB 取得に時間の上限があること（2026-09-27 に本番DBが固まり、ページが35秒以上待ち続けた）──────────
+// 各ページの「取得に失敗したら503」は、返事が来ない場合には効かない。server/supabaseServer.js の
+// timedFetch が上限で打ち切って失敗にすることで、既存の 503 の経路に乗せる。
+{
+  const http = await import('node:http');
+  // 一時フォルダへコピーすると @supabase/supabase-js を解決できないので、元のファイルをそのまま読む
+  const { timedFetch, SSR_DB_TIMEOUT_MS } = await import(pathToFileURL(path.join(ROOT, 'server/supabaseServer.js')).href);
+  const server = http.createServer(() => { /* わざと返事をしない */ });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const url = `http://127.0.0.1:${server.address().port}/`;
+  const started = Date.now();
+  let outcome = 'resolved';
+  // 検査の側にも見張りを付ける（打ち切りが壊れていると、ここで何分も待ってしまう＝2026-09-27 に妨害で試して5分止まった）
+  const guard = new Promise((_, rej) => setTimeout(() => rej(Object.assign(new Error('guard'), { name: 'GuardTimeout' })), 3000));
+  try { await Promise.race([timedFetch(300)(url), guard]); } catch (e) { outcome = e?.name || 'error'; }
+  if (outcome === 'GuardTimeout') outcome = 'resolved';
+  const took = Date.now() - started;
+  // 実際の Supabase の部品を通しても速く失敗すること（部品が時間切れをやり直すと 10秒×4＋7秒＝47秒になった）
+  const { createServerSupabase } = await import(pathToFileURL(path.join(ROOT, 'server/supabaseServer.js')).href);
+  const prevUrl = process.env.VITE_SUPABASE_URL;
+  process.env.VITE_SUPABASE_URL = url.replace(/\/$/, '');
+  const t0 = Date.now();
+  let res;
+  try { res = await Promise.race([createServerSupabase('dummy', 300).from('shops').select('id').limit(1), guard]); } catch (e) { res = { thrown: e?.name }; }
+  process.env.VITE_SUPABASE_URL = prevUrl;
+  const took2 = Date.now() - t0;
+  if (res?.thrown === 'GuardTimeout' || took2 > 2500) failures.push(`createServerSupabase: 返事をしない DB で ${took2}ms かかった（部品が時間切れをやり直している）`);
+  else if (!res?.error) failures.push('createServerSupabase: 返事をしない DB なのに error が返らない（ページが503に届かない）');
+  server.closeAllConnections?.(); server.close();
+  if (outcome === 'resolved') failures.push('timedFetch: 返事をしない相手でも打ち切らない');
+  else if (took > 3000) failures.push(`timedFetch: 300ms の上限で ${took}ms かかった（打ち切りが効いていない）`);
+  if (!(SSR_DB_TIMEOUT_MS >= 3000 && SSR_DB_TIMEOUT_MS <= 20000)) failures.push(`SSR_DB_TIMEOUT_MS=${SSR_DB_TIMEOUT_MS}（3〜20秒の範囲に。短すぎると遅いが返るページまで503、長すぎると待ち続ける）`);
+  // 呼び出し側の中止（signal）も効くこと
+  const ac = new AbortController(); ac.abort();
+  let aborted = false;
+  try { await timedFetch(10000, (u, init) => (init.signal.aborted ? Promise.reject(Object.assign(new Error('aborted'), { name: 'AbortError' })) : Promise.resolve('ok')))(url, { signal: ac.signal }); } catch { aborted = true; }
+  if (!aborted) failures.push('timedFetch: 呼び出し側の signal を無視している');
+}
+check('pages/ の SSR は時間の上限付きのクライアント（createServerSupabase）で DB を読む', () => {
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]));
+  const bad = walk(path.join(ROOT, 'pages'))
+    .filter((f) => /\.(jsx?|tsx?)$/.test(f))
+    .filter((f) => /from\s*['"]@supabase\/supabase-js['"]/.test(fs.readFileSync(f, 'utf-8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')));
+  if (bad.length) return `supabase-js を直接使っている: ${bad.map((f) => path.relative(ROOT, f)).join(', ')}（DB が固まると待ち続ける）`;
+  const users = walk(path.join(ROOT, 'pages')).filter((f) => /createServerSupabase\(/.test(fs.readFileSync(f, 'utf-8')));
+  return users.length >= 6 ? null : `createServerSupabase を使うページが ${users.length} 件しかない（6件のはず）`;
+});
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

@@ -5,7 +5,7 @@
  * 口コミ本文の抜粋と店舗・セラピストの正規URLを必ず含める。
  */
 import React from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { createServerSupabase } from '../server/supabaseServer';
 import PopularReviewsPage from '../src/pages/PopularReviewsPage';
 
 const PAGE_SIZE = 20;
@@ -14,10 +14,7 @@ const normName = (value) => String(value || '').replace(/[\s　]/g, '');
 export async function getServerSideProps({ res }) {
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
 
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-  );
+  const supabase = createServerSupabase(process.env.SUPABASE_SERVICE_ROLE_KEY);
 
   try {
     const { data: reviews, error: reviewsError } = await supabase
