@@ -46,9 +46,11 @@ import { cleanRosterName, selfTestRosterNameClean } from '../lib/rosterNameClean
 import { loadReviewedKeys, splitDeparting, applyDeparture, selfTestDepartRows } from '../lib/departRows.mjs';
 
 const args = process.argv.slice(2);
-for (const a of args) if (!/^(--shop=\S+|--list=https?:\/\/\S+|--link=.+|--strip=.+|--text=.+|--click=.+|--tabs=.+|--db-strip=.+|--img-alts|--exclude=.+|--card=.+|--name-sel=.+|--no-add|--confirm-only|--profile-name=.+|--live|--allow-mass-depart|--render)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+for (const a of args) if (!/^(--shop=\S+|--list=https?:\/\/\S+|--more-list=https?:\/\/\S+|--link=.+|--strip=.+|--text=.+|--click=.+|--tabs=.+|--db-strip=.+|--img-alts|--exclude=.+|--card=.+|--name-sel=.+|--no-add|--confirm-only|--prefix-match|--min=\d+|--profile-name=.+|--live|--allow-mass-depart|--render)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
 const SHOP_ID = args.find((a) => a.startsWith('--shop='))?.slice(7);
 const LIST = args.find((a) => a.startsWith('--list='))?.slice(7);
+// 在籍一覧が無く、毎日の出勤情報しかない店（THE THERAPIST CLUB・2026-09-28）は、何日分かのページをまとめて1つの名簿として読む（--render --text のときだけ）
+const MORE_LISTS = args.filter((a) => a.startsWith('--more-list=')).map((a) => a.slice(12));
 const LIVE = args.includes('--live');
 const MASS = args.includes('--allow-mass-depart');
 const LINK = args.find((a) => a.startsWith('--link='))?.slice(7);
@@ -68,10 +70,12 @@ const NAME_SEL = args.find((a) => a.startsWith('--name-sel='))?.slice(11);
 const NO_ADD = args.includes('--no-add');
 // 公式が「1週間の出勤予定」しか出していない（在籍一覧が無い）サイト＝載っていない人が辞めたとは言えない。載っている人の在籍確認だけにする（みやび 伊勢崎・2026-09-28）
 const CONFIRM_ONLY = args.includes('--confirm-only');
+const PREFIX_MATCH = args.includes('--prefix-match');
 const PROFILE_NAME = args.find((a) => a.startsWith('--profile-name='))?.slice(15);
 if (PROFILE_NAME && !args.some((a) => a.startsWith('--link='))) { console.error('❌ --profile-name は --link と一緒に使う'); process.exit(1); }
 if (NAME_SEL && !CARD) { console.error('❌ --name-sel は --card と一緒に使う'); process.exit(1); }
 if ((TEXT || CLICK) && !RENDER) { console.error('❌ --text / --click は --render と一緒に使う'); process.exit(1); }
+if (MORE_LISTS.length && !(RENDER && TEXT)) { console.error('❌ --more-list は --render --text と一緒に使う'); process.exit(1); }
 const LINK_RE = LINK ? new RegExp(LINK) : null;
 if (!SHOP_ID || !LIST) { console.error('使い方: --shop=<shop_id> --list=<在籍一覧のURL> [--live] [--allow-mass-depart]'); process.exit(1); }
 selfTestRosterNameClean();
@@ -112,6 +116,7 @@ const { data: shop, error: se } = await supabase.from('shops').select('id,name,w
 if (se) { console.error('❌ DBを読めません', se.message); process.exit(1); }
 if (!shop) { console.error(`❌ 店がありません: ${SHOP_ID}`); process.exit(1); }
 assertOfficialRosterSource({ officialWebsiteUrl: shop.website_url, rosterUrl: LIST });
+for (const u of MORE_LISTS) assertOfficialRosterSource({ officialWebsiteUrl: shop.website_url, rosterUrl: u });
 
 // ── 公式の在籍一覧 ─────────────────────────────
 let listHtml;
@@ -146,6 +151,11 @@ if (RENDER) {
       await loadMore();
       texts.push(await page.evaluate(() => document.body.innerText));
       htmls.push(await page.content());
+    }
+    for (const u of MORE_LISTS) {
+      const r2 = await page.goto(u, { waitUntil: 'networkidle2', timeout: 60000 });
+      if (!r2 || r2.status() >= 400) { console.error(`❌ 公式のページを開けません: ${u} ${r2?.status()}`); process.exit(1); }
+      texts.push(await page.evaluate(() => document.body.innerText));
     }
     listHtml = htmls.join('\n');
     if (TEXT) globalThis.__listText = texts.join('\n');
@@ -203,7 +213,7 @@ if (IMG_ALTS) {
     // 同じ人が「おすすめ」と一覧の2か所に別のリンクで出るサイトがある（ARROW京都・2026-09-28）＝同じ名前は1人として数える
     if (official.some((o) => key(o.name) === key(name))) return;
     const imgSrc = c.find('img').toArray().map((x) => imgSrcOf($(x))).find((s) => s && !BAD_IMG.test(s));
-    const bg = c.find('[style*="background"]').toArray().map((x) => ($(x).attr('style') || '').match(/url\(\s*['"]?([^'")]+)['"]?\s*\)/)?.[1]).find((s) => s && !BAD_IMG.test(s));
+    const bg = c.find('[style*="url("]').addBack('[style*="url("]').toArray().map((x) => ($(x).attr('style') || '').match(/url\(\s*['"]?([^'")]+)['"]?\s*\)/)?.[1]).find((s) => s && !BAD_IMG.test(s));
     const src = imgSrc || bg || '';
     official.push({ castId, name, imgUrl: src ? new URL(src, LIST).href : null, profileUrl: href ? new URL(href, LIST).href : LIST });
   });
@@ -266,7 +276,9 @@ else $('.therapist-datas-each').each((_, el) => {
   official.push({ castId, name, imgUrl, profileUrl: new URL(a.attr('href'), LIST).href });
 });
 console.log(`■ ${shop.name} [${SHOP_ID}]\n公式の一覧: ${official.length}人（写真あり ${official.filter((o) => o.imgUrl).length}）${rejected.length ? `・名前でないので外した ${rejected.length}: ${rejected.join(' / ')}` : ''}`);
-if (official.length < 5) { console.error('❌ 公式が5人未満＝読み取りの失敗とみて中止'); process.exit(1); }
+// 公式が少なすぎるのは読み取りの失敗とみて止める。在籍4人の店（SALON BLANCA）のように本当に少ない店だけ --min=N で下げる（2未満にはしない）
+const MIN = Math.max(2, Number(args.find((a) => a.startsWith('--min='))?.slice(6) || 5));
+if (official.length < MIN) { console.error(`❌ 公式が${MIN}人未満＝読み取りの失敗とみて中止`); process.exit(1); }
 const dup = official.map((o) => key(o.name)).filter((k, i, arr) => arr.indexOf(k) !== i);
 if (dup.length) { console.error(`❌ 公式に同じ名前が複数: ${[...new Set(dup)].join(',')}`); process.exit(1); }
 
@@ -276,6 +288,23 @@ if (te) { console.error('❌ 名簿を読めません', te.message); process.exi
 const byKey = new Map();
 for (const r of rows) { const k = key(r.name); (byKey.get(k) || byKey.set(k, []).get(k)).push(r); }
 const officialKeys = new Set(official.map((o) => key(o.name)));
+// 【--prefix-match（2026-09-28・艶華）】 昔の取り込みで名前と売り文句が地続きになった行（「ふうか漂うオトナの香り♡」「りかハーフ系美女♡」）を、
+// 公式の名前（「ふうか」「りか」）で始まる行として同じ人とみなし、在籍確認のときに表示名を公式の名前に直す。
+// 「りか」と「りかこ」のような別人を取り違えないよう、公式の名前の直後がひらがな・長音なら同じ人とみなさない。
+// 1つの行に当てはまる公式の名前が2つ以上あれば、いちばん長い名前だけを使う。
+const renames = new Map(); // 行の id → 直した名前
+if (PREFIX_MATCH) {
+  for (const r of rows) {
+    const rk = key(r.name);
+    if (officialKeys.has(rk)) continue;
+    const cands = official.filter((o) => { const ok = key(o.name); return ok.length >= 2 && rk.length > ok.length && rk.startsWith(ok) && !/^[ぁ-ゖー]/.test(rk.slice(ok.length)); });
+    if (!cands.length) continue;
+    const o = cands.sort((a, b) => key(b.name).length - key(a.name).length)[0];
+    renames.set(r.id, o.name);
+    (byKey.get(key(o.name)) || byKey.set(key(o.name), []).get(key(o.name))).push(r);
+  }
+  if (renames.size) console.log(`名前を直して在籍確認 ${renames.size}: ${rows.filter((r) => renames.has(r.id)).map((r) => `${r.name}→${renames.get(r.id)}`).join('・')}`);
+}
 const ids = new Set(rows.map((r) => r.id));
 
 const confirm = official.filter((o) => byKey.has(key(o.name)));
@@ -286,7 +315,7 @@ if (NO_ADD) {
   if (!(count >= 2)) { console.error('❌ --no-add はブランドのルームが2つ以上ある店だけ（新人がどのルームにも入らなくなる）'); process.exit(1); }
   console.log(`（--no-add: 公式にだけいる ${official.length - confirm.length}人はこのルームには足さない＝同じブランドの別のルームに足す）`);
 }
-let depart = CONFIRM_ONLY ? [] : rows.filter((r) => r.is_active !== false && !officialKeys.has(key(r.name)));
+let depart = CONFIRM_ONLY ? [] : rows.filter((r) => r.is_active !== false && !officialKeys.has(key(r.name)) && !renames.has(r.id));
 const activeNow = rows.filter((r) => r.is_active !== false).length;
 // 【念押し（2026-09-28）】 消す前に、公式の一覧ページを手元の Chrome で組み立てて下まで少しずつスクロールし（続きを読み込む一覧がある）、
 // 名前が画面の文字か写真の説明文のどこかに出る人は消さない。
@@ -302,9 +331,11 @@ if (depart.length) {
     try {
       const pg = await br.newPage(); pg.on('dialog', (d) => d.dismiss().catch(() => {}));
       await pg.setUserAgent(UA);
-      await pg.goto(LIST, { waitUntil: 'networkidle2', timeout: 60000 });
-      for (let i = 0; i < 40; i++) { await pg.evaluate(() => window.scrollBy(0, 1500)); await new Promise((x) => setTimeout(x, 350)); }
-      page = await pg.evaluate(() => document.body.innerText + ' ' + [...document.images].map((i) => i.alt).join(' '));
+      for (const u of [LIST, ...MORE_LISTS]) {
+        await pg.goto(u, { waitUntil: 'networkidle2', timeout: 60000 });
+        for (let i = 0; i < 40; i++) { await pg.evaluate(() => window.scrollBy(0, 1500)); await new Promise((x) => setTimeout(x, 350)); }
+        page += ' ' + await pg.evaluate(() => document.body.innerText + ' ' + [...document.images].map((i) => i.alt).join(' '));
+      }
     } finally { await br.close(); }
   } catch (e) { console.error(`❌ 念押しのために公式の一覧を開けません（${e.message.slice(0, 60)}）＝誰も消さずに中止`); process.exit(1); }
   const pageKey = key(page);
@@ -343,6 +374,7 @@ const img = async (o) => {
 for (const o of confirm) {
   for (const r of byKey.get(key(o.name))) {
     const patch = { is_active: true, last_seen_at: now };
+    if (renames.has(r.id)) patch.name = renames.get(r.id);
     if (!r.image_url) patch.image_url = await img(o);
     const { error } = await supabase.from('therapists').update(patch).eq('id', r.id);
     if (error) { console.error('❌', o.name, error.message); process.exit(1); }
