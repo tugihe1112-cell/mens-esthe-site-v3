@@ -102,7 +102,7 @@ const nameOf = (raw00) => {
 // 画像の場所。<img src="spacer300x450.png" style="background-image:url(/images/ml_11_1_10470.jpg)"> のように
 // 透明の画像を置いて写真を背景に入れるサイトがある（Everything 目黒・2026-09-28）。そのときは背景の方を写真にする。
 const imgSrcOf = (img) => {
-  const src = img.attr('data-src') || img.attr('data-original') || img.attr('src') || '';
+  const src = img.attr('data-src') || img.attr('data-original') || img.attr('data-lazy-src') || img.attr('lazy-src') || img.attr('src') || '';
   if (src && !/spacer|blank|transparent/i.test(src)) return src;
   return (img.attr('style') || '').match(/url\(\s*['"]?([^'")]+)['"]?\s*\)/)?.[1] || src;
 };
@@ -163,6 +163,7 @@ if (RENDER) {
 }
 const $ = cheerio.load(listHtml);
 const official = []; const seen = new Set(); const rejected = [];
+const photoOnly = new Map(); // 名前の無いリンクの写真（id → 写真）
 if (IMG_ALTS) {
   $('img').each((_, el) => {
     const alt = ($(el).attr('alt') || '').trim();
@@ -171,7 +172,7 @@ if (IMG_ALTS) {
     if (!name) { rejected.push(alt); return; }
     if (seen.has(key(name))) return;
     seen.add(key(name));
-    const src = $(el).attr('data-src') || $(el).attr('data-original') || $(el).attr('src') || '';
+    const src = imgSrcOf($(el));
     const imgUrl = src && !/comingsoon|noimage|now[-_ ]?printing|no_image|spacer/i.test(src) ? new URL(src, LIST).href : null;
     official.push({ castId: (src.match(/(\d{2,})/g) || []).pop() || `i${official.length + 1}`, name, imgUrl, profileUrl: LIST });
   });
@@ -187,18 +188,21 @@ if (IMG_ALTS) {
   }
 } else if (CARD) {
   const BAD_IMG = /(new|icon|badge|today|syukkin|shukkin|label|mark|sns|spacer|comingsoon|noimage|now[-_ ]?printing|no_image)/i;
-  $(CARD).each((_, el) => {
+  $(CARD).each((i, el) => {
     const c = $(el);
-    const a = c.find('a[href]').toArray().map((x) => $(x)).find((x) => !LINK_RE || LINK_RE.test(x.attr('href') || ''));
+    // 枠そのものがリンク（<a>）のことがある（ARROW京都）＝中だけでなく枠自身も見る
+    const a = c.find('a[href]').addBack('a[href]').toArray().map((x) => $(x)).find((x) => !LINK_RE || LINK_RE.test(x.attr('href') || ''));
     const href = a?.attr('href') || '';
     const raw = (NAME_SEL ? c.find(NAME_SEL).first().text() : c.find('img').toArray().map((x) => $(x).attr('alt')).find((t) => nameOf(t)) || '').replace(/\s+/g, ' ').trim();
     if (!raw || (EXCLUDE_RE && EXCLUDE_RE.test(raw))) return;
-    const castId = (LINK_RE ? href.match(LINK_RE)?.[1] : null) || href || `c${official.length + 1}`;
+    const castId = (LINK_RE ? href.match(LINK_RE)?.[1] : null) || href || `c${i}`;
     if (seen.has(castId)) return;
     seen.add(castId);
     const name = nameOf(raw);
     if (!name) { rejected.push(raw); return; }
-    const imgSrc = c.find('img').toArray().map((x) => $(x).attr('data-src') || $(x).attr('data-original') || $(x).attr('src') || '').find((s) => s && !BAD_IMG.test(s));
+    // 同じ人が「おすすめ」と一覧の2か所に別のリンクで出るサイトがある（ARROW京都・2026-09-28）＝同じ名前は1人として数える
+    if (official.some((o) => key(o.name) === key(name))) return;
+    const imgSrc = c.find('img').toArray().map((x) => imgSrcOf($(x))).find((s) => s && !BAD_IMG.test(s));
     const bg = c.find('[style*="background"]').toArray().map((x) => ($(x).attr('style') || '').match(/url\(\s*['"]?([^'")]+)['"]?\s*\)/)?.[1]).find((s) => s && !BAD_IMG.test(s));
     const src = imgSrc || bg || '';
     official.push({ castId, name, imgUrl: src ? new URL(src, LIST).href : null, profileUrl: href ? new URL(href, LIST).href : LIST });
@@ -211,7 +215,7 @@ if (IMG_ALTS) {
     const castId = href.match(LINK_RE)?.[1];
     if (!castId || seen.has(castId)) return;
     seen.add(castId);
-    const src = $(el).find('img').toArray().map((x) => $(x).attr('data-src') || $(x).attr('data-original') || $(x).attr('src') || '').find((s) => s && !/(new|icon|badge|comingsoon|noimage|now[-_ ]?printing|no_image|spacer)/i.test(s)) || '';
+    const src = $(el).find('img').toArray().map((x) => imgSrcOf($(x))).find((s) => s && !/(new|icon|badge|comingsoon|noimage|now[-_ ]?printing|no_image|spacer)/i.test(s)) || '';
     items.push({ castId, href: new URL(href, LIST).href, src });
   });
   for (const it of items) {
@@ -239,12 +243,15 @@ if (IMG_ALTS) {
     img = imgs.find((x) => !/(new|icon|badge|today|syukkin|shukkin|label|mark|sns)/i.test(x.attr('src') || '')) || imgs[0] || $('<img>');
   }
   const name = nameOf(raw);
-  if (seen.has(castId)) { const o = official.find((x) => x.castId === castId); if (o && !o.imgUrl) { const src2 = imgSrcOf(img); if (src2 && !/comingsoon|noimage|now[-_ ]?printing|no_image|spacer/i.test(src2)) o.imgUrl = new URL(src2, LIST).href; } return; }
+  const src0 = imgSrcOf(img);
+  const imgHere = src0 && !/comingsoon|noimage|now[-_ ]?printing|no_image|spacer/i.test(src0) ? new URL(src0, LIST).href : null;
+  if (seen.has(castId)) { const o = official.find((x) => x.castId === castId); if (o && !o.imgUrl) o.imgUrl = imgHere; return; }
+  // 1人に「写真だけのリンク」と「名前だけのリンク」が別々にあるサイト（ぼくがバナナ・2026-09-28）。
+  // 名前の無いリンクで id を取ってしまうと、後の名前のリンクが読まれず、その人が「公式にいない」と判定されて消える。
+  // 名前の無いリンクは写真だけ預けておき、名前のあるリンクで1人として数える。
+  if (!name) { if (raw) rejected.push(raw); if (imgHere && !photoOnly.has(castId)) photoOnly.set(castId, imgHere); return; }
   seen.add(castId);
-  if (!name) { if (raw) rejected.push(raw); return; }
-  const src = imgSrcOf(img);
-  const imgUrl = src && !/comingsoon|noimage|now[-_ ]?printing|no_image|spacer/i.test(src) ? new URL(src, LIST).href : null;
-  official.push({ castId, name, imgUrl, profileUrl: new URL(href, LIST).href });
+  official.push({ castId, name, imgUrl: imgHere || photoOnly.get(castId) || null, profileUrl: new URL(href, LIST).href });
 });
 else $('.therapist-datas-each').each((_, el) => {
   const a = $(el).find('a.therapist-datas-name').first();
@@ -279,8 +286,33 @@ if (NO_ADD) {
   if (!(count >= 2)) { console.error('❌ --no-add はブランドのルームが2つ以上ある店だけ（新人がどのルームにも入らなくなる）'); process.exit(1); }
   console.log(`（--no-add: 公式にだけいる ${official.length - confirm.length}人はこのルームには足さない＝同じブランドの別のルームに足す）`);
 }
-const depart = CONFIRM_ONLY ? [] : rows.filter((r) => r.is_active !== false && !officialKeys.has(key(r.name)));
+let depart = CONFIRM_ONLY ? [] : rows.filter((r) => r.is_active !== false && !officialKeys.has(key(r.name)));
 const activeNow = rows.filter((r) => r.is_active !== false).length;
+// 【念押し（2026-09-28）】 消す前に、公式の一覧ページを手元の Chrome で組み立てて下まで少しずつスクロールし（続きを読み込む一覧がある）、
+// 名前が画面の文字か写真の説明文のどこかに出る人は消さない。
+// ⚠️ わたしのおうち・WHITE ROSE・超レベチは一覧が20人ずつ後から読み込まれる作りで、普通に読むと最初の20人しか取れず、
+//    残りの在籍中の人を「公式にいない」と判定して消していた（2026-09-28 に見つけて戻した）。
+//    短い名前が別の人の名前の一部に当たって残ることはあるが、消し過ぎるより残す方を選ぶ。
+const keptIds = new Set();
+if (depart.length) {
+  let page = '';
+  try {
+    const puppeteer = (await import('puppeteer-core')).default;
+    const br = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: 'new' });
+    try {
+      const pg = await br.newPage(); pg.on('dialog', (d) => d.dismiss().catch(() => {}));
+      await pg.setUserAgent(UA);
+      await pg.goto(LIST, { waitUntil: 'networkidle2', timeout: 60000 });
+      for (let i = 0; i < 40; i++) { await pg.evaluate(() => window.scrollBy(0, 1500)); await new Promise((x) => setTimeout(x, 350)); }
+      page = await pg.evaluate(() => document.body.innerText + ' ' + [...document.images].map((i) => i.alt).join(' '));
+    } finally { await br.close(); }
+  } catch (e) { console.error(`❌ 念押しのために公式の一覧を開けません（${e.message.slice(0, 60)}）＝誰も消さずに中止`); process.exit(1); }
+  const pageKey = key(page);
+  const kept = depart.filter((r) => key(r.name).length >= 2 && pageKey.includes(key(r.name)));
+  if (kept.length) console.log(`名前が公式ページのどこかに出るので消さない ${kept.length}: ${kept.map((r) => r.name).join('・')}`);
+  for (const r of kept) keptIds.add(r.id);
+  depart = depart.filter((r) => !kept.includes(r));
+}
 const { data: revs } = await supabase.from('reviews').select('therapist_id').eq('shop_id', SHOP_ID);
 const reviewed = new Set((revs || []).map((r) => r.therapist_id));
 const clash = add.filter((o) => ids.has(`${SHOP_ID}_${o.name}`));
@@ -327,7 +359,7 @@ if (depart.length) {
 const { data: after } = await supabase.from('therapists').select('id,name,image_url,is_active').eq('shop_id', SHOP_ID);
 const active = after.filter((r) => r.is_active !== false);
 const activeKeys = new Set(active.map((r) => key(r.name)));
-const ok = (NO_ADD || CONFIRM_ONLY ? confirm : official).every((o) => activeKeys.has(key(o.name))) && (CONFIRM_ONLY || active.every((r) => officialKeys.has(key(r.name))));
+const ok = (NO_ADD || CONFIRM_ONLY ? confirm : official).every((o) => activeKeys.has(key(o.name))) && (CONFIRM_ONLY || active.every((r) => officialKeys.has(key(r.name)) || keptIds.has(r.id)));
 console.log(`読み直し: 在籍 ${active.length}行（公式 ${official.length}人）・写真あり ${active.filter((r) => r.image_url).length}・退店扱いで残っている行 ${after.length - active.length}（今回消した ${split.remove.length}）`);
 console.log(ok ? '✅ 公式と一致' : '❌ 公式と一致しません');
 if (!ok) process.exit(1);
