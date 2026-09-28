@@ -41,7 +41,7 @@ import path from 'node:path';
 import * as cheerio from 'cheerio';
 import { createClient } from '@supabase/supabase-js';
 import { uploadImage } from '../lib/r2Upload.mjs';
-import { scopedImageKey, assertOfficialRosterSource } from '../lib/sourceProvenance.mjs';
+import { scopedImageKey, assertOfficialRosterSource, rootDomainOf } from '../lib/sourceProvenance.mjs';
 import { cleanRosterName, selfTestRosterNameClean } from '../lib/rosterNameClean.mjs';
 import { loadReviewedKeys, splitDeparting, applyDeparture, selfTestDepartRows } from '../lib/departRows.mjs';
 
@@ -334,9 +334,10 @@ fs.mkdirSync('outputs/roster-reconcile', { recursive: true });
 const backup = path.join('outputs/roster-reconcile', `caskan-${SHOP_ID}-${now.replace(/[:.]/g, '-')}.json`);
 fs.writeFileSync(backup, JSON.stringify({ at: now, list: LIST, shop, therapists: rows }, null, 1));
 console.log(`📦 バックアップ ${backup}`);
+// 写真の出所は人物ページ。人物ページが店の外（ARROW京都は estama.jp）のときは、写真が載っている公式の一覧ページを出所にする
 const img = async (o) => {
   if (!o.imgUrl) return null;
-  try { return await uploadImage(o.imgUrl, scopedImageKey({ shopId: SHOP_ID, castId: o.castId, sourceUrl: o.imgUrl }), shop.website_url, 'therapist-images', { officialWebsiteUrl: shop.website_url, sourcePageUrl: o.profileUrl }); }
+  try { return await uploadImage(o.imgUrl, scopedImageKey({ shopId: SHOP_ID, castId: o.castId, sourceUrl: o.imgUrl }), shop.website_url, 'therapist-images', { officialWebsiteUrl: shop.website_url, sourcePageUrl: rootDomainOf(o.profileUrl) === rootDomainOf(shop.website_url) ? o.profileUrl : LIST }); }
   catch (e) { console.log(`  写真なしで登録: ${o.name}（${e.message.slice(0, 60)}）`); return null; }
 };
 for (const o of confirm) {
