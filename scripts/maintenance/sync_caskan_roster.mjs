@@ -18,6 +18,11 @@
  *  例: MADAME聖子 `--list=https://madame-seiko.com/girl --link='profile\?lid=(\d+)'`（説明文「あんり　9/24入店」→「あんり」）。
  *
  * 【--strip=<正規表現>（2026-09-27）】 そのサイトだけの飾り（「れあ 先生」の「 先生」、「ーひとみ」の頭の「ー」など）を、名前を整える前に外す。
+ * 【文字だけで並ぶ一覧（2026-09-27・博多人妻）】 `--render --click=もっと見る --text=<名前を()で囲んだ正規表現>` で、「もっと見る」を押し切ってから
+ *  画面の文字から名前を拾う（人物リンクも写真の説明文も無いサイト）。写真は取れないので追加する人は名前だけ。
+ *  `--db-strip=<正規表現>` は照合のときだけ DB の名前から外す文字（「近藤夫人_久留米」の「_久留米」）。
+ * 【写真の説明文だけに名前が並ぶ一覧（2026-09-27・CAMERON・Aroma Fairy）】 `--img-alts --exclude=<札の正規表現>` で、ページの画像の説明文から名前を拾う
+ *  （「SSクラス」「Twitter有り」のような札・店名の画像は --exclude と名前の整え方で外す）。写真はその画像。
  * 【--render（2026-09-27）】 後から画面を組み立てるサイトは、手元の Chrome で組み立ててから（下までスクロールして）読む。
  *
  * 【安全装置】 知らない引数は止める。公式が5人未満なら中止。退店扱いが在籍の60%超は --allow-mass-depart が無ければ中止。
@@ -33,7 +38,7 @@ import { cleanRosterName, selfTestRosterNameClean } from '../lib/rosterNameClean
 import { loadReviewedKeys, splitDeparting, applyDeparture, selfTestDepartRows } from '../lib/departRows.mjs';
 
 const args = process.argv.slice(2);
-for (const a of args) if (!/^(--shop=[\w-]+|--list=https?:\/\/\S+|--link=.+|--strip=.+|--live|--allow-mass-depart|--render)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+for (const a of args) if (!/^(--shop=\S+|--list=https?:\/\/\S+|--link=.+|--strip=.+|--text=.+|--click=.+|--tabs=.+|--db-strip=.+|--img-alts|--exclude=.+|--live|--allow-mass-depart|--render)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
 const SHOP_ID = args.find((a) => a.startsWith('--shop='))?.slice(7);
 const LIST = args.find((a) => a.startsWith('--list='))?.slice(7);
 const LIVE = args.includes('--live');
@@ -42,6 +47,15 @@ const LINK = args.find((a) => a.startsWith('--link='))?.slice(7);
 const RENDER = args.includes('--render');
 const STRIP = args.find((a) => a.startsWith('--strip='))?.slice(8);
 const STRIP_RE = STRIP ? new RegExp(STRIP, 'g') : null;
+const TEXT = args.find((a) => a.startsWith('--text='))?.slice(7);
+const CLICK = args.find((a) => a.startsWith('--click='))?.slice(8);
+const DB_STRIP = args.find((a) => a.startsWith('--db-strip='))?.slice(11);
+// 店ごとの切り替え（博多店／久留米店）がある一覧は、切り替えを1つずつ押して全部読む。押さないと最初の店しか出ない＝残りの店の人を「公式にいない」と消してしまう（2026-09-27 博多人妻で実際に起きかけた）
+const IMG_ALTS = args.includes('--img-alts');
+const EXCLUDE = args.find((a) => a.startsWith('--exclude='))?.slice(10);
+const EXCLUDE_RE = EXCLUDE ? new RegExp(EXCLUDE) : null;
+const TABS = args.find((a) => a.startsWith('--tabs='))?.slice(7).split(',').filter(Boolean) || [];
+if ((TEXT || CLICK) && !RENDER) { console.error('❌ --text / --click は --render と一緒に使う'); process.exit(1); }
 const LINK_RE = LINK ? new RegExp(LINK) : null;
 if (!SHOP_ID || !LIST) { console.error('使い方: --shop=<shop_id> --list=<在籍一覧のURL> [--live] [--allow-mass-depart]'); process.exit(1); }
 selfTestRosterNameClean();
@@ -51,7 +65,7 @@ const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
 const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('SUPABASE_SERVICE_ROLE_KEY'), { auth: { autoRefreshToken: false, persistSession: false } });
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36';
-const key = (s) => String(s || '').normalize('NFKC').replace(/[（(【\[].*?[）)】\]]/g, '').replace(/[\s　・]/g, '').toLowerCase();
+const key = (s) => String(s || '').normalize('NFKC').replace(DB_STRIP ? new RegExp(DB_STRIP, 'g') : /$^/, '').replace(/[（(【\[].*?[）)】\]]/g, '').replace(/[\s　・]/g, '').toLowerCase();
 // 1文字の名前（泉・渚・蛍★ほたる・蒼【あおい】）。cleanRosterName は拾い物の雑音を避けるため2文字以上しか通さないが、
 // 人物ページへのリンクに付いた名前なら1文字でも本物（ミセス美オーラ・倉敷Roman で実際に捨てていた＝2026-09-27）。
 // 1文字の名前を捨てると、DB にいるその人が「公式にいない」と判定されて消えてしまう。
@@ -81,7 +95,30 @@ if (RENDER) {
     const r = await page.goto(LIST, { waitUntil: 'networkidle2', timeout: 60000 });
     if (!r || r.status() >= 400) { console.error(`❌ 公式の一覧を開けません: ${r?.status()}`); process.exit(1); }
     for (let i = 0; i < 20; i++) { await page.evaluate(() => window.scrollBy(0, 2500)); await new Promise((x) => setTimeout(x, 300)); }
-    listHtml = await page.content();
+    const clickText = (label) => page.evaluate((l) => {
+      const el = [...document.querySelectorAll('button,a,li,div,span')].find((e) => (e.innerText || '').trim() === l && e.offsetParent !== null);
+      if (!el) return false; el.click(); return true;
+    }, label);
+    const loadMore = async () => {
+      if (!CLICK) return;
+      for (let n = 0; n < 60; n++) {
+        if (!(await clickText(CLICK))) break;
+        await new Promise((x) => setTimeout(x, 1200));
+        await page.evaluate(() => window.scrollBy(0, 5000));
+      }
+    };
+    const texts = []; const htmls = [];
+    for (const tab of TABS.length ? TABS : [null]) {
+      if (tab) {
+        if (!(await clickText(tab))) { console.error(`❌ 切り替え「${tab}」が見つからない`); process.exit(1); }
+        await new Promise((x) => setTimeout(x, 2000));
+      }
+      await loadMore();
+      texts.push(await page.evaluate(() => document.body.innerText));
+      htmls.push(await page.content());
+    }
+    listHtml = htmls.join('\n');
+    if (TEXT) globalThis.__listText = texts.join('\n');
   } finally { await browser.close(); }
 } else {
   const res = await fetch(LIST, { headers: { 'User-Agent': UA } });
@@ -96,12 +133,43 @@ if (RENDER) {
 }
 const $ = cheerio.load(listHtml);
 const official = []; const seen = new Set(); const rejected = [];
-if (LINK_RE) $('a[href]').each((_, el) => {
+if (IMG_ALTS) {
+  $('img').each((_, el) => {
+    const alt = ($(el).attr('alt') || '').trim();
+    if (!alt || (EXCLUDE_RE && EXCLUDE_RE.test(alt))) return;
+    const name = nameOf(alt);
+    if (!name) { rejected.push(alt); return; }
+    if (seen.has(key(name))) return;
+    seen.add(key(name));
+    const src = $(el).attr('data-src') || $(el).attr('data-original') || $(el).attr('src') || '';
+    const imgUrl = src && !/comingsoon|noimage|now[-_ ]?printing|no_image|spacer/i.test(src) ? new URL(src, LIST).href : null;
+    official.push({ castId: (src.match(/(\d{2,})/g) || []).pop() || `i${official.length + 1}`, name, imgUrl, profileUrl: LIST });
+  });
+} else if (TEXT) {
+  const re = new RegExp(TEXT, 'g');
+  for (const m of String(globalThis.__listText || '').matchAll(re)) {
+    const raw = m[1] || m[0];
+    const name = nameOf(raw);
+    if (!name) { rejected.push(raw); continue; }
+    if (seen.has(key(name))) continue;
+    seen.add(key(name));
+    official.push({ castId: `t${official.length + 1}`, name, imgUrl: null, profileUrl: LIST });
+  }
+} else if (LINK_RE) $('a[href]').each((_, el) => {
   const href = $(el).attr('href') || '';
   const castId = href.match(LINK_RE)?.[1];
   if (!castId) return;
-  const img = $(el).find('img').first();
-  const raw = (img.attr('alt') || $(el).text() || '').trim();
+  // リンクの中の画像を全部見る（最初の画像が「本日出勤」「NEW」の札のサイトがある＝luxeaz・riraku-hug・2026-09-27）。
+  // 名前として通る説明文を持つ画像を写真に、無ければリンクの文字の行から名前を取る。
+  const imgs = $(el).find('img').toArray().map((x) => $(x));
+  let img = imgs.find((x) => nameOf(x.attr('alt'))) || null;
+  let raw = img ? img.attr('alt') : '';
+  if (!img) {
+    // リンクの中の文字を部品ごとに見る（HTMLの文字には改行が無いことがある＝MANDOM・2026-09-27）
+    const parts = $(el).find('*').addBack().contents().toArray().filter((n) => n.type === 'text').map((n) => $(n).text().trim()).filter(Boolean);
+    raw = parts.find((t) => nameOf(t)) || parts.join(' ');
+    img = imgs.find((x) => !/(new|icon|badge|today|syukkin|shukkin|label|mark|sns)/i.test(x.attr('src') || '')) || imgs[0] || $('<img>');
+  }
   const name = nameOf(raw);
   if (seen.has(castId)) { const o = official.find((x) => x.castId === castId); if (o && !o.imgUrl) { const src2 = img.attr('data-src') || img.attr('data-original') || img.attr('src') || ''; if (src2 && !/comingsoon|noimage|now[-_ ]?printing|no_image|spacer/i.test(src2)) o.imgUrl = new URL(src2, LIST).href; } return; }
   seen.add(castId);
