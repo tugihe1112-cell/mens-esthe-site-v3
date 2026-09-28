@@ -75,7 +75,6 @@ const PROFILE_NAME = args.find((a) => a.startsWith('--profile-name='))?.slice(15
 if (PROFILE_NAME && !args.some((a) => a.startsWith('--link='))) { console.error('❌ --profile-name は --link と一緒に使う'); process.exit(1); }
 if (NAME_SEL && !CARD) { console.error('❌ --name-sel は --card と一緒に使う'); process.exit(1); }
 if ((TEXT || CLICK) && !RENDER) { console.error('❌ --text / --click は --render と一緒に使う'); process.exit(1); }
-if (MORE_LISTS.length && !(RENDER && TEXT)) { console.error('❌ --more-list は --render --text と一緒に使う'); process.exit(1); }
 const LINK_RE = LINK ? new RegExp(LINK) : null;
 if (!SHOP_ID || !LIST) { console.error('使い方: --shop=<shop_id> --list=<在籍一覧のURL> [--live] [--allow-mass-depart]'); process.exit(1); }
 selfTestRosterNameClean();
@@ -156,6 +155,7 @@ if (RENDER) {
       const r2 = await page.goto(u, { waitUntil: 'networkidle2', timeout: 60000 });
       if (!r2 || r2.status() >= 400) { console.error(`❌ 公式のページを開けません: ${u} ${r2?.status()}`); process.exit(1); }
       texts.push(await page.evaluate(() => document.body.innerText));
+      htmls.push(await page.content());
     }
     listHtml = htmls.join('\n');
     if (TEXT) globalThis.__listText = texts.join('\n');
@@ -169,6 +169,12 @@ if (RENDER) {
   const cs = ((res.headers.get('content-type') || '').match(/charset=([\w-]+)/i)?.[1] || head.match(/<meta[^>]+charset=["']?([\w-]+)/i)?.[1] || 'utf-8').toLowerCase();
   const enc = /shift[_-]?jis|sjis|x-sjis|windows-31j|cp932/.test(cs) ? 'shift_jis' : /euc-?jp/.test(cs) ? 'euc-jp' : 'utf-8';
   listHtml = new TextDecoder(enc).decode(buf);
+  // 何ページかに分かれた一覧（RESEXY は staff.php?p=2・2026-09-29）は、残りのページも同じ文字コードで読んでつなぐ
+  for (const u of MORE_LISTS) {
+    const r2 = await fetch(u, { headers: { 'User-Agent': UA } });
+    if (!r2.ok) { console.error(`❌ 公式のページを開けません: ${u} ${r2.status}`); process.exit(1); }
+    listHtml += '\n' + new TextDecoder(enc).decode(Buffer.from(await r2.arrayBuffer()));
+  }
   if (enc !== 'utf-8') console.log(`  文字コード: ${enc}`);
 }
 const $ = cheerio.load(listHtml);
