@@ -35,7 +35,14 @@ if (MAX_PER_SITE > 60 && !/\.verified\.json$/.test(FILE)) { console.error('❌ -
   const problems = selfTestRosterNameClean();
   if (problems.length) { console.error('❌ 名前の整え方が壊れています:', problems); process.exit(1); }
 }
-const nameKey = (v) => String(v || '').normalize('NFKC').replace(/[\s\u3000]/g, '').toLowerCase();
+const nameKey0 = (v) => String(v || '').normalize('NFKC').replace(/[\s\u3000]/g, '').toLowerCase();
+// 【2026-09-29】 名前の後ろの「さん」「ちゃん」は照合では外す。公式が「なぎさん」、DB が「なぎ」の店があり（Lucky Cat など）、
+// 付いたまま比べると同じ人を新人として二重に足してしまう。足す名前からも外す（残りが2文字未満になるときは外さない）。
+const stripHonorific = (v) => { const t = String(v || '').trim(); const r = t.replace(/[\s\u3000]*(さん|ちゃん)$/, ''); return r.replace(/[\s\u3000]/g, '').length >= 2 ? r : t; };
+const nameKey = (v) => nameKey0(stripHonorific(v));
+// 人ではない札（「大宮店」「どこかのルーム」「お店」「フリーさん」「空き状況さん」）と、名前の後ろに付いた売り文句（「如月ゆい おすすめ新人」）
+const NOT_PERSON = /(店|ルーム|ROOM|room)$|^お店$|フリー|空き|状況/;
+const tidy = (v) => stripHonorific(String(v || '').replace(/[\s\u3000]+(おすすめ新人|おすすめ|新人|NEW)$/i, '').trim());
 
 const env = fs.readFileSync('.env', 'utf-8');
 const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
@@ -45,7 +52,7 @@ const data = JSON.parse(fs.readFileSync(FILE, 'utf-8'));
 // 同じブランド（同じドメインのルーム＋同じ group_id のルーム）の DB の名前
 const shops = [];
 for (let from = 0; ; from += 1000) {
-  const { data: rows, error } = await supabase.from('shops').select('id,website_url,group_id').range(from, from + 999);
+  const { data: rows, error } = await supabase.from('shops').select('id,name,website_url,group_id').range(from, from + 999);
   if (error) { console.error('❌', error.message); process.exit(1); }
   shops.push(...rows); if (rows.length < 1000) break;
 }
@@ -74,8 +81,11 @@ for (const r of data.results) {
   const planned = plannedByBrand.get(bk) || plannedByBrand.set(bk, new Set()).get(bk);
   const seen = new Set(); const add = []; const revive = [];
   for (const x of [...r.newPeople, ...r.revive]) {
-    const name = cleanRosterName(x.name, prefix);
-    if (!name) { rejected += 1; continue; }
+    const cleaned = cleanRosterName(x.name, prefix);
+    const name = cleaned ? tidy(cleaned) : null;
+    // 店の名前そのもの（KAHLUA MILK の「カルーアミルク」）も人ではない
+    const shopName = String(shops.find((sh) => sh.id === r.addTo)?.name || '').normalize('NFKC');
+    if (!name || NOT_PERSON.test(name) || (name.length >= 4 && shopName.includes(name.normalize('NFKC')))) { rejected += 1; continue; }
     const k = nameKey(name);
     if (seen.has(k) || active.has(k) || planned.has(k)) continue;
     seen.add(k);
@@ -89,12 +99,25 @@ for (const r of data.results) {
 console.log(`名前の形にならず足さない候補: ${rejected}件`);
 // 既にある id は足さない
 const existing = new Set();
+// 【2026-09-29】 同じ公式プロフィール（人物ID）の写真を持つ人がすでにいれば足さない＝名前が変わった同じ人。
+// BELLA SPA の「小鳥遊ゆり」（9/25）が公式で「小鳥遊さり」になっていて、同じ人を別の名前で二重に足していた（画像の監視で発覚）。
+// 写真のキーは scopedImageKey＝「cast_<店>_<人物ID>_<版>」なので、先頭が同じなら同じ人物ページの写真。
+const photoKeys = new Map();
 for (const p of plan) {
   if (!p.add.length) continue;
-  const { data: rows } = await supabase.from('therapists').select('id').eq('shop_id', p.addTo);
-  for (const t of rows || []) existing.add(t.id);
+  const { data: rows } = await supabase.from('therapists').select('id,name,image_url').eq('shop_id', p.addTo);
+  for (const t of rows || []) { existing.add(t.id); const f = String(t.image_url || '').split('/').pop(); if (f) photoKeys.set(f, t.name); }
 }
-for (const p of plan) p.add = p.add.filter((x) => !existing.has(`${p.addTo}_${x.name}`));
+const sameProfile = [];
+for (const p of plan) p.add = p.add.filter((x) => {
+  if (existing.has(`${p.addTo}_${x.name}`)) return false;
+  const scope = String(p.addTo).normalize('NFKC').replace(/[^a-z0-9_-]+/gi, '_').replace(/^_+|_+$/g, '').slice(0, 80);
+  const head = `cast_${scope}_${x.castId || x.key}_`;
+  const hit = [...photoKeys.entries()].find(([f]) => f.startsWith(head));
+  if (hit) { sameProfile.push(`${p.domain}: ${x.name}（DB では「${hit[1]}」）`); return false; }
+  return true;
+});
+if (sameProfile.length) console.log(`同じ公式プロフィールの人がすでにいるので足さない（名前が変わった可能性） ${sameProfile.length}: ${sameProfile.join('・')}`);
 
 const nAdd = plan.reduce((n, p) => n + p.add.length, 0);
 const nRev = plan.reduce((n, p) => n + p.revive.length, 0);
