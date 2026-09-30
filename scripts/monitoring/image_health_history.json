@@ -1742,5 +1742,84 @@
       "repeatedRows": 0,
       "unrelatedRepeatedGroups": 0
     }
+  },
+  {
+    "schemaVersion": 4,
+    "at": "2026-09-30 07:04:04",
+    "shops": {
+      "total": 1147,
+      "nulls": 88,
+      "nullPct": 7.7,
+      "mode": "sample",
+      "checkedUrls": 40,
+      "dead": 0,
+      "deadPct": 0,
+      "affectedRows": 0,
+      "badExamples": [],
+      "affectedExamples": []
+    },
+    "therapists": {
+      "total": 65284,
+      "nulls": 8529,
+      "nullPct": 13.1,
+      "mode": "sample",
+      "checkedUrls": 40,
+      "dead": 0,
+      "deadPct": 0,
+      "affectedRows": 0,
+      "badExamples": [],
+      "affectedExamples": []
+    },
+    "therapistSemantic": {
+      "checked": 57648,
+      "knownBad": 0,
+      "suspiciousNames": 0,
+      "repeatedGroups": 0,
+      "repeatedRows": 0,
+      "unrelatedRepeatedGroups": 0
+    }
+  },
+  {
+    "schemaVersion": 4,
+    "at": "2026-09-30 07:04:40",
+    "shops": {
+      "total": 1147,
+      "nulls": 88,
+      "nullPct": 7.7,
+      "mode": "sample",
+      "checkedUrls": 40,
+      "dead": 1,
+      "deadPct": 2.5,
+      "affectedRows": 0,
+      "badExamples": [
+        {
+          "url": "https://mens-esthe-images.tugihe1112.workers.dev/shop-logos/aichi_meieki_deep_3751_%E4%BF%AE%E6%AD%A3FV_PC-1-scaled.webp",
+          "status": 404,
+          "contentType": "text/plain;charset=UTF-8",
+          "reason": "HTTP 404"
+        }
+      ],
+      "affectedExamples": []
+    },
+    "therapists": {
+      "total": 65284,
+      "nulls": 8529,
+      "nullPct": 13.1,
+      "mode": "sample",
+      "checkedUrls": 40,
+      "dead": 0,
+      "deadPct": 0,
+      "affectedRows": 0,
+      "badExamples": [],
+      "affectedExamples": []
+    },
+    "therapistSemantic": {
+      "checked": 57648,
+      "knownBad": 0,
+      "suspiciousNames": 0,
+      "repeatedGroups": 0,
+      "repeatedRows": 0,
+      "unrelatedRepeatedGroups": 0
+    }
   }
 ]
