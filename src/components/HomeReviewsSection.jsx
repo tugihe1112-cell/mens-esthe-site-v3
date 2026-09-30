@@ -49,6 +49,8 @@ function RegionChip({ label, count, pressed, onClick }) {
 // 「編集方針」の囲み（2026-09-30・デザインA案＋B案の囲み）。朱の印・中立宣言・掲載数。
 // D-003: 中立宣言は消さない。母数は掲載数であって口コミ件数ではない（口コミ件数のように見せない）。
 // ⚠️ 文は siteCopy の NEUTRAL_REVIEW_NOTE だけ（写しを作らない）。
+// ⚠️ 印の「中立」も font-mincho（端末の明朝が先）。var(--font-mincho) を直接書くと、
+//    明朝を持つ端末でも配信の明朝を読みに行き、トップのフォント通信が 37→65KB に増えた（2026-09-30 本番で実測）。
 function NeutralStatement({ displayedCounts, className = '' }) {
   return (
     <section aria-label="編集方針" className={`border border-slate-700 bg-slate-900 px-5 py-5 md:px-6 ${className}`}>
@@ -57,7 +59,7 @@ function NeutralStatement({ displayedCounts, className = '' }) {
         <svg width="74" height="74" viewBox="0 0 74 74" aria-hidden="true" className="shrink-0">
           <circle cx="37" cy="37" r="34" fill="none" stroke="#E0613F" strokeWidth="2" />
           <circle cx="37" cy="37" r="29" fill="none" stroke="#E0613F" strokeWidth="0.8" />
-          <text x="37" y="36" textAnchor="middle" fontSize="17" fontWeight="700" fill="#E0613F" style={{ fontFamily: 'var(--font-mincho), serif' }}>中立</text>
+          <text x="37" y="36" textAnchor="middle" fontSize="17" fontWeight="700" fill="#E0613F" className="font-mincho">中立</text>
           <text x="37" y="50" textAnchor="middle" fontSize="7.5" letterSpacing="1" fill="#E0613F">掲載料ゼロ</text>
         </svg>
         <p className="font-mincho font-bold text-slate-50" style={{ fontSize: '16px', lineHeight: 1.7 }}>

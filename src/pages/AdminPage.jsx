@@ -85,19 +85,19 @@ function GrantModal({ review, onClose, onGrant }) {
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
       <SeoHead title="管理画面" noindex />
-      <div className="bg-slate-900 border border-white/10 rounded-2xl p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
+      <div className="bg-slate-900 border border-white/10 rounded-sm p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
         <h3 className="text-white font-black text-lg mb-1">閲覧日数を付与</h3>
         <p className="text-slate-400 text-sm mb-4">
           <span className="text-pink-400">{review?.therapist_name || '不明'}</span> への口コミ投稿者に付与
         </p>
-        <div className="bg-slate-800/50 rounded-xl p-3 mb-4 max-h-32 overflow-y-auto">
+        <div className="bg-slate-800/50 rounded-sm p-3 mb-4 max-h-32 overflow-y-auto">
           <p className="text-slate-300 text-xs leading-relaxed">{review?.content}</p>
           <p className="text-slate-600 text-[10px] mt-2 text-right">{(review?.content || '').length}文字</p>
         </div>
         <div className="grid grid-cols-4 gap-2 mb-4">
           {PRESETS.map(d => (
             <button key={d} onClick={() => setDays(d)}
-              className={`py-2.5 rounded-xl font-black text-sm transition ${days === d ? 'bg-pink-500 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
+              className={`py-2.5 rounded-sm font-black text-sm transition ${days === d ? 'bg-pink-500 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'}`}>
               {d}日
             </button>
           ))}
@@ -106,12 +106,12 @@ function GrantModal({ review, onClose, onGrant }) {
           <span className="text-slate-400 text-sm">カスタム:</span>
           <input type="number" value={days}
             onChange={e => setDays(Math.max(1, Math.min(90, parseInt(e.target.value) || 1)))}
-            className="w-20 bg-slate-800 border border-white/10 rounded-xl px-3 py-2 text-white text-center font-black focus:outline-none focus:border-pink-500/50" />
+            className="w-20 bg-slate-800 border border-white/10 rounded-sm px-3 py-2 text-white text-center font-black focus:outline-none focus:border-pink-500/50" />
           <span className="text-slate-400 text-sm">日間</span>
         </div>
         {/* メール送信ステータス */}
         {emailStatus && (
-          <div className={`mb-3 text-center text-xs font-bold rounded-xl py-2 ${
+          <div className={`mb-3 text-center text-xs font-bold rounded-sm py-2 ${
             emailStatus === 'sending' ? 'bg-blue-500/10 text-blue-400' :
             emailStatus === 'sent'    ? 'bg-emerald-500/10 text-emerald-400' :
                                         'bg-red-500/10 text-red-400'
@@ -122,9 +122,9 @@ function GrantModal({ review, onClose, onGrant }) {
           </div>
         )}
         <div className="flex gap-3">
-          <button onClick={onClose} className="flex-1 py-3 rounded-xl text-slate-400 hover:text-white border border-white/10 font-bold transition">キャンセル</button>
+          <button onClick={onClose} className="flex-1 py-3 rounded-sm text-slate-400 hover:text-white border border-white/10 font-bold transition">キャンセル</button>
           <button onClick={grant} disabled={isLoading || emailStatus === 'sending'}
-            className="flex-1 py-3 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-black transition disabled:opacity-50">
+            className="flex-1 py-3 rounded-sm bg-pink-500 hover:bg-pink-600 text-white font-black transition disabled:opacity-50">
             {isLoading ? '付与中...' : `${days}日付与する`}
           </button>
         </div>
@@ -169,7 +169,7 @@ function ShopEditModal({ shop, onClose, onSave }) {
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+      <div className="bg-slate-800 border border-slate-700 rounded-sm p-6 w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
         <h2 className="text-xl font-bold border-b border-slate-700 pb-3 mb-4">店舗情報の編集</h2>
         <div className="space-y-3">
           {[
@@ -181,7 +181,7 @@ function ShopEditModal({ shop, onClose, onSave }) {
             <div key={key}>
               <label className="text-xs text-slate-400 font-bold uppercase mb-1 block">{label}</label>
               <input
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white text-sm focus:border-blue-500 outline-none"
+                className="w-full bg-slate-900 border border-slate-700 rounded-sm p-2.5 text-white text-sm focus:border-blue-500 outline-none"
                 value={form[key]}
                 onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
               />
@@ -189,13 +189,13 @@ function ShopEditModal({ shop, onClose, onSave }) {
           ))}
         </div>
         {form.image_url && (
-          <div className="mt-3 w-full h-32 rounded-xl overflow-hidden border border-slate-700">
+          <div className="mt-3 w-full h-32 rounded-sm overflow-hidden border border-slate-700">
             <img src={form.image_url} alt="preview" className="w-full h-full object-cover" />
           </div>
         )}
         <div className="flex gap-3 mt-5">
-          <button onClick={onClose} className="flex-1 py-3 bg-slate-700 rounded-xl font-bold text-sm">キャンセル</button>
-          <button onClick={save} disabled={isSaving} className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-sm transition disabled:opacity-50">
+          <button onClick={onClose} className="flex-1 py-3 bg-slate-700 rounded-sm font-bold text-sm">キャンセル</button>
+          <button onClick={save} disabled={isSaving} className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-sm font-bold text-sm transition disabled:opacity-50">
             {isSaving ? '保存中...' : '保存する'}
           </button>
         </div>
@@ -412,7 +412,7 @@ export default function AdminPage() {
           <div className="flex items-center gap-3">
             {/* 💎ロゴ→トップ（管理ツールなので共通Headerは重ねず、既存バーに導線を追加） */}
             <Link to="/" aria-label="トップへ" className="shrink-0">
-              <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-600 to-rose-600 flex items-center justify-center text-lg shadow">💎</span>
+              <span className="w-9 h-9 rounded-sm bg-gradient-to-br from-pink-600 to-rose-600 flex items-center justify-center text-lg shadow">💎</span>
             </Link>
             <div>
               <h1 className="text-xl font-black">🛠️ 運営ダッシュボード</h1>
@@ -428,23 +428,23 @@ export default function AdminPage() {
       <div className="max-w-5xl mx-auto px-4 pt-6">
 
         {requestedReviewId && linkedReviewStatus === 'found' && (
-          <div className="mb-4 rounded-xl border border-pink-500/30 bg-pink-500/10 px-4 py-3 text-sm font-bold text-pink-200">
+          <div className="mb-4 rounded-sm border border-pink-500/30 bg-pink-500/10 px-4 py-3 text-sm font-bold text-pink-200">
             📩 メールの口コミを開きました。本文を確認して閲覧日数を付与できます。
           </div>
         )}
         {requestedReviewId && linkedReviewStatus === 'not-found' && (
-          <div className="mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-200">
+          <div className="mb-4 rounded-sm border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-200">
             ⚠️ メールで指定された口コミは見つかりません。すでに削除された可能性があります。
           </div>
         )}
 
         {/* タブ */}
-        <div className="flex gap-2 mb-6 bg-slate-800 p-1 rounded-2xl border border-slate-700 overflow-x-auto">
+        <div className="flex gap-2 mb-6 bg-slate-800 p-1 rounded-sm border border-slate-700 overflow-x-auto">
           {TABS.map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 flex-shrink-0 py-2.5 px-3 rounded-xl font-bold text-sm transition whitespace-nowrap ${
+              className={`flex-1 flex-shrink-0 py-2.5 px-3 rounded-sm font-bold text-sm transition whitespace-nowrap ${
                 activeTab === tab.key ? 'bg-slate-700 text-white shadow-lg' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -467,7 +467,7 @@ export default function AdminPage() {
             </div>
 
             {isLoadingReviews ? (
-              <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-slate-800/50 rounded-xl animate-pulse" />)}</div>
+              <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="h-20 bg-slate-800/50 rounded-sm animate-pulse" />)}</div>
             ) : displayReviews.length === 0 ? (
               <div className="text-center py-20 text-slate-500">口コミはありません</div>
             ) : (
@@ -485,7 +485,7 @@ export default function AdminPage() {
                         if (node) reviewElementsRef.current.set(id, node);
                         else reviewElementsRef.current.delete(id);
                       }}
-                      className={`border rounded-xl overflow-hidden transition ${
+                      className={`border rounded-sm overflow-hidden transition ${
                         String(r.id) === requestedReviewId
                           ? 'bg-pink-950/30 border-pink-500/60 ring-2 ring-pink-500/20'
                           : isGranted ? 'bg-emerald-950/30 border-emerald-700/30' : 'bg-slate-800 border-slate-700'
@@ -536,7 +536,7 @@ export default function AdminPage() {
                           <ReviewStoryContent
                             content={r.content || ''}
                             storySections={r.story_sections || r.storySections}
-                            className="rounded-xl bg-slate-900/60 p-3 text-sm leading-relaxed text-slate-200"
+                            className="rounded-sm bg-slate-900/60 p-3 text-sm leading-relaxed text-slate-200"
                           />
                           <div className="flex gap-2 justify-end pt-1">
                             <button onClick={() => deleteReview(r.id)}
@@ -568,7 +568,7 @@ export default function AdminPage() {
             {credits.length === 0 ? (
               <div className="text-center py-20 text-slate-500">付与済みクレジットはありません</div>
             ) : credits.map(c => (
-              <div key={c.user_id} className="bg-slate-800 border border-slate-700 rounded-xl p-4 flex items-center justify-between gap-4">
+              <div key={c.user_id} className="bg-slate-800 border border-slate-700 rounded-sm p-4 flex items-center justify-between gap-4">
                 <div>
                   <p className="text-white text-sm font-bold font-mono">{c.user_id.slice(0, 20)}...</p>
                   <p className="text-slate-500 text-xs">投稿数: {c.total_reviews_posted} | 更新: {timeAgo(c.updated_at)}</p>
@@ -593,21 +593,21 @@ export default function AdminPage() {
                 placeholder="店名・IDで検索..."
                 value={shopSearch}
                 onChange={e => setShopSearch(e.target.value)}
-                className="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white text-sm focus:border-blue-500 outline-none"
+                className="flex-1 bg-slate-800 border border-slate-700 rounded-sm px-4 py-2.5 text-white text-sm focus:border-blue-500 outline-none"
               />
-              <button onClick={fetchShops} className="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-400 border border-slate-700 hover:text-white transition">↻</button>
+              <button onClick={fetchShops} className="px-4 py-2.5 rounded-sm text-sm font-bold text-slate-400 border border-slate-700 hover:text-white transition">↻</button>
             </div>
 
             {isLoadingShops ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[1,2,3,4].map(i => <div key={i} className="h-24 bg-slate-800/50 rounded-xl animate-pulse" />)}
+                {[1,2,3,4].map(i => <div key={i} className="h-24 bg-slate-800/50 rounded-sm animate-pulse" />)}
               </div>
             ) : (
               <>
                 <p className="text-slate-500 text-xs mb-3">{filteredShops.length}件表示</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {filteredShops.slice(0, 100).map(shop => (
-                    <div key={shop.id} className="bg-slate-800 border border-slate-700 rounded-xl p-4 flex gap-3">
+                    <div key={shop.id} className="bg-slate-800 border border-slate-700 rounded-sm p-4 flex gap-3">
                       <div className="w-16 h-16 bg-slate-700 rounded-lg overflow-hidden flex-shrink-0 border border-slate-600">
                         {shop.image_url
                           ? <img src={shop.image_url} alt={shop.name} className="w-full h-full object-cover" />

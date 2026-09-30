@@ -2,12 +2,12 @@ import React from 'react';
 
 /* ベースパルスブロック */
 const Pulse = ({ className = '' }) => (
-  <div className={`bg-slate-800 animate-pulse rounded-xl ${className}`} />
+  <div className={`bg-slate-800 animate-pulse rounded-sm ${className}`} />
 );
 
 /* セラピストカード (3カラムグリッド用) */
 export const TherapistCardSkeleton = () => (
-  <div className="bg-slate-900/60 border border-white/5 rounded-2xl p-2 flex flex-col items-center gap-2">
+  <div className="bg-slate-900/60 border border-white/5 rounded-sm p-2 flex flex-col items-center gap-2">
     <Pulse className="w-16 h-16 rounded-full" />
     <Pulse className="h-2.5 w-14 rounded-full" />
     <Pulse className="h-2 w-10 rounded-full opacity-50" />
@@ -16,7 +16,7 @@ export const TherapistCardSkeleton = () => (
 
 /* 横長店舗カード */
 export const ShopCardSkeleton = () => (
-  <div className="bg-slate-900/60 border border-white/5 rounded-2xl overflow-hidden">
+  <div className="bg-slate-900/60 border border-white/5 rounded-sm overflow-hidden">
     <Pulse className="aspect-video w-full rounded-none" />
     <div className="p-3 space-y-2">
       <Pulse className="h-3 w-3/4 rounded-full" />
@@ -27,7 +27,7 @@ export const ShopCardSkeleton = () => (
 
 /* ランキング行 */
 export const RankingRowSkeleton = () => (
-  <div className="flex items-center gap-4 p-4 bg-slate-900/40 rounded-2xl border border-white/5">
+  <div className="flex items-center gap-4 p-4 bg-slate-900/40 rounded-sm border border-white/5">
     <Pulse className="w-8 h-8 rounded-full shrink-0" />
     <Pulse className="w-12 h-12 rounded-full shrink-0" />
     <div className="flex-1 space-y-2">
@@ -40,7 +40,7 @@ export const RankingRowSkeleton = () => (
 
 /* 口コミカード */
 export const ReviewCardSkeleton = () => (
-  <div className="bg-slate-900/60 border border-white/5 rounded-2xl p-5 space-y-3">
+  <div className="bg-slate-900/60 border border-white/5 rounded-sm p-5 space-y-3">
     <div className="flex items-center gap-3">
       <Pulse className="w-10 h-10 rounded-full shrink-0" />
       <div className="space-y-2 flex-1">
@@ -56,7 +56,7 @@ export const ReviewCardSkeleton = () => (
 
 /* ヒーロースライダー */
 export const HeroSkeleton = () => (
-  <div className="w-full aspect-[4/3] md:aspect-[16/9] bg-slate-900 animate-pulse rounded-3xl" />
+  <div className="w-full aspect-[4/3] md:aspect-[16/9] bg-slate-900 animate-pulse rounded-sm" />
 );
 
 /* グリッドセット: n個のスケルトンを並べる */

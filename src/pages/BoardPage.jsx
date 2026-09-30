@@ -117,13 +117,13 @@ export default function BoardPage() {
         <div className="max-w-3xl mx-auto px-4 py-6">
           {/* 投稿フォーム */}
           {showForm && (
-            <div className="bg-slate-900 border border-pink-500/30 rounded-2xl p-5 mb-6">
+            <div className="bg-slate-900 border border-pink-500/30 rounded-sm p-5 mb-6">
               <h3 className="font-black text-white mb-4">新規投稿</h3>
               <div className="space-y-3">
                 <select
                   value={form.category}
                   onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-                  className="w-full bg-slate-800 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500/50"
+                  className="w-full bg-slate-800 border border-white/10 rounded-sm px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500/50"
                 >
                   {CATEGORIES.filter(c => c.key !== 'all').map(c => (
                     <option key={c.key} value={c.key}>{c.label}</option>
@@ -134,14 +134,14 @@ export default function BoardPage() {
                   value={form.title}
                   onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
                   maxLength={120}
-                  className="w-full bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50"
+                  className="w-full bg-slate-800 border border-white/10 rounded-sm px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50"
                 />
                 <input
                   placeholder="関連店舗名（任意）"
                   value={form.shop_name}
                   onChange={e => setForm(f => ({ ...f, shop_name: e.target.value }))}
                   maxLength={120}
-                  className="w-full bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50"
+                  className="w-full bg-slate-800 border border-white/10 rounded-sm px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50"
                 />
                 <textarea
                   placeholder="本文を入力..."
@@ -149,7 +149,7 @@ export default function BoardPage() {
                   value={form.content}
                   onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
                   maxLength={5000}
-                  className="w-full bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50 resize-none"
+                  className="w-full bg-slate-800 border border-white/10 rounded-sm px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50 resize-none"
                 />
                 <div className="flex gap-2 justify-end">
                   <button onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-white transition">キャンセル</button>
@@ -186,7 +186,7 @@ export default function BoardPage() {
           {isLoading ? (
             <div className="space-y-3">
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="rounded-2xl bg-slate-800/50 animate-pulse h-24" />
+                <div key={i} className="rounded-sm bg-slate-800/50 animate-pulse h-24" />
               ))}
             </div>
           ) : posts.length === 0 ? (
@@ -203,7 +203,7 @@ export default function BoardPage() {
                 <Link
                   key={post.id}
                   to={`/board/${post.id}`}
-                  className="block bg-slate-900/80 border border-white/5 hover:border-blue-500/30 rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                  className="block bg-slate-900/80 border border-white/5 hover:border-blue-500/30 rounded-sm p-4 transition-all duration-200 hover:-translate-y-0.5"
                 >
                   <div className="flex items-start gap-3">
                     <div className="flex-1 min-w-0">

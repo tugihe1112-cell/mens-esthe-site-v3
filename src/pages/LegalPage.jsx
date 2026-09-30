@@ -21,7 +21,7 @@ export default function LegalPage() {
           特定商取引法に基づく表記
         </h1>
 
-        <div className="bg-slate-900/50 backdrop-blur rounded-2xl border border-white/5 overflow-hidden shadow-xl">
+        <div className="bg-slate-900/50 backdrop-blur rounded-sm border border-white/5 overflow-hidden shadow-xl">
           <dl className="divide-y divide-white/5 text-sm md:text-base">
             <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] p-6 gap-2 md:gap-4 hover:bg-white/5 transition">
               <dt className="text-slate-400 font-bold">販売事業者</dt>

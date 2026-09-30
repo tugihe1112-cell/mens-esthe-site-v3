@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import LineIcon from '../components/LineIcon.jsx';
 import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
@@ -104,8 +105,7 @@ export default function NewTherapistsPage() {
         <div className="bg-gradient-to-br from-pink-900/60 via-slate-900 to-purple-900/40 border-b border-white/5 pt-20 pb-8 px-4">
           <div className="max-w-5xl mx-auto">
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-2xl">✨</span>
-              <h1 className="text-2xl md:text-3xl font-black tracking-tight">新人セラピスト一覧</h1>
+              <h1 className="font-mincho text-[28px] md:text-[36px] font-bold leading-[1.3] text-slate-50">新人セラピスト一覧</h1>
               <span className="bg-pink-500 text-white text-xs font-black px-2 py-0.5 rounded-full animate-pulse">NEW</span>
             </div>
             <p className="text-slate-400 text-sm">全国のメンズエステに新しく登録されたセラピストをチェック</p>
@@ -116,7 +116,7 @@ export default function NewTherapistsPage() {
           {isLoading ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className="rounded-2xl bg-slate-800/50 animate-pulse aspect-[3/4]" />
+                <div key={i} className="rounded-sm bg-slate-800/50 animate-pulse aspect-[3/4]" />
               ))}
             </div>
           ) : (
@@ -128,7 +128,7 @@ export default function NewTherapistsPage() {
                     <Link
                       key={t.id}
                       to={`/shops/${t.shop_id}/threads/${t.id}`}
-                      className="group relative rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-pink-900/20 bg-slate-900"
+                      className="group relative rounded-sm overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-pink-900/20 bg-slate-900"
                     >
                       {/* 写真 */}
                       <div className="aspect-[3/4] relative overflow-hidden">
@@ -186,7 +186,7 @@ export default function NewTherapistsPage() {
 
               {therapists.length === 0 && (
                 <div className="text-center py-20 text-slate-500">
-                  <p className="text-4xl mb-4">🌸</p>
+                  <p className="mb-4 flex justify-center text-slate-500"><LineIcon name="search" size={34} /></p>
                   <p>セラピストが見つかりませんでした</p>
                 </div>
               )}

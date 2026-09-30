@@ -696,6 +696,27 @@ for (const [path, label] of [
   if (/body\s*\{[^}]*--font-mincho/.test(css) || /sans:\s*\[[^\]]*var\(--font-mincho\)/.test(tw)) {
     failures.push('本文に配信の明朝が使われています（本文は端末の書体のまま）');
   }
+  // 🚩 2026-09-30: トップの「中立」の印が style で var(--font-mincho) を直接指定しており、
+  //    明朝を持つ端末でも配信の明朝を読みに行った（本番でフォント通信 37→65KB）。
+  //    画面の部品は font-mincho クラス（端末の明朝が先）だけを使うこと。
+  {
+    const offenders = [];
+    const walk = (dir) => {
+      for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+        const p = `${dir}/${ent.name}`;
+        if (ent.isDirectory()) { if (ent.name !== '_archive' && ent.name !== 'styles') walk(p); continue; }
+        if (!/\.(jsx|tsx|js)$/.test(ent.name)) continue;
+        const code = stripSrc(fs.readFileSync(p, 'utf8'));
+        if (/var\(--font-mincho\)/.test(code)) offenders.push(p);
+      }
+    };
+    walk('src'); walk('pages');
+    const allowed = new Set(['pages/_app.jsx']);
+    const bad = offenders.filter((p) => !allowed.has(p));
+    if (bad.length) {
+      failures.push(`画面の部品が配信の明朝（var(--font-mincho)）を直接指定しています: ${bad.join(', ')}\n      → font-mincho クラスを使うこと（端末の明朝が先＝明朝を持つ端末では通信0）`);
+    }
+  }
 }
 
 if (failures.length) {

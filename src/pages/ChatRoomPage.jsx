@@ -228,7 +228,7 @@ export default function ChatRoomPage() {
                           </span>
                         )}
                         <div
-                          className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed break-words ${
+                          className={`px-4 py-2.5 rounded-sm text-sm leading-relaxed break-words ${
                             isMe
                               ? 'bg-gradient-to-br from-pink-500 to-purple-600 text-white rounded-br-sm'
                               : 'bg-slate-800 text-slate-200 rounded-bl-sm'
@@ -263,7 +263,7 @@ export default function ChatRoomPage() {
             onKeyDown={handleKeyDown}
             placeholder="メッセージを入力... (Enterで送信)"
             rows={1}
-            className="flex-1 bg-slate-800 border border-white/10 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50 resize-none"
+            className="flex-1 bg-slate-800 border border-white/10 rounded-sm px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50 resize-none"
             style={{ maxHeight: '120px' }}
             onInput={e => {
               e.target.style.height = 'auto';

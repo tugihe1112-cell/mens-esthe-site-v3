@@ -22,7 +22,7 @@ export default function BrandResultCard({ summary, shops, roomCounts = null }) {
   const brandHref = rooms.length ? shopHref(rooms[0], roomCounts) : null;
 
   return (
-    <div className="w-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl overflow-hidden border border-pink-500/30 shadow-2xl shadow-pink-900/20 mb-8 animate-in fade-in zoom-in-95 duration-300">
+    <div className="w-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-sm overflow-hidden border border-pink-500/30 shadow-2xl shadow-pink-900/20 mb-8 animate-in fade-in zoom-in-95 duration-300">
       <div className="relative h-48 md:h-64">
         {/* 背景画像 */}
         <LazyImage 
@@ -98,7 +98,7 @@ export default function BrandResultCard({ summary, shops, roomCounts = null }) {
             {rooms.map((shop) => (
               <div
                 key={shop.id}
-                className="flex items-center gap-4 p-3 rounded-xl bg-slate-800/50 border border-white/5"
+                className="flex items-center gap-4 p-3 rounded-sm bg-slate-800/50 border border-white/5"
               >
                 <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                   <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover" />

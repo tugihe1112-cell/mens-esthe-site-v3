@@ -19,7 +19,7 @@ export default function PrivacyPage() {
 
         <h1 className="text-2xl md:text-3xl font-black text-white mb-8 border-b border-white/10 pb-4">プライバシーポリシー</h1>
 
-        <div className="bg-slate-900/50 backdrop-blur rounded-2xl border border-white/5 p-6 md:p-8 shadow-xl space-y-8 text-sm md:text-base leading-relaxed text-slate-300">
+        <div className="bg-slate-900/50 backdrop-blur rounded-sm border border-white/5 p-6 md:p-8 shadow-xl space-y-8 text-sm md:text-base leading-relaxed text-slate-300">
           <p>
             当サイト（以下、「本サービス」といいます。）は、ユーザーの皆様の個人情報について、以下のとおりプライバシーポリシー（以下、「本ポリシー」といいます。）を定めます。
           </p>

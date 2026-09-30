@@ -52,11 +52,11 @@ export default function RatingDisplay({
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <span className={`${currentSize.numberClass} text-yellow-400 font-bold`}>
+      <span className={`${currentSize.numberClass} text-pink-400 font-bold`}>
         {safeRating.toFixed(1)}
       </span>
       {showStars && (
-        <span className={`${currentSize.starsClass} text-yellow-400`}>
+        <span className={`${currentSize.starsClass} text-pink-400`}>
           {renderStars(safeRating)}
         </span>
       )}

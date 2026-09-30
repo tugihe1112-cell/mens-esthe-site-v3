@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
+import LineIcon from '../components/LineIcon.jsx';
 import { FormProvider, useFormContext, Controller } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from '../compat/router';
 import { Toaster, toast } from 'react-hot-toast';
@@ -131,18 +132,18 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
               ・公開範囲 … 12_ のトリガーで、公式登録セラピストへの**最初の1件だけ**が公開。
                           2件目以降・手入力セラピスト・指名なしは非公開で、
                           閲覧権のある人だけが読める */}
-        <div className="mt-3 space-y-1.5 rounded-xl border border-pink-500/20 bg-pink-500/5 px-3 py-2.5 text-xs font-medium leading-relaxed text-slate-300">
-          <p>📗 <span className="text-white">200字で3日間、700字で7日間</span>の閲覧権が付きます</p>
-          <p>👤 投稿者名は<span className="text-white">アカウントの表示名</span>（未設定なら「名無しさん」）。本名やメールアドレスは公開されません</p>
-          <p>🔓 そのセラピストへの<span className="text-white">最初の口コミは公開</span>されます。2件目以降は非公開で、閲覧権のある方だけが読めます</p>
+        <div className="mt-3 space-y-1.5 rounded-sm border border-pink-500/20 bg-pink-500/5 px-3 py-2.5 text-xs font-medium leading-relaxed text-slate-300">
+          <p className="flex gap-1.5"><LineIcon name="unlock" size={14} className="mt-0.5 text-pink-300" /><span><span className="text-white">200字で3日間、700字で7日間</span>の閲覧権が付きます</span></p>
+          <p className="flex gap-1.5"><LineIcon name="person" size={14} className="mt-0.5 text-pink-300" /><span>投稿者名は<span className="text-white">アカウントの表示名</span>（未設定なら「名無しさん」）。本名やメールアドレスは公開されません</span></p>
+          <p className="flex gap-1.5"><LineIcon name="chat" size={14} className="mt-0.5 text-pink-300" /><span>そのセラピストへの<span className="text-white">最初の口コミは公開</span>されます。2件目以降は非公開で、閲覧権のある方だけが読めます</span></p>
         </div>
 
         {/* ⚠️ 下書き機能の「存在」を書き始める前に伝える（2026-08-18・okabayashi指摘）。
                保存状態の表示は「書いた後の確認」でしかなく、**着手前の不安**は消せない。
                「700字も書くのか、途中でやめたら無駄になる」と思われた時点で離脱するので、
                最初に読まれるこの位置で先に約束する。緑＝安心の色で他の注意書きと区別。 */}
-        <div className="mt-2 flex items-start gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.07] px-3 py-2.5">
-          <span className="text-base leading-none mt-0.5">💾</span>
+        <div className="mt-2 flex items-start gap-2 rounded-sm border border-emerald-500/25 bg-emerald-500/[0.07] px-3 py-2.5">
+          <span className="leading-none mt-0.5 text-emerald-300"><LineIcon name="save" size={15} /></span>
           <p className="text-xs font-medium leading-relaxed text-slate-300">
             <span className="font-black text-emerald-300">書きかけは自動で保存されます。</span>
             <br className="sm:hidden" />
@@ -151,12 +152,12 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
         </div>
       </div>
 
-      <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl">
+      <div className="bg-slate-900 p-5 rounded-sm border border-white/5 shadow-xl">
         <label className="block text-xs font-bold text-slate-400 mb-3 pl-1">店舗名</label>
 
         {paramShopId ? (
           /* URLから来た場合は固定表示 */
-          <div className="w-full bg-black/30 border border-white/10 rounded-xl p-4 cursor-not-allowed">
+          <div className="w-full bg-black/30 border border-white/10 rounded-sm p-4 cursor-not-allowed">
             <span className="block text-white font-bold">{selectedShopName || '店舗が選択されています'}</span>
             {shopLocationLabel(selectedShop) && <span className="mt-1 block text-xs font-medium text-slate-400">{shopLocationLabel(selectedShop)}</span>}
           </div>
@@ -170,7 +171,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
               onFocus={() => setShowSuggestions(true)}
               placeholder="店舗名を入力して検索..."
               autoComplete="off"
-              className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white font-bold focus:border-pink-500 transition outline-none placeholder:text-slate-600"
+              className="w-full bg-black/20 border border-white/10 rounded-sm p-4 text-white font-bold focus:border-pink-500 transition outline-none placeholder:text-slate-600"
             />
             {/* 選択済みチェックマーク */}
             {selectedShopId && (
@@ -187,7 +188,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
 
             {/* 候補ドロップダウン */}
             {showSuggestions && suggestions.length > 0 && (
-              <ul className="absolute z-50 top-full mt-1 w-full bg-slate-800 border border-white/10 rounded-xl shadow-2xl max-h-64 overflow-y-auto">
+              <ul className="absolute z-50 top-full mt-1 w-full bg-slate-800 border border-white/10 rounded-sm shadow-2xl max-h-64 overflow-y-auto">
                 {suggestions.map(shop => (
                   <li key={shop.id}>
                     <button
@@ -207,7 +208,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
       </div>
 
       {selectedShopId && (
-        <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl animate-in fade-in duration-500">
+        <div className="bg-slate-900 p-5 rounded-sm border border-white/5 shadow-xl animate-in fade-in duration-500">
           <label className="block text-xs font-bold text-slate-400 mb-4 pl-1">セラピスト</label>
 
           {customMode ? (
@@ -220,7 +221,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
                   value={therapistName || ''}
                   onChange={(e) => setValue('therapistName', e.target.value)}
                   autoFocus
-                  className="w-full bg-black/30 border border-purple-500/60 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-purple-400 placeholder:text-slate-600 transition"
+                  className="w-full bg-black/30 border border-purple-500/60 rounded-sm px-4 py-3 text-white text-sm outline-none focus:border-purple-400 placeholder:text-slate-600 transition"
                 />
                 {therapistName && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-400 text-xs font-bold">✓</div>
@@ -268,13 +269,13 @@ const TherapistGrid = ({ shopTherapists, selectedTherapistId, selectTherapist, e
     <div>
       {/* 検索バー */}
       <div className="relative mb-4">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">🔍</span>
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><LineIcon name="search" size={15} /></span>
         <input
           type="text"
           value={filter}
           onChange={e => setFilter(e.target.value)}
           placeholder="セラピスト名で絞り込み..."
-          className="w-full bg-black/30 border border-white/10 rounded-xl pl-8 pr-8 py-2.5 text-white text-sm outline-none focus:border-pink-500 transition placeholder:text-slate-600"
+          className="w-full bg-black/30 border border-white/10 rounded-sm pl-8 pr-8 py-2.5 text-white text-sm outline-none focus:border-pink-500 transition placeholder:text-slate-600"
         />
         {filter && (
           <button
@@ -292,7 +293,7 @@ const TherapistGrid = ({ shopTherapists, selectedTherapistId, selectTherapist, e
             type="button"
             key={t.id}
             onClick={() => selectTherapist(t)}
-            className={`p-2 rounded-2xl border flex flex-col items-center gap-2 transition active:scale-95 ${selectedTherapistId == t.id ? 'bg-pink-600 border-pink-500 text-white shadow-lg shadow-pink-900/30' : 'bg-black/20 border-white/5 text-slate-400 hover:bg-white/5'}`}
+            className={`p-2 rounded-sm border flex flex-col items-center gap-2 transition active:scale-95 ${selectedTherapistId == t.id ? 'bg-pink-500 border-pink-500 text-slate-950' : 'bg-black/20 border-white/5 text-slate-400 hover:bg-white/5'}`}
           >
             <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-800 border border-white/10">
               <LazyImage src={t.image_url || t.image} alt={t.name} className="w-full h-full object-cover" />
@@ -305,9 +306,9 @@ const TherapistGrid = ({ shopTherapists, selectedTherapistId, selectTherapist, e
         <button
           type="button"
           onClick={enterCustomMode}
-          className="p-4 rounded-2xl border border-dashed border-white/20 bg-black/20 text-slate-500 flex flex-col items-center justify-center gap-2 transition active:scale-95 hover:border-purple-500/50 hover:text-purple-400"
+          className="p-4 rounded-sm border border-dashed border-white/20 bg-black/20 text-slate-500 flex flex-col items-center justify-center gap-2 transition active:scale-95 hover:border-purple-500/50 hover:text-purple-400"
         >
-          <span className="text-xl">✏️</span>
+          <span className="text-pink-300"><LineIcon name="pen" size={20} /></span>
           <span className="text-[10px] font-bold leading-tight text-center">リストに{'\n'}いない</span>
         </button>
       </div>
@@ -346,7 +347,7 @@ const Step2_Rating = () => {
 
       {/* ⚠️ 一言コメントは必ず「任意」にすること。
           必須にすると、体験談の崖を下げるつもりが逆に6つ増える（2026-08-26 設計判断）。 */}
-      <div className="bg-slate-900 p-5 rounded-2xl border border-white/5 shadow-xl space-y-7">
+      <div className="bg-slate-900 p-5 rounded-sm border border-white/5 shadow-xl space-y-7">
         {RATING_CONFIG.map((item) => (
           <div key={item.id} className="space-y-2">
             <Controller
@@ -367,14 +368,14 @@ const Step2_Rating = () => {
               maxLength={120}
               {...register(`ratingNotes.${item.id}`)}
               placeholder={`${item.label}について一言（任意）`}
-              className="w-full bg-slate-950/60 border border-white/5 rounded-xl px-3 py-2 text-white placeholder-slate-600 focus:border-pink-500/40 focus:outline-none transition"
+              className="w-full bg-slate-950/60 border border-white/5 rounded-sm px-3 py-2 text-white placeholder-slate-600 focus:border-pink-500/40 focus:outline-none transition"
             />
           </div>
         ))}
       </div>
 
       {/* 書いた一言が無駄にならないこと（＝本文に入り文字数に数えること）をその場で示す */}
-      <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl px-4 py-3">
+      <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-sm px-4 py-3">
         <p className="text-[11px] text-emerald-300 leading-relaxed">
           {noteChars > 0
             ? <>✓ 一言コメント <span className="font-black">{noteChars}文字</span> は文字数に加算され、口コミの最後に一緒に公開されます。</>
@@ -382,7 +383,7 @@ const Step2_Rating = () => {
         </p>
       </div>
 
-      <div className="bg-slate-900/50 p-6 rounded-[2rem] border border-white/5 shadow-xl">
+      <div className="bg-slate-900/50 p-6 rounded-sm border border-white/5 shadow-xl">
         <label className="block text-xs font-bold text-slate-400 mb-4 tracking-wide pl-1">タグ（任意）</label>
         <TagSelector selectedTags={tags} setSelectedTags={(newTags) => setValue('tags', newTags)} />
       </div>
@@ -429,8 +430,8 @@ const Step3_Story = ({ onMilestone }) => {
 
       {/* ⚠️ ここが最も離脱する場所（700字という量を目の当たりにする瞬間）。
              「一度に書き切らなくていい」と明示しないと、着手そのものを諦められる。 */}
-      <div className="flex items-start gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.07] px-3 py-2.5">
-        <span className="text-base leading-none mt-0.5">💾</span>
+      <div className="flex items-start gap-2 rounded-sm border border-emerald-500/25 bg-emerald-500/[0.07] px-3 py-2.5">
+        <span className="leading-none mt-0.5 text-emerald-300"><LineIcon name="save" size={15} /></span>
         <p className="text-xs font-medium leading-relaxed text-slate-300">
           <span className="font-black text-emerald-300">一度に書き切らなくて大丈夫です。</span>
           入力は自動保存されるので、途中で閉じても続きから書けます
@@ -438,7 +439,7 @@ const Step3_Story = ({ onMilestone }) => {
       </div>
 
       {/* 達成メーター（0→200字=3日→700字=7日の2段ゴール。しきい値通過でマイルストーンが点灯） */}
-      <div className="bg-slate-900/60 rounded-2xl p-4 border border-white/5">
+      <div className="bg-slate-900/60 rounded-sm p-4 border border-white/5">
         <div className="flex items-baseline justify-between mb-2">
           <span className="text-xs text-slate-400 font-bold">合計文字数</span>
           <span className={`text-lg font-black ${reached700 ? 'text-emerald-400' : reached200 ? 'text-amber-400' : 'text-white'}`}>
@@ -459,16 +460,16 @@ const Step3_Story = ({ onMilestone }) => {
         {/* マイルストーン2つ（通過で色が点く＝完走のご褒美を可視化） */}
         <div className="flex gap-2 mt-2">
           <span className={`flex-1 text-center text-[11px] font-bold rounded-lg py-1 border transition ${reached200 ? 'bg-amber-500/15 text-amber-300 border-amber-500/40' : 'bg-white/5 text-slate-500 border-white/5'}`}>
-            {reached200 ? '✅ 200字・3日分確定！' : `200字で3日（あと${MIN_CHARS - totalChars}）`}
+            {reached200 ? '200字・3日分確定' : `200字で3日（あと${MIN_CHARS - totalChars}）`}
           </span>
           <span className={`flex-1 text-center text-[11px] font-bold rounded-lg py-1 border transition ${reached700 ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40' : 'bg-white/5 text-slate-500 border-white/5'}`}>
-            {reached700 ? '🎉 700字・7日分確定！' : `700字で7日（あと${Math.max(0, BONUS_CHARS - totalChars)}）`}
+            {reached700 ? '700字・7日分確定' : `700字で7日（あと${Math.max(0, BONUS_CHARS - totalChars)}）`}
           </span>
         </div>
       </div>
 
-      <div className="bg-slate-900/60 backdrop-blur-md rounded-[2rem] p-6 border border-white/5 shadow-2xl relative">
-          <div className="absolute top-8 bottom-8 left-[27px] w-0.5 bg-gradient-to-b from-pink-500 via-purple-500 to-blue-500 opacity-30"></div>
+      <div className="bg-slate-900/60 backdrop-blur-md rounded-sm p-6 border border-white/5 shadow-2xl relative">
+          <div className="absolute top-8 bottom-8 left-[27px] w-px bg-pink-500 opacity-40"></div>
           
           {/* ⚠️ 直接入力する区分だけを描く。ratings_note は採点欄から組み立てられる区分なので
                  ここに欄を出さない（出すと同じ内容を2回書かせることになる）。 */}
@@ -481,7 +482,7 @@ const Step3_Story = ({ onMilestone }) => {
                 <span className="text-slate-500 text-[10px]">{section.desc}</span>
               </div>
               
-              <div className="bg-black/20 rounded-2xl p-4 border border-white/5 hover:border-white/10 transition-all">
+              <div className="bg-black/20 rounded-sm p-4 border border-white/5 hover:border-white/10 transition-all">
                 <textarea 
                   {...register(`story.${section.id}`)}
                   placeholder={section.placeholder}
@@ -491,7 +492,7 @@ const Step3_Story = ({ onMilestone }) => {
               </div>
               {STORY_HINTS[section.id] && (
                 <div className="flex flex-wrap gap-1.5 mt-2 pl-1">
-                  <span className="text-[10px] text-slate-600 self-center">💡 例:</span>
+                  <span className="text-[11px] text-slate-400 self-center">例:</span>
                   {STORY_HINTS[section.id].map(h => (
                     <span key={h} className="text-[10px] text-slate-500 bg-white/5 border border-white/5 rounded-full px-2 py-0.5">{h}</span>
                   ))}
@@ -523,7 +524,7 @@ const Step4_Confirm = ({ isSubmitting }) => {
         <p className="text-slate-500 text-sm">この内容で投稿しますか？</p>
       </div>
 
-      <div className="bg-slate-900/50 p-8 rounded-3xl text-center border border-white/10">
+      <div className="bg-slate-900/50 p-8 rounded-sm text-center border border-white/10">
         {therapistLabel && (
           <div className="mb-4 inline-flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
             <span className="text-slate-400 text-xs">対象セラピスト:</span>
@@ -535,7 +536,7 @@ const Step4_Confirm = ({ isSubmitting }) => {
       </div>
 
       {ratingsNote && (
-        <div className="bg-slate-900/50 rounded-3xl border border-white/10 p-5 text-left">
+        <div className="bg-slate-900/50 rounded-sm border border-white/10 p-5 text-left">
           <p className="text-[11px] font-black tracking-wide text-slate-400 mb-1">採点コメント</p>
           <p className="text-[11px] text-slate-500 mb-3">
             採点欄に書いた一言です。<span className="text-slate-300 font-bold">体験談の最後に、この形で一緒に公開されます。</span>
@@ -554,16 +555,16 @@ const Step4_Confirm = ({ isSubmitting }) => {
       <button 
         type="submit"
         disabled={isSubmitting}
-        className="w-full py-4 rounded-2xl font-black text-lg text-white bg-gradient-to-r from-pink-600 to-purple-600 shadow-xl shadow-pink-900/40 hover:scale-[1.02] hover:shadow-pink-900/60 transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full py-4 rounded-sm font-bold text-lg text-slate-950 bg-pink-500 hover:bg-pink-400 shadow-xl transition-colors active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {isSubmitting ? (
           <>
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            <div className="w-5 h-5 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin"></div>
             <span>投稿中...</span>
           </>
         ) : (
           <>
-            <span>🚀</span> 投稿を完了する
+            <LineIcon name="send" size={16} /> 投稿を完了する
           </>
         )}
       </button>
@@ -853,7 +854,7 @@ export default function PostReviewPage() {
     // pendingPublish=true ＝ 戻ってきたら確認画面へ自動で飛ばす（公開する意思があるため）
     if (!user) {
       saveDraft(data, TOTAL_STEPS, true);
-      toast('ログイン / 無料登録で投稿が完了します 🔑', { duration: 4000 });
+      toast('ログイン / 無料登録で投稿が完了します', { duration: 4000 });
       // ⚠️ compat useNavigate は state を渡せない（Next Pages Router）。redirectはクエリで渡す。
       navigate('/login?redirect=%2Fpost-review');
       return;
@@ -916,12 +917,12 @@ export default function PostReviewPage() {
         <Header />
         <div className="pt-24 pb-32 px-4">
           <div className="max-w-md mx-auto text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-3xl mb-5 shadow-xl shadow-pink-900/40">🎉</div>
+            <div className="w-16 h-16 mx-auto rounded-full border border-pink-500 text-pink-400 flex items-center justify-center mb-5"><LineIcon name="check" size={30} strokeWidth={1.6} /></div>
             <h1 className="text-2xl font-black text-white mb-2">投稿ありがとうございます！</h1>
             <p className="text-slate-400 text-sm mb-6">あなたの体験談が投稿されました。</p>
 
             {/* 付与された閲覧日数 */}
-            <div className="bg-gradient-to-br from-purple-900/50 to-slate-900 border border-purple-500/25 rounded-2xl p-6 mb-4">
+            <div className="bg-gradient-to-br from-purple-900/50 to-slate-900 border border-purple-500/25 rounded-sm p-6 mb-4">
               <div className="text-[11px] font-bold text-purple-300 tracking-widest mb-1">閲覧権が付与されました</div>
               <div className="text-4xl font-black text-white leading-none mb-1">{completed.grantedDays}<span className="text-lg ml-1">日間</span></div>
               <p className="text-[11px] text-slate-400 mt-2">
@@ -932,8 +933,8 @@ export default function PostReviewPage() {
             </div>
 
             {/* 週次メール通知の案内（B-3・リテンション） */}
-            <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-4 mb-6 text-left flex items-start gap-3">
-              <span className="text-xl shrink-0">📬</span>
+            <div className="bg-slate-900/60 border border-white/10 rounded-sm p-4 mb-6 text-left flex items-start gap-3">
+              <span className="shrink-0 text-pink-300"><LineIcon name="mail" size={20} /></span>
               <p className="text-xs text-slate-400 leading-relaxed">
                 あなたの口コミが読まれると、<b className="text-slate-200">「今週◯回読まれました」</b>と週次メールでお知らせします。誰かの役に立った実感が届きます。
               </p>
@@ -944,14 +945,14 @@ export default function PostReviewPage() {
               <button
                 type="button"
                 onClick={() => navigate(completed.reviewLink)}
-                className="w-full py-3.5 rounded-2xl font-black text-white bg-gradient-to-r from-pink-600 to-purple-600 shadow-lg hover:scale-[1.02] transition active:scale-95"
+                className="w-full py-3.5 rounded-sm font-black text-white bg-gradient-to-r from-pink-600 to-purple-600 shadow-lg hover:scale-[1.02] transition active:scale-95"
               >
                 投稿した口コミを見る →
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/popular-reviews')}
-                className="w-full py-3 rounded-2xl font-bold text-slate-200 bg-slate-900 border border-white/10 hover:border-pink-500/40 transition"
+                className="w-full py-3 rounded-sm font-bold text-slate-200 bg-slate-900 border border-white/10 hover:border-pink-500/40 transition"
               >
                 みんなの口コミを読む
               </button>
@@ -1020,7 +1021,7 @@ export default function PostReviewPage() {
 
               {/* 書きかけの下書きがある場合のバナー。勝手に復元せず本人に選ばせる。 */}
               {draftPrompt && (
-                <div className="mb-6 rounded-2xl border border-pink-500/30 bg-pink-500/[0.08] p-4">
+                <div className="mb-6 rounded-sm border border-pink-500/30 bg-pink-500/[0.08] p-4">
                   <p className="text-sm font-black text-white">書きかけの口コミがあります</p>
                   <p className="text-[11px] text-slate-400 mt-1">
                     最終保存 {formatSavedAt(draftPrompt.savedAt)}
@@ -1039,14 +1040,14 @@ export default function PostReviewPage() {
                     <button
                       type="button"
                       onClick={resumeDraft}
-                      className="flex-1 py-3 rounded-xl bg-white text-slate-900 font-black text-sm active:scale-95 transition"
+                      className="flex-1 py-3 rounded-sm bg-pink-500 text-slate-950 font-bold text-sm active:scale-95 transition-colors hover:bg-pink-400"
                     >
                       続きから書く
                     </button>
                     <button
                       type="button"
                       onClick={discardDraft}
-                      className="px-4 py-3 rounded-xl border border-white/15 text-slate-300 font-bold text-sm active:scale-95 transition"
+                      className="px-4 py-3 rounded-sm border border-white/15 text-slate-300 font-bold text-sm active:scale-95 transition"
                     >
                       破棄
                     </button>
@@ -1087,7 +1088,7 @@ export default function PostReviewPage() {
                 >
                   {/* 保存状態＋手動保存。書いている最中は指も視線もこの位置にあるので、
                       「保存されている」ことがここに出ていないと安心材料にならない。 */}
-                  <div className="pointer-events-auto w-full max-w-md flex items-center justify-between gap-2 rounded-xl bg-slate-900/90 border border-white/10 backdrop-blur px-3 py-2">
+                  <div className="pointer-events-auto w-full max-w-md flex items-center justify-between gap-2 rounded-sm bg-slate-900/90 border border-white/10 backdrop-blur px-3 py-2">
                     <span className="min-w-0 flex items-center gap-1.5 text-[11px] font-bold">
                       {draftStatus === 'saving' ? (
                         <>
@@ -1115,7 +1116,7 @@ export default function PostReviewPage() {
                   <button
                     type="button"
                     onClick={nextStep}
-                    className="pointer-events-auto w-full max-w-md py-4 rounded-2xl font-black text-lg shadow-xl bg-white text-slate-900 hover:bg-slate-200 transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                    className="pointer-events-auto w-full max-w-md py-4 rounded-sm font-bold text-lg shadow-xl bg-pink-500 text-slate-950 hover:bg-pink-400 transition-colors active:scale-95 flex items-center justify-center gap-2"
                   >
                     次へ進む <span>→</span>
                   </button>

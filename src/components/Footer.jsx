@@ -111,7 +111,7 @@ export default function Footer({ variant = 'full', statsOverride = null }) {
               <Link
                 key={slug}
                 to={`/area/${slug}`}
-                className="group flex flex-col items-center justify-center rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-pink-500/40 transition px-2 py-2.5 text-center"
+                className="group flex flex-col items-center justify-center rounded-sm bg-slate-900 hover:bg-slate-800 border border-white/5 hover:border-pink-500/40 transition px-2 py-2.5 text-center"
               >
                 <span className="text-xs font-bold text-slate-200 group-hover:text-pink-400 transition leading-tight truncate w-full">{label}</span>
                 <span className="text-xs text-slate-600 leading-tight mt-0.5">メンズエステ</span>

@@ -185,7 +185,7 @@ export default function AreaSSRPage({ ssr }) {
              Googlebotには見えない＝ここをSSRで出すことに意味がある。 */}
       {shopList.length > 0 && (
         <section className={`max-w-5xl mx-auto px-4 -mt-4 ${latestReviews.length > 0 ? 'pb-6' : 'pb-28'}`}>
-          <div className="rounded-2xl border border-white/10 bg-slate-900 p-4">
+          <div className="rounded-sm border border-white/10 bg-slate-900 p-4">
             <h2 className="text-base font-black text-white mb-3">{prefName}の掲載店舗</h2>
             <ul className="flex flex-wrap gap-2">
               {shopList.slice(0, 30).map((s) => (
@@ -212,18 +212,18 @@ export default function AreaSSRPage({ ssr }) {
       {/* Tier 2-1: エリアの最新の本物口コミ（SSR・エリアページに一次コンテンツ＋口コミページへの内部リンク） */}
       {latestReviews.length > 0 && (
         <section className="max-w-5xl mx-auto px-4 pb-28 -mt-4">
-          <div className="rounded-2xl border border-white/10 bg-slate-900 p-4">
+          <div className="rounded-sm border border-white/10 bg-slate-900 p-4">
             <h2 className="text-base font-black text-white mb-3">{prefName}の最新の口コミ</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {latestReviews.map((r, i) => (
                 <a
                   key={i}
                   href={`/shops/${r.shopId}/threads/${r.therapistId}`}
-                  className="block rounded-xl border border-white/10 bg-slate-800 hover:border-pink-500/40 transition p-3"
+                  className="block rounded-sm border border-white/10 bg-slate-800 hover:border-pink-500/40 transition p-3"
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-black text-white truncate">{r.therapistName}</span>
-                    {r.rating != null && <span className="text-xs font-bold text-pink-400 shrink-0 ml-2">★ {Number(r.rating).toFixed(1)}</span>}
+                    {r.rating != null && <span className="font-numeral text-lg text-slate-50 shrink-0 ml-2">{Number(r.rating).toFixed(1)}</span>}
                   </div>
                   <div className="text-[11px] text-slate-500 mb-1 truncate">{r.shopName}</div>
                   <p className="text-xs text-slate-400 line-clamp-2">{r.snippet}…</p>

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import LineIcon from '../components/LineIcon.jsx';
 import { useNavigate, useSearchParams, Link } from '../compat/router';
 import { supabase } from '../lib/supabase';
 import SeoHead from '../components/SeoHead.jsx';
@@ -116,14 +117,14 @@ export default function AuthConfirmPage() {
         )}
         {status === 'success' && (
           <>
-            <div className="text-5xl mb-4">✅</div>
+            <div className="mb-4 flex justify-center text-pink-400"><LineIcon name="check" size={44} strokeWidth={1.5} /></div>
             <p className="text-white font-bold text-xl mb-2">メール確認完了</p>
             <p className="text-slate-400 text-sm">続きの画面へ移動します...</p>
           </>
         )}
         {status === 'error' && (
           <>
-            <div className="text-5xl mb-4">❌</div>
+            <div className="mb-4 flex justify-center text-amber-300"><LineIcon name="alert" size={44} strokeWidth={1.5} /></div>
             <p className="text-white font-bold text-xl mb-2">リンクを確認できませんでした</p>
             <p className="text-slate-400 text-sm mb-6 leading-relaxed">
               有効期限が切れているか、すでに使用済みのリンクです。
@@ -134,7 +135,7 @@ export default function AuthConfirmPage() {
               <button
                 type="button"
                 onClick={() => navigate(destinationRef.current, { replace: true })}
-                className="w-full min-h-12 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-black transition"
+                className="w-full min-h-12 rounded-sm bg-pink-600 hover:bg-pink-500 text-white font-black transition"
               >
                 このまま続ける
               </button>
@@ -147,14 +148,14 @@ export default function AuthConfirmPage() {
               type === 'recovery' ? (
                 <Link
                   to="/login"
-                  className="flex min-h-12 w-full items-center justify-center rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-black transition"
+                  className="flex min-h-12 w-full items-center justify-center rounded-sm bg-pink-600 hover:bg-pink-500 text-white font-black transition"
                 >
                   パスワード再設定をやり直す
                 </Link>
               ) : (
                 <Link
                   to={loginHref}
-                  className="flex min-h-12 w-full items-center justify-center rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-black transition"
+                  className="flex min-h-12 w-full items-center justify-center rounded-sm bg-pink-600 hover:bg-pink-500 text-white font-black transition"
                 >
                   ログインする
                 </Link>

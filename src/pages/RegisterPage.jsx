@@ -206,7 +206,7 @@ export default function RegisterPage() {
           ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             {formError && (
-              <div role="alert" className="rounded-xl border border-rose-500/50 bg-rose-500/10 p-3">
+              <div role="alert" className="rounded-sm border border-rose-500/50 bg-rose-500/10 p-3">
                 <p className="ui-error">{formError.text || FORM_ERROR_TEXT.server}</p>
                 {formError.code === 'duplicate' && (
                   <Link to={withReturnTo('/login', returnTo)} className="ui-link inline-flex items-center min-h-11" style={{ fontSize: '13px' }}>

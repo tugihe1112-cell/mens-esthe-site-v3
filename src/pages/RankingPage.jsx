@@ -137,9 +137,9 @@ export default function RankingPage() {
           /* スケルトン: 表彰台3枠 + リスト5行 */
           <>
             <div className="grid grid-cols-3 gap-2 md:gap-6 items-end mb-16 px-1 min-h-[320px]">
-              <div className="order-1 h-52 bg-slate-800 animate-pulse rounded-3xl" />
-              <div className="order-2 h-72 bg-slate-800 animate-pulse rounded-3xl pb-8" />
-              <div className="order-3 h-44 bg-slate-800 animate-pulse rounded-3xl" />
+              <div className="order-1 h-52 bg-slate-800 animate-pulse rounded-sm" />
+              <div className="order-2 h-72 bg-slate-800 animate-pulse rounded-sm pb-8" />
+              <div className="order-3 h-44 bg-slate-800 animate-pulse rounded-sm" />
             </div>
             <RankingListSkeleton count={5} />
           </>
@@ -186,7 +186,7 @@ export default function RankingPage() {
             </div>
           </>
         ) : (
-          <div className="relative overflow-hidden rounded-3xl border border-pink-500/20 bg-gradient-to-br from-pink-950/40 to-purple-950/40 p-12 text-center animate-in fade-in zoom-in-95 duration-500">
+          <div className="relative overflow-hidden rounded-sm border border-pink-500/20 bg-gradient-to-br from-pink-950/40 to-purple-950/40 p-12 text-center animate-in fade-in zoom-in-95 duration-500">
             <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-purple-500/5 pointer-events-none" />
             <p className="text-pink-400 font-black tracking-widest text-xs uppercase mb-4">口コミ募集中</p>
             <h2 className="text-white font-black text-2xl md:text-3xl mb-3">
@@ -199,13 +199,13 @@ export default function RankingPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/post-review"
-                className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-black px-10 py-4 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-pink-900/40"
+                className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-black px-10 py-4 rounded-sm transition-all hover:scale-105 active:scale-95 shadow-lg shadow-pink-900/40"
               >
                 口コミを書く
               </Link>
               <Link
                 to="/popular-reviews"
-                className="inline-block bg-slate-800 hover:bg-slate-700 text-white font-bold px-10 py-4 rounded-xl transition-all border border-white/10"
+                className="inline-block bg-slate-800 hover:bg-slate-700 text-white font-bold px-10 py-4 rounded-sm transition-all border border-white/10"
               >
                 みんなの口コミを見る
               </Link>

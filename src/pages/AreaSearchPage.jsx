@@ -11,7 +11,7 @@ const AREAS = [
     en: 'SHINJUKU',
     desc: '眠らない街、最大の激戦区',
     tags: ['#No1激戦区', '#高級店多数'],
-    color: 'from-purple-600 to-indigo-900',
+    color: 'from-slate-800 to-slate-950',
     size: 'col-span-2 row-span-2' // 大きく表示
   },
   {
@@ -20,7 +20,7 @@ const AREAS = [
     en: 'SHIBUYA',
     desc: 'トレンドと熱気が交差する',
     tags: ['#美女多数', '#アクセス抜群'],
-    color: 'from-pink-600 to-rose-900',
+    color: 'from-slate-800 to-slate-950',
     size: 'col-span-1 row-span-1'
   },
   {
@@ -29,7 +29,7 @@ const AREAS = [
     en: 'IKEBUKURO',
     desc: 'ディープな魅力とコスパ',
     tags: ['#コスパ最強', '#隠れ家'],
-    color: 'from-blue-600 to-cyan-900',
+    color: 'from-slate-800 to-slate-950',
     size: 'col-span-1 row-span-1'
   },
   {
@@ -38,7 +38,7 @@ const AREAS = [
     en: 'GOTANDA',
     desc: '大人のための遊戯場',
     tags: ['#玄人好み', '#実力派'],
-    color: 'from-emerald-600 to-teal-900',
+    color: 'from-slate-800 to-slate-950',
     size: 'col-span-1 row-span-2' // 縦長
   },
   {
@@ -47,7 +47,7 @@ const AREAS = [
     en: 'YOSHIWARA',
     desc: '伝統と格式の遊郭跡',
     tags: ['#ソープ街', '#老舗'],
-    color: 'from-red-600 to-orange-900',
+    color: 'from-slate-800 to-slate-950',
     size: 'col-span-1 row-span-1'
   },
   {
@@ -56,7 +56,7 @@ const AREAS = [
     en: 'YOKOHAMA',
     desc: '港町のロマンチックな夜',
     tags: ['#洗練', '#デートスポット'],
-    color: 'from-sky-600 to-blue-900',
+    color: 'from-slate-800 to-slate-950',
     size: 'col-span-1 row-span-1'
   },
   {
@@ -65,7 +65,7 @@ const AREAS = [
     en: 'KAWASAKI',
     desc: '日本屈指の風俗街',
     tags: ['#濃厚', '#サービス重視'],
-    color: 'from-amber-600 to-yellow-900',
+    color: 'from-slate-800 to-slate-950',
     size: 'col-span-2 row-span-1' // 横長
   },
 ];
@@ -95,7 +95,7 @@ export default function AreaSearchPage() {
             <Link 
               key={area.id}
               to={`/search?q=${area.name}`}
-              className={`group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:z-10 hover:scale-[1.02] ${area.size}`}
+              className={`group relative rounded-sm overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:z-10 hover:scale-[1.02] ${area.size}`}
               style={{ animationDelay: `${idx * 100}ms` }}
             >
               {/* 外部写真に依存しない軽量背景。配信元の削除でカードが壊れる事故を防ぐ。 */}

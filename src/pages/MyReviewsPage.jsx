@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import LineIcon from '../components/LineIcon.jsx';
 import ModernReviewCard from '../components/ModernReviewCard.jsx';
 import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
@@ -55,30 +56,30 @@ export default function MyReviewsPage() {
         </div>
 
         {authLoading || loading ? (
-          <div className="space-y-4">{[1, 2].map((item) => <div key={item} className="h-40 animate-pulse rounded-2xl bg-slate-900" />)}</div>
+          <div className="space-y-4">{[1, 2].map((item) => <div key={item} className="h-40 animate-pulse rounded-sm bg-slate-900" />)}</div>
         ) : !user ? (
-          <section className="rounded-3xl border border-white/10 bg-slate-900/50 p-8 text-center">
-            <p className="text-4xl mb-4">🔒</p>
+          <section className="rounded-sm border border-white/10 bg-slate-900/50 p-8 text-center">
+            <p className="mb-4 flex justify-center text-slate-500"><LineIcon name="lock" size={36} strokeWidth={1.5} /></p>
             <h2 className="text-xl font-black text-white mb-2">ログインが必要です</h2>
-            <Link to="/login?redirect=%2Fmy-reviews" className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-pink-600 px-6 font-bold text-white">ログイン</Link>
+            <Link to="/login?redirect=%2Fmy-reviews" className="mt-5 inline-flex min-h-11 items-center rounded-sm bg-pink-600 px-6 font-bold text-white">ログイン</Link>
           </section>
         ) : error ? (
-          <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-5 text-red-200">{error}</div>
+          <div className="rounded-sm border border-red-500/30 bg-red-500/10 p-5 text-red-200">{error}</div>
         ) : reviews.length > 0 ? (
           <>
             <section className="grid grid-cols-3 gap-2 md:gap-3 mb-7">
-              <div className="rounded-2xl border border-white/5 bg-slate-900/70 p-3 text-center"><small className="text-slate-500">投稿数</small><b className="block text-xl text-white">{reviews.length}</b></div>
-              <div className="rounded-2xl border border-white/5 bg-slate-900/70 p-3 text-center"><small className="text-slate-500">平均評価</small><b className="block text-xl text-yellow-300">{stats.average}</b></div>
-              <div className="rounded-2xl border border-white/5 bg-slate-900/70 p-3 text-center"><small className="text-slate-500">総文字数</small><b className="block text-xl text-blue-300">{stats.totalChars.toLocaleString()}</b></div>
+              <div className="rounded-sm border border-white/5 bg-slate-900/70 p-3 text-center"><small className="text-slate-500">投稿数</small><b className="block text-xl text-white">{reviews.length}</b></div>
+              <div className="rounded-sm border border-white/5 bg-slate-900/70 p-3 text-center"><small className="text-slate-500">平均評価</small><b className="block font-numeral text-2xl text-slate-50">{stats.average}</b></div>
+              <div className="rounded-sm border border-white/5 bg-slate-900/70 p-3 text-center"><small className="text-slate-500">総文字数</small><b className="block font-numeral text-2xl text-slate-50">{stats.totalChars.toLocaleString()}</b></div>
             </section>
             <div>{reviews.map((review) => <ModernReviewCard key={review.id} review={review} />)}</div>
           </>
         ) : (
-          <section className="rounded-3xl border border-dashed border-slate-700 bg-slate-900/30 py-16 px-6 text-center">
-            <p className="text-5xl mb-5">✍️</p>
+          <section className="rounded-sm border border-dashed border-slate-700 bg-slate-900/30 py-16 px-6 text-center">
+            <p className="mb-5 flex justify-center text-pink-300"><LineIcon name="pen" size={38} strokeWidth={1.5} /></p>
             <h2 className="text-xl font-black text-white mb-2">まだ投稿がありません</h2>
             <p className="text-sm text-slate-400 mb-7">あなたの体験が、次にお店を選ぶ人の助けになります。</p>
-            <Link to="/post-review" className="inline-flex min-h-12 items-center rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 px-7 font-black text-white">口コミを書く</Link>
+            <Link to="/post-review" className="inline-flex min-h-12 items-center rounded-sm bg-gradient-to-r from-pink-600 to-purple-600 px-7 font-black text-white">口コミを書く</Link>
           </section>
         )}
       </main>

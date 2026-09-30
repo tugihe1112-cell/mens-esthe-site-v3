@@ -19,7 +19,7 @@ export default function TermsPage() {
 
         <h1 className="text-2xl md:text-3xl font-black text-white mb-8 border-b border-white/10 pb-4">利用規約</h1>
 
-        <div className="bg-slate-900/50 backdrop-blur rounded-2xl border border-white/5 p-6 md:p-8 shadow-xl space-y-8 text-sm md:text-base leading-relaxed text-slate-300">
+        <div className="bg-slate-900/50 backdrop-blur rounded-sm border border-white/5 p-6 md:p-8 shadow-xl space-y-8 text-sm md:text-base leading-relaxed text-slate-300">
           <p>
             この利用規約（以下、「本規約」といいます。）は、当サイト（以下、「本サービス」といいます。）の利用条件を定めるものです。ご利用される皆様（以下、「ユーザー」といいます。）には、本規約に従って本サービスをご利用いただきます。
           </p>

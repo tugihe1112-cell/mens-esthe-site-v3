@@ -10,7 +10,7 @@ export const ProgressBar = ({ current, total }) => {
     //    z は Header(z-50) より上。高さ4pxなのでヘッダーの意匠を損なわない。
     <div className="fixed top-0 left-0 w-full h-1 bg-slate-900/80 z-[60]">
       <div 
-        className="h-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(236,72,153,0.8)]" 
+        className="h-full bg-pink-500 transition-all duration-500 ease-out" 
         style={{ width: `${(current / total) * 100}%` }} 
       />
     </div>

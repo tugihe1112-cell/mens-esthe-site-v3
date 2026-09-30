@@ -35,7 +35,7 @@ function HeroPlaceholder() {
 }
 
 // topSlot＝スライダーの上に置く帯（ホームの日付入りの見出し帯・2026-09-30）。
-// ⚠️ ヘッダー（透明時）の高さ＝スマホ84px・PC112px（Header.jsx の py-2.5+64px / py-5+72px）の下に置く。
+// ⚠️ ヘッダーの高さ＝スマホ64px・PC72px（Header.jsx・U01-7）の下に置く。
 //    それより上だとヘッダーの墨のぼかしに隠れる。
 export default function TopHeroSlider({ initialHero = [], topSlot = null }) {
   const { shops, roomCounts } = useShopData();
@@ -106,7 +106,7 @@ export default function TopHeroSlider({ initialHero = [], topSlot = null }) {
 
   return (
     <div
-      className={`relative w-full bg-slate-950 ${topSlot ? 'pt-[84px] md:pt-[112px]' : 'pt-16 md:pt-10'} pb-2 md:pb-10`}
+      className={`relative w-full bg-slate-950 ${topSlot ? 'pt-16 lg:pt-[72px]' : 'pt-16 md:pt-10'} pb-2 md:pb-10`}
       style={{ overflow: 'hidden', isolation: 'isolate' }}
       onFocusCapture={handleFocusCapture}
       onBlurCapture={handleBlurCapture}
@@ -173,7 +173,7 @@ export default function TopHeroSlider({ initialHero = [], topSlot = null }) {
                 }}
               >
               <div
-                className="relative w-full h-full rounded-[1px] overflow-hidden"
+                className="relative w-full h-full rounded-sm overflow-hidden"
               >
                 {/* 店舗画像（先頭スライドは preload 済み・lazy にしない） */}
                 {shop.heroImageType === 'logo' ? (

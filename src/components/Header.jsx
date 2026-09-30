@@ -65,14 +65,16 @@ export default function Header() {
           isVisible ? 'translate-y-0' : '-translate-y-full'
         } ${
           isScrolled || mobileMenuOpen
-            ? 'bg-slate-950/95 backdrop-blur-md border-b border-slate-800 py-2 md:py-2.5' // スクロール時・メニュー開放時: ほぼ不透明
+            ? 'bg-slate-950/95 backdrop-blur-md border-b border-slate-800' // スクロール時・メニュー開放時: ほぼ不透明
             : isTransparentPage
-              ? 'bg-gradient-to-b from-slate-950/90 via-slate-950/50 to-transparent py-2.5 md:py-5' // 透明時: 墨のグラデーションで文字を見やすく
-              : 'bg-slate-950 border-b border-slate-800 py-2.5 md:py-3'
+              ? 'bg-gradient-to-b from-slate-950/90 via-slate-950/50 to-transparent' // 透明時: 墨のグラデーションで文字を見やすく
+              : 'bg-slate-950 border-b border-slate-800'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6">
-          {/* U01-7: 高さの基準はスマホ64px・PC72px */}
+          {/* U01-7: 高さの基準はスマホ64px・PC72px。
+              ⚠️ 2026-09-30: 外側に上下の余白（py-2.5 など）を足すと、ヘッダーが84〜112pxになり、
+                 各ページの上の余白（pt-20＝80px）より高くなって本文の頭が隠れていた。高さはこの行だけで決める。 */}
           <div className="flex items-center justify-between gap-3 sm:gap-4 min-h-[64px] lg:min-h-[72px]">
 
             {/* ロゴ（デザインA案「夜の文芸誌」・2026-09-30）: 明朝の「メンエスマップ」＋小さな欧文。

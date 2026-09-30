@@ -1,4 +1,5 @@
 import React from 'react';
+import LineIcon from '../components/LineIcon.jsx';
 import { historyLink, useRecentlyViewed } from '../hooks/useRecentlyViewed';
 import { Link, useNavigate } from '../compat/router';
 import LazyImage from '../components/LazyImage.jsx';
@@ -26,7 +27,7 @@ export default function HistoryPage() {
         <div className="flex items-center justify-between mb-6 md:mb-8 sticky top-14 md:top-24 z-30 bg-slate-950/90 backdrop-blur py-3 md:py-4 -mx-4 px-4 border-b border-white/5">
           <div>
             <h1 className="text-2xl font-black text-white flex items-center gap-3 tracking-tight">
-              <span className="text-3xl">🕒</span> 閲覧履歴
+              <span className="font-mincho font-bold">閲覧履歴</span>
             </h1>
             <p className="text-slate-400 text-xs font-bold mt-1 ml-1">最近チェックしたキャスト</p>
           </div>
@@ -43,8 +44,8 @@ export default function HistoryPage() {
 
         {/* Content */}
         {formattedHistory.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center bg-slate-900/30 rounded-[3rem] border border-dashed border-slate-800">
-             <div className="text-6xl mb-6 opacity-50 grayscale">🕰️</div>
+          <div className="flex flex-col items-center justify-center py-20 text-center bg-slate-900/30 rounded-sm border border-dashed border-slate-800">
+             <div className="mb-6 text-slate-600"><LineIcon name="clock" size={52} strokeWidth={1.3} /></div>
              <h3 className="text-xl font-bold text-white mb-2">閲覧履歴はありません</h3>
              <p className="text-slate-500 text-sm max-w-xs mx-auto mb-8">
                最近見たキャストや店舗がここに表示されます。
@@ -52,7 +53,7 @@ export default function HistoryPage() {
              </p>
              <Link 
                to="/search" 
-               className="px-8 py-3 rounded-xl font-bold text-white bg-pink-600 hover:bg-pink-500 shadow-lg shadow-pink-900/30 transition transform hover:-translate-y-1"
+               className="px-8 py-3 rounded-sm font-bold text-white bg-pink-600 hover:bg-pink-500 shadow-lg shadow-pink-900/30 transition transform hover:-translate-y-1"
              >
                キャストを探す
              </Link>
@@ -73,8 +74,8 @@ export default function HistoryPage() {
                   to={item.link} 
                   className="block"
                 >
-                  <div className="flex items-start gap-3 md:gap-5 bg-slate-900/50 p-3 md:p-4 rounded-2xl border border-white/5 hover:bg-slate-900 hover:border-pink-500/30 transition-all duration-300 shadow-lg group-hover:shadow-pink-900/10 group-hover:-translate-y-1">
-                    <div className="w-16 h-20 md:w-20 md:h-24 rounded-xl overflow-hidden flex-shrink-0 border border-white/5 relative bg-slate-800">
+                  <div className="flex items-start gap-3 md:gap-5 bg-slate-900/50 p-3 md:p-4 rounded-sm border border-white/5 hover:bg-slate-900 hover:border-pink-500/30 transition-all duration-300 shadow-lg group-hover:shadow-pink-900/10 group-hover:-translate-y-1">
+                    <div className="w-16 h-20 md:w-20 md:h-24 rounded-sm overflow-hidden flex-shrink-0 border border-white/5 relative bg-slate-800">
                       <LazyImage src={item.image_url || item.image} alt={item.name} className="w-full h-full object-cover transition duration-500 group-hover:scale-110" />
                     </div>
                     

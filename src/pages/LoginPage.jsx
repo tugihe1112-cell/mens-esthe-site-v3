@@ -152,7 +152,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div role="alert" className="rounded-xl border border-rose-500/50 bg-rose-500/10 p-3">
+              <div role="alert" className="rounded-sm border border-rose-500/50 bg-rose-500/10 p-3">
                 <p className="ui-error">{error.text}</p>
                 {/* ⚠️ 原因だけ出して終わらない。次の一手を必ず添える。 */}
                 {error.hint && <p className="ui-help mt-1.5">{error.hint}</p>}
@@ -164,7 +164,7 @@ export default function LoginPage() {
               </div>
             )}
             {resetSent && (
-              <div role="status" className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3">
+              <div role="status" className="rounded-sm border border-emerald-500/40 bg-emerald-500/10 p-3">
                 <p className="ui-help text-emerald-100">登録済みの場合は、パスワード再設定メールが届きます。</p>
               </div>
             )}

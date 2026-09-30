@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import LineIcon from '../components/LineIcon.jsx';
 import { Link, useNavigate } from '../compat/router';
 import { supabase } from '../lib/supabase';
 import SeoHead from '../components/SeoHead.jsx';
@@ -48,32 +49,32 @@ export default function ResetPasswordPage() {
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-16 text-white flex items-center justify-center">
       <SeoHead title="パスワード再設定" noindex />
-      <section className="w-full max-w-md rounded-3xl border border-white/10 bg-slate-900/80 p-7 shadow-2xl">
+      <section className="w-full max-w-md rounded-sm border border-white/10 bg-slate-900/80 p-7 shadow-2xl">
         <h1 className="text-2xl font-black mb-2">パスワード再設定</h1>
         {hasSession === null ? (
           <p className="text-slate-400">リンクを確認しています…</p>
         ) : !hasSession ? (
           <div>
             <p className="text-slate-300 mb-5">リンクの有効期限が切れているか、すでに使用済みです。</p>
-            <Link to="/login" className="inline-flex min-h-11 items-center rounded-xl bg-pink-600 px-5 font-bold">再設定メールを送り直す</Link>
+            <Link to="/login" className="inline-flex min-h-11 items-center rounded-sm bg-pink-600 px-5 font-bold">再設定メールを送り直す</Link>
           </div>
         ) : done ? (
           <div className="text-center py-5">
-            <p className="text-4xl mb-3">✅</p>
+            <p className="mb-3 flex justify-center text-pink-400"><LineIcon name="check" size={40} strokeWidth={1.5} /></p>
             <p className="font-black">パスワードを変更しました</p>
           </div>
         ) : (
           <form onSubmit={submit} className="space-y-4 mt-6">
-            {error && <p className="rounded-xl border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-200">{error}</p>}
+            {error && <p className="rounded-sm border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-200">{error}</p>}
             <label className="block text-sm font-bold">
               新しいパスワード
-              <input type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-slate-800 p-3 text-base outline-none focus:border-pink-500" />
+              <input type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2 w-full rounded-sm border border-white/10 bg-slate-800 p-3 text-base outline-none focus:border-pink-500" />
             </label>
             <label className="block text-sm font-bold">
               新しいパスワード（確認）
-              <input type="password" autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="mt-2 w-full rounded-xl border border-white/10 bg-slate-800 p-3 text-base outline-none focus:border-pink-500" />
+              <input type="password" autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="mt-2 w-full rounded-sm border border-white/10 bg-slate-800 p-3 text-base outline-none focus:border-pink-500" />
             </label>
-            <button disabled={saving} className="min-h-12 w-full rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 font-black disabled:opacity-50">{saving ? '変更中…' : 'パスワードを変更する'}</button>
+            <button disabled={saving} className="min-h-12 w-full rounded-sm bg-gradient-to-r from-pink-600 to-purple-600 font-black disabled:opacity-50">{saving ? '変更中…' : 'パスワードを変更する'}</button>
           </form>
         )}
       </section>

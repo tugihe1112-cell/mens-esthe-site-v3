@@ -217,7 +217,7 @@ export default function BrandPage({
         <div className="max-w-xl mx-auto px-4 py-24 text-center">
           <h1 className="text-2xl font-black mb-3">ブランドが見つかりません</h1>
           <p className="text-slate-400 text-sm mb-6">このページは削除されたか、URLが変わった可能性があります。</p>
-          <Link to="/search" className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-bold px-6 py-3 rounded-xl transition">セラピストを探す</Link>
+          <Link to="/search" className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-bold px-6 py-3 rounded-sm transition">セラピストを探す</Link>
         </div>
       </div>
     );

@@ -1,4 +1,5 @@
 import React from "react";
+import LineIcon from '../components/LineIcon.jsx';
 import { Link } from '../compat/router';
 import Header from "../components/Header.jsx";
 import SeoHead from "../components/SeoHead.jsx";
@@ -24,10 +25,10 @@ export default function PremiumPage() {
       />
       <Header />
       <div className="max-w-2xl mx-auto px-4 md:px-6 pt-24 pb-10">
-        <div className="bg-slate-900/60 backdrop-blur rounded-3xl p-8 md:p-12 border border-white/10 text-center">
+        <div className="bg-slate-900/60 backdrop-blur rounded-sm p-8 md:p-12 border border-white/10 text-center">
 
-          <div className="w-16 h-16 bg-slate-800 border border-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <span className="text-3xl">🛠️</span>
+          <div className="w-16 h-16 bg-slate-800 border border-white/10 rounded-sm flex items-center justify-center mx-auto mb-6">
+            <span className="text-slate-400"><LineIcon name="clock" size={30} strokeWidth={1.5} /></span>
           </div>
 
           <p className="text-slate-500 font-black text-[11px] tracking-widest mb-2">PREPARING</p>
@@ -39,7 +40,7 @@ export default function PremiumPage() {
           </p>
 
           {/* W2R（いま使える唯一の解放手段） */}
-          <div className="bg-gradient-to-br from-purple-950/70 to-slate-900 border border-purple-500/25 rounded-2xl p-6 mb-8 text-left">
+          <div className="bg-gradient-to-br from-purple-950/70 to-slate-900 border border-purple-500/25 rounded-sm p-6 mb-8 text-left">
             <h2 className="text-white font-black text-base mb-3">口コミを書けば一定期間読み放題</h2>
             <ul className="space-y-2 text-sm text-slate-300 font-bold">
               <li className="flex gap-2"><span className="text-purple-400">✓</span> 200文字以上の体験談で <span className="text-purple-300">3日間</span> の閲覧権を即時付与</li>
@@ -51,7 +52,7 @@ export default function PremiumPage() {
           <Link
             to="/post-review"
             onClick={() => trackEvent('click_paywall_cta', { target: 'post_review' })}
-            className="inline-block w-full max-w-md mx-auto px-12 py-4 rounded-2xl bg-gradient-to-r from-pink-600 to-purple-600 text-white text-base font-black transition-all hover:scale-[1.02] active:scale-95 shadow-lg shadow-pink-900/40"
+            className="inline-block w-full max-w-md mx-auto px-12 py-4 rounded-sm bg-gradient-to-r from-pink-600 to-purple-600 text-white text-base font-black transition-all hover:scale-[1.02] active:scale-95 shadow-lg shadow-pink-900/40"
           >
             口コミを書く →
           </Link>

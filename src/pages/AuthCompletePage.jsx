@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import LineIcon from '../components/LineIcon.jsx';
 import { useNavigate, useSearchParams, Link } from '../compat/router';
 import { supabase } from '../lib/supabase';
 import SeoHead from '../components/SeoHead.jsx';
@@ -122,7 +123,7 @@ export default function AuthCompletePage() {
 
         {status === 'success' && (
           <>
-            <div className="text-5xl mb-4">✅</div>
+            <div className="mb-4 flex justify-center text-pink-400"><LineIcon name="check" size={44} strokeWidth={1.5} /></div>
             <p className="text-white font-bold text-xl mb-2">メール確認が完了しました</p>
             <p className="text-slate-400 text-sm">元のページに戻ります...</p>
           </>
@@ -130,7 +131,7 @@ export default function AuthCompletePage() {
 
         {status === 'error' && (
           <>
-            <div className="text-5xl mb-4">⚠️</div>
+            <div className="mb-4 flex justify-center text-amber-300"><LineIcon name="alert" size={44} strokeWidth={1.5} /></div>
             <p className="text-white font-bold text-xl mb-2">確認後のログインを完了できませんでした</p>
             <p className="text-slate-400 text-sm mb-6 leading-relaxed">
               メールの確認自体は終わっている場合があります。
@@ -138,7 +139,7 @@ export default function AuthCompletePage() {
             </p>
             <Link
               to={withReturnTo('/login', returnTo)}
-              className="flex min-h-12 w-full items-center justify-center rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-black transition"
+              className="flex min-h-12 w-full items-center justify-center rounded-sm bg-pink-600 hover:bg-pink-500 text-white font-black transition"
             >
               ログインする
             </Link>

@@ -21,8 +21,8 @@ export function ShopDetailSkeleton() {
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
         <div className="h-10 bg-slate-800 rounded w-3/4"></div>
         <div className="flex gap-4">
-          <div className="flex-1 h-14 bg-slate-800 rounded-xl"></div>
-          <div className="flex-1 h-14 bg-slate-800 rounded-xl"></div>
+          <div className="flex-1 h-14 bg-slate-800 rounded-sm"></div>
+          <div className="flex-1 h-14 bg-slate-800 rounded-sm"></div>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@ export function MyPageSkeleton() {
         <div className="h-8 bg-slate-800 rounded w-48"></div>
         <div className="space-y-4">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-32 bg-slate-800 rounded-xl"></div>
+            <div key={i} className="h-32 bg-slate-800 rounded-sm"></div>
           ))}
         </div>
       </div>

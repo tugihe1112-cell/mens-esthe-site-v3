@@ -98,7 +98,7 @@ export default function ChatListPage() {
           {isLoading ? (
             <div className="space-y-3 mt-4">
               {[1,2,3].map(i => (
-                <div key={i} className="h-16 bg-slate-800/50 rounded-2xl animate-pulse" />
+                <div key={i} className="h-16 bg-slate-800/50 rounded-sm animate-pulse" />
               ))}
             </div>
           ) : rooms.length === 0 ? (
@@ -113,7 +113,7 @@ export default function ChatListPage() {
                 <Link
                   key={room.id}
                   to={`/chat/${room.id}`}
-                  className="flex items-center gap-4 bg-slate-900/80 border border-white/5 hover:border-indigo-500/30 rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                  className="flex items-center gap-4 bg-slate-900/80 border border-white/5 hover:border-indigo-500/30 rounded-sm p-4 transition-all duration-200 hover:-translate-y-0.5"
                 >
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
                     <span className="text-white font-black text-lg">👤</span>

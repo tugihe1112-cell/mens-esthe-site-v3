@@ -40,7 +40,7 @@ export default function StarRating({
             key={value}
             className={`
               ${sizeClass}
-              ${isFilled ? "text-yellow-400" : "text-gray-600"}
+              ${isFilled ? "text-pink-400" : "text-gray-600"}
               ${interactive ? "cursor-pointer hover:scale-125 transition" : ""}
             `}
             onClick={() => handleClick(value)}

@@ -33,7 +33,7 @@ export default function ShopStatusBanner({ shop, className = '' }) {
   return (
     <div
       data-role="shop-status-banner"
-      className={`rounded-xl border px-4 py-3 ${TONE[s.status]} ${className}`}
+      className={`rounded-sm border px-4 py-3 ${TONE[s.status]} ${className}`}
     >
       <p className="text-sm font-black">{s.label}</p>
       <p className="text-xs mt-1 leading-relaxed opacity-95">{s.note}</p>

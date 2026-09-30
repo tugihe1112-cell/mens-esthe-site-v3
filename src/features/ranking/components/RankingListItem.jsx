@@ -1,4 +1,5 @@
 import React from 'react';
+import LineIcon from '../../../components/LineIcon.jsx';
 import { Link } from '../../../compat/router';
 import LazyImage from '../../../components/LazyImage';
 
@@ -15,7 +16,7 @@ export const RankingListItem = ({ item, rank, delay }) => {
   return (
     <Link 
       to={linkPath}
-      className="group relative flex items-center gap-4 bg-slate-900/50 hover:bg-slate-900 border border-white/5 hover:border-pink-500/30 rounded-2xl p-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
+      className="group relative flex items-center gap-4 bg-slate-900/50 hover:bg-slate-900 border border-white/5 hover:border-pink-500/30 rounded-sm p-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden"
       style={{ animationDelay: `${delay}ms` }}
     >
       {/* Rank Number */}
@@ -26,7 +27,7 @@ export const RankingListItem = ({ item, rank, delay }) => {
       </div>
 
       {/* Image */}
-      <div className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-xl overflow-hidden relative border border-white/5">
+      <div className="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 rounded-sm overflow-hidden relative border border-white/5">
         <LazyImage src={item.image} alt={item.name} className="w-full h-full object-cover transition duration-500 group-hover:scale-110" />
       </div>
 
@@ -51,11 +52,10 @@ export const RankingListItem = ({ item, rank, delay }) => {
 
         <div className="flex items-center gap-3 text-xs text-slate-400">
           <div className="flex items-center gap-1">
-            <span className="text-yellow-500">★</span>
-            <span className="font-bold text-slate-200">{Number.isFinite(Number(rating)) ? Number(rating).toFixed(1) : '-'}</span>
+            <span className="font-numeral text-lg text-slate-50">{Number.isFinite(Number(rating)) ? Number(rating).toFixed(1) : '-'}</span>
           </div>
           <div className="flex items-center gap-1">
-            <span>💬</span>
+            <LineIcon name="chat" size={13} />
             <span>{reviewCount}</span>
           </div>
         </div>

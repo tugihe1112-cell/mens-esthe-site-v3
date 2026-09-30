@@ -115,13 +115,13 @@ export default function PrefecturePage({
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
             to={`/search?shop=${encodeURIComponent(prefName)}`}
-            className="bg-pink-600 hover:bg-pink-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all hover:scale-105 active:scale-95"
+            className="bg-pink-600 hover:bg-pink-500 text-white font-bold px-5 py-2.5 rounded-sm text-sm transition-all hover:scale-105 active:scale-95"
           >
             {prefName}のキャストを検索
           </Link>
           <Link
             to="/post-review"
-            className="bg-slate-800 hover:bg-slate-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all border border-white/10"
+            className="bg-slate-800 hover:bg-slate-700 text-white font-bold px-5 py-2.5 rounded-sm text-sm transition-all border border-white/10"
           >
             口コミを書く
           </Link>
@@ -145,7 +145,7 @@ export default function PrefecturePage({
                   <Link
                     key={shop.id}
                     to={brandCanonicalPath(shop, allRoomCounts)}
-                    className="group bg-slate-900/60 border border-white/5 hover:border-pink-500/30 rounded-2xl overflow-hidden transition-all hover:-translate-y-0.5"
+                    className="group bg-slate-900/60 border border-white/5 hover:border-pink-500/30 rounded-sm overflow-hidden transition-all hover:-translate-y-0.5"
                   >
                     {shop.image_url && (
                       <div className="aspect-video overflow-hidden">

@@ -529,8 +529,9 @@ a {
   --ui-primary: #C9502F;
   --ui-primary-hover: #A8412A;
   --ui-link: #F2B8A6;
-  --ui-radius-card: 16px;
-  --ui-radius-control: 12px;
+  /* 角は立てる（2026-09-30・デザインA案「夜の文芸誌」）。以前はカード16px・操作12px */
+  --ui-radius-card: 2px;
+  --ui-radius-control: 2px;
   --ui-tap-min: 44px;
   --ui-field-min: 48px;
 }

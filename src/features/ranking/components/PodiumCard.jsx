@@ -10,29 +10,29 @@ export const PodiumCard = ({ rank, item }) => {
   // 順位ごとのスタイル定義
   const styles = {
     1: {
-      crown: '👑',
-      border: 'border-yellow-500/50',
-      shadow: 'shadow-[0_0_30px_rgba(234,179,8,0.3)]',
-      bg: 'bg-gradient-to-b from-yellow-900/40 to-slate-900/80',
-      text: 'text-yellow-400',
+      crown: '01',
+      border: 'border-pink-500/60',
+      shadow: 'shadow-[0_20px_50px_rgba(0,0,0,0.5)]',
+      bg: 'bg-gradient-to-b from-pink-900/30 to-slate-900/80',
+      text: 'text-pink-300',
       height: 'h-[320px] md:h-[380px]', // 1位は一番高く
       scale: 'scale-110 z-10'
     },
     2: {
-      crown: '🥈',
-      border: 'border-slate-400/50',
-      shadow: 'shadow-[0_0_20px_rgba(148,163,184,0.2)]',
+      crown: '02',
+      border: 'border-slate-500/60',
+      shadow: 'shadow-[0_20px_40px_rgba(0,0,0,0.45)]',
       bg: 'bg-gradient-to-b from-slate-800/40 to-slate-900/80',
       text: 'text-slate-300',
       height: 'h-[280px] md:h-[320px]',
       scale: 'scale-100'
     },
     3: {
-      crown: '🥉',
-      border: 'border-orange-700/50',
-      shadow: 'shadow-[0_0_20px_rgba(194,65,12,0.2)]',
-      bg: 'bg-gradient-to-b from-orange-900/40 to-slate-900/80',
-      text: 'text-orange-400',
+      crown: '03',
+      border: 'border-slate-600/60',
+      shadow: 'shadow-[0_20px_40px_rgba(0,0,0,0.45)]',
+      bg: 'bg-gradient-to-b from-slate-800/40 to-slate-900/80',
+      text: 'text-slate-300',
       height: 'h-[260px] md:h-[300px]',
       scale: 'scale-95'
     }
@@ -51,14 +51,15 @@ export const PodiumCard = ({ rank, item }) => {
   return (
     <Link 
       to={linkPath}
-      className={`relative flex flex-col items-center justify-end w-full rounded-t-3xl border-t border-x ${styles.border} ${styles.bg} ${styles.shadow} ${styles.height} ${styles.scale} transition-all duration-500 hover:-translate-y-2 group overflow-hidden backdrop-blur-md`}
+      className={`relative flex flex-col items-center justify-end w-full rounded-t-sm border-t border-x ${styles.border} ${styles.bg} ${styles.shadow} ${styles.height} ${styles.scale} transition-all duration-500 hover:-translate-y-2 group overflow-hidden backdrop-blur-md`}
     >
       {/* 光のエフェクト */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
       
       {/* 順位バッジ */}
-      <div className="absolute top-[-20px] left-1/2 -translate-x-1/2 w-16 h-16 bg-slate-900 rounded-full border border-white/10 flex items-center justify-center shadow-xl z-20">
-         <span className="text-3xl filter drop-shadow-lg">{styles.crown}</span>
+      {/* 順位は数字の書体で（王冠・メダルの絵文字はやめた・2026-09-30） */}
+      <div className="absolute top-[-20px] left-1/2 -translate-x-1/2 w-14 h-14 bg-slate-950 border border-slate-600 flex items-center justify-center shadow-xl z-20">
+         <span className={`font-numeral text-2xl font-semibold ${styles.text}`}>{styles.crown}</span>
       </div>
 
       {/* 画像 */}
@@ -80,7 +81,7 @@ export const PodiumCard = ({ rank, item }) => {
         
         <div className="flex items-center justify-center gap-3 text-xs font-bold text-slate-400">
           <span className="bg-white/10 px-2 py-0.5 rounded border border-white/5 backdrop-blur">
-            ★ {Number.isFinite(Number(rating)) ? Number(rating).toFixed(1) : '-'}
+            {Number.isFinite(Number(rating)) ? Number(rating).toFixed(1) : '-'}
           </span>
           <span>
             {reviewCount} reviews

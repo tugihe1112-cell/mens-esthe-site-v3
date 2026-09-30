@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import LineIcon from '../components/LineIcon.jsx';
 import { Link, useSearchParams } from '../compat/router';
 import { useShopData } from "../contexts/DataContext.jsx";
 import { useSearch } from "../hooks/useSearch";
@@ -159,7 +160,7 @@ export default function ShopListPage() {
         <div className="mb-6 md:mb-8 space-y-5 md:space-y-6">
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <h1 className="text-2xl md:text-3xl font-black flex items-center gap-2">
-              <span className="text-3xl">🏢</span> {query ? '店舗の検索結果' : '店舗を探す'}
+              <span className="font-mincho font-bold">{query ? '店舗の検索結果' : '店舗を探す'}</span>
             </h1>
             <div className="text-gray-400 text-sm font-bold">
               {/* ⚠️ U05: 総掲載数との差を「データ欠落」と読ませない書き方にする */}
@@ -176,7 +177,7 @@ export default function ShopListPage() {
               placeholder="店舗名、エリア(歌舞伎町など)で検索..."
               className="w-full bg-slate-900 border border-slate-700 rounded-full py-3 px-5 pl-12 text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition shadow-inner"
             />
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">🔍</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"><LineIcon name="search" size={16} /></span>
             
             {/* Clear Button or Status */}
             {query && (
@@ -218,7 +219,7 @@ export default function ShopListPage() {
                   <Link
                     key={shop.id}
                     to={shopHref(shop, roomCounts)}
-                    className="group bg-slate-900 rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 hover:shadow-2xl hover:shadow-pink-900/10 transition-all duration-300 flex md:block min-h-[132px] md:min-h-0 transform md:hover:-translate-y-1 active:scale-[0.98]"
+                    className="group bg-slate-900 rounded-sm overflow-hidden border border-white/5 hover:border-pink-500/50 hover:shadow-2xl hover:shadow-pink-900/10 transition-all duration-300 flex md:block min-h-[132px] md:min-h-0 transform md:hover:-translate-y-1 active:scale-[0.98]"
                   >
                     <div className="w-28 sm:w-36 md:w-full min-h-[132px] md:min-h-0 md:h-48 relative overflow-hidden shrink-0">
                       <LazyImage
@@ -286,8 +287,8 @@ export default function ShopListPage() {
               </div>
             ) : (
               /* 検索結果ゼロの場合 */
-              <div className="py-20 text-center text-slate-500 bg-slate-900/50 rounded-3xl border border-white/5 border-dashed animate-in zoom-in-95 duration-300">
-                <p className="text-4xl mb-4">🕵️‍♂️</p>
+              <div className="py-20 text-center text-slate-500 bg-slate-900/50 rounded-sm border border-white/5 border-dashed animate-in zoom-in-95 duration-300">
+                <p className="mb-4 flex justify-center text-slate-500"><LineIcon name="search" size={34} /></p>
                 <p className="text-lg font-bold mb-2 text-white">条件に一致する店舗が見つかりませんでした</p>
                 <p className="text-xs mb-6">別のキーワードやエリアで試してみてください。</p>
                 <button onClick={handleClearSearch} className="bg-white text-slate-900 px-6 py-2 rounded-full text-sm font-bold hover:bg-slate-200 transition shadow-lg">

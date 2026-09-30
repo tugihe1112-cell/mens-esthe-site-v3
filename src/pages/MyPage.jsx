@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import LineIcon from '../components/LineIcon.jsx';
 import { Link, useNavigate } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext';
 import { authHeaders } from '../utils/supabaseRest';
@@ -62,11 +63,11 @@ export default function MyPage() {
         <SeoHead title="マイページ" noindex />
         <Header />
         <main className="min-h-screen bg-slate-950 pt-24 pb-28 px-4">
-          <div className="max-w-md mx-auto rounded-3xl border border-white/10 bg-slate-900/50 p-7 text-center">
-            <div className="text-5xl mb-5">🔒</div>
+          <div className="max-w-md mx-auto rounded-sm border border-white/10 bg-slate-900/50 p-7 text-center">
+            <div className="mb-5 flex justify-center text-slate-500"><LineIcon name="lock" size={40} strokeWidth={1.5} /></div>
             <h1 className="text-2xl font-black text-white mb-2">マイページ</h1>
             <p className="text-slate-400 text-sm mb-7">利用するにはログインが必要です。</p>
-            <Link to="/login?redirect=%2Fmypage" className="flex min-h-12 items-center justify-center rounded-2xl bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black">ログイン</Link>
+            <Link to="/login?redirect=%2Fmypage" className="flex min-h-12 items-center justify-center rounded-sm bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black">ログイン</Link>
             <Link to="/register" className="mt-3 flex min-h-11 items-center justify-center text-sm font-bold text-pink-300">無料会員登録</Link>
           </div>
         </main>
@@ -87,9 +88,9 @@ export default function MyPage() {
       <Header />
       <main className="min-h-screen bg-slate-950 pt-20 md:pt-24 pb-28 px-4 text-white">
         <div className="max-w-lg mx-auto space-y-5">
-          <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-900/60 p-6">
+          <section className="rounded-sm border border-white/10 bg-gradient-to-br from-slate-900 to-slate-900/60 p-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-600 to-purple-500 flex items-center justify-center text-2xl">👤</div>
+              <div className="w-16 h-16 rounded-sm border border-slate-600 bg-slate-800 text-slate-300 flex items-center justify-center"><LineIcon name="person" size={28} strokeWidth={1.5} /></div>
               <div className="min-w-0 flex-1">
                 <h1 className="truncate text-2xl font-black">{displayName}</h1>
                 <p className="truncate text-xs text-slate-400">{user.email}</p>
@@ -100,18 +101,18 @@ export default function MyPage() {
             </div>
           </section>
 
-          <section className={`rounded-2xl border p-5 ${entitlement.active ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-white/10 bg-slate-900/60'}`}>
+          <section className={`rounded-sm border p-5 ${entitlement.active ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-white/10 bg-slate-900/60'}`}>
             <p className="text-xs font-bold text-slate-400">口コミの閲覧権</p>
             <div className="mt-1 flex items-end justify-between gap-3">
               <p className={`text-2xl font-black ${entitlement.active ? 'text-emerald-300' : 'text-slate-300'}`}>{entitlement.label}</p>
               {entitlement.expiry && <p className="text-xs text-slate-400">{entitlement.expiry}まで</p>}
             </div>
             {!entitlement.active && (
-              <Link to="/post-review" className="mt-4 flex min-h-11 items-center justify-center rounded-xl bg-pink-600 px-4 text-sm font-black">口コミを書いて閲覧権を得る</Link>
+              <Link to="/post-review" className="mt-4 flex min-h-11 items-center justify-center rounded-sm bg-pink-600 px-4 text-sm font-black">口コミを書いて閲覧権を得る</Link>
             )}
           </section>
 
-          <nav className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900/60">
+          <nav className="overflow-hidden rounded-sm border border-white/10 bg-slate-900/60">
             {actions.map(({ to, label, sub, icon: Icon }) => (
               <Link key={to} to={to} className="flex min-h-16 items-center gap-4 border-b border-white/5 px-4 last:border-b-0 hover:bg-white/5">
                 <Icon size={20} className="text-pink-400" />
@@ -128,7 +129,7 @@ export default function MyPage() {
             )}
           </nav>
 
-          <button onClick={handleLogout} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-red-500/20 bg-red-500/5 font-bold text-red-300 hover:bg-red-500/10">
+          <button onClick={handleLogout} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-sm border border-red-500/20 bg-red-500/5 font-bold text-red-300 hover:bg-red-500/10">
             <LogOut size={18} /> ログアウト
           </button>
         </div>

@@ -89,7 +89,7 @@ export default function BoardDetailPage() {
           </Link>
 
           {/* 投稿本文 */}
-          <div className="bg-slate-900 border border-white/5 rounded-2xl p-6 mb-6">
+          <div className="bg-slate-900 border border-white/5 rounded-sm p-6 mb-6">
             <div className="flex items-center gap-2 mb-3">
               <span className="text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded-full">
                 {post.category || '雑談'}
@@ -110,7 +110,7 @@ export default function BoardDetailPage() {
           <h2 className="text-sm font-black text-slate-400 mb-3">返信 {replies.length}件</h2>
           <div className="space-y-3 mb-6">
             {replies.map((r, i) => (
-              <div key={r.id} className="bg-slate-900/60 border border-white/5 rounded-xl p-4">
+              <div key={r.id} className="bg-slate-900/60 border border-white/5 rounded-sm p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xs font-bold text-pink-400">#{i + 1}</span>
                   <span className="text-xs text-slate-500">👤 {r.user_name}</span>
@@ -122,7 +122,7 @@ export default function BoardDetailPage() {
           </div>
 
           {/* 返信フォーム */}
-          <div className="bg-slate-900 border border-white/10 rounded-2xl p-4">
+          <div className="bg-slate-900 border border-white/10 rounded-sm p-4">
             <h3 className="text-sm font-black text-white mb-3">返信を書く</h3>
             {user ? (
               <>
@@ -132,7 +132,7 @@ export default function BoardDetailPage() {
                   value={replyContent}
                   onChange={e => setReplyContent(e.target.value)}
                   maxLength={5000}
-                  className="w-full bg-slate-800 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50 resize-none mb-3"
+                  className="w-full bg-slate-800 border border-white/10 rounded-sm px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500/50 resize-none mb-3"
                 />
                 <div className="flex justify-end">
                   <button

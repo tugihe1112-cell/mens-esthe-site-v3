@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef, useTransition } from 'react';
+import LineIcon from '../components/LineIcon.jsx';
 import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { useSearchParams, Link } from '../compat/router';
 import { useShopData } from '../contexts/DataContext.jsx';
@@ -46,13 +47,13 @@ function ShopCard({ shop, onSelect }) {
   const shopDetailUrl = brandCanonicalPath(shop);
 
   return (
-    <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden transition-all">
+    <div className="bg-slate-900 border border-white/5 rounded-sm overflow-hidden transition-all">
       {/* 上段: 基本情報 */}
       <Link to={shopDetailUrl} onClick={() => onSelect && onSelect(shop)} className="flex items-center gap-3 p-4 hover:bg-slate-800/50 transition-colors">
-        <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-slate-800 block">
+        <div className="w-14 h-14 rounded-sm overflow-hidden flex-shrink-0 bg-slate-800 block">
           {shop.image_url
             ? <img src={shop.image_url} alt={shop.name} className="w-full h-full object-cover" />
-            : <div className="w-full h-full flex items-center justify-center text-2xl">🏢</div>
+            : <div className="w-full h-full flex items-center justify-center text-slate-500"><LineIcon name="shop" size={26} /></div>
           }
         </div>
         <div className="min-w-0 flex-1">
@@ -70,7 +71,7 @@ function ShopCard({ shop, onSelect }) {
             parts={shop.areaLabels?.length ? shop.areaLabels : [shop.prefecture, shop.city]}
           />
           {shop.business_hours && (
-            <div className="text-xs text-slate-400 mt-0.5">🕐 {shop.business_hours}</div>
+            <div className="text-xs text-slate-400 mt-0.5 flex items-center gap-1"><LineIcon name="clock" size={12} />{shop.business_hours}</div>
           )}
         </div>
         <span className="flex-shrink-0 text-slate-400 text-lg ml-1">›</span>
@@ -97,7 +98,7 @@ function ShopCard({ shop, onSelect }) {
               <a href={shop.website_url} target="_blank" rel="noreferrer"
                 onClick={() => trackEvent('click_outbound', { link_type: 'official', shop_id: shop.id, shop_name: shop.name })}
                 className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-full transition border border-white/10">
-                🌐 公式サイト
+                <LineIcon name="globe" size={14} /> 公式サイト
               </a>
             )}
             {shop.schedule_url && (
@@ -111,7 +112,7 @@ function ShopCard({ shop, onSelect }) {
               <a href={`tel:${shop.phone_number}`}
                 onClick={() => trackEvent('click_outbound', { link_type: 'phone', shop_id: shop.id, shop_name: shop.name })}
                 className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-4 py-2 rounded-full transition border border-white/10">
-                📞 {shop.phone_number}
+                <LineIcon name="phone" size={14} /> {shop.phone_number}
               </a>
             )}
           </div>
@@ -123,7 +124,7 @@ function ShopCard({ shop, onSelect }) {
                 <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
                 出勤スケジュール
               </div>
-              <div className="rounded-xl overflow-hidden border border-white/5 bg-slate-800/30">
+              <div className="rounded-sm overflow-hidden border border-white/5 bg-slate-800/30">
                 <iframe
                   src={shop.schedule_url}
                   className="w-full h-[340px] md:h-[480px]"
@@ -148,7 +149,7 @@ function ShopCard({ shop, onSelect }) {
                 <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
                 料金システム
               </div>
-              <div className="bg-slate-800/50 rounded-xl p-3 border border-white/5 text-xs text-slate-300 space-y-1.5">
+              <div className="bg-slate-800/50 rounded-sm p-3 border border-white/5 text-xs text-slate-300 space-y-1.5">
                 {priceLines.map((line, i) => (
                   <div key={i} className="flex items-start gap-2">
                     <span className="text-pink-500 flex-shrink-0 mt-0.5">•</span>
@@ -671,7 +672,7 @@ export default function SearchPage({ renderSeo = true }) {
 
             {/* 🏢 店舗・エリア検索 */}
             <div className="flex-1 relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none">🏢</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"><LineIcon name="shop" size={16} /></span>
               <input
                 type="text"
                 value={shopInput}
@@ -692,7 +693,7 @@ export default function SearchPage({ renderSeo = true }) {
 
             {/* 💃 キャスト名検索 */}
             <div className="flex-1 relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none">💃</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"><LineIcon name="person" size={16} /></span>
               <input
                 type="text"
                 value={castInput}
@@ -712,17 +713,17 @@ export default function SearchPage({ renderSeo = true }) {
 
           {/* モバイル: 検索対象を切り替え、入力欄を1本に集約 */}
           <div className="sm:hidden space-y-2.5">
-            <div className="grid grid-cols-2 gap-1 rounded-2xl border border-white/10 bg-slate-900/70 p-1" role="group" aria-label="検索対象">
+            <div className="grid grid-cols-2 gap-1 rounded-sm border border-white/10 bg-slate-900/70 p-1" role="group" aria-label="検索対象">
               {[
-                { key: 'shop', label: '🏢 店舗・エリア' },
-                { key: 'cast', label: '💃 セラピスト' },
+                { key: 'shop', label: '店舗・エリア' },
+                { key: 'cast', label: 'セラピスト' },
               ].map(option => (
                 <button
                   key={option.key}
                   type="button"
                   onClick={() => setMobileSearchMode(option.key)}
                   aria-pressed={mobileSearchMode === option.key}
-                  className={`min-h-9 rounded-xl px-3 text-xs font-black transition ${
+                  className={`min-h-9 rounded-sm px-3 text-xs font-black transition ${
                     mobileSearchMode === option.key
                       ? 'bg-white text-slate-950 shadow-sm'
                       : 'text-slate-500'
@@ -734,8 +735,8 @@ export default function SearchPage({ renderSeo = true }) {
             </div>
 
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base pointer-events-none">
-                {mobileSearchMode === 'shop' ? '🏢' : '💃'}
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+                <LineIcon name={mobileSearchMode === 'shop' ? 'shop' : 'person'} size={16} />
               </span>
               <input
                 type="text"
@@ -745,7 +746,7 @@ export default function SearchPage({ renderSeo = true }) {
                 onChange={e => mobileSearchMode === 'shop' ? setShopInput(e.target.value) : setCastInput(e.target.value)}
                 placeholder={mobileSearchMode === 'shop' ? '店舗名・エリアで検索' : 'セラピスト名で検索'}
                 aria-label={mobileSearchMode === 'shop' ? '店舗名・エリアで検索' : 'セラピスト名で検索'}
-                className="w-full min-h-11 rounded-2xl border border-white/10 bg-slate-900/80 py-2.5 pl-10 pr-11 text-sm font-bold text-white placeholder-slate-500 transition focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500"
+                className="w-full min-h-11 rounded-sm border border-white/10 bg-slate-900/80 py-2.5 pl-10 pr-11 text-sm font-bold text-white placeholder-slate-500 transition focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500"
               />
               {(mobileSearchMode === 'shop' ? shopInput : castInput) && (
                 <button
@@ -764,9 +765,9 @@ export default function SearchPage({ renderSeo = true }) {
                 type="button"
                 ref={filterOpenerRef}
                 onClick={() => setIsFilterOpen(true)}
-                className="min-h-10 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-xs font-bold text-white"
+                className="min-h-10 w-full rounded-sm border border-white/10 bg-white/5 px-4 text-xs font-bold text-white"
               >
-                ⚙ 条件で絞り込む {selectedTags.length > 0 && `(${selectedTags.length})`}
+                <LineIcon name="filter" size={14} /> 条件で絞り込む {selectedTags.length > 0 && `(${selectedTags.length})`}
               </button>
             )}
           </div>
@@ -826,7 +827,7 @@ export default function SearchPage({ renderSeo = true }) {
           role={isFilterOpen ? 'dialog' : undefined}
           aria-modal={isFilterOpen ? 'true' : undefined}
           aria-labelledby={isFilterOpen ? 'mobile-filter-title' : undefined}
-          className={`${isFilterOpen ? 'block' : 'hidden'} fixed inset-x-0 bottom-0 z-[80] max-h-[82vh] space-y-4 overflow-y-auto rounded-t-3xl border-t border-white/10 bg-slate-950 p-4 shadow-2xl lg:sticky lg:inset-auto lg:top-36 lg:z-auto lg:block lg:max-h-none lg:space-y-6 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none`}
+          className={`${isFilterOpen ? 'block' : 'hidden'} fixed inset-x-0 bottom-0 z-[80] max-h-[82vh] space-y-4 overflow-y-auto rounded-t-sm border-t border-white/10 bg-slate-950 p-4 shadow-2xl lg:sticky lg:inset-auto lg:top-36 lg:z-auto lg:block lg:max-h-none lg:space-y-6 lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none`}
         >
           <div className="sticky top-0 z-10 -mx-4 -mt-4 mb-2 flex items-center justify-between border-b border-white/10 bg-slate-950/95 px-4 py-3 backdrop-blur lg:hidden">
             <div>
@@ -836,13 +837,13 @@ export default function SearchPage({ renderSeo = true }) {
             <button
               type="button"
               onClick={() => setIsFilterOpen(false)}
-              className="min-h-10 rounded-xl bg-white px-4 text-xs font-black text-slate-950"
+              className="min-h-10 rounded-sm bg-white px-4 text-xs font-black text-slate-950"
             >
               完了
             </button>
           </div>
           {TAG_CATEGORIES.map(category => (
-            <div key={category.id} className="bg-slate-900/40 backdrop-blur rounded-2xl lg:rounded-3xl p-4 lg:p-5 border border-white/5 shadow-xl">
+            <div key={category.id} className="bg-slate-900/40 backdrop-blur rounded-sm lg:rounded-sm p-4 lg:p-5 border border-white/5 shadow-xl">
               <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
                 {category.title}
@@ -859,7 +860,7 @@ export default function SearchPage({ renderSeo = true }) {
                         else if (count > 0) setSelectedTags(prev => [...prev, tag]);
                       }}
                       disabled={count === 0 && !isSelected}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                      className={`px-3 py-1.5 rounded-sm text-xs font-bold transition-all border ${
                         isSelected
                           ? 'bg-pink-600 border-pink-500 text-white'
                           : count === 0
@@ -930,7 +931,7 @@ export default function SearchPage({ renderSeo = true }) {
             {/* ⚠️ FIXES.md F05: 通信失敗を「見つかりませんでした」と混同しない。
                 既存の結果は消さず、再読み込みだけを出す。 */}
             {fetchError && (
-              <div role="alert" className="mb-4 rounded-xl border border-rose-500/50 bg-rose-500/10 p-3">
+              <div role="alert" className="mb-4 rounded-sm border border-rose-500/50 bg-rose-500/10 p-3">
                 <p className="ui-error">読み込めませんでした</p>
                 <button
                   type="button"
@@ -952,8 +953,8 @@ export default function SearchPage({ renderSeo = true }) {
             )}
 
             {isFeaturedBrowse && !isLoading && visibleTherapists.length > 0 && (
-              <div className="mb-4 sm:mb-6 flex items-center gap-2.5 rounded-2xl border border-purple-500/20 bg-gradient-to-r from-purple-950/50 to-slate-900/70 px-3 py-2.5 sm:items-start sm:gap-3 sm:px-4 sm:py-3">
-                <span className="text-base sm:text-xl leading-none">✨</span>
+              <div className="mb-4 sm:mb-6 flex items-center gap-2.5 rounded-sm border border-purple-500/20 bg-gradient-to-r from-purple-950/50 to-slate-900/70 px-3 py-2.5 sm:items-start sm:gap-3 sm:px-4 sm:py-3">
+                <span className="leading-none text-pink-300"><LineIcon name="unlock" size={18} /></span>
                 <div>
                   {/* ⚠️ U05: 「店舗・地域が偏らないように表示しています」は実装の説明で、
                       利用者が次にする操作の助けにならないので削除した。 */}
@@ -973,9 +974,9 @@ export default function SearchPage({ renderSeo = true }) {
                   <span className="text-xs text-slate-500 font-black shrink-0">並び替え</span>
                   {[
                     { key: 'default', label: 'デフォルト', mobileLabel: '標準' },
-                    { key: 'aiueo',   label: 'あ 五十音', mobileLabel: '五十音' },
-                    { key: 'reviews', label: '💬 口コミ多い', mobileLabel: '💬 口コミ' },
-                    { key: 'rating',  label: '⭐ 評価高い', mobileLabel: '⭐ 評価' },
+                    { key: 'aiueo',   label: '五十音', mobileLabel: '五十音' },
+                    { key: 'reviews', label: '口コミ多い', mobileLabel: '口コミ' },
+                    { key: 'rating',  label: '評価高い', mobileLabel: '評価' },
                   ].map(opt => (
                     <button
                       key={opt.key}
@@ -1012,11 +1013,11 @@ export default function SearchPage({ renderSeo = true }) {
                         to={matchingShops.length === 1 || initShopId
                           ? `/post-review?shopId=${initShopId || matchingShops[0].id}&customMode=true`
                           : '/post-review?customMode=true'}
-                        className="group relative block bg-slate-900/60 rounded-[1.5rem] overflow-hidden border border-dashed border-purple-500/30 hover:border-purple-500/70 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-900/20 hover:-translate-y-1"
+                        className="group relative block bg-slate-900/60 rounded-sm overflow-hidden border border-dashed border-purple-500/30 hover:border-purple-500/70 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-900/20 hover:-translate-y-1"
                       >
                         <div className="aspect-[3/4] flex flex-col items-center justify-center gap-3 p-4">
-                          <div className="w-14 h-14 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300">
-                            ✏️
+                          <div className="w-14 h-14 rounded-full border border-pink-500/40 text-pink-300 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <LineIcon name="pen" size={22} />
                           </div>
                           <div className="text-center">
                             <p className="text-white font-black text-sm leading-tight">リストに<br />いない</p>
@@ -1039,18 +1040,18 @@ export default function SearchPage({ renderSeo = true }) {
                         {showWriteToRead && (
                           <Link
                             to="/post-review"
-                            className={`col-span-2 md:col-span-3 ${isFeaturedBrowse ? 'xl:col-span-5' : 'xl:col-span-4'} ${writeToReadVisibility} flex-col items-start justify-between gap-3 bg-gradient-to-r from-purple-900/70 to-pink-900/50 border border-purple-500/30 rounded-2xl px-4 sm:px-5 py-4 hover:border-purple-400/50 transition-all group sm:flex-row sm:items-center`}
+                            className={`col-span-2 md:col-span-3 ${isFeaturedBrowse ? 'xl:col-span-5' : 'xl:col-span-4'} ${writeToReadVisibility} flex-col items-start justify-between gap-3 bg-gradient-to-r from-purple-900/70 to-pink-900/50 border border-purple-500/30 rounded-sm px-4 sm:px-5 py-4 hover:border-purple-400/50 transition-all group sm:flex-row sm:items-center`}
                           >
                             <div>
                               <p className="text-white font-black text-sm">口コミを書くと、みんなの口コミが読み放題になります</p>
                               <p className="text-purple-300 text-xs mt-0.5">200字で3日・700字で7日の閲覧権を即時付与</p>
                             </div>
-                            <span className="w-full shrink-0 rounded-xl bg-pink-600 px-4 py-2 text-center text-xs font-black text-white transition group-hover:bg-pink-500 sm:w-auto whitespace-nowrap">口コミを書く →</span>
+                            <span className="w-full shrink-0 rounded-sm bg-pink-600 px-4 py-2 text-center text-xs font-black text-white transition group-hover:bg-pink-500 sm:w-auto whitespace-nowrap">口コミを書く →</span>
                           </Link>
                         )}
                         <Link
                           to={`/shops/${t.shop_id}/threads/${t.id}`}
-                          className="group relative block bg-slate-900 rounded-2xl sm:rounded-[1.5rem] overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-900/20 hover:-translate-y-1"
+                          className="group relative block bg-slate-900 rounded-sm sm:rounded-sm overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-900/20 hover:-translate-y-1"
                         >
                           {/* ⚠️ U05: 名前・店舗・地域は**写真の下の単色面**へ置く。
                               写真の上に重ねると、明るい画像や顔の位置次第で読めなくなる
@@ -1072,7 +1073,7 @@ export default function SearchPage({ renderSeo = true }) {
                               <p className="mt-1.5 flex items-center gap-2 text-slate-300" style={{ fontSize: '13px' }}>
                                 <span className="font-bold text-pink-300">口コミ{reviewCountMap[t.id]}件</span>
                                 {ratingMap[t.id] != null && (
-                                  <span className="font-bold text-amber-300">★ {ratingMap[t.id].toFixed(1)}</span>
+                                  <span className="font-numeral text-base text-slate-50">{ratingMap[t.id].toFixed(1)}</span>
                                 )}
                               </p>
                             )}
@@ -1087,7 +1088,7 @@ export default function SearchPage({ renderSeo = true }) {
                     <div className="mt-8 sm:mt-10 text-center">
                       <button
                         onClick={() => setDisplayCount(n => n + ITEMS_PER_PAGE)}
-                        className="w-full sm:w-auto bg-slate-800 text-white px-8 py-3.5 sm:py-3 rounded-2xl sm:rounded-full font-bold hover:bg-slate-700 transition border border-white/10"
+                        className="w-full sm:w-auto bg-slate-800 text-white px-8 py-3.5 sm:py-3 rounded-sm sm:rounded-full font-bold hover:bg-slate-700 transition border border-white/10"
                       >
                         もっと見る（残り{deduplicatedTherapists.length - visibleTherapists.length}件）
                       </button>
@@ -1098,7 +1099,7 @@ export default function SearchPage({ renderSeo = true }) {
                 !isLoading && matchingShops.length === 0 && (shopQuery || castQuery || selectedTags.length > 0) && (
                   <div className="py-20 text-center">
                     <div className="w-20 h-20 bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-5 border border-white/5">
-                      <span className="text-3xl opacity-50">🕵️</span>
+                      <span className="text-slate-500"><LineIcon name="search" size={30} /></span>
                     </div>
                     <h3 className="text-xl font-black text-white mb-2">見つかりませんでした</h3>
                     <p className="text-slate-400 text-sm mb-6">条件を変えて検索してみてください。</p>

@@ -88,7 +88,7 @@ export default function ContactPage() {
           <h1 className="text-2xl md:text-3xl font-black text-white">お問い合わせ</h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-slate-900/50 backdrop-blur rounded-2xl border border-white/5 p-6 md:p-8 shadow-xl space-y-6">
+        <form onSubmit={handleSubmit} className="bg-slate-900/50 backdrop-blur rounded-sm border border-white/5 p-6 md:p-8 shadow-xl space-y-6">
           <div className="hidden" aria-hidden="true">
             <label>
               会社名
@@ -105,7 +105,7 @@ export default function ContactPage() {
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                className="w-full bg-slate-950/80 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-pink-500/70 focus:ring-2 focus:ring-pink-500/10 transition"
+                className="w-full bg-slate-950/80 border border-white/10 rounded-sm px-4 py-3 text-white outline-none focus:border-pink-500/70 focus:ring-2 focus:ring-pink-500/10 transition"
                 placeholder="お名前"
               />
             </label>
@@ -118,7 +118,7 @@ export default function ContactPage() {
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                className="w-full bg-slate-950/80 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-pink-500/70 focus:ring-2 focus:ring-pink-500/10 transition"
+                className="w-full bg-slate-950/80 border border-white/10 rounded-sm px-4 py-3 text-white outline-none focus:border-pink-500/70 focus:ring-2 focus:ring-pink-500/10 transition"
                 placeholder="mail@example.com"
               />
             </label>
@@ -130,7 +130,7 @@ export default function ContactPage() {
               name="category"
               value={form.category}
               onChange={handleChange}
-              className="w-full bg-slate-950/80 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-pink-500/70 focus:ring-2 focus:ring-pink-500/10 transition"
+              className="w-full bg-slate-950/80 border border-white/10 rounded-sm px-4 py-3 text-white outline-none focus:border-pink-500/70 focus:ring-2 focus:ring-pink-500/10 transition"
             >
               <option>掲載情報の修正</option>
               <option>口コミ・投稿について</option>
@@ -149,21 +149,21 @@ export default function ContactPage() {
               value={form.message}
               onChange={handleChange}
               rows={8}
-              className="w-full resize-y bg-slate-950/80 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-pink-500/70 focus:ring-2 focus:ring-pink-500/10 transition leading-relaxed"
+              className="w-full resize-y bg-slate-950/80 border border-white/10 rounded-sm px-4 py-3 text-white outline-none focus:border-pink-500/70 focus:ring-2 focus:ring-pink-500/10 transition leading-relaxed"
               placeholder="お問い合わせ内容"
             />
             <span className="mt-2 block text-right text-xs text-slate-500">{form.message.length}/4000</span>
           </label>
 
           {status === 'success' && (
-            <div className="flex items-start gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+            <div className="flex items-start gap-3 rounded-sm border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
               <CheckCircle2 className="w-5 h-5 shrink-0" />
               <span>送信しました。確認後、必要に応じてご連絡いたします。</span>
             </div>
           )}
 
           {status === 'error' && (
-            <div className="flex items-start gap-3 rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+            <div className="flex items-start gap-3 rounded-sm border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
               <AlertCircle className="w-5 h-5 shrink-0" />
               <span>{error}</span>
             </div>
@@ -172,7 +172,7 @@ export default function ContactPage() {
           <button
             type="submit"
             disabled={isSending}
-            className="inline-flex w-full md:w-auto items-center justify-center gap-2 bg-pink-600 hover:bg-pink-500 disabled:opacity-60 disabled:hover:bg-pink-600 text-white px-6 py-3 rounded-xl text-sm font-black transition"
+            className="inline-flex w-full md:w-auto items-center justify-center gap-2 bg-pink-600 hover:bg-pink-500 disabled:opacity-60 disabled:hover:bg-pink-600 text-white px-6 py-3 rounded-sm text-sm font-black transition"
           >
             <Send className="w-4 h-4" />
             {isSending ? '送信中' : '送信する'}

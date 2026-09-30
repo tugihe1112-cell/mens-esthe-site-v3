@@ -1,4 +1,5 @@
 import { shopHref } from '../utils/brandGroups.js';
+import LineIcon from '../components/LineIcon.jsx';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useShopData } from '../contexts/DataContext.jsx';
@@ -80,11 +81,11 @@ export default function FavoritesPage() {
         <SeoHead title="お気に入り" noindex />
         <Header />
         <main className="pt-24 px-4">
-          <section className="mx-auto max-w-md rounded-3xl border border-white/10 bg-slate-900/50 p-8 text-center">
-            <p className="text-5xl mb-4">❤️</p>
+          <section className="mx-auto max-w-md rounded-sm border border-white/10 bg-slate-900/50 p-8 text-center">
+            <p className="mb-4 flex justify-center text-pink-400"><LineIcon name="heart" size={40} strokeWidth={1.5} /></p>
             <h1 className="text-2xl font-black text-white mb-2">お気に入り</h1>
             <p className="text-sm text-slate-400 mb-7">保存した店舗・セラピストを見るにはログインしてください。</p>
-            <Link to="/login?redirect=%2Ffavorites" className="inline-flex min-h-12 items-center rounded-xl bg-pink-600 px-7 font-black text-white">ログイン</Link>
+            <Link to="/login?redirect=%2Ffavorites" className="inline-flex min-h-12 items-center rounded-sm bg-pink-600 px-7 font-black text-white">ログイン</Link>
           </section>
         </main>
       </div>
@@ -102,36 +103,36 @@ export default function FavoritesPage() {
         <div className="flex items-center justify-between mb-6 md:mb-8">
           <div>
             <h1 className="text-2xl md:text-3xl font-black text-white flex items-center gap-3 tracking-tight">
-              <span className="text-3xl md:text-4xl">❤️</span> お気に入り
+              <span className="font-mincho font-bold">お気に入り</span>
             </h1>
             <p className="text-slate-400 text-sm font-bold mt-1 ml-1">あなたの推しコレクション</p>
           </div>
         </div>
 
         {/* Tab Switcher (iOS Segmented Control Style) */}
-        <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-2xl mb-6 md:mb-10 border border-white/5 flex shadow-inner sticky top-14 md:top-20 z-30">
+        <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-sm mb-6 md:mb-10 border border-white/5 flex shadow-inner sticky top-14 md:top-20 z-30">
           <button 
             onClick={() => setActiveTab('therapists')}
-            className={`flex-1 py-3 rounded-xl text-sm font-black transition-all duration-300 relative overflow-hidden ${
+            className={`flex-1 py-3 rounded-sm text-sm font-black transition-all duration-300 relative overflow-hidden ${
               displayTab === 'therapists'
                 ? 'bg-gradient-to-br from-pink-600 to-pink-500 text-white shadow-lg shadow-pink-900/30' 
                 : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
             }`}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              <span>👩‍🦰</span> セラピスト <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favTherapistList.length}</span>
+              <LineIcon name="person" size={14} /> セラピスト <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favTherapistList.length}</span>
             </span>
           </button>
           <button 
             onClick={() => setActiveTab('shops')}
-            className={`flex-1 py-3 rounded-xl text-sm font-black transition-all duration-300 relative overflow-hidden ${
+            className={`flex-1 py-3 rounded-sm text-sm font-black transition-all duration-300 relative overflow-hidden ${
               displayTab === 'shops'
-                ? 'bg-gradient-to-br from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-900/30' 
+                ? 'bg-pink-500 text-slate-950' 
                 : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
             }`}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              <span>🏢</span> 店舗 <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favShopList.length}</span>
+              <LineIcon name="shop" size={14} /> 店舗 <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favShopList.length}</span>
             </span>
           </button>
         </div>
@@ -147,7 +148,7 @@ export default function FavoritesPage() {
                   <Link 
                     key={t.favoriteKey || `${t.shopId}_${t.id}`}
                     to={`/shops/${t.shopId}/threads/${t.id}`} 
-                    className="group relative block bg-slate-900 rounded-2xl overflow-hidden border border-white/5 shadow-xl transition-all duration-300 hover:border-pink-500/50 hover:shadow-pink-900/20 hover:-translate-y-1"
+                    className="group relative block bg-slate-900 rounded-sm overflow-hidden border border-white/5 shadow-xl transition-all duration-300 hover:border-pink-500/50 hover:shadow-pink-900/20 hover:-translate-y-1"
                   >
                     <div className="aspect-[3/4] relative overflow-hidden">
                       <LazyImage src={t.image_url || t.image} alt={t.name} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
@@ -187,19 +188,19 @@ export default function FavoritesPage() {
                   <Link 
                     key={shop.id} 
                     to={shopHref(shop, roomCounts)}
-                    className="flex items-center gap-5 bg-slate-900/50 p-4 rounded-3xl border border-white/5 hover:border-blue-500/50 hover:bg-slate-900 transition-all duration-300 group shadow-lg"
+                    className="flex items-center gap-5 bg-slate-900/50 p-4 rounded-sm border border-white/5 hover:border-pink-500/50 hover:bg-slate-900 transition-all duration-300 group shadow-lg"
                   >
-                    <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 border border-white/5 shadow-inner">
+                    <div className="w-24 h-24 rounded-sm overflow-hidden flex-shrink-0 border border-white/5 shadow-inner">
                       <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="w-full h-full object-cover transition duration-500 group-hover:scale-110" />
                     </div>
                     <div className="flex-1 min-w-0 py-1">
                       {/* ⚠️ エリアが無い店舗では中身の無い青い箱だけが出ていた */}
                       {joinFields(shopAreaList(shop), shop.city) && (
                         <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[10px] font-bold bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">{joinFields(shopAreaList(shop), shop.city)}</span>
+                            <span className="text-[11px] text-slate-300 px-2 py-0.5 border border-slate-700">{joinFields(shopAreaList(shop), shop.city)}</span>
                         </div>
                       )}
-                      <h3 className="text-lg font-black text-white truncate group-hover:text-blue-400 transition">{getDisplayName(shop.name, shop)}</h3>
+                      <h3 className="text-lg font-black text-white truncate group-hover:text-pink-300 transition">{getDisplayName(shop.name, shop)}</h3>
                       <ShopStatusChip shop={shop} className="mt-1" />
                       {/* ⚠️ `shop.access` はDBに存在しないフィールドで、**全てのお気に入りに**
                           「アクセス情報なし」が出ていた。正しくは address（無ければ出さない）。 */}
@@ -210,7 +211,7 @@ export default function FavoritesPage() {
                         parts={[shop.address || joinFields(shop.prefecture, shop.city)]}
                       />
                     </div>
-                    <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 group-hover:bg-pink-500 group-hover:text-slate-950 transition">
                       →
                     </div>
                   </Link>
@@ -231,8 +232,8 @@ export default function FavoritesPage() {
 function EmptyState({ type }) {
   const isTherapist = type === 'therapist';
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-center bg-slate-900/30 rounded-[3rem] border border-dashed border-slate-800">
-      <div className="text-6xl mb-6 opacity-50 grayscale">{isTherapist ? '👩' : '🏢'}</div>
+    <div className="flex flex-col items-center justify-center py-20 text-center bg-slate-900/30 rounded-sm border border-dashed border-slate-800">
+      <div className="mb-6 text-slate-600"><LineIcon name={isTherapist ? 'person' : 'shop'} size={52} strokeWidth={1.3} /></div>
       <h3 className="text-xl font-bold text-white mb-2">
         {isTherapist ? '推しメンがまだいません' : 'お気に入り店舗がありません'}
       </h3>
@@ -243,7 +244,7 @@ function EmptyState({ type }) {
       </p>
       <Link 
         to={isTherapist ? '/search' : '/'} 
-        className={`px-8 py-3 rounded-xl font-bold text-white shadow-lg transition transform hover:-translate-y-1 ${isTherapist ? 'bg-pink-600 hover:bg-pink-500 shadow-pink-900/30' : 'bg-blue-600 hover:bg-blue-500 shadow-blue-900/30'}`}
+        className={`px-8 py-3 rounded-sm font-bold text-white shadow-lg transition transform hover:-translate-y-1 ${isTherapist ? 'bg-pink-600 hover:bg-pink-500 shadow-pink-900/30' : 'bg-pink-500 hover:bg-pink-400 text-slate-950'}`}
       >
         {isTherapist ? 'セラピストを探す' : 'お店を探す'}
       </Link>

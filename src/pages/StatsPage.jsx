@@ -41,7 +41,7 @@ function BarRow({ rank, label, sub, value, pct, valueLabel }) {
 
 function Section({ id, title, note, children, copyText, copiedKey, onCopy }) {
   return (
-    <section id={id} className="rounded-2xl bg-slate-900/60 border border-white/5 p-5 sm:p-7">
+    <section id={id} className="rounded-sm bg-slate-900/60 border border-white/5 p-5 sm:p-7">
       <div className="flex items-start justify-between gap-3 mb-4">
         <div>
           <h2 className="text-lg sm:text-xl font-black text-white leading-tight">{title}</h2>
@@ -52,7 +52,7 @@ function Section({ id, title, note, children, copyText, copiedKey, onCopy }) {
             onClick={() => onCopy(copyText, id)}
             className="shrink-0 text-[11px] font-bold px-3 py-1.5 rounded-full border border-pink-500/40 text-pink-300 hover:bg-pink-500/10 transition whitespace-nowrap"
           >
-            {copiedKey === id ? '✓ コピー' : '📋 この数字を引用'}
+            {copiedKey === id ? '✓ コピーしました' : 'この数字を引用'}
           </button>
         )}
       </div>
@@ -151,7 +151,7 @@ export default function StatsPage() {
               東京506店に対し兵庫9店・福岡6店は市場規模の差ではなく収集状況の差であり、
               これを黙って並べると業界を知る読み手に一目で見抜かれ、ページ全体の信頼を失う。
               引用される資産にするには、限界を先に自分から書くことが必須。 */}
-          <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-3.5">
+          <div className="rounded-sm border border-amber-500/25 bg-amber-500/[0.06] p-3.5">
             <p className="text-[11px] text-amber-200/90 font-bold mb-1">データの範囲について（先にお読みください）</p>
             <p className="text-[11px] text-slate-400 leading-relaxed">
               本ページの数字は<b className="text-slate-300">当サイトが掲載している店舗</b>の実測値です。収集の進み具合は地域によって異なり、東京・関東圏は網羅的に収集していますが、その他の地域は主要店舗を中心に収集しています。
@@ -163,7 +163,7 @@ export default function StatsPage() {
         </header>
 
         {!hasData && (
-          <div className="rounded-2xl bg-slate-900/60 border border-white/5 p-8 text-center text-slate-400 text-sm">
+          <div className="rounded-sm bg-slate-900/60 border border-white/5 p-8 text-center text-slate-400 text-sm">
             集計データを準備中です。<br />（<code className="text-slate-300">node scripts/metrics/build_stats.mjs</code> を実行すると数値が入ります）
           </div>
         )}
@@ -177,7 +177,7 @@ export default function StatsPage() {
                 { k: '在籍セラピスト', v: num(coverage.totalTherapists) },
                 { k: '料金調査店舗', v: num(coverage.priceSampleShops) },
               ].map((x) => (
-                <div key={x.k} className="rounded-xl bg-slate-900/60 border border-white/5 p-3 text-center">
+                <div key={x.k} className="rounded-sm bg-slate-900/60 border border-white/5 p-3 text-center">
                   <div className="text-lg sm:text-2xl font-black text-white tabular-nums">{x.v}</div>
                   <div className="text-[10px] text-slate-500 mt-0.5">{x.k}</div>
                 </div>
@@ -199,7 +199,7 @@ export default function StatsPage() {
               copiedKey={copiedKey} onCopy={handleCopy}
             >
               {/* 掲載全店の中央値をSVGバーで自前描画（「全国」とは名乗らない＝東京77%のため） */}
-              <div className="rounded-xl bg-slate-950/60 border border-white/5 p-4 mb-4">
+              <div className="rounded-sm bg-slate-950/60 border border-white/5 p-4 mb-4">
                 <div className="text-[11px] text-slate-400 mb-2 font-bold">掲載{num(coverage.priceSampleShops)}店舗の中央値</div>
                 <svg viewBox="0 0 300 70" className="w-full" role="img" aria-label="掲載店舗の料金中央値（60分・90分）">
                   {(() => {
@@ -222,7 +222,7 @@ export default function StatsPage() {
 
               {/* サンプルの地域偏りを明示。これを書かないと「全国」を名乗る数字が東京の数字と一致していることの説明がつかない */}
               {tokyoShare != null && tokyoShare >= 50 && (
-                <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-3.5 mb-4">
+                <div className="rounded-sm border border-amber-500/25 bg-amber-500/[0.06] p-3.5 mb-4">
                   <p className="text-[11px] text-slate-400 leading-relaxed">
                     <b className="text-amber-200/90">この数字は「全国平均」ではありません。</b>
                     料金を公開している店舗のうち約<b className="text-slate-300">{tokyoShare}%が東京都</b>のため（60分 {num(tokyoPrice?.n60)}/{num(nationalPrice.n60)}店・90分 {num(tokyoPrice?.n90)}/{num(nationalPrice.n90)}店）、上の中央値は実質的に<b className="text-slate-300">首都圏の水準</b>です。
@@ -305,11 +305,11 @@ export default function StatsPage() {
               copiedKey={copiedKey} onCopy={handleCopy}
             >
               <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="rounded-xl bg-slate-950/60 border border-white/5 p-3 text-center">
+                <div className="rounded-sm bg-slate-950/60 border border-white/5 p-3 text-center">
                   <div className="text-xl sm:text-2xl font-black text-white tabular-nums">{num(therapistStats.total)}</div>
                   <div className="text-[10px] text-slate-500 mt-0.5">在籍総数</div>
                 </div>
-                <div className="rounded-xl bg-slate-950/60 border border-white/5 p-3 text-center">
+                <div className="rounded-sm bg-slate-950/60 border border-white/5 p-3 text-center">
                   <div className="text-xl sm:text-2xl font-black text-white tabular-nums">{num(therapistStats.medianPerShop)}</div>
                   <div className="text-[10px] text-slate-500 mt-0.5">1店舗あたり中央値</div>
                 </div>
@@ -322,7 +322,7 @@ export default function StatsPage() {
             </Section>
 
             {/* コピペ・引用しやすい表（全データ） */}
-            <details className="rounded-2xl bg-slate-900/60 border border-white/5 p-5 sm:p-7">
+            <details className="rounded-sm bg-slate-900/60 border border-white/5 p-5 sm:p-7">
               <summary className="cursor-pointer text-sm font-black text-white">全データ表（都道府県別 掲載店舗数・エリア別 掲載店舗数）</summary>
               <div className="grid md:grid-cols-2 gap-6 mt-4">
                 <div className="overflow-x-auto">
@@ -351,7 +351,7 @@ export default function StatsPage() {
             </details>
 
             {/* 出典・使い方 */}
-            <div className="rounded-2xl bg-slate-900/40 border border-white/5 p-5 text-xs text-slate-400 leading-relaxed space-y-2">
+            <div className="rounded-sm bg-slate-900/40 border border-white/5 p-5 text-xs text-slate-400 leading-relaxed space-y-2">
               <p className="font-bold text-slate-300">この統計の引用について</p>
               <p>本ページの数字は自由に引用いただけます。引用の際は出典として「メンエスマップ調べ」および本ページURL（<span className="text-slate-300">{CITE_URL}</span>）の明記をお願いします。各セクションの「引用」ボタンで出典付きテキストをコピーできます。</p>
               <p className="text-slate-500">※ 数字は当サイト掲載データからの実測値です（{asOf}時点・掲載{num(coverage.totalShops)}店舗）。料金はデータを掲載している{num(coverage.priceSampleShops)}店舗のみを対象に集計しており、実際の店舗料金とは異なる場合があります。推計値は含みません。</p>

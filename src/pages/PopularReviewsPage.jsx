@@ -1,4 +1,5 @@
 import { shopAreaList } from '../utils/shopFields';
+import LineIcon from '../components/LineIcon.jsx';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { shopHref } from '../utils/brandGroups.js';
@@ -10,7 +11,6 @@ import SeoHead from '../components/SeoHead.jsx';
 import ReviewLikeButton from '../components/ReviewLikeButton.jsx';
 import { isNotListed, NOT_LISTED_SHORT } from '../utils/therapistStatus.js';
 import LazyImage from '../components/LazyImage.jsx';
-import { ratingGradientClass } from '../utils/ratingStyle';
 // 支店名は表示しない（地名は検索のためだけに name に入っている）
 import { getDisplayName } from '../utils/shopHelpers';
 
@@ -196,8 +196,7 @@ export default function PopularReviewsPage({
         <div className="bg-gradient-to-br from-purple-900/60 via-slate-900 to-pink-900/40 border-b border-white/5 pt-20 pb-8 px-4">
           <div className="max-w-3xl mx-auto">
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-2xl">💬</span>
-              <h1 className="text-2xl md:text-3xl font-black tracking-tight">みんなの口コミ</h1>
+              <h1 className="font-mincho text-[28px] md:text-[36px] font-bold leading-[1.3] text-slate-50">みんなの口コミ</h1>
             </div>
             <p className="text-slate-400 text-sm">全国のセラピストへのリアルな体験レポート</p>
             <p className="text-slate-500 text-xs mt-1">掲載店舗から広告費・掲載料は受け取っていません。だから辛口もそのまま載ります。</p>
@@ -208,8 +207,8 @@ export default function PopularReviewsPage({
           {/* ソートタブ */}
           <div className="flex gap-2 mb-6">
             {[
-              { key: 'new', label: '🕐 新着順' },
-              { key: 'rating', label: '⭐ 評価順' },
+              { key: 'new', label: '新着順' },
+              { key: 'rating', label: '評価順' },
             ].map(tab => (
               <button
                 key={tab.key}
@@ -227,7 +226,7 @@ export default function PopularReviewsPage({
 
           {/* ⚠️ F05: 初回の通信失敗は「0件」ではない。再読み込みを出す。 */}
           {loadError === 'initial' && reviews.length === 0 && !isLoading && (
-            <div role="alert" className="rounded-xl border border-rose-500/50 bg-rose-500/10 p-4 text-center">
+            <div role="alert" className="rounded-sm border border-rose-500/50 bg-rose-500/10 p-4 text-center">
               <p className="ui-error">読み込めませんでした</p>
               <button type="button" onClick={() => fetchReviews(0, sortBy, false)} className="ui-link mt-1.5 inline-flex min-h-11 items-center font-bold" style={{ fontSize: '13px' }}>
                 再読み込み
@@ -238,7 +237,7 @@ export default function PopularReviewsPage({
           {isLoading ? (
             <div className="space-y-4">
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="rounded-2xl bg-slate-800/50 animate-pulse h-40" />
+                <div key={i} className="rounded-sm bg-slate-800/50 animate-pulse h-40" />
               ))}
             </div>
           ) : (
@@ -269,15 +268,15 @@ export default function PopularReviewsPage({
                   return (
                     <article
                       key={r.id}
-                      className="bg-slate-900 border border-white/10 hover:border-pink-500/40 rounded-2xl p-4 transition-all duration-200"
+                      className="bg-slate-900 border border-white/10 hover:border-pink-500/40 rounded-sm p-4 transition-all duration-200"
                     >
                       <div className="flex gap-3">
                         {/* セラピスト写真 */}
-                        <Link to={threadLink} className="flex-shrink-0 w-16 h-20 rounded-xl overflow-hidden bg-slate-800 border border-white/5 block">
+                        <Link to={threadLink} className="flex-shrink-0 w-16 h-20 rounded-sm overflow-hidden bg-slate-800 border border-white/5 block">
                           {therapist.image_url ? (
                             <LazyImage src={therapist.image_url} alt={r.therapist_name} width={160} className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-2xl">👤</div>
+                            <div className="w-full h-full flex items-center justify-center text-slate-500"><LineIcon name="person" size={22} /></div>
                           )}
                         </Link>
 
@@ -289,17 +288,17 @@ export default function PopularReviewsPage({
                                   （押しても何も無いリンクは行き止まりで、口コミ本文の邪魔にもなる） */}
                               {shop.name && (
                                 <Link to={shopLink} className="inline-flex items-center gap-1.5 min-w-0 font-black text-white text-sm hover:text-pink-300 transition">
-                                  <span className="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-xs shrink-0">🏢</span>
+                                  <span className="shrink-0 text-slate-400"><LineIcon name="shop" size={13} /></span>
                                   <span className="truncate">{getDisplayName(shop.name, shop)}</span>
                                 </Link>
                               )}
                               {loc && (
-                                <span className="text-xs font-bold text-pink-200 bg-pink-500/10 border border-pink-500/20 rounded-full px-2 py-0.5 shrink-0">📍 {loc}</span>
+                                <span className="inline-flex items-center gap-1 text-xs text-slate-300 shrink-0"><LineIcon name="pin" size={12} className="text-pink-400" />{loc}</span>
                               )}
                             </div>
                             {rating != null && (
-                              <span className={`inline-flex items-center text-xs font-black text-white bg-gradient-to-br ${ratingGradientClass(rating)} rounded-md px-1.5 py-0.5 shrink-0 shadow`}>
-                                ★ {rating.toFixed(1)}
+                              <span className="shrink-0 font-numeral text-2xl font-semibold leading-none text-slate-50" aria-label={`評価 ${rating.toFixed(1)}`}>
+                                {rating.toFixed(1)}
                               </span>
                             )}
                           </div>
@@ -323,7 +322,7 @@ export default function PopularReviewsPage({
                             )}
                             {r.user_name && <span className="text-xs text-slate-400">by <span className="font-bold text-slate-300">{r.user_name}</span></span>}
                             {r.course && (
-                              <span className="text-xs font-bold text-slate-300 bg-white/5 border border-white/10 rounded-full px-2 py-0.5">🧾 {r.course}</span>
+                              <span className="text-xs text-slate-300 border border-slate-700 px-2 py-0.5">{r.course}</span>
                             )}
                           </div>
 
@@ -362,7 +361,7 @@ export default function PopularReviewsPage({
               {/* ⚠️ F05: 追加分の失敗は既存カードを残したまま一覧末尾に出す。
                   「見つかりませんでした」と混同させない。 */}
               {loadError === 'more' && (
-                <div role="alert" className="mt-6 rounded-xl border border-rose-500/50 bg-rose-500/10 p-3 text-center">
+                <div role="alert" className="mt-6 rounded-sm border border-rose-500/50 bg-rose-500/10 p-3 text-center">
                   <p className="ui-error">追加分を読み込めませんでした</p>
                   <button type="button" onClick={loadMore} className="ui-link mt-1.5 inline-flex min-h-11 items-center font-bold" style={{ fontSize: '13px' }}>
                     もう一度読み込む
@@ -385,7 +384,7 @@ export default function PopularReviewsPage({
 
               {reviews.length === 0 && (
                 <div className="text-center py-20 text-slate-500">
-                  <p className="text-4xl mb-4">💬</p>
+                  <p className="mb-4 flex justify-center text-slate-500"><LineIcon name="chat" size={34} /></p>
                   <p>口コミがまだありません</p>
                   <Link to="/post-review" className="mt-4 inline-block bg-pink-500 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-pink-600 transition">
                     最初の口コミを書く
