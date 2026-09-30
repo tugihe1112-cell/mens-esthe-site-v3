@@ -41,7 +41,7 @@ const STATIC_PAGES = [
   //    「サイトマップには載るがページが存在しない」soft404 が再発する。
   ...['tokyo','osaka','aichi','kanagawa','saitama','chiba',
       'hyogo','kyoto','fukuoka','miyagi','shizuoka',
-      'hiroshima','hokkaido','ibaraki','tochigi','gunma'].map(slug => ({
+      'hiroshima','hokkaido','ibaraki','tochigi','gunma','gifu','mie'].map(slug => ({
     path: `/area/${slug}`, priority: '0.8',
   })),
 ];

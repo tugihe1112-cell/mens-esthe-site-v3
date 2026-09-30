@@ -25,6 +25,8 @@ export const PREF_SLUG_MAP = {
   ibaraki:   '茨城県',
   tochigi:   '栃木県',
   gunma:     '群馬県',
+  gifu:      '岐阜県',
+  mie:       '三重県',
 };
 
 // フッター等の一覧に出さない slug（ページ自体は有効だが掲載数が少なく訴求しない）
