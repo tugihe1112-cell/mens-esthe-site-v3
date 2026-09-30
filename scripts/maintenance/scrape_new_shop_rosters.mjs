@@ -149,7 +149,7 @@ for (const s of cfg.shops) {
   }
   const lists = s.list ? [].concat(s.list) : PATHS.map((p) => base + p);
   const linkRe = s.link ? new RegExp(s.link) : null;
-  const stripRe = s.strip ? new RegExp(s.strip) : null;
+  const stripRe = s.strip ? new RegExp(s.strip, 'gu') : null;   // 全部を外す（♡らんか♡）・\p{…} を使えるように u
   let chosen = null;
   for (const url of lists) {
     const r = await readPage(url);
