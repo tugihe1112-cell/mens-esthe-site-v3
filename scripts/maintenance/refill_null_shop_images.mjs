@@ -79,21 +79,20 @@ async function findThumbnail(siteUrl) {
     pick(html, /<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i),
   ].map((u) => abs(u, base)).filter(Boolean);
 
-  // og系が無ければ本文の大きめ画像（メインビジュアル狙い）
-  if (!candidates.length) {
-    const imgs = [...html.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)]
-      .map((m) => abs(m[1], base))
-      .filter((u) => u && /\.(jpe?g|png|webp)(\?|$)/i.test(u) && !/spacer|blank|1x1|pixel/i.test(u));
-    candidates.push(...imgs.slice(0, 3));
-  }
+  // 本文の大きめ画像（メインビジュアル狙い）も後ろに並べる。
+  // og:image が店のサイトで壊れている（404）ことがあるので、og があっても次の候補を持っておく
+  // （2026-09-30、re:Treats・First Class Platinum・KOBE QUEEN の og:image が404だった）。
+  const imgs = [...html.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)]
+    .map((m) => abs(m[1], base))
+    .filter((u) => u && /\.(jpe?g|png|webp)(\?|$)/i.test(u) && !/spacer|blank|1x1|pixel/i.test(u));
+  candidates.push(...imgs.slice(0, 3));
 
   // 最後の手段: apple-touch-icon 等（フロントでNO IMAGE扱いなので --allow-icon 指定時のみ）
   const icon = abs(pick(html, /<link[^>]+rel=["'][^"']*apple-touch-icon[^"']*["'][^>]+href=["']([^"']+)["']/i), base);
 
-  const good = candidates.find((u) => !isIconUrl(u));
-  if (good) return good;
-  if (ALLOW_ICON && (candidates[0] || icon)) return candidates[0] || icon;
-  return null;
+  const list = [...new Set(candidates)].filter((u) => !isIconUrl(u));
+  if (ALLOW_ICON && icon) list.push(icon);
+  return list;
 }
 
 const sha1 = async (s) => {
@@ -151,12 +150,14 @@ async function main() {
     const chunk = list.slice(i, i + CONC);
     await Promise.all(chunk.map(async (shop) => {
       try {
-        const found = await findThumbnail(shop.website_url);
-        if (!found) { ng++; console.log(`  -  ${shop.name}: 候補なし`); return; }
-        if (!LIVE) { ok++; console.log(`  ✓  ${shop.name}: ${found.slice(0, 90)}`); return; }
-
-        const got = await fetchImageBuffer(found, shop.website_url);
-        if (!got) { ng++; console.log(`  ✗  ${shop.name}: 画像取得失敗 ${found.slice(0, 60)}`); return; }
+        const cands = await findThumbnail(shop.website_url);
+        if (!cands.length) { ng++; console.log(`  -  ${shop.name}: 候補なし`); return; }
+        // 候補を順に取りに行き、画像として取れた最初のものを使う（下見でも実際に取る＝下見で見た画像がそのまま書かれる）。
+        // URL は省略せず全部出す（2026-09-30、90字で切っていたため候補を目で確かめる一覧が作れなかった）。
+        let found = null, got = null;
+        for (const u of cands) { const g = await fetchImageBuffer(u, shop.website_url); if (g) { found = u; got = g; break; } }
+        if (!got) { ng++; console.log(`  ✗  ${shop.name}: 画像取得失敗（候補${cands.length}件とも取れない）`); return; }
+        if (!LIVE) { ok++; console.log(`  ✓  ${shop.id} ${shop.name}: ${found}`); return; }
         const key = `shop_${(await sha1(found)).slice(0, 16)}${(found.match(/\.(jpe?g|png|webp)/i) || ['.jpg'])[0]}`;
         const newUrl = await uploadBuffer(got.buf, key, got.ct, 'shop-logos');
         if (!newUrl) { ng++; console.log(`  ✗  ${shop.name}: R2アップ失敗`); return; }
