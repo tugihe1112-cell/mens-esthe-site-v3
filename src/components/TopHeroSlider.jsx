@@ -7,6 +7,7 @@ import { useShopData } from '../contexts/DataContext.jsx';
 import LikeButton from './LikeButton.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 import LocationLabel from './LocationLabel.jsx';
+import { splitNameReading } from '../utils/nameReading.js';
 import { HERO_SHOP_IDS, toHeroItem } from '../data/heroShops';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -22,7 +23,7 @@ function HeroPlaceholder() {
   return (
     <div style={{ paddingTop: '20px', paddingBottom: '20px' }}>
       <div
-        className="mx-auto w-[88%] sm:w-[62%] lg:w-[45%] h-[clamp(190px,32vh,270px)] sm:h-[clamp(200px,38vh,440px)] rounded-2xl bg-slate-800/60 animate-pulse"
+        className="mx-auto w-[88%] sm:w-[62%] lg:w-[45%] h-[clamp(190px,32vh,270px)] sm:h-[clamp(200px,38vh,440px)] rounded-sm bg-slate-800/60 animate-pulse"
       />
       <div className="flex justify-center gap-1.5 mt-4">
         {Array.from({ length: 5 }).map((_, i) => (
@@ -33,7 +34,10 @@ function HeroPlaceholder() {
   );
 }
 
-export default function TopHeroSlider({ initialHero = [] }) {
+// topSlot＝スライダーの上に置く帯（ホームの日付入りの見出し帯・2026-09-30）。
+// ⚠️ ヘッダー（透明時）の高さ＝スマホ84px・PC112px（Header.jsx の py-2.5+64px / py-5+72px）の下に置く。
+//    それより上だとヘッダーの墨のぼかしに隠れる。
+export default function TopHeroSlider({ initialHero = [], topSlot = null }) {
   const { shops, roomCounts } = useShopData();
   const [activeProgress, setActiveProgress] = useState(0);
 
@@ -102,13 +106,14 @@ export default function TopHeroSlider({ initialHero = [] }) {
 
   return (
     <div
-      className="relative w-full bg-slate-950 pt-16 md:pt-10 pb-2 md:pb-10"
+      className={`relative w-full bg-slate-950 ${topSlot ? 'pt-[84px] md:pt-[112px]' : 'pt-16 md:pt-10'} pb-2 md:pb-10`}
       style={{ overflow: 'hidden', isolation: 'isolate' }}
       onFocusCapture={handleFocusCapture}
       onBlurCapture={handleBlurCapture}
     >
-      {/* 背景グロー */}
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(236,72,153,0.07) 0%, transparent 70%)' }} />
+      {topSlot}
+      {/* 背景グロー（朱をごく薄く） */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(224,97,63,0.06) 0%, transparent 70%)' }} />
 
       {/* 進行バー */}
       {isPlaying && (
@@ -152,23 +157,23 @@ export default function TopHeroSlider({ initialHero = [] }) {
         onSwiper={(s) => { swiperRef.current = s; }}
         onSlideChange={(s) => setActiveIndex(typeof s.realIndex === 'number' ? s.realIndex : (s.activeIndex || 0))}
         className="w-full hero-coverflow"
-        style={{ paddingTop: '20px', paddingBottom: '20px' }}
+        style={{ paddingTop: topSlot ? '10px' : '20px', paddingBottom: '20px' }}
       >
         {items.map((shop, index) => (
           <SwiperSlide key={shop.id} className="!h-[clamp(190px,32vh,270px)] sm:!h-[clamp(200px,38vh,440px)]">
             {({ isActive }) => (
               <div
-                className="w-full h-full rounded-2xl p-[2px]"
+                className="w-full h-full rounded-sm p-px"
                 style={{
-                  background: isActive ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)',
+                  background: isActive ? 'rgba(238,231,219,0.85)' : 'rgba(238,231,219,0.18)',
                   boxShadow: isActive
-                    ? '0 0 30px rgba(255,255,255,0.15), 0 20px 60px rgba(0,0,0,0.6)'
+                    ? '0 20px 60px rgba(0,0,0,0.6)'
                     : '0 8px 32px rgba(0,0,0,0.4)',
                   transition: 'background 0.6s ease, box-shadow 0.6s ease',
                 }}
               >
               <div
-                className="relative w-full h-full rounded-[14px] overflow-hidden"
+                className="relative w-full h-full rounded-[1px] overflow-hidden"
               >
                 {/* 店舗画像（先頭スライドは preload 済み・lazy にしない） */}
                 {shop.heroImageType === 'logo' ? (
@@ -202,24 +207,31 @@ export default function TopHeroSlider({ initialHero = [] }) {
                 {/* アクティブ時コンテンツ */}
                 {isActive && (
                   <div className="absolute inset-0 p-4 md:p-10 flex flex-col justify-end items-start">
-                    <p className="text-pink-400 font-bold tracking-widest text-xs mb-2 flex items-center gap-2">
-                      <span className="w-5 h-[2px] bg-pink-400 inline-block" />
+                    <p className="text-pink-300 tracking-[0.2em] text-[11px] mb-2 flex items-center gap-2">
+                      <span className="w-5 h-px bg-pink-400 inline-block" />
                       掲載店舗ピックアップ
                     </p>
-                    <h3 className="text-xl md:text-4xl font-black text-white mb-2 md:mb-3 leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]">
-                      {getDisplayName(shop.name, shop)}
-                    </h3>
+                    {/* 店名と読み（括弧の中のかな）を分ける＝読みが途中で折り返さない */}
+                    {(() => {
+                      const n = splitNameReading(getDisplayName(shop.name, shop));
+                      return (
+                        <h3 className="font-mincho text-2xl md:text-4xl font-bold text-slate-50 mb-2 md:mb-3 leading-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.9)]">
+                          {n.main}
+                          {n.reading && <span className="mt-0.5 block font-sans text-xs md:text-sm font-normal tracking-[0.12em] text-slate-300">{n.reading}</span>}
+                        </h3>
+                      );
+                    })()}
                     <div className="flex flex-wrap items-center gap-2 mb-3 md:mb-5">
-                      <LocationLabel className="bg-black/50 backdrop-blur px-3 py-1 rounded-full text-xs text-white border border-white/20" parts={[shop.prefecture, shop.city]} />
+                      <LocationLabel className="bg-black/50 backdrop-blur px-2.5 py-1 text-xs text-slate-100" parts={[shop.prefecture, shop.city]} />
                       {/* ⚠️ 以前は収集元サイトの評価（raw_data.rating）を出していた。
                           ★>0 の39店は当サイトの口コミが全て0件で、実質「根拠のない★」だった。
                           星は口コミページ側で実データから出すので、ここでは出さない。 */}
                     </div>
                     <div className="flex items-center gap-3">
-                      <Link to={shopHref(shop, roomCounts)} className="bg-white text-slate-900 font-black px-6 py-2.5 rounded-xl hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 text-sm">
-                        店舗を見る
+                      <Link to={shopHref(shop, roomCounts)} className="inline-flex items-center gap-2 bg-slate-50 text-slate-950 font-bold px-5 py-2.5 rounded-sm hover:bg-pink-500 transition-colors active:scale-95 text-sm">
+                        店舗を見る <span aria-hidden="true">→</span>
                       </Link>
-                      <LikeButton id={shop.id} className="w-11 h-11 bg-black/40 backdrop-blur-md rounded-xl p-2.5 text-white border border-white/20 hover:bg-white/20 transition active:scale-95" />
+                      <LikeButton id={shop.id} className="w-11 h-11 bg-black/40 backdrop-blur-md rounded-sm p-2.5 text-white border border-white/25 hover:bg-white/15 transition active:scale-95" />
                     </div>
                   </div>
                 )}
@@ -227,7 +239,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
                 {/* 非アクティブ時：店舗名だけ薄く */}
                 {!isActive && (
                   <div className="absolute bottom-4 left-4 right-4">
-                    <p className="text-white/50 text-sm font-bold truncate">{getDisplayName(shop.name, shop)}</p>
+                    <p className="font-mincho text-white/55 text-sm font-bold truncate">{getDisplayName(shop.name, shop)}</p>
                   </div>
                 )}
               </div>
@@ -253,7 +265,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
             className="h-11 w-11 flex items-center justify-center rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
           >
             <span className={`block h-1.5 rounded-full transition-all duration-500 ${
-              i === activeIndex ? 'w-6 bg-pink-500' : 'w-1.5 bg-white/20'
+              i === activeIndex ? 'w-6 bg-pink-500' : 'w-1.5 bg-slate-600'
             }`} />
           </button>
         ))}

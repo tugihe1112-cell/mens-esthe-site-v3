@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from '../compat/router';
 import LazyImage from './LazyImage.jsx';
 import { trackEvent } from '../utils/analytics';
-import { ratingSoftClass } from '../utils/ratingStyle';
 import { isNotListed, NOT_LISTED_SHORT } from '../utils/therapistStatus.js';
 import { PREFERRED_PREF_KEY } from '../utils/homeReviews';
+import RatingFingerprint from './RatingFingerprint.jsx';
 
 // ホーム「最新の実体験口コミ」＝呼水カード。2種類ある。
 //   hero    … 欄の先頭の最新1件。写真・店舗名・来店情報・要約・6軸・「口コミ全文を読む」
@@ -34,13 +34,14 @@ function relTime(iso) {
 }
 
 // 写真が無い人の頭文字アバター。色は口コミIDから決める（乱数にするとSSRと画面で色が変わる）。
+// 色は墨と朱の濃淡だけ（2026-09-30・デザインA案＝差し色は朱1色）
 const AVATAR_GRADIENTS = [
-  'from-amber-500 to-pink-600',
-  'from-violet-600 to-pink-600',
-  'from-sky-500 to-indigo-500',
-  'from-emerald-500 to-sky-500',
-  'from-slate-500 to-slate-700',
-  'from-rose-500 to-fuchsia-700',
+  'from-pink-700 to-slate-900',
+  'from-purple-600 to-slate-900',
+  'from-slate-600 to-slate-900',
+  'from-pink-500 to-purple-800',
+  'from-slate-500 to-slate-800',
+  'from-purple-500 to-slate-950',
 ];
 function avatarGradient(seed) {
   let h = 0;
@@ -81,18 +82,16 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
     trackEvent('select_home_review', { position, therapist_id: r.therapistId, variant, pref });
   };
 
+  // 点数は数字の書体で（★の色付きの札はやめた・2026-09-30）。読み上げでは「評価 3.8」。
   const RatingBadge = rating != null ? (
-    <span
-      className={`inline-flex shrink-0 items-center gap-0.5 rounded-full px-2 font-black ${ratingSoftClass(rating)}`}
-      style={{ fontSize: '13px', height: '24px' }}
-    >
-      ★ {rating.toFixed(1)}
+    <span className="shrink-0 font-numeral text-[22px] font-semibold leading-none text-slate-50" aria-label={`評価 ${rating.toFixed(1)}`}>
+      {rating.toFixed(1)}
     </span>
   ) : null;
 
   // ⚠️ 在籍一覧から外れた人を現役として送らない。断定はしない（退店とは書かない）。
   const NotListedBadge = notListed ? (
-    <span className="shrink-0 rounded-full border border-amber-500/40 bg-amber-500/15 px-2 py-0.5 font-bold text-amber-200" style={{ fontSize: '11px' }}>
+    <span className="shrink-0 rounded-sm border border-amber-500/40 bg-amber-500/15 px-2 py-0.5 font-bold text-amber-200" style={{ fontSize: '11px' }}>
       {NOT_LISTED_SHORT}
     </span>
   ) : null;
@@ -109,11 +108,8 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
     const foot = [r.userName ? `by ${r.userName}` : null, time?.label].filter(Boolean).join(' · ');
     return (
       <article
-        className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-slate-900 px-4 pb-3 pt-3.5 transition-colors hover:border-pink-500/40 ${
-          rating != null && rating < 3 ? 'border-rose-500/30' : 'border-white/10'
-        }`}
+        className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-slate-800 bg-slate-900 px-4 pb-3 pt-3.5 transition-colors hover:border-pink-500/50"
       >
-        <span aria-hidden="true" className="pointer-events-none absolute -top-3 right-3 select-none font-serif font-black leading-none text-white/[0.05]" style={{ fontSize: '64px' }}>“</span>
         <div className="flex items-center gap-2.5">
           {r.image ? (
             // 名前は隣のリンクで読み上げるので、写真は読み上げから外す（altは読み込み失敗時の頭文字に使われる）
@@ -134,8 +130,8 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
               <Link
                 to={reviewLink}
                 onClick={onOpen}
-                className="min-h-0 truncate font-extrabold text-white after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-pink-400"
-                style={{ fontSize: '14px', lineHeight: 1.35 }}
+                className="min-h-0 truncate font-mincho font-bold text-slate-50 after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-pink-400"
+                style={{ fontSize: '15px', lineHeight: 1.35 }}
               >
                 {r.therapistName}
                 <span className="sr-only">の口コミを読む</span>
@@ -149,20 +145,20 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
         <p className="mt-2.5 line-clamp-3 text-slate-300" style={{ fontSize: '13px', lineHeight: 1.7 }}>{r.snippet}…</p>
         <div className="mt-auto flex items-center justify-between gap-2 pt-2.5 text-slate-400" style={{ fontSize: '12px' }}>
           <span className="min-w-0 truncate">{foot}</span>
-          <span aria-hidden="true" className="shrink-0 font-extrabold text-pink-300 group-hover:text-pink-200">読む →</span>
+          <span aria-hidden="true" className="shrink-0 font-bold text-pink-300 group-hover:text-pink-200">読む →</span>
         </div>
       </article>
     );
   }
 
   // ── 最新1件（hero）────────────────────────────────
-  // 値のない軸は表示しない（0点として描かない）。3列×2行。
-  const axes = dr ? DR_LABELS.map(([k, label]) => [label, Number(dr[k]) || 0]).filter(([, v]) => v > 0) : [];
+  // 6項目は小さな「採点の形」で出す（棒6本より形の違いが一目で分かる・口コミページと同じ図）。
+  const hasAxes = !!dr && DR_LABELS.some(([k]) => Number(dr[k]) > 0);
 
   return (
-    <article className="relative rounded-[22px] border border-white/15 bg-gradient-to-b from-[#131d36] to-slate-900 p-4 md:p-5">
+    <article className="relative rounded-sm border border-slate-700 bg-slate-900 p-4 md:p-5">
       {tag && (
-        <span className="absolute -top-3 left-4 rounded-full bg-pink-500 px-2.5 py-0.5 font-extrabold tracking-wide text-white md:left-5" style={{ fontSize: '11px' }}>
+        <span className="absolute -top-3 left-4 bg-pink-500 px-2.5 py-0.5 font-bold tracking-wide text-slate-950 md:left-5" style={{ fontSize: '11px' }}>
           {tag}
         </span>
       )}
@@ -172,7 +168,7 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
           onClick={onOpen}
           tabIndex={-1}
           aria-hidden="true"
-          className="h-[110px] w-[84px] overflow-hidden rounded-xl bg-slate-800 md:row-span-2 md:h-[172px] md:w-[132px] md:rounded-2xl"
+          className="h-[110px] w-[84px] overflow-hidden border border-slate-700 bg-slate-800 md:row-span-2 md:h-[172px] md:w-[132px]"
         >
           {r.image ? (
             <LazyImage src={r.image} alt={r.therapistName} width={300} className="h-full w-full" />
@@ -182,57 +178,49 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
         </Link>
 
         <div className="min-w-0">
-          <Link
-            to={shopLink}
-            onClick={onOpen}
-            className="-my-3 line-clamp-2 min-h-0 py-3 text-base font-black text-white transition hover:text-pink-300 md:text-lg"
-            style={{ lineHeight: 1.4 }}
-          >
-            {r.shopName}
-          </Link>
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-slate-400" style={{ fontSize: '13px' }}>
-            <Link to={threadLink} onClick={onOpen} className="-my-3 min-h-0 py-3 font-extrabold text-white transition hover:text-pink-300" style={{ fontSize: '14px' }}>
+          <p className="truncate text-xs tracking-[0.12em] text-slate-400">
+            {loc && <>{loc} · </>}
+            <Link to={shopLink} onClick={onOpen} className="-my-3 min-h-0 py-3 text-slate-300 transition hover:text-pink-300">
+              {r.shopName}
+            </Link>
+          </p>
+          <div className="mt-1 flex items-center gap-2">
+            <Link to={threadLink} onClick={onOpen} className="-my-3 min-h-0 truncate py-3 font-mincho text-xl font-bold text-slate-50 transition hover:text-pink-300 md:text-2xl">
               {r.therapistName}
             </Link>
             {NotListedBadge}
-            {RatingBadge}
-            {loc && <span>📍 {loc}</span>}
-            {time && (
-              <span className="inline-flex items-center gap-1">
-                {time.isNew && <span className="h-1.5 w-1.5 rounded-full bg-pink-500" />}
-                {time.label}
+          </div>
+          <div className="mt-2 flex items-center gap-4">
+            {rating != null && (
+              <span className="flex items-end gap-1.5">
+                <span className="font-numeral text-[40px] font-semibold leading-[0.85] text-slate-50" aria-label={`評価 ${rating.toFixed(1)}`}>{rating.toFixed(1)}</span>
+                <span className="pb-0.5 text-xs text-slate-400">/ 5</span>
               </span>
             )}
-            {r.userName && <span>by {r.userName}</span>}
+            {hasAxes && <RatingFingerprint values={dr} size="mini" />}
+            <div className="min-w-0 text-xs text-slate-400">
+              {time && (
+                <p className="inline-flex items-center gap-1">
+                  {time.isNew && <span className="h-1.5 w-1.5 rounded-full bg-pink-500" />}
+                  {time.label}
+                </p>
+              )}
+              {r.userName && <p className="truncate">by {r.userName}</p>}
+            </div>
           </div>
           {r.course && (
-            <p className="mt-2.5 w-fit max-w-full truncate rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-slate-300" style={{ fontSize: '12px' }}>
-              🧾 {r.course}
+            <p className="mt-2.5 w-fit max-w-full truncate border border-slate-800 px-2.5 py-1 text-slate-300" style={{ fontSize: '12px' }}>
+              {r.course}
             </p>
           )}
         </div>
 
         <div className="col-span-2 min-w-0 md:col-span-1 md:col-start-2">
-          <p className="line-clamp-4 text-slate-300 md:mt-3 md:line-clamp-3" style={{ fontSize: '14px', lineHeight: 1.75 }}>{r.snippet}…</p>
-          {axes.length > 0 && (
-            <div className="mt-3.5 grid grid-cols-3 gap-x-3 gap-y-2 md:gap-x-4">
-              {axes.map(([label, v]) => (
-                <div key={label} className="min-w-0">
-                  <div className="flex items-center justify-between gap-1 text-slate-400" style={{ fontSize: '12px' }}>
-                    <span className="truncate">{label}</span>
-                    <span className="font-bold text-slate-100">{v.toFixed(1)}</span>
-                  </div>
-                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-white/[0.07]">
-                    <div className="h-full rounded-full bg-gradient-to-r from-pink-400 to-pink-500" style={{ width: `${Math.min((v / 5) * 100, 100)}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <p className="line-clamp-4 text-slate-300 md:mt-3 md:line-clamp-3" style={{ fontSize: '14px', lineHeight: 1.85 }}>{r.snippet}…</p>
           <Link
             to={reviewLink}
             onClick={onOpen}
-            className="ui-link mt-2 inline-flex min-h-11 items-center font-extrabold"
+            className="ui-link mt-2 inline-flex min-h-11 items-center font-bold"
             style={{ fontSize: '13px' }}
           >
             口コミ全文を読む →

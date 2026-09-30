@@ -10,14 +10,12 @@ export default function RecentlyViewed() {
   return (
     <section className="py-6">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-4 px-2">
-          {/* 他セクション（💃注目セラピスト・✨新着店舗）と見出しの作法を揃える */}
-          <h3 className="text-xl md:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
-            <span className="text-2xl">🕒</span> 最近チェックした
-          </h3>
+        <div className="flex items-end justify-between mb-4 border-b border-slate-700 pb-3">
+          {/* 他セクション（注目セラピスト・新着店舗）と見出しの作法を揃える（明朝・下に細い線） */}
+          <h3 className="font-mincho text-[26px] md:text-[32px] font-bold leading-[1.3] text-slate-50">最近チェックした</h3>
           <button
             onClick={clearHistory}
-            className="text-xs font-bold text-slate-500 hover:text-pink-400 transition py-3 -my-3 pl-3"
+            className="text-xs font-bold text-slate-400 hover:text-pink-300 transition py-3 -my-3 pl-3"
           >
             履歴を消す
           </button>
@@ -35,7 +33,7 @@ export default function RecentlyViewed() {
                   条件は item.image を見ているのに src は item.image_url を優先していたため、
                   image_url しか持たない履歴は「写真があるのに絵文字プレースホルダ」になっていた。
                   実機スクショで3件とも 💆‍♀️ になっていた原因がこれ。判定側を src と揃える。 */}
-              <div className="aspect-[3/4] w-32 rounded-xl overflow-hidden border border-white/10 relative mb-2 bg-slate-800">
+              <div className="aspect-[3/4] w-32 overflow-hidden border border-slate-700 relative mb-2 bg-slate-800">
                 {(item.image_url || item.image) ? (
                   <img
                     src={item.image_url || item.image}
@@ -54,10 +52,10 @@ export default function RecentlyViewed() {
                 {/* 下端グラデーション＋名前をカード内に置く（注目セラピストと同じ作法に統一） */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                 <div className="absolute bottom-1.5 left-2 right-2">
-                  <p className="text-white font-black text-xs leading-tight truncate [text-shadow:0_1px_4px_rgba(0,0,0,0.9)]">{item.name}</p>
+                  <p className="font-mincho text-white font-bold text-sm leading-tight truncate [text-shadow:0_1px_4px_rgba(0,0,0,0.9)]">{item.name}</p>
                   {item.subText && <p className="text-pink-300 text-xs truncate mt-0.5">{item.subText}</p>}
                 </div>
-                <div className={`absolute top-1.5 left-1.5 text-xs font-black px-1.5 py-0.5 rounded-full backdrop-blur-sm ${item.type === 'shop' ? 'bg-blue-600/90 text-white' : 'bg-pink-600/90 text-white'}`}>
+                <div className={`absolute top-1.5 left-1.5 text-[11px] font-bold px-1.5 py-0.5 ${item.type === 'shop' ? 'bg-slate-950/80 text-slate-100 border border-slate-600' : 'bg-pink-500 text-slate-950'}`}>
                   {item.type === 'shop' ? '店舗' : 'セラピスト'}
                 </div>
               </div>

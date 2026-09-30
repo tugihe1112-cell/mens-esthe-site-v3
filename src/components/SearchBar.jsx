@@ -23,17 +23,17 @@ export default function SearchBar() {
   };
 
   const fieldClass =
-    'w-full min-w-0 rounded-xl border border-white/10 bg-white/10 px-3.5 text-white placeholder-slate-400 transition focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-pink-500';
+    'w-full min-w-0 rounded-sm border border-slate-600 bg-slate-950 px-3.5 text-slate-50 placeholder-slate-500 transition focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500';
   const fieldStyle = { height: '48px', fontSize: '16px', fontWeight: 700 };
   const submitClass =
-    'shrink-0 rounded-xl bg-pink-600 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 active:scale-[0.98]';
+    'shrink-0 rounded-sm bg-pink-500 font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300 active:scale-[0.98]';
 
   return (
     <form onSubmit={handleSearch}>
       {/* スマホは検索対象を切り替えて入力欄を1つだけ表示。2欄縦積みで
           ファーストビューを使い切っていた問題を解消する。PCは従来どおりAND検索。 */}
       <div className="sm:hidden">
-        <div className="grid grid-cols-2 gap-1 rounded-xl bg-black/20 p-1" role="group" aria-label="検索対象">
+        <div className="grid grid-cols-2 divide-x divide-slate-700 rounded-sm border border-slate-700" role="group" aria-label="検索対象">
           {[
             { key: 'shop', label: '店舗・エリア' },
             { key: 'cast', label: 'セラピスト' },
@@ -47,8 +47,8 @@ export default function SearchBar() {
                 else setShopInput('');
               }}
               aria-pressed={mobileMode === mode.key}
-              className={`min-h-11 rounded-lg font-black transition ${
-                mobileMode === mode.key ? 'bg-white text-slate-950 shadow' : 'text-slate-300'
+              className={`min-h-11 transition ${
+                mobileMode === mode.key ? 'bg-slate-800 font-bold text-slate-50' : 'text-slate-400'
               }`}
               style={{ fontSize: '13px' }}
             >

@@ -29,13 +29,22 @@ import { shopAreaList } from '../utils/shopFields';
 // 順位ごとの表示スタイル
 // ⚠️ バッジは「掲載店舗数の順位」だけを書く。以前は「👑 店舗数No.1」「✨ 人気」「🔥 注目」だったが、
 // 並びは当サイトの掲載数であって人気でも市場規模でもない（8/17 に見出しを「掲載店舗数の多い順」へ直した方針）。
+// 色は墨の面に細い枠。1位だけ朱をごく薄く敷く（2026-09-30・デザインA案＝差し色は朱1色。
+// 以前は紫・青・緑・赤のグラデーションだった）。
 const RANK_STYLES = [
-  { size: 'col-span-2 row-span-2', color: 'from-purple-600 to-indigo-900', tag: '掲載数 1位' },
-  { size: 'col-span-1 row-span-1', color: 'from-pink-600 to-rose-900', tag: '掲載数 2位' },
-  { size: 'col-span-1 row-span-1', color: 'from-blue-600 to-cyan-900', tag: '掲載数 3位' },
-  { size: 'col-span-1 row-span-2', color: 'from-emerald-600 to-teal-900', tag: '掲載数 4位' },
-  { size: 'col-span-1 row-span-1', color: 'from-red-600 to-orange-900', tag: '掲載数 5位' },
+  { size: 'col-span-2 row-span-2', color: 'from-pink-900/50 to-slate-900', tag: '掲載数 1位' },
+  { size: 'col-span-1 row-span-1', color: 'from-slate-900 to-slate-900', tag: '掲載数 2位' },
+  { size: 'col-span-1 row-span-1', color: 'from-slate-900 to-slate-900', tag: '掲載数 3位' },
+  // ⚠️ 4位も1段にする（2段にすると1位の下に穴が空いていた）。1位の2×2＋小さい4枚で隙間なく埋まる。
+  { size: 'col-span-1 row-span-1', color: 'from-slate-900 to-slate-900', tag: '掲載数 4位' },
+  { size: 'col-span-1 row-span-1', color: 'from-slate-900 to-slate-900', tag: '掲載数 5位' },
 ];
+
+// 見出し帯の日付（日本時間）。サーバーと画面で日付が変わる瞬間だけ食い違うので suppressHydrationWarning を付けて出す。
+function jstDateLabel() {
+  const d = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月${d.getUTCDate()}日（${'日月火水木金土'[d.getUTCDay()]}）`;
+}
 
 export default function HomePage({ initialHero = [], reviewsByPref = [], latestReviews = [], reviewStats = null, liveCounts = null }) {
   const { shops, loading, roomCounts } = useShopData();
@@ -222,12 +231,22 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
       {/* 1. ヒーローセクション
           ⚠️ U02: スライダーの置換・静的化・coverflow効果や高さの再設計はしない。 */}
       <div className="relative">
-        <TopHeroSlider initialHero={initialHero} />
+        {/* 日付入りの見出し帯（雑誌の表紙の一行）。スライダーの上・ヘッダーの下に置く。
+            ⚠️ 細く保つ（390×844で「特典・登録・検索」を最初の画面に入れる・U02）。 */}
+        <TopHeroSlider
+          initialHero={initialHero}
+          topSlot={(
+            <div className="relative z-10 mx-auto flex max-w-[1200px] items-center justify-between gap-3 border-y border-slate-800 px-4 py-1.5 md:px-6">
+              <span className="font-mincho text-[13px] font-bold tracking-[0.14em] text-slate-100">メンズエステの口コミ手帖</span>
+              <span className="text-[11px] text-slate-400" suppressHydrationWarning>{jstDateLabel()}</span>
+            </div>
+          )}
+        />
         {/* 検索カードをスライダーに食い込ませて常にファーストビュー内に。
             ⚠️ U02-2: PC幅880px・余白24px・角丸16px。以前の40px余白＋40px角丸は
                「何のサイトか」を書くための領域をカードの縁で食い潰していた。 */}
         <div className="relative z-30 -mt-2 md:mt-6 px-4 md:px-6 max-w-[880px] mx-auto">
-          <div className="bg-slate-900/80 backdrop-blur-2xl border border-white/10 p-4 md:p-6 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+          <div className="bg-slate-900 border border-slate-700 p-4 md:p-6 rounded-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
             {/* ⚠️ U02-1: ページのH1はここ1つだけ。以前は sr-only のH1が別にあり、
                    画面に見えている一番大きな文字（＝利用者が読む見出し）と食い違っていた。
                    このカード内のH1はスマホ22px・PC28pxで、汎用H1より小さくする（U02-2）。 */}
@@ -236,7 +255,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
                    クローラーや読み上げ以外の抽出では「見出しが重複」に見える。外部の指摘で発覚）。
                    文字の大きさだけの違いなので、1つの要素のまま幅で切り替える。
                    ⚠️ index.css に「768px以下の h1 は 1.5rem」があるが、クラス指定のほうが強いので 22px が勝つ。 */}
-            <h1 className="font-black text-white tracking-tight text-[22px] md:text-[28px]" style={{ lineHeight: 1.3 }}>
+            <h1 className="font-mincho font-bold text-slate-50 text-[22px] md:text-[28px]" style={{ lineHeight: 1.4 }}>
               口コミを読んで、店選びの不安を減らす。
             </h1>
 
@@ -248,7 +267,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
                     to={withReturnTo('/register', '', { source: 'home' })}
                     onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
                     data-cta="home-register"
-                    className="inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-pink-600 px-6 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                    className="inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-sm bg-pink-500 px-6 font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300"
                     style={{ minHeight: '48px', fontSize: '15px' }}
                   >
                     無料登録する
@@ -304,19 +323,16 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
                「ハイライト（人気エリア）→ 全一覧（すべてのエリア）」の1本の流れに整理する。
                フッター側は「都道府県から探す」に改名して役割を分けた。 */}
         <section>
-          <div className="flex items-center justify-between mb-6 px-2">
-            <h3 className="text-xl md:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
-              <span className="w-1.5 h-6 bg-pink-500 rounded-full"></span>
-              エリアから探す
-            </h3>
+          <div className="mb-6 border-b border-slate-700 pb-3">
+            <h3 className="font-mincho text-[26px] md:text-[32px] font-bold leading-[1.3] text-slate-50">エリアから探す</h3>
           </div>
 
           {/* ハイライト：掲載数の多いエリア */}
           <div className="flex items-end justify-between mb-4 px-2">
-            <h4 className="text-sm font-black text-slate-300 tracking-wide">人気エリア</h4>
+            <h4 className="font-mincho text-base font-bold text-slate-200">人気エリア</h4>
             {/* ⚠️「店舗数ランキング」と書いていたが、これは市場規模の順位ではなく
                    当サイトの掲載数の多い順。/stats で同じ表記を正した（2026-08-17）ので揃える。 */}
-            <span className="text-xs text-slate-500 font-bold">掲載店舗数の多い順</span>
+            <span className="text-xs text-slate-400">掲載店舗数の多い順</span>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[160px] md:auto-rows-[200px]">
@@ -324,32 +340,33 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
               <Link
                 key={area.name}
                 to={`/shops?q=${area.name}`}
-                className={`group relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br ${area.color} ${area.size}`}
+                className={`group relative overflow-hidden border border-slate-700 transition-colors duration-300 hover:border-pink-500/60 bg-gradient-to-br ${area.color} ${area.size}`}
               >
-                {/* Unsplashの外国夜景を廃止＝1.1MBのLCP負債除去＋誠実さ。タイポグラフィタイルに */}
-                <div className="absolute inset-0 bg-slate-950/35 group-hover:bg-slate-950/15 transition duration-300" />
-                <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
-                  <div className="flex flex-wrap gap-1 mb-2">
+                {/* Unsplashの外国夜景を廃止＝1.1MBのLCP負債除去＋誠実さ。文字だけのタイルに */}
+                <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-between">
+                  <div className="flex flex-wrap gap-1">
                     {area.tags.map(tag => (
-                      <span key={tag} className="text-xs font-bold bg-black/25 backdrop-blur px-2 py-0.5 rounded text-white border border-white/10">
+                      <span key={tag} className="text-[11px] tracking-[0.12em] text-pink-300">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black text-white leading-none tracking-tight mb-1">
-                    {area.name}
-                  </h2>
-                  <p className="text-xs md:text-sm font-bold text-white/80 group-hover:text-white transition">
-                    {area.sub}
-                  </p>
+                  <div>
+                    <h2 className="font-mincho text-2xl md:text-4xl font-bold text-slate-50 leading-tight group-hover:text-pink-200 transition-colors">
+                      {area.name}
+                    </h2>
+                    <p className="mt-1 text-xs text-slate-400">
+                      {area.sub}
+                    </p>
+                  </div>
                 </div>
               </Link>
             ))}
           </div>
 
           {/* 全一覧：地方→都道府県→市区のアコーディオン */}
-          <div className="mt-8 pt-6 border-t border-white/5">
-            <h4 className="text-sm font-black text-slate-300 tracking-wide mb-4 px-2">すべてのエリア</h4>
+          <div className="mt-8 pt-6 border-t border-slate-800">
+            <h4 className="font-mincho text-base font-bold text-slate-200 mb-4">すべてのエリア</h4>
             <PrefectureSelector shops={shops} />
           </div>
         </section>
@@ -359,18 +376,16 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
 
         {/* 3.5. 注目セラピスト */}
         <section>
-          <div className="flex items-center justify-between mb-6 px-2">
-            <h3 className="text-xl md:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
-              <span className="text-2xl">💃</span> 注目セラピスト
-            </h3>
-            <Link to="/search" className="text-xs text-slate-400 font-bold hover:text-white transition py-3 -my-3 pl-3">もっと見る</Link>
+          <div className="mb-6 flex items-end justify-between border-b border-slate-700 pb-3">
+            <h3 className="font-mincho text-[26px] md:text-[32px] font-bold leading-[1.3] text-slate-50">注目セラピスト</h3>
+            <Link to="/search" className="text-xs text-slate-300 font-bold hover:text-white transition py-3 -my-3 pl-3">もっと見る →</Link>
           </div>
           {loading || featuredTherapists.length === 0 ? (
             /* スケルトン: 横スクロール */
             <div className="flex gap-4 pb-4 -mx-4 px-4 overflow-hidden">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="flex-shrink-0 w-[120px] md:w-[150px]">
-                  <div className="aspect-[3/4] rounded-2xl bg-slate-800 animate-pulse" />
+                  <div className="aspect-[3/4] bg-slate-800 animate-pulse" />
                 </div>
               ))}
             </div>
@@ -384,7 +399,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
                     to={shop ? `/shops/${shop.id}/threads/${t.id}` : '/search'}
                     className="snap-center flex-shrink-0 w-[120px] md:w-[150px] group"
                   >
-                    <div className="aspect-[3/4] rounded-2xl overflow-hidden relative bg-slate-900">
+                    <div className="aspect-[3/4] overflow-hidden relative border border-slate-700 bg-slate-900">
                       <img
                         src={optimizeImageUrl(t.image_url, 300)}
                         alt={t.name}
@@ -397,7 +412,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                       <div className="absolute bottom-2 left-2 right-2">
-                        <p className="text-white font-black text-xs leading-tight [text-shadow:0_1px_4px_rgba(0,0,0,0.9)] truncate">{t.name}</p>
+                        <p className="font-mincho text-white font-bold text-sm leading-tight [text-shadow:0_1px_4px_rgba(0,0,0,0.9)] truncate">{t.name}</p>
                         {shop && <p className="text-pink-300 text-xs truncate mt-0.5">{getDisplayName(shop.name, shop)}</p>}
                       </div>
                     </div>
@@ -410,11 +425,9 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
 
         {/* 4. 新着店舗 */}
         <section>
-          <div className="flex items-center justify-between mb-6 px-2">
-              <h3 className="text-xl md:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
-                <span className="text-2xl">✨</span> 新着店舗
-              </h3>
-              <Link to="/shops" className="text-xs text-slate-400 font-bold hover:text-white transition py-3 -my-3 pl-3">もっと見る</Link>
+          <div className="mb-6 flex items-end justify-between border-b border-slate-700 pb-3">
+              <h3 className="font-mincho text-[26px] md:text-[32px] font-bold leading-[1.3] text-slate-50">新着店舗</h3>
+              <Link to="/shops" className="text-xs text-slate-300 font-bold hover:text-white transition py-3 -my-3 pl-3">もっと見る →</Link>
           </div>
 
           {loading ? (
@@ -422,8 +435,8 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
             <div className="flex gap-4 pb-8 -mx-4 px-4 overflow-hidden">
               {Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="flex-shrink-0 w-[160px] md:w-[240px]">
-                  <div className="aspect-[3/4] rounded-t-2xl bg-slate-800 animate-pulse" />
-                  <div className="bg-slate-900 rounded-b-2xl p-3 space-y-2">
+                  <div className="aspect-[3/4] bg-slate-800 animate-pulse" />
+                  <div className="bg-slate-900 p-3 space-y-2">
                     <div className="h-3 bg-slate-800 animate-pulse rounded-full w-3/4" />
                     <div className="h-2 bg-slate-800 animate-pulse rounded-full w-1/2 opacity-60" />
                   </div>
@@ -442,21 +455,21 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
                        縦長(3/4)のカードに object-cover で入れると上下を切り落とし、
                        文字の断片だけが写って「壊れている」ように見える（2026-08-20 実機で発覚）。
                        ヒーローと同じく「ぼかし背景＋contain」にして全体を見せる。 */}
-                <div className="aspect-[3/4] rounded-t-2xl overflow-hidden relative bg-slate-900">
+                <div className="aspect-[3/4] overflow-hidden relative border border-slate-700 bg-slate-900">
                   {/* ⚠️ object-contain は imgClassName で渡す。className はラッパーdivに付くだけ。 */}
                   <LazyImage src={shop.image_url || shop.image} alt="" className="absolute inset-0 w-full h-full scale-110 blur-xl opacity-30" imgClassName="w-full h-full object-cover" />
                   <LazyImage src={shop.image_url || shop.image} alt={shop.name} className="absolute inset-0 w-full h-full p-3 transition duration-700 group-hover:scale-105" imgClassName="w-full h-full object-contain" />
                   <div className="absolute top-2 left-2">
-                    <span className="bg-pink-600/90 backdrop-blur text-white text-xs font-bold px-2 py-0.5 rounded shadow-lg">NEW</span>
+                    <span className="bg-pink-500 text-slate-950 text-[11px] font-bold px-2 py-0.5">NEW</span>
                   </div>
                 </div>
-                <div className="bg-slate-900 rounded-b-2xl px-3 py-2.5 border-t border-white/5">
-                  <h4 className="text-white font-black text-sm leading-tight truncate">{getDisplayName(shop.name, shop)}</h4>
+                <div className="px-0.5 pt-2">
+                  <h4 className="font-mincho text-slate-50 font-bold text-[15px] leading-tight truncate group-hover:text-pink-300">{getDisplayName(shop.name, shop)}</h4>
                   <p className="text-xs text-slate-400 truncate mt-0.5">{shop.prefecture || '東京'}{shop.city && shop.city !== shop.prefecture ? ` ${shop.city}` : ''}</p>
                 </div>
               </Link>
             ))}
-             <Link to="/shops" className="snap-center flex-shrink-0 w-[120px] flex items-center justify-center border border-dashed border-white/20 rounded-2xl bg-white/5 hover:bg-white/10 transition group aspect-[3/4]">
+             <Link to="/shops" className="snap-center flex-shrink-0 w-[120px] flex items-center justify-center border border-slate-700 hover:border-pink-500/60 transition group aspect-[3/4]">
                 <div className="text-center">
                   <span className="block text-2xl mb-2 group-hover:translate-x-1 transition">→</span>
                   <span className="text-xs font-bold text-slate-400">すべて見る</span>
@@ -472,26 +485,26 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
             ⚠️「1件で読み放題」という期限のない書き方をしない。日数を明記する。 */}
         <section>
           {!user ? (
-            <div className="ui-card p-5 lg:p-6 text-center">
-              <h4 className="text-white font-black text-lg">無料登録で3日間、口コミ読み放題</h4>
+            <div className="border border-slate-700 bg-slate-900 p-6 lg:p-8">
+              <h4 className="font-mincho text-xl font-bold leading-[1.5] text-slate-50">無料登録で3日間、口コミ読み放題</h4>
               <p className="ui-help mt-2">{FREE_READ_NOTE}</p>
               <Link
                 to={withReturnTo('/register', '', { source: 'home' })}
                 onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
-                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-pink-600 px-6 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-sm bg-pink-500 px-6 font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300"
                 style={{ minHeight: '48px', fontSize: '15px' }}
               >
                 無料登録する
               </Link>
             </div>
           ) : (
-            <div className="ui-card p-5 lg:p-6 text-center">
-              <h4 className="text-white font-black text-lg">体験談を投稿して、閲覧期間を延長</h4>
+            <div className="border border-slate-700 bg-slate-900 p-6 lg:p-8">
+              <h4 className="font-mincho text-xl font-bold leading-[1.5] text-slate-50">体験談を投稿して、閲覧期間を延長</h4>
               <p className="ui-muted mt-2">200字で3日間、700字で7日間の閲覧権が即時付与されます</p>
               <Link
                 to="/post-review"
                 onClick={() => trackEvent('click_paywall_cta', { target: 'post_review', source: 'home' })}
-                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-pink-600 px-6 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-sm bg-pink-500 px-6 font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300"
                 style={{ minHeight: '48px', fontSize: '15px' }}
               >
                 体験談を書く
@@ -512,18 +525,18 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
         {/* 注目店舗バナー */}
         <div className="sticky top-4 space-y-8">
           <div>
-            <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 px-1">注目店舗</h4>
+            <h4 className="font-mincho text-lg font-bold text-slate-50 mb-3 border-b border-slate-700 pb-2">注目店舗</h4>
             <div className="space-y-3">
               {sidebarShops.map(shop => (
                   <Link
                     key={shop.id}
                     to={shopHref(shop, roomCounts)}
-                    className="group flex items-center gap-3 bg-slate-900/60 hover:bg-slate-800/80 border border-white/5 hover:border-pink-500/20 rounded-2xl p-3 transition-all duration-200"
+                    className="group flex items-center gap-3 border-b border-slate-800 py-3 transition-colors"
                   >
                     {/* ⚠️ 16x16の小さなサムネでも、横長ロゴを cover で入れると
                            左右が切れて何の店か分からなくなる。ここも contain（D-008）。
                            p-1 でロゴが枠に貼り付かないように余白を入れる。 */}
-                    <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-800 p-1">
+                    <div className="w-16 h-16 overflow-hidden flex-shrink-0 border border-slate-700 bg-slate-900 p-1">
                       <img
                         src={optimizeImageUrl(shop.image_url, 128)}
                         alt={shop.name}
@@ -536,9 +549,9 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white font-black text-xs leading-tight truncate">{getDisplayName(shop.name, shop)}</p>
+                      <p className="font-mincho text-slate-50 font-bold text-sm leading-tight truncate group-hover:text-pink-300">{getDisplayName(shop.name, shop)}</p>
                       <p className="text-slate-400 text-xs mt-0.5 truncate">{shop.prefecture} {shop.city}</p>
-                      <span className="text-pink-400 text-xs font-bold mt-1 block group-hover:translate-x-0.5 transition-transform">詳しく見る →</span>
+                      <span className="text-pink-300 text-xs mt-1 block">詳しく見る →</span>
                     </div>
                   </Link>
                 ))}
@@ -549,25 +562,25 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
               登録案内1枚＋統計のテキストリンクへ整理した。
               PC右カラムが同じ話を繰り返す長い柱になっていた。固定追従バナーは追加しない。 */}
           {!user ? (
-            <div className="ui-card p-5">
-              <h4 className="text-white font-black text-sm leading-snug">無料登録で3日間、口コミ読み放題</h4>
+            <div className="border border-slate-700 bg-slate-900 p-5">
+              <h4 className="font-mincho text-base font-bold leading-snug text-slate-50">無料登録で3日間、口コミ読み放題</h4>
               <p className="ui-help mt-2">{FREE_READ_NOTE}</p>
               <Link
                 to={withReturnTo('/register', '', { source: 'home' })}
                 onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
-                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-pink-600 px-4 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                className="mt-3 inline-flex w-full items-center justify-center rounded-sm bg-pink-500 px-4 font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300"
                 style={{ minHeight: '48px', fontSize: '14px' }}
               >
                 無料登録する
               </Link>
             </div>
           ) : (
-            <div className="ui-card p-5">
-              <h4 className="text-white font-black text-sm leading-snug">体験談を投稿して、閲覧期間を延長</h4>
+            <div className="border border-slate-700 bg-slate-900 p-5">
+              <h4 className="font-mincho text-base font-bold leading-snug text-slate-50">体験談を投稿して、閲覧期間を延長</h4>
               <p className="ui-help mt-2">200字で3日間、700字で7日間</p>
               <Link
                 to="/post-review"
-                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-pink-600 px-4 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                className="mt-3 inline-flex w-full items-center justify-center rounded-sm bg-pink-500 px-4 font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300"
                 style={{ minHeight: '48px', fontSize: '14px' }}
               >
                 体験談を書く

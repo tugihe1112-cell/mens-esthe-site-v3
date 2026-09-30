@@ -471,8 +471,8 @@ a {
   backdrop-filter: blur(10px);
   width: 40px !important;
   height: 40px !important;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  border: 1px solid rgba(238, 231, 219, 0.25);
   top: 46% !important;
 }
 

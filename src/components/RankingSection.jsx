@@ -112,27 +112,25 @@ export default function RankingSection() {
 
   return (
     <section className="relative z-10">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 border-b border-slate-700 pb-3">
         <div>
-          <h2 className="text-3xl font-black text-white flex items-center gap-3">
-            <span className="text-yellow-500 drop-shadow-lg">🏆</span> 
-            <span>部門別ランキング</span>
-          </h2>
-          <p className="text-slate-400 text-sm font-medium mt-2 pl-1">
+          <h2 className="font-mincho text-[26px] md:text-[32px] font-bold leading-[1.3] text-slate-50">部門別ランキング</h2>
+          <p className="text-slate-400 text-sm mt-1">
             リアルな体験談に基づく、今もっとも熱いセラピスト
           </p>
         </div>
 
         {/* タブメニュー */}
-        <div className="flex bg-slate-900/80 p-1.5 rounded-2xl border border-white/10 backdrop-blur-md overflow-x-auto no-scrollbar max-w-full">
+        <div role="group" aria-label="ランキングの部門" className="flex divide-x divide-slate-700 rounded-sm border border-slate-700 overflow-x-auto no-scrollbar max-w-full">
           {RANKING_CATEGORIES.map(cat => (
              <button 
                key={cat.id} 
                onClick={() => setRankingTab(cat.id)}
-               className={`whitespace-nowrap px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+               aria-pressed={rankingTab === cat.id}
+               className={`min-h-11 whitespace-nowrap px-4 text-sm transition-colors ${
                  rankingTab === cat.id
-                 ? 'bg-pink-600 text-white shadow-lg shadow-pink-900/40'
-                 : 'text-slate-400 hover:text-white hover:bg-white/5'
+                 ? 'bg-slate-800 font-bold text-slate-50'
+                 : 'text-slate-400 hover:text-white'
                }`}
              >
                {cat.label}
@@ -142,70 +140,64 @@ export default function RankingSection() {
       </div>
 
       {/* ランキングリスト表示 */}
-      <div className="grid gap-4">
+      <div className="grid">
          {topTherapists.map((item, index) => (
             <Link 
               key={item.key} 
               to={`/shops/${item.shopId}/threads/${item.id}`}
-              className="group flex items-center gap-4 bg-slate-900/40 p-4 rounded-3xl border border-white/5 hover:border-pink-500/50 hover:bg-slate-900/60 transition-all duration-300"
+              className="group flex items-center gap-4 border-b border-slate-800 py-4 transition-colors"
             >
-               {/* 順位バッジ */}
-               <div className={`w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl font-black text-xl shadow-inner ${
-                 index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-black shadow-yellow-900/50' :
-                 index === 1 ? 'bg-gradient-to-br from-slate-300 to-slate-400 text-slate-900' :
-                 index === 2 ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white' : 
-                 'bg-slate-800 text-slate-500'
-               }`}>
-                 {index + 1}
+               {/* 順位（金・銀・銅の色はやめ、数字の書体で。上位3つだけ朱） */}
+               <div className={`w-10 flex-shrink-0 text-center font-numeral text-[32px] font-semibold leading-none ${index < 3 ? 'text-pink-400' : 'text-slate-500'}`}>
+                 {String(index + 1).padStart(2, '0')}
                </div>
 
                {/* 画像 */}
-               <div className="w-16 h-16 rounded-2xl overflow-hidden border border-white/10 flex-shrink-0 relative group-hover:scale-105 transition duration-500">
+               <div className="w-16 h-16 overflow-hidden border border-slate-700 flex-shrink-0 relative">
                  <LazyImage src={item.image_url || item.image} alt={item.name} className="w-full h-full object-cover" />
                </div>
 
                {/* 情報 */}
                <div className="flex-1 min-w-0">
                  <div className="flex items-center gap-2">
-                    <h3 className="text-white font-bold text-lg truncate group-hover:text-pink-400 transition">
+                    <h3 className="font-mincho text-slate-50 font-bold text-lg truncate group-hover:text-pink-300 transition">
                       {item.name}
                     </h3>
-                    {item.age && <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full border border-slate-700">Age {item.age}</span>}
+                    {item.age && <span className="shrink-0 text-xs text-slate-400">{item.age}歳</span>}
                  </div>
-                 <p className="text-xs text-slate-500 truncate mt-1">{item.shopName}</p>
+                 <p className="text-xs text-slate-400 truncate mt-1">{item.shopName}</p>
                </div>
 
                {/* スコア（口コミ件数を必ず併記＝母数を隠さない） */}
                <div className="text-right hidden sm:block">
-                 <div className="text-2xl font-black text-pink-500 leading-none">
+                 <div className="font-numeral text-3xl font-semibold text-slate-50 leading-none">
                    {item[`avg_${rankingTab}`].toFixed(1)}
                  </div>
-                 <div className="text-xs text-slate-500 font-bold mt-1">口コミ{item.count}件</div>
+                 <div className="text-xs text-slate-400 mt-1">口コミ{item.count}件</div>
                </div>
                {/* モバイルは省スペースで1行に */}
                <div className="text-right sm:hidden">
-                 <div className="text-lg font-black text-pink-500 leading-none">
+                 <div className="font-numeral text-2xl font-semibold text-slate-50 leading-none">
                    {item[`avg_${rankingTab}`].toFixed(1)}
                  </div>
-                 <div className="text-xs text-slate-500 font-bold mt-0.5">{item.count}件</div>
+                 <div className="text-xs text-slate-400 mt-0.5">{item.count}件</div>
                </div>
                
-               <div className="text-slate-700 group-hover:text-pink-500 transition-colors px-2">›</div>
+               <div aria-hidden="true" className="text-slate-600 group-hover:text-pink-400 transition-colors px-1">→</div>
             </Link>
          ))}
          
          {topTherapists.length === 0 && (
-           <div className="relative overflow-hidden rounded-3xl border border-pink-500/20 bg-gradient-to-br from-pink-950/40 to-purple-950/40 p-8 text-center">
-             <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-purple-500/5 pointer-events-none" />
-             <p className="text-pink-400 font-black tracking-widest text-xs uppercase mb-3">口コミ募集中</p>
-             <h3 className="text-white font-black text-xl mb-2">ランキングを一緒に作ろう</h3>
+           <div className="border border-slate-700 bg-slate-900 p-6 md:p-8">
+             <p className="text-pink-300 tracking-[0.2em] text-[11px] mb-3">口コミ募集中</p>
+             <h3 className="font-mincho text-slate-50 font-bold text-xl mb-2">ランキングを一緒に作ろう</h3>
              <p className="text-slate-400 text-sm mb-6 leading-relaxed">
                体験談を投稿すると<span className="text-pink-400 font-bold">閲覧権が得られます</span>。<br/>
                あなたの口コミがランキングを動かします。
              </p>
              <Link
                to="/post-review"
-               className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-black px-8 py-3 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-pink-900/40 text-sm"
+               className="inline-flex min-h-11 items-center bg-pink-500 hover:bg-pink-400 text-slate-950 font-bold px-8 rounded-sm transition-colors active:scale-95 text-sm"
              >
                口コミを書く
              </Link>
