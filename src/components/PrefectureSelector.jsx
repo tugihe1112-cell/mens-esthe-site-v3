@@ -22,7 +22,7 @@ const TOKYO_GROUPS = [
   { label: "城西", items: ["中野区", "新宿区", "杉並区", "渋谷区"], colorClass: "border-purple-500 text-purple-400" },
   { label: "城北", items: ["北区", "練馬区", "豊島区"], colorClass: "border-yellow-500 text-yellow-400" },
   { label: "都心", items: ["中央区", "千代田区", "港区"], colorClass: "border-pink-500 text-pink-400" },
-  { label: "市部", items: ["三鷹市", "八王子市", "調布市", "立川市", "国分寺市", "小金井市", "府中市", "武蔵野市", "多摩市", "町田市", "23区出張"], colorClass: "border-slate-500 text-slate-400" }
+  { label: "市部", items: ["三鷹市", "八王子市", "日野市", "調布市", "立川市", "国分寺市", "小金井市", "府中市", "武蔵野市", "多摩市", "町田市", "23区出張"], colorClass: "border-slate-500 text-slate-400" }
 ];
 
   const AreaPanel = ({ city, pref, areas, activePlaces }) => {

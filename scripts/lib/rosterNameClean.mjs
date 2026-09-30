@@ -11,8 +11,8 @@
  *  にならないものは足さない（英字だけの名前・1文字の名前も今回は足さない）。
  */
 
-const REJECT_ANY = /(円|分|割|限定|お得|情報|お知らせ|出勤|コース|料金|予約|キャンペーン|イベント|募集|求人|一覧|ランキング|ranking|日記|ブログ|blog|diary|コチラ|こちら|ノーイメージ|no ?image|now ?printing|coming ?soon|近日|公開|準備中|本日|店休|休業|お休み|ロゴ|logo|バナー|banner|メンズリラク|エステ魂|店長|スタッフ|体験入店|シークレット|×|＆|&|AV|女優|ランク|カップ$)/i;
-const SUFFIXES = [/\s*セラピスト写真$/, /\s*の?写真$/, /セラピストの詳細$/, /の詳細$/, /の?(bluesky|twitter|instagram|tiktok|その他sns|sns)$/i, /(セラピスト|セラピ)$/, /さんの(写真|画像|プロフィール)$/];
+const REJECT_ANY = /(円|分|割|限定|お得|情報|お知らせ|出勤|コース|料金|予約|キャンペーン|イベント|募集|求人|一覧|ランキング|ranking|日記|ブログ|blog|diary|コチラ|こちら|ノーイメージ|no ?image|now ?printing|coming ?soon|近日|公開|準備中|本日|店休|休業|お休み|ロゴ|logo|バナー|banner|メンズリラク|エステ魂|店長|スタッフ|体験入店|シークレット|×|＆|&|AV|女優|ランク|カップ$|レビュー|口コミ|を見る$|詳しく|状況)/i;
+const SUFFIXES = [/\s*セラピスト写真$/, /\s*の?写真$/, /\s*の画像$/, /セラピストの詳細$/, /の詳細$/, /の?(bluesky|twitter|instagram|tiktok|その他sns|sns)$/i, /(セラピスト|セラピ)$/, /さんの(写真|画像|プロフィール)$/];
 // 名前の欄に入っていた「タグ・売り文句」（esthe-alice の「清楚系」「未経験」「イチオシ」、milkrepos の客の名前「〜 様」など）。
 // 名前そのものと一致したときだけ捨てる（「可愛川 ゆの」のような名字は残す）。末尾が「系」は名前ではない。
 const REJECT_EXACT = new Set(['スレンダー', 'グラマー', '長身', '巨乳', '爆乳', '美乳', '美脚', '小柄', '高身長', '色白', '健康的', 'ベテラン', '外国人',
@@ -31,8 +31,18 @@ export function cleanRosterName(raw, sitePrefix = '') {
   let s = String(raw || '').normalize('NFKC').replace(/[\s　]+/g, ' ').trim();
   if (!s) return null;
   if (sitePrefix && s.startsWith(sitePrefix)) s = s.slice(sitePrefix.length).trim();
+  // 検索向けの alt「椎名ティナ【LINDA SPA】麻布十番メンズエステ」「銀座メンズエステ【アロマメゾン】岡崎レン」（2026-09-29）。
+  // 【】の左右のうち「メンズエステ」を含まない側が名前。読み仮名の「紗奈【さな】」は左右どちらにも無いので触らない。
+  {
+    const m = s.match(/^(.*?)【[^】]*】(.*)$/);
+    const ad = (t) => /メンズエステ|メンエス/.test(t);
+    if (m && ad(m[2]) && !ad(m[1]) && m[1].trim()) s = m[1].trim();
+    else if (m && ad(m[1]) && !ad(m[2]) && m[2].trim()) s = m[2].trim();
+  }
   // 「あんり 9/24入店」の入店日（MADAME聖子・2026-09-27）。下の「/」で切る前に外す（切ると「あんり 9」が残って捨てていた）
   s = s.replace(/\s*\d{1,2}\s*[\/月]\s*\d{1,2}\s*日?\s*(入店|デビュー)\s*$/, '');
+  // 「りん(22) ----」「あすか(19) 16:00～22:30」＝名前の後ろの（年齢）から先は出勤の表示（Aimerfeel・2026-09-29）
+  s = s.replace(/\s*[(（]\d{1,2}[)）].*$/, '');
   // ⚠️ キャッチコピーを先に外してから「名前でないもの」を判定する（「叶 恭子♡Iカップ」を名前ごと捨てないため）
   s = s.split(/[〜~♡♥❤★☆♪♦◆◇※｜|／/🔰]/u)[0];                       // ここから後ろはキャッチコピー
   if (REJECT_ANY.test(s)) return null;
@@ -50,20 +60,28 @@ export function cleanRosterName(raw, sitePrefix = '') {
 }
 
 /**
- * そのサイトの名前に共通して付く頭の文字（空白で区切られた最初の語）を見つける。
+ * そのサイトの名前に共通して付く頭の文字（空白で区切られた語）を見つける。
  * 半分以上の名前が同じ語で始まっていれば、それは店名などの飾りとみなす。
+ * 3語まで続けて見る（「虎ノ門メンズエステ タイガーゲート 天乃てんか」「美魔女セラピー 大阪 陽子」・2026-09-29）。
+ * 後ろにまだ語が残るときだけ伸ばす＝名前そのものは食わない（「シークレットルームヒマワリ 大倉 さおり」の名字は人ごとに違うので止まる）。
  */
 export function detectSitePrefix(raws) {
-  const heads = new Map();
-  let n = 0;
-  for (const r of raws) {
-    const s = String(r || '').normalize('NFKC').replace(/[\s　]+/g, ' ').trim();
-    const m = s.match(/^(\S+) \S/);
-    n += 1;
-    if (m) heads.set(m[1], (heads.get(m[1]) || 0) + 1);
+  const list = raws.map((r) => String(r || '').normalize('NFKC').replace(/[\s　]+/g, ' ').trim());
+  const n = list.length;
+  if (n < 4) return '';
+  let prefix = '';
+  for (let depth = 0; depth < 3; depth += 1) {
+    const heads = new Map();
+    for (const s of list) {
+      if (prefix && !s.startsWith(`${prefix} `)) continue;
+      const m = (prefix ? s.slice(prefix.length + 1) : s).match(/^(\S+) \S/);
+      if (m) heads.set(m[1], (heads.get(m[1]) || 0) + 1);
+    }
+    const [best, c] = [...heads.entries()].sort((a, b) => b[1] - a[1])[0] || [];
+    if (!best || c / n < 0.5) break;
+    prefix = prefix ? `${prefix} ${best}` : best;
   }
-  const [best, c] = [...heads.entries()].sort((a, b) => b[1] - a[1])[0] || [];
-  return best && n >= 4 && c / n >= 0.5 ? best : '';
+  return prefix;
 }
 
 /** 自己診断（実際に拾ったもので確かめる）。DBに触る前に呼ぶ。 */
@@ -77,7 +95,9 @@ export function selfTestRosterNameClean() {
     ['メンズリラク版はコチラ', null], ['ノーイメージ', null], ['セラピスト一覧', null], ['エステ魂', null],
     ['清楚系', null], ['未経験', null], ['イチオシ', null], ['スリム', null], ['美少女', null], ['キレイ系', null], ['たか 様', null],
     ['本日店休日', null], ['おっとり', null], ['色白肌', null], ['優しい', null], ['もっとみる', null], ['友華 セラピスト写真', '友華'], ['美月 セラピスト写真', '美月'], ['可愛川 ゆの', '可愛川 ゆの'], ['西野さん', '西野さん'], ['アバター', null], ['あんり　9/24入店', 'あんり'], ['お得情報', null], ['明日出勤', null], ['明後日出勤', null], ['明日美りお', '明日美りお'], ['明日香', '明日香'], ['☆セラピスト募集☆', null], ['さわ 9月22日デビュー', 'さわ'], ['体験入店', null],
-    ['榛名(はるな)あこ', '榛名あこ'], ['癒流 みお(ゆる みお)', '癒流 みお'], ['翠〜SS美女待望デビュー', null], ['星野りんご×月野いちご', null],
+    ['椎名ティナ【LINDA SPA】麻布十番メンズエステ', '椎名ティナ'], ['奏 ゆいか【アロマジュエルズ】新宿 秋葉原 五反田 新橋メンズエステ ', '奏 ゆいか'],
+    ['銀座メンズエステ【アロマメゾン】岡崎レン', '岡崎レン'], ['めるの画像', 'める'],
+    ['レビューを見る', null], ['りん(22) ----', 'りん'], ['あすか(19) 16:00～22:30', 'あすか'], ['リアルタイム状況(0) ----', null], ['石井 花 (26) 10：00～14：00', '石井 花'], ['口コミを見る', null], ['榛名(はるな)あこ', '榛名あこ'], ['癒流 みお(ゆる みお)', '癒流 みお'], ['翠〜SS美女待望デビュー', null], ['星野りんご×月野いちご', null],
   ];
   const problems = [];
   for (const [input, want] of cases) {
@@ -86,5 +106,9 @@ export function selfTestRosterNameClean() {
   }
   if (cleanRosterName('リリカ大阪 黒崎あいみ', detectSitePrefix(['リリカ大阪 黒崎あいみ', 'リリカ大阪 夢乃める', 'リリカ大阪 星乃るる', 'リリカ大阪 あい'])) !== '黒崎あいみ') problems.push('サイト共通の頭の文字（リリカ大阪）を外せない');
   if (detectSitePrefix(['あい', 'めい', 'ゆい', 'さら']) !== '') problems.push('頭の文字が無いサイトで誤検出');
+  const tg = ['虎ノ門メンズエステ タイガーゲート 天乃てんか', '虎ノ門メンズエステ タイガーゲート 黒木さとみ', '虎ノ門メンズエステ タイガーゲート 桜木ももか', '虎ノ門メンズエステ タイガーゲート 観月せな'];
+  if (cleanRosterName(tg[0], detectSitePrefix(tg)) !== '天乃てんか') problems.push('2語の頭の文字（虎ノ門メンズエステ タイガーゲート）を外せない');
+  const hw = ['シークレットルームヒマワリ 大倉 さおり', 'シークレットルームヒマワリ 森重 みく', 'シークレットルームヒマワリ 吉岡 つばき', 'シークレットルームヒマワリ 椎名 かおり'];
+  if (detectSitePrefix(hw) !== 'シークレットルームヒマワリ') problems.push('頭の文字を伸ばしすぎて名字まで食う');
   return problems;
 }

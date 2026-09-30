@@ -4,6 +4,8 @@
  *   node scripts/maintenance/register_hyogo_shops.mjs            （下見・何も書かない）
  *   node scripts/maintenance/register_hyogo_shops.mjs --live     （店舗・セラピスト・画像を書き込む）
  *   オプション: --file=<rosters.json>（既定 outputs/hyogo-2026-09-24/rosters.json）
+ *   岐阜・三重・兵庫の注目店（2026-09-29）からは scrape_new_shop_rosters.mjs の出力も読む。
+ *   出力に groupOf / extraRooms / existingGroupUpdates があればそれを使い、無ければ下の兵庫（9/24）の値を使う。
  *
  * 【安全装置】
  *  1. 既定は下見。`--live` が要る（知らない引数はその場で止める）。
@@ -24,7 +26,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as cheerio from 'cheerio';
 import { createClient } from '@supabase/supabase-js';
-import { assertOfficialRosterSource, rootDomainOf, scopedImageKey } from '../lib/sourceProvenance.mjs';
+import { assertOfficialRosterSource, rosterSiteKeyFactory, scopedImageKey } from '../lib/sourceProvenance.mjs';
 
 const args = process.argv.slice(2);
 for (const a of args) {
@@ -63,6 +65,11 @@ const EXISTING_GROUP_UPDATES = [
   { id: 'osaka_umeda_打上花火梅田ルーム', from: null, to: 'g_brand_uchiage_hanabi' },
   { id: 'hyogo_sannomiya_mrs_melty', from: 'g_solo_hyogo_sannomiya_mrs_melty', to: 'g_brand_mrs_melty' },
 ];
+// 出力ファイルに書いてあればそちら（岐阜・三重・兵庫の注目店＝2026-09-29）。兵庫（9/24）のファイルには無いので上の値を使う。
+if (data.groupOf) { for (const k of Object.keys(GROUP_OF)) delete GROUP_OF[k]; Object.assign(GROUP_OF, data.groupOf); }
+if (data.extraRooms) EXTRA_ROOMS.splice(0, EXTRA_ROOMS.length, ...data.extraRooms);
+if (data.existingGroupUpdates) EXISTING_GROUP_UPDATES.splice(0, EXISTING_GROUP_UPDATES.length, ...data.existingGroupUpdates);
+const LABEL = data.label || 'hyogo';
 const groupOf = (s) => GROUP_OF[s.key] || `g_solo_${s.shop.id}`;
 
 // ── 事前チェック（DBを読むだけ）─────────────────────────────
@@ -76,15 +83,18 @@ for (let from = 0; ; from += 1000) {
   allShops.push(...rows);
   if (rows.length < 1000) break;
 }
+// 同じ店かどうかはサイトの単位で見る。1つのドメインに別の店が相乗りしている所（esthe-hp.com・estama.jp・ap2hp.com など）は
+// アドレスごと（rosterSiteKeyFactory）。ドメインで見ると、相乗りの別の店を「同じ店」と取り違えて止まる（2026-09-29）。
+const siteKey = rosterSiteKeyFactory([...allShops.map((r) => r.website_url), ...shops.map((s) => s.shop.website_url), ...EXTRA_ROOMS.map((r) => r.website_url)]);
 const byDomain = new Map();
 for (const r of allShops) {
-  const d = rootDomainOf(r.website_url);
+  const d = siteKey(r.website_url);
   if (d) (byDomain.get(d) || byDomain.set(d, []).get(d)).push(r);
 }
 const conflicts = [];
 for (const s of shops) {
   if (sameId?.some((r) => r.id === s.shop.id)) conflicts.push(`${s.shop.id}: 同じ id が既にある`);
-  const d = rootDomainOf(s.shop.website_url);
+  const d = siteKey(s.shop.website_url);
   // 同じブランドにまとめる既存レコード（EXISTING_GROUP_UPDATES）は衝突ではない。
   const known = (byDomain.get(d) || []).filter((r) => !EXISTING_GROUP_UPDATES.some((u) => u.id === r.id));
   if (known.length) conflicts.push(`${s.shop.id}: 同じ公式サイトの店がある（${known.map((r) => r.id).join(', ')}）`);
@@ -99,8 +109,9 @@ for (const s of shops) {
 }
 for (const r of EXTRA_ROOMS) {
   if (sameId?.some((x) => x.id === r.id)) conflicts.push(`${r.id}: 同じ id が既にある`);
-  const d = rootDomainOf(r.website_url);
-  if ((byDomain.get(d) || []).length) conflicts.push(`${r.id}: 同じ公式サイトの店がある（${byDomain.get(d).map((x) => x.id).join(', ')}）`);
+  // 同じブランドにまとめる既存レコード（EXISTING_GROUP_UPDATES）と同じ公式サイトなのは当たり前（PomPom 高崎と西東京のルーム）
+  const known = (byDomain.get(siteKey(r.website_url)) || []).filter((x) => !EXISTING_GROUP_UPDATES.some((u) => u.id === x.id));
+  if (known.length) conflicts.push(`${r.id}: 同じ公式サイトの店がある（${known.map((x) => x.id).join(', ')}）`);
 }
 const { data: existingRows, error: e2 } = await supabase.from('shops').select('id,group_id').in('id', EXISTING_GROUP_UPDATES.map((u) => u.id));
 if (e2) { console.error('❌ DBを読めません:', e2.message); process.exit(1); }
@@ -154,7 +165,7 @@ const now = new Date().toISOString();
 const created = { at: now, file: FILE, shops: [], therapists: [], groupUpdates: [] };
 const backupDir = 'outputs/added-shops';
 fs.mkdirSync(backupDir, { recursive: true });
-const backupPath = path.join(backupDir, `hyogo-${now.replace(/[:.]/g, '-')}.json`);
+const backupPath = path.join(backupDir, `${LABEL}-${now.replace(/[:.]/g, '-')}.json`);
 const saveBackup = () => fs.writeFileSync(backupPath, JSON.stringify(created, null, 1));
 
 async function pool(items, size, fn) {

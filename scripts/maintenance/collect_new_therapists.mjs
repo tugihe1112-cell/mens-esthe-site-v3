@@ -27,8 +27,10 @@ import { rootDomainOf } from '../lib/sourceProvenance.mjs';
 import { cleanRosterName, detectSitePrefix, selfTestRosterNameClean } from '../lib/rosterNameClean.mjs';
 
 const args = process.argv.slice(2);
-for (const a of args) if (!/^--file=.+$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
-const FILES = args.map((a) => a.slice(7));
+for (const a of args) if (!/^--(file|domains)=.+$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+const FILES = args.filter((a) => a.startsWith('--file=')).map((a) => a.slice(7));
+// 読み直すサイトだけに絞る（名前を読めなかったサイトの取り直し・2026-09-29）
+const ONLY = new Set(args.filter((a) => a.startsWith('--domains=')).flatMap((a) => a.slice(10).split(',')).map((d) => d.trim()).filter(Boolean));
 if (!FILES.length) { console.error('使い方: --file=outputs/roster-audit/audit-YYYY-MM-DD.json'); process.exit(1); }
 
 const env = fs.readFileSync('.env', 'utf-8');
@@ -101,7 +103,8 @@ const byDomain = new Map();
 for (const f of FILES) for (const r of JSON.parse(fs.readFileSync(f, 'utf-8')).results) {
   if (r.usable && (r.matchRate ?? 0) >= 0.6) byDomain.set(r.domain, r);   // 後のファイルが優先
 }
-const sites = [...byDomain.values()];
+const sites = [...byDomain.values()].filter((r) => !ONLY.size || ONLY.has(r.domain));
+if (ONLY.size && sites.length !== ONLY.size) console.log(`⚠️ 指定 ${ONLY.size} サイトのうち、照合結果に無いもの: ${[...ONLY].filter((d) => !byDomain.has(d)).join(', ')}`);
 
 // ── DB（対象ドメインの全ルームの行）────────────────────────
 const shops = [];
@@ -147,7 +150,10 @@ for (const r of sites) {
   const cand = [];
   let rejectedName = 0;
   for (const x of pairs) {
-    if (NOT_PERSON.test(x.raw) || PLACEHOLDER_IMG.test(x.imgUrl)) continue;
+    // 人ではない枠の判定は、サイト共通の頭の文字を外してから（「シークレットルームヒマワリ 大倉 さおり」を「シークレット」枠として全員捨てていた・2026-09-29）
+    const body = prefix && String(x.raw).normalize('NFKC').replace(/[\s　]+/g, ' ').trim().startsWith(prefix)
+      ? String(x.raw).normalize('NFKC').replace(/[\s　]+/g, ' ').trim().slice(prefix.length) : x.raw;
+    if (NOT_PERSON.test(body) || PLACEHOLDER_IMG.test(x.imgUrl)) continue;
     const name = cleanRosterName(x.raw, prefix);
     const key = name ? nameKey(name) : nameKey(x.raw);
     const tpl = urlTemplate(x.profileUrl);
