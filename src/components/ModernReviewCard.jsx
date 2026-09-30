@@ -9,6 +9,8 @@ import ReviewStoryContent from './ReviewStoryContent.jsx';
 import { useReturnTo } from '../utils/useReturnTo';
 import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
+import RatingFingerprint, { hasFingerprint } from './RatingFingerprint.jsx';
+import { countReviewStoryChars } from '../features/reviews/reviewStory.mjs';
 
 // --- ウォーターマーク ---
 function Watermark({ text }) {
@@ -17,7 +19,7 @@ function Watermark({ text }) {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 overflow-hidden pointer-events-none rounded-3xl z-20"
+      className="absolute inset-0 overflow-hidden pointer-events-none z-20"
       style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
     >
       {items.map((i) => (
@@ -41,29 +43,6 @@ function Watermark({ text }) {
     </div>
   );
 }
-
-// タグの系統別色分け（体型=ピンク・雰囲気=パープル・年代=ブルー・属性=スレート）
-const TAG_BODY = ['スレンダー', 'グラマー', '巨乳', '美脚', '小柄', '高身長'];
-const TAG_MOOD = ['可愛い系', '美人系', '清楚系', 'ギャル系', 'お姉さん系'];
-const TAG_AGE = ['10代', '20代前半', '20代後半', '30代', '40代'];
-const tagStyle = (tag) => {
-  if (TAG_BODY.includes(tag)) return 'bg-pink-500/15 text-pink-200 border-pink-500/40';
-  if (TAG_MOOD.includes(tag)) return 'bg-purple-500/15 text-purple-200 border-purple-500/40';
-  if (TAG_AGE.includes(tag)) return 'bg-blue-500/15 text-blue-200 border-blue-500/40';
-  return 'bg-slate-600/20 text-slate-300 border-slate-500/40'; // 属性・その他
-};
-
-// --- アイコン (Lucide互換) ---
-const Icons = {
-  Eye: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
-  User: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-  Heart: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>,
-  Sparkles: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>,
-  Activity: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>,
-  Hand: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>,
-  Tag: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94 .94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/></svg>,
-  ChevronRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>,
-};
 
 // DMボタン: チャットルームを作成または既存ルームに遷移
 function DMButton({ toUserId, currentUser, navigate }) {
@@ -127,18 +106,43 @@ function DMButton({ toUserId, currentUser, navigate }) {
   );
 }
 
-export default function ModernReviewCard({ review }) {
+// 日付は日本時間で「2026.09.05」。サーバー（UTC）と画面（JST）で日付がずれないよう自前で組む。
+function formatJstDate(value) {
+  const t = value ? new Date(value).getTime() : NaN;
+  if (!Number.isFinite(t)) return null;
+  const d = new Date(t + 9 * 60 * 60 * 1000);
+  return `${d.getUTCFullYear()}.${String(d.getUTCMonth() + 1).padStart(2, '0')}.${String(d.getUTCDate()).padStart(2, '0')}`;
+}
+
+// 引用（大きな明朝で1文だけ見せる）。総評の中から**本文の文をそのまま**選ぶ。言い換えない・つながない。
+// ⚠️ 後読みの正規表現（(?<=…)）は古い iPhone の Safari で読み込みごと止まるので使わない。
+function pickPullQuote(storySections) {
+  const src = String(storySections?.exit || '').trim();
+  if (!src) return '';
+  const sentences = (src.match(/[^。！？!?\n]+[。！？!?]?/g) || []).map((s) => s.trim());
+  // 長すぎる文は引用にしない（大きな文字で4行を超えると、引用ではなく本文の繰り返しに見える）
+  return sentences.find((s) => s.length >= 12 && s.length <= 46 && !/^[「『（(・]/.test(s)) || '';
+}
+
+// 最初は畳んでおく区分。「ご対面（写真との違い）」と「総評」を開けておく＝判断に効く2つを先に読ませる。
+const COLLAPSED_SECTIONS = ['entrance', 'session', 'ratings_note'];
+
+const PenIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z" /></svg>
+);
+
+/**
+ * @param reportNo      この人の何本目のレポートか（古い順に 01〜）。一覧側が数える。
+ * @param showTherapist 人物ページでは見出しに名前があるので出さない
+ */
+export default function ModernReviewCard({ review, reportNo = null, showTherapist = true }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const reviewReturnTo = useReturnTo();
   const { user, userPlan } = useAuth();
   const navigate = useNavigate();
   const [creditDays, setCreditDays] = useState(null);
   // 来店時期と投稿日は別物。来店月が無いときに投稿日を「来店日」と誤表示しない。
-  const postedAt = review.created_at || review.createdAt || review.timestamp || review.date || null;
-  const postedDateValue = postedAt ? new Date(postedAt) : null;
-  const postedDate = postedDateValue && !Number.isNaN(postedDateValue.getTime())
-    ? postedDateValue.toLocaleDateString('ja-JP')
-    : null;
+  const postedDate = formatJstDate(review.created_at || review.createdAt || review.timestamp || review.date || null);
   const visitMonthRaw = review.visit_month || review.visitMonth || null;
   const visitMonth = visitMonthRaw
     ? `${String(visitMonthRaw).replace(/来店$/, '')}来店`
@@ -155,7 +159,6 @@ export default function ModernReviewCard({ review }) {
   useEffect(() => {
     if (!user) { setCreditDays(0); return; }
     const url = process.env.VITE_SUPABASE_URL;
-    const key = process.env.VITE_SUPABASE_ANON_KEY;
     // ⚠️ 2026-08-12: user_credits_read_own は TO authenticated。
     //    anonキー固定で送っていたため、12_適用後は残高が必ず空になりW2Rが死ぬ。
     let cancelled = false;
@@ -210,18 +213,17 @@ export default function ModernReviewCard({ review }) {
   const therapistLinkable =
     !!cardShopId && !!cardTherapistId && !/^manual_/i.test(cardTherapistId);
 
-  // 6軸メトリクス（snake/camel両対応・DBは detailed_ratings）
+  // 6軸（snake/camel両対応・DBは detailed_ratings）
   const dr = review.detailedRatings || review.detailed_ratings || {};
-  const scores = [
-    { label: "清潔感", value: Number(dr.cleanliness) || 0 },
-    { label: "ルックス", value: Number(dr.looks) || 0 },
-    { label: "スタイル", value: Number(dr.style) || 0 },
-    { label: "接客", value: Number(dr.service) || 0 },
-    { label: "マッサージ", value: Number(dr.massage) || 0 },
-    { label: "密着", value: Number(dr.intimacy) || 0 },
-  ];
-  const hasScores = scores.some((s) => s.value > 0);
+  const hasScores = hasFingerprint(dr);
   const evidenceFacts = [visitMonth, review.course || null, totalLabel].filter(Boolean);
+
+  const storySections = review.story_sections || review.storySections;
+  const isStructured = !!storySections && typeof storySections === 'object' && !Array.isArray(storySections);
+  const charCount = isStructured ? countReviewStoryChars(storySections) : String(review.content || '').length;
+  const pullQuote = canReadFull && isStructured ? pickPullQuote(storySections) : '';
+  const rating = Number(review.rating || 0);
+  const trackOpen = () => trackEvent('expand_review', { therapist_id: review.therapistId || review.therapist_id });
 
   // ウォーターマーク用テキスト（ログイン済みはメールの一部、未ログインはサイト名）
   const wmText = user?.email
@@ -234,97 +236,119 @@ export default function ModernReviewCard({ review }) {
     <article
       id={review.id ? `review-${review.id}` : undefined}
       style={{ scrollMarginTop: '96px' }}
-      className="relative w-full max-w-3xl mx-auto mb-5"
+      className="relative w-full max-w-3xl mx-auto mb-10 border-t border-slate-700 pt-7"
     >
-      <div className="absolute inset-0 bg-slate-900/95 rounded-2xl border border-white/10 shadow-lg" />
       {/* ウォーターマーク */}
       <Watermark text={wmText} />
 
-      <div className="relative p-4 sm:p-5 z-10">
-        {/* 1. 証拠行: 来店月→コース→総額。無い項目は表示しない。 */}
-        {evidenceFacts.length > 0 && (
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pb-3 mb-3 border-b border-white/10 text-xs font-medium text-slate-300">
-            {evidenceFacts.map((fact, index) => (
-              <React.Fragment key={`${fact}-${index}`}>
-                {index > 0 && <span aria-hidden="true" className="text-slate-600">/</span>}
-                <span>{fact}</span>
-              </React.Fragment>
-            ))}
-          </div>
-        )}
-
-        {/* 2. 投稿種別・評価・投稿者 */}
-        <div className="flex flex-wrap items-center gap-2 mb-3 text-xs">
-          <span className="rounded-xl border border-pink-500/30 bg-pink-500/10 px-2.5 py-1 font-bold text-pink-200">実体験レポート</span>
-          <span className="font-black text-white">評価 {Number(review.rating || 0).toFixed(1)}</span>
-          <span className="text-slate-400">by {review.userName || review.user_name || '匿名'}</span>
-          {postedDate && <span className="ml-auto text-slate-400">{postedDate}投稿</span>}
+      <div className="relative z-10">
+        {/* 1. 号数と種別 */}
+        <div className="mb-4 flex items-baseline justify-between gap-3">
+          <span className="font-numeral text-[16px] tracking-wide text-pink-300">
+            {reportNo ? `Report No.${String(reportNo).padStart(2, '0')}` : 'Report'}
+          </span>
+          <span className="text-[11px] tracking-[0.12em] text-slate-400">実体験レポート</span>
         </div>
 
-        {/* 対象名。RESTのsnake_caseとmanual IDの扱いを維持する。 */}
-        <div className="mb-4">
-          {therapistLinkable ? (
-            <Link
-              to={`/shops/${cardShopId}/threads/${cardTherapistId}`}
-              className="inline-flex min-h-11 items-center rounded-lg text-lg font-bold text-white hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500"
-            >
-              {therapistLabel}
-            </Link>
-          ) : (
-            <h2 className="text-lg font-bold text-white leading-tight">{therapistLabel}</h2>
-          )}
-        </div>
-
-        {/* 3. 6軸はモバイルも2行×3列で固定 */}
-        {hasScores && (
-          <div className="grid grid-cols-3 gap-x-3 gap-y-3 mb-5 rounded-2xl bg-slate-950/60 p-3 border border-white/5">
-            {scores.map((score, i) => (
-              <div key={i} className="min-w-0">
-                <div className="mb-1 flex items-center justify-between gap-1 text-xs">
-                  <span className="truncate font-medium text-slate-400">{score.label}</span>
-                  <span className="font-bold text-slate-200">{Number(score.value).toFixed(1)}</span>
-                </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-slate-800">
-                  <div className="h-full rounded-full bg-pink-500" style={{ width: `${Math.min((score.value / 5) * 100, 100)}%` }} />
-                </div>
+        {/* PC（sm以上）では、左に点数・投稿者・証拠行、右に採点の形を並べる */}
+        <div className={hasScores ? 'sm:grid sm:grid-cols-[minmax(0,1fr)_300px] sm:items-start sm:gap-8' : ''}>
+          <div className="min-w-0">
+            {/* 2. 点数（大きな数字）・投稿者・字数 */}
+            <div className="flex items-end gap-3.5">
+              <span className="font-numeral text-[64px] font-semibold leading-[0.85] text-slate-50" aria-label={`評価 ${rating.toFixed(1)}（5点満点）`}>
+                {rating.toFixed(1)}
+              </span>
+              <div className="flex min-w-0 flex-col gap-0.5 pb-1 text-xs">
+                <span className="text-slate-400">/ 5</span>
+                <span className="truncate text-slate-300">
+                  {review.userName || review.user_name || '匿名'}{postedDate && <span className="text-slate-400"> · {postedDate}</span>}
+                </span>
+                {charCount > 0 && <span className="text-slate-400">{charCount.toLocaleString('ja-JP')}字</span>}
               </div>
-            ))}
+            </div>
+
+            {/* 対象名（一覧で使うとき）。RESTのsnake_caseとmanual IDの扱いを維持する。 */}
+            {showTherapist && (
+              <div className="mt-4">
+                {therapistLinkable ? (
+                  <Link
+                    to={`/shops/${cardShopId}/threads/${cardTherapistId}`}
+                    className="inline-flex min-h-11 items-center font-mincho text-xl font-bold text-slate-50 hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500"
+                  >
+                    {therapistLabel}
+                  </Link>
+                ) : (
+                  <h2 className="font-mincho text-xl font-bold leading-tight text-slate-50">{therapistLabel}</h2>
+                )}
+              </div>
+            )}
+
+            {/* 3. 証拠行: 来店月→コース→総額。無い項目は表示しない。 */}
+            {evidenceFacts.length > 0 && (
+              <p className="mt-5 border border-slate-800 px-3.5 py-3 text-[13px] leading-relaxed text-slate-300">
+                {evidenceFacts.join(' / ')}
+              </p>
+            )}
           </div>
+
+          {/* 4. 採点の指紋（6項目の形） */}
+          {hasScores && <RatingFingerprint values={dr} className="mt-6 sm:mt-0" />}
+        </div>
+
+        {/* 5. 引用（読める口コミだけ。ロック中の本文を大きな文字で漏らさない） */}
+        {pullQuote && (
+          <blockquote aria-hidden="true" className="relative mt-8 mb-2 max-w-[26em] pt-7 font-mincho text-[22px] font-bold leading-[1.6] text-slate-50 sm:text-[25px]" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
+            <span className="absolute -left-0.5 -top-3 font-numeral text-[64px] leading-none text-pink-500">&ldquo;</span>
+            {pullQuote}
+          </blockquote>
         )}
 
-        {/* 4. 本文 */}
-        <div className="relative pt-4 border-t border-white/10">
+        {/* 6. 本文 */}
+        <div className="relative mt-6">
           {canReadFull ? (
-            <>
+            isStructured ? (
               <ReviewStoryContent
                 content={review.content || ''}
                 storySections={review.story_sections || review.storySections}
-                className={`text-[15px] text-slate-200 leading-relaxed whitespace-pre-wrap ${!isExpanded && "line-clamp-4"}`}
+                collapseIds={isExpanded ? [] : COLLAPSED_SECTIONS}
+                onSectionOpen={trackOpen}
+                className="max-w-[42em] border-t border-slate-800 pt-5 text-[15px] leading-[2] text-slate-200"
                 style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
                 onCopy={e => e.preventDefault()}
                 onCut={e => e.preventDefault()}
                 onContextMenu={e => e.preventDefault()}
               />
-              {(review.content || "").length > 150 && (
-                <button
-                  onClick={() => {
-                    // 「読みたくなった瞬間」の量を可視化＝W2Rの入口の需要指標。
-                    // 従来は投稿ファネル側の計測しか無く、読む側は expand_home_review のみだった。
-                    if (!isExpanded) trackEvent('expand_review', { therapist_id: review.therapistId || review.therapist_id });
-                    setIsExpanded(!isExpanded);
-                  }}
-                  className="mt-2 inline-flex min-h-11 items-center rounded-lg text-xs font-bold text-pink-400 hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500"
-                >
-                  {isExpanded ? "閉じる" : "続きを読む"}
-                </button>
-              )}
-            </>
+            ) : (
+              <>
+                <ReviewStoryContent
+                  content={review.content || ''}
+                  storySections={review.story_sections || review.storySections}
+                  className={`border-t border-slate-800 pt-5 text-[15px] leading-[2] text-slate-200 whitespace-pre-wrap ${!isExpanded && "line-clamp-6"}`}
+                  style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+                  onCopy={e => e.preventDefault()}
+                  onCut={e => e.preventDefault()}
+                  onContextMenu={e => e.preventDefault()}
+                />
+                {(review.content || "").length > 150 && (
+                  <button
+                    onClick={() => {
+                      // 「読みたくなった瞬間」の量を可視化＝W2Rの入口の需要指標。
+                      if (!isExpanded) trackOpen();
+                      setIsExpanded(!isExpanded);
+                    }}
+                    className="mt-2 inline-flex min-h-11 items-center text-xs font-bold text-pink-400 hover:text-pink-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500"
+                  >
+                    {isExpanded ? "閉じる" : "続きを読む"}
+                  </button>
+                )}
+              </>
+            )
           ) : (
             /* ロック表示: 冒頭を少し読ませてから焦らす（メータード） */
-            <div className="relative">
+            <div className="relative border-t border-slate-800 pt-5">
               {/* チラ見せ（冒頭をクリアに表示し、下にいくほどフェード） */}
               <div
-                className="text-[15px] text-slate-300 leading-relaxed line-clamp-3 select-none pointer-events-none"
+                className="text-[15px] leading-[2] text-slate-300 line-clamp-3 select-none pointer-events-none"
                 style={{
                   WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
                   maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
@@ -335,10 +359,10 @@ export default function ModernReviewCard({ review }) {
                 {(review.content || "").replace(/[【】]/g, ' ').slice(0, 140)}
               </div>
               {/* 焦らしCTA */}
-              <div className="mt-2 text-center px-5 py-4 bg-slate-950/90 rounded-2xl border border-pink-500/25">
-                <p className="text-pink-300 font-bold text-xs mb-2">続き{Math.max(0, (review.content || '').length - 140)}文字は限定公開</p>
-                <p className="text-white font-black text-sm mb-1 leading-tight">体験談を投稿すると<br/>この続きが読めます</p>
-                <p className="text-slate-400 text-xs mb-3">1件投稿で<span className="text-pink-300 font-bold">最大7日間読み放題</span>（即時自動付与）</p>
+              <div className="mt-3 border border-pink-500/30 bg-slate-950 px-5 py-5 text-center">
+                <p className="mb-2 text-xs font-bold text-pink-300">続き{Math.max(0, (review.content || '').length - 140)}文字は限定公開</p>
+                <p className="mb-1 font-mincho text-base font-bold leading-snug text-slate-50">体験談を投稿すると<br/>この続きが読めます</p>
+                <p className="mb-4 text-xs text-slate-400">1件投稿で<span className="font-bold text-pink-300">最大7日間読み放題</span>（即時自動付与）</p>
                 {/* ⚠️ U04: ここは会員・未登録の区別なく「投稿して続きを読む」だけだった。
                        未登録の人にとって投稿は登録より遠い操作で、行き止まりになる。
                        未登録には登録CTA、会員には投稿CTAを出す。 */}
@@ -346,17 +370,17 @@ export default function ModernReviewCard({ review }) {
                   <Link
                     to="/post-review"
                     onClick={() => trackEvent('click_paywall_cta', { target: 'post_review', source: 'review_lock' })}
-                    className="inline-flex min-h-11 items-center rounded-2xl bg-pink-600 px-6 py-2.5 text-xs font-black text-white shadow-lg shadow-pink-900/40 transition hover:bg-pink-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-sm bg-pink-500 px-6 text-sm font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300"
                   >
-                    体験談を投稿して続きを読む →
+                    <PenIcon />体験談を投稿して続きを読む
                   </Link>
                 ) : (
                   <Link
                     to={withReturnTo('/register', reviewReturnTo, { source: 'review_lock' })}
                     onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'review_lock' }); trackRegisterCtaClick('review_lock'); }}
-                    className="inline-flex min-h-11 items-center rounded-2xl bg-pink-600 px-6 py-2.5 text-xs font-black text-white shadow-lg shadow-pink-900/40 transition hover:bg-pink-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                    className="inline-flex min-h-11 items-center rounded-sm bg-pink-500 px-6 text-sm font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300"
                   >
-                    無料登録して続きを読む →
+                    無料登録して続きを読む
                   </Link>
                 )}
               </div>
@@ -364,27 +388,20 @@ export default function ModernReviewCard({ review }) {
           )}
         </div>
 
-        {/* --- 4. TAGS (Footer) --- */}
-        {review.tags?.length > 0 && (
-          <div className="mt-5 pt-3 border-t border-white/5 flex flex-wrap gap-2">
-              {review.tags.map((tag, i) => (
-                <span key={i} className={`border px-3 py-1 rounded-xl text-xs font-bold ${tagStyle(tag)}`}>
-                  {tag}
-                </span>
-              ))}
+        {/* 7. タグ・参考になった */}
+        {/* ⚠️ 2026-08-12: 感謝バッジ(ThanksBadgeButton)とDM(DMButton)の導線を一時的に外した。
+            オーナー確定事項 D-006「掲示板・チャット・感謝バッジは一時的に非表示」に従う。
+            再開したいときはこのブロックにボタンを戻すだけでよい（コードは残してある）。 */}
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-800 pt-4">
+          <div className="flex flex-wrap gap-1.5">
+            {(review.tags || []).map((tag, i) => (
+              <span key={i} className="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-300">
+                {tag}
+              </span>
+            ))}
           </div>
-        )}
-
-      {/* いいね */}
-      {/* ⚠️ 2026-08-12: 感謝バッジ(ThanksBadgeButton)とDM(DMButton)の導線を一時的に外した。
-          オーナー確定事項 D-006「掲示板・チャット・感謝バッジは一時的に非表示」に従う。
-          DB側（RLS・権限・トリガー）の安全化は 12_ で実施済みなので、
-          再開したいときはこのブロックにボタンを戻すだけでよい。
-          ※ DMButton / ThanksBadgeButton のコードは残してある（削除すると再開が面倒なため）。 */}
-      <div className="flex justify-end items-center mt-2">
-        <ReviewLikeButton reviewId={review.id} initialLikeCount={review.like_count || 0} />
-      </div>
-
+          <div className="ml-auto"><ReviewLikeButton reviewId={review.id} initialLikeCount={review.like_count || 0} /></div>
+        </div>
       </div>
     </article>
   );

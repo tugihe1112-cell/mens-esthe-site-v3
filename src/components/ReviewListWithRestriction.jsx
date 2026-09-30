@@ -26,9 +26,10 @@ export default function ReviewListWithRestriction({ reviews, shopId = '', therap
   if (total === 0) return <p className="text-slate-500 font-bold">まだクチコミがありません。</p>;
 
   return (
-    <div className="space-y-4 relative">
-      {reviews.map(review => (
-        <ModernReviewCard key={review.id} review={review} />
+    <div className="relative">
+      {/* 号数は古い順に 01〜（新しい口コミが上に来るので、上ほど番号が大きい） */}
+      {reviews.map((review, i) => (
+        <ModernReviewCard key={review.id} review={review} reportNo={total - i} showTherapist={false} />
       ))}
 
       {/* 読み終わり地点の案内（DESIGN.md U04）。

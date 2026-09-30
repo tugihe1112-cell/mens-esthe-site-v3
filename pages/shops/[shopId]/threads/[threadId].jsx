@@ -325,19 +325,21 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
       {/* Tier 2-2: 同じ店で口コミがある他のセラピストへの相互リンク（SSR・口コミページ間の内部リンク） */}
       {ssrRelated.length > 0 && (
         <nav aria-label="同じ店で口コミがあるセラピスト" className="max-w-3xl mx-auto px-4 pb-28 -mt-6">
-          <div className="rounded-2xl border border-white/10 bg-slate-900 p-4">
-            <h2 className="text-sm font-black text-white mb-3">この店で口コミがある他のセラピスト</h2>
-            <div className="flex flex-wrap gap-2">
+          <div className="border-t border-slate-700 pt-5">
+            <h2 className="font-mincho text-lg font-bold text-slate-50 mb-2">この店で口コミがある他のセラピスト</h2>
+            <ul className="grid grid-cols-2 gap-x-6 sm:grid-cols-3">
               {ssrRelated.map((t, i) => (
-                <a
-                  key={i}
-                  href={`/shops/${t.shopId}/threads/${t.therapistId}`}
-                  className="text-xs text-pink-300 bg-slate-800 hover:bg-slate-700 border border-white/10 rounded-full px-3 py-1.5 transition"
-                >
-                  {t.therapistName} ›
-                </a>
+                <li key={i} className="border-b border-slate-800">
+                  <a
+                    href={`/shops/${t.shopId}/threads/${t.therapistId}`}
+                    className="flex min-h-11 items-center justify-between gap-2 text-sm text-slate-200 transition hover:text-pink-300"
+                  >
+                    <span className="truncate">{t.therapistName}</span>
+                    <span aria-hidden="true" className="text-slate-500">→</span>
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </nav>
       )}

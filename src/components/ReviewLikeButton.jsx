@@ -96,14 +96,17 @@ export default function ReviewLikeButton({ reviewId, initialLikeCount = 0 }) {
     <button
       onClick={toggle}
       disabled={isLoading}
-      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
+      aria-pressed={liked}
+      className={`inline-flex min-h-9 items-center gap-1.5 rounded-sm border px-3 text-xs font-bold transition ${
         liked
-          ? 'bg-pink-500/20 border-pink-500/50 text-pink-400'
-          : 'bg-slate-800 border-white/10 text-slate-400 hover:border-pink-500/40 hover:text-pink-300'
+          ? 'border-pink-500/60 text-pink-300'
+          : 'border-slate-700 text-slate-400 hover:border-pink-500/50 hover:text-pink-300'
       } ${isLoading ? 'opacity-50' : ''}`}
     >
-      <span className={liked ? '❤️' : '🤍'} style={{ fontSize: '12px' }} />
-      <span>{count > 0 ? count : '参考になった'}</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+      </svg>
+      <span>{count > 0 ? `参考になった ${count}` : '参考になった'}</span>
     </button>
   );
 }

@@ -16,6 +16,10 @@ body {
       配信する明朝（Shippori Mincho B1・src/styles/fonts.js）は、明朝を持たない端末（Android など）のためだけ。
       最初は配信の明朝を先にしていて、1ページで 270〜450KB 増えていた（2026-09-30 実測）。
    base 層に置く＝ページ側で font-sans などを付ければそちらが勝つ。本文は端末の書体のまま（重くしない）。 */
+/* 数字の書体（Cormorant Garamond）は既定が「小文字のような数字」（1・3・8 の高さがそろわない）。
+   点数・号数は並べて比べるものなので、高さのそろった数字にする（2026-09-30） */
+.font-numeral { font-variant-numeric: lining-nums; }
+
 @layer base {
   h1, h2, h3 {
     font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'Yu Mincho', 'YuMincho', var(--font-mincho), serif;

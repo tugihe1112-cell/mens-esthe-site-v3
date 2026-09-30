@@ -20,6 +20,11 @@ import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 import { filterReviewsForPerson } from '../utils/reviewIdentity.js';
 import { isNotListed, NOT_LISTED_LABEL, NOT_LISTED_NOTE } from '../utils/therapistStatus.js';
 import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
+import RatingFingerprint from '../components/RatingFingerprint.jsx';
+
+const PenIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z" /></svg>
+);
 
 // ローディング中の骨組み（全画面テキスト→スケルトンで"個人サイト感"を除去）
 function ThreadSkeleton() {
@@ -27,17 +32,17 @@ function ThreadSkeleton() {
     <div className="min-h-screen bg-slate-950 pb-32">
       <Header />
       <div className="max-w-3xl mx-auto px-4 pt-20 space-y-5">
-        <div className="h-4 w-1/2 bg-slate-800 rounded animate-pulse" />
+        <div className="h-4 w-1/2 bg-slate-800 animate-pulse" />
         <div className="flex gap-4">
-          <div className="w-[40%] max-w-[200px] bg-slate-800 rounded-2xl animate-pulse" style={{ aspectRatio: '3 / 4', maxHeight: '320px' }} />
+          <div className="w-[40%] max-w-[220px] bg-slate-800 animate-pulse" style={{ aspectRatio: '3 / 4', maxHeight: '320px' }} />
           <div className="flex-1 space-y-3 py-4">
             <div className="h-4 w-2/3 bg-slate-800 rounded animate-pulse" />
             <div className="h-7 w-1/2 bg-slate-800 rounded animate-pulse" />
             <div className="h-5 w-3/4 bg-slate-800 rounded animate-pulse" />
           </div>
         </div>
-        <div className="h-32 bg-slate-900 rounded-2xl animate-pulse" />
-        <div className="h-48 bg-slate-900 rounded-2xl animate-pulse" />
+        <div className="h-32 bg-slate-900 animate-pulse" />
+        <div className="h-48 bg-slate-900 animate-pulse" />
       </div>
     </div>
   );
@@ -293,6 +298,7 @@ export default function ThreadDetailPage({
     return {
       count,
       avg: (ratingSum / count).toFixed(1),
+      values: Object.fromEntries(keys.map((k) => [k, avgOf(k)])),
       axes: [
         { label: '清潔感', val: avgOf('cleanliness') },
         { label: 'ルックス', val: avgOf('looks') },
@@ -383,132 +389,128 @@ export default function ThreadDetailPage({
         }) }} />
       )}
 
-      {/* --- ページ本体：コンパクトヘッダー＋評価サマリ＋口コミ（口コミ1件目をファーストビューに） --- */}
-      <div className="max-w-3xl mx-auto px-4 pt-20 relative z-30 space-y-5">
+      {/* --- ページ本体：見出し（写真・名前・点数）→ 採点の形 → 口コミ（デザインA案「夜の文芸誌」2026-09-30） ---
+          ⚠️ 写真は左40%・最大220px（スマホで口コミ1件目を最初の画面に入れるため・2026-08-14）。 */}
+      <div className="max-w-3xl mx-auto px-4 pt-20 relative z-30 space-y-6">
         {/* 戻る＋お気に入り */}
         <div className="flex items-center justify-between">
-          <button onClick={() => navigate(-1)} aria-label="前のページに戻る" className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-white/10 text-white text-sm font-bold border border-white/15 hover:bg-white/20 transition active:scale-95">
-            <span className="text-base leading-none">←</span> 戻る
+          <button onClick={() => navigate(-1)} aria-label="前のページに戻る" className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-slate-700 px-3.5 text-sm font-bold text-slate-200 transition hover:border-slate-500 active:scale-95">
+            <span className="text-base leading-none" aria-hidden="true">←</span> 戻る
           </button>
-          <button onClick={() => user ? toggleFavTherapist(uniqueKey) : navigate(`/login?redirect=${encodeURIComponent(`/shops/${shopId}/threads/${threadId}`)}`)} aria-label="お気に入り" className={`w-10 h-10 rounded-full flex items-center justify-center border transition active:scale-90 ${isFav ? 'bg-pink-600/80 border-pink-500 text-white' : 'bg-white/5 border-white/10 text-white hover:bg-white/10'}`}>
-            <span className="text-xl">{isFav ? '❤️' : '🤍'}</span>
+          <button
+            onClick={() => user ? toggleFavTherapist(uniqueKey) : navigate(`/login?redirect=${encodeURIComponent(`/shops/${shopId}/threads/${threadId}`)}`)}
+            aria-label={isFav ? 'お気に入りから外す' : 'お気に入りに入れる'}
+            aria-pressed={isFav}
+            className={`flex h-10 w-10 items-center justify-center rounded-sm border transition active:scale-90 ${isFav ? 'border-pink-500 text-pink-400' : 'border-slate-700 text-slate-300 hover:border-slate-500'}`}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill={isFav ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            </svg>
           </button>
         </div>
 
         {/* パンくず（JSON-LDのBreadcrumbListと視覚を一致） */}
-        <nav aria-label="パンくず" className="flex items-center gap-1.5 text-xs text-slate-400 flex-wrap">
-          <Link to="/" className="hover:text-white transition">ホーム</Link>
-          <span className="text-slate-600">›</span>
-          <Link to={shopHref(shop || { id: shopId }, roomCounts)} className="hover:text-white transition truncate max-w-[45%]">{getDisplayName(shop.name, shop)}</Link>
-          <span className="text-slate-600">›</span>
-          <span className="text-slate-200 font-bold truncate max-w-[35%]">{therapist.name}</span>
+        <nav aria-label="パンくず" className="-my-3 flex items-center gap-2 text-xs text-slate-400">
+          <Link to="/" className="inline-flex min-h-11 items-center hover:text-white transition">ホーム</Link>
+          <span className="text-slate-600" aria-hidden="true">/</span>
+          <Link to={shopHref(shop || { id: shopId }, roomCounts)} className="inline-flex min-h-11 min-w-0 max-w-[45%] items-center hover:text-white transition"><span className="truncate">{getDisplayName(shop.name, shop)}</span></Link>
+          <span className="text-slate-600" aria-hidden="true">/</span>
+          <span className="text-slate-300 truncate max-w-[35%]">{therapist.name}</span>
         </nav>
 
-        {/* コンパクトヘッダー：写真左40% ＋ 名前/店舗/評価サマリ右 */}
-        <div className="flex gap-4">
-          <div className="w-[40%] max-w-[200px] shrink-0">
-            <div className="relative max-h-[220px] sm:max-h-[320px] rounded-2xl overflow-hidden border border-white/10 bg-slate-900" style={{ aspectRatio: '3 / 4' }}>
+        {/* 見出し：写真左40% ＋ 店・名前・点数 */}
+        <div className="flex gap-4 sm:gap-6">
+          <div className="w-[40%] max-w-[220px] shrink-0">
+            <div className="relative max-h-[220px] sm:max-h-[320px] overflow-hidden border border-slate-700 bg-slate-900" style={{ aspectRatio: '3 / 4' }}>
               {(therapist.image_url || therapist.image) ? (
                 <LazyImage src={therapist.image_url || therapist.image} alt={therapist.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-sm font-black text-slate-600 tracking-widest">写真なし</span>
+                  <span className="text-sm text-slate-500 tracking-widest">写真なし</span>
                 </div>
               )}
             </div>
           </div>
           <div className="flex-1 min-w-0 flex flex-col justify-center">
-            <Link to={shopHref(shop || { id: shopId }, roomCounts)} className="inline-flex min-h-11 items-center gap-1.5 mb-1 text-sm font-bold text-slate-400 hover:text-white transition min-w-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">
-              <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] shrink-0">🏢</span>
-              <span className="truncate">{getDisplayName(shop.name, shop)}</span>
+            <Link to={shopHref(shop || { id: shopId }, roomCounts)} className="inline-flex min-h-11 items-center text-xs tracking-[0.12em] text-slate-400 hover:text-white transition min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500">
+              <span className="truncate">{getDisplayName(shop.name, shop)}{shopPlace && ` · ${shop.city || shop.prefecture}`}</span>
             </Link>
-            <h1 className="text-2xl md:text-3xl font-black text-white leading-tight mb-2 break-words">
+            <h1 className="font-mincho text-[30px] md:text-[40px] font-bold text-slate-50 leading-[1.15] mb-3 break-words">
               {therapist.name}
               {notListed && (
-                <span className="ml-2 align-middle inline-flex items-center rounded-full border border-amber-500/40 bg-amber-500/15 px-2.5 py-1 font-bold text-amber-200" style={{ fontSize: '12px' }}>
+                <span className="ml-2 align-middle inline-flex items-center rounded-sm border border-amber-500/40 bg-amber-500/15 px-2.5 py-1 font-sans font-bold text-amber-200" style={{ fontSize: '12px' }}>
                   {NOT_LISTED_LABEL}
                 </span>
               )}
             </h1>
             {notListed && (
-              <p className="mb-2 rounded-xl border border-amber-500/25 bg-amber-500/5 px-3 py-2 text-amber-100" style={{ fontSize: '13px', lineHeight: 1.7 }}>
+              <p className="mb-3 border border-amber-500/25 bg-amber-500/5 px-3 py-2 text-amber-100" style={{ fontSize: '13px', lineHeight: 1.7 }}>
                 {NOT_LISTED_NOTE}
               </p>
             )}
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {therapist.age && <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white">{therapist.age}歳</span>}
-              {therapist.T && <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-white">身長{therapist.T}cm</span>}
-              {therapist.cup && <span className="px-2.5 py-0.5 rounded-full bg-pink-600/20 border border-pink-500/30 text-[11px] font-bold text-pink-300">{therapist.cup}カップ</span>}
-              {therapist.types?.[0] && <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/10 text-[11px] font-bold text-slate-200">{therapist.types[0]}</span>}
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {therapist.age && <span className="px-2.5 py-0.5 rounded-full border border-slate-700 text-[11px] text-slate-200">{therapist.age}歳</span>}
+              {therapist.T && <span className="px-2.5 py-0.5 rounded-full border border-slate-700 text-[11px] text-slate-200">身長{therapist.T}cm</span>}
+              {therapist.cup && <span className="px-2.5 py-0.5 rounded-full border border-slate-700 text-[11px] text-slate-200">{therapist.cup}カップ</span>}
+              {therapist.types?.[0] && <span className="px-2.5 py-0.5 rounded-full border border-slate-700 text-[11px] text-slate-200">{therapist.types[0]}</span>}
             </div>
             {stats ? (
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-black text-white">★ {stats.avg}</span>
-                <span className="text-xs text-slate-400 font-bold">（{stats.count}件の実体験レポ）</span>
+              <div className="flex items-end gap-2.5">
+                <span className="font-numeral text-[48px] font-semibold leading-[0.85] text-slate-50" aria-label={`平均 ${stats.avg}（5点満点）`}>{stats.avg}</span>
+                <span className="flex flex-col gap-0.5 pb-0.5 text-xs text-slate-400"><span>/ 5</span><span>{stats.count}件の実体験レポート</span></span>
               </div>
             ) : (
-              <div className="text-xs text-slate-500 font-bold">まだ評価がありません</div>
+              <div className="text-xs text-slate-500">まだ評価がありません</div>
             )}
           </div>
         </div>
 
-        {/* 評価サマリバー（6軸の平均）。口コミが1件のときは下の口コミカードと同じ内容になり重複するので、2件以上のときだけ表示 */}
+        {/* 採点の形（平均）。口コミが1件のときは下の口コミに同じ図が出るので、2件以上のときだけ。 */}
         {stats && stats.count >= 2 && (
-          <section className="bg-slate-900/60 rounded-2xl p-4 border border-white/10">
-            <h2 className="text-xs font-bold text-slate-400 mb-3">評価の内訳（{stats.count}件の平均）</h2>
-            <div className="grid grid-cols-3 gap-x-3 gap-y-3">
-              {stats.axes.map((a) => (
-                <div key={a.label} className="min-w-0">
-                  <div className="mb-1 flex items-center justify-between gap-1 text-xs">
-                    <span className="truncate font-medium text-slate-400">{a.label}</span>
-                    <span className="font-bold text-white">{a.val.toFixed(1)}</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full rounded-full bg-pink-500" style={{ width: `${Math.min((a.val / 5) * 100, 100)}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
+          <section className="border-t border-slate-800 pt-6">
+            <h2 className="font-mincho text-lg font-bold text-slate-50">
+              採点の形<span className="ml-2 font-sans text-xs font-normal text-slate-400">{stats.count}件の平均</span>
+            </h2>
+            <RatingFingerprint values={stats.values} decimals={1} className="mt-3" />
           </section>
         )}
 
-        {/* --- クチコミセクション --- */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-lg font-black text-white flex items-center gap-2">
-              <span className="text-pink-500">💬</span>
-              クチコミ
+        {/* --- 口コミ --- */}
+        <section className="pt-2">
+          <div className="flex items-end justify-between gap-3 border-b border-slate-700 pb-3">
+            <h2 className="font-mincho text-2xl font-bold text-slate-50">
+              口コミ
               {therapistReviews.length > 0 && (
-                <span className="text-slate-500 text-sm font-bold">({therapistReviews.length})</span>
+                <span className="ml-2 font-numeral text-xl font-medium text-slate-400">{therapistReviews.length}</span>
               )}
-            </h3>
+            </h2>
             <button
               onClick={() => handlePostReview('review_header')}
-              className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-2 px-5 rounded-full shadow-lg shadow-pink-600/30 active:scale-95 transition-all duration-300 flex items-center gap-2 text-sm"
+              className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-pink-500 px-4 text-sm font-bold text-pink-200 transition hover:bg-pink-500/10 active:scale-95"
             >
-              <span>✍️</span> 書く
+              <PenIcon /> 書く
             </button>
           </div>
           {/* D-003: 口コミを読む場所で「広告ではない」と分かるように（2026-09-23） */}
-          <NeutralReviewNote className="px-1" />
+          <NeutralReviewNote className="mt-3 mb-2" />
 
           {therapistReviews.length > 0 ? (
             <ReviewListWithRestriction reviews={therapistReviews} shopId={shopId} therapistId={threadId} />
           ) : (
-            <div className="text-center py-10 px-4 bg-slate-900/40 rounded-2xl border border-dashed border-purple-800/50">
-              <p className="text-white font-black text-base mb-1">まだ口コミがありません</p>
-              <p className="text-purple-300 text-xs font-bold mb-4"><span className="text-white">200字で3日間・700字で7日間</span>口コミが読み放題</p>
+            <div className="mt-4 border border-slate-700 bg-slate-900 px-5 py-7">
+              <p className="font-mincho text-xl font-bold leading-[1.5] text-slate-50">まだ口コミがありません。<br />最初の体験を、<br className="sm:hidden" />次の人の判断材料に。</p>
+              <p className="mt-2 text-[13px] leading-relaxed text-slate-300"><span className="text-slate-50">200字で3日間・700字で7日間</span>、口コミが読み放題</p>
               <button
                 onClick={() => handlePostReview('empty_state')}
-                className="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-black py-3 px-8 rounded-full shadow-lg shadow-pink-600/30 active:scale-95 transition-all duration-300 inline-flex items-center gap-2 mx-auto"
+                className="mt-5 inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-sm bg-pink-500 px-6 text-[15px] font-bold text-slate-950 transition hover:bg-pink-400 active:scale-[0.98] sm:w-auto"
               >
-                <span>✍️</span> 最初の口コミを書く
+                <PenIcon /> 最初の口コミを書く
               </button>
               {/* ⚠️ 投稿ページに入る前の段階で「途中でやめられる」ことを伝える（2026-08-18）。
                      ここで「700字も書くのか、面倒だ」と思われたらページにすら来ない。
                      下書き機能は存在するだけでは意味がなく、**着手前に知られている**必要がある。 */}
-              <p className="mt-3 text-[11px] text-slate-400 font-medium">
-                💾 書きかけは自動保存されます。一度に書き切らなくて大丈夫です
+              <p className="mt-3 text-[12px] text-slate-400">
+                書きかけは自動保存されます。一度に書き切らなくて大丈夫です
               </p>
             </div>
           )}
@@ -524,19 +526,19 @@ export default function ThreadDetailPage({
           {user ? (
             <button
               onClick={() => handlePostReview('sticky')}
-              className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-3.5 rounded-2xl shadow-2xl shadow-pink-900/50 active:scale-[0.98] transition text-sm"
+              className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 rounded-sm bg-pink-500 py-3.5 text-sm font-bold text-slate-950 shadow-[0_10px_30px_rgba(0,0,0,0.55)] transition hover:bg-pink-400 active:scale-[0.98]"
             >
-              <span>✍️</span>{therapist.name}の口コミを書く
-              <span className="text-[11px] font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">最大7日間</span>
+              <PenIcon />{therapist.name}の口コミを書く
+              <span className="whitespace-nowrap rounded-sm bg-slate-950/15 px-2 py-0.5 text-[11px] font-bold">最大7日間</span>
             </button>
           ) : (
             <Link
               to={withReturnTo('/register', threadReturnTo, { source: 'review_end' })}
               onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'sticky' }); trackRegisterCtaClick('review_end'); }}
-              className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-3.5 rounded-2xl shadow-2xl shadow-pink-900/50 active:scale-[0.98] transition text-sm"
+              className="pointer-events-auto w-full max-w-2xl mx-auto flex items-center justify-center gap-2 rounded-sm bg-pink-500 py-3.5 text-sm font-bold text-slate-950 shadow-[0_10px_30px_rgba(0,0,0,0.55)] transition hover:bg-pink-400 active:scale-[0.98]"
             >
               無料登録する
-              <span className="text-[11px] font-bold bg-white/20 rounded-full px-2 py-0.5 whitespace-nowrap">3日間読み放題</span>
+              <span className="whitespace-nowrap rounded-sm bg-slate-950/15 px-2 py-0.5 text-[11px] font-bold">3日間読み放題</span>
             </Link>
           )}
         </div>
