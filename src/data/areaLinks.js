@@ -27,6 +27,15 @@ export const PREF_SLUG_MAP = {
   gunma:     '群馬県',
   gifu:      '岐阜県',
   mie:       '三重県',
+  // 2026-06 に登録した8県。店はあったのに県のページが無く、/area/<slug> が404だった（2026-09-30 に追加）
+  niigata:   '新潟県',
+  ishikawa:  '石川県',
+  nagano:    '長野県',
+  nara:      '奈良県',
+  wakayama:  '和歌山県',
+  okayama:   '岡山県',
+  kumamoto:  '熊本県',
+  okinawa:   '沖縄県',
 };
 
 // フッター等の一覧に出さない slug（ページ自体は有効だが掲載数が少なく訴求しない）

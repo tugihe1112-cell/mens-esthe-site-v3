@@ -457,6 +457,30 @@ requireMatch(integrityMonitor, /口コミの実更新日が無い/, '本番監�
     'トップの構造化データに SearchAction があります（Googleはサイトリンク検索ボックスの表示をやめています。付けない）');
 }
 
+// 🚩 県のページの一覧（src/data/areaLinks.js）とサイトマップの県の一覧（api/sitemap.xml.js）が同じであること。
+//    サイトマップは Vercel の関数なので src/ を import せずリテラルで持っている＝2か所を手で揃えるしかない。
+//    2026-09-30、岐阜・三重を areaLinks.js に足したのにサイトマップに足し忘れ、ビルドは緑のまま載らなかった
+//    （同じ日に、6月に登録した8県がどちらにも無く /area/<県> が404だったことも分かった）。
+{
+  const areaSrc = strip(read('src/data/areaLinks.js'));
+  const mapBody = areaSrc.match(/PREF_SLUG_MAP\s*=\s*\{([\s\S]*?)\};/)?.[1] || '';
+  const slugs = [...mapBody.matchAll(/^\s*([a-z]+)\s*:/gm)].map((m) => m[1]);
+  const hidden = [...(areaSrc.match(/HIDDEN_FROM_LINKS\s*=\s*new Set\(\[([^\]]*)\]/)?.[1] || '').matchAll(/'([a-z]+)'/g)].map((m) => m[1]);
+  const smList = strip(sitemap).match(/\.\.\.\[([^\]]*)\]\.map\(slug => \(\{\s*path: `\/area\//)?.[1];
+  const inSitemap = [...(smList || '').matchAll(/'([a-z]+)'/g)].map((m) => m[1]);
+  if (slugs.length < 10 || !smList) {
+    failures.push('[県の一覧] areaLinks.js の PREF_SLUG_MAP かサイトマップの県の一覧を読み取れません（書き方が変わったならこの検査も直すこと）');
+  } else {
+    const want = slugs.filter((s) => !hidden.includes(s));
+    const missing = want.filter((s) => !inSitemap.includes(s));
+    const extra = inSitemap.filter((s) => !slugs.includes(s));
+    if (missing.length) failures.push(`[県の一覧] 県のページがあるのにサイトマップに載っていません: ${missing.join(', ')}（api/sitemap.xml.js に足すこと）`);
+    if (extra.length) failures.push(`[県の一覧] サイトマップに載っているのに県のページがありません（soft404/404）: ${extra.join(', ')}（src/data/areaLinks.js に足すか外すこと）`);
+    const hiddenListed = inSitemap.filter((s) => hidden.includes(s));
+    if (hiddenListed.length) failures.push(`[県の一覧] 掲載数が少なく出さないことにした県がサイトマップに載っています: ${hiddenListed.join(', ')}`);
+  }
+}
+
 if (failures.length) {
   console.error('❌ インデックス導線の回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));
