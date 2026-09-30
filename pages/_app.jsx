@@ -16,6 +16,7 @@ import Script from 'next/script';
 import Head from 'next/head';
 import { GA_ID } from '../src/utils/analytics';
 import { installPageDataPrefetch } from '../src/utils/pageDataPrefetch';
+import { mincho, numeral } from '../src/styles/fonts';
 import '../src/index.css';
 
 const HIDE_NAV_PATHS = ['/login', '/register', '/404'];
@@ -154,6 +155,14 @@ export default function MyApp({ Component, pageProps }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" key="viewport" />
       </Head>
+      {/* 書体の変数（src/styles/fonts.js）。:root に置く＝モーダルなど body 直下に出る部品にも届く。
+          ページ側は tailwind の font-mincho / font-numeral、または index.css の見出し指定から使う。 */}
+      <style jsx global>{`
+        :root {
+          --font-mincho: ${mincho.style.fontFamily};
+          --font-numeral: ${numeral.style.fontFamily};
+        }
+      `}</style>
       {/* GA4: 旧Viteのindex.htmlにしか無く未計測だったため、Next.jsで正式ロード（SPA遷移はGA4拡張計測が捕捉） */}
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
       {/* ⚠️ 2026-09-08（DESIGN.md U06）: /auth/* はメールのリンクから

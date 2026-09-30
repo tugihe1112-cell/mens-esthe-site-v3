@@ -36,54 +36,24 @@ export default function BottomNav() {
 
   // ⚠️ U01-4: 5項目は「ホーム／探す／口コミ／投稿／登録・マイページ」。
   //    ランキングはフッターへ移した。既存利用者のログインはヘッダーに常設してある。
+  // デザインA案（2026-09-30）: 線の細いアイコンに揃える（選択中は線を少し太く＝塗りつぶしで形を変えない）。
+  const icon = (d) => (active) => (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={active ? 2 : 1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {d}
+    </svg>
+  );
   const navItems = [
-    {
-      path: '/',
-      label: 'ホーム',
-      icon: (active) => (
-        <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      ),
-    },
-    {
-      path: '/search',
-      label: '探す',
-      icon: (active) => (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 2.5 : 2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      ),
-    },
-    {
-      path: '/popular-reviews',
-      label: '口コミ',
-      icon: (active) => (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 2.5 : 2} d="M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-      ),
-    },
-    {
-      path: '/post-review',
-      label: '投稿',
-      icon: (active) => (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 2.5 : 2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-        </svg>
-      ),
-    },
+    { path: '/', label: 'ホーム', icon: icon(<path d="M4 11l8-6 8 6v8h-5v-5H9v5H4z" />) },
+    { path: '/search', label: '探す', icon: icon(<><circle cx="11" cy="11" r="6" /><path d="M16 16l4 4" /></>) },
+    { path: '/popular-reviews', label: '口コミ', icon: icon(<path d="M5 5h14v10H9l-4 4z" />) },
+    { path: '/post-review', label: '投稿', icon: icon(<path d="M4 20l4-1 11-11-3-3L5 16z" />) },
     {
       path: user ? '/mypage' : '/register',
       label: user ? 'マイページ' : '登録',
       // ⚠️ U01-5: 未登録で「投稿」だけを常時発光させない。
-      //    強調するのは選択中の項目だけで、未登録の「登録」は文字色をピンクにするに留める。
+      //    強調するのは選択中の項目だけで、未登録の「登録」は文字色を朱にするに留める。
       accent: !user,
-      icon: (active) => (
-        <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-      ),
+      icon: icon(<><circle cx="12" cy="9" r="4" /><path d="M5 20c1-4 4-6 7-6s6 2 7 6" /></>),
     },
   ];
 
@@ -91,14 +61,14 @@ export default function BottomNav() {
 
   return (
     <div className="fixed bottom-0 left-0 w-full z-50 lg:hidden pointer-events-none">
-      {/* 背景のグラデーションフェード（コンテンツが消える演出） */}
+      {/* 背景のフェード（コンテンツが消える演出） */}
       <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-slate-950 via-slate-950/75 to-transparent pointer-events-none"></div>
 
       {/* U01-3: 中央ドックは最大幅600px・中央寄せ */}
-      <div className="relative px-2.5 max-w-[600px] mx-auto">
+      <div className="relative px-3 max-w-[600px] mx-auto">
         <nav
           aria-label="メインナビゲーション"
-          className="pointer-events-auto relative bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg shadow-black/40 overflow-hidden"
+          className="pointer-events-auto relative bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-sm shadow-lg shadow-black/40 overflow-hidden"
           style={{ marginBottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))' }}
         >
           {/* U01-5: 高さ60px、ラベル12px */}
@@ -111,15 +81,15 @@ export default function BottomNav() {
                   to={item.path}
                   onClick={item.path === '/register' ? () => trackRegisterCtaClick('bottom_nav') : undefined}
                   aria-current={active ? 'page' : undefined}
-                  className={`relative flex flex-col items-center justify-center gap-0.5 w-full h-full min-w-[44px] select-none active:scale-95 transition-transform duration-200 ${
-                    active || item.accent ? 'text-pink-400' : 'text-slate-400 hover:text-slate-200'
+                  className={`relative flex flex-col items-center justify-center gap-1 w-full h-full min-w-[44px] select-none active:scale-95 transition-transform duration-200 ${
+                    active ? 'text-slate-100' : item.accent ? 'text-pink-300' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
+                  {active && <span className="absolute top-0 w-7 h-0.5 bg-pink-400" />}
                   {item.icon(active)}
-                  <span className={`text-xs leading-none tracking-tight ${active ? 'font-black text-white' : 'font-bold'}`}>
+                  <span className={`text-xs leading-none ${active ? 'font-bold' : ''}`}>
                     {item.label}
                   </span>
-                  {active && <span className="absolute bottom-0 w-8 h-0.5 bg-pink-500 rounded-t-full" />}
                 </Link>
               );
             })}

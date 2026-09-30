@@ -248,7 +248,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
                     to={withReturnTo('/register', '', { source: 'home' })}
                     onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
                     data-cta="home-register"
-                    className="inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-[#be185d] px-6 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                    className="inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-pink-600 px-6 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
                     style={{ minHeight: '48px', fontSize: '15px' }}
                   >
                     無料登録する
@@ -478,7 +478,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
               <Link
                 to={withReturnTo('/register', '', { source: 'home' })}
                 onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
-                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-[#be185d] px-6 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-pink-600 px-6 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
                 style={{ minHeight: '48px', fontSize: '15px' }}
               >
                 無料登録する
@@ -491,7 +491,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
               <Link
                 to="/post-review"
                 onClick={() => trackEvent('click_paywall_cta', { target: 'post_review', source: 'home' })}
-                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-[#be185d] px-6 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                className="mt-4 inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-pink-600 px-6 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
                 style={{ minHeight: '48px', fontSize: '15px' }}
               >
                 体験談を書く
@@ -555,7 +555,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
               <Link
                 to={withReturnTo('/register', '', { source: 'home' })}
                 onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
-                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-[#be185d] px-4 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-pink-600 px-4 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
                 style={{ minHeight: '48px', fontSize: '14px' }}
               >
                 無料登録する
@@ -567,7 +567,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
               <p className="ui-help mt-2">200字で3日間、700字で7日間</p>
               <Link
                 to="/post-review"
-                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-[#be185d] px-4 font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
+                className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-pink-600 px-4 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400"
                 style={{ minHeight: '48px', fontSize: '14px' }}
               >
                 体験談を書く

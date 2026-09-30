@@ -205,8 +205,8 @@ export default function StatsPage() {
                   {(() => {
                     const max = Math.max(nationalPrice.median60 || 0, nationalPrice.median90 || 0, 1);
                     const bars = [
-                      { label: '60分', v: nationalPrice.median60, y: 8, color: '#ec4899' },
-                      { label: '90分', v: nationalPrice.median90, y: 40, color: '#a855f7' },
+                      { label: '60分', v: nationalPrice.median60, y: 8, color: '#E0613F' },
+                      { label: '90分', v: nationalPrice.median90, y: 40, color: '#9E4230' },
                     ];
                     return bars.map((b) => (
                       <g key={b.label}>

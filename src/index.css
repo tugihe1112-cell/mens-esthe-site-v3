@@ -10,8 +10,21 @@ body {
   @apply bg-slate-950 min-h-screen text-gray-200;
 }
 
+/* 見出しは明朝（デザインA案「夜の文芸誌」・2026-09-30）。
+   ⚠️ **端末に入っている明朝を先に**並べる（iPhone・Mac＝ヒラギノ明朝、Windows＝游明朝）。
+      ブラウザは実際に使う書体しか読み込まないので、これらの端末では明朝の通信が0になる。
+      配信する明朝（Shippori Mincho B1・src/styles/fonts.js）は、明朝を持たない端末（Android など）のためだけ。
+      最初は配信の明朝を先にしていて、1ページで 270〜450KB 増えていた（2026-09-30 実測）。
+   base 層に置く＝ページ側で font-sans などを付ければそちらが勝つ。本文は端末の書体のまま（重くしない）。 */
+@layer base {
+  h1, h2, h3 {
+    font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'Yu Mincho', 'YuMincho', var(--font-mincho), serif;
+    letter-spacing: 0.02em;
+  }
+}
+
 .card {
-  @apply bg-[#2b1a4f]/60 backdrop-blur-md rounded-xl shadow-lg;
+  @apply bg-slate-900/60 backdrop-blur-md rounded-xl shadow-lg;
 }
 
 /* ページ遷移中のトップ・プログレスバー（タップした瞬間に反応を見せる） */
@@ -33,8 +46,8 @@ body {
   left: 0;
   height: 100%;
   width: 40%;
-  background: linear-gradient(90deg, #ec4899, #a855f7);
-  box-shadow: 0 0 10px rgba(236, 72, 153, 0.7);
+  background: #E0613F;
+  box-shadow: 0 0 10px rgba(224, 97, 63, 0.6);
   animation: route-progress-slide 1s ease-in-out infinite;
 }
 @keyframes route-progress-slide {
@@ -186,17 +199,17 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.3);
+  background: rgba(18, 16, 22, 0.3);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(219, 39, 119, 0.5);
+  background: rgba(224, 97, 63, 0.45);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(219, 39, 119, 0.7);
+  background: rgba(224, 97, 63, 0.7);
 }
 
 /* ===================================== */
@@ -220,7 +233,7 @@ a {
 /* フォーカス時のアウトライン */
 /* ===================================== */
 *:focus-visible {
-  outline: 2px solid rgb(219, 39, 119);
+  outline: 2px solid #EA8364;
   outline-offset: 2px;
 }
 
@@ -238,7 +251,7 @@ a {
 /* グラデーション背景 */
 /* ===================================== */
 .gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #1B1820;
 }
 
 /* ===================================== */
@@ -388,13 +401,13 @@ a {
 
   /* 2. 賢いグラスモーフィズム */
   .glass-panel {
-    background-color: rgba(15, 23, 42, 0.95);
+    background-color: rgba(18, 16, 22, 0.95);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   @supports (backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px)) {
     .glass-panel {
-      background-color: rgba(15, 23, 42, 0.75);
+      background-color: rgba(18, 16, 22, 0.78);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
     }
@@ -450,7 +463,7 @@ a {
 .hero-coverflow .swiper-button-next,
 .hero-coverflow .swiper-button-prev {
   color: white !important;
-  background: rgba(15, 23, 42, 0.7) !important;
+  background: rgba(18, 16, 22, 0.72) !important;
   backdrop-filter: blur(10px);
   width: 40px !important;
   height: 40px !important;
@@ -461,8 +474,8 @@ a {
 
 .hero-coverflow .swiper-button-next:hover,
 .hero-coverflow .swiper-button-prev:hover {
-  background: #ec4899 !important;
-  border-color: #ec4899;
+  background: #E0613F !important;
+  border-color: #E0613F;
 }
 
 .hero-coverflow .swiper-button-next::after,
@@ -502,15 +515,16 @@ a {
 /* ⚠️ 44px は本案件の設計値であって、WCAGの最低要件と同一ではない。         */
 /*    通常の文字のコントラストは 4.5:1 以上を満たすこと。                  */
 :root {
-  --ui-bg: #020617;
-  --ui-surface: #0f172a;
-  --ui-field-bg: #1e293b;
-  --ui-text: #f8fafc;
-  --ui-text-muted: #cbd5e1;
-  --ui-border: #334155;
-  --ui-primary: #be185d;
-  --ui-primary-hover: #9d174d;
-  --ui-link: #f9a8d4;
+  /* デザインA案（2026-09-30）: 墨・生成り・朱。コントラストは tailwind.config.js の説明と同じ基準 */
+  --ui-bg: #121016;
+  --ui-surface: #1B1820;
+  --ui-field-bg: #26222C;
+  --ui-text: #EEE7DB;
+  --ui-text-muted: #CFC7BA;
+  --ui-border: #3A3440;
+  --ui-primary: #C9502F;
+  --ui-primary-hover: #A8412A;
+  --ui-link: #F2B8A6;
   --ui-radius-card: 16px;
   --ui-radius-control: 12px;
   --ui-tap-min: 44px;

@@ -25,7 +25,7 @@ export default function RegisterInvite({ source = 'review_end', returnTo = '', s
     : '/post-review';
 
   const primaryClass =
-    'inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-[#be185d] px-6 text-sm font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400';
+    'inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-xl bg-pink-600 px-6 text-sm font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400';
   const primaryStyle = { minHeight: '48px' };
 
   // ── 未登録 ─────────────────────────────────────────────

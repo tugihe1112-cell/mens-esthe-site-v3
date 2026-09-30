@@ -65,56 +65,49 @@ export default function Header() {
           isVisible ? 'translate-y-0' : '-translate-y-full'
         } ${
           isScrolled || mobileMenuOpen
-            ? 'bg-slate-950 backdrop-blur-xl shadow-lg border-b border-white/10 py-2.5 md:py-3' // スクロール時・メニュー開放時: 完全不透明
+            ? 'bg-slate-950/95 backdrop-blur-md border-b border-slate-800 py-2 md:py-2.5' // スクロール時・メニュー開放時: ほぼ不透明
             : isTransparentPage
-              ? 'bg-gradient-to-b from-black/80 via-black/40 to-transparent py-3 md:py-6' // 透明時: 黒グラデーションで文字を見やすく
-              : 'bg-slate-900/80 backdrop-blur-md py-3 md:py-4'
+              ? 'bg-gradient-to-b from-slate-950/90 via-slate-950/50 to-transparent py-2.5 md:py-5' // 透明時: 墨のグラデーションで文字を見やすく
+              : 'bg-slate-950 border-b border-slate-800 py-2.5 md:py-3'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           {/* U01-7: 高さの基準はスマホ64px・PC72px */}
           <div className="flex items-center justify-between gap-3 sm:gap-4 min-h-[64px] lg:min-h-[72px]">
 
-            {/* ロゴエリア */}
-            <Link to="/" className="flex items-center gap-2 group relative z-50 shrink-0">
-              <div className="relative">
-                <div className="absolute inset-0 bg-pink-500 rounded-xl blur opacity-40 group-hover:opacity-60 transition"></div>
-                <div className="relative bg-gradient-to-br from-pink-600 to-rose-600 text-white w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-105 transition duration-300">
-                  <span className="text-base md:text-xl">💎</span>
-                </div>
-              </div>
-              {/* ⚠️ U01: ロゴ表記はヘッダーでも「メンエスマップ」に統一する（アイコンは既存のまま）。 */}
-              <div className={`font-black text-base md:text-xl tracking-tight whitespace-nowrap transition duration-300 ${isScrolled || !isTransparentPage ? 'text-white' : 'text-white drop-shadow-md'}`}>
-                メンエス<span className="text-pink-500">マップ</span>
-              </div>
+            {/* ロゴ（デザインA案「夜の文芸誌」・2026-09-30）: 明朝の「メンエスマップ」＋小さな欧文。
+                ⚠️ U01: ロゴ表記は「メンエスマップ」に統一（宝石の絵文字のバッジはやめた＝絵文字をアイコンに使わない）。 */}
+            <Link to="/" className="flex flex-col sm:flex-row sm:items-baseline gap-0.5 sm:gap-3 relative z-50 shrink-0 min-h-0">
+              <span className="font-mincho font-bold text-[19px] md:text-[22px] leading-none tracking-[0.08em] text-slate-100 whitespace-nowrap">
+                メンエスマップ
+              </span>
+              <span className="font-numeral text-[10px] md:text-[11px] leading-none tracking-[0.32em] text-slate-400 whitespace-nowrap">
+                MENS ESTHE MAP
+              </span>
             </Link>
 
-            {/* PC用 ナビゲーション (日本語化 & 視認性強化) */}
-            <nav className="hidden lg:flex items-center gap-6">
+            {/* PC用 ナビゲーション */}
+            <nav className="hidden lg:flex items-center gap-7">
               {/* ⚠️ U01: PCナビは「セラピストを探す」「口コミを読む」の2本に絞る。
                   ランキングはフッターへ移した（主導線を増やしすぎない）。 */}
-              <Link to="/search" className="text-sm font-bold text-white hover:text-pink-400 transition relative group drop-shadow-md">
+              <Link to="/search" className="text-sm text-slate-300 hover:text-slate-100 transition relative group py-3">
                 セラピストを探す
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-1.5 left-0 w-0 h-px bg-pink-400 transition-all group-hover:w-full"></span>
               </Link>
-              <Link to="/popular-reviews" className="text-sm font-bold text-white hover:text-pink-400 transition relative group drop-shadow-md">
+              <Link to="/popular-reviews" className="text-sm text-slate-300 hover:text-slate-100 transition relative group py-3">
                 口コミを読む
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all group-hover:w-full"></span>
+                <span className="absolute bottom-1.5 left-0 w-0 h-px bg-pink-400 transition-all group-hover:w-full"></span>
               </Link>
 
               {authUser ? (
-                <div className="flex items-center gap-4 pl-4 border-l border-white/20">
-                  <Link to="/mypage" className="flex items-center gap-2 group">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 p-[1px] shadow-lg">
-                       <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xs">👤</div>
-                    </div>
-                    <span className="text-sm font-bold text-white group-hover:text-pink-400 transition drop-shadow-md">マイページ</span>
-                  </Link>
-                </div>
+                <Link to="/mypage" className="flex items-center gap-2 pl-5 border-l border-slate-800 text-sm text-slate-200 hover:text-pink-300 transition py-3">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6} aria-hidden="true"><circle cx="12" cy="9" r="4" /><path d="M5 20c1-4 4-6 7-6s6 2 7 6" /></svg>
+                  マイページ
+                </Link>
               ) : (
-                <div className="flex items-center gap-3 pl-2">
-                  <Link to={loginHref} className="text-sm font-bold text-white hover:text-pink-400 transition drop-shadow-md">ログイン</Link>
-                  <Link to={registerHref} onClick={() => trackRegisterCtaClick('header')} className="bg-white text-slate-900 px-5 py-2 rounded-full text-sm font-black hover:bg-slate-100 transition shadow-lg shadow-white/10 hover:shadow-white/20">
+                <div className="flex items-center gap-5 pl-1">
+                  <Link to={loginHref} className="text-sm text-slate-300 hover:text-slate-100 transition py-3">ログイン</Link>
+                  <Link to={registerHref} onClick={() => trackRegisterCtaClick('header')} className="border border-pink-500 text-pink-300 px-5 py-2.5 rounded-sm text-sm font-bold hover:bg-pink-500 hover:text-slate-950 transition">
                     無料登録
                   </Link>
                 </div>
@@ -123,22 +116,23 @@ export default function Header() {
 
             {/* モバイル用 認証ボタン */}
             {!authUser && (
-              <div className="lg:hidden flex items-center gap-2 shrink-0">
+              <div className="lg:hidden flex items-center gap-1 shrink-0">
                 {/* ⚠️ U01-4: ボトムナビの5番目は「登録／マイページ」になったので、
                     既存利用者のログインはヘッダーに常設する（狭い幅でも隠さない）。 */}
                 <Link to={loginHref}
-                  className="inline-flex min-h-11 items-center text-xs font-bold text-white border border-white/25 px-3 sm:px-4 rounded-full whitespace-nowrap hover:bg-white/10 transition">
+                  className="inline-flex min-h-11 items-center text-[13px] text-slate-300 px-2.5 whitespace-nowrap hover:text-slate-100 transition">
                   ログイン
                 </Link>
                 <Link to={registerHref} onClick={() => trackRegisterCtaClick('header')}
-                  className="min-h-11 inline-flex items-center text-xs font-black text-white bg-pink-600 px-3 sm:px-4 rounded-full whitespace-nowrap hover:bg-pink-500 transition shadow-lg shadow-pink-950/30">
+                  className="min-h-11 inline-flex items-center text-[13px] font-bold text-pink-300 border border-pink-500 px-3.5 rounded-sm whitespace-nowrap hover:bg-pink-500 hover:text-slate-950 transition">
                   無料登録
                 </Link>
               </div>
             )}
             {authUser && (
-              <Link to="/mypage" className="hidden md:inline-flex lg:hidden min-h-10 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 text-xs font-black text-white">
-                👤 マイページ
+              <Link to="/mypage" className="hidden md:inline-flex lg:hidden min-h-10 items-center gap-2 rounded-sm border border-slate-700 px-4 text-xs font-bold text-slate-200">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6} aria-hidden="true"><circle cx="12" cy="9" r="4" /><path d="M5 20c1-4 4-6 7-6s6 2 7 6" /></svg>
+                マイページ
               </Link>
             )}
 

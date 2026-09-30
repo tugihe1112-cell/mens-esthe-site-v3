@@ -113,7 +113,7 @@ export default function TopHeroSlider({ initialHero = [] }) {
       {/* 進行バー */}
       {isPlaying && (
       <div className="absolute bottom-0 left-0 w-full h-0.5 z-[60] bg-white/10">
-        <div className="h-full bg-pink-500 shadow-[0_0_12px_#ec4899] transition-all duration-100 linear" style={{ width: `${(1 - activeProgress) * 100}%` }} />
+        <div className="h-full bg-pink-500 shadow-[0_0_12px_#E0613F] transition-all duration-100 linear" style={{ width: `${(1 - activeProgress) * 100}%` }} />
       </div>
       )}
 

@@ -662,6 +662,42 @@ for (const [path, label] of [
   }
 }
 
+// ── 書体の重さ（デザインA案・2026-09-30） ─────────────────────────────────────
+// 見出しの明朝は「端末の明朝が先・配信の明朝は持たない端末のためだけ」。配信の明朝を先にすると、
+// ブラウザは端末にヒラギノ明朝があっても配信のほうを読みに行き、1ページ 270〜450KB 増えた（実測）。
+// 日本語のWebフォントを本文に使う・先読みする、も同じく重くなるので止める。
+{
+  const strip = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const css = strip(read('src/index.css'));
+  const tw = strip(read('tailwind.config.js'));
+  const fonts = strip(read('src/styles/fonts.js'));
+  const heading = css.match(/h1,\s*h2,\s*h3\s*\{[^}]*font-family:\s*([^;]+);/);
+  if (!heading) {
+    failures.push('index.css の見出し（h1, h2, h3）の書体の指定が見つかりません');
+  } else {
+    const list = heading[1];
+    const local = list.indexOf('Hiragino Mincho');
+    const web = list.indexOf('var(--font-mincho)');
+    if (local < 0 || web < 0 || web < local) {
+      failures.push('index.css の見出しの書体で、配信の明朝（var(--font-mincho)）が端末の明朝（Hiragino Mincho）より先にあります（1ページ数百KB増える）');
+    }
+  }
+  const twMincho = tw.match(/mincho:\s*\[([^\]]*)\]/);
+  if (!twMincho || twMincho[1].indexOf('var(--font-mincho)') < twMincho[1].indexOf('Hiragino Mincho')) {
+    failures.push('tailwind.config.js の font-mincho で、配信の明朝が端末の明朝より先にあります');
+  }
+  const minchoCall = fonts.match(/Shippori_Mincho_B1\(\{([\s\S]*?)\}\)/);
+  if (!minchoCall || !/preload:\s*false/.test(minchoCall[1])) {
+    failures.push('src/styles/fonts.js の明朝に preload: false がありません（日本語の書体を先読みすると全ページで重くなる）');
+  }
+  if (minchoCall && /weight:\s*\[[^\]]*,/.test(minchoCall[1])) {
+    failures.push('src/styles/fonts.js の明朝の太さが2種類以上あります（1種類ごとに日本語のファイル一式が増える）');
+  }
+  if (/body\s*\{[^}]*--font-mincho/.test(css) || /sans:\s*\[[^\]]*var\(--font-mincho\)/.test(tw)) {
+    failures.push('本文に配信の明朝が使われています（本文は端末の書体のまま）');
+  }
+}
+
 if (failures.length) {
   console.error('❌ コア安全ガードの回帰を検出:');
   failures.forEach((failure) => console.error(`  - ${failure}`));

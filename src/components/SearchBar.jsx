@@ -26,7 +26,7 @@ export default function SearchBar() {
     'w-full min-w-0 rounded-xl border border-white/10 bg-white/10 px-3.5 text-white placeholder-slate-400 transition focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-pink-500';
   const fieldStyle = { height: '48px', fontSize: '16px', fontWeight: 700 };
   const submitClass =
-    'shrink-0 rounded-xl bg-[#be185d] font-black text-white transition hover:bg-[#9d174d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 active:scale-[0.98]';
+    'shrink-0 rounded-xl bg-pink-600 font-black text-white transition hover:bg-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 active:scale-[0.98]';
 
   return (
     <form onSubmit={handleSearch}>
