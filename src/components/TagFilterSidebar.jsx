@@ -20,7 +20,8 @@ import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
  *    2026-08-21に「0件なら隠す」分岐が入り、口コミ0件の店だけ別レイアウトになって
  *    オーナーから4回同じ指摘を受けた。**分岐を作らないこと自体が再発防止**。
  */
-const TAG_CATEGORIES = TAG_SOURCE.map((c) => ({ id: c.id, title: c.titleEn, tags: c.tags }));
+// 見出しは日本語（「■体型」の記号は外す）。英語の見出しは読む人の役に立たない（2026-09-30・デザインA案）
+const TAG_CATEGORIES = TAG_SOURCE.map((c) => ({ id: c.id, title: String(c.title || c.titleEn).replace(/^■/, ''), tags: c.tags }));
 
 export function TagFilterSidebar({
   tagCounts = {},
@@ -40,20 +41,17 @@ export function TagFilterSidebar({
           className="fixed inset-0 z-[65] bg-black/70 backdrop-blur-sm lg:hidden"
         />
       )}
-      <aside className={`${isOpen ? 'fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))] z-[70] block max-h-[78vh] overflow-y-auto rounded-3xl bg-slate-950 p-4 border border-white/10 shadow-2xl' : 'hidden'} lg:z-auto lg:block lg:max-h-none lg:overflow-visible lg:rounded-none lg:bg-transparent lg:p-0 lg:border-0 lg:shadow-none space-y-4 lg:sticky lg:top-36 self-start`}>
-        <div className="lg:hidden sticky top-0 -mx-1 -mt-1 mb-2 flex items-center justify-between rounded-2xl bg-slate-950/95 px-2 py-2 backdrop-blur">
-          <div>
-            <p className="text-sm font-black text-white">タグで絞り込む</p>
-            <p className="text-xs text-slate-500">口コミに付いたタグから選べます</p>
-          </div>
-          <button onClick={onClose} className="min-w-11 min-h-11 rounded-full bg-slate-800 text-white text-xl" aria-label="閉じる">×</button>
+      <aside
+        aria-label="タグで絞り込む"
+        className={`${isOpen ? 'fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))] z-[70] block max-h-[78vh] overflow-y-auto rounded-sm bg-slate-950 p-5 border border-slate-700 shadow-2xl' : 'hidden'} lg:z-auto lg:block lg:max-h-none lg:overflow-visible lg:bg-transparent lg:p-0 lg:border-0 lg:shadow-none space-y-5 lg:sticky lg:top-36 self-start`}
+      >
+        <div className="sticky top-0 -mx-1 -mt-1 flex items-center justify-between bg-slate-950/95 px-1 py-1 backdrop-blur lg:static lg:m-0 lg:bg-transparent lg:p-0">
+          <h2 className="font-mincho text-lg font-bold text-slate-50">タグで絞り込む</h2>
+          <button onClick={onClose} className="min-w-11 min-h-11 rounded-sm border border-slate-700 text-slate-200 text-xl lg:hidden" aria-label="閉じる">×</button>
         </div>
         {TAG_CATEGORIES.map((category) => (
-          <div key={category.id} className="bg-slate-900/40 backdrop-blur rounded-2xl p-4 border border-white/5">
-            <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
-              {category.title}
-            </h3>
+          <div key={category.id} className="space-y-2">
+            <h3 className="text-[11px] tracking-[0.16em] text-slate-400">{category.title}</h3>
             <div className="flex flex-wrap gap-1.5">
               {category.tags.map((tag) => {
                 const count = tagCounts[tag] || 0;
@@ -63,23 +61,25 @@ export function TagFilterSidebar({
                     key={tag}
                     onClick={() => onToggle?.(tag)}
                     disabled={count === 0 && !isSelected}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                    aria-pressed={isSelected}
+                    className={`inline-flex h-8 items-center gap-1 rounded-full border px-2.5 text-xs transition ${
                       isSelected
-                        ? 'bg-pink-600 border-pink-500 text-white'
+                        ? 'border-pink-500 bg-pink-500 font-bold text-slate-950'
                         : count === 0
-                          ? 'bg-transparent border-slate-800 text-slate-700 cursor-not-allowed'
-                          : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white'
+                          ? 'cursor-not-allowed border-dashed border-slate-800 text-slate-600'
+                          : 'border-slate-700 text-slate-100 hover:border-pink-500/60'
                     }`}
                   >
-                    {tag} <span className="opacity-50">({count})</span>
+                    {tag}<span className={isSelected ? '' : 'text-slate-400'}>{count}</span>
                   </button>
                 );
               })}
             </div>
           </div>
         ))}
+        <p className="text-[11px] leading-relaxed text-slate-400">タグは口コミを書いた人が付けたもの。数字は付いた口コミの件数です。</p>
         {selectedTags.length > 0 && (
-          <button onClick={onClear} className="w-full py-2 rounded-xl bg-slate-800 border border-white/10 text-xs font-bold text-slate-300 hover:text-white transition">
+          <button onClick={onClear} className="w-full min-h-11 rounded-sm border border-slate-700 text-xs font-bold text-slate-200 transition hover:border-slate-500">
             絞り込みを解除
           </button>
         )}
@@ -93,9 +93,10 @@ export function TagFilterButton({ selectedCount = 0, onOpen }) {
   return (
     <button
       onClick={onOpen}
-      className="lg:hidden w-full min-h-11 mb-4 rounded-xl bg-slate-900 border border-white/10 text-xs font-bold text-slate-300"
+      className="lg:hidden inline-flex w-full min-h-11 mb-4 items-center justify-center gap-2 rounded-sm border border-slate-700 text-xs font-bold text-slate-200"
     >
-      🔎 タグで絞り込む{selectedCount > 0 ? `（${selectedCount}）` : ''}
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" /></svg>
+      タグで絞り込む{selectedCount > 0 ? `（${selectedCount}）` : ''}
     </button>
   );
 }

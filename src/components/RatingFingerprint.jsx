@@ -36,6 +36,22 @@ export function hasFingerprint(values) {
   return FINGERPRINT_AXES.some(({ id }) => fingerprintValue(values, id) !== null);
 }
 
+/** 口コミの6項目の平均（その項目に点数を付けた口コミだけで割る）。1件も無ければ null */
+export function averageFingerprint(reviews = []) {
+  const values = {};
+  let used = 0;
+  for (const r of reviews) {
+    const d = r?.detailed_ratings || r?.detailedRatings;
+    if (FINGERPRINT_AXES.some(({ id }) => fingerprintValue(d, id) !== null)) used += 1;
+  }
+  if (used === 0) return null;
+  for (const { id } of FINGERPRINT_AXES) {
+    const xs = reviews.map((r) => fingerprintValue(r?.detailed_ratings || r?.detailedRatings, id)).filter((v) => v !== null);
+    values[id] = xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0;
+  }
+  return { values, count: used };
+}
+
 const fmt = (v, decimals) => (v === null ? '—' : (decimals > 0 ? v.toFixed(decimals) : String(round1(v))));
 
 function polygon(cx, cy, radius, ratios) {

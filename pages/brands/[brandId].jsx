@@ -60,7 +60,7 @@ export async function getServerSideProps({ params, res }) {
 
     const [reviewRes, revTRes, rosterRes, nearRes] = await Promise.all([
       supabase.from('reviews')
-        .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at, user_name')
+        .select('id, shop_id, therapist_id, therapist_name, rating, content, created_at, user_name, detailed_ratings')
         .in('shop_id', shopIds)
         .or('is_public.eq.true,user_id.eq.owner_manual')
         .order('created_at', { ascending: false })

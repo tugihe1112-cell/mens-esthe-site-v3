@@ -30,11 +30,20 @@ import { TagFilterSidebar, TagFilterButton } from '../components/TagFilterSideba
 import { authHeaders } from '../utils/supabaseRest';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
+import RatingFingerprint, { averageFingerprint } from '../components/RatingFingerprint.jsx';
+import { splitNameReading } from '../utils/nameReading.js';
 
+// 日付は日本時間で「2026.09.05」。サーバー（UTC）と画面（JST）で日付がずれないよう自前で組む。
 const fmtDate = (v) => {
-  const d = new Date(v);
-  return Number.isNaN(d.getTime()) ? '' : `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
+  const t = v ? new Date(v).getTime() : NaN;
+  if (!Number.isFinite(t)) return '';
+  const d = new Date(t + 9 * 60 * 60 * 1000);
+  return `${d.getUTCFullYear()}.${String(d.getUTCMonth() + 1).padStart(2, '0')}.${String(d.getUTCDate()).padStart(2, '0')}`;
 };
+
+const PenIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z" /></svg>
+);
 
 const ROSTER_PAGE = 24;
 const TAG_CATEGORIES = TAG_SOURCE.map((c) => ({ id: c.id, title: c.titleEn, tags: c.tags }));
@@ -242,6 +251,17 @@ export default function BrandPage({
     ? `${ssrArea}の他のブランド`
     : (ssrPrefecture ? `${ssrPrefecture}の他のブランド` : '他のブランド');
 
+  // この店の採点の形（SSRの公開口コミの6項目の平均）
+  const brandFingerprint = averageFingerprint(ssrReviews);
+  // 見出しは店名と読み（括弧の中のかな）を分けて組む＝読みが途中で折り返さない
+  const headName = splitNameReading(brand.name);
+  const sectionNav = [
+    roster.length > 0 && { id: 'brand-cast', label: '在籍セラピスト' },
+    ssrReviews.length > 0 && { id: 'brand-review', label: ssrReviewCount > 0 ? `口コミ ${ssrReviewCount}` : '口コミ' },
+    shopInfo.length > 0 && { id: 'brand-info', label: '店舗情報' },
+    rooms.length > 0 && { id: 'brand-rooms', label: 'ルーム' },
+  ].filter(Boolean);
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 font-sans pb-24">
       {renderSeo && (
@@ -253,67 +273,122 @@ export default function BrandPage({
       )}
       <Header />
 
-      <div className="relative">
-        {brand.image_url && (
-          <div className="absolute inset-0 overflow-hidden">
-            <LazyImage src={brand.image_url} alt="" className="w-full h-full object-cover opacity-20 blur-sm" />
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 to-slate-950"></div>
-          </div>
-        )}
-        <div className="relative max-w-4xl mx-auto px-4 pt-24 pb-8">
-          <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-3">{brand.name}</h1>
-          <ShopStatusChip shop={brand} className="mb-3" />
-          {/* 全ルームの地名。ここを落とすと「代々木で検索しても出ない」になる。 */}
-          <LocationLabel as="p" className="text-slate-300 text-sm mb-4" parts={areaLabels} />
-          <div className="flex flex-wrap gap-2 text-xs font-bold">
+      {/* 1. 店の見出し（デザインA案「夜の文芸誌」2026-09-30・店舗ページと同じ組み方）
+          PCは「店の画像｜店名・点数・在籍｜採点の形」の3列、スマホは縦に積む。 */}
+      <section className="max-w-[1200px] mx-auto px-4 md:px-6 pt-20">
+        <nav aria-label="パンくず" className="flex min-w-0 items-center gap-2 text-xs text-slate-400">
+          <Link to="/" className="inline-flex min-h-11 items-center hover:text-white transition">ホーム</Link>
+          <span className="text-slate-600" aria-hidden="true">/</span>
+          <span className="truncate text-slate-300">{brand.name}</span>
+        </nav>
+
+        <div className={`mt-2 grid grid-cols-1 gap-6 md:gap-8 ${brand.image_url ? 'md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]' : ''} ${brandFingerprint ? (brand.image_url ? 'lg:grid-cols-[320px_minmax(0,1fr)_300px]' : 'md:grid-cols-[minmax(0,1fr)_300px]') : ''} lg:items-center`}>
+          {/* 店の画像。ぼかした複製を背景に、本体は切らずに全体を見せる（店舗ページと同じ・D-008の考え方） */}
+          {brand.image_url && (
+            <div className="relative aspect-[16/9] md:aspect-[4/3] overflow-hidden border border-slate-700 bg-slate-900">
+              <LazyImage src={brand.image_url} alt="" className="absolute inset-0 w-full h-full scale-110 blur-2xl opacity-40" imgClassName="w-full h-full object-cover" />
+              <div className="absolute inset-0 flex items-center justify-center p-5">
+                <LazyImage src={brand.image_url} alt={brand.name} className="w-full h-full" imgClassName="w-full h-full object-contain drop-shadow-2xl" />
+              </div>
+            </div>
+          )}
+
+          <div className="min-w-0">
             {rooms.length > 1 && (
-              <span className="bg-slate-800 border border-white/10 rounded-full px-3 py-1.5 text-slate-300">{rooms.length}ルーム</span>
+              <p className="text-xs tracking-[0.12em] text-slate-400">{rooms.length}ルーム</p>
             )}
-            {ssrTherapistCount > 0 && (
-              <span className="bg-slate-800 border border-white/10 rounded-full px-3 py-1.5 text-slate-300">セラピスト{ssrTherapistCount}名</span>
+            <h1 className="mt-1 font-mincho text-[32px] md:text-[44px] font-bold leading-[1.15] text-slate-50 break-words">
+              {headName.main}
+              {headName.reading && <span className="mt-1 block font-sans text-sm font-normal tracking-[0.12em] text-slate-400">{headName.reading}</span>}
+            </h1>
+            <ShopStatusChip shop={brand} className="mt-3" />
+            {/* 全ルームの地名。ここを落とすと「代々木で検索しても出ない」になる。 */}
+            <LocationLabel as="p" className="mt-2 text-sm text-slate-300" parts={areaLabels} />
+
+            {/* ⚠️ 口コミが0件のときに件数も点数も出さない。根拠のない数字を作らない（D-010の考え方）。 */}
+            {(ssrReviewCount > 0 || ssrTherapistCount > 0) && (
+              <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-4 border-t border-slate-800 pt-4">
+                {ssrReviewCount > 0 && ssrAvgRating && (
+                  <div>
+                    <dt className="text-[11px] tracking-[0.12em] text-slate-400">平均（口コミ{ssrReviewCount}件）</dt>
+                    <dd className="mt-1 font-numeral text-[40px] font-semibold leading-[0.9] text-slate-50">{ssrAvgRating}</dd>
+                  </div>
+                )}
+                {ssrTherapistCount > 0 && (
+                  <div>
+                    <dt className="text-[11px] tracking-[0.12em] text-slate-400">在籍</dt>
+                    <dd className="mt-1 text-slate-50"><span className="font-numeral text-[40px] font-semibold leading-[0.9]">{ssrTherapistCount}</span><span className="ml-1 text-xs text-slate-400">名</span></dd>
+                  </div>
+                )}
+              </dl>
             )}
-            {/* ⚠️ 口コミが0件のときに件数も★も出さない。根拠のない数字を作らない（D-010の考え方）。 */}
-            {ssrReviewCount > 0 && (
-              <span className="bg-pink-600/20 border border-pink-500/30 rounded-full px-3 py-1.5 text-pink-200">
-                口コミ{ssrReviewCount}件{ssrAvgRating ? ` ★${ssrAvgRating}` : ''}
-              </span>
-            )}
+
+            {/* ⚠️ 口コミ投稿の導線は必ず残す。店舗ページには「口コミを書く」があり、
+                ここに無いまま店舗ページを畳むとサイトの一次コンテンツの入口が消える。 */}
+            <div className="mt-5 flex flex-wrap gap-2">
+              <Link
+                to={`/shops/${reviewShopId}/review`}
+                className="inline-flex min-h-11 items-center gap-2 rounded-sm bg-pink-500 px-5 text-sm font-bold text-slate-950 transition hover:bg-pink-400"
+              >
+                <PenIcon /> この店の口コミを書く
+              </Link>
+              {brand.website_url && (
+                <a
+                  href={brand.website_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-slate-500 px-5 text-sm font-bold text-slate-50 transition hover:border-slate-300"
+                >
+                  公式サイトで最新情報を見る <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </div>
           </div>
-          {/* ⚠️ 口コミ投稿の導線は必ず残す。店舗ページには「口コミを書く」があり、
-              ここに無いまま店舗ページを畳むとサイトの一次コンテンツの入口が消える。 */}
-          <div className="flex flex-wrap gap-3 mt-5">
-            <Link
-              to={`/shops/${reviewShopId}/review`}
-              className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-black text-sm px-5 py-3 rounded-xl transition"
-            >
-              ✍️ 口コミを書く
-            </Link>
-          </div>
-          {brand.website_url && (
-            <a
-              href={brand.website_url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-block mt-5 bg-white text-slate-900 hover:bg-slate-200 font-black text-sm px-5 py-3 rounded-xl transition"
-            >
-              公式サイトで最新情報を見る
-            </a>
+
+          {brandFingerprint && (
+            <div className={brand.image_url ? 'md:col-span-2 lg:col-span-1' : ''}>
+              <RatingFingerprint
+                values={brandFingerprint.values}
+                decimals={1}
+                caption={`口コミ${brandFingerprint.count}件の採点の形（この店の「指紋」）`}
+              />
+            </div>
           )}
         </div>
-      </div>
+      </section>
 
-      <main className="max-w-4xl mx-auto px-4 space-y-10">
+      {/* 2. このページの中の見出しへ（店舗ページと同じ）。D-003 の一文はPCだけここにも出す。 */}
+      {sectionNav.length > 1 && (
+        <div className="sticky top-14 md:top-20 z-40 mt-8 border-y border-slate-800 bg-slate-950/95 backdrop-blur">
+          <div className="flex max-w-[1200px] mx-auto items-center gap-6 overflow-x-auto px-4 md:gap-8 md:px-6">
+            {sectionNav.map((s) => (
+              <a
+                key={s.id}
+                href={`#${s.id}`}
+                onClick={(e) => { e.preventDefault(); document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
+                className="inline-flex min-h-12 shrink-0 items-center border-b-2 border-transparent text-sm text-slate-300 transition hover:border-pink-500 hover:text-white"
+              >
+                {s.label}
+              </a>
+            ))}
+            <NeutralReviewNote className="ml-auto hidden shrink-0 lg:flex" />
+          </div>
+        </div>
+      )}
+
+      <main className="max-w-[1200px] mx-auto px-4 md:px-6 pt-10 space-y-14">
         {ssrReviewedTherapists.length > 0 && (
-          <section>
-            <h2 className="text-base font-black text-white mb-3">口コミがあるセラピスト</h2>
-            <ul className="flex flex-wrap gap-2">
+          <section className="border-t border-slate-700 pt-6">
+            <h2 className="font-mincho text-xl font-bold text-slate-50">口コミがあるセラピスト</h2>
+            <ul className="mt-3 grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
               {ssrReviewedTherapists.map((t) => (
-                <li key={t.id}>
+                <li key={t.id} className="border-b border-slate-800">
                   <Link
                     to={`/shops/${t.shopId}/threads/${t.id}`}
-                    className="inline-block text-xs text-slate-200 hover:text-pink-300 bg-slate-900 hover:bg-slate-800 border border-white/10 rounded-full px-3 py-1.5 transition"
+                    className="flex min-h-12 items-center justify-between gap-3 text-slate-100 transition hover:text-pink-300"
                   >
-                    {t.name}{t.rating ? <span className="text-yellow-400 ml-1">★{t.rating}</span> : null}
+                    <span className="truncate font-mincho text-base font-bold">{t.name}</span>
+                    {t.rating ? <span className="shrink-0 font-numeral text-lg text-slate-50">{Number(t.rating).toFixed(1)}</span> : null}
                   </Link>
                 </li>
               ))}
@@ -322,22 +397,29 @@ export default function BrandPage({
         )}
 
         {ssrReviews.length > 0 && (
-          <section>
-            <h2 className="text-base font-black text-white mb-3">口コミ</h2>
+          <section id="brand-review" className="scroll-mt-32">
+            <div className="border-b border-slate-700 pb-3">
+              <h2 className="font-mincho text-2xl font-bold text-slate-50">
+                口コミ
+                {ssrReviewCount > 0 && <span className="ml-2 font-numeral text-xl font-medium text-slate-400">{ssrReviewCount}</span>}
+              </h2>
+            </div>
             {/* D-003: 口コミを読む場所で「広告ではない」と分かるように（2026-09-23） */}
-            <NeutralReviewNote className="-mt-1 mb-3" />
-            <div className="space-y-3">
+            <NeutralReviewNote className="mt-3 mb-2" />
+            <div className="grid grid-cols-1 gap-x-10 md:grid-cols-2">
               {ssrReviews.map((r) => (
-                <article key={r.id} className="bg-slate-900 border border-white/5 rounded-2xl p-4">
-                  <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
-                    {r.therapist_name && <span className="font-bold text-slate-200">{r.therapist_name}</span>}
-                    {r.rating > 0 && <span className="text-yellow-400 font-bold">★{r.rating}</span>}
-                    <span className="ml-auto">{fmtDate(r.created_at)}</span>
+                <article key={r.id} className="border-t border-slate-800 py-6">
+                  <div className="flex items-end gap-3">
+                    {r.rating > 0 && <span className="font-numeral text-[40px] font-semibold leading-[0.85] text-slate-50">{Number(r.rating).toFixed(1)}</span>}
+                    <div className="min-w-0 pb-0.5 text-xs text-slate-400">
+                      {r.therapist_name && <p className="truncate font-mincho text-base font-bold text-slate-100">{r.therapist_name}</p>}
+                      <p>{r.user_name ? `${r.user_name} · ` : ''}{fmtDate(r.created_at)}</p>
+                    </div>
                   </div>
-                  <p className="text-sm text-slate-300 leading-relaxed line-clamp-5">{r.content}</p>
+                  <p className="mt-3 text-sm leading-[1.9] text-slate-300 line-clamp-5">{r.content}</p>
                   {r.therapist_id && (
-                    <Link to={`/shops/${r.shop_id}/threads/${r.therapist_id}`} className="inline-block mt-2 text-xs font-bold text-pink-300 hover:text-pink-200">
-                      この口コミの全文を読む
+                    <Link to={`/shops/${r.shop_id}/threads/${r.therapist_id}`} className="mt-2 inline-flex min-h-11 items-center text-xs font-bold text-pink-300 hover:text-pink-200">
+                      この口コミの全文を読む <span aria-hidden="true" className="ml-1">→</span>
                     </Link>
                   )}
                 </article>
@@ -350,13 +432,13 @@ export default function BrandPage({
             ⚠️ セラピストは店舗ではなくブランドに属する。全ルームぶんを1つの名簿として出す。
             ⚠️ SSR分だけでも初期HTMLに名前とリンクが載る（D-013: JS実行前に本文と内部リンク）。 */}
         {roster.length > 0 && (
-          <section>
+          <section id="brand-cast" className="scroll-mt-32">
             {/* 🚩 左にタグの列・真ん中にキャスト一覧（D-001・オーナー確定デザイン）。
                 D-014でここへ301した以上、店舗ページと**同じ見え方**でなければ畳んだ意味がない。
                 ⚠️ 2026-09-19の「移植」では機能だけ移して形を移しておらず、
                    370店（34%）がこの列を失っていた。二度とやらないため**同じ部品**を描く。
                 ⚠️ 条件で出し分けない（タグ0件でも名簿が何人でも常に出す）。 */}
-            <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-8">
             <TagFilterSidebar
               tagCounts={tagCounts}
               selectedTags={selectedTags}
@@ -371,14 +453,11 @@ export default function BrandPage({
 
             <div className="min-w-0">
             <TagFilterButton selectedCount={selectedTags.length} onOpen={() => setIsFilterOpen(true)} />
-            <div className="flex items-center justify-between mb-3 gap-2">
-              <h2 className="text-base font-black text-white">
-                在籍セラピスト
-                {ssrTherapistCount > 0 && <span className="ml-2 text-xs font-bold text-slate-500">{ssrTherapistCount}名</span>}
-              </h2>
+            <div className="mb-5 flex items-end justify-between gap-3 border-b border-slate-700 pb-3">
+              <h2 className="font-mincho text-2xl font-bold text-slate-50">在籍セラピスト</h2>
               {/* ⚠️ 絞り込み中は「N / 全M人」。店舗ページと同じ出し方に揃える。 */}
-              <span className="bg-white/10 px-2 py-0.5 rounded text-xs font-bold text-slate-300 shrink-0">
-                {(castNameFilter || selectedTags.length > 0) ? `${sortedRoster.length} / ` : ''}全{roster.length}人
+              <span className="shrink-0 text-xs text-slate-400">
+                {(castNameFilter || selectedTags.length > 0) ? <><span className="font-numeral text-xl text-slate-50">{sortedRoster.length}</span> / </> : null}全<span className="font-numeral text-xl text-slate-50">{roster.length}</span>人
               </span>
             </div>
 
@@ -387,20 +466,25 @@ export default function BrandPage({
                 この操作が丸ごと失われていた。 */}
             {/* ⚠️ 条件で出し分けない（D-001）。人数が少ない店だけ別レイアウトにしない。 */}
             {true && (
-              <div className="flex flex-col sm:flex-row gap-2 mb-4">
-                <input
-                  type="search"
-                  value={castNameFilter}
-                  onChange={(e) => { setCastNameFilter(e.target.value); setDisplayCount(ROSTER_PAGE); }}
-                  placeholder="セラピスト名で絞り込み"
-                  className="flex-1 min-w-0 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-pink-500/50"
-                />
-                <div className="flex gap-1 shrink-0">
-                  {[{ v: 'default', label: '標準' }, { v: 'aiueo', label: '五十音' }, { v: 'reviews', label: '💬 口コミ' }].map((o) => (
+              <div className="flex flex-col sm:flex-row gap-2 mb-6">
+                <div className="relative flex-1 min-w-0">
+                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6" /><path d="M16 16l4 4" /></svg>
+                  <input
+                    type="search"
+                    value={castNameFilter}
+                    onChange={(e) => { setCastNameFilter(e.target.value); setDisplayCount(ROSTER_PAGE); }}
+                    placeholder="セラピスト名で絞り込み"
+                    aria-label="セラピスト名で絞り込み"
+                    className="w-full min-h-11 bg-slate-900 border border-slate-700 rounded-sm pl-9 pr-3 text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none focus:border-pink-500/60"
+                  />
+                </div>
+                <div role="group" aria-label="並び替え" className="flex shrink-0 divide-x divide-slate-700 border border-slate-700 rounded-sm">
+                  {[{ v: 'default', label: '標準' }, { v: 'aiueo', label: '五十音' }, { v: 'reviews', label: '口コミ順' }].map((o) => (
                     <button
                       key={o.v}
                       onClick={() => setCastSortOrder(o.v)}
-                      className={`px-3 py-2 rounded-xl text-xs font-bold border transition ${castSortOrder === o.v ? 'bg-pink-600 text-white border-pink-500' : 'bg-slate-900 text-slate-300 border-white/10 hover:border-white/30'}`}
+                      aria-pressed={castSortOrder === o.v}
+                      className={`min-h-11 flex-1 px-4 text-xs transition whitespace-nowrap ${castSortOrder === o.v ? 'bg-slate-800 font-bold text-slate-50' : 'text-slate-400 hover:text-white'}`}
                     >
                       {o.label}
                     </button>
@@ -409,37 +493,41 @@ export default function BrandPage({
               </div>
             )}
 
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-              {visibleRoster.map((t) => (
-                <Link
-                  key={t.id}
-                  to={`/shops/${t.shopId || reviewShopId}/threads/${t.id}`}
-                  className="group bg-slate-900 rounded-xl overflow-hidden border border-white/5 hover:border-pink-500/50 transition"
-                >
-                  <div className="aspect-[3/4] overflow-hidden bg-slate-800">
-                    <LazyImage src={t.image_url} alt={t.name} className="w-full h-full object-cover" />
-                  </div>
-                  {/* ⚠️ ブランド名は外して出す（店舗ページと同じ。人名が読みにくくなるため） */}
-                  <p className="text-[11px] text-slate-300 group-hover:text-pink-300 font-bold px-2 py-1.5 truncate">{getTherapistDisplayName(t.name, brand?.name)}</p>
-                </Link>
-              ))}
+            <div className="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-5 gap-x-3 gap-y-5">
+              {visibleRoster.map((t) => {
+                const cnt = therapistReviewCounts[t.id] || 0;
+                return (
+                  <Link
+                    key={t.id}
+                    to={`/shops/${t.shopId || reviewShopId}/threads/${t.id}`}
+                    className="group flex min-w-0 flex-col gap-1.5"
+                  >
+                    <div className="relative aspect-[3/4] overflow-hidden border border-slate-700 bg-slate-900">
+                      <LazyImage src={t.image_url} alt={t.name} className="w-full h-full object-cover transition duration-700 group-hover:scale-105" />
+                      {cnt > 0 && <span className="absolute left-1.5 top-1.5 border border-pink-500 bg-slate-950 px-1.5 py-0.5 text-[11px] text-pink-300">口コミ {cnt}</span>}
+                    </div>
+                    {/* ⚠️ ブランド名は外して出す（店舗ページと同じ。人名が読みにくくなるため） */}
+                    <p className="truncate font-mincho text-sm font-bold text-slate-100 group-hover:text-pink-300">{getTherapistDisplayName(t.name, brand?.name)}</p>
+                  </Link>
+                );
+              })}
             </div>
             {/* ⚠️ ここに「写真を確認できるセラピストを表示しています」と書いてはいけない（2026-09-16）。
                 名簿は写真の有無で絞っていない（buildBrandRoster）。書くと**画面が嘘をつく**。
                 ⚠️ 「一部を表示しています」も、もっと見るで全員見られる今は不正確。
                    残りが何人かを出して、押せば見られることを示す。 */}
             {hasMoreRoster && (
-              <div className="mt-4 text-center">
+              <div className="mt-8 text-center">
                 <button
                   onClick={() => setDisplayCount((n) => n + ROSTER_PAGE)}
-                  className="px-6 py-2.5 rounded-full bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700 hover:text-white transition border border-white/5"
+                  className="inline-flex min-h-11 items-center rounded-sm border border-slate-600 px-8 text-sm font-bold text-slate-200 transition hover:border-slate-400 hover:text-white"
                 >
-                  もっと見る (+{sortedRoster.length - displayCount})
+                  もっと見る（あと{sortedRoster.length - displayCount}人）
                 </button>
               </div>
             )}
             {(castNameFilter || selectedTags.length > 0) && sortedRoster.length === 0 && (
-              <p className="text-xs text-slate-500 mt-3">条件に一致するセラピストはいません。</p>
+              <p className="text-xs text-slate-400 mt-3">条件に一致するセラピストはいません。</p>
             )}
             </div>
             </div>
@@ -452,13 +540,13 @@ export default function BrandPage({
             ⚠️ 住所はここに出さない。実測で**71%のブランドがルームごとに違う**＝共通にできない。
                住所は下の「ルーム」欄に各ルームで添える。 */}
         {shopInfo.length > 0 && (
-          <section>
-            <h2 className="text-base font-black text-white mb-3">店舗情報</h2>
-            <dl className="bg-slate-900/60 border border-white/10 rounded-2xl p-4 space-y-3">
+          <section id="brand-info" className="scroll-mt-32 border-t border-slate-700 pt-6">
+            <h2 className="font-mincho text-2xl font-bold text-slate-50">店舗情報</h2>
+            <dl className="mt-5 divide-y divide-slate-800 border-y border-slate-800">
               {shopInfo.map((row) => (
-                <div key={row.label} className="grid grid-cols-[84px_1fr] items-baseline gap-2">
-                  <dt className="text-[11px] font-black text-slate-500 tracking-widest">{row.label}</dt>
-                  <dd className="text-sm text-white whitespace-pre-wrap break-words">
+                <div key={row.label} className="grid grid-cols-[88px_1fr] md:grid-cols-[140px_1fr] items-baseline gap-3 py-4">
+                  <dt className="text-xs tracking-[0.12em] text-slate-400">{row.label}</dt>
+                  <dd className="text-sm text-slate-50 whitespace-pre-wrap break-words">
                     {row.varies
                       ? <span className="text-slate-400">ルームにより異なります（公式サイトでご確認ください）</span>
                       : (row.href
@@ -473,21 +561,18 @@ export default function BrandPage({
 
         {/* ルームは「どこにあるか」が分かればよい。支店を主役にしない。 */}
         {rooms.length > 0 && (
-          <section>
-            <h2 className="text-base font-black text-white mb-3">ルーム</h2>
+          <section id="brand-rooms" className="scroll-mt-32 border-t border-slate-700 pt-6">
+            <h2 className="font-mincho text-xl font-bold text-slate-50">ルーム</h2>
             {/* ⚠️ ルームはリンクにしない（D-014）。
                 複数ルームの店舗ページはこのページへ301するので、リンクにすると
                 「押す → 301 → 同じページに戻る」という往復になる。
                 ここで見せたいのは「どこにルームがあるか」であって支店ページではない。 */}
-            <ul className="flex flex-wrap gap-2">
+            <ul className="mt-3 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
               {rooms.map((r) => (
-                <li
-                  key={r.id}
-                  className="inline-block text-xs text-slate-300 bg-slate-900 border border-white/10 rounded-full px-3 py-1.5"
-                >
+                <li key={r.id} className="border-b border-slate-800 py-3 text-sm text-slate-100">
                   {r.area || r.city || r.prefecture || 'ルーム'}
                   {/* ⚠️ 住所はルームごと（実測で71%が違う）。ここでしか出せない。 */}
-                  {r.address && <span className="ml-1.5 text-slate-500">{r.address}</span>}
+                  {r.address && <span className="mt-0.5 block text-xs text-slate-400">{r.address}</span>}
                 </li>
               ))}
             </ul>
@@ -499,17 +584,20 @@ export default function BrandPage({
                エリアページ→店舗の内部リンクで索引を戻した経緯（D-001 補足）を細らせる。
             ⚠️ 送り先は店舗ではなくブランド。店舗へ送ると同じブランドの支店が並ぶ。 */}
         {ssrNearbyBrands.length > 0 && (
-          <section>
-            <h2 className="text-base font-black text-white mb-3">{nearbyHeading}</h2>
-            <ul className="flex flex-wrap gap-2">
+          <section className="border-t border-slate-700 pt-6">
+            <h2 className="font-mincho text-xl font-bold text-slate-50">{nearbyHeading}</h2>
+            <ul className="mt-3 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
               {ssrNearbyBrands.map((b) => (
-                <li key={b.id}>
+                <li key={b.id} className="border-b border-slate-800">
                   <Link
                     to={brandCanonicalPath(b)}
-                    className="inline-block text-xs text-slate-300 hover:text-pink-300 bg-slate-900 hover:bg-slate-800 border border-white/10 rounded-full px-3 py-1.5 transition"
+                    className="flex min-h-12 items-center justify-between gap-3 text-sm text-slate-200 transition hover:text-pink-300"
                   >
-                    {b.name}
-                    {b.areaLabel && <span className="text-slate-500 ml-1">{b.areaLabel}</span>}
+                    <span className="truncate">
+                      {b.name}
+                      {b.areaLabel && <span className="text-slate-400 ml-1.5 text-xs">{b.areaLabel}</span>}
+                    </span>
+                    <span aria-hidden="true" className="text-slate-500">→</span>
                   </Link>
                 </li>
               ))}

@@ -19,6 +19,18 @@ import { trackEvent } from '../utils/analytics';
 import siteStats from '../data/stats-latest.json';
 import ShopStatusBanner from '../components/ShopStatusBanner.jsx';
 import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
+import RatingFingerprint, { averageFingerprint } from '../components/RatingFingerprint.jsx';
+import { splitNameReading } from '../utils/nameReading.js';
+
+const PenIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z" /></svg>
+);
+const HeartIcon = ({ filled = false }) => (
+  <svg width="17" height="17" viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+  </svg>
+);
+
 
 // 左サイドバーのタグ絞り込み（SearchPage と同一定義。表記を割らないため必ず揃える）
 // ⚠️ タグ定義をここに書き戻さないこと（src/data/constants.js が唯一の定義元）。
@@ -270,13 +282,9 @@ export default function ShopDetailPage({
   const reviews = cloudReviews.length > 0 ? cloudReviews : (getReviewsByShopId ? getReviewsByShopId(shopId, isPremiumUser) : []);
   const isFavorite = shop ? favorites.includes(shop.id) : false;
 
-  // 🌟 店舗IDからロゴ画像を判定するロジック
-  let logoUrl = null;
-  if (shopId?.includes('yuruspa') || shop?.brand_id === 'yuruspa') {
-    logoUrl = 'https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/yuruspa.png';
-  } else if (shopId?.includes('mens_esthe_group') || shopId?.includes('menes_group') || shop?.brand_id === 'mens_esthe_group') {
-    logoUrl = 'https://azuetkuzzmshqfbrhqmf.supabase.co/storage/v1/object/public/shop-logos/menesgroup.png';
-  }
+  // ⚠️ 2026-09-30: ここにあった「店舗IDから特別なロゴを出す」処理（ゆるスパ系・メンエスグループ系）は削除した。
+  //    指していた画像は旧画像置き場（Supabase Storage）で、2026-06-30 に R2 へ移したあとは 400 を返し、
+  //    その2系列の店だけ壊れた画像を出していた。店の画像は image_url（R2）だけを使う。
 
   // 名前で絞り込み → 並び替え → 表示件数で切る（SearchPageと同じ流れ）
   // ⚠️ 人物の同定は reviewIdentity に一本化する（独自の正規化を書かない）。
@@ -341,8 +349,8 @@ export default function ShopDetailPage({
   const handleLoadMore = () => setDisplayCount(prev => prev + LOAD_MORE_COUNT);
 
   // ✨ すべてのHook（useState, useEffect）が終わったので、ここで初めて安全に早期リターン！
-  if (isFetching && !shop) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white font-bold tracking-widest animate-pulse">LOADING...</div>;
-  if (!shop) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Shop not found</div>;
+  if (isFetching && !shop) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-300 animate-pulse">読み込み中…</div>;
+  if (!shop) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-300">店舗が見つかりませんでした</div>;
 
   // Tier 2-3: 件数入りタイトル/descriptionでCTR改善（SSRラッパーと同じ形式で揃える）
   // クライアント取得は最新20件までなので、SSRで数えた全件数を下回らせない。
@@ -369,6 +377,10 @@ export default function ShopDetailPage({
   const handlePostReview = () => {
     navigate(`/shops/${shop.id}/review`);
   };
+  // この店の採点の形（見出しに出す）。表示中の口コミから作る＝SSRの口コミと同じ母集団。
+  const shopFingerprint = averageFingerprint(reviews);
+  // 見出しは店名と読み（括弧の中のかな）を分けて組む＝読みが途中で折り返さない
+  const headName = splitNameReading(getDisplayName(shop.name, shop));
 
   return (
     <div className="bg-slate-950 min-h-screen pb-24 md:pb-16 text-slate-200 font-sans relative">
@@ -404,128 +416,141 @@ export default function ShopDetailPage({
         } : undefined
       }) }} />}
 
-      {/* 1. Cinematic Hero Header */}
-      <div className="relative h-[360px] sm:h-[45vh] md:h-[55vh] w-full overflow-hidden group">
-         <button
-           onClick={() => navigate(-1)}
-           aria-label="前のページに戻る"
-           /* 共通ヘッダー（ロゴ・左上）と重ならないようヘッダー下に配置 */
-           className="absolute top-16 md:top-20 left-4 z-40 inline-flex items-center gap-1.5 h-10 px-4 rounded-full bg-black/50 backdrop-blur-md text-white text-sm font-bold border border-white/15 hover:bg-black/70 transition active:scale-95"
-         >
-           <span className="text-base leading-none">←</span> 戻る
-         </button>
+      {/* 1. 店の見出し（デザインA案「夜の文芸誌」2026-09-30）
+          PCは「店の画像｜店名・点数・在籍｜採点の形」の3列、スマホは縦に積む。
+          🐛 店の画像の見せ方（2026-08-20 実測で特定）
+             ・店舗画像は 2026-07-06 の一括リサイズで**全て最大600px**
+             ・横長のロゴ／キャンペーンバナー（600x285等）が多く、object-cover で切ると文字の断片だけが出る
+             【対処】背景はぼかした複製で埋め、本体は object-contain で全体を見せる。
+             ⚠️ object-cover に戻さないこと（D-008）。 */}
+      <section className="max-w-[1200px] mx-auto px-4 md:px-6 pt-20">
+        <div className="flex items-center justify-between gap-3">
+          <nav aria-label="パンくず" className="flex min-w-0 items-center gap-2 text-xs text-slate-400">
+            <Link to="/" className="inline-flex min-h-11 items-center hover:text-white transition">ホーム</Link>
+            {seoPrefecture && (
+              <>
+                <span className="text-slate-600" aria-hidden="true">/</span>
+                <span className="shrink-0">{seoPrefecture}</span>
+              </>
+            )}
+            <span className="text-slate-600" aria-hidden="true">/</span>
+            <span className="truncate text-slate-300">{getDisplayName(shop.name, shop)}</span>
+          </nav>
+          <button
+            onClick={() => navigate(-1)}
+            aria-label="前のページに戻る"
+            className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-sm border border-slate-700 px-3.5 text-sm font-bold text-slate-200 transition hover:border-slate-500 active:scale-95"
+          >
+            <span className="text-base leading-none" aria-hidden="true">←</span> 戻る
+          </button>
+        </div>
 
-         {/* 🐛 ヒーローが「壊れて見える」真因（2026-08-20 実測で特定）
-             ・店舗画像は 2026-07-06 の一括リサイズで**全て最大600px**に縮小済み
-             ・PCのヒーローは幅約1,700px ＝ **2.8倍に拡大**していた
-             ・さらに object-cover なので、横長のロゴ／キャンペーンバナー（600x285等）は
-               上下を大きく切り取られ、文字の断片だけが巨大に表示される
-             → 実測: ユニーク756枚のうち横長(aspect≥2.2)が245枚、低解像度(<200px)が129枚。
-               つまり**半数以上がこの拡大＋切り取りで破綻する形**だった。
-             【対処】背景はぼかした複製で埋め、本体は object-contain で原寸を超えない範囲に収める。
-             これで横長バナーでも正方形ロゴでも切れず・ボケず・意図した見た目になる。
-             ⚠️ object-cover に戻さないこと。戻すと同じ事故が再発する。 */}
-         <div className="absolute inset-0">
-           {/* 背景: ぼかして暗くした複製。拡大のボケはぼかしで意図的な演出になる */}
-           <LazyImage
-             src={shop.image_url || shop.image}
-             alt=""
-             className="w-full h-full scale-110 blur-2xl opacity-40"
-             imgClassName="w-full h-full object-cover"
-           />
-           {/* 本体: 切り取らずに全体を見せる。
-               ⚠️ object-contain は **imgClassName** で渡すこと。className はラッパーdivに付くだけで
-                  <img> には届かない（2026-08-20 にここで「直したつもりで直っていない」事故） */}
-           <div className="absolute inset-0 flex items-center justify-center px-6 pt-24 pb-28">
-             <LazyImage
-               src={shop.image_url || shop.image}
-               alt={shop.name}
-               className="w-full h-full max-w-[720px] transition-transform duration-1000 group-hover:scale-105"
-               imgClassName="w-full h-full object-contain drop-shadow-2xl"
-             />
-           </div>
-           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-black/30"></div>
-         </div>
+        <div className={`mt-4 grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)] md:gap-8 ${shopFingerprint ? 'lg:grid-cols-[320px_minmax(0,1fr)_300px]' : ''} lg:items-center`}>
+          {/* 店の画像 */}
+          <div className="relative aspect-[16/9] md:aspect-[4/3] overflow-hidden border border-slate-700 bg-slate-900">
+            <LazyImage
+              src={shop.image_url || shop.image}
+              alt=""
+              className="absolute inset-0 w-full h-full scale-110 blur-2xl opacity-40"
+              imgClassName="w-full h-full object-cover"
+            />
+            {/* ⚠️ object-contain は **imgClassName** で渡すこと。className はラッパーdivに付くだけで
+                <img> には届かない（2026-08-20 にここで「直したつもりで直っていない」事故） */}
+            <div className="absolute inset-0 flex items-center justify-center p-5">
+              <LazyImage
+                src={shop.image_url || shop.image}
+                alt={shop.name}
+                className="w-full h-full"
+                imgClassName="w-full h-full object-contain drop-shadow-2xl"
+              />
+            </div>
+          </div>
 
-         <div className="absolute bottom-0 left-0 w-full p-4 md:p-10 z-20">
-           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-end justify-between gap-3 md:gap-6">
-             <div className="flex-1">
-               <div className="flex flex-wrap gap-2 mb-3">
-                 {/* ⚠️ 市区・エリアが両方とも無い店舗が65店ある。
-                     無条件で描くと中身の無い「空のピンクの箱」だけが出る（2026-08-22に本番で発生）。 */}
-                 {joinFields(shop.city, shopAreaList(shop)) && (
-                   <span className="px-2.5 py-0.5 rounded-md bg-pink-600/80 backdrop-blur text-white text-xs font-bold tracking-widest uppercase border border-white/10">
-                     {joinFields(shop.city, shopAreaList(shop))}
-                   </span>
-                 )}
-                 {shop.group_id && (
-                   <span className="px-2.5 py-0.5 rounded-md bg-blue-600/80 backdrop-blur text-white text-xs font-bold tracking-widest uppercase border border-white/10">
-                     系列店
-                   </span>
-                 )}
-               </div>
-               {logoUrl && (<div className="mb-4 flex justify-center"><img src={logoUrl} alt="Brand Logo" className="h-16 md:h-20 w-auto object-contain" /></div>)}
-              <h1 className="text-3xl md:text-6xl font-black text-white leading-tight mb-2 drop-shadow-xl tracking-tight line-clamp-2">
-                 {getDisplayName(shop.name, shop)}
-               </h1>
-               {/* 閉店・営業未確認の帯。店名のすぐ下＝見落としようがない位置に置く。
-                   判定と文言は src/utils/shopStatus.js にしかない。 */}
-               <ShopStatusBanner shop={shop} className="mb-3 text-left" />
-               <div className="flex items-start gap-3 text-slate-300 text-xs md:text-sm font-medium">
-                 {/* 住所が無い店舗は614店（56%）。LocationLabelが空なら描画しないので「📍」だけ残らない。
-                     住所が無くても都道府県・市区までは出せることが多いのでフォールバックする。 */}
-                 <LocationLabel
-                   className="line-clamp-2"
-                   parts={[shop.address || joinFields(shop.prefecture, shop.city, shopAreaList(shop))]}
-                 />
-                 {/* ⚠️ 収集元サイトの `raw_data.rating` は使わない（shapeShopRow が構造的に落としている）。
-                     ★>0 を持つ39店は当サイトの口コミが全て0件で、出すと「口コミ0件なのに★4.7」になる。
-                     必ず**実際の口コミから算出した平均**だけを表示する。 */}
-                 {/* 🚩 口コミが0件のときは★を出さない（2026-09-15）。
-                     以前は `★ {avgRating || 'New'}` と書いており、**0件の店に「★ New」**が出ていた。
-                     ★は評価の記号なのに評価ではなく、しかもこれらの店は新規ではない＝
-                     「口コミ0件」を「New」と言い換えていただけ。すぐ上のコメントで
-                     「根拠のない数字を作らない」と書いた直後に作っていた（D-010と同じ型）。
-                     営業を確認できていない店にも「New」が付いていて矛盾していた。
-                     ブランドページは既に0件なら件数も★も出さない。画面を揃える。 */}
-                 {avgRating && <span className="text-yellow-400 font-bold shrink-0">★ {avgRating}</span>}
-               </div>
-             </div>
+          {/* 店名・点数・在籍 */}
+          <div className="min-w-0">
+            {/* ⚠️ 市区・エリアが両方とも無い店舗が65店ある。空の行を出さない。 */}
+            {joinFields(shop.city, shopAreaList(shop)) && (
+              <p className="text-xs tracking-[0.12em] text-slate-400">
+                {joinFields(shop.city, shopAreaList(shop))}
+              </p>
+            )}
+            <h1 className="mt-1 font-mincho text-[32px] md:text-[44px] font-bold leading-[1.15] text-slate-50 break-words">
+              {headName.main}
+              {headName.reading && <span className="mt-1 block font-sans text-sm font-normal tracking-[0.12em] text-slate-400">{headName.reading}</span>}
+            </h1>
+            {/* 閉店・営業未確認の帯。店名のすぐ下＝見落としようがない位置に置く。
+                判定と文言は src/utils/shopStatus.js にしかない。 */}
+            <ShopStatusBanner shop={shop} className="mt-3 text-left" />
+            {/* 住所が無い店舗は614店（56%）。LocationLabelが空なら描画しないので「📍」だけ残らない。 */}
+            <LocationLabel
+              className="mt-2 text-xs text-slate-400 line-clamp-2"
+              parts={[shop.address || joinFields(shop.prefecture, shop.city, shopAreaList(shop))]}
+            />
 
-             <div className="flex gap-2 self-start md:self-auto">
-               <button 
-                  onClick={() => user ? toggleFavorite(shop.id) : navigate(`/login?redirect=${encodeURIComponent(`/shops/${shop.id}`)}`)}
-                  aria-label={isFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
-                  className={`min-h-11 min-w-11 flex items-center justify-center gap-2 px-3 md:px-6 md:py-3 rounded-full font-bold transition shadow-lg backdrop-blur-sm ${
-                    isFavorite 
-                      ? 'bg-pink-600 text-white border border-pink-500' 
-                      : 'bg-white/10 text-white border border-white/20 hover:bg-white/20'
-                  }`}
-                >
-                  <span className="md:hidden">{isFavorite ? '❤️' : '🤍'}</span>
-                  <span className="hidden md:inline">{isFavorite ? 'お気に入り済み ❤️' : 'お気に入り'}</span>
-                </button>
-               <button 
-                 onClick={handlePostReview}
-                 className="min-h-11 flex bg-white text-slate-950 px-4 md:px-6 md:py-3 rounded-full font-black shadow-lg hover:bg-pink-500 hover:text-white transition-all transform hover:-translate-y-1 items-center gap-2 text-sm"
-               >
-                 <span>✍️</span> 口コミを書く
-               </button>
-             </div>
-           </div>
-         </div>
-      </div>
+            {/* ⚠️ 収集元サイトの `raw_data.rating` は使わない（shapeShopRow が構造的に落としている）。
+                必ず**実際の口コミから算出した平均**だけを出す。
+                🚩 口コミが0件のときは点数を出さない（「★ New」を出していた・2026-09-15）。D-010。 */}
+            <dl className="mt-5 flex flex-wrap gap-x-8 gap-y-4 border-t border-slate-800 pt-4">
+              {avgRating && (
+                <div>
+                  <dt className="text-[11px] tracking-[0.12em] text-slate-400">平均（口コミ{reviewCount}件）</dt>
+                  <dd className="mt-1 font-numeral text-[40px] font-semibold leading-[0.9] text-slate-50">{avgRating}</dd>
+                </div>
+              )}
+              {ssrTherapistCount > 0 && (
+                <div>
+                  <dt className="text-[11px] tracking-[0.12em] text-slate-400">在籍</dt>
+                  <dd className="mt-1 text-slate-50"><span className="font-numeral text-[40px] font-semibold leading-[0.9]">{ssrTherapistCount.toLocaleString()}</span><span className="ml-1 text-xs text-slate-400">名</span></dd>
+                </div>
+              )}
+              {(shop.business_hours || shop.raw_data?.hours) && (
+                <div className="min-w-0">
+                  <dt className="text-[11px] tracking-[0.12em] text-slate-400">営業時間</dt>
+                  <dd className="mt-2 text-sm text-slate-100">{shop.business_hours || shop.raw_data?.hours}</dd>
+                </div>
+              )}
+            </dl>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              <button
+                onClick={handlePostReview}
+                className="inline-flex min-h-11 items-center gap-2 rounded-sm bg-pink-500 px-5 text-sm font-bold text-slate-950 transition hover:bg-pink-400 active:scale-95"
+              >
+                <PenIcon /> この店の口コミを書く
+              </button>
+              <button
+                onClick={() => user ? toggleFavorite(shop.id) : navigate(`/login?redirect=${encodeURIComponent(`/shops/${shop.id}`)}`)}
+                aria-label={isFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
+                aria-pressed={isFavorite}
+                className={`inline-flex min-h-11 items-center gap-2 rounded-sm border px-4 text-sm font-bold transition ${isFavorite ? 'border-pink-500 text-pink-300' : 'border-slate-700 text-slate-200 hover:border-slate-500'}`}
+              >
+                <HeartIcon filled={isFavorite} />
+                <span className="hidden sm:inline">{isFavorite ? 'お気に入り済み' : 'お気に入り'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* この店の採点の形（口コミの6項目の平均）。点数の付いた口コミが無ければ出さない。 */}
+          {shopFingerprint && (
+            <div className="md:col-span-2 lg:col-span-1">
+              <RatingFingerprint
+                values={shopFingerprint.values}
+                decimals={1}
+                caption={`口コミ${shopFingerprint.count}件の採点の形（この店の「指紋」）`}
+              />
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* 2. セクションナビ（旧タブUI）
-          ⚠️ 2026-08: タブ切替を廃止し1ページに全セクションを積む形へ。
-             理由: okabayashiの方針で「タブ型の店舗ページは使わない」＝SearchPage型（キャスト一覧が主役）に寄せる。
-             ただし内部リンク/canonical/JSON-LDは /shops/:id のまま維持する（7月の索引崩落から復旧させた
-             1,098ページへのクロール経路をここで切らないため）。ナビはアンカースクロールに変更。 */}
-      <div className="sticky top-14 md:top-20 z-40 bg-slate-950/95 backdrop-blur border-b border-white/5 shadow-lg">
-        <div className="flex max-w-[1200px] mx-auto">
+          ⚠️ 2026-08: タブ切替を廃止し1ページに全セクションを積む形へ（D-001）。
+             ただし内部リンク/canonical/JSON-LDは /shops/:id のまま維持する。ナビはアンカースクロール。 */}
+      <div className="sticky top-14 md:top-20 z-40 mt-8 border-y border-slate-800 bg-slate-950/95 backdrop-blur">
+        <div className="flex max-w-[1200px] mx-auto items-center gap-6 overflow-x-auto px-4 md:gap-8 md:px-6">
           {([
-            { key: 'cast', label: 'キャスト' },
-            { key: 'review', label: '口コミ' },
+            { key: 'cast', label: '在籍セラピスト' },
+            { key: 'review', label: reviewCount > 0 ? `口コミ ${reviewCount}` : '口コミ' },
             { key: 'info', label: '店舗情報' },
             ...(cloudShop?.schedule_url ? [{ key: 'schedule', label: '出勤' }] : []),
           ]).map((tab) => (
@@ -536,67 +561,35 @@ export default function ShopDetailPage({
                 e.preventDefault();
                 document.getElementById(`sec-${tab.key}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }}
-              className="flex-1 py-3 md:py-4 text-xs md:text-sm font-black tracking-wider text-slate-400 hover:text-white transition-all text-center"
+              className="inline-flex min-h-12 shrink-0 items-center border-b-2 border-transparent text-sm text-slate-300 transition hover:border-pink-500 hover:text-white"
             >
               {tab.label}
             </a>
           ))}
+          {/* D-003: 口コミを読む前に「広告ではない」と分かるように（PCだけ。スマホは口コミ欄に出す） */}
+          <NeutralReviewNote className="ml-auto hidden shrink-0 lg:flex" />
         </div>
       </div>
 
       {/* 3. Content Area */}
       {/* ⚠️ U05: PCのコンテンツ幅を1200pxへ（左タグ＋一覧が窮屈だった） */}
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-5 md:py-8 min-h-[50vh] flex flex-col gap-8 md:gap-12">
-        
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-6 md:py-10 min-h-[50vh] flex flex-col gap-12 md:gap-16">
+
         <section id="sec-info" className="scroll-mt-32 order-3">
-          <div className="space-y-8">
-             <div className="md:hidden">
-                <button 
-                  onClick={handlePostReview}
-                  className="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-3 rounded-xl font-black shadow-lg shadow-pink-900/30 flex items-center justify-center gap-2"
-                >
-                  <span>✍️</span> このお店のクチコミを書く
-                </button>
-            </div>
+          <div className="space-y-12">
+            <div className="border-t border-slate-700 pt-6">
+              <h2 className="font-mincho text-2xl font-bold text-slate-50">店舗情報</h2>
 
-            
-            
-            
-            {/* ▼ サイト＆キャスト＆スケジュールリンク (洗練版・3ボタン) ▼ */}
-            {(shop.url || shop.websiteUrl || shop.website_url || shop?.raw_data?.url || shop?.raw_data?.website || cloudShop?.schedule_url) && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
-                {cloudShop?.schedule_url && (
-              <button onClick={() => document.getElementById('sec-schedule')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className="flex items-center gap-3 p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-white/10 transition group shadow-lg">
-                <span className="text-xl opacity-60 group-hover:opacity-100 transition">📅</span>
-                <div className="text-left flex-1">
-                  {/* 英語ラベル＋9pxだった。日本語＋11pxに（2026-08-17） */}
-                  <div className="text-xs text-slate-400 font-bold mb-0.5">出勤スケジュール</div>
-                  <div className="text-xs font-bold text-slate-200 tracking-wide group-hover:text-green-400 transition">出勤情報</div>
-                </div>
-              </button>
-            )}
-              </div>
-            )}
-<div className="bg-slate-900/50 rounded-3xl p-6 md:p-8 border border-white/5 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/5 rounded-full blur-3xl pointer-events-none"></div>
-              
-              <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
-                 <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                   <span className="w-1.5 h-1.5 bg-pink-500 rounded-full"></span>
-                   店舗情報
-                 </h3>
-              </div>
-
-              <dl className="space-y-6">
+              <dl className="mt-5 divide-y divide-slate-800 border-y border-slate-800">
                 {/* 在籍セラピスト数＝全1,098店が持つ固有の実データ。まずこれを出す */}
                 {ssrTherapistCount > 0 && (
-                  <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                    <dt className="text-xs md:text-xs font-bold text-slate-500 tracking-widest">在籍</dt>
-                    <dd className="text-sm md:text-base font-bold text-white">
-                      <span className="text-pink-400 text-lg md:text-xl">{ssrTherapistCount.toLocaleString()}</span> 人
+                  <div className="grid grid-cols-[88px_1fr] md:grid-cols-[140px_1fr] items-baseline gap-3 py-4">
+                    <dt className="text-xs tracking-[0.12em] text-slate-400">在籍</dt>
+                    <dd className="text-sm md:text-base text-slate-50">
+                      <span className="font-numeral text-2xl">{ssrTherapistCount.toLocaleString()}</span> 人
                       {ssrReviewCount > 0 && (
-                        <span className="text-slate-400 font-normal text-xs ml-3">
-                          口コミ {ssrReviewCount}件{ssrAvgRating ? `・平均★${ssrAvgRating}` : ''}
+                        <span className="text-slate-400 text-xs ml-3">
+                          口コミ {ssrReviewCount}件{ssrAvgRating ? `・平均${ssrAvgRating}` : ''}
                         </span>
                       )}
                     </dd>
@@ -604,14 +597,14 @@ export default function ShopDetailPage({
                 )}
                 {/* ⚠️「営業時間情報なし」は行き止まりなので、データがある時だけ出す */}
                 {(shop.business_hours || shop.raw_data?.hours) && (
-                  <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                    <dt className="text-xs md:text-xs font-bold text-slate-500 tracking-widest">営業時間</dt>
-                    <dd className="text-sm md:text-base font-bold text-white">{shop.business_hours || shop.raw_data?.hours}</dd>
+                  <div className="grid grid-cols-[88px_1fr] md:grid-cols-[140px_1fr] items-baseline gap-3 py-4">
+                    <dt className="text-xs tracking-[0.12em] text-slate-400">営業時間</dt>
+                    <dd className="text-sm md:text-base text-slate-50">{shop.business_hours || shop.raw_data?.hours}</dd>
                   </div>
                 )}
-                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                  <dt className="text-xs md:text-xs font-bold text-slate-500 uppercase tracking-widest">料金</dt>
-                  <dd className="text-sm md:text-base text-white w-full bg-slate-800/50 p-4 rounded-xl border border-white/5">{shop?.price_system ? (
+                <div className="grid grid-cols-[88px_1fr] md:grid-cols-[140px_1fr] items-baseline gap-3 py-4">
+                  <dt className="text-xs tracking-[0.12em] text-slate-400">料金</dt>
+                  <dd className="text-sm md:text-base text-slate-50 w-full">{shop?.price_system ? (
   <div className="flex flex-col space-y-3 w-full">
     {(() => {
       let ps = shop.price_system;
@@ -624,9 +617,9 @@ export default function ShopDetailPage({
         return Object.entries(ps)
           .sort((a, b) => Number(a[0]) - Number(b[0]))
           .map(([min, price]) => (
-            <div key={min} className="flex justify-between items-center border-b border-white/5 pb-2 last:border-0 last:pb-0">
+            <div key={min} className="flex justify-between items-baseline border-b border-slate-800 pb-2 last:border-0 last:pb-0">
               <span className="text-slate-300">{min}分</span>
-              <span className="text-white font-bold tracking-wider">¥{Number(price).toLocaleString()}</span>
+              <span className="font-numeral text-lg text-slate-50">¥{Number(price).toLocaleString()}</span>
             </div>
           ));
       }
@@ -635,9 +628,9 @@ export default function ShopDetailPage({
       return str.split('\n').filter(Boolean).map((line, idx) => {
         const parts = line.split(':');
         return (
-          <div key={idx} className="flex justify-between items-center border-b border-white/5 pb-2 last:border-0 last:pb-0">
+          <div key={idx} className="flex justify-between items-baseline border-b border-slate-800 pb-2 last:border-0 last:pb-0">
             <span className="text-slate-300">{parts[0]}</span>
-            <span className="text-white font-bold tracking-wider">{parts[1] || ''}</span>
+            <span className="text-slate-50">{parts[1] || ''}</span>
           </div>
         );
       });
@@ -649,18 +642,18 @@ export default function ShopDetailPage({
      「相場感 → 公式で確認」という次の行動まで繋ぐ。 */
   <div className="space-y-3">
     <p className="text-slate-300 text-sm">この店舗の料金は未掲載です。</p>
-    <div className="rounded-xl bg-black/20 border border-white/5 p-3">
-      <p className="text-xs text-slate-500 font-bold tracking-wider mb-2">
+    <div className="border border-slate-800 p-3">
+      <p className="text-xs text-slate-400 mb-2">
         全国のメンズエステ料金相場（メンエスマップ調べ・{siteStats?.coverage?.priceSampleShops || 0}店の実測中央値）
       </p>
       <div className="flex gap-4">
-        <div className="flex-1 flex justify-between items-center border-b border-white/5 pb-1">
+        <div className="flex-1 flex justify-between items-baseline border-b border-slate-800 pb-1">
           <span className="text-slate-400 text-xs">60分</span>
-          <span className="text-white font-bold">¥{(siteStats?.nationalPrice?.median60 || 0).toLocaleString()}</span>
+          <span className="font-numeral text-lg text-slate-50">¥{(siteStats?.nationalPrice?.median60 || 0).toLocaleString()}</span>
         </div>
-        <div className="flex-1 flex justify-between items-center border-b border-white/5 pb-1">
+        <div className="flex-1 flex justify-between items-baseline border-b border-slate-800 pb-1">
           <span className="text-slate-400 text-xs">90分</span>
-          <span className="text-white font-bold">¥{(siteStats?.nationalPrice?.median90 || 0).toLocaleString()}</span>
+          <span className="font-numeral text-lg text-slate-50">¥{(siteStats?.nationalPrice?.median90 || 0).toLocaleString()}</span>
         </div>
       </div>
       <Link to="/stats" className="inline-block mt-2 text-xs font-bold text-pink-400 hover:text-pink-300">
@@ -668,16 +661,16 @@ export default function ShopDetailPage({
       </Link>
     </div>
     {(shop.website_url || shop.url || shop?.raw_data?.url) && (
-      <p className="text-xs text-slate-500">最新の料金は公式サイトでご確認ください。</p>
+      <p className="text-xs text-slate-400">最新の料金は公式サイトでご確認ください。</p>
     )}
   </div>
 )}
                 </dd>
                 </div>
                 {(shop.phone_number || shop.raw_data?.phone) && (
-                  <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                    <dt className="text-xs md:text-xs font-bold text-slate-500 uppercase tracking-widest">TEL</dt>
-                    <dd className="text-sm md:text-base font-bold text-white tracking-widest">
+                  <div className="grid grid-cols-[88px_1fr] md:grid-cols-[140px_1fr] items-baseline gap-3 py-4">
+                    <dt className="text-xs tracking-[0.12em] text-slate-400">電話</dt>
+                    <dd className="font-numeral text-lg text-slate-50 tracking-wide">
                        <a href={`tel:${shop.phone_number || shop.raw_data?.phone}`} onClick={() => trackEvent('click_outbound', { link_type: 'phone', shop_id: shop.id, shop_name: shop.name })} className="hover:text-pink-400 transition">{shop.phone_number || shop.raw_data?.phone}</a>
                     </dd>
                   </div>
@@ -686,39 +679,40 @@ export default function ShopDetailPage({
                     「ACCESS」というラベルの右が空白のままになる（営業時間・TELと同じ扱いに揃える）。
                     住所が無くても都道府県・市区までは出せることが多いのでフォールバックする。 */}
                 {joinFields(shop.address || joinFields(shop.prefecture, shop.city, shopAreaList(shop))) && (
-                  <div className="grid grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] items-baseline">
-                    <dt className="text-xs md:text-xs font-bold text-slate-500 uppercase tracking-widest">所在地</dt>
-                    <dd className="text-sm md:text-base text-slate-300 leading-relaxed">
+                  <div className="grid grid-cols-[88px_1fr] md:grid-cols-[140px_1fr] items-baseline gap-3 py-4">
+                    <dt className="text-xs tracking-[0.12em] text-slate-400">所在地</dt>
+                    <dd className="text-sm md:text-base text-slate-200 leading-relaxed">
                       {shop.address || joinFields(shop.prefecture, shop.city, shopAreaList(shop))}
                     </dd>
                   </div>
                 )}
               </dl>
               
-              <div className="mt-8">
-                 <a href={shop.url || shop.website_url || shop.raw_data?.url || shop.raw_data?.websiteUrl || '#'} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_outbound', { link_type: 'official', shop_id: shop.id, shop_name: shop.name })} className="block w-full bg-white text-slate-900 hover:bg-slate-200 py-4 rounded-xl text-sm font-black text-center transition shadow-lg tracking-widest">
-                   公式サイトで最新情報を見る ↗
+              <div className="mt-6">
+                 <a href={shop.url || shop.website_url || shop.raw_data?.url || shop.raw_data?.websiteUrl || '#'} target="_blank" rel="noreferrer" onClick={() => trackEvent('click_outbound', { link_type: 'official', shop_id: shop.id, shop_name: shop.name })} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm border border-slate-500 px-6 text-sm font-bold text-slate-50 transition hover:border-slate-300 sm:w-auto">
+                   公式サイトで最新情報を見る <span aria-hidden="true">↗</span>
                  </a>
               </div>
             </div>
 
             {/* 口コミがあるセラピスト＝読ませる価値のある内部リンク（SSRで出力＝クローラーも辿れる） */}
             {ssrReviewedTherapists.length > 0 && (
-              <div className="bg-slate-900/50 rounded-3xl p-6 md:p-8 border border-white/5">
-                <h3 className="text-sm font-black text-white mb-1">この店で口コミがあるセラピスト</h3>
-                <p className="text-xs text-slate-500 mb-4">実際に行った人の体験談が読めます</p>
-                <div className="flex flex-wrap gap-2">
+              <div className="border-t border-slate-700 pt-6">
+                <h2 className="font-mincho text-xl font-bold text-slate-50">この店で口コミがあるセラピスト</h2>
+                <p className="mt-1 text-xs text-slate-400">実際に行った人の体験談が読めます</p>
+                <ul className="mt-3 grid grid-cols-1 gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
                   {ssrReviewedTherapists.map((t) => (
-                    <Link
-                      key={t.id}
-                      to={`/shops/${shop.id}/threads/${t.id}`}
-                      className="inline-flex items-center gap-2 bg-slate-800/70 hover:bg-slate-700 border border-white/10 hover:border-pink-500/40 rounded-full px-4 py-2 text-xs font-bold text-slate-200 hover:text-white transition"
-                    >
-                      {t.name}
-                      {t.rating != null && <span className="text-yellow-400">★{Number(t.rating).toFixed(1)}</span>}
-                    </Link>
+                    <li key={t.id} className="border-b border-slate-800">
+                      <Link
+                        to={`/shops/${shop.id}/threads/${t.id}`}
+                        className="flex min-h-12 items-center justify-between gap-3 text-sm text-slate-100 transition hover:text-pink-300"
+                      >
+                        <span className="truncate font-mincho text-base font-bold">{t.name}</span>
+                        {t.rating != null && <span className="shrink-0 font-numeral text-lg text-slate-50">{Number(t.rating).toFixed(1)}</span>}
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             )}
 
@@ -726,23 +720,24 @@ export default function ShopDetailPage({
                 ⚠️ F06-C: 見出しは ssrNearbyScope が示す実際の集合（同エリア/同県）に合わせる。
                 距離を測っていないので「近く」とは書かない。 */}
             {ssrNearbyShops.length > 0 && (
-              <div className="bg-slate-900/50 rounded-3xl p-6 md:p-8 border border-white/5">
-                <h3 className="text-sm font-black text-white mb-1">
+              <div className="border-t border-slate-700 pt-6">
+                <h2 className="font-mincho text-xl font-bold text-slate-50">
                   {nearbyHeading}
-                </h3>
-                <p className="text-xs text-slate-500 mb-4">他の店舗も比較する</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                </h2>
+                <p className="mt-1 text-xs text-slate-400">他の店舗も比較する</p>
+                <ul className="mt-3 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
                   {ssrNearbyShops.map((s) => (
-                    <Link
-                      key={s.id}
-                      to={shopHref(s, roomCounts)}
-                      className="flex items-center justify-between bg-slate-800/50 hover:bg-slate-700/60 border border-white/5 hover:border-pink-500/30 rounded-xl px-4 py-3 text-xs font-bold text-slate-200 hover:text-white transition"
-                    >
-                      <span className="truncate">{getDisplayName(s.name, s)}</span>
-                      <span className="text-slate-600">›</span>
-                    </Link>
+                    <li key={s.id} className="border-b border-slate-800">
+                      <Link
+                        to={shopHref(s, roomCounts)}
+                        className="flex min-h-12 items-center justify-between gap-3 text-sm text-slate-200 transition hover:text-pink-300"
+                      >
+                        <span className="truncate">{getDisplayName(s.name, s)}</span>
+                        <span aria-hidden="true" className="text-slate-500">→</span>
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             )}
           </div>
@@ -771,45 +766,42 @@ export default function ShopDetailPage({
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-w-0">
              {/* ⚠️ スマホの絞り込みボタンも条件で出し分けない（PCの列と同じ扱い）。 */}
              <TagFilterButton selectedCount={selectedTags.length} onOpen={() => setIsFilterOpen(true)} />
-             <div className="flex items-center justify-between mb-6 px-1">
-               <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                 <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
-                 在籍セラピスト
-               </h3>
-               <span className="bg-white/10 px-2 py-0.5 rounded text-xs font-bold text-slate-300">
-                 {castNameFilter ? `${sortedTherapists.length} / ` : ''}全{therapists.length}人
+             <div className="mb-5 flex items-end justify-between gap-3 border-b border-slate-700 pb-3">
+               <h2 className="font-mincho text-2xl font-bold text-slate-50">在籍セラピスト</h2>
+               <span className="shrink-0 text-xs text-slate-400">
+                 {castNameFilter ? <><span className="font-numeral text-xl text-slate-50">{sortedTherapists.length}</span> / </> : null}全<span className="font-numeral text-xl text-slate-50">{therapists.length}</span>人
                </span>
              </div>
 
              {/* 絞り込み＋並び替え（SearchPageと同じ操作感） */}
              {therapists.length > 6 && (
-               <div className="flex flex-col sm:flex-row gap-2 mb-5">
+               <div className="flex flex-col sm:flex-row gap-2 mb-6">
                  <div className="relative flex-1">
-                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">🔍</span>
+                   <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6" /><path d="M16 16l4 4" /></svg>
                    <input
                      type="text"
                      value={castNameFilter}
                      onChange={(e) => { setCastNameFilter(e.target.value); setDisplayCount(INITIAL_DISPLAY_COUNT); }}
                      placeholder="セラピスト名で絞り込み"
-                     className="w-full bg-slate-900 border border-white/10 rounded-xl pl-9 pr-9 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-pink-500/50"
+                     aria-label="セラピスト名で絞り込み"
+                     className="w-full min-h-11 bg-slate-900 border border-slate-700 rounded-sm pl-9 pr-9 text-sm text-slate-50 placeholder-slate-500 focus:outline-none focus:border-pink-500/60"
                    />
                    {castNameFilter && (
-                     <button onClick={() => setCastNameFilter('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white text-sm">✕</button>
+                     <button onClick={() => setCastNameFilter('')} aria-label="名前の絞り込みを消す" className="absolute right-1 top-1/2 -translate-y-1/2 min-h-9 min-w-9 text-slate-400 hover:text-white text-sm">✕</button>
                    )}
                  </div>
-                 <div className="flex gap-1.5">
+                 <div role="group" aria-label="並び替え" className="flex shrink-0 divide-x divide-slate-700 border border-slate-700 rounded-sm">
                    {[
                      { key: 'default', label: '標準' },
                      { key: 'aiueo', label: '五十音' },
-                     { key: 'reviews', label: '💬 口コミ順' },
+                     { key: 'reviews', label: '口コミ順' },
                    ].map((o) => (
                      <button
                        key={o.key}
                        onClick={() => { setCastSortOrder(o.key); setDisplayCount(INITIAL_DISPLAY_COUNT); }}
-                       className={`px-3 py-2.5 rounded-xl text-xs font-bold border transition whitespace-nowrap ${
-                         castSortOrder === o.key
-                           ? 'bg-pink-600 border-pink-500 text-white'
-                           : 'bg-slate-900 border-white/10 text-slate-400 hover:text-white'
+                       aria-pressed={castSortOrder === o.key}
+                       className={`min-h-11 flex-1 px-4 text-xs transition whitespace-nowrap ${
+                         castSortOrder === o.key ? 'bg-slate-800 font-bold text-slate-50' : 'text-slate-400 hover:text-white'
                        }`}
                      >
                        {o.label}
@@ -821,58 +813,51 @@ export default function ShopDetailPage({
 
              {therapists.length > 0 ? (
                <>
-                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                   {visibleTherapists.map(t => (
-                     <Link key={t.id} to={`/shops/${shop.id}/threads/${t.id}`} className="group relative bg-slate-900 rounded-2xl overflow-hidden border border-white/5 hover:border-pink-500/50 transition-all duration-300">
-                         <div className="aspect-[3/4] relative overflow-hidden">
-                           <LazyImage src={t.image_url || t.image} alt={t.name} className="w-full h-full object-cover transition duration-700 group-hover:scale-110" />
-                           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-60"></div>
-                           <div className="absolute top-2 left-2 flex flex-col gap-1">
-                              {t.age && <span className="bg-black/60 backdrop-blur px-1.5 py-0.5 rounded text-xs font-bold text-white border border-white/10">{t.age}歳</span>}
-                           </div>
-                           <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
-                             {(() => {
-                               const cnt = countsReady ? therapistReviewCounts[t.id] : undefined;
-                               return cnt > 0 ? (
-                                 <span className="bg-pink-500 text-white text-xs font-black px-2 py-1 rounded-full shadow-lg shadow-pink-500/50 flex items-center gap-1">
-                                   💬 {cnt}
-                                 </span>
-                               ) : null;
-                             })()}
-                             <button
-                               onClick={(e) => {
-                                 e.preventDefault();
-                                 if (user) toggleFavTherapist(`${shop.id}_${t.id}`);
-                                 else navigate(`/login?redirect=${encodeURIComponent(`/shops/${shop.id}`)}`);
-                               }}
-                               className="w-8 h-8 rounded-full bg-black/30 backdrop-blur flex items-center justify-center text-lg hover:bg-pink-600 transition"
-                             >
-                               {favTherapists.includes(`${shop.id}_${t.id}`) ? '❤️' : '🤍'}
-                             </button>
-                           </div>
+                 <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
+                   {visibleTherapists.map(t => {
+                     const cnt = countsReady ? therapistReviewCounts[t.id] : undefined;
+                     const fav = favTherapists.includes(`${shop.id}_${t.id}`);
+                     const spec = [t.tall && `T${t.tall}`, t.cup && `${t.cup}カップ`].filter(Boolean).join(' / ');
+                     return (
+                       <Link key={t.id} to={`/shops/${shop.id}/threads/${t.id}`} className="group flex min-w-0 flex-col gap-2">
+                         <div className="relative aspect-[3/4] overflow-hidden border border-slate-700 bg-slate-900">
+                           <LazyImage src={t.image_url || t.image} alt={t.name} className="w-full h-full object-cover transition duration-700 group-hover:scale-105" />
+                           {cnt > 0 && (
+                             <span className="absolute left-2 top-2 border border-pink-500 bg-slate-950 px-2 py-0.5 text-[11px] text-pink-300">口コミ {cnt}</span>
+                           )}
+                           <button
+                             onClick={(e) => {
+                               e.preventDefault();
+                               if (user) toggleFavTherapist(`${shop.id}_${t.id}`);
+                               else navigate(`/login?redirect=${encodeURIComponent(`/shops/${shop.id}`)}`);
+                             }}
+                             aria-label={fav ? 'お気に入りから外す' : 'お気に入りに入れる'}
+                             aria-pressed={fav}
+                             className={`absolute right-1.5 top-1.5 flex h-9 w-9 items-center justify-center bg-slate-950/60 transition hover:text-pink-300 ${fav ? 'text-pink-400' : 'text-slate-100'}`}
+                           >
+                             <HeartIcon filled={fav} />
+                           </button>
+                           {t.isNew && <span className="absolute bottom-2 left-2 bg-pink-500 px-1.5 py-0.5 text-[11px] font-bold text-slate-950">NEW</span>}
                          </div>
-                         <div className="absolute bottom-0 left-0 w-full p-3">
-                           <div className="flex items-end justify-between">
-                             <div>
-                               {/* ⚠️ 店名は外して出す。この一覧はその店のページなので、
-                                   全カードに同じ店名が繰り返されるだけで人名が読みにくい
-                                   （「瑠香 -るか- Marvelous -マーベラス-」が180行あった）。 */}
-                               <h4 className="text-white font-bold text-base leading-tight">{getTherapistDisplayName(t.name, shop?.name)}</h4>
-                               <p className="text-xs text-slate-400 mt-0.5">T{t.tall || '-'} / B{t.cup || '-'}</p>
-                             </div>
-                             {t.isNew && <span className="text-xs font-bold text-yellow-400 bg-yellow-400/10 px-1.5 py-0.5 rounded border border-yellow-400/20">NEW</span>}
-                           </div>
+                         <div className="flex items-baseline justify-between gap-2">
+                           {/* ⚠️ 店名は外して出す。この一覧はその店のページなので、
+                               全カードに同じ店名が繰り返されるだけで人名が読みにくい
+                               （「瑠香 -るか- Marvelous -マーベラス-」が180行あった）。 */}
+                           <h3 className="truncate font-mincho text-base font-bold text-slate-50 group-hover:text-pink-300">{getTherapistDisplayName(t.name, shop?.name)}</h3>
+                           {t.age && <span className="shrink-0 text-xs text-slate-400">{t.age}歳</span>}
                          </div>
-                     </Link>
-                   ))}
+                         {spec && <p className="-mt-1 text-xs text-slate-400">{spec}</p>}
+                       </Link>
+                     );
+                   })}
                  </div>
                  {hasMore && (
-                    <div className="mt-12 text-center">
-                      <button 
+                    <div className="mt-10 text-center">
+                      <button
                         onClick={handleLoadMore}
-                        className="px-8 py-3 rounded-full bg-slate-800 text-slate-300 font-bold text-sm hover:bg-slate-700 hover:text-white transition border border-white/5"
+                        className="inline-flex min-h-11 items-center rounded-sm border border-slate-600 px-8 text-sm font-bold text-slate-200 transition hover:border-slate-400 hover:text-white"
                       >
-                        もっと見る (+{sortedTherapists.length - displayCount})
+                        もっと見る（あと{sortedTherapists.length - displayCount}人）
                       </button>
                     </div>
                  )}
@@ -894,23 +879,23 @@ export default function ShopDetailPage({
         {/* 口コミ */}
         <section id="sec-review" className="scroll-mt-32 order-2">
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 relative">
-            <div className="flex items-center justify-between mb-6 px-1">
-               <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                 <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+            <div className="flex items-end justify-between gap-3 border-b border-slate-700 pb-3">
+               <h2 className="font-mincho text-2xl font-bold text-slate-50">
                  口コミ
-               </h3>
-               <button 
+                 {reviewCount > 0 && <span className="ml-2 font-numeral text-xl font-medium text-slate-400">{reviewCount}</span>}
+               </h2>
+               <button
                   onClick={handlePostReview}
-                  className="bg-white/10 hover:bg-white/20 px-4 py-1.5 rounded-full text-xs font-bold text-white border border-white/10 transition flex items-center gap-2"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-pink-500 px-4 text-sm font-bold text-pink-200 transition hover:bg-pink-500/10 active:scale-95"
                >
-                 <span>✍️</span> 投稿する
+                 <PenIcon /> 書く
                </button>
             </div>
             {/* D-003: 口コミを読む場所で「広告ではない」と分かるように（2026-09-23） */}
-            <NeutralReviewNote className="-mt-3 mb-5 px-1" />
+            <NeutralReviewNote className="mt-3 mb-2" />
 
             {reviews.length > 0 ? (
-               <div className="space-y-4 relative">
+               <div className="relative">
                  {/* ⚠️ 2026-08-12: 以前は `shouldBlur = idx > 0 && !isPremiumUser` で
                      **2件目以降を一律ぼかし**ていた。isPremiumUser は premium/vip しか見ておらず、
                      W2Rで閲覧権(credits)を得た人が対象外だった＝700字書いても読めない行き止まり。
@@ -928,7 +913,7 @@ export default function ShopDetailPage({
                    <button
                      onClick={loadMoreReviews}
                      disabled={isLoadingMoreReviews}
-                     className="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm transition disabled:opacity-50"
+                     className="w-full min-h-12 rounded-sm border border-slate-600 text-sm font-bold text-slate-200 transition hover:border-slate-400 disabled:opacity-50"
                    >
                      {isLoadingMoreReviews ? '読み込み中...' : 'さらに読み込む'}
                    </button>
@@ -940,13 +925,14 @@ export default function ShopDetailPage({
                      読める/読めないの判定はDBのRLSと ModernReviewCard に一本化する。 */}
                </div>
             ) : (
-               <div className="py-20 text-center bg-slate-900/50 rounded-3xl border border-white/5 border-dashed">
-                 <p className="text-slate-500 font-bold mb-4">まだクチコミがありません</p>
-                 <button 
+               <div className="mt-4 border border-slate-700 bg-slate-900 px-5 py-7">
+                 <p className="font-mincho text-xl font-bold leading-[1.5] text-slate-50">まだ口コミがありません。<br />最初の体験を、<br className="sm:hidden" />次の人の判断材料に。</p>
+                 <p className="mt-2 text-[13px] leading-relaxed text-slate-300"><span className="text-slate-50">200字で3日間・700字で7日間</span>、口コミが読み放題</p>
+                 <button
                    onClick={handlePostReview}
-                   className="text-pink-400 font-bold text-sm hover:underline"
+                   className="mt-5 inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-sm bg-pink-500 px-6 text-[15px] font-bold text-slate-950 transition hover:bg-pink-400 active:scale-[0.98] sm:w-auto"
                  >
-                   一番乗りで投稿する →
+                   <PenIcon /> 最初の口コミを書く
                  </button>
                </div>
             )}
@@ -957,11 +943,8 @@ export default function ShopDetailPage({
         {cloudShop?.schedule_url && (
         <section id="sec-schedule" className="scroll-mt-32 order-4">
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                出勤スケジュール
-              </h3>
+            <div className="border-b border-slate-700 pb-3">
+              <h2 className="font-mincho text-2xl font-bold text-slate-50">出勤スケジュール</h2>
             </div>
             {/* ⚠️ 2026-09-08（FIXES.md F07）: ここは常時75vhの外部iframeだった。
                 本番では灰色のエラー表示になっていた＝当サイトのCSPが `default-src 'self'` で
@@ -970,22 +953,22 @@ export default function ShopDetailPage({
                 🚫 CSPを緩めたり frame-src https: を足したりして通すことはしない。
                    外部埋め込みの再実装は別要件として扱う。
                 ここでは公式サイトへ1操作で行けるコンパクトな案内カードにする。 */}
-            <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-5 md:p-6">
-              <p className="text-sm font-bold text-white mb-1">{getDisplayName(shop.name, shop)}の出勤</p>
+            <div className="mt-4 border border-slate-700 bg-slate-900 p-5 md:p-6">
+              <p className="text-sm font-bold text-slate-50 mb-1">{getDisplayName(shop.name, shop)}の出勤</p>
               <p className="text-[13px] text-slate-400 mb-4">最新の出勤は公式サイトで確認できます。</p>
               <a
                 href={cloudShop.schedule_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent('click_outbound', { link_type: 'schedule', shop_id: shop.id, shop_name: shop.name })}
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-12 px-6 rounded-xl bg-white text-slate-900 font-black text-sm hover:bg-slate-200 transition shadow-lg"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-12 px-6 rounded-sm border border-slate-500 text-slate-50 font-bold text-sm transition hover:border-slate-300"
               >
                 公式サイトで出勤を確認
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </a>
-              <p className="text-[13px] text-slate-500 mt-3">外部サイト（店舗の公式ページ）が新しいタブで開きます。</p>
+              <p className="text-[13px] text-slate-400 mt-3">外部サイト（店舗の公式ページ）が新しいタブで開きます。</p>
             </div>
           </div>
         </section>

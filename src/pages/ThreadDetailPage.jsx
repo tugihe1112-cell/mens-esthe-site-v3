@@ -20,7 +20,7 @@ import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 import { filterReviewsForPerson } from '../utils/reviewIdentity.js';
 import { isNotListed, NOT_LISTED_LABEL, NOT_LISTED_NOTE } from '../utils/therapistStatus.js';
 import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
-import RatingFingerprint from '../components/RatingFingerprint.jsx';
+import RatingFingerprint, { averageFingerprint } from '../components/RatingFingerprint.jsx';
 
 const PenIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z" /></svg>
@@ -298,7 +298,6 @@ export default function ThreadDetailPage({
     return {
       count,
       avg: (ratingSum / count).toFixed(1),
-      values: Object.fromEntries(keys.map((k) => [k, avgOf(k)])),
       axes: [
         { label: '清潔感', val: avgOf('cleanliness') },
         { label: 'ルックス', val: avgOf('looks') },
@@ -466,12 +465,12 @@ export default function ThreadDetailPage({
         </div>
 
         {/* 採点の形（平均）。口コミが1件のときは下の口コミに同じ図が出るので、2件以上のときだけ。 */}
-        {stats && stats.count >= 2 && (
+        {stats && stats.count >= 2 && averageFingerprint(therapistReviews) && (
           <section className="border-t border-slate-800 pt-6">
             <h2 className="font-mincho text-lg font-bold text-slate-50">
               採点の形<span className="ml-2 font-sans text-xs font-normal text-slate-400">{stats.count}件の平均</span>
             </h2>
-            <RatingFingerprint values={stats.values} decimals={1} className="mt-3" />
+            <RatingFingerprint values={averageFingerprint(therapistReviews)?.values} decimals={1} className="mt-3" />
           </section>
         )}
 
