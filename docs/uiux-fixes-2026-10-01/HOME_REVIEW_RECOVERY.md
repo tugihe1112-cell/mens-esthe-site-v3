@@ -24,5 +24,15 @@
 - 一時検証ルートを削除し、検証用サーバーを停止した。本番で故意の通信障害や投稿は行っていない。
 - 他作業の `TopHeroSlider.jsx`・`src/index.css`・`playbook/metrics-log.md` は開始時のSHA-256と一致している。
 - `check_home_review_loading.mjs` は実際のloader・SSR・React表示を実行して検証。8種類の妨害を検出し、変更箇所を復元した。全19ガードと変更ファイルのESLintが成功。
+- `npm run build` は全19ガード・Webpackコンパイル・29ページの静的生成を含め成功。`next start`で実DBへ接続したホームは、失敗フラグfalse・最新7件・地域5区分・総数34件を確認した。
 
-本番ビルド・反映後の結果は、確認後に追記する。
+## 本番反映後の確認
+
+修正コミット `e9f7a74040cf166dd43575f2083c6c3c15da1025` をmainへpush。Vercel Production `dpl_AMM12i8e79W249MqkiyLrV6zAWCn` は同じコミットでReady。実ビルドIDは `1Lq2uBU0IPw_-v2lvKycl`。
+
+- 通常のwwwホームと、wwwなしからの転送後のHTMLは200・最新7件・地域5区分・総数34件・失敗フラグfalse。「まだ公開口コミがありません」は出ない。
+- 実ビルドの `/_next/data/…/index.json` も200・7件・総数34件・失敗フラグfalse。通常のSTALEキャッシュでも7件を保持していた。
+- 本番ブラウザでも最新口コミ・地域チップ・本文への口コミID付きリンクを確認。星咲えり・三橋すずめ・観月せななどの呼び水口コミ、他地域の口コミも残っている。
+- [GitHub CI](https://github.com/tugihe1112-cell/mens-esthe-site-v3/actions/runs/36908868454) は同じコミットで成功。
+
+本番のDB行・公開設定は変更していない。
