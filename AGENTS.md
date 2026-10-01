@@ -19,6 +19,7 @@
 - **検証**: 新規4ガードを既存CI/prebuildへ登録し妨害テストで検証。全18ガード・本番ビルド・変更29ファイルのESLintが成功。保存容量不足／コピー拒否／閲覧権503→再試行→自動期限切れは一時localhost QAで再現し、QAルート・AuthContextの一時変更は削除済み。画面・本番確認の記録は `docs/uiux-fixes-2026-10-01/VERIFICATION.md`。
 - **他作業の保護**: 開始時の `TopHeroSlider.jsx`・`src/index.css`・`playbook/metrics-log.md` と未追跡のClaude成果物は保持し、今回のコミット／デプロイへ含めない。
 - **本番**: 修正コミット `96aa729`、Vercel Production `dpl_Bjkjj4J6Kjj8ZbY1arbLfExfi6MM` Ready。空白なし／カナ検索、人物URLの認証復帰、月間17名、360/390pxホーム、768→1024px絞り込み、口コミ個別位置95.8pxへ展開を実測。登録APIの空POSTは400 JSON、公開API契約と主要5ページ／固有16チャンクは成功。本番の実アカウント作成・実口コミ投稿は未実施。GitHub CIの初回は既存Googleフォント取得で停止し18ガードは全通過。同じコミットをクリーンな一時チェックアウト＋Node22＋CI環境でビルドして成功したため、書体設定は変更していない。
+- **最終CI**: コードを変えず検証記録コミット `09a220e` のCI #315（run `36813837504`）が全ステップ成功。Vercel Production `dpl_J8tZTYwyBxqRuutU9SiYovNbzf2G`も成功。最初のフォント取得障害に対する追加コード修正は不要。
 
 ---
 
