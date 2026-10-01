@@ -731,7 +731,11 @@ function read(path) {
       }
     }
     {
-      const ssr = strip(read('pages/index.jsx'));
+      const wrapper = strip(read('pages/index.jsx'));
+      const ssr = strip(read('server/homeReviews.js'));
+      if (!/loadHomeReviews\(supabase\)/.test(wrapper) || !/export async function loadHomeReviews\(/.test(ssr)) {
+        violations.push('[U02] ホームSSRが実際の公開口コミloader（server/homeReviews.js）を呼んでいない。');
+      }
       if (!/groupReviewsByPref\(/.test(ssr) || !/buildLatestFeed\(/.test(ssr)) {
         violations.push('[U02] ホームSSRが homeReviews.js の組み立て（buildLatestFeed / groupReviewsByPref）を通っていない（1店舗2件の上限・件数がずれる）。');
       }
@@ -1033,12 +1037,12 @@ function read(path) {
   }
 
   // ホームのSSRが在籍状態を渡していること（渡さなければカード側は永久に判定できない）
-  const home = strip(read('pages/index.jsx'));
+  const home = strip(read('server/homeReviews.js'));
   if (!/select\('id, image_url, is_active'\)/.test(home)) {
     violations.push('[U05] ホームSSRが therapists.is_active を取得していない（カードに印を出せない）。');
   }
-  if (!/notListed: notListedById\[r\.therapist_id\] === true/.test(home)) {
-    violations.push('[U05] ホームSSRが口コミへ在籍状態（notListed）を渡していない。');
+  if (!/notListed:\s*!therapistResult\.error\s*&&\s*\(!therapist\s*\|\|\s*therapist\.is_active === false\)/.test(home)) {
+    violations.push('[U05] ホームSSRが口コミへ在籍状態（notListed）を渡していない、または取得失敗を退店扱いしている。');
   }
   // 口コミ一覧も同じ列を取っていること
   const pop = strip(read('src/pages/PopularReviewsPage.jsx'));

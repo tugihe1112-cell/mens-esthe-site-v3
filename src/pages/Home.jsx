@@ -46,7 +46,7 @@ function jstDateLabel() {
   return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月${d.getUTCDate()}日（${'日月火水木金土'[d.getUTCDay()]}）`;
 }
 
-export default function HomePage({ initialHero = [], reviewsByPref = [], latestReviews = [], reviewStats = null, liveCounts = null }) {
+export default function HomePage({ initialHero = [], reviewsByPref = [], latestReviews = [], reviewStats = null, reviewLoadFailed = false, liveCounts = null }) {
   const { shops, loading, roomCounts } = useShopData();
   const displayedCounts = {
     totalShops: liveCounts?.totalShops ?? siteStats.coverage?.totalShops ?? 0,
@@ -309,6 +309,7 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
           latestReviews={latestReviews}
           reviewsByPref={reviewsByPref}
           reviewStats={reviewStats}
+          reviewLoadFailed={reviewLoadFailed}
           displayedCounts={displayedCounts}
         />
 

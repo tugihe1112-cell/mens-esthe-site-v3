@@ -21,6 +21,7 @@ import {
 
 const fmt = (n) => Number(n).toLocaleString('ja-JP');
 const hasCount = (n) => Number.isInteger(n) && n >= 0;
+const EMPTY_REVIEWS = [];
 
 function RegionChip({ label, count, pressed, onClick }) {
   // 見た目は34pxのピル、押せる範囲は44px（U01のタップ最小値）
@@ -82,13 +83,15 @@ function NeutralStatement({ displayedCounts, className = '' }) {
 }
 
 export default function HomeReviewsSection({
-  latestReviews = [],
-  reviewsByPref = [],
+  latestReviews = EMPTY_REVIEWS,
+  reviewsByPref = EMPTY_REVIEWS,
   reviewStats = null,
+  reviewLoadFailed = false,
   displayedCounts = { totalShops: 0, totalTherapists: 0 },
 }) {
   const [prefs, setPrefs] = useState(reviewsByPref);
   const [selected, setSelected] = useState(''); // '' ＝すべて
+  const [retrying, setRetrying] = useState(false);
 
   useEffect(() => {
     let saved = null;
@@ -108,13 +111,31 @@ export default function HomeReviewsSection({
     trackEvent('select_home_review_region', { pref: pref || 'all' });
   };
 
-  // ⚠️ U02: 口コミが0件でも架空のカードを作らない。探せる場所へ送る。中立宣言はこの場合も出す。
+  const retry = () => {
+    setRetrying(true);
+    window.location.reload();
+  };
+
+  // 取得できなかった場合は0件と断定しない。再読込はSSRから公開口コミを取り直す。
+  // ⚠️ U02: 実際に0件でも架空のカードを作らない。中立宣言はどちらの場合も出す。
   if (!lead) {
     return (
       <section>
         <NeutralStatement displayedCounts={displayedCounts} className="mb-8" />
         <div className="border border-slate-700 p-5 text-center">
-          <p className="font-mincho text-lg font-bold text-slate-50">まだ公開口コミがありません</p>
+          <p role={reviewLoadFailed ? 'alert' : undefined} className="font-mincho text-lg font-bold text-slate-50">
+            {reviewLoadFailed
+              ? '公開口コミを読み込めませんでした'
+              : total > 0 ? 'ホームに表示できる口コミがありません' : 'まだ公開口コミがありません'}
+          </p>
+          {reviewLoadFailed && (
+            <div className="mt-3">
+              <p className="text-sm text-slate-400">時間をおいて、もう一度読み込んでください。</p>
+              <button type="button" onClick={retry} disabled={retrying} className="ui-btn-primary mt-3 min-h-11 px-4" aria-live="polite">
+                {retrying ? '読み込み中…' : 'もう一度読み込む'}
+              </button>
+            </div>
+          )}
           <div className="mt-4 flex flex-col justify-center gap-3 sm:flex-row">
             <Link to="/popular-reviews" className="ui-link inline-flex min-h-11 items-center justify-center px-2">公開口コミを探す</Link>
             <Link to="/shops" className="ui-link inline-flex min-h-11 items-center justify-center px-2">店舗を探す</Link>
