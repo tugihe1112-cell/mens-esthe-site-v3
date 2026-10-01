@@ -18,7 +18,7 @@ import { FREE_READ_NOTE } from '../data/siteCopy.js';
  */
 export default function RegisterInvite({ source = 'review_end', returnTo = '', shopId = '', therapistId = '' }) {
   const { user } = useAuth();
-  const { status } = useViewingCredits();
+  const { status, retry } = useViewingCredits();
 
   const postHref = (shopId && therapistId)
     ? `/shops/${shopId}/threads/${therapistId}/review`
@@ -32,7 +32,7 @@ export default function RegisterInvite({ source = 'review_end', returnTo = '', s
   const headClass = 'font-mincho text-xl font-bold leading-[1.5] text-slate-50';
 
   // ── 未登録 ─────────────────────────────────────────────
-  if (!user) {
+  if (!user && status !== 'loading') {
     return (
       <div data-cta="review-end" className={boxClass}>
         <h3 className={headClass}>気になる口コミを、もっと読む</h3>
@@ -62,6 +62,15 @@ export default function RegisterInvite({ source = 'review_end', returnTo = '', s
     );
   }
 
+  if (status === 'loading' || status === 'error') {
+    return (
+      <div data-cta="review-end" className={boxClass} role={status === 'error' ? 'alert' : 'status'}>
+        <p className="text-sm text-slate-200">{status === 'loading' ? '閲覧権を確認しています…' : '閲覧権を確認できませんでした。通信状況を確認して、もう一度お試しください。'}</p>
+        {status === 'error' && <button type="button" onClick={retry} className="ui-link mt-2 inline-flex min-h-11 items-center font-bold">閲覧権を再確認する</button>}
+      </div>
+    );
+  }
+
   // ── 登録済み・閲覧権切れ ────────────────────────────────
   if (status === 'expired') {
     return (
@@ -82,7 +91,7 @@ export default function RegisterInvite({ source = 'review_end', returnTo = '', s
     );
   }
 
-  // ── 登録済み・閲覧権あり（取得中もこちらを出す。権利がある人に延長を勧めない） ──
+  // ── 登録済み・閲覧権あり ──
   return (
     <div data-cta="review-end" className={boxClass}>
       <h3 className={headClass}>あなたの体験談も共有しませんか</h3>

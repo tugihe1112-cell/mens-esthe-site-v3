@@ -245,8 +245,8 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
         {/* 検索カードをスライダーに食い込ませて常にファーストビュー内に。
             ⚠️ U02-2: PC幅880px・余白24px・角丸16px。以前の40px余白＋40px角丸は
                「何のサイトか」を書くための領域をカードの縁で食い潰していた。 */}
-        <div className="relative z-30 -mt-2 md:mt-6 px-4 md:px-6 max-w-[880px] mx-auto">
-          <div className="bg-slate-900 border border-slate-700 p-4 md:p-6 rounded-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="relative z-30 -mt-4 md:mt-6 px-4 md:px-6 max-w-[880px] mx-auto">
+          <div className="bg-slate-900 border border-slate-700 p-3 md:p-6 rounded-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
             {/* ⚠️ U02-1: ページのH1はここ1つだけ。以前は sr-only のH1が別にあり、
                    画面に見えている一番大きな文字（＝利用者が読む見出し）と食い違っていた。
                    このカード内のH1はスマホ22px・PC28pxで、汎用H1より小さくする（U02-2）。 */}
@@ -259,20 +259,24 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
               口コミを読んで、店選びの不安を減らす。
             </h1>
 
+            <div className="mt-2">
+              <SearchBar />
+            </div>
+
             {!user ? (
-              <div className="mt-3">
-                <p data-role="home-benefit" className="text-pink-300 font-bold" style={{ fontSize: '15px' }}>無料登録で3日間、口コミ読み放題</p>
-                <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
+              <div className="mt-1 border-t border-slate-800 pt-2">
+                <p data-role="home-benefit" className="text-sm font-bold text-pink-300">無料登録で3日間、口コミ読み放題</p>
+                <div className="mt-2 flex items-center gap-2 sm:gap-3">
                   <Link
                     to={withReturnTo('/register', '', { source: 'home' })}
                     onClick={() => { trackEvent('click_paywall_cta', { target: 'register', source: 'home' }); trackRegisterCtaClick('home'); }}
                     data-cta="home-register"
-                    className="inline-flex w-full sm:w-auto sm:min-w-[240px] items-center justify-center rounded-sm bg-pink-500 px-6 font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300"
+                    className="inline-flex min-w-0 flex-1 sm:flex-none sm:min-w-[240px] items-center justify-center rounded-sm bg-pink-500 px-3 sm:px-6 font-bold text-slate-950 transition hover:bg-pink-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-300"
                     style={{ minHeight: '48px', fontSize: '15px' }}
                   >
                     無料登録する
                   </Link>
-                  <Link to="/popular-reviews" className="ui-link inline-flex min-h-11 items-center justify-center px-2" style={{ fontSize: '14px' }}>
+                  <Link to="/popular-reviews" className="ui-link inline-flex min-h-12 min-w-0 flex-1 items-center justify-center text-center sm:flex-none" style={{ fontSize: '13px' }}>
                     登録せず口コミを読む
                   </Link>
                 </div>
@@ -281,23 +285,19 @@ export default function HomePage({ initialHero = [], reviewsByPref = [], latestR
               <p className="ui-muted mt-2">店舗名・エリア・セラピスト名で探す</p>
             )}
 
-            <div className="mt-3">
-              <SearchBar />
-            </div>
-
             {/* ⚠️ U02-6: 起算はアカウント作成時点から72時間。「メール確認完了から丸3日」とは書かない。
                    無料期間後の自動課金は実装が存在しないので「自動課金なし」は事実。
                 ⚠️ 2026-09-09: この注記は**検索欄の下**へ置く。上に置くと2行ぶん(約44px)押し下げて、
                    390×844の初期画面から検索欄がはみ出す（実測851px）。受入条件は
                    「特典・登録CTA・検索操作まで初期画面に入る」なので、操作を優先する。 */}
             {!user && (
-              <p data-role="home-free-note" className="ui-help mt-3">{FREE_READ_NOTE}</p>
+              <p data-role="home-free-note" className="ui-help mt-2">{FREE_READ_NOTE}</p>
             )}
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 mt-8">
+      <div className="max-w-7xl mx-auto px-4 mt-5 md:mt-8">
       <div className="flex flex-col lg:flex-row gap-10">
 
       {/* ===== メインカラム ===== */}

@@ -126,9 +126,6 @@ export default function HomeReviewsSection({
 
   return (
     <section aria-labelledby="home-reviews-title">
-      {/* 編集方針（中立宣言）は口コミを読む前に置く */}
-      <NeutralStatement displayedCounts={displayedCounts} className="mb-10" />
-
       <div className="flex flex-col gap-2 border-b border-slate-700 pb-3 md:flex-row md:items-end md:justify-between md:gap-4">
         <div>
           <h3 id="home-reviews-title" className="font-mincho text-[26px] font-bold leading-[1.3] text-slate-50 md:text-[32px]">最新の実体験口コミ</h3>
@@ -182,6 +179,9 @@ export default function HomeReviewsSection({
           </ul>
         </>
       )}
+
+      {/* 掲載数と編集方針は口コミの後へまとめ、検索から本文までの距離を短くする。 */}
+      <NeutralStatement displayedCounts={displayedCounts} className="mt-5" />
 
       <div className="mt-4">
         {active && active.slug ? (

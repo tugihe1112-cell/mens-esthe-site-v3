@@ -3,8 +3,21 @@
 新しいチャットを開いたら、まずこのファイルを読ませること。
 これだけで作業の全文脈を即座に理解できる。
 
-> **最終更新: 2026-09-09 （指示書の作業単位1〜8を全て実装。⚠️09-08に新規登録が約21時間停止する本番事故あり＝下記を必読）**
+> **最終更新: 2026-10-01 （検索・ランキング・投稿・閲覧権など9件を修正。⚠️09-08の登録停止事故と共有 `.js` の制約は引き続き必読）**
 > 作業がひと段落するたびに、Codexがこのファイルを自動更新する。
+
+---
+
+## 2026-10-01 オーナー指摘の9件を修正
+
+- **名前検索／タブレット**: `search_therapists_by_normalized_name` RPCでDB取得前にNFKC・空白除去・かな統一。名前だけ／店舗とのAND検索の両経路で使用。公開行のGIN trigram索引、`SECURITY INVOKER`、件数・文字数制限、LIKEワイルドカードのエスケープを維持。絞り込みは1024px未満がシート、以上がサイドバー。migration `20261001032709_normalize_therapist_name_search.sql`を本番適用済み。店舗・人物・口コミの既存行は変更していない。
+- **認証復帰**: `authRedirect.js`は通常の空白を正しくURLエンコードした戻り先を許可し、人物ページ＋`#review-…`を保持。生の空白・改行等の制御文字・外部URL・認証画面への循環は引き続き拒否。
+- **ランキング**: 公開口コミの評価メタデータをページ送りで取得し、参照人物・店舗を取得。snake_caseの実DB列と共通人物照合に統一。読み込み／通信失敗＋再試行／対象口コミなし／集計条件不足を区別。ホームの最低3件、ランキングページの最低1件という既存条件は変更していない。
+- **ホーム／口コミ読了**: スライダーを保持し、検索入力を登録案内より上へ移動。余白を圧縮し掲載母数・編集方針を口コミの後へ移した。口コミ一覧の全文リンクにも口コミIDの目印を追加し、対象本文へスクロールして展開。
+- **投稿／下書き**: 最終確認は店舗・人物・公開投稿名・6評価・総合・タグ・5区分の本文全文と入力へ戻るボタンを表示。公開用本文の生成を送信・プレビューで共通化。保存は書込み後の読み戻しまで確認し、容量不足等は成功表示せず入力を保持、本文コピー／コピー拒否時の全文選択を用意。公開待ち下書きを自動保存が上書きする競合も修正。
+- **閲覧権**: `useViewingCredits`をカード・読了案内で共用し、未登録／確認中／確認失敗／期限切れ／閲覧可を区別。失敗は再試行。DBの実際の権利契約は**未来の `expires_at`**であり、累計 `credits_days` の正数判定へ置き換えない。権利期限のタイマー、ユーザー切替・再試行時の古い応答の排除を実装。
+- **検証**: 新規4ガードを既存CI/prebuildへ登録し妨害テストで検証。全18ガード・本番ビルド・変更29ファイルのESLintが成功。保存容量不足／コピー拒否／閲覧権503→再試行→自動期限切れは一時localhost QAで再現し、QAルート・AuthContextの一時変更は削除済み。画面・本番確認の記録は `docs/uiux-fixes-2026-10-01/VERIFICATION.md`。
+- **他作業の保護**: 開始時の `TopHeroSlider.jsx`・`src/index.css`・`playbook/metrics-log.md` と未追跡のClaude成果物は保持し、今回のコミット／デプロイへ含めない。
 
 ---
 
@@ -1922,3 +1935,13 @@ PostReviewPage の導線が分かりにくいため、SearchPage のキャスト
 - `src/components/Footer.jsx` を Layout に表示し、法律ページ・お問い合わせへの導線を追加
 - 問い合わせカテゴリは「掲載情報の修正」「口コミ・投稿について」「有料プランについて」「その他」の4つ
 - 任意のVercel環境変数: `CONTACT_TO_EMAIL`（未設定時は `tugihe1112@gmail.com`）
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

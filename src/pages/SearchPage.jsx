@@ -10,7 +10,8 @@ import { TherapistCardSkeleton } from '../components/ui/Skeleton.jsx';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import LocationLabel from '../components/LocationLabel.jsx';
-import { normalizeForSearch, rankShops } from '../utils/searchMatch';
+import { rankShops } from '../utils/searchMatch';
+import { fetchTherapistsByName, THERAPIST_NAME_QUERY_MAX_LENGTH } from '../utils/therapistSearch.js';
 import { trackEvent } from '../utils/analytics';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 // 支店名は表示しない（地名は検索のためだけに name に入っている）
@@ -268,6 +269,13 @@ export default function SearchPage({ renderSeo = true }) {
   const filterSheetRef = useRef(null);
   const filterOpenerRef = useRef(null);
   useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const closeDesktopSheet = () => { if (desktop.matches) setIsFilterOpen(false); };
+    closeDesktopSheet();
+    desktop.addEventListener('change', closeDesktopSheet);
+    return () => desktop.removeEventListener('change', closeDesktopSheet);
+  }, []);
+  useEffect(() => {
     if (!isFilterOpen || typeof document === 'undefined') return undefined;
     const previousOverflow = document.body.style.overflow;
     // ⚠️ cleanup の時点で ref.current は別のノードを指しうるので、effect内で控える。
@@ -374,29 +382,6 @@ export default function SearchPage({ renderSeo = true }) {
         const sq = shopQuery.trim().toLowerCase();
         const cq = castQuery.trim();
 
-        // スペース・カナ正規化ユーティリティ（カタカナ→ひらがな変換含む）
-        const normName = (s) => normalizeForSearch((s || '').replace(/[\s　]/g, ''));
-        const normCq = normName(cq);
-        // スペースで分割したパーツ（「西園寺 未来」→ ['西園寺','未来']）
-        const cqParts = cq.trim().split(/[\s　]+/).filter(Boolean);
-
-        // DB クエリにキャスト名フィルターを付与するヘルパー
-        // スペースありの場合: 各パーツを AND ilike（DB側で「西園寺」AND「未来」→ 「西園寺未来」にヒット）
-        // スペースなしの場合: 前半文字をprefixに使い広めに取得 → クライアントで normName 照合
-        const applyNameFilter = (q) => {
-          if (cqParts.length > 1) {
-            let r = q;
-            for (const part of cqParts) r = r.ilike('name', `%${part}%`);
-            return r;
-          } else {
-            // 前半2文字以上でprefix検索（スペースなし検索で「西園寺 未来」を拾うため）
-            const prefix = normCq.slice(0, Math.max(2, Math.ceil(normCq.length / 2)));
-            return prefix.length >= 2
-              ? q.ilike('name', `%${prefix}%`)
-              : q.ilike('name', `%${normCq}%`);
-          }
-        };
-
         // 店舗クエリがある場合、マッチする shop_id リストを作成（関連度順）
         // ⚠️ 上位100件しかDBに問い合わせないので、**関連度順**であることが重要。
         //    以前は素の filter（DB順）だったため、関連の薄い店で枠が埋まる恐れがあった。
@@ -445,38 +430,16 @@ export default function SearchPage({ renderSeo = true }) {
             data = d || [];
           }
 
-        } else if (!sq && cq) {
-          // キャストのみ → 名前正規化検索
-          let q = supabase
-            .from('therapists')
-            .select('id, shop_id, name, image_url, raw_data, is_active')
-            .not('image_url', 'is', null)
-            .neq('image_url', '')
-            .or('is_active.is.null,is_active.eq.true');
-          q = applyNameFilter(q);
-          const { data: d, error } = await q.limit(500);
-          if (error) throw error;
-          cappedAt = (d || []).length >= 500 ? 500 : 0;
-          // クライアント側でスペース除去して完全照合
-          data = (d || []).filter(t => normName(t.name).includes(normCq));
-
         } else {
-          // 両方あり → 店舗キャスト全員取得 → クライアントで名前照合
-          if (matchedShopIds.length === 0) {
-            data = [];
-          } else {
-            const { data: d, error } = await supabase
-              .from('therapists')
-              .select('id, shop_id, name, image_url, raw_data, is_active')
-              .in('shop_id', matchedShopIds.slice(0, 100))
-              .not('image_url', 'is', null)
-              .neq('image_url', '')
-              .or('is_active.is.null,is_active.eq.true')
-              .limit(1000);
-            if (error) throw error;
-            cappedAt = (d || []).length >= 1000 ? 1000 : 0;
-            data = (d || []).filter(t => normName(t.name).includes(normCq));
-          }
+          // 名前のみ／店舗と名前のAND検索とも、DBで両側を正規化してから上限を適用。
+          const limit = sq ? 1000 : 500;
+          const { data: d, error, capped } = await fetchTherapistsByName(supabase, cq, {
+            shopIds: matchedShopIds,
+            limit,
+          });
+          if (error) throw error;
+          cappedAt = capped ? limit : 0;
+          data = d;
         }
 
         if (cancelled) return; // 条件が変わっている＝この結果はもう古い
@@ -697,6 +660,7 @@ export default function SearchPage({ renderSeo = true }) {
               <input
                 type="text"
                 value={castInput}
+                maxLength={THERAPIST_NAME_QUERY_MAX_LENGTH}
                 onChange={e => setCastInput(e.target.value)}
                 placeholder="キャスト名で検索..."
                 className="w-full bg-slate-900/60 border border-white/10 rounded-full pl-10 pr-10 py-2.5 text-sm font-bold text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition"
@@ -743,6 +707,7 @@ export default function SearchPage({ renderSeo = true }) {
                 inputMode="search"
                 enterKeyHint="search"
                 value={mobileSearchMode === 'shop' ? shopInput : castInput}
+                maxLength={mobileSearchMode === 'cast' ? THERAPIST_NAME_QUERY_MAX_LENGTH : undefined}
                 onChange={e => mobileSearchMode === 'shop' ? setShopInput(e.target.value) : setCastInput(e.target.value)}
                 placeholder={mobileSearchMode === 'shop' ? '店舗名・エリアで検索' : 'セラピスト名で検索'}
                 aria-label={mobileSearchMode === 'shop' ? '店舗名・エリアで検索' : 'セラピスト名で検索'}
@@ -760,17 +725,20 @@ export default function SearchPage({ renderSeo = true }) {
               )}
             </div>
 
-            {!isFeaturedBrowse && hasAvailableTags && (
+          </div>
+
+          {!isFeaturedBrowse && hasAvailableTags && (
               <button
                 type="button"
                 ref={filterOpenerRef}
                 onClick={() => setIsFilterOpen(true)}
-                className="min-h-10 w-full rounded-sm border border-white/10 bg-white/5 px-4 text-xs font-bold text-white"
+                aria-haspopup="dialog"
+                aria-expanded={isFilterOpen}
+                className="lg:hidden min-h-10 w-full rounded-sm border border-white/10 bg-white/5 px-4 text-xs font-bold text-white"
               >
                 <LineIcon name="filter" size={14} /> 条件で絞り込む {selectedTags.length > 0 && `(${selectedTags.length})`}
               </button>
-            )}
-          </div>
+          )}
 
           {/* ステータスライン */}
           {!isFeaturedBrowse && <div className="flex items-center justify-between px-1">

@@ -37,6 +37,7 @@ const isAuthPath = (pathname) => AUTH_PATH_PREFIXES.some(
  *    grep も差分も読めなくなる）。エスケープを文字列で組み立てる。
  */
 const CONTROL_OR_SPACE = new RegExp('[\\u0000-\\u0020\\u007F]');
+const CONTROL = new RegExp('[\\u0000-\\u001F\\u007F]');
 
 /** 1段だけデコードしてみる。壊れたエスケープは null（＝この判定は行わない） */
 const decodeOnce = (value) => {
@@ -52,7 +53,7 @@ const decodeOnce = (value) => {
  *
  * 拒否するもの:
  *   - 文字列でない / 空
- *   - 制御文字・空白（改行によるヘッダー汚染を含む）
+ *   - 制御文字・未エンコードの空白（改行によるヘッダー汚染を含む）
  *   - スキーム付き（`javascript:` `data:` `https:` …）
  *   - `/` 以外で始まる（相対パスでない）
  *   - `//evil.example`（プロトコル相対＝外部へ出る）
@@ -61,7 +62,7 @@ const decodeOnce = (value) => {
  *   - 解決後の origin が自サイトでない
  *   - 認証ページ自身（ループ）
  *
- * 保存するもの: 日本語・`_`・クエリ・`#review-xxx` のハッシュ。
+ * 保存するもの: 日本語・`_`・URLにエンコードされた空白・クエリ・`#review-xxx` のハッシュ。
  * ⚠️ 検証は URL で行うが、**返すのは入力そのまま**。
  *    `new URL()` の pathname は日本語をパーセントエンコードするため、
  *    戻り先の見た目が変わってしまう（動きはするがログと比較が読めなくなる）。
@@ -77,6 +78,7 @@ export function normalizeReturnTo(value, fallback = '/') {
       : '/');
 
   if (typeof value !== 'string') return safeFallback;
+  if (CONTROL.test(value)) return safeFallback;
   const raw = value.trim();
   if (!raw) return safeFallback;
 
@@ -85,11 +87,13 @@ export function normalizeReturnTo(value, fallback = '/') {
   if (!raw.startsWith('/')) return safeFallback;
 
   // 素の値と、1段デコードした値の両方で外部脱出パターンを拒否する
-  for (const candidate of [raw, decodeOnce(raw)]) {
+  const decoded = decodeOnce(raw);
+  for (const candidate of [raw, decoded]) {
     if (typeof candidate !== 'string') continue;
     if (candidate.startsWith('//')) return safeFallback;
     if (candidate.includes('\\')) return safeFallback;
-    if (CONTROL_OR_SPACE.test(candidate)) return safeFallback;
+    // %20 は通常の人物IDに含まれる。デコード後は空白と制御文字を分けて扱う。
+    if ((candidate === raw ? CONTROL_OR_SPACE : CONTROL).test(candidate)) return safeFallback;
   }
 
   let parsed;
@@ -101,7 +105,7 @@ export function normalizeReturnTo(value, fallback = '/') {
     return safeFallback;
   }
   if (parsed.origin !== site.origin) return safeFallback;
-  if (isAuthPath(parsed.pathname)) return safeFallback;
+  if (isAuthPath(parsed.pathname) || isAuthPath(decodeOnce(parsed.pathname) || '')) return safeFallback;
 
   return raw;
 }

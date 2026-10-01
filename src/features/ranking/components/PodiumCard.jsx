@@ -43,7 +43,7 @@ export const PodiumCard = ({ rank, item }) => {
   const linkPath = item.type === 'shop' && item.id
     ? `/shops/${item.id}`
     : (item.shopId && therapistId
-        ? `/shops/${item.shopId}/threads/${therapistId}`
+        ? `/shops/${encodeURIComponent(item.shopId)}/threads/${encodeURIComponent(therapistId)}`
         : '/popular-reviews');
   const rating = item.averageRating ?? item.rating;
   const reviewCount = item.count ?? item.reviewCount ?? 0;

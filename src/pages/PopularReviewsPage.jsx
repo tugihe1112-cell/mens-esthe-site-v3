@@ -259,6 +259,9 @@ export default function PopularReviewsPage({
                   const threadLink = (r.shop_id && r.therapist_id)
                     ? `/shops/${r.shop_id}/threads/${r.therapist_id}`
                     : `/search?cast=${encodeURIComponent(r.therapist_name || '')}`;
+                  const reviewLink = r.id && r.shop_id && r.therapist_id
+                    ? `${threadLink}#review-${encodeURIComponent(r.id)}`
+                    : threadLink;
                   // ⚠️ 口コミ行は group_id を持たない。店舗の索引から引く。
                   //    引けないと shopHref は店舗URLに倒れる＝直書きと同じになる。
                   const shopLink = r.shop_id
@@ -346,7 +349,7 @@ export default function PopularReviewsPage({
                           >{preview}</p>
 
                           <div className="flex items-center justify-between mt-2">
-                            <Link to={threadLink} className="text-xs font-black text-pink-400 hover:text-pink-300 transition">
+                            <Link to={reviewLink} className="text-xs font-black text-pink-400 hover:text-pink-300 transition">
                               全文を読む → セラピストページ
                             </Link>
                             <ReviewLikeButton reviewId={r.id} initialLikeCount={r.like_count || 0} />

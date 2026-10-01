@@ -31,6 +31,10 @@ await import('./check_review_story_sync.mjs');
 await import('./check_tag_single_source.mjs');
 // 監視自身の一時通信失敗で障害メールを連発せず、恒久404/5xxは隠さない。
 await import('./check_monitor_resilience.mjs');
+await import('./check_auth_and_viewing_credits.mjs');
+await import('./check_review_post_resilience.mjs');
+await import('./check_ranking_data.mjs');
+await import('./check_therapist_search.mjs');
 // ⚠️ 最後に「手元とCIで同じガードが走るか」自体を検査する。
 //    ここが崩れると、手元のビルド成功がCIの成功を保証しなくなる（2026-08-26の事故）。
 await import('./check_guard_parity.mjs');

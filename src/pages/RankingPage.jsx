@@ -1,10 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import { useShopData } from '../contexts/DataContext.jsx';
-import { shopAreaList } from '../utils/shopFields';
+import React, { useState } from 'react';
+import { usePublicRankingData } from '../features/ranking/hooks/usePublicRankingData.js';
+import { RankingEmptyState } from '../features/ranking/components/RankingEmptyState.jsx';
 import { useRankingData } from '../features/ranking/hooks/useRankingData';
 import { PodiumCard } from '../features/ranking/components/PodiumCard';
 import { RankingListItem } from '../features/ranking/components/RankingListItem';
-import { Link } from '../compat/router';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { RankingListSkeleton } from '../components/ui/Skeleton.jsx';
@@ -22,36 +21,15 @@ const AREA_OPTIONS = [
 ];
 
 export default function RankingPage() {
-  const { shops, reviews, loading, error } = useShopData();
+  const { data, loading, error, retry } = usePublicRankingData();
   const [activeTab, setActiveTab] = useState('monthly');
   const [selectedArea, setSelectedArea] = useState('全国');
   
-  // Custom Hook for Logic (Basic Ranking)
-  // まずは全データを取得
-  const allRankingData = useRankingData(reviews, shops, activeTab);
-
-  // エリアフィルタリング
-  const filteredRankingData = useMemo(() => {
-    if (selectedArea === '全国') return allRankingData;
-
-    return allRankingData.filter(item => {
-      // item.shopName から shop オブジェクトを探す、または item に shopId があるはず
-      // useRankingData の戻り値には shopId が含まれている前提
-      const shop = shops.find(s => s.id === item.shopId);
-      if (!shop) return false;
-      
-      const area = shopAreaList(shop).join(' ').toLowerCase();
-      const city = (shop.city || '').toLowerCase();
-      const pref = (shop.prefecture || '').toLowerCase();
-      const target = selectedArea.toLowerCase();
-
-      return area.includes(target) || city.includes(target) || pref.includes(target);
-    });
-  }, [allRankingData, selectedArea, shops]);
+  const { ranking: filteredRankingData, targetReviewCount } = useRankingData(data, activeTab, 'total', selectedArea, 1);
 
   const [showAll, setShowAll] = useState(false);
   const top3 = filteredRankingData.slice(0, 3);
-  const others = filteredRankingData.slice(3, showAll ? undefined : 50);
+  const others = filteredRankingData.slice(3, showAll ? undefined : 53);
 
   return (
     <div className="min-h-screen bg-slate-950 pb-28 md:pb-16 text-slate-200 overflow-hidden relative font-sans">
@@ -73,7 +51,7 @@ export default function RankingPage() {
              人気<span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">ランキング</span>
            </h1>
            <p className="text-slate-400 text-sm font-bold animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-             口コミ評価の高いセラピスト・店舗
+             公開口コミを集計。選択期間に評価がある人物を掲載
            </p>
         </div>
       </div>
@@ -91,7 +69,8 @@ export default function RankingPage() {
                return (
                  <button
                    key={tab.id}
-                   onClick={() => setActiveTab(tab.id)}
+                   onClick={() => { setActiveTab(tab.id); setShowAll(false); }}
+                   aria-pressed={isActive}
                    className={`flex-1 md:flex-none px-6 py-3 text-xs md:text-sm font-black tracking-widest transition-all relative group whitespace-nowrap ${
                      isActive ? 'text-white' : 'text-slate-500 hover:text-slate-300'
                    }`}
@@ -120,7 +99,7 @@ export default function RankingPage() {
                id="ranking-area"
                aria-label="ランキングのエリア"
                value={selectedArea} 
-               onChange={(e) => setSelectedArea(e.target.value)}
+               onChange={(e) => { setSelectedArea(e.target.value); setShowAll(false); }}
                className="w-full bg-slate-900 border border-white/10 rounded-full px-4 py-2 text-sm font-bold text-white appearance-none focus:border-pink-500 focus:outline-none cursor-pointer hover:bg-slate-800 transition shadow-inner"
              >
                {AREA_OPTIONS.map(area => <option key={area} value={area}>{area}</option>)}
@@ -143,6 +122,8 @@ export default function RankingPage() {
             </div>
             <RankingListSkeleton count={5} />
           </>
+        ) : error ? (
+          <RankingEmptyState error onRetry={retry} />
         ) : filteredRankingData.length > 0 ? (
           <>
             {/* 👑 TOP 3 Podium */}
@@ -186,31 +167,7 @@ export default function RankingPage() {
             </div>
           </>
         ) : (
-          <div className="relative overflow-hidden rounded-sm border border-pink-500/20 bg-gradient-to-br from-pink-950/40 to-purple-950/40 p-12 text-center animate-in fade-in zoom-in-95 duration-500">
-            <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-purple-500/5 pointer-events-none" />
-            <p className="text-pink-400 font-black tracking-widest text-xs uppercase mb-4">口コミ募集中</p>
-            <h2 className="text-white font-black text-2xl md:text-3xl mb-3">
-              {selectedArea === '全国' ? 'ランキングを一緒に作ろう' : `${selectedArea}のランキングを作ろう`}
-            </h2>
-            <p className="text-slate-400 text-sm md:text-base mb-8 leading-relaxed max-w-md mx-auto">
-              体験談を投稿すると<span className="text-pink-400 font-bold">口コミ閲覧権が得られます</span>。<br/>
-              あなたの投稿がこのランキングを動かします。
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                to="/post-review"
-                className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-black px-10 py-4 rounded-sm transition-all hover:scale-105 active:scale-95 shadow-lg shadow-pink-900/40"
-              >
-                口コミを書く
-              </Link>
-              <Link
-                to="/popular-reviews"
-                className="inline-block bg-slate-800 hover:bg-slate-700 text-white font-bold px-10 py-4 rounded-sm transition-all border border-white/10"
-              >
-                みんなの口コミを見る
-              </Link>
-            </div>
-          </div>
+          <RankingEmptyState targetReviewCount={targetReviewCount} minReviews={1} />
         )}
 
       </div>

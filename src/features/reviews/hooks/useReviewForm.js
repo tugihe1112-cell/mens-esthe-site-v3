@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { reviewSchema } from '../schema/reviewSchema';
-import { normalizeReviewStory, composeReviewStoryContent, withRatingsNote, RATING_AXES } from '../reviewStory.mjs';
+import { RATING_AXES } from '../reviewStory.mjs';
+import { prepareReviewContent, reviewAuthorName } from '../reviewSubmission.js';
 import { useShopData } from '../../../contexts/DataContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
@@ -59,11 +60,7 @@ export const useReviewForm = () => {
       // ⚠️ 採点の一言コメントは **withRatingsNote で本文の最後に合成してから** 正規化する。
       //    ここを飛ばすと、画面のカウンターは数えているのに保存本文には入らず、
       //    DB側の review_story_char_length が200未満と判定して投稿が弾かれる。
-      const storySections = normalizeReviewStory(
-        withRatingsNote(data.story, data.ratings, data.ratingNotes),
-      );
-      const combinedContent = composeReviewStoryContent(storySections);
-      const totalScore = (Object.values(data.ratings).reduce((a, b) => a + b, 0) / 6).toFixed(1);
+      const { storySections, content: combinedContent, rating: totalScore } = prepareReviewContent(data);
 
       const submitData = {
         shop_id: data.shopId,
@@ -73,15 +70,11 @@ export const useReviewForm = () => {
         //    旧実装は `user?.name || user?.email` で、Supabase の user は .name を持たないため
         //    **投稿者名として本人のメールアドレスが公開される**ところだった（個人情報漏洩）。
         //    表示名は user_metadata のみを見て、無ければ「名無しさん」にする。
-        user_name:
-          user?.user_metadata?.display_name
-          || user?.user_metadata?.name
-          || user?.user_metadata?.user_name
-          || '名無しさん',
+        user_name: reviewAuthorName(user),
         // 未ログインならここには来ない（PostReviewPage 側でログインへ誘導）が、
         // 万一 null のまま送るとRLSに弾かれるので明示的に空にしておく。
         user_id: user?.id || null,
-        rating: parseFloat(totalScore),
+        rating: totalScore,
         detailed_ratings: data.ratings,
         tags: data.tags,
         content: combinedContent,

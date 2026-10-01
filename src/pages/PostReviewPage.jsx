@@ -16,6 +16,9 @@ import { RatingSlider } from '../components/ui/RatingSlider';
 import Header from '../components/Header.jsx';
 import LazyImage from '../components/LazyImage.jsx';
 import TagSelector from '../components/TagSelector.jsx';
+import ReviewStoryContent from '../components/ReviewStoryContent.jsx';
+import { prepareReviewContent, reviewAuthorName, reviewBackupText } from '../features/reviews/reviewSubmission.js';
+import { DRAFT_KEY, DRAFT_TTL, saveReviewDraft as saveDraft } from '../features/reviews/reviewDraft.js';
 import { useShopData } from '../contexts/DataContext.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { trackEvent } from '../utils/analytics';
@@ -145,9 +148,9 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
         <div className="mt-2 flex items-start gap-2 rounded-sm border border-emerald-500/25 bg-emerald-500/[0.07] px-3 py-2.5">
           <span className="leading-none mt-0.5 text-emerald-300"><LineIcon name="save" size={15} /></span>
           <p className="text-xs font-medium leading-relaxed text-slate-300">
-            <span className="font-black text-emerald-300">書きかけは自動で保存されます。</span>
+            <span className="font-black text-emerald-300">書きかけを自動保存します。</span>
             <br className="sm:hidden" />
-            途中でやめて閉じても、次に開いたときに続きから書けます（7日間）
+            「下書き保存済み」を確認すれば、次に開いたときに続きから書けます（7日間）
           </p>
         </div>
       </div>
@@ -434,7 +437,7 @@ const Step3_Story = ({ onMilestone }) => {
         <span className="leading-none mt-0.5 text-emerald-300"><LineIcon name="save" size={15} /></span>
         <p className="text-xs font-medium leading-relaxed text-slate-300">
           <span className="font-black text-emerald-300">一度に書き切らなくて大丈夫です。</span>
-          入力は自動保存されるので、途中で閉じても続きから書けます
+          「下書き保存済み」を確認してから閉じれば、続きから書けます
         </p>
       </div>
 
@@ -508,14 +511,15 @@ const Step3_Story = ({ onMilestone }) => {
   );
 };
 
-const Step4_Confirm = ({ isSubmitting }) => {
+const Step4_Confirm = ({ isSubmitting, shops, shopTherapists, user, onEdit }) => {
   const { watch } = useFormContext();
-  const therapistName = watch('therapistName');
-  const therapistId = watch('therapistId');
-  const therapistLabel = therapistName || (therapistId ? null : '指名なし');
-  // ⚠️ 採点の一言コメントは**公開される本文の一部**になる。
-  //    投稿前に一度も見せずに公開するのは不意打ちなので、ここで実際の形を出す。
-  const ratingsNote = buildRatingsNote(watch('ratings') || {}, watch('ratingNotes') || {});
+  const data = watch();
+  const shop = shops.find((item) => item.id === data.shopId);
+  const therapistLabel = data.therapistName?.trim()
+    || shopTherapists.find((item) => item.id === data.therapistId)?.name
+    || (data.therapistId ? '選択済みのセラピスト' : '指名なし');
+  const preview = prepareReviewContent(data);
+  const editButtonClass = 'min-h-11 shrink-0 rounded-sm border border-white/15 px-3 text-xs font-bold text-pink-300 hover:bg-white/5 disabled:opacity-50';
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -524,33 +528,48 @@ const Step4_Confirm = ({ isSubmitting }) => {
         <p className="text-slate-500 text-sm">この内容で投稿しますか？</p>
       </div>
 
-      <div className="bg-slate-900/50 p-8 rounded-sm text-center border border-white/10">
-        {therapistLabel && (
-          <div className="mb-4 inline-flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10">
-            <span className="text-slate-400 text-xs">対象セラピスト:</span>
-            <span className="text-white text-sm font-bold">{therapistLabel}</span>
+      <section className="rounded-sm border border-white/10 bg-slate-900/50 p-5">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="font-bold text-white">店舗・セラピスト</h3>
+          <button type="button" disabled={isSubmitting} className={editButtonClass} onClick={() => onEdit(1)}>店舗・セラピストを編集</button>
+        </div>
+        <dl className="space-y-3 text-sm">
+          <div><dt className="text-xs text-slate-400">店舗</dt><dd className="mt-1 font-bold text-white break-words">{shop ? getDisplayName(shop.name, shop) : '選択済みの店舗'}</dd>{shopLocationLabel(shop) && <dd className="mt-1 text-xs text-slate-400">{shopLocationLabel(shop)}</dd>}</div>
+          <div><dt className="text-xs text-slate-400">セラピスト</dt><dd className="mt-1 font-bold text-white break-words">{therapistLabel}</dd></div>
+          <div><dt className="text-xs text-slate-400">投稿者名</dt><dd className="mt-1 text-slate-200">{user ? reviewAuthorName(user) : 'ログイン後のアカウントの表示名'}</dd></div>
+        </dl>
+      </section>
+
+      <section className="rounded-sm border border-white/10 bg-slate-900/50 p-5">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="font-bold text-white">評価・タグ</h3>
+          <button type="button" disabled={isSubmitting} className={editButtonClass} onClick={() => onEdit(2)}>評価・タグを編集</button>
+        </div>
+        <p className="mb-4 text-sm text-slate-300">総合評価 <span className="ml-2 text-2xl font-black text-pink-400">{preview.rating.toFixed(1)}</span><span className="text-xs text-slate-400"> / 5</span></p>
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          {RATING_AXES.map(({ id, label }) => <div key={id} className="flex items-center justify-between gap-2"><dt className="text-slate-400">{label}</dt><dd className="font-bold text-slate-200">{data.ratings?.[id]} / 5</dd></div>)}
+        </dl>
+        <div className="mt-5">
+          <p className="mb-2 text-xs text-slate-400">タグ</p>
+          {data.tags?.length ? <ul className="flex flex-wrap gap-2">{data.tags.map((tag) => <li key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200">{tag}</li>)}</ul> : <p className="text-sm text-slate-300">選択なし</p>}
+        </div>
+      </section>
+
+      <section className="rounded-sm border border-white/10 bg-slate-900/50 p-5">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className="font-bold text-white">口コミ本文</h3>
+          <button type="button" disabled={isSubmitting} className={editButtonClass} onClick={() => onEdit(3)}>本文を編集</button>
+        </div>
+        <ReviewStoryContent content={preview.content} storySections={preview.storySections} className="break-words text-sm leading-relaxed text-slate-300" />
+        {preview.storySections.ratings_note && (
+          <div className="mt-3 flex items-center justify-between gap-3 border-t border-white/10 pt-3">
+            <p className="text-xs text-slate-400">採点コメントは本文の最後に含まれます。</p>
+            <button type="button" disabled={isSubmitting} className={editButtonClass} onClick={() => onEdit(2)}>採点コメントを編集</button>
           </div>
         )}
-        <p className="text-slate-300 mb-4">内容を確認して、問題なければ投稿してください。</p>
-        <p className="text-xs text-slate-500">※投稿後の修正はできません。</p>
-      </div>
+      </section>
 
-      {ratingsNote && (
-        <div className="bg-slate-900/50 rounded-sm border border-white/10 p-5 text-left">
-          <p className="text-[11px] font-black tracking-wide text-slate-400 mb-1">採点コメント</p>
-          <p className="text-[11px] text-slate-500 mb-3">
-            採点欄に書いた一言です。<span className="text-slate-300 font-bold">体験談の最後に、この形で一緒に公開されます。</span>
-          </p>
-          <ul className="space-y-1">
-            {ratingsNote.split('\n').filter(Boolean).map((line, i) => (
-              <li key={i} className="flex gap-2 text-[13px] text-slate-300 leading-relaxed">
-                <span aria-hidden="true" className="text-pink-400 shrink-0">・</span>
-                <span className="whitespace-pre-wrap">{line}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <p className="text-center text-xs text-slate-400">内容を確認してから投稿してください。投稿後の修正はできません。</p>
 
       <button 
         type="submit"
@@ -576,27 +595,7 @@ const Step4_Confirm = ({ isSubmitting }) => {
 
 const TOTAL_STEPS = 4;
 
-// ゲスト投稿の下書き保存（sessionStorage→localStorageに変更）
-// 新規登録のメール確認で別タブに遷移しても下書きが生き残るようにlocalStorageを使う。
-// 保存日時を値に持たせ、24時間を過ぎた下書きは破棄する。
-const DRAFT_KEY = 'reviewDraft';
-// ⚠️ 24h → 7日に延長（2026-08-18）。700字の体験談は一度で書き切らず、
-//    数日空けて続きを書くことがある。1日で消えるとその離脱が全部無駄になる。
-const DRAFT_TTL = 7 * 24 * 60 * 60 * 1000;
-
-/**
- * @param {object} data  フォームの値
- * @param {number} step  保存時点のステップ（復元時に同じ場所へ戻すため）
- * @param {boolean} pendingPublish
- *   true = 「公開ボタンを押したが未ログインだったのでログインへ送った」状態。
- *   この場合だけ復元時に確認画面(Step4)へ自動で飛ばす（ユーザーは公開する意思で戻ってくるため）。
- *   false = 単なる書きかけ。勝手に飛ばさず「続きから書く／破棄」を選ばせる。
- */
-function saveDraft(data, step = 1, pendingPublish = false) {
-  try {
-    localStorage.setItem(DRAFT_KEY, JSON.stringify({ savedAt: Date.now(), step, pendingPublish, data }));
-  } catch { /* 容量超過等。保存できなくても入力は継続させる */ }
-}
+// メール確認で別タブに移っても復元できるよう、下書きはlocalStorageへ7日間保存する。
 function loadDraft() {
   try {
     const raw = localStorage.getItem(DRAFT_KEY);
@@ -674,6 +673,9 @@ export default function PostReviewPage() {
   // 自動保存に変更し、保存されたことをユーザーに見せる。
   const [draftPrompt, setDraftPrompt] = useState(null); // 書きかけがある時に出すバナー
   const [draftSavedAt, setDraftSavedAt] = useState(null); // 「保存しました」表示用
+  const [draftBackup, setDraftBackup] = useState('');
+  const draftBackupRef = useRef(null);
+  const draftSaveTimerRef = useRef(null);
   const stepRef = useRef(1);
   useEffect(() => { stepRef.current = currentStep; }, [currentStep]);
 
@@ -686,6 +688,8 @@ export default function PostReviewPage() {
       methods.reset(d.data);
       if (d.data.shopId) setSelectedShopId(d.data.shopId);
       setCurrentStep(TOTAL_STEPS);
+      setDraftSavedAt(d.savedAt);
+      setDraftStatus('saved');
       toast.success('下書きを復元しました。投稿を完了してください', { duration: 4000 });
     } else {
       // 単なる書きかけ ＝ 勝手に画面を飛ばさず、本人に選ばせる
@@ -702,26 +706,34 @@ export default function PostReviewPage() {
   // 保存状態を明示する（2026-08-18 改修）。
   // ⚠️ 初版は11pxのグレー文字を本文の上に置いただけで、書いている最中は視界に入らなかった。
   //    離脱を防ぐための機能なのに、離脱しそうな瞬間に見えていないのでは意味がない。
-  //    'saving'（入力直後）→'saved'（保存完了）の2状態を持ち、固定バーに常時出す。
-  const [draftStatus, setDraftStatus] = useState('idle'); // idle | saving | saved
+  //    保存に失敗した状態は、次の書き込みを読み戻せるまで維持する。
+  const [draftStatus, setDraftStatus] = useState('idle'); // idle | saving | saved | failed
+  const persistDraft = React.useCallback((values, step, pendingPublish = false) => {
+    const result = saveDraft(values, step, pendingPublish);
+    if (result.success) {
+      setDraftSavedAt(result.savedAt);
+      setDraftStatus('saved');
+      setDraftBackup('');
+    } else {
+      setDraftStatus('failed');
+    }
+    return result;
+  }, []);
 
   // 自動保存（入力が止まって1秒後に保存＝毎キーストロークで書き込まない）
   useEffect(() => {
-    let timer;
     const sub = methods.watch((values) => {
       if (draftDisabledRef.current) return;
-      if (hasDraftContent(values)) setDraftStatus('saving'); // 打った瞬間に「保存中…」を出す
-      clearTimeout(timer);
-      timer = setTimeout(() => {
+      if (hasDraftContent(values)) setDraftStatus((status) => status === 'failed' ? 'failed' : 'saving');
+      clearTimeout(draftSaveTimerRef.current);
+      draftSaveTimerRef.current = setTimeout(() => {
         if (draftDisabledRef.current) return;
         if (!hasDraftContent(values)) return;
-        saveDraft(values, stepRef.current, false);
-        setDraftSavedAt(Date.now());
-        setDraftStatus('saved');
+        persistDraft(values, stepRef.current, false);
       }, 1000);
     });
-    return () => { clearTimeout(timer); sub?.unsubscribe?.(); };
-  }, [methods]);
+    return () => { clearTimeout(draftSaveTimerRef.current); sub?.unsubscribe?.(); };
+  }, [methods, persistDraft]);
 
   // 手動保存。自動保存があっても**押せるボタンがある**こと自体が安心につながる
   // （okabayashi指摘「保存できていることをアピールできないとダメ」）。
@@ -733,11 +745,32 @@ export default function PostReviewPage() {
       return;
     }
     draftDisabledRef.current = false;
-    saveDraft(values, stepRef.current, false);
-    setDraftSavedAt(Date.now());
-    setDraftStatus('saved');
-    toast.success('下書きを保存しました。閉じても続きから書けます', { duration: 3500 });
+    clearTimeout(draftSaveTimerRef.current);
+    const result = persistDraft(values, stepRef.current, false);
+    if (result.success) toast.success('下書きを保存しました。閉じても続きから書けます', { duration: 3500 });
+    else toast.error('下書きを保存できませんでした。画面を閉じる前に本文をコピーしてください', { duration: 6000 });
   };
+
+  const copyDraft = async () => {
+    const values = methods.getValues();
+    const shop = shops.find((item) => item.id === values.shopId);
+    const text = reviewBackupText(values, shop ? getDisplayName(shop.name, shop) : '');
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
+      await navigator.clipboard.writeText(text);
+      toast.success('店舗・評価・タグ・本文をコピーしました');
+    } catch {
+      setDraftBackup(text);
+      toast('下のコピー用テキストを選択してコピーしてください', { duration: 5000 });
+    }
+  };
+
+  useEffect(() => {
+    if (!draftBackup) return;
+    draftBackupRef.current?.focus();
+    draftBackupRef.current?.select();
+    draftBackupRef.current?.scrollIntoView({ block: 'center' });
+  }, [draftBackup]);
 
   const resumeDraft = () => {
     if (!draftPrompt) return;
@@ -745,6 +778,7 @@ export default function PostReviewPage() {
     if (draftPrompt.data.shopId) setSelectedShopId(draftPrompt.data.shopId);
     setCurrentStep(Math.min(Math.max(draftPrompt.step || 1, 1), TOTAL_STEPS));
     setDraftSavedAt(draftPrompt.savedAt);
+    setDraftStatus('saved');
     setDraftPrompt(null);
     toast.success('前回の続きから再開します', { duration: 3000 });
   };
@@ -752,6 +786,8 @@ export default function PostReviewPage() {
     clearDraft();
     setDraftPrompt(null);
     setDraftSavedAt(null);
+    setDraftStatus('idle');
+    setDraftBackup('');
     toast('下書きを破棄しました', { duration: 2500 });
     // ⚠️ ここでは draftDisabledRef を立てない。破棄はあくまで「前回の書きかけを捨てる」であり、
     //    これから書く内容は保存されてほしいため。
@@ -839,6 +875,10 @@ export default function PostReviewPage() {
   };
 
   const prevStep = () => setCurrentStep((p) => Math.max(1, p - 1));
+  const editStep = (step) => {
+    setCurrentStep(step);
+    window.scrollTo(0, 0);
+  };
 
   const onSubmit = async (data) => {
     // 特典日数・計測イベントも同じ正準文字数を使う（FIXES.md F03）。
@@ -853,7 +893,12 @@ export default function PostReviewPage() {
     // 未ログインなら下書きを保存してログインへ（書いてから公開時ログイン）
     // pendingPublish=true ＝ 戻ってきたら確認画面へ自動で飛ばす（公開する意思があるため）
     if (!user) {
-      saveDraft(data, TOTAL_STEPS, true);
+      clearTimeout(draftSaveTimerRef.current);
+      if (!persistDraft(data, TOTAL_STEPS, true).success) {
+        toast.error('下書きを保存できないため、この画面に入力を残しています。保存を再試行するか本文をコピーしてください', { duration: 6000 });
+        return;
+      }
+      draftDisabledRef.current = true;
       toast('ログイン / 無料登録で投稿が完了します', { duration: 4000 });
       // ⚠️ compat useNavigate は state を渡せない（Next Pages Router）。redirectはクエリで渡す。
       navigate('/login?redirect=%2Fpost-review');
@@ -1060,6 +1105,18 @@ export default function PostReviewPage() {
               {/* 保存状態の表示は固定バー側（＝書いている最中に必ず視界に入る位置）へ移設した。
                   ここ（本文の上）に置いていた初版は、スクロールすると見えなくなり機能しなかった。 */}
 
+              {draftStatus === 'failed' && (
+                <div role="alert" className="mb-6 rounded-sm border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-100">
+                  <p className="font-bold">下書きを保存できませんでした</p>
+                  <p className="mt-2 leading-relaxed">入力はこの画面に残っています。閉じると失われる可能性があります。保存を再試行するか、本文をコピーして手元に残してください。</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button type="button" onClick={saveDraftNow} className="min-h-11 rounded-sm border border-amber-300/30 px-3 font-bold">保存を再試行</button>
+                    <button type="button" onClick={copyDraft} className="min-h-11 rounded-sm border border-amber-300/30 px-3 font-bold">本文をコピー</button>
+                  </div>
+                  {draftBackup && <><label htmlFor="draft-backup" className="mt-4 block text-xs">選択したテキストをコピーしてください</label><textarea id="draft-backup" ref={draftBackupRef} value={draftBackup} readOnly rows={8} onFocus={(event) => event.currentTarget.select()} className="mt-2 w-full rounded-sm border border-amber-300/30 bg-slate-950 p-3 text-sm text-slate-200" /></>}
+                </div>
+              )}
+
               <form onSubmit={methods.handleSubmit(onSubmit)} className="min-h-[60vh]">
                 {currentStep === 1 && (
                   <Step1_Select
@@ -1073,7 +1130,7 @@ export default function PostReviewPage() {
                 )}
                 {currentStep === 2 && <Step2_Rating />}
                 {currentStep === 3 && <Step3_Story onMilestone={handleMilestone} />}
-                {currentStep === 4 && <Step4_Confirm isSubmitting={isSubmitting} />}
+                {currentStep === 4 && <Step4_Confirm isSubmitting={isSubmitting} shops={shops} shopTherapists={shopTherapists} user={user} onEdit={editStep} />}
               </form>
               
               {/* Footer Nav
@@ -1089,8 +1146,10 @@ export default function PostReviewPage() {
                   {/* 保存状態＋手動保存。書いている最中は指も視線もこの位置にあるので、
                       「保存されている」ことがここに出ていないと安心材料にならない。 */}
                   <div className="pointer-events-auto w-full max-w-md flex items-center justify-between gap-2 rounded-sm bg-slate-900/90 border border-white/10 backdrop-blur px-3 py-2">
-                    <span className="min-w-0 flex items-center gap-1.5 text-[11px] font-bold">
-                      {draftStatus === 'saving' ? (
+                    <span role="status" className="min-w-0 flex items-center gap-1.5 text-[11px] font-bold">
+                      {draftStatus === 'failed' ? (
+                        <span className="text-amber-200">下書き保存に失敗</span>
+                      ) : draftStatus === 'saving' ? (
                         <>
                           <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
                           <span className="text-amber-200">保存中…</span>
@@ -1104,12 +1163,13 @@ export default function PostReviewPage() {
                         <span className="text-slate-400 truncate">入力すると自動で下書き保存されます</span>
                       )}
                     </span>
+                    {draftStatus === 'failed' && <button type="button" onClick={copyDraft} className="min-h-11 shrink-0 text-[11px] font-bold text-amber-200">本文をコピー</button>}
                     <button
                       type="button"
                       onClick={saveDraftNow}
                       className="shrink-0 text-[11px] font-black px-3 py-2 rounded-lg border border-pink-500/40 text-pink-300 active:scale-95 transition"
                     >
-                      下書き保存
+                      {draftStatus === 'failed' ? '再試行' : '下書き保存'}
                     </button>
                   </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { authHeaders } from '../utils/supabaseRest';
 import { Link, useNavigate } from '../compat/router';
 import ReviewLikeButton from './ReviewLikeButton.jsx';
@@ -11,6 +11,7 @@ import { withReturnTo } from '../utils/authRedirect.js';
 import { trackRegisterCtaClick } from '../utils/registerAnalytics';
 import RatingFingerprint, { hasFingerprint } from './RatingFingerprint.jsx';
 import { countReviewStoryChars } from '../features/reviews/reviewStory.mjs';
+import { useViewingCredits } from '../hooks/useViewingCredits';
 
 // --- ウォーターマーク ---
 function Watermark({ text }) {
@@ -140,7 +141,8 @@ export default function ModernReviewCard({ review, reportNo = null, showTherapis
   const reviewReturnTo = useReturnTo();
   const { user, userPlan } = useAuth();
   const navigate = useNavigate();
-  const [creditDays, setCreditDays] = useState(null);
+  const articleRef = useRef(null);
+  const { status: viewingStatus, retry: retryViewingCredits } = useViewingCredits();
   // 来店時期と投稿日は別物。来店月が無いときに投稿日を「来店日」と誤表示しない。
   const postedDate = formatJstDate(review.created_at || review.createdAt || review.timestamp || review.date || null);
   const visitMonthRaw = review.visit_month || review.visitMonth || null;
@@ -155,35 +157,6 @@ export default function ModernReviewCard({ review, reportNo = null, showTherapis
 
   const isPremium = userPlan === 'premium' || userPlan === 'vip';
 
-  // 閲覧日数を取得（ログイン済みのみ）
-  useEffect(() => {
-    if (!user) { setCreditDays(0); return; }
-    const url = process.env.VITE_SUPABASE_URL;
-    // ⚠️ 2026-08-12: user_credits_read_own は TO authenticated。
-    //    anonキー固定で送っていたため、12_適用後は残高が必ず空になりW2Rが死ぬ。
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch(
-          `${url}/rest/v1/user_credits?user_id=eq.${user.id}&select=credits_days,expires_at`,
-          { headers: await authHeaders() }
-        );
-        const data = await res.json();
-        if (cancelled) return;
-        if (Array.isArray(data) && data.length > 0) {
-          const { credits_days, expires_at } = data[0];
-          const expired = expires_at && new Date(expires_at) < new Date();
-          setCreditDays(expired ? 0 : (credits_days || 0));
-        } else {
-          setCreditDays(0);
-        }
-      } catch {
-        if (!cancelled) setCreditDays(0);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [user]);
-
   // 閲覧権限: プレミアム OR 閲覧日数あり OR owner_manual口コミ OR 公開口コミ（各セラピストの1件目）
   // ⚠️ 2026-08-12 追加: **投稿者本人**の条件が抜けていた。
   //    DB側の reviews_own_read は本人へ非公開口コミを返すのに、UIがロックしていた。
@@ -193,7 +166,7 @@ export default function ModernReviewCard({ review, reportNo = null, showTherapis
   const canReadFull =
     isOwnReview
     || isPremium
-    || (creditDays !== null && creditDays > 0)
+    || viewingStatus === 'active'
     || review.user_id === 'owner_manual'
     || review.is_public === true;
 
@@ -203,8 +176,18 @@ export default function ModernReviewCard({ review, reportNo = null, showTherapis
   useEffect(() => {
     if (!canReadFull || !review.id) return;
     if (typeof window === 'undefined') return;
-    if (window.location.hash === `#review-${review.id}`) setIsExpanded(true);
-  }, [canReadFull, review.id]);
+    let frame;
+    const openTarget = () => {
+      let hash;
+      try { hash = decodeURIComponent(window.location.hash); } catch { return; }
+      if (hash !== `#review-${review.id}`) return;
+      if (canReadFull) setIsExpanded(true);
+      frame = requestAnimationFrame(() => articleRef.current?.scrollIntoView({ block: 'start' }));
+    };
+    openTarget();
+    window.addEventListener('hashchange', openTarget);
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('hashchange', openTarget); };
+  }, [canReadFull, review.id, reviewReturnTo]);
 
   // ── セラピストへのリンク可否（snake/camel 両対応・manual_ は非リンク）──
   const cardShopId = review.shop_id || review.shopId || '';
@@ -234,6 +217,7 @@ export default function ModernReviewCard({ review, reportNo = null, showTherapis
     // ⚠️ F01/U04: 登録から戻ってきた人・ホームからのリンクが、同じ口コミを開けるようにする。
     //    scroll-margin-top はヘッダー(64/72px)ぶん。付けないとアンカー先が隠れる。
     <article
+      ref={articleRef}
       id={review.id ? `review-${review.id}` : undefined}
       style={{ scrollMarginTop: '96px' }}
       className="relative w-full max-w-3xl mx-auto mb-10 border-t border-slate-700 pt-7"
@@ -359,6 +343,16 @@ export default function ModernReviewCard({ review, reportNo = null, showTherapis
                 {(review.content || "").replace(/[【】]/g, ' ').slice(0, 140)}
               </div>
               {/* 焦らしCTA */}
+              {viewingStatus === 'loading' || viewingStatus === 'error' ? (
+                <div role={viewingStatus === 'error' ? 'alert' : 'status'} className="mt-3 border border-slate-700 bg-slate-950 px-5 py-5 text-center">
+                  <p className="text-sm text-slate-200">
+                    {viewingStatus === 'loading' ? '閲覧権を確認しています…' : '閲覧権を確認できませんでした。通信状況を確認して、もう一度お試しください。'}
+                  </p>
+                  {viewingStatus === 'error' && (
+                    <button type="button" onClick={retryViewingCredits} className="ui-link mt-2 inline-flex min-h-11 items-center font-bold">閲覧権を再確認する</button>
+                  )}
+                </div>
+              ) : (
               <div className="mt-3 border border-pink-500/30 bg-slate-950 px-5 py-5 text-center">
                 <p className="mb-2 text-xs font-bold text-pink-300">続き{Math.max(0, (review.content || '').length - 140)}文字は限定公開</p>
                 <p className="mb-1 font-mincho text-base font-bold leading-snug text-slate-50">体験談を投稿すると<br/>この続きが読めます</p>
@@ -384,6 +378,7 @@ export default function ModernReviewCard({ review, reportNo = null, showTherapis
                   </Link>
                 )}
               </div>
+              )}
             </div>
           )}
         </div>

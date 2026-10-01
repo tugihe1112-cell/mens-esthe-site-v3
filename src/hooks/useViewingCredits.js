@@ -1,54 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { authHeaders } from '../utils/supabaseRest';
+import { fetchViewingCredits } from '../utils/viewingCredits.js';
 
-/**
- * 閲覧権（user_credits）の状態を1回だけ読む。
- *
- * 戻り値の status:
- *   'anonymous' … 未ログイン
- *   'loading'   … 取得中（まだ出し分けない）
- *   'active'    … 閲覧権あり（残日数 > 0）
- *   'expired'   … ログイン済みだが閲覧権なし・期限切れ
- *
- * ⚠️ 取得に失敗したときは 'expired' ではなく 'loading' のまま据え置く。
- *    通信失敗を「期限切れ」と言い切ると、権利がある人に
- *    「期限を延長しませんか」と出してしまう（DESIGN.md U04の状態表）。
- * ⚠️ user_credits_read_own は TO authenticated なので anon キー固定で送らない
- *    （2026-08-12 にこれでW2Rが全滅している）。authHeaders を使う。
- */
+/** anonymous / loading / error / expired / active。通信失敗を期限切れへ変換しない。 */
 export function useViewingCredits() {
-  const { user, userPlan } = useAuth();
-  const [status, setStatus] = useState('anonymous');
-  const [days, setDays] = useState(0);
+  const { user, userPlan, loading: authLoading } = useAuth();
+  const userId = user?.id || '';
+  const isPremium = userPlan === 'premium' || userPlan === 'vip';
+  const [result, setResult] = useState(null);
+  const [attempt, setAttempt] = useState(0);
+  const retry = useCallback(() => setAttempt((n) => n + 1), []);
+  const requestKey = useMemo(() => ({ user, userId, userPlan, authLoading, attempt }), [user, userId, userPlan, authLoading, attempt]);
 
   useEffect(() => {
-    if (!user) { setStatus('anonymous'); setDays(0); return; }
-    if (userPlan === 'premium' || userPlan === 'vip') { setStatus('active'); setDays(0); return; }
+    if (authLoading || !userId || isPremium) return;
     let cancelled = false;
-    setStatus('loading');
+    let expiryTimer;
     (async () => {
       try {
-        const url = process.env.VITE_SUPABASE_URL;
-        const res = await fetch(
-          `${url}/rest/v1/user_credits?user_id=eq.${user.id}&select=credits_days,expires_at`,
-          { headers: await authHeaders() }
-        );
-        if (!res.ok) return; // loading のまま据え置く
-        const data = await res.json();
-        if (cancelled || !Array.isArray(data)) return;
-        if (data.length === 0) { setStatus('expired'); setDays(0); return; }
-        const { credits_days: creditsDays, expires_at: expiresAt } = data[0];
-        const expired = expiresAt && new Date(expiresAt) < new Date();
-        const remaining = expired ? 0 : (Number(creditsDays) || 0);
-        setDays(remaining);
-        setStatus(remaining > 0 ? 'active' : 'expired');
+        const url = `${process.env.VITE_SUPABASE_URL}/rest/v1/user_credits?user_id=eq.${encodeURIComponent(userId)}&select=credits_days,expires_at`;
+        const credits = await fetchViewingCredits(url, await authHeaders());
+        if (cancelled) return;
+        setResult({ ...credits, requestKey });
+        if (credits.status === 'active' && credits.expiresAt) {
+          const delay = Math.max(1, Math.min(Date.parse(credits.expiresAt) - Date.now(), 2147483647));
+          expiryTimer = setTimeout(retry, delay);
+        }
       } catch {
-        /* 通信失敗は loading のまま。期限切れ扱いにしない。 */
+        if (!cancelled) setResult({ status: 'error', days: 0, requestKey });
       }
     })();
-    return () => { cancelled = true; };
-  }, [user, userPlan]);
+    return () => { cancelled = true; clearTimeout(expiryTimer); };
+  }, [authLoading, userId, isPremium, requestKey, retry]);
 
-  return { status, days };
+  // ユーザー切替・再試行直後にも前回の権利や期限切れを表示しない。
+  if (authLoading) return { status: 'loading', days: 0, retry };
+  if (!userId) return { status: 'anonymous', days: 0, retry };
+  if (isPremium) return { status: 'active', days: 0, retry };
+  if (result?.requestKey !== requestKey) return { status: 'loading', days: 0, retry };
+  return { status: result.status, days: result.days, retry };
 }
