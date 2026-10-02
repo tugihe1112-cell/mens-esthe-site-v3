@@ -46,10 +46,23 @@ Webpack開発サーバーlocalhost:3012、匿名状態。実際の投稿ボタ�
 - 今回のコード・ガード28ファイルのESLintと `git diff --check` が成功。会員表示の追加検査後も該当ガード・ESLintを再確認。
 - 新ガードの妨害検証は投稿13、保存14、口コミ一覧10、会員表示14、幅変更8の計59種類を検出。共有の実装ファイルを壊したまま残していない。
 - 作業ディレクトリのビルドと、今回コミットしたファイルだけのビルドを区別する。本番へ送るのはGitコミットに含めた変更のみ。
+- 修正コミット `bd6c162` をGit archiveで独立した一時ディレクトリへ取り出し、CIと同じNode22で全24ガードと29ページのWebpackビルドに成功。初回ビルドはsandboxのGoogle Fonts DNS制限で停止し、通信許可後に同じソースで成功した。書体設定は変更していない。
 
 ## 保持したデータと作業
 
 本番の口コミ・店舗・人物・権利行を修正して画面の問題を回避していない。既存の公開口コミは削除していない。Claude等の `TopHeroSlider.jsx`、`src/index.css`、`playbook/metrics-log.md` と未追跡outputsは編集・今回のコミットへの追加をしない。
+
+## 本番反映・実測
+
+- 修正コミット `bd6c1621522a6479fac9059a89904230857fd465`。GitHub側の監視記録コミット `ca1370c` を保持して統合したリリースHEADは `ad8a2747dd9c36c1ba51cefb90a21eee591f3b09`。統合で加わったファイルは `scripts/monitoring/image_health_history.json` のみ。
+- [CI #317 / run 36967435427](https://github.com/tugihe1112-cell/mens-esthe-site-v3/actions/runs/36967435427) は同じリリースHEADで全ステップ成功。2026-10-02 14:07:30 JST完了。npm ci、全24ガード、Next buildを含む。
+- Vercel Production `dpl_2wgWDjvuWcb25WkmQV1hmETNH4LK` / `mens-esthe-site-6ipg02vg9-tugihe1112-3251s-projects.vercel.app` はReady。www/非wwwの本番aliasを確認。実本番buildIdは `uTIIawuznt0KBcNF23eXm`。
+- 本番ホームは最新7件／地域5区分／公開総数34件／`reviewLoadFailed=false`。口コミ一覧のSSRは20件・`initialLoadError=false`、評価順→新着順で取得中の表示順説明が出て、完了後は新着先頭「星咲えり」。もっと見るで34件、全文リンクも口コミID付き34件。
+- RELAX店舗の768→1024→768、Escape、TIGER GATEブランドの768→1024・390→1440でシートが閉じ、元のbody overflowへ復帰。PCのタグ説明は人物数、Escapeは開くボタンへフォーカス復帰。
+- 本番投稿画面でRELAX候補をEnterとSpaceで選択でき、選択済みと人物選択が表示され、1/4のまま送信されないことを確認。本文は入力せず、確認で作った店舗選択だけの下書きは「新しく書く」で削除。
+- 公開API・匿名拒否・メソッド制限・安全ヘッダーの契約検査成功。`/api/auth/signup` の空POSTは400 / application/json / 必須項目案内。実登録やメール送信は行っていない。主要5ページ・16固有JSチャンクも200 / JS MIME。
+- 初回API契約検査だけ `shops-lite?view=counts` が503だった。原因は断定せず、再取得で200・1,147店舗／57,648人・ETagなしを確認し、契約検査の再実行は全成功。観測した一時失敗を成功記録から除外していない。
+- 画面記録 `production-popular-reviews.png`。一時QAルート・コントロール・認証偽装は本番へ含めていない。本番で故意の通信・保存障害を起こしていない。
 
 ## 本番検証の残り
 
