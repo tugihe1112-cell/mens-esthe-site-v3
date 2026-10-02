@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import LineIcon from '../components/LineIcon.jsx';
 import { FormProvider, useFormContext, Controller } from 'react-hook-form';
 import { useNavigate, useParams, useSearchParams } from '../compat/router';
+import { useRouter } from 'next/router';
 import { Toaster, toast } from 'react-hot-toast';
 import { useReviewForm } from '../features/reviews/hooks/useReviewForm';
 import {
@@ -19,6 +20,8 @@ import TagSelector from '../components/TagSelector.jsx';
 import ReviewStoryContent from '../components/ReviewStoryContent.jsx';
 import { prepareReviewContent, reviewAuthorName, reviewBackupText } from '../features/reviews/reviewSubmission.js';
 import { DRAFT_KEY, DRAFT_TTL, saveReviewDraft as saveDraft } from '../features/reviews/reviewDraft.js';
+import { completeReviewValues, emptyReviewValues, planReviewInitialization, reviewFormSignature, reviewTargetSignature, reviewTargetMatches, resolveReviewTarget } from '../features/reviews/reviewTarget.js';
+import { useReviewNavigation } from '../features/reviews/hooks/useReviewNavigation.js';
 import { useShopData } from '../contexts/DataContext.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import { trackEvent } from '../utils/analytics';
@@ -40,11 +43,11 @@ const shopLocationLabel = (shop) => {
   return [shop?.prefecture, area].filter(Boolean).join('・');
 };
 
-const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId, paramShopId, initCustomMode }) => {
-  const { register, setValue, watch } = useFormContext();
+const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId, initCustomMode }) => {
+  const { setValue, watch } = useFormContext();
   const selectedTherapistId = watch('therapistId');
   const therapistName = watch('therapistName');
-  const [customMode, setCustomMode] = useState(initCustomMode || false);
+  const [customMode, setCustomMode] = useState(initCustomMode || (!selectedTherapistId && Boolean(therapistName)));
 
   // コンボボックス用 state
   const selectedShopName = useMemo(() => shops.find(s => s.id === selectedShopId)?.name || '', [shops, selectedShopId]);
@@ -52,6 +55,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
   const [shopInput, setShopInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const comboRef = useRef(null);
+  const shopInputRef = useRef(null);
 
   // 選択済みの場合は入力欄を初期化
   useEffect(() => {
@@ -80,10 +84,11 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
     setValue('shopId', shop.id);
     setSelectedShopId(shop.id);
     setShopInput(shop.name);
-    setShowSuggestions(false);
     setValue('therapistId', null);
     setValue('therapistName', '');
     setCustomMode(false);
+    shopInputRef.current?.focus();
+    setShowSuggestions(false);
     trackEvent('review_shop_selected', { shop_id: shop.id, source: 'manual_search' });
   };
 
@@ -105,19 +110,11 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
     setCustomMode(false);
   };
 
-  const selectNone = () => {
-    setValue('therapistId', null);
-    setValue('therapistName', '');
-    setCustomMode(false);
-  };
-
   const enterCustomMode = () => {
     setValue('therapistId', null);
     setValue('therapistName', '');
     setCustomMode(true);
   };
-
-  const isNoneSelected = !selectedTherapistId && !customMode;
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -156,18 +153,15 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
       </div>
 
       <div className="bg-slate-900 p-5 rounded-sm border border-white/5 shadow-xl">
-        <label className="block text-xs font-bold text-slate-400 mb-3 pl-1">店舗名</label>
-
-        {paramShopId ? (
-          /* URLから来た場合は固定表示 */
-          <div className="w-full bg-black/30 border border-white/10 rounded-sm p-4 cursor-not-allowed">
-            <span className="block text-white font-bold">{selectedShopName || '店舗が選択されています'}</span>
-            {shopLocationLabel(selectedShop) && <span className="mt-1 block text-xs font-medium text-slate-400">{shopLocationLabel(selectedShop)}</span>}
-          </div>
-        ) : (
-          /* コンボボックス */
-          <div className="relative" ref={comboRef}>
+        <label htmlFor="review-shop-search" className="block text-xs font-bold text-slate-400 mb-3 pl-1">店舗名</label>
+        <p id="review-shop-search-help" className="mb-3 text-xs text-slate-400">店舗名で検索し、下の候補から選択してください。</p>
+        {/* 候補は通常のボタンとしてTab・Enter・Spaceで選べる。 */}
+          <div className="relative" ref={comboRef} onKeyDown={(event) => { if (event.key === 'Escape') { shopInputRef.current?.focus(); setShowSuggestions(false); } }}>
             <input
+              id="review-shop-search"
+              ref={shopInputRef}
+              aria-describedby="review-shop-search-help"
+              aria-controls={showSuggestions ? 'review-shop-suggestions' : undefined}
               type="text"
               value={shopInput}
               onChange={handleShopInputChange}
@@ -178,25 +172,28 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
             />
             {/* 選択済みチェックマーク */}
             {selectedShopId && (
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-pink-400 text-sm font-bold">✓</div>
+              <div role="status" className="absolute right-4 top-1/2 -translate-y-1/2 text-pink-400 text-sm font-bold"><span aria-hidden="true">✓</span><span className="sr-only">{getDisplayName(selectedShop?.name, selectedShop)}を選択済み</span></div>
             )}
             {/* クリアボタン（入力中・未選択時） */}
             {shopInput && !selectedShopId && (
               <button
                 type="button"
-                onClick={() => { setShopInput(''); setShowSuggestions(false); }}
+                aria-label="店舗の検索文字を消す"
+                onClick={() => { setShopInput(''); shopInputRef.current?.focus(); setShowSuggestions(false); }}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-lg leading-none"
               >×</button>
             )}
 
+            <button type="button" aria-expanded={showSuggestions} aria-controls={showSuggestions && suggestions.length ? 'review-shop-suggestions' : undefined} onClick={() => setShowSuggestions((open) => !open)} className="mt-2 min-h-11 text-xs font-bold text-pink-300">{showSuggestions ? '店舗の候補を閉じる' : '店舗の候補を表示'}</button>
             {/* 候補ドロップダウン */}
             {showSuggestions && suggestions.length > 0 && (
-              <ul className="absolute z-50 top-full mt-1 w-full bg-slate-800 border border-white/10 rounded-sm shadow-2xl max-h-64 overflow-y-auto">
+              <ul id="review-shop-suggestions" aria-label="店舗の候補" className="absolute z-50 top-full mt-1 w-full bg-slate-800 border border-white/10 rounded-sm shadow-2xl max-h-64 overflow-y-auto">
                 {suggestions.map(shop => (
                   <li key={shop.id}>
                     <button
                       type="button"
-                      onMouseDown={() => handleShopSelect(shop)}
+                      onClick={() => handleShopSelect(shop)}
+                      aria-pressed={shop.id === selectedShopId}
                       className="min-h-11 w-full border-b border-white/5 px-4 py-3 text-left text-white transition hover:bg-pink-600/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-pink-500 last:border-0"
                     >
                       <span className="block truncate text-sm font-bold">{getDisplayName(shop.name, shop)}</span>
@@ -207,18 +204,19 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
               </ul>
             )}
           </div>
-        )}
       </div>
 
       {selectedShopId && (
         <div className="bg-slate-900 p-5 rounded-sm border border-white/5 shadow-xl animate-in fade-in duration-500">
-          <label className="block text-xs font-bold text-slate-400 mb-4 pl-1">セラピスト</label>
+          <p className="block text-xs font-bold text-slate-400 mb-4 pl-1">セラピスト</p>
 
           {customMode ? (
             /* カスタムモード: 入力欄のみ表示 */
             <div className="animate-in fade-in duration-300">
               <div className="relative">
+                <label htmlFor="review-custom-therapist" className="sr-only">セラピスト名</label>
                 <input
+                  id="review-custom-therapist"
                   type="text"
                   placeholder="セラピスト名を入力してください"
                   value={therapistName || ''}
@@ -627,90 +625,127 @@ function clearDraft() {
 }
 
 export default function PostReviewPage() {
-  const navigate = useNavigate();
+  const rawNavigate = useNavigate();
+  const router = useRouter();
   const { shopId: paramShopId, threadId: paramThreadId } = useParams();
   const [searchParams] = useSearchParams();
   const qsShopId = searchParams.get('shopId');
   const initCustomMode = searchParams.get('customMode') === 'true';
   const effectiveShopId = paramShopId || qsShopId;
+  const routeKey = JSON.stringify([effectiveShopId || '', paramThreadId || '', initCustomMode]);
 
   const { methods, isSubmitting, submitReview, user } = useReviewForm();
-  const { shops, getTherapistsByShopId } = useShopData();
+  const { shops } = useShopData();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedShopId, setSelectedShopId] = useState(null);
-  const [completed, setCompleted] = useState(null); // B-3: 投稿後体験 { grantedDays, reviewLink, chars }
-  const prefilledOpenTrackedRef = useRef(false);
+  const [completed, setCompleted] = useState(null);
+  const [draftPrompt, setDraftPrompt] = useState(null);
+  const [initializing, setInitializing] = useState(true);
+  const [initializationError, setInitializationError] = useState(null);
+  const [targetError, setTargetError] = useState('');
+  const [checkingTarget, setCheckingTarget] = useState(false);
+  const [draftSavedAt, setDraftSavedAt] = useState(null);
+  const [draftBackup, setDraftBackup] = useState('');
+  const [draftStatus, setDraftStatus] = useState('idle');
+  const draftBackupRef = useRef(null);
+  const leaveDialogRef = useRef(null);
+  const draftSaveTimerRef = useRef(null);
+  const draftDisabledRef = useRef(true);
+  const initializedRef = useRef(false);
+  const initializationKeyRef = useRef(null);
+  const initializationGenerationRef = useRef(0);
+  const savedSignatureRef = useRef(reviewFormSignature(emptyReviewValues()));
+  const pendingPublishRef = useRef(false);
+  const stepRef = useRef(1);
+  const prefilledOpenTrackedRef = useRef(null);
+  const submissionAttemptRef = useRef(false);
   const milestoneTrackedRef = useRef({ 200: false, 700: false });
   const handleMilestone = React.useCallback((threshold, chars) => {
     if (milestoneTrackedRef.current[threshold]) return;
     milestoneTrackedRef.current[threshold] = true;
     trackEvent(`review_${threshold}_reached`, { chars });
   }, []);
-
-  // ★ URLパラメータによる初期化 (Data Loadingを待機)
-  useEffect(() => {
-    if (effectiveShopId && shops.length > 0) {
-      setSelectedShopId(effectiveShopId);
-      methods.setValue('shopId', effectiveShopId);
-
-      if (paramThreadId) {
-        methods.setValue('therapistId', paramThreadId);
-        setCurrentStep(2);
-        if (!prefilledOpenTrackedRef.current) {
-          prefilledOpenTrackedRef.current = true;
-          trackEvent('review_prefilled_open', {
-            shop_id: effectiveShopId,
-            therapist_id: paramThreadId,
-          });
-        }
-      }
-    }
-  }, [effectiveShopId, paramThreadId, shops, methods]);
-
-  // ── 下書き（2026-08-18 全面改修）───────────────────────────────
-  // 従来は「公開ボタンを押して未ログインだった時」だけ保存しており、
-  // **書いている途中で離脱すると700字書いていても全部消えた**。
-  // 自動保存に変更し、保存されたことをユーザーに見せる。
-  const [draftPrompt, setDraftPrompt] = useState(null); // 書きかけがある時に出すバナー
-  const [draftSavedAt, setDraftSavedAt] = useState(null); // 「保存しました」表示用
-  const [draftBackup, setDraftBackup] = useState('');
-  const draftBackupRef = useRef(null);
-  const draftSaveTimerRef = useRef(null);
-  const stepRef = useRef(1);
   useEffect(() => { stepRef.current = currentStep; }, [currentStep]);
 
-  // 復元
-  useEffect(() => {
-    const d = loadDraft();
-    if (!d) return;
-    if (d.pendingPublish) {
-      // 公開する意思でログインから戻ってきた ＝ 迷わせず確認画面へ
-      methods.reset(d.data);
-      if (d.data.shopId) setSelectedShopId(d.data.shopId);
-      setCurrentStep(TOTAL_STEPS);
-      setDraftSavedAt(d.savedAt);
-      setDraftStatus('saved');
-      toast.success('下書きを復元しました。投稿を完了してください', { duration: 4000 });
-    } else {
-      // 単なる書きかけ ＝ 勝手に画面を飛ばさず、本人に選ばせる
-      setDraftPrompt(d);
+  const applyValues = React.useCallback((input, step, savedDraft) => {
+    const values = completeReviewValues(input);
+    // Reset every target field and the body together. The watch subscriber is paused.
+    methods.reset(values);
+    savedSignatureRef.current = reviewFormSignature(values);
+    pendingPublishRef.current = Boolean(savedDraft?.pendingPublish);
+    setSelectedShopId(values.shopId || null);
+    setCurrentStep(step);
+    stepRef.current = step;
+    setDraftSavedAt(savedDraft?.savedAt || null);
+    setDraftStatus(savedDraft ? 'saved' : 'idle');
+    setDraftBackup('');
+    setDraftPrompt(null);
+    setInitializationError(null);
+    setTargetError('');
+    setInitializing(false);
+    initializedRef.current = true;
+    draftDisabledRef.current = false;
+  }, [methods]);
+
+  const startFresh = React.useCallback(async (requested, generation) => {
+    setInitializing(true);
+    setInitializationError(null);
+    const result = requested.shopId || requested.therapistId
+      ? await resolveReviewTarget(requested, supabase) : { ok: true, target: {} };
+    if (generation !== initializationGenerationRef.current) return;
+    if (!result.ok) {
+      setInitializing(false);
+      setInitializationError({ requested, kind: result.kind });
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // 初回マウントのみ
+    applyValues({ ...emptyReviewValues(), ...result.target }, result.target.therapistId ? 2 : 1);
+    if (result.target.therapistId && prefilledOpenTrackedRef.current !== reviewTargetSignature(result.target)) {
+      prefilledOpenTrackedRef.current = reviewTargetSignature(result.target);
+      trackEvent('review_prefilled_open', { shop_id: result.target.shopId, therapist_id: result.target.therapistId });
+    }
+  }, [applyValues]);
 
-  // 🐛 競合の回避（重要）: 投稿成功時に clearDraft() しても、debounce 中の自動保存が
-  //    その1秒後に発火して下書きを**書き戻して**しまう。結果、投稿済みなのに次回訪問で
-  //    「書きかけの口コミがあります」が出る。保存を止めるフラグで塞ぐ。
-  const draftDisabledRef = useRef(false);
+  const restoreDraft = React.useCallback(async (draft, generation) => {
+    applyValues(draft.data, draft.pendingPublish ? TOTAL_STEPS : Math.min(Math.max(draft.step || 1, 1), TOTAL_STEPS), draft);
+    const result = await resolveReviewTarget(draft.data, supabase);
+    if (generation !== initializationGenerationRef.current || reviewTargetSignature(methods.getValues()) !== reviewTargetSignature(draft.data)) return;
+    if (!result.ok || !reviewTargetMatches(draft.data, result.target)) {
+      setTargetError(result.kind === 'unavailable' ? '投稿先を確認できませんでした。投稿前にもう一度確認します。' : '保存した店舗・セラピストの情報が一致していません。本文を残したまま投稿先を選び直してください。');
+    }
+  }, [applyValues, methods]);
 
-  // 保存状態を明示する（2026-08-18 改修）。
-  // ⚠️ 初版は11pxのグレー文字を本文の上に置いただけで、書いている最中は視界に入らなかった。
-  //    離脱を防ぐための機能なのに、離脱しそうな瞬間に見えていないのでは意味がない。
-  //    保存に失敗した状態は、次の書き込みを読み戻せるまで維持する。
-  const [draftStatus, setDraftStatus] = useState('idle'); // idle | saving | saved | failed
-  const persistDraft = React.useCallback((values, step, pendingPublish = false) => {
+  // One reconciliation owns URL and draft initialization. Shop catalogue arrival
+  // only changes labels; it can never overwrite the chosen target or review body.
+  useEffect(() => {
+    if (!router.isReady || initializationKeyRef.current === routeKey) return;
+    initializationKeyRef.current = routeKey;
+    const generation = ++initializationGenerationRef.current;
+    initializedRef.current = false;
+    draftDisabledRef.current = true;
+    clearTimeout(draftSaveTimerRef.current);
+    setInitializing(true);
+    setCompleted(null);
+    setTargetError('');
+    setDraftPrompt(null);
+    setInitializationError(null);
+    const requested = { shopId: effectiveShopId || '', therapistId: paramThreadId || null, therapistName: '' };
+    const plan = planReviewInitialization(requested, loadDraft());
+    if (plan.action === 'choose') {
+      setDraftPrompt({ ...plan.draft, conflict: plan.conflict, requested });
+      setInitializing(false);
+    } else if (plan.action === 'resume') {
+      void restoreDraft(plan.draft, generation);
+    } else {
+      void startFresh(requested, generation);
+    }
+  }, [router.isReady, routeKey, effectiveShopId, paramThreadId, restoreDraft, startFresh]);
+  useEffect(() => () => { ++initializationGenerationRef.current; }, []);
+
+  const persistDraft = React.useCallback((values, step, pendingPublish = pendingPublishRef.current) => {
     const result = saveDraft(values, step, pendingPublish);
     if (result.success) {
+      savedSignatureRef.current = reviewFormSignature(values);
+      pendingPublishRef.current = pendingPublish;
       setDraftSavedAt(result.savedAt);
       setDraftStatus('saved');
       setDraftBackup('');
@@ -720,33 +755,41 @@ export default function PostReviewPage() {
     return result;
   }, []);
 
-  // 自動保存（入力が止まって1秒後に保存＝毎キーストロークで書き込まない）
+  const { leaveRequested, requestNavigation, stay, discardAndLeave } = useReviewNavigation({
+    getValues: methods.getValues,
+    savedSignatureRef,
+    enabled: () => initializedRef.current && !draftDisabledRef.current,
+    save: (values) => {
+      clearTimeout(draftSaveTimerRef.current);
+      return persistDraft(values, stepRef.current);
+    },
+  });
+  const navigate = (to, options) => requestNavigation(() => rawNavigate(to, options));
+
+  // Autosave remains paused until the URL/draft choice has been made.
   useEffect(() => {
     const sub = methods.watch((values) => {
-      if (draftDisabledRef.current) return;
+      if (draftDisabledRef.current || !initializedRef.current) return;
+      if (reviewFormSignature(values) === savedSignatureRef.current) return;
       if (hasDraftContent(values)) setDraftStatus((status) => status === 'failed' ? 'failed' : 'saving');
       clearTimeout(draftSaveTimerRef.current);
       draftSaveTimerRef.current = setTimeout(() => {
-        if (draftDisabledRef.current) return;
-        if (!hasDraftContent(values)) return;
-        persistDraft(values, stepRef.current, false);
+        if (draftDisabledRef.current || !initializedRef.current || !hasDraftContent(values)) return;
+        persistDraft(values, stepRef.current);
       }, 1000);
     });
     return () => { clearTimeout(draftSaveTimerRef.current); sub?.unsubscribe?.(); };
   }, [methods, persistDraft]);
 
-  // 手動保存。自動保存があっても**押せるボタンがある**こと自体が安心につながる
-  // （okabayashi指摘「保存できていることをアピールできないとダメ」）。
-  // 自動保存が本体・ボタンは確証を得るための操作、という役割分担。
   const saveDraftNow = () => {
+    if (!initializedRef.current || draftDisabledRef.current) return;
     const values = methods.getValues();
     if (!hasDraftContent(values)) {
       toast('まだ保存できる内容がありません', { duration: 2500 });
       return;
     }
-    draftDisabledRef.current = false;
     clearTimeout(draftSaveTimerRef.current);
-    const result = persistDraft(values, stepRef.current, false);
+    const result = persistDraft(values, stepRef.current);
     if (result.success) toast.success('下書きを保存しました。閉じても続きから書けます', { duration: 3500 });
     else toast.error('下書きを保存できませんでした。画面を閉じる前に本文をコピーしてください', { duration: 6000 });
   };
@@ -754,7 +797,7 @@ export default function PostReviewPage() {
   const copyDraft = async () => {
     const values = methods.getValues();
     const shop = shops.find((item) => item.id === values.shopId);
-    const text = reviewBackupText(values, shop ? getDisplayName(shop.name, shop) : '');
+    const text = reviewBackupText(values, shop ? getDisplayName(shop.name, shop) : values.shopId);
     try {
       if (!navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
       await navigator.clipboard.writeText(text);
@@ -770,27 +813,24 @@ export default function PostReviewPage() {
     draftBackupRef.current?.focus();
     draftBackupRef.current?.select();
     draftBackupRef.current?.scrollIntoView({ block: 'center' });
-  }, [draftBackup]);
+  }, [draftBackup, leaveRequested]);
+  useEffect(() => {
+    const dialog = leaveDialogRef.current;
+    if (leaveRequested) dialog?.showModal();
+    else if (dialog?.open) dialog.close();
+  }, [leaveRequested]);
 
   const resumeDraft = () => {
     if (!draftPrompt) return;
-    methods.reset(draftPrompt.data);
-    if (draftPrompt.data.shopId) setSelectedShopId(draftPrompt.data.shopId);
-    setCurrentStep(Math.min(Math.max(draftPrompt.step || 1, 1), TOTAL_STEPS));
-    setDraftSavedAt(draftPrompt.savedAt);
-    setDraftStatus('saved');
-    setDraftPrompt(null);
+    void restoreDraft(draftPrompt, initializationGenerationRef.current);
     toast.success('前回の続きから再開します', { duration: 3000 });
   };
   const discardDraft = () => {
+    if (!draftPrompt) return;
+    const requested = draftPrompt.requested;
     clearDraft();
     setDraftPrompt(null);
-    setDraftSavedAt(null);
-    setDraftStatus('idle');
-    setDraftBackup('');
-    toast('下書きを破棄しました', { duration: 2500 });
-    // ⚠️ ここでは draftDisabledRef を立てない。破棄はあくまで「前回の書きかけを捨てる」であり、
-    //    これから書く内容は保存されてほしいため。
+    void startFresh(requested, initializationGenerationRef.current);
   };
 
   // 測定: 投稿フロー開始（Step1到達）— A系改修の投稿ファネル比較用
@@ -806,6 +846,7 @@ export default function PostReviewPage() {
   useEffect(() => {
     let isMounted = true;
     const fetchTherapists = async () => {
+      setShopTherapists([]);
       if (!selectedShopId) {
         if (isMounted) setShopTherapists([]);
         return;
@@ -819,11 +860,12 @@ export default function PostReviewPage() {
         if (!url || !key) return;
         
         const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
-        const res = await fetch(`${url}/rest/v1/therapists?shop_id=eq.${selectedShopId}&select=*`, { headers });
+        const res = await fetch(`${url}/rest/v1/therapists?shop_id=eq.${encodeURIComponent(selectedShopId)}&select=*`, { headers });
+        if (!res.ok) throw new Error('therapist lookup failed');
         const data = await res.json();
         
-        if (data && data.length > 0 && isMounted) {
-          setShopTherapists(data);
+        if (Array.isArray(data) && data.length > 0 && isMounted) {
+          setShopTherapists(data.filter((item) => item.shop_id === selectedShopId));
         } else if (isMounted) {
           setShopTherapists([]);
         }
@@ -865,6 +907,7 @@ export default function PostReviewPage() {
   };
 
   const nextStep = async () => {
+    if (!initializedRef.current || draftDisabledRef.current) return;
     const isValid = await validateStep();
     if (isValid) {
       setCurrentStep((p) => Math.min(TOTAL_STEPS, p + 1));
@@ -881,9 +924,26 @@ export default function PostReviewPage() {
   };
 
   const onSubmit = async (data) => {
+    if (!initializedRef.current || draftDisabledRef.current || submissionAttemptRef.current) return;
+    submissionAttemptRef.current = true;
+    const beforeCheck = reviewFormSignature(methods.getValues());
+    const generation = initializationGenerationRef.current;
+    try {
+      setCheckingTarget(true);
+      const checkedTarget = await resolveReviewTarget(data, supabase);
+      setCheckingTarget(false);
+      if (generation !== initializationGenerationRef.current || beforeCheck !== reviewFormSignature(methods.getValues())) {
+        toast.error('入力内容が変わりました。投稿先と本文を確認してからもう一度投稿してください。');
+        return;
+      }
+      if (!checkedTarget.ok || !reviewTargetMatches(data, checkedTarget.target)) {
+        setTargetError(checkedTarget.kind === 'unavailable' ? '投稿先を確認できませんでした。時間をおいて再試行してください。' : '店舗・セラピストの情報が一致していません。本文を残したまま投稿先を選び直してください。');
+        return;
+      }
+      setTargetError('');
     // 特典日数・計測イベントも同じ正準文字数を使う（FIXES.md F03）。
     // ここが story 単体だと「メーターは700字なのに付与は3日」と表示が食い違う。
-    const len = countReviewStoryChars(withRatingsNote(data.story, data.ratings, data.ratingNotes));
+      const len = countReviewStoryChars(withRatingsNote(data.story, data.ratings, data.ratingNotes));
     trackEvent('review_submit', {
       chars: len,
       source: paramThreadId ? 'therapist_detail' : effectiveShopId ? 'shop_detail' : 'generic',
@@ -904,7 +964,7 @@ export default function PostReviewPage() {
       navigate('/login?redirect=%2Fpost-review');
       return;
     }
-    const result = await submitReview(data);
+    const result = await submitReview(data, checkedTarget);
     if (result.success) {
       // 先にフラグを立ててから消す。逆順だと debounce 中の保存に書き戻される。
       draftDisabledRef.current = true;
@@ -951,6 +1011,10 @@ export default function PostReviewPage() {
       //    （典型はセッション切れでRLSに弾かれるケース）。下書きは消さないので書き直し不要。
       const msg = result?.error?.message || '投稿に失敗しました';
       toast.error(msg, { duration: 6000 });
+    }
+    } finally {
+      submissionAttemptRef.current = false;
+      setCheckingTarget(false);
     }
   };
 
@@ -1020,6 +1084,16 @@ export default function PostReviewPage() {
       <div className="min-h-screen bg-slate-950 text-slate-200 font-sans overflow-x-clip">
         <Toaster position="top-center" />
         <Header />
+        <dialog ref={leaveDialogRef} aria-labelledby="review-leave-title" aria-describedby="review-leave-description" onCancel={(event) => { event.preventDefault(); stay(); }} className="w-[calc(100%-2rem)] max-w-lg rounded-sm border border-amber-500/40 bg-slate-900 p-5 text-slate-200 backdrop:bg-black/70">
+          <h2 id="review-leave-title" className="font-bold text-white">下書きを保存できませんでした</h2>
+          <p id="review-leave-description" className="mt-3 text-sm leading-relaxed">まだ保存されていない入力があります。画面に残るか、本文をコピーして手元に残してから移動してください。</p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button type="button" autoFocus onClick={stay} className="min-h-11 rounded-sm bg-pink-500 px-4 font-bold text-slate-950">画面に残る</button>
+            <button type="button" onClick={copyDraft} className="min-h-11 rounded-sm border border-white/20 px-4 font-bold">本文をコピー</button>
+            <button type="button" onClick={() => { draftDisabledRef.current = true; clearTimeout(draftSaveTimerRef.current); discardAndLeave(); }} className="min-h-11 rounded-sm border border-white/20 px-4 font-bold">保存せず移動</button>
+          </div>
+          {draftBackup && leaveRequested && <><label htmlFor="draft-backup" className="mt-4 block text-xs">選択したテキストをコピーしてください</label><textarea id="draft-backup" ref={draftBackupRef} value={draftBackup} readOnly rows={8} onFocus={(event) => event.currentTarget.select()} className="mt-2 w-full rounded-sm border border-amber-300/30 bg-slate-950 p-3 text-sm text-slate-200" /></>}
+        </dialog>
         <h1 className="sr-only">口コミを投稿</h1>
         {/* ⚠️ 下端の余白（2026-08-17 修正）: 主CTA「次へ進む」は fixed bottom-0 で、
             実測の占有高は p-6(48) + py-4(32) + 行高(28) ≒ 108px。従来 pb-32(128px) では
@@ -1056,7 +1130,7 @@ export default function PostReviewPage() {
                 <span className="min-w-0 text-right text-slate-500 font-bold text-xs leading-tight">
                   {currentStep} / {TOTAL_STEPS} ステップ
                   {/* 「で完了」はスマホでは省く＝1行に収める */}
-                  {currentStep < TOTAL_STEPS && (
+                  {!initializing && !draftPrompt && !initializationError && currentStep < TOTAL_STEPS && (
                     <span className="text-pink-400 ml-1.5 whitespace-nowrap">
                       あと{TOTAL_STEPS - currentStep}ステップ<span className="hidden sm:inline">で完了</span>
                     </span>
@@ -1067,7 +1141,8 @@ export default function PostReviewPage() {
               {/* 書きかけの下書きがある場合のバナー。勝手に復元せず本人に選ばせる。 */}
               {draftPrompt && (
                 <div className="mb-6 rounded-sm border border-pink-500/30 bg-pink-500/[0.08] p-4">
-                  <p className="text-sm font-black text-white">書きかけの口コミがあります</p>
+                  <p className="text-sm font-black text-white">{draftPrompt.conflict ? '別の投稿先の下書きが保存されています' : '書きかけの口コミがあります'}</p>
+                  <p className="mt-2 text-sm text-slate-300">保存した下書き: {draftPrompt.data.therapistName || '指名なし'}。どちらの投稿を続けるか選んでください。選ぶまで下書きは変更しません。</p>
                   <p className="text-[11px] text-slate-400 mt-1">
                     最終保存 {formatSavedAt(draftPrompt.savedAt)}
                     {(() => {
@@ -1087,14 +1162,14 @@ export default function PostReviewPage() {
                       onClick={resumeDraft}
                       className="flex-1 py-3 rounded-sm bg-pink-500 text-slate-950 font-bold text-sm active:scale-95 transition-colors hover:bg-pink-400"
                     >
-                      続きから書く
+                      保存した下書きを再開
                     </button>
                     <button
                       type="button"
                       onClick={discardDraft}
                       className="px-4 py-3 rounded-sm border border-white/15 text-slate-300 font-bold text-sm active:scale-95 transition"
                     >
-                      破棄
+                      {draftPrompt.requested.shopId ? '開いた人物・店舗へ新しく書く' : '新しく書く'}
                     </button>
                   </div>
                 </div>
@@ -1113,32 +1188,35 @@ export default function PostReviewPage() {
                     <button type="button" onClick={saveDraftNow} className="min-h-11 rounded-sm border border-amber-300/30 px-3 font-bold">保存を再試行</button>
                     <button type="button" onClick={copyDraft} className="min-h-11 rounded-sm border border-amber-300/30 px-3 font-bold">本文をコピー</button>
                   </div>
-                  {draftBackup && <><label htmlFor="draft-backup" className="mt-4 block text-xs">選択したテキストをコピーしてください</label><textarea id="draft-backup" ref={draftBackupRef} value={draftBackup} readOnly rows={8} onFocus={(event) => event.currentTarget.select()} className="mt-2 w-full rounded-sm border border-amber-300/30 bg-slate-950 p-3 text-sm text-slate-200" /></>}
+                  {draftBackup && !leaveRequested && <><label htmlFor="draft-backup" className="mt-4 block text-xs">選択したテキストをコピーしてください</label><textarea id="draft-backup" ref={draftBackupRef} value={draftBackup} readOnly rows={8} onFocus={(event) => event.currentTarget.select()} className="mt-2 w-full rounded-sm border border-amber-300/30 bg-slate-950 p-3 text-sm text-slate-200" /></>}
                 </div>
               )}
 
-              <form onSubmit={methods.handleSubmit(onSubmit)} className="min-h-[60vh]">
+              {initializing && <p role="status" className="mb-6 text-sm text-slate-300">投稿先を確認しています…</p>}
+              {initializationError && <div role="alert" className="mb-6 rounded-sm border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-100"><p>{initializationError.kind === 'unavailable' ? '投稿先を確認できませんでした。下書きは変更していません。' : '開いた店舗・セラピストの組み合わせを確認できませんでした。'}</p><div className="mt-3 flex flex-wrap gap-2"><button type="button" className="min-h-11 border border-amber-300/30 px-3" onClick={() => void startFresh(initializationError.requested, initializationGenerationRef.current)}>もう一度確認</button><button type="button" className="min-h-11 border border-amber-300/30 px-3" onClick={() => void startFresh({}, initializationGenerationRef.current)}>店舗を選び直す</button></div></div>}
+              {targetError && <div role="alert" className="mb-6 rounded-sm border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-100"><p>{targetError}</p><button type="button" className="mt-3 min-h-11 border border-amber-300/30 px-3" onClick={() => editStep(1)}>店舗・セラピストを選び直す</button></div>}
+              {!initializing && !draftPrompt && !initializationError && <form onSubmit={methods.handleSubmit(onSubmit)} className="min-h-[60vh]">
                 {currentStep === 1 && (
                   <Step1_Select
                     shops={shops}
                     shopTherapists={shopTherapists}
                     selectedShopId={selectedShopId}
                     setSelectedShopId={setSelectedShopId}
-                    paramShopId={effectiveShopId}
+                    key={routeKey}
                     initCustomMode={initCustomMode}
                   />
                 )}
                 {currentStep === 2 && <Step2_Rating />}
                 {currentStep === 3 && <Step3_Story onMilestone={handleMilestone} />}
-                {currentStep === 4 && <Step4_Confirm isSubmitting={isSubmitting} shops={shops} shopTherapists={shopTherapists} user={user} onEdit={editStep} />}
-              </form>
+                {currentStep === 4 && <Step4_Confirm isSubmitting={isSubmitting || checkingTarget} shops={shops} shopTherapists={shopTherapists} user={user} onEdit={editStep} />}
+              </form>}
               
               {/* Footer Nav
                   ⚠️ 条件は上の paddingBottom と必ず同じ式にすること。
                      片方が `< 4`、もう片方が `< TOTAL_STEPS` のようにズレると、
                      CTAが無いのに余白だけ残る（謎の空白）／余白が無いのにCTAが被る、
                      のどちらかが必ず起きる。 */}
-              {currentStep < TOTAL_STEPS && (
+              {!initializing && !draftPrompt && !initializationError && currentStep < TOTAL_STEPS && (
                 <div
                   className="fixed bottom-0 left-0 w-full px-4 pt-6 bg-gradient-to-t from-slate-950 via-slate-950/95 to-transparent z-50 flex flex-col items-center gap-2 pointer-events-none"
                   style={{ paddingBottom: 'calc(1.5rem + env(safe-area-inset-bottom, 0px))' }}

@@ -39,5 +39,5 @@ export function useViewingCredits() {
   if (!userId) return { status: 'anonymous', days: 0, retry };
   if (isPremium) return { status: 'active', days: 0, retry };
   if (result?.requestKey !== requestKey) return { status: 'loading', days: 0, retry };
-  return { status: result.status, days: result.days, retry };
+  return { status: result.status, days: result.days, expiresAt: result.expiresAt || null, retry };
 }

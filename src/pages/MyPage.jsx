@@ -1,52 +1,34 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import LineIcon from '../components/LineIcon.jsx';
 import { Link, useNavigate } from '../compat/router';
 import { useAuth } from '../contexts/AuthContext';
-import { authHeaders } from '../utils/supabaseRest';
+import { useViewingCredits } from '../hooks/useViewingCredits.js';
+import { usePostedReviewCount } from '../hooks/usePostedReviewCount.js';
 import { LogOut, PenLine, Heart, History, Shield } from 'lucide-react';
 import Header from '../components/Header';
 import SeoHead from '../components/SeoHead.jsx';
 
 const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
 
 export default function MyPage() {
   const { user, userPlan, signOut, loading } = useAuth();
   const navigate = useNavigate();
-  const [credits, setCredits] = useState(null);
-
-  useEffect(() => {
-    if (!user) { setCredits(null); return; }
-    let active = true;
-    (async () => {
-      try {
-        const response = await fetch(
-          `${supabaseUrl}/rest/v1/user_credits?user_id=eq.${user.id}&select=credits_days,expires_at,total_reviews_posted`,
-          { headers: await authHeaders() },
-        );
-        const rows = response.ok ? await response.json() : [];
-        if (active) setCredits(Array.isArray(rows) ? rows[0] || null : null);
-      } catch {
-        if (active) setCredits(null);
-      }
-    })();
-    return () => { active = false; };
-  }, [user]);
+  const viewing = useViewingCredits();
+  const posted = usePostedReviewCount();
 
   const displayName = useMemo(() => {
     const metadataName = user?.user_metadata?.display_name;
     return String(metadataName || user?.email?.split('@')[0] || 'ユーザー').trim();
   }, [user]);
 
-  const entitlement = useMemo(() => {
-    if (userPlan === 'vip' || userPlan === 'premium') return { active: true, label: '読み放題プラン' };
-    const expiry = credits?.expires_at ? new Date(credits.expires_at) : null;
-    if (!expiry || Number.isNaN(expiry.getTime()) || expiry <= new Date()) {
-      return { active: false, label: '閲覧権なし' };
-    }
-    const remaining = Math.max(1, Math.ceil((expiry.getTime() - Date.now()) / 86_400_000));
-    return { active: true, label: `あと${remaining}日`, expiry: expiry.toLocaleDateString('ja-JP') };
-  }, [credits, userPlan]);
+  const expiry = viewing.expiresAt ? new Date(viewing.expiresAt) : null;
+  const premium = userPlan === 'vip' || userPlan === 'premium';
+  const entitlement = {
+    active: viewing.status === 'active',
+    label: viewing.status === 'loading' ? '確認中…' : viewing.status === 'error' ? '確認できませんでした'
+      : viewing.status === 'active' ? premium ? '読み放題プラン' : `あと${Math.max(1, Math.ceil((expiry.getTime() - Date.now()) / 86_400_000))}日` : '閲覧権の期限切れ',
+    expiry: expiry && viewing.status === 'active' ? expiry.toLocaleDateString('ja-JP') : null,
+  };
 
   const handleLogout = async () => {
     await signOut();
@@ -77,7 +59,7 @@ export default function MyPage() {
 
   const isAdmin = ADMIN_EMAILS.includes(user.email);
   const actions = [
-    { to: '/my-reviews', label: '投稿した口コミ', sub: `${credits?.total_reviews_posted || 0}件`, icon: PenLine },
+    { to: '/my-reviews', label: '投稿した口コミ', sub: posted.status === 'ready' ? `${posted.count}件` : posted.status === 'error' ? '件数を取得できませんでした' : '件数を確認中…', icon: PenLine },
     { to: '/favorites', label: 'お気に入り', sub: '保存した店舗・セラピスト', icon: Heart },
     { to: '/history', label: '閲覧履歴', sub: '最近見たセラピスト', icon: History },
   ];
@@ -107,7 +89,8 @@ export default function MyPage() {
               <p className={`text-2xl font-black ${entitlement.active ? 'text-emerald-300' : 'text-slate-300'}`}>{entitlement.label}</p>
               {entitlement.expiry && <p className="text-xs text-slate-400">{entitlement.expiry}まで</p>}
             </div>
-            {!entitlement.active && (
+            {viewing.status === 'error' && <div role="alert" className="mt-3 text-sm text-slate-300"><p>通信状況を確認して、もう一度お試しください。</p><button type="button" onClick={viewing.retry} className="mt-2 min-h-11 text-pink-300 underline">閲覧権を再確認</button></div>}
+            {viewing.status === 'expired' && (
               <Link to="/post-review" className="mt-4 flex min-h-11 items-center justify-center rounded-sm bg-pink-600 px-4 text-sm font-black">口コミを書いて閲覧権を得る</Link>
             )}
           </section>
@@ -128,6 +111,7 @@ export default function MyPage() {
               </Link>
             )}
           </nav>
+          {posted.status === 'error' && <button type="button" onClick={posted.retry} className="min-h-11 text-sm text-pink-300 underline">投稿件数を再取得</button>}
 
           <button onClick={handleLogout} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-sm border border-red-500/20 bg-red-500/5 font-bold text-red-300 hover:bg-red-500/10">
             <LogOut size={18} /> ログアウト

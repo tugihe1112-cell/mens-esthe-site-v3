@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { reviewSchema } from '../schema/reviewSchema';
-import { RATING_AXES } from '../reviewStory.mjs';
+import { emptyReviewValues, resolveReviewTarget, reviewTargetMatches, reviewTargetSignature } from '../reviewTarget.js';
+import { supabase } from '../../../lib/supabase.js';
 import { prepareReviewContent, reviewAuthorName } from '../reviewSubmission.js';
 import { useShopData } from '../../../contexts/DataContext';
 import { useAuth } from '../../../contexts/AuthContext';
-import { toast } from 'react-hot-toast';
 
 export const useReviewForm = () => {
   const { addReview } = useShopData();
@@ -25,36 +25,17 @@ export const useReviewForm = () => {
   // フォームの状態管理 (React Hook Form)
   const methods = useForm({
     resolver: zodResolver(reviewSchema),
-    defaultValues: {
-      shopId: '',
-      therapistId: null,
-      therapistName: '',
-      ratings: { cleanliness: 3, looks: 3, style: 3, service: 3, massage: 3, intimacy: 3 },
-      // 採点の一言コメント（任意）。RATING_AXES から生成して定義の二重管理を避ける
-      ratingNotes: Object.fromEntries(RATING_AXES.map(({ id }) => [id, ''])),
-      tags: [],
-      story: { entrance: '', meeting: '', session: '', afterglow: '', exit: '' },
-    },
+    defaultValues: emptyReviewValues(),
     mode: 'onChange',
   });
 
-  const { watch, formState: { isDirty } } = methods;
-
-  // 離脱防止アラート
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      if (isDirty) {
-        e.preventDefault();
-        e.returnValue = '';
-      }
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [isDirty]);
-
-  const submitReview = async (data) => {
+  const submitReview = async (data, checkedTarget) => {
     setIsSubmitting(true);
     try {
+      const targetResult = checkedTarget || await resolveReviewTarget(data, supabase);
+      if (!targetResult.ok || targetResult.signature !== reviewTargetSignature(data) || !reviewTargetMatches(data, targetResult.target)) {
+        throw new Error(targetResult.kind === 'unavailable' ? '投稿先を確認できませんでした。時間をおいて再試行してください。' : '店舗・セラピストの組み合わせを選び直してください。本文はこの画面に残っています。');
+      }
       // 入力時の「入店・ご対面・施術・総評」を構造として残す。
       // contentには本文だけを入れ、生成見出しで200/700字特典を水増ししない。
       // ⚠️ 採点の一言コメントは **withRatingsNote で本文の最後に合成してから** 正規化する。

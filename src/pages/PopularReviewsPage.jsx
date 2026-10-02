@@ -45,6 +45,7 @@ export default function PopularReviewsPage({
   initialShopMap = {},
   initialTherapistMap = {},
   initialHasMore = false,
+  initialLoadError = false,
 }) {
   // ⚠️ リンク先は shopHref で決める。`/shops/${id}` を直書きすると、
   //    複数ルームのブランドでは**押した瞬間に301でブランドページへ飛ぶ**（D-014）。
@@ -58,11 +59,13 @@ export default function PopularReviewsPage({
   const [isLoading, setIsLoading] = useState(!hasServerData);
   const [offset, setOffset] = useState(0);
   // 'initial' … 初回の読み込み失敗 / 'more' … 追加分の失敗（既存カードは残す）
-  const [loadError, setLoadError] = useState(null);
+  const [loadError, setLoadError] = useState(initialLoadError ? 'initial' : null);
   const [hasMore, setHasMore] = useState(hasServerData ? initialHasMore : true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [sortBy, setSortBy] = useState('new'); // 'new' | 'rating'
-  const hasUsedInitialSsr = useRef(hasServerData);
+  const [displayedSort, setDisplayedSort] = useState('new');
+  const hasChangedSort = useRef(false);
+  const requests = useRef({ mounted: false, generation: 0, sort: 'new', initial: null, more: null });
 
   const url = process.env.VITE_SUPABASE_URL;
   // ⚠️ 2026-08-12: anonキー固定をやめ、fetch直前に await authHeaders() で
@@ -78,30 +81,40 @@ export default function PopularReviewsPage({
    * 写真が👤・店舗名/エリアが空になるうえ、数MB級のJSONをモバイルに配っていた。
    * → 表示中の口コミに含まれるIDだけを .in() で引く。
    */
-  const hydrateMaps = useCallback(async (rows) => {
-    if (!rows || rows.length === 0) return;
+  const hydrateMaps = useCallback(async (rows, isCurrentGeneration) => {
+    if (!rows || rows.length === 0 || !isCurrentGeneration()) return;
 
     const shopIds = [...new Set(rows.map(r => r.shop_id).filter(Boolean))];
     const therapistIds = [...new Set(rows.map(r => r.therapist_id).filter(Boolean))];
     const therapistNames = [...new Set(rows.map(r => r.therapist_name).filter(Boolean))];
 
     try {
+      const readMetadata = async (requestUrl) => {
+        const response = await fetch(requestUrl, { headers: await authHeaders() });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (!Array.isArray(data)) throw new Error('unexpected metadata');
+        return data;
+      };
       const reqs = [];
       reqs.push(shopIds.length
-        ? fetch(`${url}/rest/v1/shops?select=id,name,raw_data&id=in.${encodeURIComponent(inList(shopIds))}`, { headers: await authHeaders() }).then(r => r.json())
+        ? readMetadata(`${url}/rest/v1/shops?select=id,name,raw_data&id=in.${encodeURIComponent(inList(shopIds))}`)
         : Promise.resolve([]));
       // therapist は id 一致を優先、取りこぼしは名前一致でフォールバック（旧データのID揺れ対策）
       reqs.push(therapistIds.length
-        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id,is_active&id=in.${encodeURIComponent(inList(therapistIds))}`, { headers: await authHeaders() }).then(r => r.json())
+        ? readMetadata(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id,is_active&id=in.${encodeURIComponent(inList(therapistIds))}`)
         : Promise.resolve([]));
       reqs.push(therapistNames.length
-        ? fetch(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id,is_active&name=in.${encodeURIComponent(inList(therapistNames))}&limit=200`, { headers: await authHeaders() }).then(r => r.json())
+        ? readMetadata(`${url}/rest/v1/therapists?select=id,name,image_url,shop_id,is_active&name=in.${encodeURIComponent(inList(therapistNames))}&limit=200`)
         : Promise.resolve([]));
 
-      const [shops, tById, tByName] = await Promise.all(reqs);
+      const [shops, tById, tByName] = (await Promise.allSettled(reqs))
+        .map(result => result.status === 'fulfilled' ? result.value : []);
+      if (!isCurrentGeneration()) return;
 
       if (Array.isArray(shops) && shops.length) {
         setShopMap(prev => {
+          if (!isCurrentGeneration()) return prev;
           const next = { ...prev };
           shops.forEach(s => {
             next[s.id] = { name: s.name, prefecture: s.raw_data?.prefecture || '', area: areaOf(s.raw_data) };
@@ -113,6 +126,7 @@ export default function PopularReviewsPage({
       const found = [...(Array.isArray(tById) ? tById : []), ...(Array.isArray(tByName) ? tByName : [])];
       if (found.length) {
         setTherapistMap(prev => {
+          if (!isCurrentGeneration()) return prev;
           const next = { ...prev };
           found.forEach(t => {
             const k = normName(t.name);
@@ -126,64 +140,112 @@ export default function PopularReviewsPage({
   }, [url]);
 
   const fetchReviews = useCallback(async (currentOffset, sort, isLoadMore = false) => {
-    if (isLoadMore) setIsLoadingMore(true);
-    else setIsLoading(true);
+    const active = requests.current;
+    if (!active.mounted || active.sort !== sort) return;
+    if (isLoadMore && (active.initial || active.more)) return;
+    if (!isLoadMore) {
+      active.generation += 1;
+      active.more = null;
+      setIsLoadingMore(false);
+      setIsLoading(true);
+    } else setIsLoadingMore(true);
+    const generation = active.generation;
+    const kind = isLoadMore ? 'more' : 'initial';
+    const requestId = Symbol(kind);
+    active[kind] = requestId;
+    const isCurrentGeneration = () => requests.current.mounted
+      && requests.current.generation === generation && requests.current.sort === sort;
+    const isCurrentRequest = () => isCurrentGeneration() && requests.current[kind] === requestId;
+    setLoadError(null);
 
     const order = sort === 'rating' ? 'rating.desc,created_at.desc' : 'created_at.desc';
     try {
+      const headers = await authHeaders();
+      if (!isCurrentRequest()) return;
       // ⚠️ is_public=true 必須。以前は select=* かつ無フィルタで、非公開口コミの本文を
       // クライアントに配り120字プレビューとして表示していた（W2Rゲートの穴）。
       const res = await fetch(
         `${url}/rest/v1/reviews?select=id,shop_id,therapist_id,therapist_name,rating,tags,content,course,user_name,created_at,like_count` +
         `&is_public=eq.true&order=${order}&limit=${PAGE_SIZE}&offset=${currentOffset}`,
-        { headers: await authHeaders() }
+        { headers }
       );
       // ⚠️ 2026-09-08（FIXES.md F05）: `res.ok` とJSONの型を検査する。
       //    失敗を握りつぶすと「0件」と「読み込めなかった」が同じ見た目になる。
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (!Array.isArray(data)) throw new Error('unexpected payload');
+      if (!isCurrentRequest()) return;
 
       // ⚠️ 口コミIDで重複排除する（同じ行が二重に積まれるのを防ぐ）。
       if (isLoadMore) {
         setReviews(prev => {
+          if (!isCurrentGeneration()) return prev;
           const seen = new Set(prev.map(r => r.id));
-          return [...prev, ...data.filter(r => !seen.has(r.id))];
+          const added = data.filter(r => {
+            if (seen.has(r.id)) return false;
+            seen.add(r.id);
+            return true;
+          });
+          return [...prev, ...added];
         });
       } else {
         setReviews(data);
+        setDisplayedSort(sort);
       }
       setHasMore(data.length === PAGE_SIZE);
       // ⚠️ offset は**正常結果を反映したあとにだけ**進める。
       //    以前は loadMore が取得前に +20 していたため、失敗すると次の20件を飛ばしていた。
       setOffset(currentOffset);
       setLoadError(null);
-      hydrateMaps(data);
+      hydrateMaps(data, isCurrentGeneration);
     } catch (e) {
+      if (!isCurrentRequest()) return;
       console.error(e);
       setLoadError(isLoadMore ? 'more' : 'initial');
     } finally {
-      setIsLoading(false);
-      setIsLoadingMore(false);
+      if (isCurrentRequest()) {
+        requests.current[kind] = null;
+        if (isLoadMore) setIsLoadingMore(false);
+        else setIsLoading(false);
+      }
     }
   }, [url, hydrateMaps]);
 
   useEffect(() => {
+    const active = requests.current;
+    active.mounted = true;
+    return () => {
+      active.mounted = false;
+      active.generation += 1;
+      active.initial = null;
+      active.more = null;
+    };
+  }, []);
+
+  useEffect(() => {
     // SSR済みの新着20件を初回描画で捨てない。タブ変更時だけクライアント再取得する。
-    if (hasUsedInitialSsr.current && sortBy === 'new') {
-      hasUsedInitialSsr.current = false;
-      return;
-    }
-    setOffset(0);
-    setLoadError(null);
+    if (hasServerData && sortBy === 'new' && !hasChangedSort.current) return;
     fetchReviews(0, sortBy, false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortBy]);
+  }, [sortBy, hasServerData, fetchReviews]);
+
+  const selectSort = (sort) => {
+    if (sort === requests.current.sort) return;
+    // effectが始まる前にも古い応答を無効化する。
+    requests.current.generation += 1;
+    requests.current.sort = sort;
+    requests.current.initial = null;
+    requests.current.more = null;
+    hasChangedSort.current = true;
+    setSortBy(sort);
+    setLoadError(null);
+    setIsLoading(true);
+    setIsLoadingMore(false);
+  };
 
   // ⚠️ F05: 取得前に offset を進めない。リトライは同じ offset を使う。
   const loadMore = () => {
-    if (isLoadingMore) return; // 連打で二重に積まない
-    fetchReviews(offset + PAGE_SIZE, sortBy, true);
+    if (isLoading || isLoadingMore || sortBy !== displayedSort || loadError === 'initial') return;
+    fetchReviews(offset + PAGE_SIZE, displayedSort, true);
   };
 
   return (
@@ -212,7 +274,9 @@ export default function PopularReviewsPage({
             ].map(tab => (
               <button
                 key={tab.key}
-                onClick={() => setSortBy(tab.key)}
+                type="button"
+                aria-pressed={sortBy === tab.key}
+                onClick={() => selectSort(tab.key)}
                 className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
                   sortBy === tab.key
                     ? 'bg-pink-500 text-white shadow-lg shadow-pink-900/40'
@@ -223,9 +287,15 @@ export default function PopularReviewsPage({
               </button>
             ))}
           </div>
+          {sortBy !== displayedSort && reviews.length > 0 && (
+            <p role="status" className="mb-4 text-sm text-slate-300">
+              {isLoading ? `${sortBy === 'rating' ? '評価順' : '新着順'}を読み込んでいます。` : '並び替えを読み込めませんでした。'}
+              現在は{displayedSort === 'rating' ? '評価順' : '新着順'}の口コミを表示しています。
+            </p>
+          )}
 
           {/* ⚠️ F05: 初回の通信失敗は「0件」ではない。再読み込みを出す。 */}
-          {loadError === 'initial' && reviews.length === 0 && !isLoading && (
+          {loadError === 'initial' && !isLoading && (
             <div role="alert" className="rounded-sm border border-rose-500/50 bg-rose-500/10 p-4 text-center">
               <p className="ui-error">読み込めませんでした</p>
               <button type="button" onClick={() => fetchReviews(0, sortBy, false)} className="ui-link mt-1.5 inline-flex min-h-11 items-center font-bold" style={{ fontSize: '13px' }}>
@@ -234,7 +304,7 @@ export default function PopularReviewsPage({
             </div>
           )}
 
-          {isLoading ? (
+          {isLoading && reviews.length === 0 ? (
             <div className="space-y-4">
               {Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="rounded-sm bg-slate-800/50 animate-pulse h-40" />
@@ -242,12 +312,11 @@ export default function PopularReviewsPage({
             </div>
           ) : (
             <>
-              <div className="space-y-4">
+              <div className="space-y-4" aria-busy={isLoading}>
                 {reviews.map(r => {
                   const shop = shopMap[r.shop_id] || {};
-                  const therapist = therapistMap[r.therapist_id]
-                    || therapistMap[`${r.shop_id}|${normName(r.therapist_name)}`]
-                    || {};
+                  const therapist = (r.therapist_id ? therapistMap[r.therapist_id]
+                    : therapistMap[`${r.shop_id}|${normName(r.therapist_name)}`]) || {};
                   const tags = Array.isArray(r.tags) ? r.tags : [];
                   const content = r.content || '';
                   const preview = content.length > 120 ? content.slice(0, 120) + '…' : content;
@@ -373,11 +442,11 @@ export default function PopularReviewsPage({
               )}
 
               {/* もっと見る */}
-              {hasMore && (
+              {hasMore && sortBy === displayedSort && loadError !== 'initial' && (
                 <div className="flex justify-center mt-8">
                   <button
                     onClick={loadMore}
-                    disabled={isLoadingMore}
+                    disabled={isLoading || isLoadingMore}
                     className="bg-slate-800 hover:bg-slate-700 border border-white/10 hover:border-purple-500/50 text-white font-bold px-10 py-3 rounded-full transition-all disabled:opacity-50"
                   >
                     {isLoadingMore ? '読み込み中...' : 'もっと見る'}
@@ -385,7 +454,7 @@ export default function PopularReviewsPage({
                 </div>
               )}
 
-              {reviews.length === 0 && (
+              {reviews.length === 0 && !loadError && !isLoading && (
                 <div className="text-center py-20 text-slate-500">
                   <p className="mb-4 flex justify-center text-slate-500"><LineIcon name="chat" size={34} /></p>
                   <p>口コミがまだありません</p>

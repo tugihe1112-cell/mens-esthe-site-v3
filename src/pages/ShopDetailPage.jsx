@@ -2,6 +2,7 @@ import { shopHref } from '../utils/brandGroups.js';
 import React, { useState, useEffect } from 'react';
 import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { TagFilterSidebar, TagFilterButton } from '../components/TagFilterSidebar.jsx';
+import { useResponsiveFilterSheet } from '../hooks/useResponsiveFilterSheet.js';
 import { authHeaders } from '../utils/supabaseRest';
 import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews, normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { useParams, Link, useNavigate } from '../compat/router';
@@ -67,7 +68,7 @@ export default function ShopDetailPage({
   const [castNameFilter, setCastNameFilter] = useState('');
   const [castSortOrder, setCastSortOrder] = useState('default'); // default | aiueo | reviews
   const [selectedTags, setSelectedTags] = useState([]);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { isOpen: isFilterOpen, open: openFilter, close: closeFilter, openerRef: filterOpenerRef, panelRef: filterPanelRef, dialogId: filterDialogId } = useResponsiveFilterSheet(shopId);
   // セラピスト名 → その人の口コミに付いたタグ集合
   const [reviewTagMap, setReviewTagMap] = useState({});
 
@@ -208,7 +209,7 @@ export default function ShopDetailPage({
     };
     fetchAllData();
     return () => { isMounted = false; };
-  }, [shopId]);
+  }, [shopId, ssrGroupShopIds, ssrShop?.id]);
 
   // 追加のレビューを取得（プレミアム用ページネーション）
   const loadMoreReviews = async () => {
@@ -309,15 +310,6 @@ export default function ShopDetailPage({
   //      ・**レイアウトを1種類にすれば、この揺れは構造的に起きない。**
   //    ⚠️「タグが全部(0)だと無意味だから隠そう」という判断は、過去に却下されている。
   //      実装せず okabayashi に確認すること。
-
-  // スマホのタグ絞り込みはボトムシートで出す。開いている間に背面が
-  // スクロールすると現在位置を見失うため、SearchPageと同様に固定する。
-  useEffect(() => {
-    if (!isFilterOpen || typeof document === 'undefined') return undefined;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = previousOverflow; };
-  }, [isFilterOpen]);
 
   const sortedTherapists = React.useMemo(() => {
     let list = [...therapists];
@@ -755,7 +747,9 @@ export default function ShopDetailPage({
               tagCounts={tagCounts}
               selectedTags={selectedTags}
               isOpen={isFilterOpen}
-              onClose={() => setIsFilterOpen(false)}
+              onClose={closeFilter}
+              panelRef={filterPanelRef}
+              dialogId={filterDialogId}
               onToggle={(tag) => {
                 setDisplayCount(INITIAL_DISPLAY_COUNT);
                 setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
@@ -765,7 +759,7 @@ export default function ShopDetailPage({
 
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-w-0">
              {/* ⚠️ スマホの絞り込みボタンも条件で出し分けない（PCの列と同じ扱い）。 */}
-             <TagFilterButton selectedCount={selectedTags.length} onOpen={() => setIsFilterOpen(true)} />
+             <TagFilterButton selectedCount={selectedTags.length} onOpen={openFilter} openerRef={filterOpenerRef} isOpen={isFilterOpen} dialogId={filterDialogId} />
              <div className="mb-5 flex items-end justify-between gap-3 border-b border-slate-700 pb-3">
                <h2 className="font-mincho text-2xl font-bold text-slate-50">在籍セラピスト</h2>
                <span className="shrink-0 text-xs text-slate-400">

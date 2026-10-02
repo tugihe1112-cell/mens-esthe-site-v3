@@ -3,7 +3,7 @@ import LineIcon from '../components/LineIcon.jsx';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext.tsx';
 import { useShopData } from '../contexts/DataContext.jsx';
-import { Link, useNavigate } from '../compat/router';
+import { Link } from '../compat/router';
 import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
@@ -13,16 +13,19 @@ import { joinFields, shopAreaList } from '../utils/shopFields';
 import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
+import { resolveFavoriteTargets, fetchFavoriteProfiles } from '../utils/favoriteProfiles.js';
+const EMPTY_PROFILES = {};
 
 export default function FavoritesPage() {
-  const { favorites, favTherapists } = useAppContext();
-  const { shopById, therapistById, roomCounts } = useShopData();
+  const { favorites, favTherapists, favoritesLoading, favoritesError, retryFavorites, favoriteShopCountKnown = !favoritesError, favoriteTherapistCountKnown = !favoritesError } = useAppContext();
+  const { shopById, therapistById, roomCounts, loading: shopsLoading, shopsError, retryShops } = useShopData();
   const { user, loading: authLoading } = useAuth();
   // まだユーザーがタブを選んでいない間は、保存件数がある側を自動表示する。
   // 店舗だけ保存した直後に「推しメンがまだいません」が出ると、保存に失敗したように見える。
   const [activeTab, setActiveTab] = useState(null); // null | 'therapists' | 'shops'
-  const [fetchedTherapists, setFetchedTherapists] = useState({});
-  const navigate = useNavigate();
+  const [profiles, setProfiles] = useState(null);
+  const [attempt, setAttempt] = useState(0);
+  const userId = user?.id || '';
 
   // --- Restore Data ---
   const favShopList = useMemo(() => {
@@ -32,36 +35,33 @@ export default function FavoritesPage() {
   // 保存キーは `${shopId}_${therapistId}` だが、両ID自身にも `_` が入る。
   // split('_')の先頭2要素では必ず壊れるため、既知の店舗IDの最長一致で境界を復元する。
   const favoriteTargets = useMemo(() => {
-    const shopIds = Object.keys(shopById || {}).sort((a, b) => b.length - a.length);
-    return favTherapists.map((uniqueKey) => {
-      const shopId = shopIds.find((id) => uniqueKey.startsWith(`${id}_`));
-      if (!shopId) return null;
-      const therapistId = uniqueKey.slice(shopId.length + 1);
-      return therapistId ? { uniqueKey, shopId, therapistId } : null;
-    }).filter(Boolean);
+    return resolveFavoriteTargets(favTherapists, shopById);
   }, [favTherapists, shopById]);
+  const requestKey = useMemo(() => ({ userId, favoriteTargets, attempt }), [userId, favoriteTargets, attempt]);
+  const visibleProfiles = profiles?.userId === userId ? profiles : null;
+  const fetchedTherapists = visibleProfiles?.data || EMPTY_PROFILES;
+  const profilesLoading = Boolean(favTherapists.length && (!visibleProfiles || visibleProfiles.requestKey !== requestKey || visibleProfiles.status === 'loading'));
+  const profilesError = visibleProfiles?.requestKey === requestKey && visibleProfiles.status === 'error';
 
   // Favoritesページを直接開いた直後はDataContextにセラピストが未読込。
   // 保存済みIDだけをDBから取得し、ページ再読み込み後もお気に入りを復元する。
   useEffect(() => {
-    const ids = [...new Set(favoriteTargets.map((target) => target.therapistId))];
-    if (ids.length === 0) { setFetchedTherapists({}); return; }
+    if (!userId || favoritesLoading || shopsLoading || shopsError) return;
     let active = true;
-    supabase.from('therapists').select('*').in('id', ids).then(({ data }) => {
-      if (!active) return;
-      setFetchedTherapists((data || []).reduce((map, therapist) => {
-        map[therapist.id] = therapist;
-        return map;
-      }, {}));
+    setProfiles(previous => ({ userId, requestKey, status: 'loading', data: previous?.userId === userId ? previous.data : {} }));
+    fetchFavoriteProfiles(supabase, favoriteTargets).then(data => {
+      if (active) setProfiles({ userId, requestKey, status: 'ready', data });
+    }).catch(() => {
+      if (active) setProfiles(previous => ({ userId, requestKey, status: 'error', data: previous?.userId === userId ? previous.data : {} }));
     });
     return () => { active = false; };
-  }, [favoriteTargets]);
+  }, [userId, favoriteTargets, favoritesLoading, shopsLoading, shopsError, requestKey]);
 
   const favTherapistList = useMemo(() => {
     return favoriteTargets.map(({ uniqueKey, shopId, therapistId }) => {
       const therapist = fetchedTherapists[therapistId] || therapistById[therapistId];
       const shop = shopById[shopId];
-      if (!therapist) return null;
+      if (!therapist || !shopId || String(therapist.shop_id) !== String(shopId)) return null;
       // 店名が引けないときは空文字にする。描画側は空なら店名行ごと出さない
       // （「店舗情報なし」と書いても読み手には何の役にも立たない）
       return { ...therapist, favoriteKey: uniqueKey, shopId, shopName: shop?.name || '' };
@@ -69,7 +69,12 @@ export default function FavoritesPage() {
   }, [favoriteTargets, fetchedTherapists, therapistById, shopById]);
 
   const displayTab = activeTab
-    || (favTherapistList.length === 0 && favShopList.length > 0 ? 'shops' : 'therapists');
+    || (favTherapists.length === 0 && favorites.length > 0 ? 'shops' : 'therapists');
+  const selectedCount = displayTab === 'shops' ? favorites.length : favTherapists.length;
+  const loadError = favoritesError || Boolean(selectedCount && (shopsError || displayTab === 'therapists' && profilesError));
+  const loadingItems = !loadError && (favoritesLoading || Boolean(selectedCount && (shopsLoading || displayTab === 'therapists' && profilesLoading)));
+  const missingCount = !loadingItems && !loadError ? selectedCount - (displayTab === 'shops' ? favShopList.length : favTherapistList.length) : 0;
+  const retry = () => { retryFavorites(); retryShops(); setAttempt(n => n + 1); };
 
   if (authLoading) {
     return <><SeoHead title="お気に入り" noindex /><div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">ログイン状態を確認中…</div></>;
@@ -120,7 +125,7 @@ export default function FavoritesPage() {
             }`}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              <LineIcon name="person" size={14} /> セラピスト <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favTherapistList.length}</span>
+              <LineIcon name="person" size={14} /> セラピスト <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favoritesLoading ? '…' : favoriteTherapistCountKnown ? favTherapists.length : '—'}</span>
             </span>
           </button>
           <button 
@@ -132,13 +137,16 @@ export default function FavoritesPage() {
             }`}
           >
             <span className="relative z-10 flex items-center justify-center gap-2">
-              <LineIcon name="shop" size={14} /> 店舗 <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favShopList.length}</span>
+              <LineIcon name="shop" size={14} /> 店舗 <span className="bg-black/20 px-2 py-0.5 rounded-md text-[10px]">{favoritesLoading ? '…' : favoriteShopCountKnown ? favorites.length : '—'}</span>
             </span>
           </button>
         </div>
 
         {/* --- Content Area --- */}
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 min-h-[50vh]">
+          {loadingItems && <p role="status" className="mb-4 text-slate-400">お気に入りを読み込み中…</p>}
+          {loadError && <div role="alert" className="mb-4 rounded-sm border border-amber-500/30 p-4"><p>お気に入りを読み込めませんでした。保存済みの項目は削除していません。</p><button type="button" onClick={retry} className="mt-2 min-h-11 text-pink-300 underline">再試行</button></div>}
+          {missingCount > 0 && <p className="mb-4 rounded-sm border border-white/10 p-4 text-sm text-slate-400">保存済みの{missingCount}件は現在情報を表示できません。お気に入りへの保存は残っています。</p>}
           
           {/* Therapists Grid */}
           {displayTab === 'therapists' && (
@@ -176,7 +184,7 @@ export default function FavoritesPage() {
                 ))}
               </div>
             ) : (
-              <EmptyState type="therapist" />
+              !loadingItems && !loadError && selectedCount === 0 ? <EmptyState type="therapist" /> : null
             )
           )}
 
@@ -218,7 +226,7 @@ export default function FavoritesPage() {
                 ))}
               </div>
             ) : (
-              <EmptyState type="shop" />
+              !loadingItems && !loadError && selectedCount === 0 ? <EmptyState type="shop" /> : null
             )
           )}
 

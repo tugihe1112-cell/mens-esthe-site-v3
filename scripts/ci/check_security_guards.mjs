@@ -62,8 +62,8 @@ requireMatch('src/pages/SearchPage.jsx', /<h1[\s>]/, '検索ページに見出�
 requireMatch('src/pages/SearchPage.jsx', /セラピストを探す/, '検索ページのH1が用件を表していない');
 
 forbidMatch('src/context/AppContext.tsx', /submitExistingShopReview|mens_esthe_local_reviews[^'].*setItem/, 'ブラウザだけに保存するデモ口コミが復活している');
-requireMatch('src/context/AppContext.tsx', /mens_esthe_favorites:\$\{user\.id\}/, 'お気に入りがユーザー別に分離されていない');
-requireMatch('src/pages/FavoritesPage.jsx', /favTherapistList\.length === 0 && favShopList\.length > 0 \? 'shops'/, '店舗だけ保存した会員に空のセラピストタブを初期表示している');
+requireMatch('src/context/AppContext.tsx', /mens_esthe_favorites:\$\{(?:user\.id|userId)\}/, 'お気に入りがユーザー別に分離されていない');
+requireMatch('src/pages/FavoritesPage.jsx', /favTherapists\.length === 0 && favorites\.length > 0 \? 'shops'/, '店舗だけ保存した会員に空のセラピストタブを初期表示している');
 requireMatch('src/pages/ShopDetailPage.jsx', /Array\.isArray\(cloudTherapists\) && cloudTherapists\.length > 0/, '店舗詳細がnullのセラピスト配列でクラッシュする');
 requireMatch('src/pages/BoardPage.jsx', /await authHeaders\(/, '掲示板がログインJWTを送っていない');
 requireMatch('src/pages/ChatRoomPage.jsx', /await authHeaders\(/, 'チャットがログインJWTを送っていない');

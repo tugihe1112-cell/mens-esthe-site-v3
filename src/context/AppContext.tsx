@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import toast, { Toaster } from 'react-hot-toast';
+import { loadFavoriteIds, toggleStoredId, removeStoredValue } from '../utils/localStorage.js';
 
 const AppContext = createContext();
 
@@ -8,72 +10,69 @@ export const AppProvider = ({ children }) => {
   // 認証はAuthContext（Supabase）のみで扱う。このContextは端末内のお気に入り専用。
   // 旧デモ認証キーが残っていてもログイン表示へ影響しないよう、移行時に削除する。
   useEffect(() => {
-    try {
-      localStorage.removeItem('mens_esthe_user');
-      localStorage.removeItem('mens_esthe_local_reviews');
-    } catch { /* noop */ }
+    removeStoredValue('mens_esthe_user');
+    removeStoredValue('mens_esthe_local_reviews');
   }, []);
 
-  const [favorites, setFavorites] = useState([]);
-  const [favTherapists, setFavTherapists] = useState([]);
+  const userId = user?.id || '';
+  const [attempt, setAttempt] = useState(0);
+  const [saved, setSaved] = useState(null);
+  const current = useRef(null);
+  const retryFavorites = useCallback(() => setAttempt(n => n + 1), []);
 
   useEffect(() => {
-    if (!user?.id) {
-      setFavorites([]);
-      setFavTherapists([]);
-      return;
-    }
-    const shopKey = `mens_esthe_favorites:${user.id}`;
-    const therapistKey = `mens_esthe_fav_therapists:${user.id}`;
-    try {
-      // 旧版の端末共通データは、最初にログインした本人へ一度だけ移行する。
-      const scopedShops = localStorage.getItem(shopKey);
-      const scopedTherapists = localStorage.getItem(therapistKey);
-      const legacyShops = !scopedShops ? localStorage.getItem('mens_esthe_favorites') : null;
-      const legacyTherapists = !scopedTherapists ? localStorage.getItem('mens_esthe_fav_therapists') : null;
-      const nextShops = JSON.parse(scopedShops || legacyShops || '[]');
-      const nextTherapists = JSON.parse(scopedTherapists || legacyTherapists || '[]');
-      setFavorites(Array.isArray(nextShops) ? nextShops.map(String) : []);
-      setFavTherapists(Array.isArray(nextTherapists) ? nextTherapists.map(String) : []);
-      if (!scopedShops && legacyShops) localStorage.setItem(shopKey, legacyShops);
-      if (!scopedTherapists && legacyTherapists) localStorage.setItem(therapistKey, legacyTherapists);
-      localStorage.removeItem('mens_esthe_favorites');
-      localStorage.removeItem('mens_esthe_fav_therapists');
-    } catch {
-      setFavorites([]);
-      setFavTherapists([]);
-    }
-  }, [user?.id]);
+    if (!userId) { current.current = null; setSaved(null); return; }
+    const shops = loadFavoriteIds(`mens_esthe_favorites:${userId}`, 'mens_esthe_favorites', userId);
+    const people = loadFavoriteIds(`mens_esthe_fav_therapists:${userId}`, 'mens_esthe_fav_therapists', userId);
+    const previous = current.current?.userId === userId ? current.current : null;
+    const next = {
+      userId, attempt,
+      favorites: shops.ok ? shops.value : previous?.favorites || [],
+      favTherapists: people.ok ? people.value : previous?.favTherapists || [],
+      shopsOk: shops.ok, peopleOk: people.ok,
+      shopCountKnown: shops.ok || Boolean(previous?.shopCountKnown),
+      peopleCountKnown: people.ok || Boolean(previous?.peopleCountKnown),
+    };
+    current.current = next;
+    setSaved(next);
+  }, [userId, attempt]);
 
-  const toggleFavorite = (shopId) => {
-    if (!user?.id) return;
-    setFavorites(prev => {
-      const normalized = String(shopId);
-      const next = prev.includes(normalized)
-        ? prev.filter(id => id !== normalized)
-        : [...prev, normalized];
-      localStorage.setItem(`mens_esthe_favorites:${user.id}`, JSON.stringify(next));
-      return next;
-    });
+  const toggle = (kind, id) => {
+    const previous = current.current;
+    const ready = previous?.userId === userId && previous?.attempt === attempt;
+    if (!userId) return { ok: false };
+    if (!ready || !(kind === 'favorites' ? previous.shopsOk : previous.peopleOk)) {
+      toast.error('お気に入りを読み込めません。再試行してから保存してください。', { toasterId: 'favorites' });
+      return { ok: false };
+    }
+    const prefix = kind === 'favorites' ? 'mens_esthe_favorites' : 'mens_esthe_fav_therapists';
+    const result = toggleStoredId(`${prefix}:${userId}`, previous[kind], id);
+    if (!result.ok) {
+      toast.error('お気に入りを保存できませんでした。端末の保存容量や設定をご確認ください。', { toasterId: 'favorites' });
+      return result;
+    }
+    const next = { ...previous, [kind]: result.value };
+    current.current = next;
+    setSaved(next);
+    return result;
   };
-
-  const toggleFavTherapist = (therapistId) => {
-    if (!user?.id) return;
-    setFavTherapists(prev => {
-      const normalized = String(therapistId);
-      const next = prev.includes(normalized)
-        ? prev.filter(id => id !== normalized)
-        : [...prev, normalized];
-      localStorage.setItem(`mens_esthe_fav_therapists:${user.id}`, JSON.stringify(next));
-      return next;
-    });
-  };
+  const visible = saved?.userId === userId ? saved : null;
+  const favorites = visible?.favorites || [];
+  const favTherapists = visible?.favTherapists || [];
+  const favoritesLoading = Boolean(userId && (!visible || visible.attempt !== attempt));
+  const favoritesError = Boolean(visible && (!visible.shopsOk || !visible.peopleOk));
+  const toggleFavorite = id => toggle('favorites', id);
+  const toggleFavTherapist = id => toggle('favTherapists', id);
 
   return (
     <AppContext.Provider value={{ 
       favorites, toggleFavorite,
       favTherapists, toggleFavTherapist,
+      favoritesLoading, favoritesError, retryFavorites,
+      favoriteShopCountKnown: Boolean(visible?.shopCountKnown),
+      favoriteTherapistCountKnown: Boolean(visible?.peopleCountKnown),
     }}>
+      <Toaster toasterId="favorites" position="top-center" />
       {children}
     </AppContext.Provider>
   );

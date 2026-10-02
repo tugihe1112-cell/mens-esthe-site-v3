@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { readStoredJson, writeStoredJson, removeStoredValue } from '../utils/localStorage.js';
 
 const STORAGE_KEY = 'mens_esthe_history';
 const MAX_HISTORY = 10;
@@ -26,48 +27,40 @@ function normalizeHistoryItem(item) {
 
 export function useRecentlyViewed() {
   const [history, setHistory] = useState([]);
+  const current = useRef([]);
+  const storageReady = useRef(false);
+  const [storageError, setStorageError] = useState(false);
 
   // 初期読み込み
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        const normalized = Array.isArray(parsed)
-          ? parsed.filter((item) => item?.id).map(normalizeHistoryItem).slice(0, MAX_HISTORY)
-          : [];
-        setHistory(normalized);
-        // 旧形式（link未保存）も読んだ時点で修復し、次回以降も正しい遷移先を保持する。
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
-      }
-    } catch (e) {
-      console.error("履歴の読み込みに失敗しました", e);
-    }
+    const saved = readStoredJson(STORAGE_KEY, []);
+    if (!saved.ok || !Array.isArray(saved.value)) { setStorageError(true); return; }
+    storageReady.current = true;
+    const normalized = saved.value.filter(item => item?.id).map(normalizeHistoryItem).slice(0, MAX_HISTORY);
+    current.current = normalized;
+    setHistory(normalized);
+    if (saved.found) setStorageError(!writeStoredJson(STORAGE_KEY, normalized).ok);
   }, []);
 
   // 🔄 useCallbackで関数を固定し、無限ループを防止
   const addToHistory = useCallback((item) => {
     if (!item || !item.id) return;
 
-    setHistory((prev) => {
-      const filtered = prev.filter((i) => i.id !== item.id);
-      const newHistory = [
-        {
-          ...normalizeHistoryItem(item),
-          viewedAt: new Date().toISOString(),
-        },
-        ...filtered
-      ].slice(0, MAX_HISTORY);
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newHistory));
-      return newHistory;
-    });
+    const filtered = current.current.filter(i => i.id !== item.id);
+    const next = [{ ...normalizeHistoryItem(item), viewedAt: new Date().toISOString() }, ...filtered].slice(0, MAX_HISTORY);
+    current.current = next;
+    setHistory(next);
+    const result = storageReady.current ? writeStoredJson(STORAGE_KEY, next) : { ok: false };
+    setStorageError(!result.ok);
+    return result;
   }, []); // 空の配列で固定
 
   const clearHistory = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
-    setHistory([]);
+    const result = removeStoredValue(STORAGE_KEY);
+    setStorageError(!result.ok);
+    if (result.ok) { current.current = []; setHistory([]); }
+    return result;
   }, []);
 
-  return { history, addToHistory, clearHistory };
+  return { history, addToHistory, clearHistory, storageError };
 }

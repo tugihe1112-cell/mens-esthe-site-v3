@@ -27,6 +27,7 @@ import { getTherapistDisplayName } from '../utils/shopHelpers.js';
 import { buildTherapistReviewIndex, reviewsForTherapist, summarizeReviews, normalizeTherapistName } from '../utils/reviewIdentity.js';
 import { TAG_CATEGORIES as TAG_SOURCE } from '../data/constants';
 import { TagFilterSidebar, TagFilterButton } from '../components/TagFilterSidebar.jsx';
+import { useResponsiveFilterSheet } from '../hooks/useResponsiveFilterSheet.js';
 import { authHeaders } from '../utils/supabaseRest';
 import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
@@ -168,9 +169,9 @@ export default function BrandPage({
   const [castSortOrder, setCastSortOrder] = React.useState('default');
   const [selectedTags, setSelectedTags] = React.useState([]);
   // スマホでタグの列を開くシート（PCでは常に左に出ている）
-  const [isFilterOpen, setIsFilterOpen] = React.useState(false);
+  const { isOpen: isFilterOpen, open: openFilter, close: closeFilter, openerRef: filterOpenerRef, panelRef: filterPanelRef, dialogId: filterDialogId } = useResponsiveFilterSheet(brandId);
 
-  // 付いているタグの件数。0件のタグも出す（店舗ページと同じ＝選べる幅を隠さない）。
+  // そのタグが付いた人物数。0人のタグも出す（店舗ページと同じ＝選べる幅を隠さない）。
   const tagCounts = React.useMemo(() => {
     const counts = {};
     TAG_CATEGORIES.forEach((cat) => cat.tags.forEach((t) => { counts[t] = 0; }));
@@ -443,7 +444,9 @@ export default function BrandPage({
               tagCounts={tagCounts}
               selectedTags={selectedTags}
               isOpen={isFilterOpen}
-              onClose={() => setIsFilterOpen(false)}
+              onClose={closeFilter}
+              panelRef={filterPanelRef}
+              dialogId={filterDialogId}
               onToggle={(tag) => {
                 setDisplayCount(ROSTER_PAGE);
                 setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
@@ -452,7 +455,7 @@ export default function BrandPage({
             />
 
             <div className="min-w-0">
-            <TagFilterButton selectedCount={selectedTags.length} onOpen={() => setIsFilterOpen(true)} />
+            <TagFilterButton selectedCount={selectedTags.length} onOpen={openFilter} openerRef={filterOpenerRef} isOpen={isFilterOpen} dialogId={filterDialogId} />
             <div className="mb-5 flex items-end justify-between gap-3 border-b border-slate-700 pb-3">
               <h2 className="font-mincho text-2xl font-bold text-slate-50">在籍セラピスト</h2>
               {/* ⚠️ 絞り込み中は「N / 全M人」。店舗ページと同じ出し方に揃える。 */}

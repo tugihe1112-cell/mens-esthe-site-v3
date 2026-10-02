@@ -12,12 +12,18 @@ export const DataProvider = ({ children }) => {
   const [therapists, setTherapists] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [shopsError, setShopsError] = useState(false);
+  const [shopsAttempt, setShopsAttempt] = useState(0);
+  const retryShops = useCallback(() => setShopsAttempt(n => n + 1), []);
   const [version, setVersion] = useState(Date.now());
 
   const [loadedShopIds, setLoadedShopIds] = useState(new Set());
   const [loadedReviewShopIds, setLoadedReviewShopIds] = useState(new Set());
 
   useEffect(() => {
+    let active = true;
+    setLoading(true);
+    setShopsError(false);
     // ── フォールバック: ブラウザから直接Supabaseを叩く従来経路 ──
     // ⚠️ 全件取得は必ず range() でページングすること。
     //    PostgREST はサーバー側の max-rows（既定1000）が優先されるため、
@@ -39,7 +45,8 @@ export const DataProvider = ({ children }) => {
           .order('id')
           .range(from, from + PAGE - 1);
         if (error) throw error;
-        if (!data || data.length === 0) break;
+        if (!Array.isArray(data)) throw new Error('Invalid shops response');
+        if (data.length === 0) break;
         out.push(...data);
         if (data.length < PAGE) break;
         if (out.length >= 50000) break; // 暴走ガード
@@ -66,7 +73,7 @@ export const DataProvider = ({ children }) => {
           shopsData = await fetchDirectFromSupabase();
         }
 
-        if (shopsData.length) {
+        if (active) {
           // ⚠️ 整形はここに直接書かない。shapeShopRow に一本化している
           //    （以前は DataContext / heroShops / ShopDetailPage で実装がバラバラで、
           //      ShopDetailPage は変換自体を通しておらず住所が全店で消えていた）。
@@ -74,12 +81,14 @@ export const DataProvider = ({ children }) => {
         }
       } catch (error) {
         console.error('❌ Failed to fetch initial data:', error);
+        if (active) setShopsError(true);
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
     fetchInitialData();
-  }, []);
+    return () => { active = false; };
+  }, [shopsAttempt]);
 
   const getBrandName = useCallback((shopName) => {
     if (!shopName) return '';
@@ -346,7 +355,7 @@ export const DataProvider = ({ children }) => {
   const roomCounts = useMemo(() => countRoomsByBrand(shops), [shops]);
 
   const value = {
-    shops, therapists, reviews, loading, roomCounts,
+    shops, therapists, reviews, loading, shopsError, retryShops, roomCounts,
     shopById, therapistById, getTherapistsByShopId, getReviewsByShopId,
     version, addReview, loadTherapistsForShop, loadReviewsForShop
   };

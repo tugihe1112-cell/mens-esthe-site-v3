@@ -36,6 +36,11 @@ await import('./check_review_post_resilience.mjs');
 await import('./check_ranking_data.mjs');
 await import('./check_therapist_search.mjs');
 await import('./check_home_review_loading.mjs');
+await import('./check_review_initialization.mjs');
+await import('./check_local_storage_resilience.mjs');
+await import('./check_popular_review_loading.mjs');
+await import('./check_responsive_tag_filter.mjs');
+await import('./check_member_data_loading.mjs');
 // ⚠️ 最後に「手元とCIで同じガードが走るか」自体を検査する。
 //    ここが崩れると、手元のビルド成功がCIの成功を保証しなくなる（2026-08-26の事故）。
 await import('./check_guard_parity.mjs');
