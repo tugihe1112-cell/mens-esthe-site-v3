@@ -28,19 +28,43 @@ function normalizeHistoryItem(item) {
 export function useRecentlyViewed() {
   const [history, setHistory] = useState([]);
   const current = useRef([]);
+  const unsaved = useRef([]);
   const storageReady = useRef(false);
-  const [storageError, setStorageError] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(true);
+  const [readError, setReadError] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
 
-  // 初期読み込み
-  useEffect(() => {
+  // 読取に失敗したデータは上書きせず、再読込時にも現在のカードを保持する。
+  const retryHistory = useCallback(() => {
+    setHistoryLoading(true);
     const saved = readStoredJson(STORAGE_KEY, []);
-    if (!saved.ok || !Array.isArray(saved.value)) { setStorageError(true); return; }
+    if (!saved.ok || !Array.isArray(saved.value)) {
+      storageReady.current = false;
+      setReadError(true);
+      setHistoryLoading(false);
+      return { ok: false };
+    }
     storageReady.current = true;
-    const normalized = saved.value.filter(item => item?.id).map(normalizeHistoryItem).slice(0, MAX_HISTORY);
+    setReadError(false);
+    // 削除の読み戻しだけ拒否された場合も、キーが無いと確認できれば完了にできる。
+    if (!saved.found && unsaved.current.length === 0) setDeleteError(false);
+    const seen = new Set();
+    const normalized = [...unsaved.current, ...saved.value].filter(item => {
+      if (!item?.id || seen.has(item.id)) return false;
+      seen.add(item.id);
+      return true;
+    }).map(normalizeHistoryItem).slice(0, MAX_HISTORY);
     current.current = normalized;
     setHistory(normalized);
-    if (saved.found) setStorageError(!writeStoredJson(STORAGE_KEY, normalized).ok);
+    const result = saved.found || unsaved.current.length ? writeStoredJson(STORAGE_KEY, normalized) : { ok: true };
+    setSaveError(!result.ok);
+    if (result.ok) unsaved.current = [];
+    setHistoryLoading(false);
+    return result;
   }, []);
+
+  useEffect(() => { retryHistory(); }, [retryHistory]);
 
   // 🔄 useCallbackで関数を固定し、無限ループを防止
   const addToHistory = useCallback((item) => {
@@ -51,16 +75,24 @@ export function useRecentlyViewed() {
     current.current = next;
     setHistory(next);
     const result = storageReady.current ? writeStoredJson(STORAGE_KEY, next) : { ok: false };
-    setStorageError(!result.ok);
+    unsaved.current = result.ok ? [] : next;
+    setSaveError(!result.ok);
     return result;
   }, []); // 空の配列で固定
 
   const clearHistory = useCallback(() => {
     const result = removeStoredValue(STORAGE_KEY);
-    setStorageError(!result.ok);
-    if (result.ok) { current.current = []; setHistory([]); }
+    setDeleteError(!result.ok);
+    if (result.ok) {
+      storageReady.current = true;
+      current.current = [];
+      unsaved.current = [];
+      setHistory([]);
+      setReadError(false);
+      setSaveError(false);
+    }
     return result;
   }, []);
 
-  return { history, addToHistory, clearHistory, storageError };
+  return { history, addToHistory, clearHistory, retryHistory, historyLoading, readError, saveError, deleteError, storageError: readError || saveError || deleteError };
 }

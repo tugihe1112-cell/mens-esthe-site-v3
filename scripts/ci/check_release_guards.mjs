@@ -41,6 +41,11 @@ await import('./check_local_storage_resilience.mjs');
 await import('./check_popular_review_loading.mjs');
 await import('./check_responsive_tag_filter.mjs');
 await import('./check_member_data_loading.mjs');
+// 会員・ブランド・検索条件の切替と取得失敗を実Provider/ページで検査する。
+await import('./check_auth_profile_binding.mjs');
+await import('./check_brand_and_history_loading.mjs');
+await import('./check_post_candidate_loading.mjs');
+await import('./check_search_metadata_loading.mjs');
 // ⚠️ 最後に「手元とCIで同じガードが走るか」自体を検査する。
 //    ここが崩れると、手元のビルド成功がCIの成功を保証しなくなる（2026-08-26の事故）。
 await import('./check_guard_parity.mjs');

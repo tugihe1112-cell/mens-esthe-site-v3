@@ -60,8 +60,8 @@ export default function ShopDetailPage({
   const { shopById, getTherapistsByShopId, getReviewsByShopId, loadTherapistsForShop, loadReviewsForShop, roomCounts } = useShopData();
   const { toggleFavorite, favorites, toggleFavTherapist, favTherapists } = useAppContext();
   
-  const { user, userPlan } = useAuth();
-  const isPremiumUser = userPlan === 'premium' || userPlan === 'vip';
+  const { user, userPlan, planStatus = 'ready' } = useAuth();
+  const isPremiumUser = planStatus === 'ready' && (userPlan === 'premium' || userPlan === 'vip');
 
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
   // キャスト一覧の絞り込み・並び替え（SearchPageと同じ操作感に揃える）

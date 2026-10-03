@@ -33,6 +33,7 @@ import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
 import RatingFingerprint, { averageFingerprint } from '../components/RatingFingerprint.jsx';
 import { splitNameReading } from '../utils/nameReading.js';
+import { fetchBrandRows } from '../utils/brandRosterLoading.js';
 
 // 日付は日本時間で「2026.09.05」。サーバー（UTC）と画面（JST）で日付がずれないよう自前で組む。
 const fmtDate = (v) => {
@@ -47,6 +48,8 @@ const PenIcon = () => (
 );
 
 const ROSTER_PAGE = 24;
+const EMPTY_ROWS = [];
+const EMPTY_MAP = {};
 const TAG_CATEGORIES = TAG_SOURCE.map((c) => ({ id: c.id, title: c.titleEn, tags: c.tags }));
 
 export default function BrandPage({
@@ -56,7 +59,7 @@ export default function BrandPage({
   ssrReviews = [],
   ssrReviewCount = 0,
   ssrAvgRating = null,
-  ssrRoster = [],
+  ssrRoster = EMPTY_ROWS,
   ssrRosterTruncated = false,
   ssrNearbyBrands = [],
   ssrNearbyScope = 'prefecture',
@@ -84,71 +87,83 @@ export default function BrandPage({
   //    ⚠️ DataContext 側の取得は `image_url` があるものだけを拾う作りなので、呼んでも写真なしの人は落ちる。
   //       「写真が無い人も出す」（2026-09-16の決定）と食い違うため、ここでは自前で取る。
   //    ⚠️ PostgRESTは1回に最大1000行。420名規模のブランドがあるのでページ送りする。
-  const [cloudRoster, setCloudRoster] = React.useState(null);
-  const [therapistReviewCounts, setTherapistReviewCounts] = React.useState({});
-  const [reviewTagMap, setReviewTagMap] = React.useState({});
+  const shopIdsKey = JSON.stringify([...new Set(brand?.shopIds || (brand?.rooms || []).map(room => room.id))].sort());
+  const shopIds = React.useMemo(() => JSON.parse(shopIdsKey), [shopIdsKey]);
+  const shopIdSet = React.useMemo(() => new Set(shopIds), [shopIds]);
+  const rosterScope = JSON.stringify([brandId || brand?.id || '', shopIds]);
+  const currentScopeRef = React.useRef(rosterScope);
+  currentScopeRef.current = rosterScope;
+  const [cloudRosterResult, setCloudRosterResult] = React.useState(null);
+  const [rosterRetry, setRosterRetry] = React.useState(0);
+  const currentResult = cloudRosterResult?.scope === rosterScope ? cloudRosterResult : null;
+  const cloudRoster = currentResult?.rows || null;
+  const therapistReviewCounts = currentResult?.counts || EMPTY_MAP;
+  const reviewTagMap = currentResult?.tags || EMPTY_MAP;
+  const rosterStatus = currentResult?.rosterStatus || (shopIds.length ? 'loading' : 'ready');
+  const reviewStatus = currentResult?.reviewStatus || (shopIds.length ? 'loading' : 'ready');
   React.useEffect(() => {
-    const ids = ssrBrand?.shopIds || brand?.shopIds || (brand?.rooms || []).map((r) => r.id);
-    if (!ids || !ids.length) return undefined;
+    if (!shopIds.length) return undefined;
     let alive = true;
+    const isCurrent = () => alive && currentScopeRef.current === rosterScope;
+    setCloudRosterResult(previous => ({
+      ...(previous?.scope === rosterScope ? previous : {}),
+      scope: rosterScope, rosterStatus: 'loading', reviewStatus: 'loading',
+    }));
     (async () => {
       try {
         const base = process.env.VITE_SUPABASE_URL;
         const headers = await authHeaders();
-        const inList = ids.map((v) => `"${v}"`).join(',');
-        const rows = [];
-        for (let from = 0; ; from += 1000) {
-          const res = await fetch(
-            `${base}/rest/v1/therapists?select=id,name,image_url,shop_id,is_active&shop_id=in.(${inList})`,
-            { headers: { ...headers, Range: `${from}-${from + 999}` }, cache: 'no-store' },
-          );
-          if (!res.ok) break;
-          const page = await res.json();
-          if (!Array.isArray(page) || !page.length) break;
-          rows.push(...page);
-          if (page.length < 1000) break;
+        if (!isCurrent()) return;
+        // 名簿と本文不要の口コミメタデータを並行取得する。名簿は先に表示できる。
+        const peoplePromise = fetchBrandRows(base, 'therapists', 'id,name,image_url,shop_id,is_active', shopIds, headers)
+          .then(rows => {
+            const scopedRows = rows.filter(t => shopIdSet.has(t.shop_id));
+            if (isCurrent()) setCloudRosterResult(previous => ({ ...previous, scope: rosterScope, rows: scopedRows, rosterStatus: 'ready' }));
+            return scopedRows;
+          }, error => {
+            if (isCurrent()) setCloudRosterResult(previous => ({ ...previous, scope: rosterScope, rosterStatus: 'error' }));
+            throw error;
+          });
+        const [people, reviews] = await Promise.allSettled([
+          peoplePromise,
+          fetchBrandRows(base, 'reviews', 'therapist_id,shop_id,therapist_name,tags', shopIds, headers),
+        ]);
+        if (!isCurrent()) return;
+        if (people.status === 'rejected') {
+          setCloudRosterResult(previous => ({ ...previous, scope: rosterScope, rosterStatus: 'error', reviewStatus: 'error' }));
+          return;
         }
-        if (alive && rows.length) setCloudRoster(rows);
-
-        // 🚩 タグと口コミ順に要る「人物ごとの口コミ件数・タグ」を作る。
-        //    ⚠️ キーは therapist_id。名前キーは系列店の**同名の別人**を1人に束ねる（F04）。
-        //    ⚠️ 本文は要らないので列を絞る（名簿と違いここは件数とタグだけ）。
-        const cRes = await fetch(
-          `${base}/rest/v1/reviews?shop_id=in.(${inList})&select=therapist_id,shop_id,therapist_name,tags`,
-          { headers, cache: 'no-store' },
-        );
-        if (cRes.ok) {
-          const cData = await cRes.json();
-          if (alive && Array.isArray(cData)) {
-            const list = (rows.length ? rows : []).map((t) => ({ id: t.id, shop_id: t.shop_id, name: t.name }));
-            const index = buildTherapistReviewIndex(cData, list);
-            const counts = {};
-            const tagMap = {};
-            for (const t of list) {
-              const summary = summarizeReviews(reviewsForTherapist(index, t.id));
-              counts[t.id] = summary.count;
-              tagMap[t.id] = summary.tags;
-            }
-            setTherapistReviewCounts(counts);
-            setReviewTagMap(tagMap);
-          }
+        if (reviews.status === 'rejected') {
+          setCloudRosterResult(previous => ({ ...previous, scope: rosterScope, reviewStatus: 'error' }));
+          return;
         }
+        const uniquePeople = new Map([...ssrRoster, ...people.value].filter(t => shopIdSet.has(t.shop_id || t.shopId)).map(t => [t.id, t]));
+        const list = [...uniquePeople.values()].map(t => ({ id: t.id, shop_id: t.shop_id || t.shopId, name: t.name }));
+        const index = buildTherapistReviewIndex(reviews.value.filter(r => shopIdSet.has(r.shop_id)), list);
+        const counts = {};
+        const tags = {};
+        for (const t of list) {
+          const summary = summarizeReviews(reviewsForTherapist(index, t.id));
+          counts[t.id] = summary.count;
+          tags[t.id] = summary.tags;
+        }
+        const confirmedRoster = buildBrandRoster([...ssrRoster, ...people.value].filter(t => shopIdSet.has(t.shop_id || t.shopId)), { limit: Number.MAX_SAFE_INTEGER }).roster;
+        setCloudRosterResult(previous => ({ ...previous, scope: rosterScope, counts, tags, confirmedRoster, reviewStatus: 'ready' }));
       } catch {
-        // 取れなくてもSSRの24名は出ている。ここで画面を壊さない。
+        if (isCurrent()) setCloudRosterResult(previous => ({ ...previous, scope: rosterScope, rosterStatus: 'error', reviewStatus: 'error' }));
       }
     })();
     return () => { alive = false; };
-  }, [ssrBrand, brand]);
+  }, [rosterScope, shopIds, shopIdSet, ssrRoster, rosterRetry]);
 
   // 在籍セラピスト。SSRは先頭24名だけ焼いてある（420名規模のブランドがあるためHTMLを膨らませない）。
   // クライアントでは全ルームぶんを集めて**人単位**で重複除去する。
   // ⚠️ 咲さんは渋谷店にも代々木店にも行を持つ。素直に並べると同じ人が並ぶ。
   const roster = React.useMemo(() => {
-    const ids = ssrBrand?.shopIds || brand?.shopIds || (brand?.rooms || []).map((r) => r.id);
     // 自前で取れていればそれを使う。まだなら DataContext にあるぶんで間に合わせる。
     const fromContext = cloudRoster && cloudRoster.length
       ? cloudRoster
-      : (getTherapistsByShopId ? (ids || []).flatMap((id) => getTherapistsByShopId(id) || []) : []);
+      : (getTherapistsByShopId ? shopIds.flatMap((id) => getTherapistsByShopId(id) || []) : []);
     // ⚠️ SSRで焼いた分を先に置く（初期表示と並びを変えない）。
     //    重複除去は buildBrandRoster に一本化する＝画面側で別の畳み方を書くと
     //    「咲さんが3ルームぶん3回出る」が片側だけ復活する。
@@ -158,16 +173,34 @@ export default function BrandPage({
     //    多ルームのブランド（1,095店中370店）で丸ごと失われていた。
     //    ⚠️ SSRが焼くのは先頭24名のまま（420名規模のブランドがあるためHTMLを膨らませない）。
     //       画面側は displayCount で伸ばす。初期値を24にしてあるので初期表示は変わらない。
-    return buildBrandRoster([...(ssrRoster || []), ...fromContext], { limit: Number.MAX_SAFE_INTEGER }).roster;
-  }, [ssrRoster, ssrBrand, brand, getTherapistsByShopId, cloudRoster]);
+    const scopedRows = [...ssrRoster, ...fromContext].filter(t => shopIdSet.has(t.shop_id || t.shopId));
+    return buildBrandRoster(scopedRows, { limit: Number.MAX_SAFE_INTEGER }).roster;
+  }, [ssrRoster, shopIds, shopIdSet, getTherapistsByShopId, cloudRoster]);
 
   // ── 名簿の絞り込みと並び替え（店舗ページから移植）─────────────────
   // ⚠️ 人物名の正規化は reviewIdentity に一本化する。独自に書くと
   //    「ｱｲ」と「アイ」が別人になる（店舗ページと同じ約束）。
-  const [displayCount, setDisplayCount] = React.useState(ROSTER_PAGE);
-  const [castNameFilter, setCastNameFilter] = React.useState('');
-  const [castSortOrder, setCastSortOrder] = React.useState('default');
-  const [selectedTags, setSelectedTags] = React.useState([]);
+  const [rosterFilters, setRosterFilters] = React.useState(null);
+  React.useEffect(() => { setRosterFilters({ scope: rosterScope }); }, [rosterScope]);
+  const currentFilters = rosterFilters?.scope === rosterScope ? rosterFilters : {};
+  const displayCount = currentFilters.displayCount || ROSTER_PAGE;
+  const castNameFilter = currentFilters.castNameFilter || '';
+  const castSortOrder = currentFilters.castSortOrder || 'default';
+  const selectedTags = currentFilters.selectedTags || EMPTY_ROWS;
+  const updateFilter = (field, value) => setRosterFilters(previous => {
+    const filters = previous?.scope === rosterScope ? previous : {};
+    const defaults = { displayCount: ROSTER_PAGE, castNameFilter: '', castSortOrder: 'default', selectedTags: [] };
+    return { ...defaults, ...filters, scope: rosterScope, [field]: typeof value === 'function' ? value(filters[field] ?? defaults[field]) : value };
+  });
+  const setDisplayCount = value => updateFilter('displayCount', value);
+  const setCastNameFilter = value => updateFilter('castNameFilter', value);
+  const setCastSortOrder = value => updateFilter('castSortOrder', value);
+  const setSelectedTags = value => updateFilter('selectedTags', value);
+  const metadataDependent = selectedTags.length > 0 || castSortOrder === 'reviews';
+  const waitingForMetadata = metadataDependent && reviewStatus !== 'ready';
+  const confirmedRoster = currentResult?.confirmedRoster || null;
+  const canApplyMetadata = reviewStatus === 'ready' || Boolean(confirmedRoster);
+  const filterRoster = waitingForMetadata && confirmedRoster ? confirmedRoster : roster;
   // スマホでタグの列を開くシート（PCでは常に左に出ている）
   const { isOpen: isFilterOpen, open: openFilter, close: closeFilter, openerRef: filterOpenerRef, panelRef: filterPanelRef, dialogId: filterDialogId } = useResponsiveFilterSheet(brandId);
 
@@ -183,8 +216,8 @@ export default function BrandPage({
   }, [roster, reviewTagMap]);
 
   const sortedRoster = React.useMemo(() => {
-    let list = [...roster];
-    if (selectedTags.length > 0) {
+    let list = [...filterRoster];
+    if (selectedTags.length > 0 && canApplyMetadata) {
       list = list.filter((t) => {
         const tags = reviewTagMap[t.id] || new Set();
         return selectedTags.every((sel) => tags.has(sel));
@@ -196,13 +229,13 @@ export default function BrandPage({
     }
     if (castSortOrder === 'aiueo') {
       list.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ja'));
-    } else if (castSortOrder === 'reviews') {
+    } else if (castSortOrder === 'reviews' && canApplyMetadata) {
       list.sort((a, b) => (therapistReviewCounts[b.id] || 0) - (therapistReviewCounts[a.id] || 0));
     }
     // ⚠️ 既定（標準）は並べ替えない。buildBrandRoster が写真ありを先に並べた順を保つ
     //    （崩すとプレースホルダばかりが先頭に来る）。
     return list;
-  }, [roster, castNameFilter, castSortOrder, selectedTags, reviewTagMap, therapistReviewCounts]);
+  }, [filterRoster, canApplyMetadata, castNameFilter, castSortOrder, selectedTags, reviewTagMap, therapistReviewCounts]);
 
   const visibleRoster = sortedRoster.slice(0, displayCount);
   const hasMoreRoster = displayCount < sortedRoster.length;
@@ -432,8 +465,7 @@ export default function BrandPage({
         {/* 在籍セラピスト＝このページの本体。
             ⚠️ セラピストは店舗ではなくブランドに属する。全ルームぶんを1つの名簿として出す。
             ⚠️ SSR分だけでも初期HTMLに名前とリンクが載る（D-013: JS実行前に本文と内部リンク）。 */}
-        {roster.length > 0 && (
-          <section id="brand-cast" className="scroll-mt-32">
+        <section id="brand-cast" className="scroll-mt-32">
             {/* 🚩 左にタグの列・真ん中にキャスト一覧（D-001・オーナー確定デザイン）。
                 D-014でここへ301した以上、店舗ページと**同じ見え方**でなければ畳んだ意味がない。
                 ⚠️ 2026-09-19の「移植」では機能だけ移して形を移しておらず、
@@ -460,9 +492,21 @@ export default function BrandPage({
               <h2 className="font-mincho text-2xl font-bold text-slate-50">在籍セラピスト</h2>
               {/* ⚠️ 絞り込み中は「N / 全M人」。店舗ページと同じ出し方に揃える。 */}
               <span className="shrink-0 text-xs text-slate-400">
-                {(castNameFilter || selectedTags.length > 0) ? <><span className="font-numeral text-xl text-slate-50">{sortedRoster.length}</span> / </> : null}全<span className="font-numeral text-xl text-slate-50">{roster.length}</span>人
+                {(castNameFilter || selectedTags.length > 0) ? <><span className="font-numeral text-xl text-slate-50">{waitingForMetadata && !confirmedRoster ? '確認中' : sortedRoster.length}</span> / </> : null}{rosterStatus === 'ready' ? '全' : '確認済み'}<span className="font-numeral text-xl text-slate-50">{roster.length}</span>人
               </span>
             </div>
+            {rosterStatus === 'loading' && <p role="status" className="mb-4 text-sm text-slate-400">在籍一覧を読み込み中です。取得済みの人物は表示しています。</p>}
+            {rosterStatus === 'error' && <div role="alert" className="mb-4 border border-amber-500/30 p-3 text-sm text-amber-200">
+              <p>在籍一覧の追加取得に失敗しました。取得済みの人物は表示しています。</p>
+              <button type="button" onClick={() => setRosterRetry(n => n + 1)} className="mt-2 min-h-11 underline">在籍一覧を再試行</button>
+            </div>}
+            {reviewStatus === 'loading' && <p role="status" className="mb-4 text-sm text-slate-400">口コミ件数とタグを読み込み中です。</p>}
+            {reviewStatus === 'error' && rosterStatus !== 'error' && <div role="alert" className="mb-4 border border-amber-500/30 p-3 text-sm text-amber-200">
+              <p>口コミ件数とタグを読み込めませんでした。</p>
+              <button type="button" onClick={() => setRosterRetry(n => n + 1)} className="mt-2 min-h-11 underline">口コミ情報を再試行</button>
+            </div>}
+            {waitingForMetadata && <p role="status" className="mb-4 text-sm text-slate-400">{confirmedRoster ? 'タグ・口コミ順は前回の確認結果を表示しています。' : 'タグ・口コミ順の条件は口コミ情報の取得後に適用します。取得済みの人物を表示しています。'}</p>}
+            {rosterStatus === 'ready' && roster.length === 0 && <p className="mb-4 text-sm text-slate-400">在籍セラピストはいません。</p>}
 
             {/* 名前で絞り込み＋並び替え（店舗ページから移植・2026-09-19）。
                 D-014で店舗ページをここへ301した結果、多ルームのブランドでは
@@ -529,13 +573,12 @@ export default function BrandPage({
                 </button>
               </div>
             )}
-            {(castNameFilter || selectedTags.length > 0) && sortedRoster.length === 0 && (
+            {rosterStatus === 'ready' && reviewStatus === 'ready' && (castNameFilter || selectedTags.length > 0) && sortedRoster.length === 0 && (
               <p className="text-xs text-slate-400 mt-3">条件に一致するセラピストはいません。</p>
             )}
             </div>
             </div>
-          </section>
-        )}
+        </section>
 
         {/* 店舗情報（店舗ページから移植・2026-09-19）。
             【方針】**揃っていれば1つ出す。割れていれば「ルームにより異なります」と出す。**

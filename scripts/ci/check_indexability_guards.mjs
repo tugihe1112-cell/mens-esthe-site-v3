@@ -211,10 +211,15 @@ for (const [path, label] of [
   // 🚩 名簿の残りを**このページ自身で取りに行く**こと。
   //    DataContext の therapists は最初から空で、loadTherapistsForShop を呼んだ店の分しか入らない。
   //    そこに頼ると「もっと見る」を置いてもSSRの24名のままになる（2026-09-19、本番で発覚）。
-  requireMatch(brandPage, /rest\/v1\/therapists\?select=/,
+  const brandLoader = strip(read('src/utils/brandRosterLoading.js'));
+  requireMatch(brandPage, /fetchBrandRows\(base, 'therapists', 'id,name,image_url,shop_id,is_active', shopIds, headers\)/,
     'ブランドページが在籍セラピストを自前で取得していません（24名から増えません）');
-  requireMatch(brandPage, /Range: `\$\{from\}-\$\{from \+ 999\}`/,
+  requireMatch(brandPage, /import\s*\{\s*fetchBrandRows\s*\}\s*from\s*'\.\.\/utils\/brandRosterLoading\.js'/,
+    'ブランドページが追加名簿の実loaderを読み込んでいません');
+  requireMatch(brandLoader, /export async function fetchBrandRows\([\s\S]*?for \(let from = 0; ; from \+= 1000\)[\s\S]*?Range: `\$\{from\}-\$\{from \+ 999\}`/,
     'ブランドページの在籍取得がページ送りしていません（1,000名で頭打ちになります）');
+  requireMatch(brandLoader, /if \(!response\.ok\) throw new Error\(/,
+    'ブランド追加名簿が途中の取得失敗を完全取得として返しています');
   // 🚩 D-014で店舗ページをここへ301したので、店舗ページにあった絞り込みはここに要る。
   //    2026-09-19、タグ・口コミ順・名前絞り込み・並び替えが丸ごと無いまま4日間動いていた。
   // ⚠️ 2026-09-20: ここは文言「タグで絞り込む」を探していた。文言は共通部品へ移したので、
@@ -225,7 +230,7 @@ for (const [path, label] of [
   requireMatch(brandPage, /buildTherapistReviewIndex\(/,
     'ブランドページが人物ごとの口コミ索引を作っていません（タグと口コミ順が動きません）');
   // ⚠️ キーは therapist_id。名前キーは系列店の**同名の別人**を1人に束ねる（F04）。
-  requireMatch(brandPage, /select=therapist_id,shop_id,therapist_name,tags/,
+  requireMatch(brandPage, /fetchBrandRows\(base, 'reviews', 'therapist_id,shop_id,therapist_name,tags', shopIds, headers\)/,
     'ブランドページの口コミ集計が therapist_id を取っていません（同名の別人が混ざります）');
   // 🚩 店舗情報（営業時間・料金・公式・出勤）。D-014で301した先に無いと、利用者は見る手段を失う。
   requireMatch(brandPage, /brandCommonValue\(/,
@@ -269,11 +274,12 @@ for (const [path, label] of [
   //       （スコープ内には在るため）。2026-09-19、実際に使用より後ろに書いてしまった。
   //    ⚠️ 本当の検出手段はページを開くこと。この検査はあくまで再発の網。
   {
-    const decl = brandPage.indexOf('const [cloudRoster');
+    const decl = brandPage.indexOf('const [cloudRosterResult');
+    const scopedUse = brandPage.indexOf('const cloudRoster = currentResult?.rows');
     const use = brandPage.indexOf('cloudRoster && cloudRoster.length');
-    if (decl < 0 || use < 0) {
+    if (decl < 0 || scopedUse < 0 || use < 0) {
       failures.push('ブランドページの cloudRoster の宣言か使用が見つかりません（順序を検査できません）');
-    } else if (decl > use) {
+    } else if (decl > scopedUse || scopedUse > use) {
       failures.push('ブランドページで cloudRoster を宣言より前に使っています（実行時に落ちます。buildもeslintも検出しません）');
     }
   }

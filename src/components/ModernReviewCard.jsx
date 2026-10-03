@@ -139,7 +139,7 @@ const PenIcon = () => (
 export default function ModernReviewCard({ review, reportNo = null, showTherapist = true }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const reviewReturnTo = useReturnTo();
-  const { user, userPlan } = useAuth();
+  const { user, userPlan, planStatus = 'ready' } = useAuth();
   const navigate = useNavigate();
   const articleRef = useRef(null);
   const { status: viewingStatus, retry: retryViewingCredits } = useViewingCredits();
@@ -155,7 +155,7 @@ export default function ModernReviewCard({ review, reportNo = null, showTherapis
     ? `総額 ¥${totalAmount.toLocaleString('ja-JP')}`
     : null;
 
-  const isPremium = userPlan === 'premium' || userPlan === 'vip';
+  const isPremium = planStatus === 'ready' && (userPlan === 'premium' || userPlan === 'vip');
 
   // 閲覧権限: プレミアム OR 閲覧日数あり OR owner_manual口コミ OR 公開口コミ（各セラピストの1件目）
   // ⚠️ 2026-08-12 追加: **投稿者本人**の条件が抜けていた。

@@ -11,7 +11,7 @@ import SeoHead from '../components/SeoHead.jsx';
 const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
 
 export default function MyPage() {
-  const { user, userPlan, signOut, loading } = useAuth();
+  const { user, userPlan, signOut, loading, planStatus = 'ready', retryPlan } = useAuth();
   const navigate = useNavigate();
   const viewing = useViewingCredits();
   const posted = usePostedReviewCount();
@@ -22,7 +22,7 @@ export default function MyPage() {
   }, [user]);
 
   const expiry = viewing.expiresAt ? new Date(viewing.expiresAt) : null;
-  const premium = userPlan === 'vip' || userPlan === 'premium';
+  const premium = planStatus === 'ready' && (userPlan === 'vip' || userPlan === 'premium');
   const entitlement = {
     active: viewing.status === 'active',
     label: viewing.status === 'loading' ? '確認中…' : viewing.status === 'error' ? '確認できませんでした'
@@ -77,8 +77,9 @@ export default function MyPage() {
                 <h1 className="truncate text-2xl font-black">{displayName}</h1>
                 <p className="truncate text-xs text-slate-400">{user.email}</p>
                 <span className="mt-2 inline-flex rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-bold text-slate-300">
-                  {userPlan === 'vip' ? 'VIP' : userPlan === 'premium' ? 'プレミアム' : '無料会員'}
+                  {planStatus === 'loading' ? '会員プランを確認中…' : planStatus === 'error' ? '会員プランを確認できませんでした' : userPlan === 'vip' ? 'VIP' : userPlan === 'premium' ? 'プレミアム' : '無料会員'}
                 </span>
+                {planStatus === 'error' && <button type="button" onClick={retryPlan} className="mt-2 block min-h-11 text-xs text-pink-300 underline">会員プランを再確認</button>}
               </div>
             </div>
           </section>

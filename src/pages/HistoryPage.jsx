@@ -1,14 +1,15 @@
 import React from 'react';
 import LineIcon from '../components/LineIcon.jsx';
 import { historyLink, useRecentlyViewed } from '../hooks/useRecentlyViewed';
-import { Link, useNavigate } from '../compat/router';
+import { Link } from '../compat/router';
 import LazyImage from '../components/LazyImage.jsx';
 import Header from '../components/Header.jsx';
 import SeoHead from '../components/SeoHead.jsx';
+import HistoryStorageStatus from '../components/HistoryStorageStatus.jsx';
 
 export default function HistoryPage() {
-  const { history, clearHistory } = useRecentlyViewed();
-  const navigate = useNavigate();
+  const historyState = useRecentlyViewed();
+  const { history, clearHistory, historyLoading, storageError } = historyState;
 
   // 履歴データを整形
   const formattedHistory = history.map(item => ({
@@ -35,6 +36,7 @@ export default function HistoryPage() {
           {history.length > 0 && (
             <button 
               onClick={() => { if(window.confirm('履歴を全て削除しますか？')) clearHistory(); }} 
+              disabled={historyLoading}
               className="text-xs font-bold text-red-400 border border-red-500/30 px-4 py-2 rounded-full hover:bg-red-500/10 transition"
             >
               全削除
@@ -43,7 +45,8 @@ export default function HistoryPage() {
         </div>
 
         {/* Content */}
-        {formattedHistory.length === 0 ? (
+        <HistoryStorageStatus {...historyState} />
+        {formattedHistory.length === 0 && !historyLoading && !storageError ? (
           <div className="flex flex-col items-center justify-center py-20 text-center bg-slate-900/30 rounded-sm border border-dashed border-slate-800">
              <div className="mb-6 text-slate-600"><LineIcon name="clock" size={52} strokeWidth={1.3} /></div>
              <h3 className="text-xl font-bold text-white mb-2">閲覧履歴はありません</h3>
@@ -58,7 +61,7 @@ export default function HistoryPage() {
                キャストを探す
              </Link>
           </div>
-        ) : (
+        ) : formattedHistory.length > 0 ? (
           <div className="relative space-y-8 pl-6 border-l-2 border-slate-800 ml-4 pb-20">
             {/* ⚠️ 横方向のスライドイン（slide-in-from-left/right）は使わないこと。
                    幅いっぱいの要素をX方向に translate すると、その間ページが
@@ -107,7 +110,7 @@ export default function HistoryPage() {
               </div>
             ))}
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

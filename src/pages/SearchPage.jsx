@@ -171,6 +171,8 @@ function ShopCard({ shop, onSelect }) {
 const TAG_CATEGORIES = TAG_SOURCE.map(c => ({ id: c.id, title: c.titleEn, tags: c.tags }));
 
 const ITEMS_PER_PAGE = 24;
+const EMPTY_THERAPISTS = [];
+const EMPTY_REVIEW_MAP = {};
 
 function useDebounce(value, delay = 300) {
   const [debounced, setDebounced] = useState(value);
@@ -310,16 +312,30 @@ export default function SearchPage({ renderSeo = true }) {
   const castQuery = useDebounce(castInput, 150);
 
   // --- DBフェッチ ---
-  const [serverTherapists, setServerTherapists] = useState([]);
-  const [isFetchingDB, setIsFetchingDB] = useState(true);
+  const searchKey = useMemo(() => JSON.stringify([
+    shopInput, castInput, shopQuery, castQuery,
+    brands.map(brand => [brand.id, brand.name, brand.shopIds, brand.area, brand.city, brand.address, brand.area_id, brand.searchText]),
+  ]), [shopInput, castInput, shopQuery, castQuery, brands]);
+  const [therapistResult, setTherapistResult] = useState(null);
+  const serverTherapists = therapistResult?.key === searchKey ? therapistResult.rows : EMPTY_THERAPISTS;
+  const hasTherapistData = therapistResult?.key === searchKey && therapistResult.ready;
+  const [fetchingDB, setIsFetchingDB] = useState(true);
+  const isFetchingDB = fetchingDB || therapistResult?.key !== searchKey;
   // ⚠️ 2026-09-08（FIXES.md F04）: キーを**正規化した名前**から **therapist_id** に変えた。
   //    名前キーは別店舗・同一店舗の同名を1人に潰し、件数・評価・タグが別人と混ざる。
-  const [reviewCountMap, setReviewCountMap] = useState({}); // { therapistId: count }
-  const [reviewTagMap, setReviewTagMap] = useState({}); // { therapistId: Set<tag> }
-  const [ratingMap, setRatingMap] = useState({}); // { therapistId: avgRating|null }
   // ⚠️ FIXES.md F05: 「まだ取れていない」と「0件」を区別する。
   //    未取得を0件と表示すると、口コミがある人まで「0」に見える。
-  const [countsReady, setCountsReady] = useState(false);
+  const metadataKey = useMemo(() => JSON.stringify([
+    searchKey, hasTherapistData, serverTherapists.map(t => [t.id, t.shop_id, t.name]),
+  ]), [searchKey, hasTherapistData, serverTherapists]);
+  const [metadataResult, setMetadataResult] = useState(null);
+  const [metadataRetryToken, setMetadataRetryToken] = useState(0);
+  const currentMetadata = metadataResult?.key === metadataKey ? metadataResult : null;
+  const countsReady = Boolean(currentMetadata?.ready);
+  const metadataStatus = currentMetadata?.status || 'loading';
+  const reviewCountMap = currentMetadata?.counts || EMPTY_REVIEW_MAP;
+  const reviewTagMap = currentMetadata?.tags || EMPTY_REVIEW_MAP;
+  const ratingMap = currentMetadata?.ratings || EMPTY_REVIEW_MAP;
   const [fetchError, setFetchError] = useState(false);
   const [retryToken, setRetryToken] = useState(0);
   // ⚠️ 2026-09-09: 「キャスト 1000件」と表示されていたが、これは取得上限そのものだった。
@@ -363,7 +379,7 @@ export default function SearchPage({ renderSeo = true }) {
 
   // DB フェッチ本体
   useEffect(() => {
-    if (shops.length === 0) return undefined;
+    if (shops.length === 0 || shopInput !== shopQuery || castInput !== castQuery) return undefined;
 
     // ⚠️ 古いリクエストの結果で新しい結果を上書きしないためのフラグ。
     //    これが無いと、検索条件が変わったときに**遅いほうの応答が後から勝つ**。
@@ -377,6 +393,8 @@ export default function SearchPage({ renderSeo = true }) {
     const fetch = async () => {
       setIsFetchingDB(true);
       setFetchError(false);
+      setTherapistResult(previous => previous?.key === searchKey
+        ? previous : { key: searchKey, rows: EMPTY_THERAPISTS, ready: false });
       let cappedAt = 0; // この検索で使った取得上限（達したかどうかの判定に使う）
       try {
         const sq = shopQuery.trim().toLowerCase();
@@ -450,7 +468,7 @@ export default function SearchPage({ renderSeo = true }) {
           name: d.name || d.raw_data?.name,
           image_url: d.image_url || d.raw_data?.image_url,
         }));
-        setServerTherapists(formatted);
+        setTherapistResult({ key: searchKey, rows: formatted, ready: true });
         setResultCapped(cappedAt > 0);
       } catch (e) {
         // ⚠️ F05: 失敗を空配列に丸めない。既存の結果を残し、再読み込みを出す。
@@ -462,7 +480,7 @@ export default function SearchPage({ renderSeo = true }) {
 
     fetch();
     return () => { cancelled = true; };
-  }, [shopQuery, castQuery, shops, brands, retryToken]);
+  }, [shopInput, castInput, shopQuery, castQuery, shops, brands, retryToken, searchKey]);
 
   // セラピスト別口コミ件数・タグ・評価取得（serverTherapistsが更新されたら実行）
   // ⚠️ 2026-09-08（FIXES.md F04）: 集計キーを therapist_id にした。
@@ -470,26 +488,32 @@ export default function SearchPage({ renderSeo = true }) {
   //    別店舗の同名・同一店舗の同名が同じバケツに入っていた。
   //    割り当ての契約は src/utils/reviewIdentity.js に一本化している。
   useEffect(() => {
-    if (!serverTherapists.length) {
-      setReviewCountMap({}); setReviewTagMap({}); setRatingMap({}); setCountsReady(false);
-      return undefined;
-    }
-    const shopIds = [...new Set(serverTherapists.map(t => t.shop_id).filter(Boolean))];
-    if (!shopIds.length) return undefined;
-    // ⚠️ ここも上のフェッチと同じ理由でキャンセルが要る（古い店舗の口コミ集計が
-    //    新しい検索結果に被さると、件数バッジやタグ件数が別店舗のものになる）
+    if (!hasTherapistData) return undefined;
     let cancelled = false;
-    setCountsReady(false);
-    supabase
-      .from('reviews')
-      .select('therapist_id, shop_id, therapist_name, tags, rating')
-      .in('shop_id', shopIds.slice(0, 50))
-      .then(({ data, error }) => {
+    const loadMetadata = async () => {
+      setMetadataResult(previous => previous?.key === metadataKey
+        ? { ...previous, status: 'loading' }
+        : { key: metadataKey, status: 'loading', ready: false });
+      try {
+        const shopIds = [...new Set(serverTherapists.map(t => t.shop_id).filter(Boolean))];
+        if (serverTherapists.length && !shopIds.length) throw new Error('Search metadata scope missing');
+        const allReviews = [];
+        // 途中の失敗・取得上限を未掲載人物の「0件」に変換しない。
+        for (let batch = 0; batch < shopIds.length; batch += 50) {
+          for (let offset = 0; ; offset += 1000) {
+            const { data, error } = await supabase.from('reviews')
+              .select('id, therapist_id, shop_id, therapist_name, tags, rating')
+              .in('shop_id', shopIds.slice(batch, batch + 50))
+              .order('id', { ascending: true }).range(offset, offset + 999);
+            if (cancelled) return;
+            if (error) throw error;
+            if (!Array.isArray(data)) throw new Error('Search metadata unavailable');
+            allReviews.push(...data);
+            if (data.length < 1000) break;
+          }
+        }
         if (cancelled) return;
-        // ⚠️ F05: 失敗したら countsReady を立てない（未取得を0件と表示しない）。
-        if (error) { console.error('口コミ件数取得エラー:', error); return; }
-        if (!data) return;
-        const index = buildTherapistReviewIndex(data, serverTherapists);
+        const index = buildTherapistReviewIndex(allReviews, serverTherapists);
         const counts = {};
         const tagMap = {};
         const ratings = {};
@@ -499,13 +523,16 @@ export default function SearchPage({ renderSeo = true }) {
           tagMap[t.id] = summary.tags;
           ratings[t.id] = summary.rating; // 評価0件は null（0.0と表示しない）
         }
-        setReviewCountMap(counts);
-        setReviewTagMap(tagMap);
-        setRatingMap(ratings);
-        setCountsReady(true);
-      });
+        setMetadataResult({ key: metadataKey, status: 'success', ready: true, counts, tags: tagMap, ratings });
+      } catch (error) {
+        if (cancelled) return;
+        console.error('口コミ情報取得エラー:', error);
+        setMetadataResult(previous => ({ ...(previous?.key === metadataKey ? previous : {}), key: metadataKey, status: 'error' }));
+      }
+    };
+    loadMetadata();
     return () => { cancelled = true; };
-  }, [serverTherapists]);
+  }, [serverTherapists, hasTherapistData, metadataKey, metadataRetryToken]);
 
   // 店舗セクション（関連度順：語一致 > 語頭一致 > タイポ許容）
   // ⚠️ 必ず rankShops を使うこと。素の filter だとDB登録順のまま並び、
@@ -523,6 +550,7 @@ export default function SearchPage({ renderSeo = true }) {
 
     // タグ絞り込み（口コミのtagsを参照）。キーは therapist_id（F04）。
     if (selectedTags.length > 0) {
+      if (!countsReady) return [];
       results = results.filter(t => {
         const reviewTags = reviewTagMap[t.id] || new Set();
         return selectedTags.every(sel => reviewTags.has(sel));
@@ -530,11 +558,12 @@ export default function SearchPage({ renderSeo = true }) {
     }
 
     return results;
-  }, [serverTherapists, selectedTags, reviewTagMap]);
+  }, [serverTherapists, selectedTags, reviewTagMap, countsReady]);
 
   // ソート（件数・評価は F04 の集計と同じ therapist_id キーを使う）
   const sortedFilteredTherapists = useMemo(() => {
     let results = filteredTherapists;
+    if ((castSortOrder === 'reviews' || castSortOrder === 'rating') && !countsReady) return [];
     if (castSortOrder === 'aiueo') {
       results = [...results].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'ja'));
     } else if (castSortOrder === 'reviews') {
@@ -543,7 +572,7 @@ export default function SearchPage({ renderSeo = true }) {
       results = [...results].sort((a, b) => (ratingMap[b.id] || 0) - (ratingMap[a.id] || 0));
     }
     return results;
-  }, [filteredTherapists, castSortOrder, reviewCountMap, ratingMap]);
+  }, [filteredTherapists, castSortOrder, reviewCountMap, ratingMap, countsReady]);
 
   // ⚠️ 2026-09-08（FIXES.md F04）: 「同名を1枚にまとめる」をやめ、**同一IDだけ**まとめる。
   //    同名の別人（別店舗・同一店舗いずれも）が1枚のカードに統合され、
@@ -587,11 +616,16 @@ export default function SearchPage({ renderSeo = true }) {
   }, [serverTherapists, reviewTagMap]);
 
   const hasAvailableTags = useMemo(
-    () => selectedTags.length > 0 || Object.values(tagCounts).some(count => count > 0),
-    [selectedTags, tagCounts]
+    () => selectedTags.length > 0 || (!countsReady && serverTherapists.length > 0) || Object.values(tagCounts).some(count => count > 0),
+    [selectedTags, tagCounts, countsReady, serverTherapists.length]
   );
 
-  const isLoading = isPending || isFetchingDB;
+  const metadataRequired = selectedTags.length > 0 || castSortOrder === 'reviews' || castSortOrder === 'rating';
+  const inputChanging = shopInput !== shopQuery || castInput !== castQuery;
+  const currentFetchError = therapistResult?.key === searchKey && fetchError;
+  const resultsConfirmed = hasTherapistData && !inputChanging && (!metadataRequired || countsReady);
+  const isLoading = isPending || inputChanging || isFetchingDB
+    || (hasTherapistData && metadataRequired && !countsReady && metadataStatus !== 'error');
   const isFeaturedBrowse = !shopQuery.trim() && !castQuery.trim();
 
   const clearAll = () => {
@@ -747,7 +781,9 @@ export default function SearchPage({ renderSeo = true }) {
               <p className="text-xs text-pink-400 font-bold">
                 {isLoading
                   ? '検索中...'
-                  : `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length.toLocaleString()}件${resultCapped ? '以上' : ''}`}
+                  : resultsConfirmed
+                    ? `店舗 ${matchingShops.length}件・キャスト ${deduplicatedTherapists.length.toLocaleString()}件${resultCapped ? '以上' : ''}`
+                    : '検索結果を確認できませんでした'}
               </p>
             </div>
             {(shopInput || castInput || selectedTags.length > 0) && (
@@ -825,18 +861,18 @@ export default function SearchPage({ renderSeo = true }) {
                       key={tag}
                       onClick={() => {
                         if (isSelected) setSelectedTags(prev => prev.filter(t => t !== tag));
-                        else if (count > 0) setSelectedTags(prev => [...prev, tag]);
+                        else if (!countsReady || count > 0) setSelectedTags(prev => [...prev, tag]);
                       }}
-                      disabled={count === 0 && !isSelected}
+                      disabled={countsReady && count === 0 && !isSelected}
                       className={`px-3 py-1.5 rounded-sm text-xs font-bold transition-all border ${
                         isSelected
                           ? 'bg-pink-600 border-pink-500 text-white'
-                          : count === 0
+                          : countsReady && count === 0
                             ? 'bg-transparent border-slate-800 text-slate-700 cursor-not-allowed'
                             : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white'
                       }`}
                     >
-                      {tag} <span className="opacity-50">({count})</span>
+                      {tag} <span className="opacity-50">({countsReady ? count : '—'})</span>
                     </button>
                   );
                 })}
@@ -861,8 +897,6 @@ export default function SearchPage({ renderSeo = true }) {
                   <ShopCard key={shop.id} shop={shop} onSelect={(s) => {
                     setShopInput(s.name);
                     setCastInput('');
-                    setServerTherapists([]);   // 古い結果を即クリア
-                    setIsFetchingDB(true);     // 押した瞬間にスケルトン表示（debounce待ちの空白をなくす）
                     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
                   }} />
                 ))}
@@ -898,9 +932,9 @@ export default function SearchPage({ renderSeo = true }) {
 
             {/* ⚠️ FIXES.md F05: 通信失敗を「見つかりませんでした」と混同しない。
                 既存の結果は消さず、再読み込みだけを出す。 */}
-            {fetchError && (
+            {currentFetchError && (
               <div role="alert" className="mb-4 rounded-sm border border-rose-500/50 bg-rose-500/10 p-3">
-                <p className="ui-error">読み込めませんでした</p>
+                <p className="ui-error">人物の検索結果を読み込めませんでした</p>
                 <button
                   type="button"
                   onClick={() => setRetryToken((n) => n + 1)}
@@ -912,11 +946,24 @@ export default function SearchPage({ renderSeo = true }) {
               </div>
             )}
 
+            {hasTherapistData && metadataStatus === 'error' && (
+              <div role="alert" className="mb-4 rounded-sm border border-rose-500/50 bg-rose-500/10 p-3">
+                <p className="ui-error">タグ・口コミ件数・評価を読み込めませんでした</p>
+                <p className="mt-1 text-xs text-slate-300">{countsReady
+                  ? '同じ検索条件で確認できた情報を表示しています。'
+                  : metadataRequired ? '条件に合う人数はまだ確認できていません。再試行してください。' : '人物の検索結果は表示できます。口コミ情報を再試行してください。'}</p>
+                <button type="button" onClick={() => setMetadataRetryToken(n => n + 1)} className="ui-link mt-1.5 inline-flex min-h-11 items-center font-bold" style={{ fontSize: '13px' }}>口コミ情報を再取得</button>
+              </div>
+            )}
+            {hasTherapistData && metadataRequired && !countsReady && metadataStatus !== 'error' && (
+              <p role="status" className="mb-4 text-sm text-slate-300">タグ・口コミ件数・評価を確認中です…</p>
+            )}
+
             {(isFeaturedBrowse || matchingShops.length > 0 || castQuery) && (
               <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
                 {isFeaturedBrowse ? '注目セラピスト' : shopQuery && castQuery ? 'この店舗のキャスト絞り込み結果' : shopQuery ? 'この店舗のキャスト一覧' : 'キャスト検索結果'}
-                {!isLoading && <span className="text-purple-400 font-bold normal-case">{deduplicatedTherapists.length}件</span>}
+                {!isLoading && resultsConfirmed && <span className="text-purple-400 font-bold normal-case">{deduplicatedTherapists.length}件</span>}
               </h2>
             )}
 
@@ -932,7 +979,7 @@ export default function SearchPage({ renderSeo = true }) {
             )}
 
             {/* キャスト内絞り込み・ソートバー */}
-            {filteredTherapists.length > 0 && (
+            {hasTherapistData && serverTherapists.length > 0 && (
               <div className="mb-6">
                 {/* ⚠️ 2026-09-08（U05）削除: 3本目の「キャスト名で絞り込み」入力。
                     上部の「セラピスト名」と重複し、両方に別の語を入れるとAND条件で必ず0件になる。
@@ -1064,7 +1111,7 @@ export default function SearchPage({ renderSeo = true }) {
                   )}
                 </>
               ) : (
-                !isLoading && matchingShops.length === 0 && (shopQuery || castQuery || selectedTags.length > 0) && (
+                !isLoading && resultsConfirmed && matchingShops.length === 0 && (shopQuery || castQuery || selectedTags.length > 0) && (
                   <div className="py-20 text-center">
                     <div className="w-20 h-20 bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-5 border border-white/5">
                       <span className="text-slate-500"><LineIcon name="search" size={30} /></span>

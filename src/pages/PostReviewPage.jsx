@@ -43,7 +43,7 @@ const shopLocationLabel = (shop) => {
   return [shop?.prefecture, area].filter(Boolean).join('・');
 };
 
-const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId, initCustomMode }) => {
+const Step1_Select = ({ shops, shopTherapists, therapistLoadStatus, retryTherapists, selectedShopId, setSelectedShopId, initCustomMode }) => {
   const { setValue, watch } = useFormContext();
   const selectedTherapistId = watch('therapistId');
   const therapistName = watch('therapistName');
@@ -209,6 +209,14 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
       {selectedShopId && (
         <div className="bg-slate-900 p-5 rounded-sm border border-white/5 shadow-xl animate-in fade-in duration-500">
           <p className="block text-xs font-bold text-slate-400 mb-4 pl-1">セラピスト</p>
+          {selectedTherapistId && therapistName && <p className="mb-3 text-sm text-pink-200">選択済み: {therapistName}</p>}
+          {therapistLoadStatus === 'loading' && <p role="status" className="mb-4 text-sm text-slate-300">この店舗のセラピストを読み込んでいます…</p>}
+          {therapistLoadStatus === 'error' && (
+            <div role="alert" className="mb-4 rounded-sm border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-100">
+              <p>この店舗のセラピストを読み込めませんでした。選択した店舗・セラピストと入力した内容はこの画面に残っています。</p>
+              <button type="button" onClick={retryTherapists} className="mt-3 min-h-11 rounded-sm border border-amber-300/30 px-3 font-bold">同じ店舗を再試行</button>
+            </div>
+          )}
 
           {customMode ? (
             /* カスタムモード: 入力欄のみ表示 */
@@ -229,7 +237,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
                 )}
               </div>
               <p className="text-[10px] text-slate-500 mt-2 pl-1">
-                ※ 新人など、まだリストに登録されていないセラピストの名前を入力してください
+                ※ 新人など、正常に取得したリストに登録されていないセラピストの名前を入力してください。手入力の口コミは非公開です。
               </p>
               <button
                 type="button"
@@ -243,6 +251,7 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
             /* 通常モード: 検索バー + セラピストカード一覧 */
             <TherapistGrid
               shopTherapists={shopTherapists}
+              therapistLoadStatus={therapistLoadStatus}
               selectedTherapistId={selectedTherapistId}
               selectTherapist={selectTherapist}
               enterCustomMode={enterCustomMode}
@@ -255,16 +264,19 @@ const Step1_Select = ({ shops, shopTherapists, selectedShopId, setSelectedShopId
 };
 
 /* セラピスト検索グリッド（検索バー + カード一覧） */
-const TherapistGrid = ({ shopTherapists, selectedTherapistId, selectTherapist, enterCustomMode }) => {
+const TherapistGrid = ({ shopTherapists, therapistLoadStatus, selectedTherapistId, selectTherapist, enterCustomMode }) => {
   const [filter, setFilter] = useState('');
 
   const filtered = useMemo(() => {
     const q = normalizeSearchText(filter);
+    if (therapistLoadStatus !== 'success') return [];
     if (!q) return shopTherapists;
     return shopTherapists.filter(t =>
       normalizeSearchText(t.name).includes(q)
     );
-  }, [shopTherapists, filter]);
+  }, [shopTherapists, therapistLoadStatus, filter]);
+
+  if (therapistLoadStatus !== 'success') return null;
 
   return (
     <div>
@@ -286,6 +298,8 @@ const TherapistGrid = ({ shopTherapists, selectedTherapistId, selectTherapist, e
           >×</button>
         )}
       </div>
+
+      {shopTherapists.length === 0 && <p className="mb-4 text-sm text-slate-400">この店舗のセラピストはまだリストに登録されていません。</p>}
 
       {/* カードグリッド */}
       <div className="grid grid-cols-3 gap-3">
@@ -317,6 +331,7 @@ const TherapistGrid = ({ shopTherapists, selectedTherapistId, selectTherapist, e
       {filtered.length === 0 && filter && (
         <p className="text-center text-slate-500 text-sm py-4">「{filter}」に一致するセラピストが見つかりません</p>
       )}
+      <p className="mt-3 text-xs leading-relaxed text-slate-400">新人など、このリストに登録されていない方の名前は手入力できます。手入力の口コミは非公開です。</p>
     </div>
   );
 };
@@ -841,41 +856,54 @@ export default function PostReviewPage() {
   }, [effectiveShopId, paramThreadId]);
 
   // Shop Data Logic
-  const [shopTherapists, setShopTherapists] = useState([]);
+  const [therapistLoad, setTherapistLoad] = useState({ shopId: null, status: 'notselected', items: [] });
+  const [therapistRetry, setTherapistRetry] = useState(0);
+  const therapistRequestRef = useRef(0);
+  const candidateShopRef = useRef(selectedShopId);
+  candidateShopRef.current = selectedShopId;
+  // Hide the old shop's cards during the first render, before effect cleanup runs.
+  const therapistLoadStatus = !selectedShopId ? 'notselected'
+    : therapistLoad.shopId === selectedShopId ? therapistLoad.status : 'loading';
+  const shopTherapists = therapistLoad.shopId === selectedShopId && therapistLoadStatus === 'success'
+    ? therapistLoad.items : [];
+  const retryTherapists = () => {
+    if (!selectedShopId) return;
+    setTherapistLoad({ shopId: selectedShopId, status: 'loading', items: [] });
+    setTherapistRetry((attempt) => attempt + 1);
+  };
 
   useEffect(() => {
     let isMounted = true;
+    const request = ++therapistRequestRef.current;
+    const controller = new AbortController();
+    const isCurrent = () => isMounted && request === therapistRequestRef.current && candidateShopRef.current === selectedShopId;
     const fetchTherapists = async () => {
-      setShopTherapists([]);
       if (!selectedShopId) {
-        if (isMounted) setShopTherapists([]);
+        setTherapistLoad({ shopId: null, status: 'notselected', items: [] });
         return;
       }
+      setTherapistLoad({ shopId: selectedShopId, status: 'loading', items: [] });
 
       // 🚨 共有データ(Context)は文字列しか返さないバグがあるため無視！
       // 常にSupabaseから直接「写真・名前入り」の完全なオブジェクトを取得する
       try {
         const url = process.env.VITE_SUPABASE_URL;
         const key = process.env.VITE_SUPABASE_ANON_KEY;
-        if (!url || !key) return;
+        if (!url || !key) throw new Error('therapist lookup unavailable');
         
         const headers = { 'apikey': key, 'Authorization': `Bearer ${key}` };
-        const res = await fetch(`${url}/rest/v1/therapists?shop_id=eq.${encodeURIComponent(selectedShopId)}&select=*`, { headers });
+        const res = await fetch(`${url}/rest/v1/therapists?shop_id=eq.${encodeURIComponent(selectedShopId)}&select=*`, { headers, signal: controller.signal });
         if (!res.ok) throw new Error('therapist lookup failed');
         const data = await res.json();
-        
-        if (Array.isArray(data) && data.length > 0 && isMounted) {
-          setShopTherapists(data.filter((item) => item.shop_id === selectedShopId));
-        } else if (isMounted) {
-          setShopTherapists([]);
-        }
-      } catch (e) {
-        console.error("セラピスト取得エラー:", e);
+        if (!Array.isArray(data)) throw new Error('invalid therapist lookup');
+        if (isCurrent()) setTherapistLoad({ shopId: selectedShopId, status: 'success', items: data.filter((item) => item.shop_id === selectedShopId) });
+      } catch {
+        if (isCurrent()) setTherapistLoad({ shopId: selectedShopId, status: 'error', items: [] });
       }
     };
-    fetchTherapists();
-    return () => { isMounted = false; };
-  }, [selectedShopId]);
+    void fetchTherapists();
+    return () => { isMounted = false; controller.abort(); };
+  }, [selectedShopId, therapistRetry]);
 
   const validateStep = async () => {
     let isValid = false;
@@ -1200,6 +1228,8 @@ export default function PostReviewPage() {
                   <Step1_Select
                     shops={shops}
                     shopTherapists={shopTherapists}
+                    therapistLoadStatus={therapistLoadStatus}
+                    retryTherapists={retryTherapists}
                     selectedShopId={selectedShopId}
                     setSelectedShopId={setSelectedShopId}
                     key={routeKey}

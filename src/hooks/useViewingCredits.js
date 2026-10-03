@@ -5,16 +5,21 @@ import { fetchViewingCredits } from '../utils/viewingCredits.js';
 
 /** anonymous / loading / error / expired / active。通信失敗を期限切れへ変換しない。 */
 export function useViewingCredits() {
-  const { user, userPlan, loading: authLoading } = useAuth();
+  const { user, userPlan, loading: authLoading, planStatus: providedPlanStatus, retryPlan } = useAuth();
+  // 旧Providerを使う既存の実行ガードとの互換性。実AuthProviderは必ずplanStatusを返す。
+  const planStatus = providedPlanStatus ?? 'ready';
   const userId = user?.id || '';
   const isPremium = userPlan === 'premium' || userPlan === 'vip';
   const [result, setResult] = useState(null);
   const [attempt, setAttempt] = useState(0);
-  const retry = useCallback(() => setAttempt((n) => n + 1), []);
-  const requestKey = useMemo(() => ({ user, userId, userPlan, authLoading, attempt }), [user, userId, userPlan, authLoading, attempt]);
+  const retry = useCallback(() => {
+    if (planStatus === 'error') retryPlan?.();
+    else setAttempt((n) => n + 1);
+  }, [planStatus, retryPlan]);
+  const requestKey = useMemo(() => ({ user, userId, userPlan, planStatus, authLoading, attempt }), [user, userId, userPlan, planStatus, authLoading, attempt]);
 
   useEffect(() => {
-    if (authLoading || !userId || isPremium) return;
+    if (authLoading || !userId || planStatus !== 'ready' || isPremium) return;
     let cancelled = false;
     let expiryTimer;
     (async () => {
@@ -32,11 +37,13 @@ export function useViewingCredits() {
       }
     })();
     return () => { cancelled = true; clearTimeout(expiryTimer); };
-  }, [authLoading, userId, isPremium, requestKey, retry]);
+  }, [authLoading, userId, planStatus, isPremium, requestKey, retry]);
 
   // ユーザー切替・再試行直後にも前回の権利や期限切れを表示しない。
   if (authLoading) return { status: 'loading', days: 0, retry };
   if (!userId) return { status: 'anonymous', days: 0, retry };
+  if (planStatus === 'error') return { status: 'error', days: 0, retry };
+  if (planStatus !== 'ready') return { status: 'loading', days: 0, retry };
   if (isPremium) return { status: 'active', days: 0, retry };
   if (result?.requestKey !== requestKey) return { status: 'loading', days: 0, retry };
   return { status: result.status, days: result.days, expiresAt: result.expiresAt || null, retry };

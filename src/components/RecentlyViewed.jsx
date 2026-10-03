@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from '../compat/router';
 import { historyLink, useRecentlyViewed } from '../hooks/useRecentlyViewed';
+import HistoryStorageStatus from './HistoryStorageStatus.jsx';
 
 export default function RecentlyViewed() {
-  const { history, clearHistory } = useRecentlyViewed();
+  const historyState = useRecentlyViewed();
+  const { history, clearHistory, historyLoading, storageError } = historyState;
 
-  if (history.length === 0) return null;
+  if (history.length === 0 && !historyLoading && !storageError) return null;
 
   return (
     <section className="py-6">
@@ -13,13 +15,15 @@ export default function RecentlyViewed() {
         <div className="flex items-end justify-between mb-4 border-b border-slate-700 pb-3">
           {/* 他セクション（注目セラピスト・新着店舗）と見出しの作法を揃える（明朝・下に細い線） */}
           <h3 className="font-mincho text-[26px] md:text-[32px] font-bold leading-[1.3] text-slate-50">最近チェックした</h3>
-          <button
+          {history.length > 0 && <button
             onClick={clearHistory}
+            disabled={historyLoading}
             className="text-xs font-bold text-slate-400 hover:text-pink-300 transition py-3 -my-3 pl-3"
           >
             履歴を消す
-          </button>
+          </button>}
         </div>
+        <HistoryStorageStatus {...historyState} />
 
         {/* 横スクロールエリア */}
         <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide snap-x">
