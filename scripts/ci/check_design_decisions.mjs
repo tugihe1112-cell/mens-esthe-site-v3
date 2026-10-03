@@ -171,6 +171,37 @@ function read(path) {
         '        → 両隣のカードからドラッグしても動かなくなる（両隣と wrapper は pointer-events:none のため、target が .swiper になる）。'
       );
     }
+    // 2026-10-01: トップの画面のずれ（CLS 0.0996）の原因が Swiper の loop だった。
+    //   loop は送るたびにカードを列の反対側へ付け替える（DOM の並べ替え）。見た目は translate で
+    //   合わせるが、ブラウザは付け替えたカードの位置の変化を「ずれ」として数える＝自動送りのたびに +0.0996。
+    //   → 同じ5枚を3周ぶん並べ、端の周に入ったら真ん中の周へ速さ0で移す（transform だけ＝数えない）。
+    if (/\bloop\b/.test(tag)) {
+      violations.push(
+        '[D-002/ずれ] TopHeroSlider の Swiper に loop が戻っている。\n' +
+        '        → 自動送りのたびにカードの並べ替えが起き、トップの CLS が毎回 +0.0996 になる。3周ぶん並べて recenter で戻すこと。'
+      );
+    }
+    if (!/initialSlide=\{/.test(tag) || !/onSlideChangeTransitionEnd=\{recenter\}/.test(tag)) {
+      violations.push(
+        '[D-002/ずれ] TopHeroSlider が真ん中の周から始めていない、または送り終わりに recenter していない。\n' +
+        '        → 端まで行くと止まる／巻き戻しが見える。initialSlide と onSlideChangeTransitionEnd={recenter} を残すこと。'
+      );
+    }
+    if (!/slideTo\(\s*target\s*,\s*0\s*,\s*false\s*\)/.test(code) || !/flushSync/.test(code)) {
+      violations.push(
+        '[D-002/ずれ] TopHeroSlider の recenter が「速さ0・flushSync」で移していない。\n' +
+        '        → 速さが0でないと巻き戻しが見え、flushSync が無いと真ん中のカードが一瞬「暗い・店名なし」になる。'
+      );
+    }
+  }
+  {
+    const css = read('src/index.css') || '';
+    if (!/\.hero-coverflow\.hero-jumping\s+\.swiper-slide[\s\S]{0,120}transition:\s*none\s*!important/.test(css)) {
+      violations.push(
+        '[D-002/ずれ] src/index.css に .hero-coverflow.hero-jumping のトランジション停止が無い。\n' +
+        '        → 真ん中の周へ移す一瞬に、移した先のカードが「暗い→明るい」とちらつく。'
+      );
+    }
   }
   if (!/pauseOnMouseEnter\s*:\s*true/.test(slider)) {
     violations.push(

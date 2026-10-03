@@ -444,6 +444,13 @@ a {
   pointer-events: auto;
 }
 
+/* 端の周から真ん中の周へ移す一瞬だけ、ぼかし・暗さの変化を止める（TopHeroSlider の recenter）。
+   止めないと、移した先のカードが「暗い→明るい」と 0.65秒かけて変わり、ちらついて見える。 */
+.hero-coverflow.hero-jumping .swiper-slide,
+.hero-coverflow.hero-jumping .swiper-slide * {
+  transition: none !important;
+}
+
 /* ⚠️ 2026-09-21「店舗を見る」が押しても開かない（2回目）。
    症状: 最初に出ている1枚（LINDA SPA）だけ開き、スライドが送られた後の4枚は無反応。
    原因: 押した位置の当たり判定が <a> ではなく .swiper-wrapper に取られていた

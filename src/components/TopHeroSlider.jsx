@@ -1,5 +1,6 @@
 import { shopHref } from '../utils/brandGroups.js';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectCoverflow, A11y, Keyboard } from 'swiper/modules';
 import { Link } from '../compat/router';
@@ -62,8 +63,22 @@ export default function TopHeroSlider({ initialHero = [], topSlot = null }) {
   // shops未ロード時は initialHero（SSR埋め込み）を使う。
   // → サーバー描画とhydration初回が一致し、ヒーロー画像が初期HTMLに乗る。
   const items = heroItems.length ? heroItems : (initialHero || []);
+  const n = items.length;
 
-  // 現在のスライド（loop対応の realIndex）。
+  // ⚠️ 2026-10-01 トップの画面のずれ（CLS 0.0996）の原因＝Swiper の loop。
+  //    loop は送るたびにカードを1枚、列の反対側へ付け替え（DOM の並べ替え）、見た目は
+  //    wrapper の translate で合わせる。ブラウザは translate（transform）の変化は数えないが、
+  //    付け替えたカードの位置の変化は「ずれ」として数える＝自動送りのたびに +0.0996。
+  //    → loop をやめ、同じ5枚を3周ぶん並べて真ん中の周から始める。端の周に入ったら、
+  //      送り終わった瞬間に真ん中の周の同じカードへ速さ0で移す（transform だけ＝ずれに数えない）。
+  //    ⚠️ loop={true} に戻さないこと（検査 check_design_decisions で止める）。
+  const slides = useMemo(() => {
+    if (n < 2) return items.map((shop, i) => ({ shop, i, copy: 1 }));
+    return [0, 1, 2].flatMap((copy) => items.map((shop, i) => ({ shop, i, copy })));
+  }, [items, n]);
+  const startIndex = n < 2 ? 0 : n;
+
+  // 現在のスライド（3周ぶん並べた中の何枚目か を n で割った余り＝0〜n-1）。
   // ⚠️ ドットの active はこれだけで決める。autoplay の残り時間（activeProgress）は
   //    進行バーの表示にだけ使う。混ぜると F06-A の不具合（送っていないのに
   //    ドットが動く）に戻る。
@@ -71,12 +86,28 @@ export default function TopHeroSlider({ initialHero = [], topSlot = null }) {
   const [isPlaying, setIsPlaying] = useState(true);
   const swiperRef = useRef(null);
 
+  // ドット＝今いる周の i 枚目へ送る（送り終わったら recenter が真ん中の周へ戻す）
   const goToSlide = useCallback((i) => {
     const s = swiperRef.current;
-    if (!s) return;
-    if (typeof s.slideToLoop === 'function') s.slideToLoop(i);
-    else if (typeof s.slideTo === 'function') s.slideTo(i);
-  }, []);
+    if (!s || typeof s.slideTo !== 'function') return;
+    const base = n < 2 ? 0 : Math.floor(s.activeIndex / n) * n;
+    s.slideTo(base + i);
+  }, [n]);
+
+  // 端の周に入ったら、真ん中の周の同じカードへ速さ0で移す。
+  // ⚠️ 速さ0の移動は transform だけ＝ずれに数えない。並べ替えはしない。
+  // ⚠️ flushSync＝カードの「いま有効か」（isActive）の描き直しを同じフレームで済ませる。
+  //    後回しになると、真ん中のカードが一瞬「暗い・店名なし」に見える。
+  // ⚠️ hero-jumping＝その一瞬だけ CSS の変化（ぼかし・暗さ）を止める（index.css）。
+  const recenter = useCallback((s) => {
+    if (!s || n < 2) return;
+    const a = s.activeIndex;
+    if (a >= n && a < 2 * n) return;
+    const target = n + (((a % n) + n) % n);
+    s.el.classList.add('hero-jumping');
+    flushSync(() => { s.slideTo(target, 0, false); });
+    requestAnimationFrame(() => requestAnimationFrame(() => s.el.classList.remove('hero-jumping')));
+  }, [n]);
 
   const toggleAutoplay = useCallback(() => {
     const s = swiperRef.current;
@@ -150,17 +181,19 @@ export default function TopHeroSlider({ initialHero = [], topSlot = null }) {
           1024: { slidesPerView: 2.2 },
         }}
         speed={650}
-        loop={true}
+        initialSlide={startIndex}
         navigation={true}
+        a11y={{ slideLabelMessage: '' }}
         autoplay={{ delay: 4500, disableOnInteraction: false, pauseOnMouseEnter: true }}
         onAutoplayTimeLeft={(s, time, progress) => setActiveProgress(progress)}
         onSwiper={(s) => { swiperRef.current = s; }}
-        onSlideChange={(s) => setActiveIndex(typeof s.realIndex === 'number' ? s.realIndex : (s.activeIndex || 0))}
+        onSlideChange={(s) => setActiveIndex(n ? (((s.activeIndex || 0) % n) + n) % n : 0)}
+        onSlideChangeTransitionEnd={recenter}
         className="w-full hero-coverflow"
         style={{ paddingTop: topSlot ? '10px' : '20px', paddingBottom: '20px' }}
       >
-        {items.map((shop, index) => (
-          <SwiperSlide key={shop.id} className="!h-[clamp(190px,32vh,270px)] sm:!h-[clamp(200px,38vh,440px)]">
+        {slides.map(({ shop, i: index, copy }) => (
+          <SwiperSlide key={`${shop.id}__${copy}`} aria-label={`${index + 1} / ${n}`} className="!h-[clamp(190px,32vh,270px)] sm:!h-[clamp(200px,38vh,440px)]">
             {({ isActive }) => (
               <div
                 className="w-full h-full rounded-sm p-px"
@@ -189,7 +222,7 @@ export default function TopHeroSlider({ initialHero = [], topSlot = null }) {
                   <img
                     src={shop.heroImage}
                     alt={shop.name}
-                    fetchPriority={index === 0 ? 'high' : undefined}
+                    fetchPriority={index === 0 && copy === 1 ? 'high' : undefined}
                     className="w-full h-full object-cover"
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />
@@ -253,7 +286,7 @@ export default function TopHeroSlider({ initialHero = [], topSlot = null }) {
           ⚠️ 2026-09-08（FIXES.md F06-A）: 以前は active 判定に autoplay の残り時間
              （activeProgress）を使っており、スライドを送らなくても時間だけでドットが
              動いていた。時間の progress と slide index は別物なので混ぜない。
-             現在地は onSlideChange の realIndex（loop対応）だけから決める。 */}
+             現在地は onSlideChange の activeIndex（n で割った余り）だけから決める。 */}
       <div className="flex justify-center items-center gap-1 mt-1">
         {items.map((_, i) => (
           <button
