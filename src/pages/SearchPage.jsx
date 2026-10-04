@@ -18,6 +18,7 @@ import { ShopStatusChip } from '../components/ShopStatusBanner.jsx';
 import { getDisplayName } from '../utils/shopHelpers';
 // 検索結果はブランド単位。支店レコードは「渋谷で引っかかる」ための地名を持つだけ。
 import { buildBrands , brandCanonicalPath } from '../utils/brandGroups.js';
+import { unlistedReviewDestination } from '../utils/unlistedReviewDestination.js';
 
 // ─── ファジー店舗検索ユーティリティ ────────────────────────────
 // ⚠️ ロジック本体は src/utils/searchMatch.js に切り出してある（CIでテストするため）。
@@ -358,6 +359,9 @@ export default function SearchPage({ renderSeo = true }) {
       const params = {};
       if (shopInput) {
         params.shop = shopInput;
+        // Keep an explicitly selected room only while its original name is current.
+        // Editing the query must not carry that room into another search.
+        if (shopById?.[initShopId]?.name === shopInput) params.shopId = initShopId;
       } else if (initShopId) {
         // ⚠️ shopId はまだ店名に解決できていない間は**URLに残す**。
         //    店舗データ(DataContext)の読み込みは非同期なので、初回レンダー時点では
@@ -370,7 +374,7 @@ export default function SearchPage({ renderSeo = true }) {
       if (selectedTags.length > 0) params.tags = selectedTags.join(',');
       setSearchParams(params, { replace: true });
     });
-  }, [shopInput, castInput, selectedTags, setSearchParams, initShopId]);
+  }, [shopInput, castInput, selectedTags, setSearchParams, initShopId, shopById]);
 
   // displayCount をリセット
   useEffect(() => {
@@ -1019,15 +1023,12 @@ export default function SearchPage({ renderSeo = true }) {
                 <>
                   <div className={GRID_CLASS}>
                     {/* リストにいないセラピストの口コミカード（店舗指定時のみ） */}
-                    {/* ⚠️ 2026-09-08（FIXES.md F05）: `matchingShops[0]` を無条件に指定していた。
-                        「新宿」のような地域検索では複数店舗に一致するので、
-                        投稿画面が**関係のない先頭店舗に固定**される。
-                        明示された店舗が1つに定まるときだけ指定し、それ以外は店舗選択へ送る。 */}
+                    {/* ブランド1件でも複数ルームの場合がある。実店舗が一意か、
+                        現在の検索で実店舗を明示選択した場合だけ投稿先を指定する。 */}
                     {shopQuery && matchingShops.length >= 1 && (
                       <Link
-                        to={matchingShops.length === 1 || initShopId
-                          ? `/post-review?shopId=${initShopId || matchingShops[0].id}&customMode=true`
-                          : '/post-review?customMode=true'}
+                        to={unlistedReviewDestination({ matchingBrands: matchingShops, shopById,
+                          selectedShopId: initShopId, shopInput, shopQuery })}
                         className="group relative block bg-slate-900/60 rounded-sm overflow-hidden border border-dashed border-purple-500/30 hover:border-purple-500/70 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-900/20 hover:-translate-y-1"
                       >
                         <div className="aspect-[3/4] flex flex-col items-center justify-center gap-3 p-4">

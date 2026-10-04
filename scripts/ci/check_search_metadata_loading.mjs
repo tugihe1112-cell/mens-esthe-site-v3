@@ -6,6 +6,7 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import ts from 'typescript';
 import * as identity from '../../src/utils/reviewIdentity.js';
+import * as destinationHelpers from '../../src/utils/unlistedReviewDestination.js';
 
 const original = fs.readFileSync('src/pages/SearchPage.jsx', 'utf8');
 const equalDeps = (a, b) => a?.length === b?.length && a?.every((v, i) => Object.is(v, b[i]));
@@ -43,6 +44,7 @@ function harness(source = original, tags = '美人系') {
     '../compat/router': { Link: link, useSearchParams: () => [env.params, setParams] },
     '../contexts/DataContext.jsx': { useShopData: () => ({ shops: env.shops, shopById: Object.fromEntries(env.shops.map(s => [s.id, s])) }) },
     '../lib/supabase': { supabase: client }, '../utils/reviewIdentity.js': identity,
+    '../utils/unlistedReviewDestination.js': destinationHelpers,
     '../components/LazyImage.jsx': ({ alt }) => React.createElement('img', { alt }), '../components/ui/Skeleton.jsx': { TherapistCardSkeleton: () => React.createElement('div', null, 'QAスケルトン') },
     '../components/Header.jsx': empty, '../components/SeoHead.jsx': empty, '../components/LocationLabel.jsx': empty,
     '../utils/searchMatch': { rankShops: () => [] }, '../utils/therapistSearch.js': { THERAPIST_NAME_QUERY_MAX_LENGTH: 80, fetchTherapistsByName: (_client, name) => { const r = { name, ...deferred() }; env.names.push(r); return r.promise; } },
