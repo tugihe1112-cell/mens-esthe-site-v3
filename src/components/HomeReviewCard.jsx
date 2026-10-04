@@ -158,6 +158,15 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
     }
   };
   const prefetch = () => prefetchReviewBody(r.id);
+  // 開閉は「中身が普通のリンク」にする（2026-10-05・スマホで開かない件）。
+  // ページのプログラムが動き出す前に押されたら、href どおり人物ページの該当口コミへ移る（何も起きない状態を作らない）。
+  // 動き出した後は移らずに、その場で開閉する。role=button なので Space キーでも開閉できるようにする。
+  const toggleHandlers = (next) => ({
+    href: reviewLink,
+    role: 'button',
+    onClick: (e) => { e.preventDefault(); setOpen(next()); },
+    onKeyDown: (e) => { if (e.key === ' ') { e.preventDefault(); setOpen(next()); } },
+  });
   // 最新1件は、画面に入った時点で裏で全文を取っておく（押した瞬間に開く）。
   useEffect(() => {
     if (!isHero || !r.id || typeof IntersectionObserver === 'undefined' || !cardRef.current) return undefined;
@@ -217,9 +226,8 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
           <div className="min-w-0 flex-1">
             <div className="flex min-w-0 items-center gap-1.5">
               {/* カード全体を押せる開閉ボタン（after で全面に広げる）。開いた本文は z-10 で上に重ね、中のリンクを押せるようにする */}
-              <button
-                type="button"
-                onClick={() => setOpen(!open)}
+              <a
+                {...toggleHandlers(() => !open)}
                 onFocus={prefetch}
                 aria-expanded={open}
                 aria-controls={open ? bodyId : undefined}
@@ -228,7 +236,7 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
               >
                 {r.therapistName}
                 <span className="sr-only">{open ? 'の口コミを閉じる' : 'の口コミ全文をここで開く'}</span>
-              </button>
+              </a>
               {NotListedBadge}
             </div>
             {sub && <p className="truncate text-slate-400" style={{ fontSize: '12px', lineHeight: 1.5 }}>{sub}</p>}
@@ -318,16 +326,15 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
           ) : (
             <>
               <p className="line-clamp-4 text-slate-300 md:mt-3 md:line-clamp-3" style={{ fontSize: '14px', lineHeight: 1.85 }}>{r.snippet}…</p>
-              <button
-                type="button"
-                onClick={() => setOpen(true)}
+              <a
+                {...toggleHandlers(() => true)}
                 onFocus={prefetch}
                 aria-expanded={false}
                 className="ui-link mt-2 inline-flex min-h-11 items-center font-bold"
                 style={{ fontSize: '13px' }}
               >
                 口コミ全文を読む ▼
-              </button>
+              </a>
             </>
           )}
         </div>

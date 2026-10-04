@@ -24,6 +24,7 @@
  */
 import { createClient } from '@supabase/supabase-js';
 import { sendSiteCounts } from '../server/siteCounts.js';
+import { sendReviewBody } from '../server/reviewBody.js';
 
 const PAGE = 1000;
 
@@ -35,6 +36,8 @@ export default async function handler(req, res) {
   // 🚩 トップの件数（掲載N店舗／在籍N人）は ?view=counts で返す（2026-09-24・server/siteCounts.js の注記）。
   //    件数だけの関数を足したら Vercel 無料プランの「1デプロイ12関数まで」を超えてデプロイが失敗したので、ここに同居させる。
   if (req.query && req.query.view === 'counts') return sendSiteCounts(req, res);
+  // ホームの口コミカードの「その場で全文」（2026-10-05・server/reviewBody.js の注記）。同じ理由でここに同居させる。
+  if (req.query && req.query.view === 'review') return sendReviewBody(req, res);
   if (!process.env.VITE_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return res.status(500).json({ error: 'server configuration error' });
   }

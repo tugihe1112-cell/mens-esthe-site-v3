@@ -806,9 +806,22 @@ function read(path) {
       violations.push(`[U02] ${p} の開閉ボタン（最新1件・新着）が aria-expanded を持っていない（読み上げで開閉が分からない）。`);
     }
     {
+      // 2026-10-05 スマホで開かない件: 本文は自分のドメインの CDN 経由（DB が冷えていても2人目からは即返る・広告ブロッカーに止められない）、
+      // 10秒で打ち切る（返事が無いと骨組みのまま永久に開かない）、公開口コミだけ。
       const body = strip(read('src/utils/reviewBody.js') || '');
-      if (!/is_public=eq\.true/.test(body)) {
-        violations.push('[U02] src/utils/reviewBody.js が公開口コミ（is_public=eq.true）に絞らずに本文を取っている。');
+      const server = strip(read('server/reviewBody.js') || '');
+      if (!/\/api\/shops-lite\?view=review/.test(body) || /supabase\.co|rest\/v1/.test(body)) {
+        violations.push('[U02] src/utils/reviewBody.js が自分のドメインの /api/shops-lite?view=review から本文を取っていない（ブラウザから Supabase へ直接取ると、DB が冷えていると開かない）。');
+      }
+      if (!/abort\(\)/.test(body) || !/REVIEW_BODY_TIMEOUT_MS/.test(body)) {
+        violations.push('[U02] src/utils/reviewBody.js が本文の取得を時間で打ち切っていない（返事が無いと永久に開かない）。');
+      }
+      if (!/\.eq\('is_public',\s*true\)/.test(server) || /res\.(send|json)\(body/.test(server)) {
+        violations.push('[U02] server/reviewBody.js が公開口コミに絞っていない、または ETag の付く返し方をしている。');
+      }
+      // 開閉は「中身が普通のリンク」（プログラムが動き出す前に押されても人物ページへ移る＝何も起きない状態を作らない）
+      if (!/href: reviewLink,\s*role: 'button'/.test(card) || !/e\.preventDefault\(\)/.test(card)) {
+        violations.push('[U02] HomeReviewCard の開閉が「href 付きのリンク（role=button）＋動き出した後は preventDefault」になっていない。');
       }
     }
     if (/続きを読む/.test(card)) {
