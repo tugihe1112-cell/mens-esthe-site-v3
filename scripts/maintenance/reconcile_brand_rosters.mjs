@@ -24,6 +24,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import { loadReviewedKeys, splitDeparting, applyDeparture, selfTestDepartRows } from '../lib/departRows.mjs';
+import { flat, bare, splitByNamesInText, renderedText, selfTestRenderRecheck } from '../lib/renderRecheck.mjs';
 
 const args = process.argv.slice(2);
 for (const a of args) if (!/^(--live|--file=.+)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
@@ -49,8 +50,7 @@ async function pageText(url) {
     return new TextDecoder(enc).decode(buf);
   } catch { return ''; }
 }
-const flat = (s) => String(s || '').normalize('NFKC').replace(/[\s　]/g, '');
-const bare = (s) => flat(s).replace(/[（(【\[〔～~〜].*?[）)】\]〕～~〜]/g, '').replace(/\d+$/, '');
+// flat・bare は scripts/lib/renderRecheck.mjs（描画の念押しと同じ名前の比べ方にする）
 
 // ── 現在の行（audit の後に変わっていないか確かめるため読み直す）──────
 // ⚠️ id は日本語を含み長いので、id でまとめて問い合わせると URL が長すぎて失敗する。店ごとに読む。
@@ -88,6 +88,36 @@ await Promise.all(Array.from({ length: 4 }, async () => {
   }
 }));
 plan.sort((a, b) => (b.confirm.length + b.depart.length) - (a.confirm.length + a.depart.length));
+
+// ── 念押し（描画・2026-10-04）──────────────────────────────
+// 上の念押しは「描画しない HTML」で名前を探すので、後から読み込まれる一覧の人を取りこぼす
+// （10月の照合でちゅらエスの在籍中の4人が消す側に入っていた。9/28 と同じ型）。
+// → 消す人がいるサイトだけ、公式ページを手元の Chrome で1ページずつ組み立てて下まで少しずつスクロールし、
+//    名前がどこかに出る人は消さない。開けないページがあるサイトでは誰も消さない。下見でも同じことをする（数字を揃える）。
+selfTestRenderRecheck();
+{
+  const needRender = plan.filter((p) => p.depart.length);
+  if (needRender.length) {
+    let browser = null;
+    try {
+      const puppeteer = (await import('puppeteer-core')).default;
+      browser = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: 'new' });
+    } catch (e) { console.error(`⚠️ 念押しのための Chrome を起動できない（${String(e.message).slice(0, 60)}）＝誰も消さない`); }
+    let j = 0; let kept = 0;
+    await Promise.all(Array.from({ length: 2 }, async () => {
+      while (j < needRender.length) {
+        const p = needRender[j++];
+        const r = usable.find((x) => x.domain === p.domain);
+        const text = browser ? await renderedText(browser, r.pages, { userAgent: UA }) : null;
+        if (text === null) { kept += p.depart.length; p.keep.push(...p.depart); p.depart = []; p.skipped = p.skipped || '描画できない＝消さない'; continue; }
+        const s = splitByNamesInText(p.depart, text);
+        kept += s.keep.length; p.keep.push(...s.keep); p.depart = s.depart;
+      }
+    }));
+    if (browser) await browser.close();
+    console.log(`念押し（描画・下までスクロール）: 消す人がいた ${needRender.length}サイトを読み直し、名前が出る ${kept}行を消す対象から外した`);
+  }
+}
 
 const confirmRows = plan.flatMap((p) => p.confirm);
 const departRows = plan.flatMap((p) => p.depart);

@@ -11,6 +11,7 @@ import { expectsLastmod } from '../lib/sitemapRules.mjs';
 import { planReconcile, selfTestReconcile } from '../lib/rosterReconcile.mjs';
 import { rosterSiteKeyFactory } from '../lib/sourceProvenance.mjs';
 import { selfTestDepartRows } from '../lib/departRows.mjs';
+import { selfTestRenderRecheck } from '../lib/renderRecheck.mjs';
 
 const noWait = async () => {};
 const response = (status, contentType = 'text/plain') => new Response('', {
@@ -299,5 +300,20 @@ assert.equal(isTransientMonitorStatus(404), false);
 
 // 退店の扱い（D-016）: 口コミが付いている人は消さない・それ以外は消す・shop_id の無い行は止める
 selfTestDepartRows();
+
+// 消す前の念押し（描画・2026-10-04）: 照合の道具が、消す前に公式ページを描画して下までスクロールし、
+// 名前が出る人を消す対象から外していること。描画しない HTML だけだと、後から読み込まれる一覧の人を消す。
+selfTestRenderRecheck();
+{
+  const src = fs.readFileSync('scripts/maintenance/reconcile_brand_rosters.mjs', 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const at = (re) => { const m = src.match(re); return m ? m.index : -1; };
+  const iRender = at(/renderedText\(\s*browser/);
+  const iSplit = at(/splitByNamesInText\(\s*p\.depart/);
+  const iRows = at(/const departRows\s*=\s*plan\.flatMap/);
+  assert.ok(iRender >= 0 && iSplit >= 0, '照合の道具が消す前に公式ページを描画して名前を探していない（renderedText／splitByNamesInText）');
+  assert.ok(iRows > iRender && iRows > iSplit, '描画の念押しが、消す行（departRows）を決めた後に置かれている＝効かない');
+  assert.ok(/text === null[\s\S]{0,160}p\.depart = \[\]/.test(src), '描画できないサイトで誰も消さない処理が無い');
+}
 
 console.log('✅ 外形監視の再試行・恒久障害判定チェック OK');
