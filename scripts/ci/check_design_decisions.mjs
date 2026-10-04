@@ -749,7 +749,7 @@ function read(path) {
         }
         // カードを描くのは「最新1件」と「新着の並び」の2か所だけ（県ごとにカードを並べる＝縦積みに戻さない）
         const cardCount = (sec.match(/<HomeReviewCard\b/g) || []).length;
-        if (cardCount !== 2 || !/feed\.map\([\s\S]{0,200}?<HomeReviewCard/.test(sec)) {
+        if (cardCount !== 2 || !/feed\.map\([\s\S]{0,600}?<HomeReviewCard/.test(sec)) {
           violations.push(`[U02] ${sp} のカードが「最新1件＋新着の並び」の形になっていない（<HomeReviewCard が ${cardCount} か所）。全県の縦積みに戻さない。`);
         }
         if (!/pickLeadReview\(/.test(sec) || !/pickFeedReviews\(/.test(sec)) {
@@ -790,9 +790,26 @@ function read(path) {
   {
     const p = 'src/components/HomeReviewCard.jsx';
     const card = strip(read(p));
-    // 「続きを読む」→取得→「全文を読む」の二段階に戻さない
+    // 「続きを読む」→冒頭300字→「全文を読む」の二段階に戻さない（2026-09-08 U02）。
+    // 2026-10-04 okabayashi「同じ画面で読めるようにしたい（おりたたみ）」→ 押すとその場で**全文**が開く。
+    //   本文は reviewBody.js（公開口コミだけ・見えた／触れた時点で先に取る）から取り、区分付き（ReviewStoryContent）で組む。
     if (/from '\.\.\/lib\/supabase'/.test(card)) {
-      violations.push(`[U02] ${p} が本文取得のためにSupabaseを呼んでいる（押して待つ中間状態が復活する）。`);
+      violations.push(`[U02] ${p} が直接Supabaseを呼んでいる。本文は src/utils/reviewBody.js（先に取っておく仕組み付き）から取ること。`);
+    }
+    if (!/fetchReviewBody\(/.test(card) || !/prefetchReviewBody\(/.test(card)) {
+      violations.push(`[U02] ${p} がその場で全文を開く仕組み（fetchReviewBody）か、先に取っておく仕組み（prefetchReviewBody）を失っている。`);
+    }
+    if (!/<ReviewStoryContent\b/.test(card) || /\.slice\(\s*0\s*,\s*[2-9]\d{2}\s*\)/.test(card)) {
+      violations.push(`[U02] ${p} が開いたときに全文（区分付き）を出していない、または本文を途中で切っている（二段階に戻る）。`);
+    }
+    if ((card.match(/aria-expanded=/g) || []).length < 2) {
+      violations.push(`[U02] ${p} の開閉ボタン（最新1件・新着）が aria-expanded を持っていない（読み上げで開閉が分からない）。`);
+    }
+    {
+      const body = strip(read('src/utils/reviewBody.js') || '');
+      if (!/is_public=eq\.true/.test(body)) {
+        violations.push('[U02] src/utils/reviewBody.js が公開口コミ（is_public=eq.true）に絞らずに本文を取っている。');
+      }
     }
     if (/続きを読む/.test(card)) {
       violations.push(`[U02] ${p} に「続きを読む」の中間ステップが復活している（全文リンク1回にする）。`);
@@ -812,7 +829,7 @@ function read(path) {
       const stretched = classLists.filter((c) => c.includes('after:inset-0'));
       const expanded = classLists.filter((c) => c.includes('py-3') && c.includes('-my-3'));
       if (stretched.length !== 1 || !stretched[0].includes('min-h-0')) {
-        violations.push(`[U02] ${p} の新着カードが「カード全体で1つのリンク（after:inset-0 ＋ min-h-0）」になっていない。`);
+        violations.push(`[U02] ${p} の新着カードが「カード全体で1つの開閉ボタン（after:inset-0 ＋ min-h-0）」になっていない。`);
       }
       if (expanded.length < 2 || expanded.some((c) => !c.includes('min-h-0'))) {
         violations.push(`[U02] ${p} の最新1件の店名・人物名リンクが min-h-0 と py-3 -my-3 を失っている（スマホで行が44pxに膨らむ）。`);

@@ -106,7 +106,11 @@ export default function HomeReviewsSection({
   const lead = pickLeadReview(list);
   const feed = pickFeedReviews(list, lead?.id);
 
+  // 新着でその場に開いている口コミ（同時に開くのは1件だけ・2026-10-04）
+  const [openId, setOpenId] = useState(null);
+
   const choose = (pref) => {
+    setOpenId(null);
     setSelected(pref);
     trackEvent('select_home_review_region', { pref: pref || 'all' });
   };
@@ -177,6 +181,7 @@ export default function HomeReviewsSection({
 
       <div className="mt-5">
         <HomeReviewCard
+          key={lead.id}
           r={lead}
           variant="hero"
           position="latest_lead"
@@ -191,12 +196,24 @@ export default function HomeReviewsSection({
             {active ? `${active.pref}のほかの新着` : 'ほかの新着'}
           </p>
           {/* スマホは横スクロール（次のカードが少し見える＝続きがあると分かる）、PCは2列 */}
-          <ul className="no-scrollbar -mx-4 mt-3 flex snap-x snap-mandatory scroll-px-4 gap-2.5 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-2 md:gap-3 md:overflow-visible md:px-0">
-            {feed.map((r, i) => (
-              <li key={r.id || i} className="w-[80%] max-w-[300px] shrink-0 snap-start md:w-auto md:max-w-none">
-                <HomeReviewCard r={r} variant="compact" position={i + 1} pref={active?.pref || 'all'} />
-              </li>
-            ))}
+          {/* 開いたカードは横幅いっぱい（スマホ）・2列ぶん（PC）に広げて全文を読みやすくする。
+              ほかのカードは開いたカードの高さに引き伸ばさない（items-start）。 */}
+          <ul className={`no-scrollbar -mx-4 mt-3 flex snap-x snap-mandatory scroll-px-4 gap-2.5 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-2 md:gap-3 md:overflow-visible md:px-0 ${openId ? 'items-start' : ''}`}>
+            {feed.map((r, i) => {
+              const isOpen = !!r.id && openId === r.id;
+              return (
+                <li key={r.id || i} className={isOpen ? 'w-full shrink-0 snap-start md:col-span-2' : 'w-[80%] max-w-[300px] shrink-0 snap-start md:w-auto md:max-w-none'}>
+                  <HomeReviewCard
+                    r={r}
+                    variant="compact"
+                    position={i + 1}
+                    pref={active?.pref || 'all'}
+                    expanded={isOpen}
+                    onToggle={(next) => setOpenId(next ? r.id : null)}
+                  />
+                </li>
+              );
+            })}
           </ul>
         </>
       )}

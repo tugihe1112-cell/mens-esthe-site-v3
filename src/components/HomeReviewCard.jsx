@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { Link } from '../compat/router';
 import LazyImage from './LazyImage.jsx';
 import { trackEvent } from '../utils/analytics';
 import { isNotListed, NOT_LISTED_SHORT } from '../utils/therapistStatus.js';
 import { PREFERRED_PREF_KEY } from '../utils/homeReviews';
 import RatingFingerprint from './RatingFingerprint.jsx';
+import ReviewStoryContent from './ReviewStoryContent.jsx';
+import { fetchReviewBody, prefetchReviewBody } from '../utils/reviewBody.js';
 
 // ホーム「最新の実体験口コミ」＝呼水カード。2種類ある。
 //   hero    … 欄の先頭の最新1件。写真・店舗名・来店情報・要約・6軸・「口コミ全文を読む」
 //   compact … その下に並ぶ新着。人物・店舗・★・要約3行・投稿者と日時。カード全体が1つのリンク
 //
-// ⚠️ 2026-09-08（DESIGN.md U02）: 以前は「続きを読む」→ Supabaseから冒頭300字を取得 →
-//    「全文を読む」という**二段階**だった。押してから待たされ、待った先も本文ではない。
-//    通常のリンク1回（人物ページの該当口コミへ直行）にしてある。戻さない。
+// ⚠️ 2026-10-04 okabayashi「口コミを読むボタンを押すと別のページに移る。めんどくさいと思うユーザーがいる。
+//    おりたたみみたいになってて、同じ画面で読めるようにしたい」→ **押すとその場で全文が開く**（1回で全文）。
+//    2026-09-08（U02）までは「続きを読む」→冒頭300字→「全文を読む」の二段階で、待った先も本文ではなかった。
+//    それには戻さない＝1回押せば**全文**（区分付き・人物ページと同じ組み方）が出る。
+//    全文はSSRに載せない（120字の抜粋だけ）。見えた時点・触れた時点で先に取っておき、押して待たせない。
+//    人物ページの該当口コミへのリンク（#review-<id>）は開いた中に残す。
 // ⚠️ スマホで写真の右の細い列に本文を閉じ込めない（1行の文字数が少なすぎて読めない）。
 //    hero はスマホでは本文から下をカード全幅、PCでは写真の右の列に置く（列が十分広い）。
 
@@ -61,7 +66,58 @@ function InitialAvatar({ name, seed, className = '', textClass = '' }) {
   );
 }
 
-export default function HomeReviewCard({ r, variant = 'compact', position, pref, tag }) {
+// 開いたときの全文。取りに行っている間は骨組み、失敗したら取り直しと人物ページへのリンク。
+function ExpandedBody({ r, id, reviewLink, onOpen, onClose, compact }) {
+  const [state, setState] = useState({ status: 'loading' });
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    let alive = true;
+    setState({ status: 'loading' });
+    fetchReviewBody(r.id)
+      .then((b) => { if (alive) setState({ status: 'ok', ...b }); })
+      .catch(() => { if (alive) setState({ status: 'error' }); });
+    return () => { alive = false; };
+  }, [r.id, attempt]);
+  return (
+    <div id={id} className="relative z-10 mt-3 border-t border-slate-800 pt-3">
+      {state.status === 'loading' && (
+        <div aria-live="polite" className="space-y-2" role="status">
+          <span className="sr-only">口コミを読み込んでいます</span>
+          {[0, 1, 2, 3].map((i) => <div key={i} className="h-3.5 animate-pulse rounded-sm bg-slate-800" style={{ width: `${92 - i * 9}%` }} />)}
+        </div>
+      )}
+      {state.status === 'error' && (
+        <div role="alert" className="text-slate-300" style={{ fontSize: '13px' }}>
+          <p>口コミを読み込めませんでした。</p>
+          <div className="mt-1 flex flex-wrap items-center gap-x-4">
+            <button type="button" onClick={() => setAttempt((n) => n + 1)} className="ui-link inline-flex min-h-11 items-center font-bold">もう一度読み込む</button>
+            <Link to={reviewLink} onClick={onOpen} className="ui-link inline-flex min-h-11 items-center">セラピストのページで読む →</Link>
+          </div>
+        </div>
+      )}
+      {state.status === 'ok' && (
+        <ReviewStoryContent
+          storySections={state.storySections}
+          content={state.content}
+          className={compact ? 'text-[13px] leading-[1.85] text-slate-300' : 'text-[14px] leading-[1.9] text-slate-300'}
+        />
+      )}
+      <div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 border-t border-slate-800 pt-1" style={{ fontSize: '13px' }}>
+        <Link to={reviewLink} onClick={onOpen} className="ui-link inline-flex min-h-11 items-center">
+          セラピストのページで見る →
+        </Link>
+        <button type="button" onClick={onClose} aria-controls={id} className="inline-flex min-h-11 items-center font-bold text-slate-300 hover:text-pink-300">
+          閉じる ▲
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default function HomeReviewCard({ r, variant = 'compact', position, pref, tag, expanded: expandedProp, onToggle }) {
+  const bodyId = useId();
+  const cardRef = useRef(null);
+
   const isHero = variant === 'hero';
   const rating = r.rating != null ? Number(r.rating) : null;
   const time = relTime(r.createdAt);
@@ -81,6 +137,36 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
     try { if (r.prefecture) localStorage.setItem(PREFERRED_PREF_KEY, r.prefecture); } catch {}
     trackEvent('select_home_review', { position, therapist_id: r.therapistId, variant, pref });
   };
+
+  // 開閉。新着（compact）は欄が1件だけ開くよう親が持つ。最新1件（hero）は自分で持つ。
+  const [ownOpen, setOwnOpen] = useState(false);
+  const open = onToggle ? !!expandedProp : ownOpen;
+  const setOpen = (next) => {
+    if (next && !open) {
+      try { if (r.prefecture) localStorage.setItem(PREFERRED_PREF_KEY, r.prefecture); } catch {}
+      trackEvent('expand_home_review', { position, therapist_id: r.therapistId, variant, pref });
+    }
+    if (onToggle) onToggle(next); else setOwnOpen(next);
+    // 新着（スマホは横スクロール）で開いたら、そのカードを左端へ寄せて全文が画面に入るようにする
+    if (next && !isHero && cardRef.current && typeof window !== 'undefined') {
+      requestAnimationFrame(() => cardRef.current?.scrollIntoView({ block: 'nearest', inline: 'start', behavior: 'smooth' }));
+    }
+    // 閉じたとき、カードの頭が画面の上に隠れていたら戻す（長い本文を読み終えて迷子にしない）
+    if (!next && cardRef.current && typeof window !== 'undefined') {
+      const top = cardRef.current.getBoundingClientRect().top;
+      if (top < 0) cardRef.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+  };
+  const prefetch = () => prefetchReviewBody(r.id);
+  // 最新1件は、画面に入った時点で裏で全文を取っておく（押した瞬間に開く）。
+  useEffect(() => {
+    if (!isHero || !r.id || typeof IntersectionObserver === 'undefined' || !cardRef.current) return undefined;
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { prefetchReviewBody(r.id); io.disconnect(); }
+    }, { rootMargin: '200px' });
+    io.observe(cardRef.current);
+    return () => io.disconnect();
+  }, [isHero, r.id]);
 
   // 点数は数字の書体で（★の色付きの札はやめた・2026-09-30）。読み上げでは「評価 3.8」。
   const RatingBadge = rating != null ? (
@@ -108,7 +194,10 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
     const foot = [r.userName ? `by ${r.userName}` : null, time?.label].filter(Boolean).join(' · ');
     return (
       <article
-        className="group relative flex h-full flex-col overflow-hidden rounded-sm border border-slate-800 bg-slate-900 px-4 pb-3 pt-3.5 transition-colors hover:border-pink-500/50"
+        ref={cardRef}
+        onPointerEnter={prefetch}
+        onTouchStart={prefetch}
+        className={`group relative flex h-full flex-col overflow-hidden rounded-sm border bg-slate-900 px-4 pb-3 pt-3.5 transition-colors hover:border-pink-500/50 ${open ? 'border-pink-500/50' : 'border-slate-800'}`}
       >
         <div className="flex items-center gap-2.5">
           {r.image ? (
@@ -127,25 +216,33 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
           )}
           <div className="min-w-0 flex-1">
             <div className="flex min-w-0 items-center gap-1.5">
-              <Link
-                to={reviewLink}
-                onClick={onOpen}
-                className="min-h-0 truncate font-mincho font-bold text-slate-50 after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-pink-400"
+              {/* カード全体を押せる開閉ボタン（after で全面に広げる）。開いた本文は z-10 で上に重ね、中のリンクを押せるようにする */}
+              <button
+                type="button"
+                onClick={() => setOpen(!open)}
+                onFocus={prefetch}
+                aria-expanded={open}
+                aria-controls={open ? bodyId : undefined}
+                className="min-h-0 truncate text-left font-mincho font-bold text-slate-50 after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-pink-400"
                 style={{ fontSize: '15px', lineHeight: 1.35 }}
               >
                 {r.therapistName}
-                <span className="sr-only">の口コミを読む</span>
-              </Link>
+                <span className="sr-only">{open ? 'の口コミを閉じる' : 'の口コミ全文をここで開く'}</span>
+              </button>
               {NotListedBadge}
             </div>
             {sub && <p className="truncate text-slate-400" style={{ fontSize: '12px', lineHeight: 1.5 }}>{sub}</p>}
           </div>
           {RatingBadge}
         </div>
-        <p className="mt-2.5 line-clamp-3 text-slate-300" style={{ fontSize: '13px', lineHeight: 1.7 }}>{r.snippet}…</p>
+        {open ? (
+          <ExpandedBody r={r} id={bodyId} reviewLink={reviewLink} onOpen={onOpen} onClose={() => setOpen(false)} compact />
+        ) : (
+          <p className="mt-2.5 line-clamp-3 text-slate-300" style={{ fontSize: '13px', lineHeight: 1.7 }}>{r.snippet}…</p>
+        )}
         <div className="mt-auto flex items-center justify-between gap-2 pt-2.5 text-slate-400" style={{ fontSize: '12px' }}>
           <span className="min-w-0 truncate">{foot}</span>
-          <span aria-hidden="true" className="shrink-0 font-bold text-pink-300 group-hover:text-pink-200">読む →</span>
+          {!open && <span aria-hidden="true" className="shrink-0 font-bold text-pink-300 group-hover:text-pink-200">全文を読む ▼</span>}
         </div>
       </article>
     );
@@ -156,7 +253,7 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
   const hasAxes = !!dr && DR_LABELS.some(([k]) => Number(dr[k]) > 0);
 
   return (
-    <article className="relative rounded-sm border border-slate-700 bg-slate-900 p-4 md:p-5">
+    <article ref={cardRef} onPointerEnter={prefetch} onTouchStart={prefetch} className="relative rounded-sm border border-slate-700 bg-slate-900 p-4 md:p-5">
       {tag && (
         <span className="absolute -top-3 left-4 bg-pink-500 px-2.5 py-0.5 font-bold tracking-wide text-slate-950 md:left-5" style={{ fontSize: '11px' }}>
           {tag}
@@ -216,15 +313,23 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
         </div>
 
         <div className="col-span-2 min-w-0 md:col-span-1 md:col-start-2">
-          <p className="line-clamp-4 text-slate-300 md:mt-3 md:line-clamp-3" style={{ fontSize: '14px', lineHeight: 1.85 }}>{r.snippet}…</p>
-          <Link
-            to={reviewLink}
-            onClick={onOpen}
-            className="ui-link mt-2 inline-flex min-h-11 items-center font-bold"
-            style={{ fontSize: '13px' }}
-          >
-            口コミ全文を読む →
-          </Link>
+          {open ? (
+            <ExpandedBody r={r} id={bodyId} reviewLink={reviewLink} onOpen={onOpen} onClose={() => setOpen(false)} />
+          ) : (
+            <>
+              <p className="line-clamp-4 text-slate-300 md:mt-3 md:line-clamp-3" style={{ fontSize: '14px', lineHeight: 1.85 }}>{r.snippet}…</p>
+              <button
+                type="button"
+                onClick={() => setOpen(true)}
+                onFocus={prefetch}
+                aria-expanded={false}
+                className="ui-link mt-2 inline-flex min-h-11 items-center font-bold"
+                style={{ fontSize: '13px' }}
+              >
+                口コミ全文を読む ▼
+              </button>
+            </>
+          )}
         </div>
       </div>
     </article>
