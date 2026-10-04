@@ -89,7 +89,9 @@ requireMatch(threadWrapper, /'@type': 'ProfilePage'/, 'セラピストをProfile
 //    shopHref は shopRedirectPath と同じ判定を通すので、301先が分かっているときは最初からそこを指す。
 requireMatch(threadPage, /to=\{shopHref\(/, 'セラピスト画面の店舗リンクが shopHref を通っていません（複数ルームのブランドで301するURLになります）');
 rejectMatch(threadPage, /to=\{`\/search\?shop=/, 'セラピスト画面の店舗リンクが検索クエリに戻っています（実体のあるURLを指すこと）');
-requireMatch(homeReview, /const shopLink = `\/shops\/\$\{r\.shopId\}`/, 'ホーム口コミの店舗リンクが正規店舗URLではありません');
+// 2026-10-05: ホーム口コミも shopHref に（複数ルームのブランドで押した瞬間に301で飛ばさない・D-014）。意図は上と同じ。
+requireMatch(homeReview, /const shopLink = shopHref\(\{ id: r\.shopId, group_id: r\.groupId \}, roomCounts\)/, 'ホーム口コミの店舗リンクが shopHref を通っていません（正規の店舗／ブランドURLを指すこと）');
+rejectMatch(homeReview, /\/search\?shop=/, 'ホーム口コミの店舗リンクが検索クエリに戻っています（実体のあるURLを指すこと）');
 // 🚩 2026-09-16: 規則が変わった。**このガード自身が直書きを要求していた。**
 //    D-014以降、複数ルームのブランドの店舗URLは301でブランドページへ飛ぶ。
 //    BrandResultCard の展開リストは**ブランドのルーム一覧**なので、

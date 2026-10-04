@@ -31,7 +31,7 @@ export async function getServerSideProps({ params, res }) {
     const [shopRes, therapistRes] = await Promise.all([
       supabase
         .from('shops')
-        .select('id, name, group_id, image_url, website_url, raw_data')
+        .select('id, name, group_id, image_url, website_url, schedule_url, raw_data')
         .eq('id', shopId)
         .maybeSingle(),
       // セラピストは全カラム＝クライアントに初期値として渡し即・完全描画するため
@@ -206,6 +206,9 @@ export async function getServerSideProps({ params, res }) {
               group_id: shopData.group_id || null,
               image_url: shopData.image_url || null,
               website_url: shopData.website_url || null,
+              // 公式サイトへの道（出勤表・公式の在籍一覧）。ThreadDetailPage の OfficialLinks が使う。
+              schedule_url: shopData.schedule_url || null,
+              rosterUrl: shopData.raw_data?.rosterUrl || null,
               prefecture: shopData.raw_data?.prefecture || null,
               city: shopData.raw_data?.city
                 || (Array.isArray(shopData.raw_data?.area) ? shopData.raw_data.area[0] : shopData.raw_data?.area)

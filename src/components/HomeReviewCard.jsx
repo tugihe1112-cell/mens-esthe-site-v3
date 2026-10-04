@@ -7,6 +7,9 @@ import { PREFERRED_PREF_KEY } from '../utils/homeReviews';
 import RatingFingerprint from './RatingFingerprint.jsx';
 import ReviewStoryContent from './ReviewStoryContent.jsx';
 import { fetchReviewBody, prefetchReviewBody } from '../utils/reviewBody.js';
+import OfficialLinks from './OfficialLinks.jsx';
+import { useShopData } from '../contexts/DataContext.jsx';
+import { shopHref } from '../utils/brandGroups.js';
 
 // ホーム「最新の実体験口コミ」＝呼水カード。2種類ある。
 //   hero    … 欄の先頭の最新1件。写真・店舗名・来店情報・要約・6軸・「口コミ全文を読む」
@@ -18,6 +21,10 @@ import { fetchReviewBody, prefetchReviewBody } from '../utils/reviewBody.js';
 //    それには戻さない＝1回押せば**全文**（区分付き・人物ページと同じ組み方）が出る。
 //    全文はSSRに載せない（120字の抜粋だけ）。見えた時点・触れた時点で先に取っておき、押して待たせない。
 //    人物ページの該当口コミへのリンク（#review-<id>）は開いた中に残す。
+// ⚠️ 2026-10-05 okabayashi「この口コミに店舗のリンクとセラピストのリンクがない…店のね公式の」。
+//    全文を読み終えた人の次の行動は「公式で出勤を見て予約する」。開いた中に、公式（その人の公式プロフィール→
+//    公式の在籍一覧→店の公式サイト）と出勤表、このサイトのセラピストのページ・お店のページを並べる（OfficialLinks）。
+//    本文の読み込みに失敗しても、この道は出す（本文と別に、SSRの値から作る）。
 // ⚠️ スマホで写真の右の細い列に本文を閉じ込めない（1行の文字数が少なすぎて読めない）。
 //    hero はスマホでは本文から下をカード全幅、PCでは写真の右の列に置く（列が十分広い）。
 
@@ -67,7 +74,7 @@ function InitialAvatar({ name, seed, className = '', textClass = '' }) {
 }
 
 // 開いたときの全文。取りに行っている間は骨組み、失敗したら取り直しと人物ページへのリンク。
-function ExpandedBody({ r, id, reviewLink, onOpen, onClose, compact }) {
+function ExpandedBody({ r, id, reviewLink, shopLink, onOpen, onClose, compact }) {
   const [state, setState] = useState({ status: 'loading' });
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
@@ -91,7 +98,6 @@ function ExpandedBody({ r, id, reviewLink, onOpen, onClose, compact }) {
           <p>口コミを読み込めませんでした。</p>
           <div className="mt-1 flex flex-wrap items-center gap-x-4">
             <button type="button" onClick={() => setAttempt((n) => n + 1)} className="ui-link inline-flex min-h-11 items-center font-bold">もう一度読み込む</button>
-            <Link to={reviewLink} onClick={onOpen} className="ui-link inline-flex min-h-11 items-center">セラピストのページで読む →</Link>
           </div>
         </div>
       )}
@@ -102,11 +108,23 @@ function ExpandedBody({ r, id, reviewLink, onOpen, onClose, compact }) {
           className={compact ? 'text-[13px] leading-[1.85] text-slate-300' : 'text-[14px] leading-[1.9] text-slate-300'}
         />
       )}
-      <div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 border-t border-slate-800 pt-1" style={{ fontSize: '13px' }}>
+      <OfficialLinks
+        shop={{ id: r.shopId, name: r.shopName, website_url: r.shopWebsiteUrl, schedule_url: r.shopScheduleUrl, rosterUrl: r.shopRosterUrl }}
+        therapist={{ id: r.therapistId, profileUrl: r.profileUrl }}
+        notListed={isNotListed(r)}
+        placement={compact ? 'home_feed' : 'home_lead'}
+        className="mt-3 border-t border-slate-800 pt-3"
+      />
+      <div className="mt-1 flex flex-wrap items-center gap-x-4" style={{ fontSize: '13px' }}>
         <Link to={reviewLink} onClick={onOpen} className="ui-link inline-flex min-h-11 items-center">
-          セラピストのページで見る →
+          {r.therapistName ? `${r.therapistName}のページ` : 'セラピストのページ'} →
         </Link>
-        <button type="button" onClick={onClose} aria-controls={id} className="inline-flex min-h-11 items-center font-bold text-slate-300 hover:text-pink-300">
+        {r.shopName && (
+          <Link to={shopLink} onClick={onOpen} className="ui-link inline-flex min-h-11 min-w-0 items-center">
+            <span className="truncate">{withoutReading(r.shopName)}のページ</span>&nbsp;→
+          </Link>
+        )}
+        <button type="button" onClick={onClose} aria-controls={id} className="ml-auto inline-flex min-h-11 items-center font-bold text-slate-300 hover:text-pink-300">
           閉じる ▲
         </button>
       </div>
@@ -117,6 +135,7 @@ function ExpandedBody({ r, id, reviewLink, onOpen, onClose, compact }) {
 export default function HomeReviewCard({ r, variant = 'compact', position, pref, tag, expanded: expandedProp, onToggle }) {
   const bodyId = useId();
   const cardRef = useRef(null);
+  const { roomCounts } = useShopData() || {};
 
   const isHero = variant === 'hero';
   const rating = r.rating != null ? Number(r.rating) : null;
@@ -127,7 +146,8 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
   const threadLink = `/shops/${r.shopId}/threads/${r.therapistId}`;
   const reviewLink = r.id ? `${threadLink}#review-${r.id}` : threadLink;
   // 検索中継ではなく正規の店舗URLへ直結し、利用者とクローラーの行き止まりをなくす。
-  const shopLink = `/shops/${r.shopId}`;
+  // 複数ルームのブランドはブランドページへ（D-014・押した瞬間に301で飛ばさない）。
+  const shopLink = shopHref({ id: r.shopId, group_id: r.groupId }, roomCounts);
   const loc = [r.prefecture, r.area].filter(Boolean).join('・');
   const dr = r.detailedRatings || null;
   const notListed = isNotListed(r);
@@ -244,7 +264,7 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
           {RatingBadge}
         </div>
         {open ? (
-          <ExpandedBody r={r} id={bodyId} reviewLink={reviewLink} onOpen={onOpen} onClose={() => setOpen(false)} compact />
+          <ExpandedBody r={r} id={bodyId} reviewLink={reviewLink} shopLink={shopLink} onOpen={onOpen} onClose={() => setOpen(false)} compact />
         ) : (
           <p className="mt-2.5 line-clamp-3 text-slate-300" style={{ fontSize: '13px', lineHeight: 1.7 }}>{r.snippet}…</p>
         )}
@@ -285,13 +305,13 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
         <div className="min-w-0">
           <p className="truncate text-xs tracking-[0.12em] text-slate-400">
             {loc && <>{loc} · </>}
-            <Link to={shopLink} onClick={onOpen} className="-my-3 min-h-0 py-3 text-slate-300 transition hover:text-pink-300">
+            <Link to={shopLink} onClick={onOpen} className="-my-3 min-h-0 py-3 text-slate-200 underline decoration-slate-500 underline-offset-4 transition hover:text-pink-300">
               {r.shopName}
             </Link>
           </p>
           <div className="mt-1 flex items-center gap-2">
             <Link to={threadLink} onClick={onOpen} className="-my-3 min-h-0 truncate py-3 font-mincho text-xl font-bold text-slate-50 transition hover:text-pink-300 md:text-2xl">
-              {r.therapistName}
+              {r.therapistName}<span aria-hidden="true" className="ml-1 font-sans text-base font-normal text-slate-500">›</span>
             </Link>
             {NotListedBadge}
           </div>
@@ -322,7 +342,7 @@ export default function HomeReviewCard({ r, variant = 'compact', position, pref,
 
         <div className="col-span-2 min-w-0 md:col-span-1 md:col-start-2">
           {open ? (
-            <ExpandedBody r={r} id={bodyId} reviewLink={reviewLink} onOpen={onOpen} onClose={() => setOpen(false)} />
+            <ExpandedBody r={r} id={bodyId} reviewLink={reviewLink} shopLink={shopLink} onOpen={onOpen} onClose={() => setOpen(false)} />
           ) : (
             <>
               <p className="line-clamp-4 text-slate-300 md:mt-3 md:line-clamp-3" style={{ fontSize: '14px', lineHeight: 1.85 }}>{r.snippet}…</p>

@@ -1099,7 +1099,8 @@ function read(path) {
 
   // ホームのSSRが在籍状態を渡していること（渡さなければカード側は永久に判定できない）
   const home = strip(read('server/homeReviews.js'));
-  if (!/select\('id, image_url, is_active'\)/.test(home)) {
+  // 綴りではなく「人物の取得に is_active が入っているか」を見る（2026-10-05 公式プロフィールを足したら列の並びで落ちた）
+  if (!/from\('therapists'\)\s*\.select\('[^']*\bis_active\b[^']*'\)/.test(home)) {
     violations.push('[U05] ホームSSRが therapists.is_active を取得していない（カードに印を出せない）。');
   }
   if (!/notListed:\s*!therapistResult\.error\s*&&\s*\(!therapist\s*\|\|\s*therapist\.is_active === false\)/.test(home)) {

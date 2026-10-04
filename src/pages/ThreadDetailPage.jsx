@@ -21,6 +21,7 @@ import { filterReviewsForPerson } from '../utils/reviewIdentity.js';
 import { isNotListed, NOT_LISTED_LABEL, NOT_LISTED_NOTE } from '../utils/therapistStatus.js';
 import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
 import RatingFingerprint, { averageFingerprint } from '../components/RatingFingerprint.jsx';
+import OfficialLinks from '../components/OfficialLinks.jsx';
 
 const PenIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z" /></svg>
@@ -464,6 +465,22 @@ export default function ThreadDetailPage({
           </div>
         </div>
 
+        {/* 公式サイトへの道＋このお店のページ（2026-10-05）。
+            ⚠️ okabayashi「このセラピストページを押した後も同じ。店の公式とセラピストページのリンクがない」。
+               口コミを読んで会いたくなった人の次の行動は、公式で出勤を見て予約すること。ここから公式へ行けなかった。
+               行き先（その人の公式プロフィール→公式の在籍一覧→店の公式サイト・出勤表）は OfficialLinks に一本化。
+               お店のページへの文字リンクも、名前の上の小さな店名だけでは気づかれないので、はっきり出す。 */}
+        <section aria-label="公式サイトとお店のページ" className="border-y border-slate-800 py-3">
+          <OfficialLinks shop={shop} therapist={therapist} notListed={notListed} placement="thread_top" />
+          <Link
+            to={shopHref(shop || { id: shopId }, roomCounts)}
+            className="ui-link mt-1 inline-flex min-h-11 min-w-0 max-w-full items-center"
+            style={{ fontSize: '13px' }}
+          >
+            <span className="truncate">{getDisplayName(shop.name, shop)}のページ（在籍・料金・ほかの口コミ）</span>&nbsp;→
+          </Link>
+        </section>
+
         {/* 採点の形（平均）。口コミが1件のときは下の口コミに同じ図が出るので、2件以上のときだけ。 */}
         {stats && stats.count >= 2 && averageFingerprint(therapistReviews) && (
           <section className="border-t border-slate-800 pt-6">
@@ -514,6 +531,21 @@ export default function ThreadDetailPage({
             </div>
           )}
         </section>
+
+        {/* 読み終えたあと（口コミがあるときだけ）。上の公式への道は、長い口コミを読み終えた位置からは遠い。 */}
+        {therapistReviews.length > 0 && (
+          <section aria-label="出勤・予約は公式サイトで" className="border-t border-slate-700 pt-5">
+            <h2 className="font-mincho text-lg font-bold text-slate-50">{notListed ? 'お店の公式サイト' : `${therapist.name}の出勤・予約は公式サイトで`}</h2>
+            <OfficialLinks shop={shop} therapist={therapist} notListed={notListed} placement="thread_end" heading={false} className="mt-3" />
+            <Link
+              to={shopHref(shop || { id: shopId }, roomCounts)}
+              className="ui-link mt-1 inline-flex min-h-11 min-w-0 max-w-full items-center"
+              style={{ fontSize: '13px' }}
+            >
+              <span className="truncate">{getDisplayName(shop.name, shop)}のほかのセラピストを見る</span>&nbsp;→
+            </Link>
+          </section>
+        )}
       </div>
 
       {/* B-1: 追いCTA（スクロールで出るsticky）。

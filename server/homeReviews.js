@@ -71,10 +71,10 @@ export async function loadHomeReviews(supabase, { timeoutMs = SSR_DB_TIMEOUT_MS,
   for (let i = 0; i < shopIds.length; i += 150) shopChunks.push(shopIds.slice(i, i + 150));
   const [shopResults, therapistResult] = await Promise.all([
     Promise.all(shopChunks.map(ids => readQuery(() => supabase.from('shops')
-      .select('id, name, prefecture:raw_data->>prefecture, area:raw_data->area, city:raw_data->>city')
+      .select('id, name, group_id, website_url, schedule_url, roster_url:raw_data->>rosterUrl, prefecture:raw_data->>prefecture, area:raw_data->area, city:raw_data->>city')
       .in('id', ids)))),
     therapistIds.length ? readQuery(() => supabase.from('therapists')
-      .select('id, image_url, is_active').in('id', therapistIds)) : Promise.resolve({ data: [], error: null }),
+      .select('id, image_url, is_active, profile_url:raw_data->>profileUrl').in('id', therapistIds)) : Promise.resolve({ data: [], error: null }),
   ]);
   const shopLookupOk = shopResults.every(result => !result.error);
   const shopById = Object.fromEntries(shopResults.flatMap(result => result.error ? [] : result.data).map(shop => [shop.id, shop]));
@@ -100,6 +100,12 @@ export async function loadHomeReviews(supabase, { timeoutMs = SSR_DB_TIMEOUT_MS,
       userName: PLACEHOLDER_NAMES.has(r.user_name) ? null : (r.user_name || null),
       course: r.course || null,
       createdAt: r.created_at || null,
+      // 公式サイトへの道（開いた口コミの中に出す・src/utils/officialLinks.js）。無ければ null。
+      groupId: shop?.group_id || null,
+      shopWebsiteUrl: shop?.website_url || null,
+      shopScheduleUrl: shop?.schedule_url || null,
+      shopRosterUrl: shop?.roster_url || null,
+      profileUrl: therapist?.profile_url || null,
     };
   });
   const summary = summarizeReviewIndex(indexResult.error ? null : indexRows, {

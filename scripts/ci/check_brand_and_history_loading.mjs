@@ -129,7 +129,7 @@ function brandHost(mutation) {
       '../components/TagFilterSidebar.jsx': compile('src/components/TagFilterSidebar.jsx', { react: React, '../data/constants': constants }),
       '../hooks/useResponsiveFilterSheet.js': { useResponsiveFilterSheet: () => ({ isOpen: false, open: noop, close: noop }) },
       '../utils/supabaseRest': { authHeaders: async () => ({}) }, '../components/ShopStatusBanner.jsx': { ShopStatusChip: noop },
-      '../components/NeutralReviewNote.jsx': noop, '../components/RatingFingerprint.jsx': { __esModule: true, default: noop, averageFingerprint: () => null },
+      '../components/NeutralReviewNote.jsx': noop, '../components/OfficialLinks.jsx': noop, '../components/RatingFingerprint.jsx': { __esModule: true, default: noop, averageFingerprint: () => null },
       '../utils/nameReading.js': compile('src/utils/nameReading.js'),
       '../utils/brandRosterLoading.js': compile('src/utils/brandRosterLoading.js', {}, { fetch: fetchFixture }, mutation),
     }, { fetch: fetchFixture }, mutation);
@@ -381,7 +381,7 @@ async function verifyThreadStorage() {
         '../utils/brandGroups.js': groups, '../utils/analytics': { trackEvent: noop }, '../utils/useReturnTo': { useReturnTo: () => '/search' },
         '../utils/authRedirect.js': { withReturnTo: path => path }, '../utils/registerAnalytics': { trackRegisterCtaClick: noop },
         '../utils/reviewIdentity.js': identity, '../utils/therapistStatus.js': { isNotListed: () => false },
-        '../components/NeutralReviewNote.jsx': noop, '../components/RatingFingerprint.jsx': { __esModule: true, default: noop, averageFingerprint: () => null },
+        '../components/NeutralReviewNote.jsx': noop, '../components/OfficialLinks.jsx': noop, '../components/RatingFingerprint.jsx': { __esModule: true, default: noop, averageFingerprint: () => null },
       }, { window: browser, document: { querySelector: () => null } });
       return () => page.default({ ssrShop: shop, ssrTherapist: therapist });
     });
