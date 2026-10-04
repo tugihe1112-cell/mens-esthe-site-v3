@@ -147,7 +147,8 @@ for (const p of plan) {
   const rows = [];
   for (const x of p.add) {
     const image = await uploadImage(x.imgUrl, scopedImageKey({ shopId: p.addTo, castId: x.castId || x.key, sourceUrl: x.imgUrl }), p.website, 'therapist-images', { officialWebsiteUrl: p.website, sourcePageUrl: x.profileUrl });
-    rows.push({ id: `${p.addTo}_${x.name}`, shop_id: p.addTo, name: x.name, image_url: image, is_active: true, last_seen_at: now });
+    // 公式プロフィールのURLも残す（口コミ・セラピストのページから公式へ直接送るため・2026-10-05・src/utils/officialLinks.js）
+    rows.push({ id: `${p.addTo}_${x.name}`, shop_id: p.addTo, name: x.name, image_url: image, is_active: true, last_seen_at: now, ...(x.profileUrl ? { raw_data: { profileUrl: x.profileUrl } } : {}) });
   }
   if (rows.length) {
     const { error } = await supabase.from('therapists').insert(rows);
