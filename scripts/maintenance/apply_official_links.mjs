@@ -6,6 +6,7 @@
  *
  * 書く場所: therapists.raw_data.profileUrl ／ shops.raw_data.rosterUrl（raw_data のほかの項目は触らない＝読み直して足すだけ）。
  * ⚠️ 書く直前に DB の今の値で確かめ直す: 在籍中であること・公式サイト（website_url）と同じホストであること・http/https であること。
+ *    共用のポータル（estama.jp・daysnavi.info）は店の番号まで同じこと・別のブランドの店が公式サイトにしているアドレスでないこと。
  * ⚠️ 同じ人（同じ行）に違うURLが2つ以上届いたら、その行は書かない（どちらが正しいか分からない）。
  * ⚠️ 書く前に、変える行の raw_data を全部 JSON に保存する（outputs/official-links/backup-*.json）。保存できなければ1行も書かない。
  * ⚠️ 書いた後に読み直して、書いた数と一致するか確かめる。
@@ -13,7 +14,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
-import { safeHttpUrl, sameOfficialSite } from '../../src/utils/officialLinks.js';
+import { safeHttpUrl, sameOfficialSite, officialSiteScope, selfTestOfficialLinks } from '../../src/utils/officialLinks.js';
+
+const selfProblems = selfTestOfficialLinks();
+if (selfProblems.length) { console.error('❌ 公式サイトの判定の自己診断が通りません:\n  ' + selfProblems.join('\n  ')); process.exit(1); }
 
 const args = process.argv.slice(2);
 for (const a of args) if (!/^--(file=.+|live)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
@@ -40,10 +44,17 @@ function collapse(entries, idKey, urlKey) {
 const T = collapse(plan.results.flatMap((r) => r.therapists), 'id', 'profileUrl');
 const S = collapse(plan.results.flatMap((r) => r.shops), 'id', 'rosterUrl');
 
+// id は日本語を含み URL で1件 60〜150字になる。200件まとめると URL が長すぎて接続ごと切られる
+// （2026-10-05 に 35,902行で "fetch failed"）。1回50件・通信の失敗は3回までやり直す。
 async function readRows(table, cols, ids) {
   const out = [];
-  for (let i = 0; i < ids.length; i += 200) {
-    const { data, error } = await supabase.from(table).select(cols).in('id', ids.slice(i, i + 200));
+  for (let i = 0; i < ids.length; i += 50) {
+    let data, error;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      ({ data, error } = await supabase.from(table).select(cols).in('id', ids.slice(i, i + 50)));
+      if (!error || !/fetch failed|network|timeout/i.test(error.message)) break;
+      await new Promise((r) => setTimeout(r, 1000 * attempt));
+    }
     if (error) { console.error('❌', table, error.message); process.exit(1); }
     out.push(...data);
   }
@@ -51,20 +62,35 @@ async function readRows(table, cols, ids) {
 }
 const shops = [];
 for (let from = 0; ; from += 1000) {
-  const { data, error } = await supabase.from('shops').select('id,website_url,raw_data').range(from, from + 999);
+  const { data, error } = await supabase.from('shops').select('id,website_url,group_id,raw_data').range(from, from + 999);
   if (error) { console.error('❌ shops', error.message); process.exit(1); }
   shops.push(...data); if (data.length < 1000) break;
 }
 const shopById = new Map(shops.map((s) => [s.id, s]));
+// そのアドレスを公式サイトにしている店（ブランド）。別のブランドの店のアドレスなら、その店の人のページではない。
+// （同じ貸しサーバーのサブドメインを別の店が使う形＝aroma-terrace.men-este.com と fairy.men-este.com など）
+const brandOf = (s) => s.group_id || `solo:${s.id}`;
+const owners = new Map();
+for (const s of shops) {
+  const k = officialSiteScope(s.website_url); if (!k) continue;
+  (owners.get(k) || owners.set(k, new Set()).get(k)).add(brandOf(s));
+}
+const otherBrandsSite = (url, shop) => { const o = owners.get(officialSiteScope(url)); return !!o && !o.has(brandOf(shop)); };
+// 在籍一覧がほかの店の公式サイト（トップ）そのものなら、その店の一覧ではない（SUHADA SPA 柏店に千葉店の /chiba/ が入った）
+const normUrl = (u) => String(u || '').trim().replace(/^https?:\/\/(www\.)?/i, '').replace(/\/+$/, '').toLowerCase();
+const websiteOwner = new Map(shops.filter((s) => s.website_url).map((s) => [normUrl(s.website_url), s.id]));
+const otherShopsTop = (url, shop) => { const o = websiteOwner.get(normUrl(url)); return !!o && o !== shop.id; };
 const tRows = await readRows('therapists', 'id,shop_id,is_active,raw_data', [...T.map.keys()]);
 
-const changes = []; const skipped = { inactive: 0, offSite: 0, notObject: 0, same: 0, missing: 0 };
+const skipEx = [];
+const changes = []; const skipped = { inactive: 0, offSite: 0, otherBrand: 0, notObject: 0, same: 0, missing: 0 };
 const isObj = (v) => v == null || (typeof v === 'object' && !Array.isArray(v));
 for (const t of tRows) {
   const url = T.map.get(t.id);
-  const site = shopById.get(t.shop_id)?.website_url;
+  const shop = shopById.get(t.shop_id); const site = shop?.website_url;
   if (t.is_active === false) { skipped.inactive += 1; continue; }
-  if (!site || !sameOfficialSite(url, site)) { skipped.offSite += 1; continue; }
+  if (!site || !sameOfficialSite(url, site)) { skipped.offSite += 1; skipEx.push(`公式の外 ${t.id} → ${url}（公式 ${site}）`); continue; }
+  if (otherBrandsSite(url, shop)) { skipped.otherBrand += 1; skipEx.push(`別の店 ${t.id} → ${url}`); continue; }
   if (!isObj(t.raw_data)) { skipped.notObject += 1; continue; }
   if (t.raw_data?.profileUrl === url) { skipped.same += 1; continue; }
   changes.push({ table: 'therapists', id: t.id, before: t.raw_data ?? null, after: { ...(t.raw_data || {}), profileUrl: url } });
@@ -74,6 +100,7 @@ for (const [id, url] of S.map) {
   const s = shopById.get(id);
   if (!s) { skipped.missing += 1; continue; }
   if (!s.website_url || !sameOfficialSite(url, s.website_url)) { skipped.offSite += 1; continue; }
+  if (otherBrandsSite(url, s) || otherShopsTop(url, s)) { skipped.otherBrand += 1; skipEx.push(`別の店 ${id} → ${url}`); continue; }
   if (!isObj(s.raw_data)) { skipped.notObject += 1; continue; }
   if (s.raw_data?.rosterUrl === url) { skipped.same += 1; continue; }
   changes.push({ table: 'shops', id, before: s.raw_data ?? null, after: { ...(s.raw_data || {}), rosterUrl: url } });
@@ -82,8 +109,9 @@ const nT = changes.filter((c) => c.table === 'therapists').length;
 const nS = changes.filter((c) => c.table === 'shops').length;
 const replace = changes.filter((c) => c.table === 'therapists' && c.before?.profileUrl).length;
 console.log(`書く予定: セラピスト ${nT}行（公式プロフィール・うち今の値を置き換え ${replace}）・店 ${nS}店（公式の在籍一覧）`);
-console.log(`書かない: 在籍中でない ${skipped.inactive}・公式サイトの外 ${skipped.offSite}・raw_data が形違い ${skipped.notObject}・同じ値 ${skipped.same}・行が無い ${skipped.missing}・違うURLが2つ ${T.conflict.length + S.conflict.length}`);
+console.log(`書かない: 在籍中でない ${skipped.inactive}・公式サイトの外 ${skipped.offSite}・別の店のサイト ${skipped.otherBrand}・raw_data が形違い ${skipped.notObject}・同じ値 ${skipped.same}・行が無い ${skipped.missing}・違うURLが2つ ${T.conflict.length + S.conflict.length}`);
 for (const c of changes.filter((x) => x.table === 'therapists').slice(0, 5)) console.log(`  例 ${c.id} → ${c.after.profileUrl}`);
+for (const x of skipEx.slice(0, 12)) console.log(`  書かない例 ${x}`);
 if (!LIVE) { console.log('\n（下見です。書くときは --live）'); process.exit(0); }
 
 // ── バックアップ → 書く → 読み直し ─────────────────────────

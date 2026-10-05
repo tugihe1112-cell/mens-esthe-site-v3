@@ -30,10 +30,31 @@ export function safeHttpUrl(u) {
   return hostOf(t) ? t : null;
 }
 
-/** 同じ公式サイトか（同じホスト、またはどちらかがもう一方のサブドメイン） */
+// 1つのホストを多くの店が使うポータル・貸しサーバー。ホストが同じでも、店の番号が違えば別の店。
+// （2026-10-05 実際に起きた: estama.jp の「中部の女の子一覧」から、名前が同じだけの別の店の人のページを拾った／
+//   daysnavi.info で Parco の一覧の人を、同じ貸しサーバーの HARMONY・Reveur の人に結び付けた）
+const SHARED_SCOPES = [
+  { root: 'estama.jp', scope: (x) => x.pathname.match(/^\/shop\/(\d+)/)?.[1] || null },
+  { root: 'daysnavi.info', scope: (x) => x.searchParams.get('no') || null },
+];
+
+/** どの店のサイトか（ふつうはホスト。共用のポータルは「ホスト#店の番号」・番号が無いページは「#?」） */
+export function officialSiteScope(u) {
+  const h = hostOf(u);
+  if (!h) return null;
+  const s = SHARED_SCOPES.find((r) => h === r.root || h.endsWith(`.${r.root}`));
+  if (!s) return h;
+  let id = null;
+  try { id = s.scope(new URL(u)); } catch { id = null; }
+  return `${s.root}#${id ?? '?'}`;
+}
+
+/** 同じ公式サイトか（同じホスト、またはどちらかがもう一方のサブドメイン。共用のポータルは店の番号まで同じとき） */
 export function sameOfficialSite(a, b) {
   const ha = hostOf(a); const hb = hostOf(b);
   if (!ha || !hb) return false;
+  const sa = officialSiteScope(a); const sb = officialSiteScope(b);
+  if (sa.includes('#') || sb.includes('#')) return sa === sb && !sa.endsWith('#?');
   return ha === hb || ha.endsWith(`.${hb}`) || hb.endsWith(`.${ha}`);
 }
 
@@ -89,5 +110,12 @@ export function selfTestOfficialLinks() {
   // 7. 何も無ければ公式サイト（整形済みの形も読む）
   r = officialLinksFor({ shop: { websiteUrl: 'https://x-spa.jp/', scheduleUrl: 'https://x-spa.jp/' } });
   eq('website only', r.primary?.kind, 'official'); eq('same schedule', r.schedule, null); eq('no dup website', r.website, null);
+  // 8. 共用のポータル: 同じ estama.jp でも店の番号が違えば別の店（ポータル全体の一覧ページも店のページではない）
+  eq('estama other shop', sameOfficialSite('https://estama.jp/shop/50253/cast/961505/', 'https://estama.jp/shop/38462/'), false);
+  eq('estama same shop', sameOfficialSite('https://estama.jp/shop/38462/cast/827068/', 'https://estama.jp/shop/38462/'), true);
+  eq('estama portal list', sameOfficialSite('https://estama.jp/chubu/girlslist/', 'https://estama.jp/shop/38462/'), false);
+  // 9. 共用の貸しサーバー: daysnavi.info は ?no= が店の番号
+  eq('daysnavi other shop', sameOfficialSite('https://www3.daysnavi.info/web/girls-profile.html?no=804000&girl_no=1', 'https://www3.daysnavi.info/web/?no=804099'), false);
+  eq('daysnavi same shop', sameOfficialSite('https://www3.daysnavi.info/web/girls-profile.html?no=804000&girl_no=1', 'https://www3.daysnavi.info/web/?no=804000'), true);
   return problems;
 }
