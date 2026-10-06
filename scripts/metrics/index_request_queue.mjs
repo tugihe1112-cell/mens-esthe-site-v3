@@ -12,9 +12,13 @@
  *
  * 【使い方】（Mac 側。サンドボックスは Google API へ疎通できない）
  *   node scripts/metrics/index_request_queue.mjs next [--n=10]
- *       → サイトマップ（今 Google に出しているページ）から、まだリクエストしていないページを
- *         口コミの多い順に n 件。店・ブランドのページが先、セラピストのページが後。
- *         outputs/index-requests/next.json にも書く。
+ *       → サイトマップ（今 Google に出しているページ）から、出す順に n 件。outputs/index-requests/next.json にも書く。
+ *         ① 新しい口コミが入ったページ（口コミが最後のリクエストより後に入った／まだ一度も出していない、
+ *            かつその口コミが TRACK_START 以降）＝口コミの新しい順。既に出したページも、口コミが増えたら出し直す。
+ *         ② 残り＝まだ出していないページを口コミの多い順（店・ブランドが先、セラピストが後）。
+ *         （2026-10-07 okabayashi「クチコミを書くたびに seo 申請するようにして 自動的に」。
+ *          リクエストに API は無いので、毎朝の定期タスクがこの順で出す＝書いた口コミは翌朝の回で最優先に出る。
+ *          口コミを足すのが運営の道具でも、サイトの投稿画面でも、DB の reviews を見るので同じように拾う）
  *   node scripts/metrics/index_request_queue.mjs mark <URL> <リクエスト前の状態> <結果>
  *       → 結果は requested（リクエスト済み）/ already_indexed（既に登録済みで出さなかった）/
  *         quota（上限で出せなかった＝次回もう一度）/ error（画面の不具合など）
@@ -55,6 +59,19 @@ const saveProgress = (p) => fs.writeFileSync(PROGRESS, JSON.stringify(p, null, 1
 const norm = (u) => { try { return decodeURIComponent(u).replace(/\/$/, ''); } catch { return u.replace(/\/$/, ''); } };
 const label = (u) => norm(u).replace(ORIGIN, '');
 const jstDate = (d = new Date()) => new Date(d.getTime() + 9 * 3600e3).toISOString().slice(0, 10);
+// 「新しい口コミ」として先に出すのは、この時刻より後に入った口コミだけ（リクエストを始めた 2026-10-06 0:00 JST）。
+// これより前の口コミしかないページは②（口コミの多い順の残り）で出す。
+const TRACK_START = '2026-10-05T15:00:00.000Z';
+// ページごとの「最後にリクエストした時刻」（requested・already_indexed だけ。quota・error は出せていないので数えない）
+function lastRequestMap(requests) {
+  const m = new Map();
+  for (const r of requests) {
+    if (r.result !== 'requested' && r.result !== 'already_indexed') continue;
+    const k = norm(r.url);
+    if (!m.has(k) || r.requested_at > m.get(k).requested_at) m.set(k, r);
+  }
+  return m;
+}
 
 async function sitemapPages() {
   const res = await fetch(`${ORIGIN}/api/sitemap.xml`, { headers: { 'cache-control': 'no-cache' } });
@@ -70,7 +87,7 @@ async function sitemapPages() {
 async function reviewCounts() {
   const { createClient } = await import('@supabase/supabase-js');
   const sb = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('SUPABASE_SERVICE_ROLE_KEY'), { auth: { persistSession: false } });
-  const { data: revs, error } = await sb.from('reviews').select('shop_id,therapist_id,content').or('is_public.eq.true,user_id.eq.owner_manual');
+  const { data: revs, error } = await sb.from('reviews').select('shop_id,therapist_id,content,created_at').or('is_public.eq.true,user_id.eq.owner_manual');
   if (error) throw error;
   const shops = [];
   for (let from = 0; ; from += 1000) { // PostgREST は1回1000行まで
@@ -84,27 +101,34 @@ async function reviewCounts() {
 
 if (cmd === 'next') {
   const n = Number(flag('n', '10')) || 10;
-  const done = new Set(loadProgress().requests.filter((r) => r.result !== 'quota' && r.result !== 'error').map((r) => norm(r.url)));
+  const lastReq = lastRequestMap(loadProgress().requests);
   const { shops, threads } = await sitemapPages();
   const { revs, groupOf } = await reviewCounts();
   const rows = [];
+  const summarize = (u, kind, rs) => {
+    const latest = rs.reduce((a, r) => (r.created_at > a ? r.created_at : a), '');
+    const last = lastReq.get(norm(u))?.requested_at || null;
+    const fresh = !!latest && latest >= TRACK_START && (!last || latest > last);
+    return { url: u, kind, n: rs.length, chars: rs.reduce((a, r) => a + (r.content?.length || 0), 0), latestReview: latest || null, lastRequested: last, fresh, again: fresh && !!last };
+  };
   for (const u of shops) {
     const key = norm(u).split('/').pop();
-    const rs = revs.filter((r) => (u.includes('/brands/') ? groupOf[r.shop_id] === key : r.shop_id === key));
-    rows.push({ url: u, kind: '店', n: rs.length, chars: rs.reduce((a, r) => a + (r.content?.length || 0), 0) });
+    rows.push(summarize(u, '店', revs.filter((r) => (u.includes('/brands/') ? groupOf[r.shop_id] === key : r.shop_id === key))));
   }
   for (const u of threads) {
     const tid = norm(u).split('/threads/')[1];
-    const rs = revs.filter((r) => r.therapist_id === tid);
-    rows.push({ url: u, kind: '人', n: rs.length, chars: rs.reduce((a, r) => a + (r.content?.length || 0), 0) });
+    rows.push(summarize(u, '人', revs.filter((r) => r.therapist_id === tid)));
   }
-  rows.sort((a, b) => (a.kind === b.kind ? b.n - a.n || b.chars - a.chars : a.kind === '店' ? -1 : 1));
-  const todo = rows.filter((r) => !done.has(norm(r.url)));
+  const byCount = (a, b) => (a.kind === b.kind ? b.n - a.n || b.chars - a.chars : a.kind === '店' ? -1 : 1);
+  // ① 新しい口コミのページ（口コミの新しい順・同じ時刻なら店が先）→ ② まだ出していない残り（口コミの多い順）
+  const fresh = rows.filter((r) => r.fresh).sort((a, b) => (b.latestReview > a.latestReview ? 1 : b.latestReview < a.latestReview ? -1 : byCount(a, b)));
+  const rest = rows.filter((r) => !r.fresh && !lastReq.has(norm(r.url))).sort(byCount);
+  const todo = [...fresh, ...rest];
   const pick = todo.slice(0, n);
   fs.writeFileSync(path.join(DIR, 'next.json'), JSON.stringify(pick, null, 1));
-  console.log(`サイトマップの店・ブランド ${shops.length}・セラピスト ${threads.length}／リクエスト済み ${done.size}／まだ ${todo.length}`);
-  pick.forEach((r, i) => console.log(`${i + 1}\t${r.kind}\t口コミ${r.n}件\t${r.url}\t${label(r.url)}`));
-  if (!pick.length) console.log('（まだリクエストしていないページは無い）');
+  console.log(`サイトマップの店・ブランド ${shops.length}・セラピスト ${threads.length}／リクエスト済み ${lastReq.size}／新しい口コミ ${fresh.length}（うち出し直し ${fresh.filter((r) => r.again).length}）／残り ${rest.length}`);
+  pick.forEach((r, i) => console.log(`${i + 1}\t${r.kind}\t口コミ${r.n}件\t${r.fresh ? (r.again ? '新しい口コミ（出し直し）' : '新しい口コミ') : '残り'}\t${r.url}\t${label(r.url)}`));
+  if (!pick.length) console.log('（出すページは無い）');
 }
 
 if (cmd === 'mark') {
@@ -135,12 +159,8 @@ if (cmd === 'status') {
   const auth = new google.auth.GoogleAuth({ keyFile: KEY_FILE, scopes: ['https://www.googleapis.com/auth/webmasters.readonly'] });
   const sc = google.searchconsole({ version: 'v1', auth });
 
-  const p = loadProgress();
-  const firstReq = new Map();
-  for (const r of p.requests.filter((x) => x.result === 'requested' || x.result === 'already_indexed')) {
-    const k = norm(r.url);
-    if (!firstReq.has(k)) firstReq.set(k, r);
-  }
+  // 出し直したページは、いちばん最近のリクエストの後に Google が来たかを見る
+  const firstReq = lastRequestMap(loadProgress().requests);
   const prevFile = fs.readdirSync(DIR).filter((f) => /^status-\d{4}-\d{2}-\d{2}\.json$/.test(f) && f !== `status-${jstDate()}.json`).sort().pop();
   const prev = prevFile ? Object.fromEntries(JSON.parse(fs.readFileSync(path.join(DIR, prevFile), 'utf8')).map((r) => [norm(r.url), r])) : {};
 

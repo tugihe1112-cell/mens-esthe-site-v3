@@ -177,5 +177,8 @@ async function main() {
   const tally = { ins: 0, skip: 0, fail: 0 };
   for (let i = 0; i < list.length; i++) tally[await processOne(list[i], i)]++;
   console.log(`\n=== 完了: 挿入${tally.ins} / スキップ${tally.skip} / 失敗${tally.fail} ===`);
+  // 口コミを書いたら Google に登録リクエスト（2026-10-07 okabayashi「クチコミを書くたびに seo 申請するようにして 自動的に」）。
+  // リクエストに API は無いので、毎朝の定期タスク daily-index-requests が新しい口コミのページを最優先で出す。
+  if (!DRY && tally.ins) console.log('→ Google への登録リクエスト: 毎朝10時ごろの自動の回で、このページ（人物ページと店・ブランドのページ）を最優先で出す。順番は `node scripts/metrics/index_request_queue.mjs next` で見られる。');
 }
 main().catch(e => { console.error('FATAL', e); process.exit(1); });
