@@ -1,7 +1,10 @@
 // 汎用 owner口コミ投入スクリプト（Tier 1-2：店ごとの insert_xxx_review.mjs を一本化）
 // 使い方: node scripts/maintenance/insert_owner_review.mjs <review.json> [--dry-run]
 //   JSONは単一オブジェクト or 配列。1ファイルで複数店・複数セラピストを一括投入できる。
-//   機能: therapist_id自動解決 / therapist未登録ならname-only登録 / 重複チェック / 字数&タグ検証 / --dry-run
+//   機能: therapist_id自動解決 / 重複チェック / 字数&タグ検証 / --dry-run
+//   ⛔ 辞めた人（在籍一覧にない・退店扱い）の口コミは載せない（2026-10-06 オーナー判断「もうやめて退店している人に関しては載せなくていい」）。
+//      退店扱い（is_active=false）の人・この店に登録が無い人は止める。公式の在籍一覧に載っているのに
+//      DB に無い人だけ、JSON に "new_therapist_confirmed": true を付けると名前だけで登録して載せる。
 //   テンプレ: scripts/maintenance/_owner_review_template.json
 //
 // ⚠️ 露骨表現・名指し実店舗の本番断定は ng-rules 通り「事前に人間が置換済み」であること。
@@ -40,14 +43,13 @@ const normName = (s) => (s || '').replace(/[\s　]/g, '');
 async function resolveTherapist(shopId, nameHint) {
   // 店内から ilike 検索でDB正式名・id区切りの揺れを吸収（lessons.md：therapist_idはハードコードせずDB解決）
   const { data: rows, error } = await supabase
-    .from('therapists').select('id, name, shop_id').eq('shop_id', shopId).ilike('name', `%${nameHint}%`);
+    .from('therapists').select('id, name, shop_id, is_active').eq('shop_id', shopId).ilike('name', `%${nameHint}%`);
   if (error) throw new Error('therapist検索失敗: ' + error.message);
   const exact = (rows || []).find(r => normName(r.name) === normName(nameHint));
   return exact || (rows || [])[0] || null;
 }
 
-async function ensureTherapist(shopId, nameHint) {
-  const t = await resolveTherapist(shopId, nameHint);
+async function ensureTherapist(shopId, nameHint, t) {
   if (t) return { id: t.id, name: t.name, created: false };
   const tid = `${shopId}_${nameHint}`;
   if (DRY) return { id: tid, name: nameHint, created: 'dry' };
@@ -128,7 +130,16 @@ async function processOne(r, i) {
   const { data: ex } = await supabase.from('reviews').select('id').eq('id', id).maybeSingle();
   if (ex) { console.log(`  ⏭ 既に存在(${id}) → スキップ`); return 'skip'; }
 
-  const th = await ensureTherapist(r.shop_id, r.therapist_name);
+  const found = await resolveTherapist(r.shop_id, r.therapist_name);
+  if (found && found.is_active === false) {
+    console.log(`  ⛔ ${found.name} は在籍一覧にない（退店扱い）→ 載せない（2026-10-06 オーナー判断）`);
+    return 'skip';
+  }
+  if (!found && r.new_therapist_confirmed !== true) {
+    console.log('  ⛔ この店に登録が無い人 → 載せない。公式の在籍一覧に載っていれば "new_therapist_confirmed": true を付ける（辞めた人には載せない＝2026-10-06 オーナー判断）');
+    return 'skip';
+  }
+  const th = await ensureTherapist(r.shop_id, r.therapist_name, found);
   console.log(`  therapist: ${th.id} / "${th.name}" ${th.created === true ? '(新規作成)' : th.created === 'dry' ? '(DRY:作成予定)' : '(既存)'}`);
 
   const review = {
