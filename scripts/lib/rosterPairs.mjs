@@ -28,7 +28,8 @@ export function urlTemplate(u) {
     const x = new URL(u);
     const segs = x.pathname.split('/').filter(Boolean);
     const t = segs.map((seg, i) => (/\d/.test(seg) || (i === segs.length - 1 && segs.length > 1) ? '*' : seg));
-    const q = [...new Set(x.searchParams.keys())].sort().map((k) => `${k}=*`).join('&');
+    // profile.html?12354 のように番号そのものが項目名になる形は、番号を * にそろえる（2026-10-05: FINALE などが全員別の形に見えていた）
+    const q = [...new Set([...x.searchParams.keys()].map((k) => (/\d/.test(k) ? '*' : k)))].sort().map((k) => `${k}=*`).join('&');
     return `${x.hostname.replace(/^www\./, '')}/${t.join('/')}${q ? `?${q}` : ''}`;
   } catch { return ''; }
 }

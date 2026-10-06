@@ -34,7 +34,8 @@ export function safeHttpUrl(u) {
 // （2026-10-05 実際に起きた: estama.jp の「中部の女の子一覧」から、名前が同じだけの別の店の人のページを拾った／
 //   daysnavi.info で Parco の一覧の人を、同じ貸しサーバーの HARMONY・Reveur の人に結び付けた）
 const SHARED_SCOPES = [
-  { root: 'estama.jp', scope: (x) => x.pathname.match(/^\/shop\/(\d+)/)?.[1] || null },
+  // estama.jp/shop/番号 と、店ごとのホームページ型（27359.b7.estama.jp）。後者はホスト名がそのまま店の印
+  { root: 'estama.jp', scope: (x) => (x.hostname.replace(/^www\./, '') !== 'estama.jp' ? x.hostname : x.pathname.match(/^\/shop\/(\d+)/)?.[1] || null) },
   { root: 'daysnavi.info', scope: (x) => x.searchParams.get('no') || null },
 ];
 
@@ -114,6 +115,8 @@ export function selfTestOfficialLinks() {
   eq('estama other shop', sameOfficialSite('https://estama.jp/shop/50253/cast/961505/', 'https://estama.jp/shop/38462/'), false);
   eq('estama same shop', sameOfficialSite('https://estama.jp/shop/38462/cast/827068/', 'https://estama.jp/shop/38462/'), true);
   eq('estama portal list', sameOfficialSite('https://estama.jp/chubu/girlslist/', 'https://estama.jp/shop/38462/'), false);
+  eq('estama own homepage', sameOfficialSite('https://27359.b7.estama.jp/girls/12/', 'https://27359.b7.estama.jp/'), true);
+  eq('estama other homepage', sameOfficialSite('https://31079.b8.estama.jp/girls/12/', 'https://27359.b7.estama.jp/'), false);
   // 9. 共用の貸しサーバー: daysnavi.info は ?no= が店の番号
   eq('daysnavi other shop', sameOfficialSite('https://www3.daysnavi.info/web/girls-profile.html?no=804000&girl_no=1', 'https://www3.daysnavi.info/web/?no=804099'), false);
   eq('daysnavi same shop', sameOfficialSite('https://www3.daysnavi.info/web/girls-profile.html?no=804000&girl_no=1', 'https://www3.daysnavi.info/web/?no=804000'), true);

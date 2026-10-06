@@ -1,7 +1,8 @@
 /**
  * collect_official_links.mjs — セラピストの公式プロフィールのURLと、店の公式の在籍一覧のURLを集める（読むだけ・DBは書かない）
  *
- *   node scripts/maintenance/collect_official_links.mjs [--domains=a.com,b.com] [--limit=N]
+ *   node scripts/maintenance/collect_official_links.mjs [--domains=a.com,b.com] [--limit=N] [--audit=outputs/roster-audit/audit-X.json,...]
+ *     --audit= を付けるとその照合結果だけを材料にする（付けなければ outputs/roster-audit/audit-*.json 全部）
  *
  * 出力: outputs/official-links/plan-<日付>.json（apply_official_links.mjs が読む）
  *
@@ -28,7 +29,8 @@ import { UA, nameKey, NOT_PERSON, PLACEHOLDER_IMG, urlTemplate, MIN_TEMPLATE_MAT
 import { sameOfficialSite, safeHttpUrl } from '../../src/utils/officialLinks.js';
 
 const args = process.argv.slice(2);
-for (const a of args) if (!/^--(domains|limit)=.+$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+for (const a of args) if (!/^--(domains|limit|audit)=.+$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+const AUDITS = args.filter((a) => a.startsWith('--audit=')).flatMap((a) => a.slice(8).split(',')).map((f) => f.trim()).filter(Boolean);
 const ONLY = new Set(args.filter((a) => a.startsWith('--domains=')).flatMap((a) => a.slice(10).split(',')).map((d) => d.trim()).filter(Boolean));
 const LIMIT = Number(args.find((a) => a.startsWith('--limit='))?.slice(8) || 0);
 
@@ -43,8 +45,9 @@ const supabase = createClient(getEnv('VITE_SUPABASE_URL'), getEnv('SUPABASE_SERV
 // ── 材料: 照合の結果（サイトごとに一番新しいもの・使える判定を優先）──────────
 const AUDIT_DIR = 'outputs/roster-audit';
 const byDomain = new Map();
-for (const f of fs.readdirSync(AUDIT_DIR).filter((x) => /^audit-.*\.json$/.test(x)).sort()) {
-  let j; try { j = JSON.parse(fs.readFileSync(path.join(AUDIT_DIR, f), 'utf-8')); } catch { continue; }
+const auditFiles = AUDITS.length ? AUDITS : fs.readdirSync(AUDIT_DIR).filter((x) => /^audit-.*\.json$/.test(x)).sort().map((f) => path.join(AUDIT_DIR, f));
+for (const f of auditFiles) {
+  let j; try { j = JSON.parse(fs.readFileSync(f, 'utf-8')); } catch { if (AUDITS.length) { console.error(`❌ 読めません: ${f}`); process.exit(1); } continue; }
   for (const r of j.results || []) {
     if (!r?.domain || !(r.pages || []).length) continue;
     const prev = byDomain.get(r.domain);
@@ -97,7 +100,10 @@ let doneCount = 0;
 async function processSite(r, order) {
   // 1つのドメインを別々の店が使っているサイト（men-este.com のサブドメインなど）は、読んだサイトと同じホストの店だけ
   const website0 = safeHttpUrl(r.website);
-  const domainShops = (shopsByDomain.get(r.domain) || []).filter((s) => !website0 || sameOfficialSite(s.website_url, website0));
+  // 照合の結果は、1つのドメインを別々の店が使うサイトではホスト名（candy-s-candy.men-es.jp）で、それ以外はドメインで来る。
+  // 店はドメインで引いてからホストで絞る（2026-10-05 まではホスト名の結果を引けず、Candy Spa・Aroma Terrace 名古屋などを黙って飛ばしていた）
+  const root = rootDomainOf(website0 || '') || rootDomainOf(r.domain);
+  const domainShops = (shopsByDomain.get(root) || []).filter((s) => !website0 || sameOfficialSite(s.website_url, website0));
   if (!domainShops.length) return;
   const website = website0 || safeHttpUrl(domainShops[0].website_url);
   const groups = new Set(domainShops.map((s) => s.group_id).filter(Boolean));
@@ -126,7 +132,11 @@ async function processSite(r, order) {
     if (NOT_PERSON.test(body) || PLACEHOLDER_IMG.test(x.imgUrl)) continue;
     const name = cleanRosterName(x.raw, prefix);
     const keys = [...new Set([name ? nameKey(name) : null, nameKey(x.raw)].filter(Boolean))];
-    const key = keys.find((k) => byKey.has(k));
+    // 一覧の名前に店名やルーム名が後ろに付く形（「おと 極みのミセス HITO NO YOME〜」「ゆな　日本橋」）は、
+    // 完全一致しないときだけ先頭の語（姓名に分かれていれば先頭2語）で照合し直す
+    const toks = String(body).normalize('NFKC').trim().split(/[\s　]+/).filter(Boolean);
+    const loose = [toks.length > 2 ? nameKey(toks[0] + toks[1]) : null, nameKey(toks[0] || '')].filter((k) => k && k.length >= 2);
+    const key = keys.find((k) => byKey.has(k)) || loose.find((k) => byKey.has(k));
     if (!key) continue;
     const u = safeHttpUrl(x.profileUrl);
     if (!u || !website || !sameOfficialSite(u, website) || isTop(u, website)) continue;
@@ -137,9 +147,13 @@ async function processSite(r, order) {
   const okTpl = new Set([...tplCount].filter(([, n]) => n >= MIN_TEMPLATE_MATCHES).map(([t]) => t));
   const therapists = [];
   let ambiguous = 0; let offTemplate = 0;
+  // 違う人に同じURLが付く（「一覧へ戻る」など人のページではないリンク）なら使わない
+  const keysByUrl = new Map();
+  for (const [key, set] of urlsByKey) if (set.size === 1) { const u = [...set][0]; keysByUrl.set(u, (keysByUrl.get(u) || 0) + 1); }
   for (const [key, set] of urlsByKey) {
     if (set.size !== 1) { ambiguous += 1; continue; }
     const url = [...set][0];
+    if (keysByUrl.get(url) > 1) { ambiguous += 1; continue; }
     if (!okTpl.has(urlTemplate(url))) { offTemplate += 1; continue; }
     for (const t of byKey.get(key)) therapists.push({ id: t.id, shop_id: t.shop_id, name: t.name, profileUrl: url, before: t.profile_url || null });
   }
