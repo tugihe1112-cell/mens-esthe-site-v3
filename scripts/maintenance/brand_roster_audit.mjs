@@ -33,9 +33,15 @@ import path from 'node:path';
 import * as cheerio from 'cheerio';
 import { createClient } from '@supabase/supabase-js';
 import { rosterSiteKeyFactory } from '../lib/sourceProvenance.mjs';
+import { crawlPaginated, selfTestRosterPagination } from '../lib/rosterPagination.mjs';
 
 const args = process.argv.slice(2);
 for (const a of args) if (!/^(--top=\d+|--days=\d+|--domain=[\w.-]+|--render)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+{
+  // ページ送りを辿れないまま照合すると、2ページ目から先の在籍中の人を「公式にいない」と判定して消す（2026-10-09）
+  const problems = await selfTestRosterPagination();
+  if (problems.length) { console.error('❌ ページ送りの辿り方が壊れています:', problems); process.exit(1); }
+}
 const TOP = Number(args.find((a) => a.startsWith('--top='))?.slice(6) || 100);
 const DAYS = Number(args.find((a) => a.startsWith('--days='))?.slice(7) || 120);
 const ONLY = args.find((a) => a.startsWith('--domain='))?.slice(9);
@@ -100,20 +106,20 @@ async function readRoster(website) {
   const pages = [top.url, ...listPages];
   const names = new Set();
   const visited = new Set();
+  const read = [];
+  // ⚠️ 2026-10-09: ページ送りは**全部**辿る（scripts/lib/rosterPagination.mjs）。
+  //    以前は「まだ読んでいないリンクを1つだけ」選んで進み、タイガーアイの2ページ目で ?p=1（前）を選んで
+  //    3〜4ページ目に行かず、在籍中の19人を「公式にいない」として消していた。
   for (const p of pages) {
-    let url = p;
-    for (let i = 0; i < 10 && url && !visited.has(url); i++) {
-      visited.add(url);
-      let got;
-      try { got = await getHtml(url); } catch { break; }
-      const $ = cheerio.load(got.html);
+    const got = await crawlPaginated(p, async (url) => {
+      const g = await getHtml(url);
+      const $ = cheerio.load(g.html);
       for (const n of candidatesFrom($)) names.add(n);
-      const next = $('a').filter((_, a) => /^(次|next|›|»|>)/i.test($(a).text().trim()) || /[?&/](page|p)[=/]\d+/.test($(a).attr('href') || '')).map((_, a) => $(a).attr('href')).get()
-        .map((h) => { try { return new URL(h, got.url).href; } catch { return null; } }).find((h) => h && !visited.has(h) && h.startsWith(origin));
-      url = next;
-    }
+      return { url: g.url, anchors: $('a').map((_, a) => ({ href: $(a).attr('href') || '', text: $(a).text() })).get() };
+    }, { visited });
+    for (const g of got) read.push(g.url);
   }
-  return { names, pages: [...visited] };
+  return { names, pages: [...new Set(read)] };
 }
 
 // ── DB: 最終確認が古い在籍者をドメインごとに ─────────────────
@@ -205,6 +211,8 @@ async function renderTexts(browser, website) {
     for (let k = 0; k < 6; k++) { await page.evaluate(() => window.scrollBy(0, document.body.scrollHeight)); await new Promise((r) => setTimeout(r, 600)); }
     visited.push(page.url());
     texts.push(await page.evaluate(() => document.body.innerText + '\n' + [...document.images].map((i) => i.alt || '').join('\n')));
+    const anchors = await page.$$eval('a', (as) => as.map((a) => ({ href: a.href, text: (a.innerText || '').trim().slice(0, 40) })));
+    return { url: page.url(), anchors };
   })(), 90000, 'ページの読み込み');
   try {
     await grab(website);
@@ -212,7 +220,9 @@ async function renderTexts(browser, website) {
     const links = [...new Set(await page.$$eval('a', (as) => as.map((a) => a.href)))]
       .filter((h) => h.startsWith(origin) && ROSTER_HINT.test(h.replace(origin, '')) && !/(recruit|blog|diary|news|schedule|system|price|access|review|uid=|id=\d|\/\d{2,}\/?$|detail|GirlInfo)/i.test(h))
       .sort((x, y) => x.length - y.length).slice(0, 3);
-    for (const l of links) { try { await grab(l); } catch { /* 次へ */ } }
+    // ⚠️ 2026-10-09: 一覧のページ送りも全部辿る（以前は一覧の1ページ目しか描画していなかった）
+    const seen = new Set(visited);
+    for (const l of links) await crawlPaginated(l, grab, { visited: seen });
   } finally { await withTimeout(page.close(), 10000, 'ページを閉じる').catch(() => {}); }
   return { text: texts.join('\n'), pages: visited };
 }

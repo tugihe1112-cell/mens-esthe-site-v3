@@ -12,6 +12,7 @@ import { planReconcile, selfTestReconcile } from '../lib/rosterReconcile.mjs';
 import { rosterSiteKeyFactory } from '../lib/sourceProvenance.mjs';
 import { selfTestDepartRows } from '../lib/departRows.mjs';
 import { selfTestRenderRecheck } from '../lib/renderRecheck.mjs';
+import { selfTestRosterPagination } from '../lib/rosterPagination.mjs';
 
 const noWait = async () => {};
 const response = (status, contentType = 'text/plain') => new Response('', {
@@ -314,6 +315,24 @@ selfTestRenderRecheck();
   assert.ok(iRender >= 0 && iSplit >= 0, '照合の道具が消す前に公式ページを描画して名前を探していない（renderedText／splitByNamesInText）');
   assert.ok(iRows > iRender && iRows > iSplit, '描画の念押しが、消す行（departRows）を決めた後に置かれている＝効かない');
   assert.ok(/text === null[\s\S]{0,160}p\.depart = \[\]/.test(src), '描画できないサイトで誰も消さない処理が無い');
+}
+
+// 在籍一覧のページ送りを全部辿る（2026-10-09）: タイガーアイの一覧は4ページで、1ページ目には ?p=2 しか無い。
+// 照合の道具が「まだ読んでいないリンクを1つだけ」選んで2ページ目で ?p=1 に戻り、3〜4ページ目の在籍中の19人を消していた。
+{
+  assert.deepEqual(await selfTestRosterPagination(), [], 'ページ送りの辿り方の自己診断が失敗している');
+  const strip = (p) => fs.readFileSync(p, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const audit = strip('scripts/maintenance/brand_roster_audit.mjs');
+  const deep = strip('scripts/maintenance/deep_roster_audit.mjs');
+  const readRoster = (audit.match(/async function readRoster[\s\S]*?\n}\n/) || [''])[0];
+  const renderTexts = (audit.match(/async function renderTexts[\s\S]*?\n}\n/) || [''])[0];
+  assert.ok(readRoster && /crawlPaginated\(/.test(readRoster), '照合の道具（HTML で読む方）がページ送りを crawlPaginated で辿っていない');
+  assert.ok(!/\.find\(\(h\) => h && !visited\.has\(h\)/.test(readRoster), '照合の道具が「まだ読んでいないリンクを1つだけ」選ぶ作りに戻っている');
+  assert.ok(renderTexts && /crawlPaginated\(/.test(renderTexts), '照合の道具（画面を組み立てて読む方）がページ送りを辿っていない');
+  assert.ok(/crawlPaginated\(/.test(deep) && /paginationLinks\(/.test(deep), 'deep_roster_audit がページ送りを crawlPaginated で辿っていない');
+  for (const [name, src] of [['brand_roster_audit', audit], ['deep_roster_audit', deep]]) {
+    assert.ok(/selfTestRosterPagination\(\)/.test(src), `${name} が起動時にページ送りの自己診断を呼んでいない`);
+  }
 }
 
 console.log('✅ 外形監視の再試行・恒久障害判定チェック OK');

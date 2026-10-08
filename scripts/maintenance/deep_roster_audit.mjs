@@ -27,9 +27,15 @@ import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import puppeteer from 'puppeteer-core';
 import { rosterSiteKeyFactory } from '../lib/sourceProvenance.mjs';
+import { crawlPaginated, paginationLinks, MAX_LIST_PAGES, selfTestRosterPagination } from '../lib/rosterPagination.mjs';
 
 const args = process.argv.slice(2);
 for (const a of args) if (!/^(--from=.+|--domain=[\w.-]+|--domains=[\w.,-]+|--skip=[\w.,-]+|--days=\d+|--resume)$/.test(a)) { console.error(`❌ 知らない引数です: ${a}`); process.exit(1); }
+{
+  // ページ送りを辿れないまま照合すると、2ページ目から先の在籍中の人を「公式にいない」と判定して消す（2026-10-09）
+  const problems = await selfTestRosterPagination();
+  if (problems.length) { console.error('❌ ページ送りの辿り方が壊れています:', problems); process.exit(1); }
+}
 const FROM = args.find((a) => a.startsWith('--from='))?.slice(7);
 const ONLY = args.find((a) => a.startsWith('--domain='))?.slice(9);
 const MANY = args.find((a) => a.startsWith('--domains='))?.slice(10).split(',').filter(Boolean);
@@ -165,12 +171,17 @@ await Promise.all(Array.from({ length: 2 }, async () => {
         if (h > best.hits) best = { url: got.url, text: got.text, hits: h, links: got.links };
       }
       // 一覧のページ送り
+      // ⚠️ 2026-10-09: 読んだページからもページ送りを拾って全部辿る（scripts/lib/rosterPagination.mjs）。
+      //    以前は一覧の1ページ目にあるリンクしか辿らず、1ページ目に「2」しか無い一覧では3ページ目から先を読まなかった。
       const texts = [best.text]; const pages = [best.url];
-      const bestPath = new URL(best.url).pathname.replace(/\/+$/, '');
-      const queue = best.links.map((l) => l.href).filter((h) => h.startsWith(origin) && (new URL(h).pathname.startsWith(`${bestPath}/page/`) || (new URL(h).pathname.replace(/\/+$/, '') === bestPath && /[?&](p|page|pg)=\d+/.test(h))));
-      for (const u of [...new Set(queue)]) {
-        if (pages.length >= 12 || pages.includes(u)) continue;
-        try { const got = await render(u); texts.push(got.text); pages.push(got.url); } catch { /* 次へ */ }
+      const seen = new Set([best.url]);
+      for (const start of paginationLinks(best.links, best.url)) {
+        if (pages.length >= MAX_LIST_PAGES) break;
+        const got = await crawlPaginated(start, async (u) => {
+          const g = await render(u);
+          return { url: g.url, anchors: g.links, text: g.text };
+        }, { visited: seen, max: MAX_LIST_PAGES - pages.length });
+        for (const g of got) { if (!pages.includes(g.url)) { texts.push(g.text); pages.push(g.url); } }
       }
       if (res.error) return; // 1サイトの打ち切り後に遅れて返ってきた分は捨てる
       const T = flatT(texts.join('\n'));
