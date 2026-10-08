@@ -450,6 +450,36 @@ requireMatch(integrityMonitor, /口コミの実更新日が無い/, '本番監�
     '店舗ページの在籍数が退店マークの人まで数えています（一覧と同じ is_active の条件で数えること）');
 }
 
+// ── 店舗ページの料金・営業時間を SSR で出す（2026-10-09）───────────────────────
+// 店舗SSRが shops から料金・営業時間を取っておらず、ssrShop にも載せていなかった。
+// SSR の HTML では料金欄が「この店舗の料金は未掲載です」・営業時間なしになり、ブラウザが後から
+// 読む値で埋めていた＝人には出るが Google が読む HTML には出ない（単独店すべて）。
+// 🚩 鎖は3段（取る → ssrShop に載せる → 画面が読む）。どこが切れても黙って「未掲載」に戻るので3段とも見る。
+{
+  const shopSsr = strip(read('pages/shops/[shopId]/index.jsx'));
+  const shopSelect = (shopSsr.match(/\.from\('shops'\)\s*\.select\('id, name, group_id[^']*'\)/) || [''])[0];
+  requireMatch(shopSelect, /\.select\(/,
+    '店舗SSRの shops 本体の取得が見つかりません（書き方を変えたらこの検査も直すこと）');
+  requireMatch(shopSelect, /\bbusiness_hours\b/,
+    '店舗SSRが営業時間（business_hours）を取っていません（HTMLの店舗情報から営業時間が消えます）');
+  requireMatch(shopSelect, /\bprice_system\b/,
+    '店舗SSRが料金（price_system）を取っていません（HTMLの料金欄が「未掲載」に戻ります）');
+  const ssrShopBlock = (shopSsr.match(/const ssrShop = shop\s*\?\s*\{[\s\S]*?\}\s*:\s*null/) || [''])[0];
+  requireMatch(ssrShopBlock, /const ssrShop/,
+    '店舗SSRの ssrShop が見つかりません（書き方を変えたらこの検査も直すこと）');
+  requireMatch(ssrShopBlock, /\bbusiness_hours:\s*shop\.business_hours/,
+    '店舗SSRの ssrShop に営業時間（business_hours）を載せていません');
+  requireMatch(ssrShopBlock, /\bprice_system:\s*shop\.price_system/,
+    '店舗SSRの ssrShop に料金（price_system）を載せていません');
+  rejectMatch(ssrShopBlock, /\braw_data\s*:/,
+    '店舗SSRの ssrShop に raw_data を載せています（1店約12KBのブロブがHTMLに焼き込まれます）');
+  const shopPage = strip(read('src/pages/ShopDetailPage.jsx'));
+  requireMatch(shopPage, /shop\?\.price_system/,
+    '店舗ページが shop.price_system を読んでいません（SSRで渡している名前と揃えること）');
+  requireMatch(shopPage, /shop\.business_hours/,
+    '店舗ページが shop.business_hours を読んでいません（SSRで渡している名前と揃えること）');
+}
+
 // ── トップの WebSite 構造化データ（2026-09-23）────────────────────────────
 // Google は検索結果の「サイト名」を、トップの WebSite 構造化データから最優先で読む。
 // 店舗・ブランド・エリアには構造化データがあったが、トップには1つも無かった。

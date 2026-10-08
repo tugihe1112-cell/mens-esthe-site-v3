@@ -29,7 +29,10 @@ export async function getServerSideProps({ params, res }) {
     const [shopRes, therapistCountRes] = await Promise.all([
       supabase
         .from('shops')
-        .select('id, name, group_id, image_url, website_url, raw_data')
+        // ⚠️ 2026-10-09: 料金・営業時間も取る。取っていなかったので、SSR の HTML では料金欄が
+        //    「この店舗の料金は未掲載です」・営業時間なしになり、ブラウザが後から読む値で埋めていた
+        //    （人には出るが Google が読む HTML には出ない）。
+        .select('id, name, group_id, image_url, website_url, business_hours, price_system, raw_data')
         .eq('id', shopId)
         // ⚠️ single() は「0件」もエラー扱いになり、本物のDB障害と区別できない。
         //    404を出す判断をするので maybeSingle()（0件は data=null / error=null）にする。
@@ -180,6 +183,13 @@ export async function getServerSideProps({ params, res }) {
           name: shop.name,
           image_url: shop.image_url || null,
           website_url: shop.website_url || null,
+          // ⚠️ 店舗情報の料金・営業時間。画面（ShopDetailPage）は shop.price_system と
+          //    shop.business_hours || shop.raw_data?.hours を読むので、raw_data.hours は
+          //    ブロブを載せずにこの1項目だけ平らにして渡す。
+          business_hours: shop.business_hours
+            || (typeof shop.raw_data?.hours === 'string' ? shop.raw_data.hours : null)
+            || null,
+          price_system: shop.price_system ?? null,
           // ⚠️ 閉店・営業未確認の帯は**この2つだけ**を平らにして渡す。
           //    raw_data ごと渡すと上のブロブ問題（HTMLが3倍）が戻る。
           //    判定は src/utils/shopStatus.js（フラットなプロパティも見るようにしてある）。
