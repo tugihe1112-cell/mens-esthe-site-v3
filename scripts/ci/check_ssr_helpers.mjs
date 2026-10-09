@@ -1786,6 +1786,49 @@ check('pages/ の SSR は時間の上限付きのクライアント（createServ
   return users.length >= 6 ? null : `createServerSupabase を使うページが ${users.length} 件しかない（6件のはず）`;
 });
 
+// ── 店舗ページの在籍一覧を SSR で出す（2026-10-09）──────────────────────────────
+// 以前は最初の HTML が「全 0 人／在籍セラピスト情報はありません」だった。
+// SSR の一覧と画面の一覧は**同じ順・同じ畳み方**でないと、読み込み終わった瞬間に並び替わる・人数が変わる。
+{
+  const { buildShopRosterProps, orderShopRoster, SHOP_ROSTER_SSR_LIMIT } = await loadModule('src/utils/shopRoster.js');
+  const rows = [
+    { id: 'a', shop_id: 's', name: 'あい', image_url: null, raw_data: { big: 'x'.repeat(1000) } },
+    { id: 'b', shop_id: 's', name: 'ｱｲ', image_url: 'https://x/b.jpg' },      // 「あい」とは別人（かな違い）
+    { id: 'c', shop_id: 's', name: '似鳥 芹香', image_url: null },
+    { id: 'd', shop_id: 's', name: '似鳥芹香', image_url: 'https://x/d.jpg' }, // c と同じ人・写真あり
+    { id: 'e', shop_id: 's', name: 'もも', image_url: 'https://x/e.jpg', is_active: false },
+    { id: 'f', shop_id: 's', name: '', image_url: 'https://x/f.jpg' },
+  ];
+  check('在籍一覧: 同じ人を1人に畳み、写真ありの行を残す', () => {
+    const ids = orderShopRoster(rows).map((t) => t.id);
+    if (!ids.includes('d') || ids.includes('c')) return `写真あり(d)ではなく写真なし(c)が残った: ${ids.join(',')}`;
+    return null;
+  });
+  check('在籍一覧: 写真ありが先頭・退店マークと名前なしは出さない', () => {
+    const ids = orderShopRoster(rows).map((t) => t.id);
+    if (ids.join(',') !== 'b,d,a') return `順番が想定（b,d,a）と違う: ${ids.join(',')}`;
+    return null;
+  });
+  check('在籍一覧: 全人数は畳んだあとの数・HTML に載せるのは先頭だけ・raw_data を載せない', () => {
+    const many = Array.from({ length: 30 }, (_, i) => ({ id: `t${String(i).padStart(2, '0')}`, shop_id: 's', name: `人${i}`, image_url: null }));
+    const { roster, total } = buildShopRosterProps(many);
+    if (total !== 30) return `全人数が ${total}（30 のはず）`;
+    if (roster.length !== SHOP_ROSTER_SSR_LIMIT) return `HTML に載せる人数が ${roster.length}（${SHOP_ROSTER_SSR_LIMIT} のはず）`;
+    if ('raw_data' in buildShopRosterProps(rows).roster[0]) return 'raw_data を props に載せている（HTML が膨れる）';
+    if (buildShopRosterProps(rows).total !== 3) return `rows の全人数が ${buildShopRosterProps(rows).total}（3 のはず）`;
+    return null;
+  });
+  check('在籍一覧: 取得失敗（null）でも落ちない', () => {
+    const r = buildShopRosterProps(null);
+    return r.total === 0 && r.roster.length === 0 ? null : '空のはず';
+  });
+  check('在籍一覧: SSR の表示件数と画面の最初の表示件数が同じ', () => {
+    const page = fs.readFileSync(path.join(ROOT, 'src/pages/ShopDetailPage.jsx'), 'utf-8');
+    const m = page.match(/const INITIAL_DISPLAY_COUNT = (\d+);/);
+    return m && Number(m[1]) === SHOP_ROSTER_SSR_LIMIT ? null : `画面 ${m?.[1]} と SSR ${SHOP_ROSTER_SSR_LIMIT} が違う（HTML の人数と最初の表示がずれる）`;
+  });
+}
+
 if (failures.length) {
   console.error('\n🚨 SSRヘルパの実行検査に失敗しました（このままデプロイすると本番が500になります）:\n');
   failures.forEach((v) => console.error('  - ' + v));

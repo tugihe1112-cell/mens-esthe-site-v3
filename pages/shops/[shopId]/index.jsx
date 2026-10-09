@@ -12,6 +12,27 @@ import { createServerSupabase } from '../../../server/supabaseServer';
 import ShopDetailPage from '../../../src/pages/ShopDetailPage';
 import { pickNearbyShops } from '../../../src/utils/nearbyShops.mjs';
 import { shopRedirectPath, countRoomsByBrand } from '../../../src/utils/brandGroups.js';
+import { buildShopRosterProps, SHOP_ROSTER_COLUMNS } from '../../../src/utils/shopRoster.js';
+
+// 在籍一覧を全員取る（PostgREST は1回1000行まで。いちばん多い店で約680人＝通常は1回で終わる）。
+// ⚠️ 取り切れていない一覧で人数を出さない（数え切れていない数字を出すのと同じ）。
+async function fetchShopRosterRows(supabase, shopId) {
+  const PAGE = 1000;
+  const rows = [];
+  for (let from = 0; from < 5000; from += PAGE) {
+    const { data, error } = await supabase
+      .from('therapists')
+      .select(SHOP_ROSTER_COLUMNS)
+      .eq('shop_id', shopId)
+      .or('is_active.is.null,is_active.eq.true')
+      .order('id', { ascending: true })
+      .range(from, from + PAGE - 1);
+    if (error) return { data: null, error };
+    rows.push(...(data || []));
+    if (!data || data.length < PAGE) return { data: rows, error: null };
+  }
+  return { data: null, error: new Error('roster too large') };
+}
 
 export async function getServerSideProps({ params, res }) {
   const { shopId } = params;
@@ -25,8 +46,8 @@ export async function getServerSideProps({ params, res }) {
     // 1本50〜150msでも合計600ms〜2.5秒のTTFBになっていた（実測: HTML受信完了 2,573ms）。
     // 依存関係は「shop が要る／reviewShopIds が要る」の2段しかないので3ウェーブで足りる。
 
-    // ── wave 1: shop 本体と 在籍数（在籍数は shopId だけで引けるので同時に投げられる）
-    const [shopRes, therapistCountRes] = await Promise.all([
+    // ── wave 1: shop 本体と 在籍一覧（在籍は shopId だけで引けるので同時に投げられる）
+    const [shopRes, rosterRes] = await Promise.all([
       supabase
         .from('shops')
         // ⚠️ 2026-10-09: 料金・営業時間も取る。取っていなかったので、SSR の HTML では料金欄が
@@ -40,17 +61,16 @@ export async function getServerSideProps({ params, res }) {
       // ⚠️ 2026-09-22: 在籍数は**一覧と同じ定義**（is_active が null か true）で数える。
       //    以前は店の全行を数えていたため、在籍照合で退店マークを付けた直後の AromaCharm が
       //    「在籍 56 人」と「全37人」を同じページに並べた（退店マーク19名ぶん）。
-      //    この数字は SEO の説明文（在籍セラピストN名）にも使われる。
-      supabase
-        .from('therapists')
-        .select('id', { count: 'exact', head: true })
-        .eq('shop_id', shopId)
-        .or('is_active.is.null,is_active.eq.true'),
+      // 🚩 2026-10-09: 数えるだけでなく**一覧そのもの**を取り、HTML に載せる。
+      //    以前はブラウザだけが一覧を取りに行っていたので、最初の HTML は
+      //    「全 0 人／在籍セラピスト情報はありません」だった（Google が読む HTML に在籍者が居ない）。
+      //    人数も一覧と同じ畳み方（同じ人を1人に）で数える＝「在籍N人」と「全N人」が必ず揃う。
+      fetchShopRosterRows(supabase, shopId),
     ]);
     if (shopRes.error) throw shopRes.error;
-    if (therapistCountRes.error) throw therapistCountRes.error;
+    if (rosterRes.error) throw rosterRes.error;
     const shop = shopRes.data;
-    const therapistCount = therapistCountRes.count;
+    const { roster: ssrRoster, total: therapistCount } = buildShopRosterProps(rosterRes.data);
 
     // ── ソフト404の解消（2026-08-10・GSC「重複しています。ユーザーにより、正規ページとして
     //    選択されていません」30件の原因）──
@@ -206,6 +226,8 @@ export async function getServerSideProps({ params, res }) {
         ssrAvgRating: avg,
         ssrSample: sample,
         ssrTherapistCount: therapistCount || 0,
+        // 🚩 在籍一覧の先頭（最初に見える人数ぶん）。ブラウザが全員を読み込むまでこれを出す。
+        ssrRoster,
         ssrReviewedTherapists: reviewedTherapists,
         ssrNearbyShops: nearbyShops,
         ssrPrefecture: prefecture,
@@ -228,7 +250,7 @@ export async function getServerSideProps({ params, res }) {
     return {
       props: {
         ssrShop: null, ssrReviewCount: 0, ssrReviews: [], ssrAvgRating: null, ssrSample: '',
-        ssrTherapistCount: 0, ssrReviewedTherapists: [], ssrNearbyShops: [], ssrPrefecture: null, ssrArea: null, ssrNearbyScope: 'prefecture',
+        ssrTherapistCount: 0, ssrRoster: [], ssrReviewedTherapists: [], ssrNearbyShops: [], ssrPrefecture: null, ssrArea: null, ssrNearbyScope: 'prefecture',
         ssrGroupShopIds: [],
       },
     };
@@ -237,7 +259,7 @@ export async function getServerSideProps({ params, res }) {
 
 export default function ShopDetailSSRPage({
   ssrShop, ssrReviewCount, ssrReviews = [], ssrAvgRating, ssrSample,
-  ssrTherapistCount = 0, ssrReviewedTherapists = [], ssrNearbyShops = [], ssrPrefecture = null, ssrArea = null,
+  ssrTherapistCount = 0, ssrRoster = [], ssrReviewedTherapists = [], ssrNearbyShops = [], ssrPrefecture = null, ssrArea = null,
   ssrGroupShopIds = [],
 }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
@@ -332,6 +354,7 @@ export default function ShopDetailSSRPage({
         ssrShop={ssrShop}
         ssrReviews={ssrReviews}
         ssrTherapistCount={ssrTherapistCount}
+        ssrRoster={ssrRoster}
         ssrReviewedTherapists={ssrReviewedTherapists}
         ssrNearbyShops={ssrNearbyShops}
         ssrPrefecture={ssrPrefecture}

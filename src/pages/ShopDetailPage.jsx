@@ -45,6 +45,7 @@ export default function ShopDetailPage({
   ssrShop = null,
   ssrReviews = [],
   ssrTherapistCount = 0,
+  ssrRoster = [],
   ssrReviewedTherapists = [],
   ssrNearbyShops = [],
   ssrPrefecture = null,
@@ -157,7 +158,9 @@ export default function ShopDetailPage({
         const reviewFetchUrl = `${reviewBase}&select=*&order=created_at.desc&limit=${REVIEW_PAGE_SIZE}&offset=0`;
 
         const [tRes, rRes] = await Promise.all([
-          fetch(`${url}/rest/v1/therapists?select=*&${therapistQuery}`, { headers, cache: 'no-store' }),
+          // ⚠️ 並び順は SSR の在籍一覧（id 昇順）と揃える。揃えないと、読み込み終わった瞬間に
+          //    最初に見えていたカードが並び替わる（写真ありを先頭へ寄せる並べ替えは安定なので、元の順がそのまま効く）。
+          fetch(`${url}/rest/v1/therapists?select=*&${therapistQuery}&order=id.asc`, { headers, cache: 'no-store' }),
           fetch(reviewFetchUrl, { headers, cache: 'no-store' })
         ]);
 
@@ -259,10 +262,18 @@ export default function ShopDetailPage({
   );
   // グループ店舗で同一セラピストが複数店舗に登録されている場合に重複除去。
   // 直接取得がまだ空の間だけContextを保険にし、安定した配列参照を後続memoへ渡す。
+  // 🚩 2026-10-09: ブラウザが全員を読み込むまでは、SSR が HTML に載せた先頭の在籍者を出す。
+  //    以前はここが空で、最初の HTML は「全 0 人／在籍セラピスト情報はありません」だった
+  //    （Google が読む HTML に在籍者が1人も居ない）。
+  //    ⚠️ SSR の値は「この店のページとして描いたもの」だけ使う（別の店へ移った直後の古い props を使わない）。
+  const cloudRosterReady = Array.isArray(cloudTherapists) && cloudTherapists.length > 0;
+  const ssrRosterUsable = !cloudRosterReady && ssrShop?.id === shopId && Array.isArray(ssrRoster) && ssrRoster.length > 0;
   const therapists = React.useMemo(() => {
     const source = Array.isArray(cloudTherapists) && cloudTherapists.length > 0
       ? cloudTherapists
-      : (getTherapistsByShopId ? getTherapistsByShopId(shopId) : []);
+      : ssrRosterUsable
+        ? ssrRoster
+        : (getTherapistsByShopId ? getTherapistsByShopId(shopId) : []);
     // 🚩 **重複排除より前に、写真ありを先頭へ並べる。**
     //    下の filter は同じ名前の**先に来たほうを残す**（先勝ち）。
     //    写真なしの行が先に来ると、同じ人の写真あり行が捨てられて
@@ -279,7 +290,10 @@ export default function ShopDetailPage({
       seen.add(key);
       return true;
     });
-  }, [cloudTherapists, getTherapistsByShopId, shopId]);
+  }, [cloudTherapists, getTherapistsByShopId, shopId, ssrRosterUsable, ssrRoster]);
+  // 「全N人」と「もっと見る」の人数。SSR の先頭だけを出している間は、SSR が数えた全人数を使う
+  // （先頭の12人を「全12人」と言わない）。
+  const rosterTotal = ssrRosterUsable ? Math.max(ssrTherapistCount || 0, therapists.length) : therapists.length;
   const reviews = cloudReviews.length > 0 ? cloudReviews : (getReviewsByShopId ? getReviewsByShopId(shopId, isPremiumUser) : []);
   const isFavorite = shop ? favorites.includes(shop.id) : false;
 
@@ -337,7 +351,11 @@ export default function ShopDetailPage({
   }, [therapists, castNameFilter, castSortOrder, therapistReviewCounts, selectedTags, reviewTagMap]);
 
   const visibleTherapists = sortedTherapists.slice(0, displayCount);
-  const hasMore = displayCount < sortedTherapists.length;
+  // ⚠️ SSR の先頭だけを出している間は、まだ読み込んでいない人も「あと N 人」に含める。
+  const rosterRemaining = ssrRosterUsable && !castNameFilter.trim() && selectedTags.length === 0
+    ? rosterTotal - Math.min(displayCount, sortedTherapists.length)
+    : sortedTherapists.length - displayCount;
+  const hasMore = rosterRemaining > 0;
   const handleLoadMore = () => setDisplayCount(prev => prev + LOAD_MORE_COUNT);
 
   // ✨ すべてのHook（useState, useEffect）が終わったので、ここで初めて安全に早期リターン！
@@ -763,12 +781,12 @@ export default function ShopDetailPage({
              <div className="mb-5 flex items-end justify-between gap-3 border-b border-slate-700 pb-3">
                <h2 className="font-mincho text-2xl font-bold text-slate-50">在籍セラピスト</h2>
                <span className="shrink-0 text-xs text-slate-400">
-                 {castNameFilter ? <><span className="font-numeral text-xl text-slate-50">{sortedTherapists.length}</span> / </> : null}全<span className="font-numeral text-xl text-slate-50">{therapists.length}</span>人
+                 {castNameFilter ? <><span className="font-numeral text-xl text-slate-50">{sortedTherapists.length}</span> / </> : null}全<span className="font-numeral text-xl text-slate-50">{rosterTotal}</span>人
                </span>
              </div>
 
              {/* 絞り込み＋並び替え（SearchPageと同じ操作感） */}
-             {therapists.length > 6 && (
+             {rosterTotal > 6 && (
                <div className="flex flex-col sm:flex-row gap-2 mb-6">
                  <div className="relative flex-1">
                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6" /><path d="M16 16l4 4" /></svg>
@@ -851,7 +869,7 @@ export default function ShopDetailPage({
                         onClick={handleLoadMore}
                         className="inline-flex min-h-11 items-center rounded-sm border border-slate-600 px-8 text-sm font-bold text-slate-200 transition hover:border-slate-400 hover:text-white"
                       >
-                        もっと見る（あと{sortedTherapists.length - displayCount}人）
+                        もっと見る（あと{rosterRemaining}人）
                       </button>
                     </div>
                  )}

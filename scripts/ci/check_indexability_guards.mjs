@@ -438,16 +438,46 @@ requireMatch(integrityMonitor, /口コミの実更新日が無い/, '本番監�
     'エリア一覧からローマ字表記が消えています（見出しから降ろすだけで、削除はしない約束です）');
 }
 
-// ── 在籍数の定義（2026-09-22）──────────────────────────────────────
+// ── 在籍数の定義（2026-09-22）／在籍一覧を SSR で出す（2026-10-09）─────────────
 // 店舗ページの「在籍N人」とSEO説明文の人数が、一覧（在籍だけ）と違う母数で数えられていた。
 // 在籍照合で退店マークを付けた直後、AromaCharm が「在籍 56 人」「全37人」を同時に出した。
+// 🚩 2026-10-09: 在籍一覧はブラウザだけが取りに行っていたので、最初の HTML は
+//    「全 0 人／在籍セラピスト情報はありません」だった（Google が読む HTML に在籍者が居ない）。
+//    鎖は4段（一覧を取る → 同じ畳み方で数える → props に載せる → 画面が読む）。
+//    どこが切れても黙って「全 0 人」に戻るので4段とも見る。人数と一覧は同じ関数から出す。
 {
   const shopSsr = strip(read('pages/shops/[shopId]/index.jsx'));
-  const countChain = (shopSsr.match(/\.from\('therapists'\)[^;]*?count:\s*'exact'[\s\S]*?(?=,\s*\n\s*\]\);|;)/) || [''])[0];
-  requireMatch(countChain, /\.from\('therapists'\)/,
-    '店舗ページの在籍数の取得が見つかりません（書き方を変えたらこの検査も直すこと）');
-  requireMatch(countChain, /\.or\('is_active\.is\.null,is_active\.eq\.true'\)/,
-    '店舗ページの在籍数が退店マークの人まで数えています（一覧と同じ is_active の条件で数えること）');
+  const rosterFn = (shopSsr.match(/async function fetchShopRosterRows[\s\S]*?\n\}/) || [''])[0];
+  requireMatch(rosterFn, /\.from\('therapists'\)/,
+    '店舗ページの在籍一覧の取得（fetchShopRosterRows）が見つかりません（書き方を変えたらこの検査も直すこと）');
+  requireMatch(rosterFn, /\.or\('is_active\.is\.null,is_active\.eq\.true'\)/,
+    '店舗ページの在籍一覧が退店マークの人まで取っています（一覧と同じ is_active の条件で取ること）');
+  requireMatch(rosterFn, /\.range\(/,
+    '店舗ページの在籍一覧がページ送りしていません（1000行で黙って欠けます）');
+  requireMatch(rosterFn, /\.order\('id'/,
+    '店舗ページの在籍一覧に並び順がありません（ブラウザが読み込み終わった瞬間にカードが並び替わります）');
+  // ⚠️ 関数の定義行（async function fetchShopRosterRows(supabase, shopId)）にも一致するので、
+  //    **呼び出し**（Promise.all の中の1行）だけを見る（2026-10-09、呼び出しを消す妨害で素通りして発覚）。
+  requireMatch(shopSsr, /^\s*fetchShopRosterRows\(supabase,\s*shopId\),\s*$/m,
+    '店舗SSRが在籍一覧を取っていません（最初の HTML が「全 0 人」に戻ります）');
+  requireMatch(shopSsr, /buildShopRosterProps\(rosterRes\.data\)/,
+    '店舗SSRの在籍数が一覧と同じ関数（buildShopRosterProps）で数えられていません（「在籍N人」と「全N人」が食い違います）');
+  requireMatch(shopSsr, /^\s*ssrRoster,\s*$/m,
+    '店舗SSRが在籍一覧を props（ssrRoster）に載せていません');
+  requireMatch(shopSsr, /ssrRoster=\{ssrRoster\}/,
+    '店舗SSRが在籍一覧を画面へ渡していません');
+  const shopPageCode = strip(read('src/pages/ShopDetailPage.jsx'));
+  requireMatch(shopPageCode, /:\s*ssrRosterUsable\s*\?\s*ssrRoster/,
+    '店舗ページが SSR の在籍一覧を使っていません（最初の HTML が「全 0 人」に戻ります）');
+  requireMatch(shopPageCode, /&order=id\.asc/,
+    '店舗ページの在籍一覧の取得が SSR と同じ順（id 昇順）になっていません（読み込み後にカードが並び替わります）');
+  requireMatch(shopPageCode, /全<span[^>]*>\{rosterTotal\}/,
+    '店舗ページの「全N人」が SSR の先頭だけを数えています（先頭12人を「全12人」と出します）');
+  const rosterUtil = read('src/utils/shopRoster.js');
+  requireMatch(rosterUtil, /normalizeTherapistName/,
+    '在籍一覧の畳み方が normalizeTherapistName を使っていません（画面と人数が食い違います）');
+  rejectMatch(rosterUtil.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, ''), /raw_data/,
+    '在籍一覧の SSR に raw_data を載せています（1行で数KB・HTML が膨れます）');
 }
 
 // ── 店舗ページの料金・営業時間を SSR で出す（2026-10-09）───────────────────────
