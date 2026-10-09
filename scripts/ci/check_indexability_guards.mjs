@@ -473,6 +473,10 @@ requireMatch(integrityMonitor, /口コミの実更新日が無い/, '本番監�
     '店舗ページの在籍一覧の取得が SSR と同じ順（id 昇順）になっていません（読み込み後にカードが並び替わります）');
   requireMatch(shopPageCode, /全<span[^>]*>\{rosterTotal\}/,
     '店舗ページの「全N人」が SSR の先頭だけを数えています（先頭12人を「全12人」と出します）');
+  rejectMatch(shopPageCode, /\bt\.tall\b/,
+    '店舗ページの在籍カードが t.tall を読んでいます（DB の列は height。身長が一度も出ません）');
+  requireMatch(shopPageCode, /therapistHeight\(t\)/,
+    '店舗ページの在籍カードが therapistHeight を通していません（身長が出ない・おかしな値が出ます）');
   const rosterUtil = read('src/utils/shopRoster.js');
   requireMatch(rosterUtil, /normalizeTherapistName/,
     '在籍一覧の畳み方が normalizeTherapistName を使っていません（画面と人数が食い違います）');

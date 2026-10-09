@@ -1818,6 +1818,16 @@ check('pages/ の SSR は時間の上限付きのクライアント（createServ
     if (buildShopRosterProps(rows).total !== 3) return `rows の全人数が ${buildShopRosterProps(rows).total}（3 のはず）`;
     return null;
   });
+  const { therapistHeight } = await loadModule('src/utils/shopRoster.js');
+  check('在籍カードの身長: DB の列（height）を読む・おかしな値は出さない', () => {
+    if (therapistHeight({ height: 158 }) !== 158) return 'height=158 が出ない（DB の列は height）';
+    if (therapistHeight({ height: '163' }) !== 163) return '文字列の 163 が出ない';
+    if (therapistHeight({ height: 254 }) !== null) return '254cm を出している（人ではない行の値）';
+    if (therapistHeight({ height: 105 }) !== null) return '105cm を出している';
+    if (therapistHeight({ height: null }) !== null || therapistHeight({}) !== null) return '身長が無いのに値を返す';
+    if (!('height' in buildShopRosterProps([{ id: 'x', name: 'x', height: 160 }]).roster[0])) return 'SSR の在籍一覧に height が載っていない（最初の HTML で身長が出ない）';
+    return null;
+  });
   check('在籍一覧: 取得失敗（null）でも落ちない', () => {
     const r = buildShopRosterProps(null);
     return r.total === 0 && r.roster.length === 0 ? null : '空のはず';

@@ -19,7 +19,7 @@ import { normalizeTherapistName } from './reviewIdentity.js';
 export const SHOP_ROSTER_SSR_LIMIT = 12;
 
 /** 在籍一覧の問い合わせで取る列。画面のカードが使う項目だけ。 */
-export const SHOP_ROSTER_COLUMNS = 'id, shop_id, name, image_url, age, cup, is_active';
+export const SHOP_ROSTER_COLUMNS = 'id, shop_id, name, image_url, age, height, cup, is_active';
 
 const hasImage = (t) => Boolean(String(t?.image_url ?? t?.image ?? '').trim());
 
@@ -47,9 +47,23 @@ export function buildShopRosterProps(rows, limit = SHOP_ROSTER_SSR_LIMIT) {
       name: t.name || '',
       image_url: t.image_url || null,
       age: t.age ?? null,
+      height: t.height ?? null,
       cup: t.cup ?? null,
       is_active: t.is_active ?? null,
     })),
     total: all.length,
   };
+}
+
+/**
+ * 在籍カードに出す身長（cm）。出さないときは null。
+ *
+ * 🚩 2026-10-09: カードは `t.tall` を読んでいたが、DB の列は `height`＝**身長が一度も出ていなかった**
+ *    （在籍 57,850 人中 3,341 人が身長を持っている）。
+ * ⚠️ 130〜200cm の外は出さない。DB には 254（人ではない行「各部屋の清掃・除菌済み」）や 105 が入っている。
+ *    根拠の怪しい数字を画面に出さない（D-010 と同じ考え方）。
+ */
+export function therapistHeight(t) {
+  const v = Number(t?.height ?? t?.tall);
+  return Number.isFinite(v) && v >= 130 && v <= 200 ? Math.round(v) : null;
 }

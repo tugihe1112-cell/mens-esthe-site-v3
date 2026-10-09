@@ -22,6 +22,7 @@ import ShopStatusBanner from '../components/ShopStatusBanner.jsx';
 import NeutralReviewNote from '../components/NeutralReviewNote.jsx';
 import RatingFingerprint, { averageFingerprint } from '../components/RatingFingerprint.jsx';
 import { splitNameReading } from '../utils/nameReading.js';
+import { therapistHeight } from '../utils/shopRoster.js';
 
 const PenIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z" /></svg>
@@ -829,7 +830,9 @@ export default function ShopDetailPage({
                    {visibleTherapists.map(t => {
                      const cnt = countsReady ? therapistReviewCounts[t.id] : undefined;
                      const fav = favTherapists.includes(`${shop.id}_${t.id}`);
-                     const spec = [t.tall && `T${t.tall}`, t.cup && `${t.cup}カップ`].filter(Boolean).join(' / ');
+                     // ⚠️ 身長は therapistHeight を通す（DB の列は height。t.tall を読むと一度も出ない）。
+                     const tall = therapistHeight(t);
+                     const spec = [tall && `T${tall}`, t.cup && `${t.cup}カップ`].filter(Boolean).join(' / ');
                      return (
                        <Link key={t.id} to={`/shops/${shop.id}/threads/${t.id}`} className="group flex min-w-0 flex-col gap-2">
                          <div className="relative aspect-[3/4] overflow-hidden border border-slate-700 bg-slate-900">
