@@ -260,7 +260,7 @@ export async function getServerSideProps({ params, res }) {
 export default function ShopDetailSSRPage({
   ssrShop, ssrReviewCount, ssrReviews = [], ssrAvgRating, ssrSample,
   ssrTherapistCount = 0, ssrRoster = [], ssrReviewedTherapists = [], ssrNearbyShops = [], ssrPrefecture = null, ssrArea = null,
-  ssrGroupShopIds = [],
+  ssrGroupShopIds = [], ssrNearbyScope = 'prefecture',
 }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
   const shopName = ssrShop?.name || '';
@@ -362,6 +362,9 @@ export default function ShopDetailSSRPage({
         ssrReviewCount={ssrReviewCount}
         ssrAvgRating={ssrAvgRating}
         ssrGroupShopIds={ssrGroupShopIds}
+        // ⚠️ getServerSideProps で足した値は**ここでも渡す**。この中継は名指しで渡すので、足し忘れると黙って落ちる
+        //    （2026-10-11: ssrNearbyScope が落ちていて、画面の「他の店舗」の見出しが常に県の扱いだった）。
+        ssrNearbyScope={ssrNearbyScope}
         renderSeo={false}
       />
     </>

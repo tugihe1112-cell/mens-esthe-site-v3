@@ -555,6 +555,12 @@ function read(path) {
     if (ssr !== null && !/nearbyScope/.test(ssr)) {
       violations.push('[F06-C] 店舗SSRが nearbyScope を props で渡していない。');
     }
+    // 🚩 中継（ShopDetailSSRPage）は props を名指しで渡すので、getServerSideProps に在っても画面まで届かないことがある。
+    //    2026-10-11: ssrNearbyScope が中継で落ちていて、見出しが常に県の扱いだった（上の検査は SSR の文字だけ見ていて素通り）。
+    const ssrCode = ssr === null ? null : ssr.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    if (ssrCode !== null && !/<ShopDetailPage[\s\S]*?ssrNearbyScope=\{ssrNearbyScope\}[\s\S]*?\/>/.test(ssrCode)) {
+      violations.push('[F06-C] 店舗SSRの中継（ShopDetailSSRPage）が ssrNearbyScope を ShopDetailPage へ渡していない。');
+    }
   }
 
   // D. ヘッダー：'/' の前方一致で全ページが透過になる書き方に戻さない
