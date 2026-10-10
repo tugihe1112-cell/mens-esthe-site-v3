@@ -7,7 +7,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 const ShopContext = createContext();
 export const useShopData = () => useContext(ShopContext);
 
-export const DataProvider = ({ children }) => {
+export const DataProvider = ({ children, seedRoomCounts = null }) => {
   const [shops, setShops] = useState([]);
   const [therapists, setTherapists] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -352,7 +352,15 @@ export const DataProvider = ({ children }) => {
    *       複数ルームのブランドが1ルームに見えて、また直書きと同じ結果になる。
    *    リンクを作るときは `shopHref(shop, roomCounts)` を使う。
    */
-  const roomCounts = useMemo(() => countRoomsByBrand(shops), [shops]);
+  // 🚩 2026-10-10: 全店を読み込むまでは、ページのSSRが渡したルーム数（ssrRoomCounts）を使う。
+  //    以前はここが空のまま最初のHTMLが作られ、複数ルームのブランドへのリンクが
+  //    **店舗URL（＝押すと301で転送）**になっていた（本番で21か所・118本）。Google が読むのは最初のHTML。
+  //    ⚠️ サーバーとブラウザの最初の表示は同じ値（shops が空・同じ pageProps）になる＝表示の食い違いは出ない。
+  //    全店が読めたら全店から数え直す（結果は同じ。県をまたぐブランドも正しく数えられる）。
+  const roomCounts = useMemo(() => {
+    if (shops.length) return countRoomsByBrand(shops);
+    return new Map(Object.entries(seedRoomCounts || {}).map(([gid, n]) => [gid, Number(n)]));
+  }, [shops, seedRoomCounts]);
 
   const value = {
     shops, therapists, reviews, loading, shopsError, retryShops, roomCounts,

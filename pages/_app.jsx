@@ -180,7 +180,9 @@ export default function MyApp({ Component, pageProps }) {
           : {});
       `}</Script>
       <ErrorBoundary>
-        <DataProvider>
+        {/* ssrRoomCounts: SSR のページが渡す「複数ルームのブランドのルーム数」。最初のHTMLのリンク先を
+            ブランドページにするため（server/roomCounts.js）。渡さないページは今までどおり。 */}
+        <DataProvider seedRoomCounts={pageProps.ssrRoomCounts}>
           <AuthProvider>
             <AppProvider>
               <Layout liveCounts={pageProps.liveCounts}>

@@ -11,6 +11,7 @@ import { createServerSupabase } from '../server/supabaseServer';
 import Home from '../src/pages/Home';
 import { HERO_SHOP_IDS, buildInitialHero } from '../src/data/heroShops';
 import { loadHomeReviews } from '../server/homeReviews';
+import { loadMultiRoomCounts } from '../server/roomCounts.js';
 import { createCountsCache } from '../src/utils/liveCountsCache';
 
 const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
@@ -81,6 +82,9 @@ export async function getServerSideProps({ res }) {
   let latestReviews = [];
   let reviewStats = null;
   let liveCounts = null;
+  // 複数ルームのブランドのルーム数（server/roomCounts.js）。口コミ・ヒーローの店へのリンク先を
+  // 最初のHTMLから /brands/ にするため（空だと店舗URL＝301に倒れる。2026-10-10 本番で確認）。
+  let ssrRoomCounts = {};
   // 正常な口コミ応答を確認するまで失敗扱い。例外で代入に到達しなくても0件へ丸めない。
   let reviewLoadFailed = true;
   try {
@@ -89,10 +93,13 @@ export async function getServerSideProps({ res }) {
     // 件数は手元の数を使う。古い・無いときはここで数え直しを始め、ほかの取得と並べて進める（待つのは下の waitFor）。
     liveCountsCache.peek();
     // ヒーロー・公開口コミは独立 → 並列（Vercel関数↔Supabaseの往復回数を削減）
-    const [heroResult, reviewResult] = await Promise.allSettled([
+    const [heroResult, reviewResult, roomCountsResult] = await Promise.allSettled([
       supabase.from('shops').select('id, group_id, name, raw_data, image_url').in('id', HERO_SHOP_IDS).retry(false),
       loadHomeReviews(supabase),
+      loadMultiRoomCounts(supabase),
     ]);
+    // ⚠️ 取れなくてもトップは出す（リンクが店舗URLに倒れるだけ＝今までと同じ）。
+    if (roomCountsResult.status === 'fulfilled') ssrRoomCounts = roomCountsResult.value || {};
     if (reviewResult.status === 'fulfilled') {
       ({ reviewsByPref, latestReviews, reviewStats, reviewLoadFailed } = reviewResult.value);
     } else {
@@ -130,5 +137,5 @@ export async function getServerSideProps({ res }) {
     res.setHeader('Retry-After', '120');
   }
 
-  return { props: { initialHero, reviewsByPref, latestReviews, reviewStats, liveCounts, reviewLoadFailed } };
+  return { props: { initialHero, reviewsByPref, latestReviews, reviewStats, liveCounts, reviewLoadFailed, ssrRoomCounts } };
 }

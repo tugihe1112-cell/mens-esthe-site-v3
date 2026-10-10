@@ -18,6 +18,9 @@ import Head from 'next/head';
 import { createServerSupabase } from '../../server/supabaseServer';
 import BrandPage from '../../src/pages/BrandPage';
 import { buildBrands, pickNearbyBrands, buildBrandRoster, brandCanonicalPath, brandRoomProps } from '../../src/utils/brandGroups.js';
+import { normalizeTherapistName } from '../../src/utils/reviewIdentity.js';
+import { loadMultiRoomCounts } from '../../server/roomCounts.js';
+import { loadReviewedPeople } from '../../server/reviewedPeople.js';
 
 // PostgREST は1回に最大1000行。人数を数えるので取り切る必要がある。
 const THERAPIST_PAGE = 1000;
@@ -28,6 +31,9 @@ export async function getServerSideProps({ params, res }) {
   // ⚠️ SWRは最大2分。長くするとデプロイ後に古いHTML→消えたJSチャンク404→真っ黒になる。
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
   const supabase = createServerSupabase(process.env.SUPABASE_SERVICE_ROLE_KEY);
+  // ほかの取得と並べて始める（どちらも失敗しても空で解決する＝ページは落とさない）。
+  const roomCountsPromise = loadMultiRoomCounts(supabase);
+  const peoplePromise = loadReviewedPeople(supabase);
   try {
     // group_id で引く。単独店（group_idなし）は id そのものがブランドの鍵になる。
     const [byGroup, byId] = await Promise.all([
@@ -87,11 +93,24 @@ export async function getServerSideProps({ params, res }) {
     if (rosterRes.error) throw rosterRes.error;
     if (nearRes.error) throw nearRes.error;
 
+    // 🚩 人物ページの正規URL（2026-10-10）。同じ人のページはルームの数だけあり、以前はこのページの
+    //    名簿が**口コミの書かれていないルームのページ**（TIGER GATE 新橋の3人など）へリンクしていた。
+    //    リンク先は「その人の口コミが書かれたページ」＝サイトマップと同じ規則（src/utils/reviewedPeople.js）。
+    //    鍵は正規化した名前（このブランドの中だけ）。
+    const [ssrRoomCounts, people] = await Promise.all([roomCountsPromise, peoplePromise]);
+    const ssrPersonCanonical = {};
+    for (const p of people) {
+      if (p.groupKey !== String(brand.id)) continue;
+      ssrPersonCanonical[p.key.slice(p.groupKey.length + 2)] = p.canonicalPath;
+    }
+
     const seenT = new Set();
     const reviewedTherapists = [];
     for (const r of revTRes.data || []) {
-      if (!r.therapist_id || seenT.has(r.therapist_id)) continue;
-      seenT.add(r.therapist_id);
+      // 同じ人を別ルームのIDで2回並べない（鍵は正規化した名前）
+      const personKey = normalizeTherapistName(r.therapist_name) || r.therapist_id;
+      if (!r.therapist_id || seenT.has(personKey)) continue;
+      seenT.add(personKey);
       reviewedTherapists.push({ id: r.therapist_id, name: r.therapist_name || '', shopId: r.shop_id, rating: r.rating || null });
       if (reviewedTherapists.length >= 12) break;
     }
@@ -127,6 +146,8 @@ export async function getServerSideProps({ params, res }) {
 
     return {
       props: {
+        ssrRoomCounts,
+        ssrPersonCanonical,
         ssrBrand: {
           id: brand.id,
           name: brand.name,
@@ -168,6 +189,7 @@ export async function getServerSideProps({ params, res }) {
 export default function BrandSSRPage({
   ssrBrand, ssrTherapistCount = 0, ssrReviewedTherapists = [], ssrReviews = [], ssrReviewCount = 0, ssrAvgRating = null, ssrSample = '',
   ssrRoster = [], ssrRosterTruncated = false, ssrNearbyBrands = [], ssrNearbyScope = 'prefecture', ssrArea = null, ssrPrefecture = null,
+  ssrPersonCanonical = {},
 }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
   const name = ssrBrand?.name || '';
@@ -257,6 +279,7 @@ export default function BrandSSRPage({
         ssrNearbyScope={ssrNearbyScope}
         ssrArea={ssrArea}
         ssrPrefecture={ssrPrefecture}
+        ssrPersonCanonical={ssrPersonCanonical}
         renderSeo={false}
       />
     </>

@@ -73,6 +73,8 @@ async function ssr(overrides = {}, createError = false) {
     '../server/supabaseServer': { createServerSupabase: () => { if (createError) throw new Error('QA setup failed'); return client; } },
     '../src/pages/PopularReviewsPage': () => null,
     '../src/utils/reviewIdentity.js': { normalizeTherapistName },
+    // 複数ルームのブランドのルーム数（2026-10-10）。最初のHTMLの店舗リンクを /brands/ にするため。
+    '../server/roomCounts.js': { loadMultiRoomCounts: async () => ({ qa_group: 2 }) },
   });
   const res = { statusCode: 200, headers: {}, setHeader(key, value) { this.headers[key.toLowerCase()] = value; } };
   const result = await page.getServerSideProps({ res });
@@ -101,6 +103,9 @@ for (const table of ['shops', 'therapists']) {
   }
 }
 const successSsr = await ssr();
+assert.equal(successSsr.props.ssrRoomCounts?.qa_group, 2, 'popular SSR must pass room counts so first-HTML shop links skip the 301');
+assert.ok(successSsr.calls.find(call => call.table === 'shops').columns.includes('group_id'), 'popular SSR must read group_id to pick the brand URL');
+assert.ok(Object.values(successSsr.props.initialShopMap).every(shop => 'group_id' in shop), 'initialShopMap must carry group_id');
 assert.equal(successSsr.props.initialTherapistMap['qa-person'].is_active, false);
 assert.ok(successSsr.calls.find(call => call.table === 'therapists').columns.includes('is_active'));
 assert.ok(successSsr.calls.find(call => call.table === 'reviews').filters.some(([key, value]) => key === 'is_public' && value === true));

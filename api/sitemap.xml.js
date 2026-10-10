@@ -13,6 +13,7 @@ import { createClient } from '@supabase/supabase-js';
 //    ERR_REQUIRE_ESM で新規登録が21時間停止した）。brandGroups/shopHelpers/reviewIdentity は
 //    いずれも依存ゼロの純粋関数なので、ここから読んで安全。
 import { countRoomsByBrand, shopRedirectPath } from '../src/utils/brandGroups.js';
+import { buildReviewedPeople } from '../src/utils/reviewedPeople.js';
 
 const SITE = 'https://www.mens-esthe-map.jp';
 // 🚩 2026-08-19 整理: **独自コンテンツを持つページだけ**を提出する。
@@ -155,7 +156,7 @@ export default async function handler(req, res) {
   for (let from = 0; ; from += PAGE) {
     const { data, error } = await supabase
       .from('reviews')
-      .select('id, shop_id, therapist_id, created_at')
+      .select('id, shop_id, therapist_id, therapist_name, created_at')
       .or('is_public.eq.true,user_id.eq.owner_manual')
       .order('id')
       .range(from, from + PAGE - 1);
@@ -166,25 +167,14 @@ export default async function handler(req, res) {
     if (pubReviews.length >= 100000) break; // 暴走ガード
   }
 
-  // shop_id + therapist_id でユニーク化
-  const therapistPages = [];
-  const therapistLastmod = new Map();
-  if (pubReviews) {
-    const seen = new Set();
-    for (const r of pubReviews) {
-      if (!r.therapist_id || !r.shop_id) continue;
-      if (isExcludedId(r.shop_id) || isExcludedId(r.therapist_id)) continue; // テストデータ除外
-      const key = `${r.shop_id}|${r.therapist_id}`;
-      const previous = therapistLastmod.get(key);
-      if (!previous || String(r.created_at || '') > String(previous || '')) {
-        therapistLastmod.set(key, r.created_at || null);
-      }
-      if (!seen.has(key)) {
-        seen.add(key);
-        therapistPages.push(r);
-      }
-    }
-  }
+  // 🚩 人物ページは**1人1URL**（2026-10-10）。同じ人のページはルームの数だけあるので、
+  //    口コミを人でまとめて「いちばん古い口コミが書かれたページ」だけを出す。
+  //    人物ページの canonical と同じ関数（src/utils/reviewedPeople.js）を通す＝
+  //    「サイトマップに出したURLが別のURLを正規と名乗る」食い違いを作らない。
+  //    lastmod はその人の最新の口コミ日（人物ページは系列の口コミをまとめて出すため）。
+  //    テスト/ダミー・手入力の合成ID（manual_）は buildReviewedPeople が除く（下の isExcludedId と同じ規則）。
+  const shopsById = Object.fromEntries((shops || []).map((s) => [s.id, s]));
+  const people = buildReviewedPeople(pubReviews || [], { shopsById });
 
   // ── 2.5 口コミを持つ店舗だけに絞る ──
   //  ⚠️ therapist_id が無い口コミ（指名なし・手入力）も店舗ページの価値になるので、
@@ -238,8 +228,8 @@ export default async function handler(req, res) {
     priority: '0.8',
   })).join('\n');
 
-  const therapistXml = therapistPages.map((r) => urlXml(`/shops/${r.shop_id}/threads/${r.therapist_id}`, {
-    lastmod: therapistLastmod.get(`${r.shop_id}|${r.therapist_id}`),
+  const therapistXml = people.map((p) => urlXml(p.canonicalPath, {
+    lastmod: p.lastAt || null,
     priority: '0.6',
   })).join('\n');
 

@@ -8,6 +8,7 @@ import React from 'react';
 import { createServerSupabase } from '../server/supabaseServer';
 import PopularReviewsPage from '../src/pages/PopularReviewsPage';
 import { normalizeTherapistName } from '../src/utils/reviewIdentity.js';
+import { loadMultiRoomCounts } from '../server/roomCounts.js';
 
 const PAGE_SIZE = 20;
 const normName = normalizeTherapistName;
@@ -17,6 +18,8 @@ export async function getServerSideProps({ res }) {
 
   try {
     const supabase = createServerSupabase(process.env.SUPABASE_SERVICE_ROLE_KEY);
+    // ほかの取得と並べて始める（失敗しても {} で解決する＝ページは落とさない）。
+    const roomCountsPromise = loadMultiRoomCounts(supabase);
     const { data: reviews, error: reviewsError } = await supabase
       .from('reviews')
       .select('id, shop_id, therapist_id, therapist_name, rating, tags, content, course, user_name, created_at, like_count')
@@ -30,7 +33,7 @@ export async function getServerSideProps({ res }) {
     const therapistIds = [...new Set((reviews || []).map((review) => review.therapist_id).filter(Boolean))];
     const [shopLookup, therapistLookup] = await Promise.allSettled([
       shopIds.length
-        ? supabase.from('shops').select('id, name, raw_data').in('id', shopIds)
+        ? supabase.from('shops').select('id, name, group_id, raw_data').in('id', shopIds)
         : Promise.resolve({ data: [], error: null }),
       therapistIds.length
         ? supabase.from('therapists').select('id, name, image_url, shop_id, is_active').in('id', therapistIds)
@@ -46,6 +49,8 @@ export async function getServerSideProps({ res }) {
       const area = Array.isArray(shop.raw_data?.area) ? shop.raw_data.area[0] : shop.raw_data?.area;
       return [shop.id, {
         name: shop.name,
+        // 店舗へのリンク先を決めるのに要る（複数ルームのブランドは /brands/・D-014）
+        group_id: shop.group_id || null,
         prefecture: shop.raw_data?.prefecture || '',
         area: area || '',
       }];
@@ -57,8 +62,12 @@ export async function getServerSideProps({ res }) {
       initialTherapistMap[`${therapist.shop_id}|${normName(therapist.name)}`] = therapist;
     }
 
+    // 複数ルームのブランドのルーム数。最初のHTMLのリンク先を /brands/ にするため（server/roomCounts.js）。
+    const ssrRoomCounts = await roomCountsPromise;
+
     return {
       props: {
+        ssrRoomCounts,
         initialReviews: reviews || [],
         initialShopMap,
         initialTherapistMap,

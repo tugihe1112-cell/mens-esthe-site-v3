@@ -21,6 +21,7 @@ export function pickNearbyShops(rows, area, limit = 8) {
   const useArea = Boolean(area) && sameArea.length >= 3;
   return {
     scope: useArea ? 'area' : 'prefecture',
-    shops: (useArea ? sameArea : list).slice(0, limit).map((s) => ({ id: s.id, name: s.name })),
+    // group_id はリンク先を決めるのに要る（複数ルームのブランドは /brands/・D-014）。落とすと店舗URL＝301に倒れる。
+    shops: (useArea ? sameArea : list).slice(0, limit).map((s) => ({ id: s.id, name: s.name, group_id: s.group_id ?? null })),
   };
 }

@@ -98,7 +98,7 @@ export default function PopularReviewsPage({
       };
       const reqs = [];
       reqs.push(shopIds.length
-        ? readMetadata(`${url}/rest/v1/shops?select=id,name,raw_data&id=in.${encodeURIComponent(inList(shopIds))}`)
+        ? readMetadata(`${url}/rest/v1/shops?select=id,name,group_id,raw_data&id=in.${encodeURIComponent(inList(shopIds))}`)
         : Promise.resolve([]));
       // therapist は id 一致を優先、取りこぼしは名前一致でフォールバック（旧データのID揺れ対策）
       reqs.push(therapistIds.length
@@ -117,7 +117,7 @@ export default function PopularReviewsPage({
           if (!isCurrentGeneration()) return prev;
           const next = { ...prev };
           shops.forEach(s => {
-            next[s.id] = { name: s.name, prefecture: s.raw_data?.prefecture || '', area: areaOf(s.raw_data) };
+            next[s.id] = { name: s.name, group_id: s.group_id || null, prefecture: s.raw_data?.prefecture || '', area: areaOf(s.raw_data) };
           });
           return next;
         });
@@ -333,8 +333,10 @@ export default function PopularReviewsPage({
                     : threadLink;
                   // ⚠️ 口コミ行は group_id を持たない。店舗の索引から引く。
                   //    引けないと shopHref は店舗URLに倒れる＝直書きと同じになる。
+                  //    最初のHTML（SSR）では店舗の索引がまだ空なので、SSRが渡した shopMap の group_id を使う
+                  //    （無いと店舗URL＝301に倒れていた。2026-10-10 本番で確認）。
                   const shopLink = r.shop_id
-                    ? shopHref({ id: r.shop_id, group_id: shopById?.[r.shop_id]?.group_id }, roomCounts)
+                    ? shopHref({ id: r.shop_id, group_id: shopById?.[r.shop_id]?.group_id ?? shopMap?.[r.shop_id]?.group_id }, roomCounts)
                     : '/search';
 
                   return (

@@ -499,7 +499,9 @@ const check = (name, fn) => {
     };
     const inputs = [[area3, '虎ノ門'], [area2, '虎ノ門'], [area3, undefined], [[], '虎ノ門'], [area2, '荻窪']];
     for (const [rows, area] of inputs) {
-      const got = JSON.stringify(n.pickNearbyShops(rows, area).shops);
+      // 比べるのは「どの店をどの順で選ぶか」。2026-10-10 に group_id を足した（リンク先を決めるため）ので、
+      // 項目まで丸ごと比べると選び方が同じでも落ちる。
+      const got = JSON.stringify(n.pickNearbyShops(rows, area).shops.map(({ id, name }) => ({ id, name })));
       const want = JSON.stringify(legacy(rows, area));
       if (got !== want) return `一覧が変わっている（area=${area}）: ${got} vs ${want}`;
     }
@@ -1837,6 +1839,153 @@ check('pages/ の SSR は時間の上限付きのクライアント（createServ
     const m = page.match(/const INITIAL_DISPLAY_COUNT = (\d+);/);
     return m && Number(m[1]) === SHOP_ROSTER_SSR_LIMIT ? null : `画面 ${m?.[1]} と SSR ${SHOP_ROSTER_SSR_LIMIT} が違う（HTML の人数と最初の表示がずれる）`;
   });
+}
+
+// ────────────────────────────────────────────────────────────
+// 🚩 2026-10-10 人物ページの正規URL・「ほかの口コミ」・県ページの「口コミがある人」・最初のHTMLのリンク先
+//    （src/utils/reviewedPeople.js / server/reviewedPeople.js / server/roomCounts.js）
+// ────────────────────────────────────────────────────────────
+{
+  const rp = await loadModule('src/utils/reviewedPeople.js');
+  const shopsById = {
+    S1: { id: 'S1', name: 'ユニゾン 相模原', group_id: 'G', prefecture: '神奈川県', area: ['相模原'] },
+    S2: { id: 'S2', name: 'ユニゾン 調布', group_id: 'G', prefecture: '東京都', area: '調布' },
+    S3: { id: 'S3', name: '別の店', group_id: null, prefecture: '東京都', area: '新宿' },
+  };
+  const a = { shop_id: 'S1', therapist_id: 'S1_上野ゆい', therapist_name: '上野　ゆい', created_at: '2026-06-22T00:00:00Z' };
+  const b = { shop_id: 'S2', therapist_id: 'S2_上野ゆい', therapist_name: '上野ゆい', created_at: '2026-07-01T00:00:00Z' };
+  const c = { shop_id: 'S3', therapist_id: 'S3_上野ゆい', therapist_name: '上野ゆい', created_at: '2026-05-01T00:00:00Z' };
+  const manual = { shop_id: 'S3', therapist_id: 'manual_x', therapist_name: 'x', created_at: '2026-01-01T00:00:00Z' };
+  const noTherapist = { shop_id: 'S3', therapist_id: null, therapist_name: '', created_at: '2026-01-01T00:00:00Z' };
+
+  check('正規URL: いちばん古い口コミが書かれたページ（新しい口コミが入っても変わらない）', () => {
+    const r = rp.pickCanonicalPersonPage([b, a]);
+    if (r?.path !== '/shops/S1/threads/S1_上野ゆい') return `古い口コミのページを選んでいない（${r?.path}）`;
+    const later = { ...b, created_at: '2026-10-01T00:00:00Z' };
+    if (rp.pickCanonicalPersonPage([a, b, later])?.path !== r.path) return '新しい口コミで正規URLが変わる';
+    const tie = rp.pickCanonicalPersonPage([{ ...b, created_at: a.created_at }, a]);
+    if (tie?.path !== '/shops/S1/threads/S1_上野ゆい') return '同時刻のときの選び方が決まっていない';
+    if (rp.pickCanonicalPersonPage([noTherapist, manual]) !== null) return '指名なし・手入力の合成IDを正規URLにしている';
+    return null;
+  });
+
+  const people = rp.buildReviewedPeople([a, b, c, manual, noTherapist], { shopsById });
+  check('口コミがある人: 同じ系列の同じ名前（空白ゆれ込み）は1人・別の店の同じ名前は別人', () => {
+    if (people.length !== 2) return `人数が ${people.length}（2人のはず）`;
+    const g = people.find((p) => p.groupKey === 'G');
+    if (!g) return '系列Gの人がいない';
+    if (g.pages.length !== 2) return `同じ人のページが ${g.pages.length} つ（2つのはず＝相模原と調布）`;
+    if (g.canonicalPath !== '/shops/S1/threads/S1_上野ゆい') return `正規URLが違う（${g.canonicalPath}）`;
+    if (g.reviewCount !== 2 || g.lastAt !== b.created_at) return '口コミ数・最新日がまとまっていない';
+    if (g.prefecture !== '神奈川県' || g.area !== '相模原') return '正規URLの店の県・地名になっていない';
+    if (people.some((p) => p.pages.some((x) => x.includes('manual_')))) return '手入力の合成IDが入っている';
+    return null;
+  });
+  check('口コミがある人: サイトマップと人物ページが同じ正規URLを選ぶ', () => {
+    const g = people.find((p) => p.groupKey === 'G');
+    const ssr = rp.pickCanonicalPersonPage([b, a]);
+    return ssr?.path === g?.canonicalPath ? null : `人物ページ ${ssr?.path} とサイトマップ ${g?.canonicalPath} が違う`;
+  });
+  check('正規URLの対応表: 別ルームのページ → 口コミが書かれたページ', () => {
+    const map = rp.canonicalPathMap(people);
+    if (map.get('/shops/S2/threads/S2_上野ゆい') !== '/shops/S1/threads/S1_上野ゆい') return '調布のページが相模原を指さない';
+    if (map.get('/shops/S3/threads/S3_上野ゆい') !== '/shops/S3/threads/S3_上野ゆい') return '別の店の人まで束ねている';
+    if (map.has('/shops/S1/threads/口コミの無い人')) return '口コミの無いページまで入っている';
+    return null;
+  });
+
+  const mk = (i, pref, group, at) => ({
+    key: `${group}::p${i}`, groupKey: group, name: `p${i}`, canonicalPath: `/shops/${group}/threads/p${i}`,
+    pages: [`/shops/${group}/threads/p${i}`], shopName: group, prefecture: pref, area: '', reviewCount: 1,
+    firstAt: at, lastAt: at,
+  });
+  const many = [
+    mk(1, '東京都', 'A', '2026-01'), mk(2, '東京都', 'A', '2026-02'), mk(3, '東京都', 'A', '2026-03'),
+    mk(4, '東京都', 'B', '2026-04'), mk(5, '北海道', 'C', '2026-05'), mk(6, '愛知県', 'D', '2026-06'), mk(7, '愛知県', 'E', '2026-07'),
+  ];
+  check('ほかの口コミ: 全員がちょうど4本ずつ受ける・自分は出さない', () => {
+    const ordered = rp.orderPeopleForRing(many);
+    const inbound = new Map(many.map((p) => [p.key, 0]));
+    for (const p of many) {
+      const nb = rp.ringNeighbors(ordered, p.key, 4);
+      if (nb.length !== 4) return `${p.key} に ${nb.length} 人（4人のはず）`;
+      if (nb.some((q) => q.key === p.key)) return `${p.key} が自分自身を出している`;
+      if (new Set(nb.map((q) => q.key)).size !== nb.length) return `${p.key} に同じ人が重複`;
+      for (const q of nb) inbound.set(q.key, inbound.get(q.key) + 1);
+    }
+    const bad = [...inbound].filter(([, n]) => n !== 4);
+    return bad.length ? `受ける本数が4でない人: ${bad.map(([k, n]) => `${k}=${n}`).join(', ')}` : null;
+  });
+  check('ほかの口コミ: 3人なら2本ずつ・一覧に居ない人には出さない', () => {
+    const three = rp.orderPeopleForRing(many.slice(0, 3));
+    for (const p of three) if (rp.ringNeighbors(three, p.key, 4).length !== 2) return '3人のとき2人ずつにならない';
+    if (rp.ringNeighbors(three, 'nobody', 4).length !== 0) return '口コミの無い人にも出している';
+    if (rp.ringNeighbors([], 'x', 4).length !== 0) return '空の一覧で落ちる';
+    return null;
+  });
+  check('ほかの口コミの並び: 県はJIS順・県の中は店を交互', () => {
+    const ordered = rp.orderPeopleForRing(many);
+    const prefs = ordered.map((p) => p.prefecture);
+    if (prefs.indexOf('北海道') > prefs.indexOf('東京都') || prefs.indexOf('東京都') > prefs.indexOf('愛知県')) return `県の順が違う（${[...new Set(prefs)].join('→')}）`;
+    const tokyo = ordered.filter((p) => p.prefecture === '東京都').map((p) => p.groupKey);
+    if (tokyo[0] === tokyo[1]) return `東京の先頭2人が同じ店（${tokyo.join(',')}）＝「同じ店の他のセラピスト」と重なるだけになる`;
+    return null;
+  });
+  check('県の「口コミがある人」: その県の人だけ・新しい口コミの人から', () => {
+    const list = rp.peopleInPrefecture(many, '東京都');
+    if (list.length !== 4 || list.some((p) => p.prefecture !== '東京都')) return '県で絞れていない';
+    return list[0].key === 'B::p4' ? null : `新しい順になっていない（先頭 ${list[0].key}）`;
+  });
+
+  const nb = await loadModule('src/utils/nearbyShops.mjs');
+  check('他の店舗も比較する: group_id を落とさない（落とすとリンクが店舗URL＝301になる）', () => {
+    const r = nb.pickNearbyShops([{ id: 'x', name: 'x', group_id: 'g', raw_data: { area: '虎ノ門' } }], '虎ノ門');
+    return r.shops[0]?.group_id === 'g' ? null : 'group_id が落ちている';
+  });
+
+  // 取得の部品（偽の DB で動かす）
+  const fakeClient = (handler) => ({
+    from(table) {
+      const ops = [];
+      const q = {
+        then(resolve, reject) { return Promise.resolve().then(() => handler(table, ops)).then(resolve, reject); },
+      };
+      for (const m of ['select', 'not', 'order', 'range', 'or', 'in', 'eq']) q[m] = (...args) => { ops.push([m, ...args]); return q; };
+      return q;
+    },
+  });
+  const rc = await import(pathToFileURL(path.join(ROOT, 'server/roomCounts.js')).href);
+  {
+    rc.resetMultiRoomCountsCache();
+    const rows = Array.from({ length: 1500 }, (_, i) => ({ id: `s${i}`, group_id: i < 2 ? 'g1' : `solo${i}` }));
+    let ranges = 0;
+    const out = await rc.loadMultiRoomCounts(fakeClient((table, ops) => {
+      const r = ops.find((o) => o[0] === 'range');
+      ranges += 1;
+      return { data: rows.slice(r[1], r[2] + 1), error: null };
+    }));
+    check('ルーム数: 2ルーム以上だけ・1000行を超えても繰って数える', () => {
+      if (out.g1 !== 2) return `g1=${out.g1}（2のはず）`;
+      if (Object.keys(out).length !== 1) return `1ルームのブランドまで載せている（${Object.keys(out).length}件）`;
+      return ranges >= 2 ? null : 'PostgREST の1000行で止まっている（ページ送りしていない）';
+    });
+    rc.resetMultiRoomCountsCache();
+    const failed = await rc.loadMultiRoomCounts(fakeClient(() => ({ data: null, error: new Error('down') })));
+    check('ルーム数: DB が落ちても {} を返す（ページを落とさない）', () => (failed && Object.keys(failed).length === 0 ? null : 'エラーを投げるか値が入っている'));
+    rc.resetMultiRoomCountsCache();
+  }
+  const rpl = await import(pathToFileURL(path.join(ROOT, 'server/reviewedPeople.js')).href);
+  {
+    rpl.resetReviewedPeopleCache();
+    const out = await rpl.loadReviewedPeople(fakeClient((table) => (table === 'reviews'
+      ? { data: [a, b, c], error: null }
+      : { data: Object.values(shopsById), error: null })));
+    check('口コミがある人の取得: DB の行から人にまとめる', () => (out.length === 2 ? null : `${out.length} 人（2人のはず）`));
+    rpl.resetReviewedPeopleCache();
+    const failed = await rpl.loadReviewedPeople(fakeClient(() => ({ data: null, error: new Error('down') })));
+    check('口コミがある人の取得: DB が落ちても [] を返す（ページを落とさない）', () => (Array.isArray(failed) && failed.length === 0 ? null : 'エラーを投げるか値が入っている'));
+    rpl.resetReviewedPeopleCache();
+  }
 }
 
 if (failures.length) {

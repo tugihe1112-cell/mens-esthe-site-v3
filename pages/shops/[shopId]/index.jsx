@@ -12,6 +12,7 @@ import { createServerSupabase } from '../../../server/supabaseServer';
 import ShopDetailPage from '../../../src/pages/ShopDetailPage';
 import { pickNearbyShops } from '../../../src/utils/nearbyShops.mjs';
 import { shopRedirectPath, countRoomsByBrand } from '../../../src/utils/brandGroups.js';
+import { loadMultiRoomCounts } from '../../../server/roomCounts.js';
 import { buildShopRosterProps, SHOP_ROSTER_COLUMNS } from '../../../src/utils/shopRoster.js';
 
 // 在籍一覧を全員取る（PostgREST は1回1000行まで。いちばん多い店で約680人＝通常は1回で終わる）。
@@ -40,6 +41,8 @@ export async function getServerSideProps({ params, res }) {
   // ⚠️SWRを1日にするとデプロイ後に古いHTML→消えた古いJSチャンク404→真っ黒になる。stale窓は短く（最大2分）。
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=120');
   const supabase = createServerSupabase(process.env.SUPABASE_SERVICE_ROLE_KEY);
+  // ほかの取得と並べて始める（失敗しても {} で解決する＝ページは落とさない）。
+  const roomCountsPromise = loadMultiRoomCounts(supabase);
   try {
     // ── 速度改善(2026-08-09): 直列6クエリ → 3ウェーブに並列化 ──
     // 以前は shop → group → reviews → count → revT → nearby を全部 await で直列に回しており、
@@ -100,7 +103,7 @@ export async function getServerSideProps({ params, res }) {
       prefecture
         ? supabase
             .from('shops')
-            .select('id, name, raw_data')
+            .select('id, name, group_id, raw_data')
             .eq('raw_data->>prefecture', prefecture)
             .neq('id', shopId)
             .limit(60)
@@ -218,8 +221,13 @@ export async function getServerSideProps({ params, res }) {
         }
       : null;
 
+    // 複数ルームのブランドのルーム数。「他の店舗も比較する」のリンク先を最初のHTMLから
+    // /brands/ にするため（server/roomCounts.js。空だと店舗URL＝301に倒れていた）。
+    const ssrRoomCounts = await roomCountsPromise;
+
     return {
       props: {
+        ssrRoomCounts,
         ssrShop,
         ssrReviewCount: count,
         ssrReviews: reviews || [],

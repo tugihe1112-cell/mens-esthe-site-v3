@@ -162,6 +162,8 @@ const dependencies = {
   '../src/data/heroShops': { HERO_SHOP_IDS: ['qa-hero'], buildInitialHero: (rows) => rows || [] },
   '../src/utils/liveCountsCache': { createCountsCache: () => ({ peek() {}, waitFor: async () => ({ totalShops: 1234, totalTherapists: 56789 }) }) },
   [loaderSpecifier]: { loadHomeReviews: (supabase) => loadHomeReviews(supabase, testOptions) },
+  // 複数ルームのブランドのルーム数（2026-10-10）。最初のHTMLの店舗リンクを /brands/ にするため。
+  '../server/roomCounts.js': { loadMultiRoomCounts: async () => ({ qa_group: 2 }) },
 };
 async function runSsr(mock, overrides = {}) {
   const page = compileModule(source, { ...dependencies, ...overrides, '../server/supabaseServer': { createServerSupabase: () => mock } });
@@ -187,6 +189,11 @@ const emptySsr = await runSsr(mockSupabase({ feed: ok([]), index: ok([], { count
 assert.equal(emptySsr.response.statusCode, 200);
 assert.equal(emptySsr.props.reviewLoadFailed, false);
 assert.equal(emptySsr.props.reviewStats.total, 0);
+assert.deepEqual(recoveredSsr.props.ssrRoomCounts, { qa_group: 2 }, 'home SSR must pass room counts so first-HTML shop links skip the 301');
+const roomCountsFailedSsr = await runSsr(mockSupabase(), { '../server/roomCounts.js': { loadMultiRoomCounts: async () => { throw new Error('QA room counts failure'); } } });
+assert.equal(roomCountsFailedSsr.response.statusCode, 200, 'room-count failure must not take the home page down');
+// ⚠️ ページはテスト用の別の実行環境で動くので、{} どうしでも厳密比較は型の出どころの違いで落ちる。中身で見る。
+assert.equal(JSON.stringify(roomCountsFailedSsr.props.ssrRoomCounts), '{}', 'room-count failure falls back to shop URLs (same as before)');
 const heroFailedSsr = await runSsr(mockSupabase({ hero: new Error('QA hero failure') }));
 assert.equal(heroFailedSsr.response.statusCode, 200);
 assert.ok(heroFailedSsr.props.latestReviews.some((row) => row.id === fixtureReviews[0].id), 'optional hero failure must not cancel reviews');

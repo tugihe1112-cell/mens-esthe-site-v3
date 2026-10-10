@@ -12,6 +12,8 @@ import PrefecturePage from '../../src/pages/PrefecturePage';
 import { PREF_SLUG_MAP } from '../../src/data/areaLinks';
 import { getDisplayName } from '../../src/utils/shopHelpers';
 import { buildBrands, countRoomsByBrand, brandCanonicalPath } from '../../src/utils/brandGroups.js';
+import { peopleInPrefecture, personLinkProps, canonicalPathMap } from '../../src/utils/reviewedPeople.js';
+import { loadReviewedPeople } from '../../server/reviewedPeople.js';
 
 // 県リストは src/data/areaLinks.js に集約（4箇所に散らばって soft404 を生んだため）
 const PREF_MAP = PREF_SLUG_MAP;
@@ -43,14 +45,28 @@ export async function getServerSideProps({ params, res }) {
       }
       return rows;
     };
-    const [shopsRes, allRooms] = await Promise.all([
+    const [shopsRes, allRooms, people, latestRes] = await Promise.all([
       supabase
         .from('shops')
         .select('id, name, group_id, prefecture:raw_data->prefecture, city:raw_data->city, area:raw_data->area, address:raw_data->address')
         .eq('raw_data->>prefecture', prefName)
         .limit(1000),
       fetchAllRooms(),
+      // 口コミがある人（全国）。取れなくてもページは落とさない（[] が返る）。
+      loadReviewedPeople(supabase),
+      // 最新の口コミ（下で、この県のルームの口コミだけに絞る）。
+      // ⚠️ 以前は `.in('shop_id', ブランドの代表ルームのid)` で引いていたので、**代表以外のルームで
+      //    書かれた口コミが県ページに一度も出なかった**。全体の新しい順から県のルームで絞る。
+      //    条件はサイトマップ・人物ページと同じ（is_public か owner_manual）。
+      supabase
+        .from('reviews')
+        .select('shop_id, therapist_id, therapist_name, rating, content, created_at')
+        .or('is_public.eq.true,user_id.eq.owner_manual')
+        .not('therapist_id', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(300),
     ]);
+    if (latestRes.error) throw latestRes.error;
     if (shopsRes.error) throw shopsRes.error;
     const shops = (shopsRes.data || []).map(({ prefecture, city, area, address, ...row }) => {
       const raw_data = {};
@@ -103,26 +119,40 @@ export async function getServerSideProps({ params, res }) {
     }
     const topAreas = Object.entries(areaCount).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([a]) => a);
 
-    let latestReviews = [];
-    const shopIds = shopList.map((s) => s.id);
-    if (shopIds.length) {
-      const { data: revs } = await supabase
-        .from('reviews')
-        .select('shop_id, therapist_id, therapist_name, rating, content')
-        .in('shop_id', shopIds.slice(0, 300))
-        .eq('is_public', true)
-        .not('therapist_id', 'is', null)
-        .order('created_at', { ascending: false })
-        .limit(6);
-      const nameById = Object.fromEntries(shopList.map((s) => [s.id, s.name]));
-      latestReviews = (revs || []).map((r) => ({
-        shopId: r.shop_id, therapistId: r.therapist_id, therapistName: r.therapist_name || '',
-        shopName: nameById[r.shop_id] || '', rating: r.rating || null,
+    // 口コミのリンク先は、その人の正規URL（同じ人の別ルームのURLを指さない・src/utils/reviewedPeople.js）。
+    const toCanonical = canonicalPathMap(people);
+    const canonicalOf = (path) => toCanonical.get(path) || path;
+
+    const prefRoomIds = new Set(shops.map((s) => s.id));
+    const roomNameById = Object.fromEntries(shops.map((s) => [s.id, s.name]));
+    const brandNameById = Object.fromEntries(buildBrands(shops).flatMap((b) => (b.shopIds || [b.primaryShopId || b.id]).map((id) => [id, b.name])));
+    const latestReviews = (latestRes.data || [])
+      .filter((r) => prefRoomIds.has(r.shop_id))
+      .slice(0, 6)
+      .map((r) => ({
+        path: canonicalOf(`/shops/${r.shop_id}/threads/${r.therapist_id}`),
+        therapistName: r.therapist_name || '',
+        shopName: brandNameById[r.shop_id] || roomNameById[r.shop_id] || '', rating: r.rating || null,
         snippet: (r.content || '').replace(/\s+/g, '').slice(0, 60),
       }));
-    }
 
-    return { props: { ssr: { prefName, pref, shopCount, topAreas, shopList: shopList.slice(0, 60), latestReviews, initialRoomCounts } } };
+    // 🚩 この県で口コミがある人の**全員**（2026-10-10）。口コミページへの本文からのリンクが
+    //    平均1.8本しかなく、「最新の口コミ」の6件の枠は次の口コミが入ると押し出される。
+    //    ここは消えない。⚠️ 上限は200人（それを超えたら下に「ほかN人」と出す＝黙って切らない）。
+    const prefPeople = peopleInPrefecture(people, prefName);
+    const reviewedPeople = prefPeople.slice(0, 200).map(personLinkProps);
+    const reviewedPeopleTotal = prefPeople.length;
+
+    // 複数ルームのブランドのルーム数（全店で数えたもの）。最初のHTMLのリンク先を決めるため
+    // _app → DataProvider に渡す（server/roomCounts.js と同じ形＝2ルーム以上だけ）。
+    const ssrRoomCounts = Object.fromEntries([...roomCountMap].filter(([, n]) => n > 1));
+
+    return {
+      props: {
+        ssr: { prefName, pref, shopCount, topAreas, shopList: shopList.slice(0, 60), latestReviews, reviewedPeople, reviewedPeopleTotal, initialRoomCounts },
+        ssrRoomCounts,
+      },
+    };
   } catch (e) {
     console.error('[SSR Area]', e.message);
     // DB障害を「店舗0件」の正常ページとしてキャッシュしない。実在ページは保持し、
@@ -138,14 +168,15 @@ export default function AreaSSRPage({ ssr }) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
   if (!ssr) return <PrefecturePage />;
 
-  const { prefName, pref, shopCount, topAreas, shopList, latestReviews, initialRoomCounts = {} } = ssr;
+  const { prefName, pref, shopCount, topAreas, shopList, latestReviews, reviewedPeople = [], reviewedPeopleTotal = 0, initialRoomCounts = {} } = ssr;
   const canonical = `${SITE}/area/${pref}`;
   const title = `${prefName}のメンズエステ${shopCount}店舗・口コミ | メンエスマップ`;
   const description = `${prefName}のメンズエステ${shopCount}店舗（${topAreas.slice(0, 3).join('・')}など）を掲載。セラピスト情報・口コミ・料金・出勤スケジュールをチェック。`;
 
   const itemListLd = shopList.length ? {
     '@context': 'https://schema.org', '@type': 'ItemList',
-    itemListElement: shopList.map((s, i) => ({ '@type': 'ListItem', position: i + 1, name: s.name, url: `${SITE}/shops/${s.id}` })),
+    // ⚠️ s.href＝D-014 の本命URL。`/shops/${s.id}` は複数ルームのブランドだと301する。
+    itemListElement: shopList.map((s, i) => ({ '@type': 'ListItem', position: i + 1, name: s.name, url: `${SITE}${s.href || `/shops/${s.id}`}` })),
   } : null;
   const breadcrumbLd = {
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
@@ -184,7 +215,7 @@ export default function AreaSSRPage({ ssr }) {
              状態を解消する。PrefecturePage側の店舗グリッドはクライアント描画なので
              Googlebotには見えない＝ここをSSRで出すことに意味がある。 */}
       {shopList.length > 0 && (
-        <section className={`max-w-5xl mx-auto px-4 -mt-4 ${latestReviews.length > 0 ? 'pb-6' : 'pb-28'}`}>
+        <section className={`max-w-5xl mx-auto px-4 -mt-4 ${latestReviews.length > 0 || reviewedPeople.length > 0 ? 'pb-6' : 'pb-28'}`}>
           <div className="rounded-sm border border-white/10 bg-slate-900 p-4">
             <h2 className="text-base font-black text-white mb-3">{prefName}の掲載店舗</h2>
             <ul className="flex flex-wrap gap-2">
@@ -211,14 +242,14 @@ export default function AreaSSRPage({ ssr }) {
 
       {/* Tier 2-1: エリアの最新の本物口コミ（SSR・エリアページに一次コンテンツ＋口コミページへの内部リンク） */}
       {latestReviews.length > 0 && (
-        <section className="max-w-5xl mx-auto px-4 pb-28 -mt-4">
+        <section className={`max-w-5xl mx-auto px-4 -mt-4 ${reviewedPeople.length > 0 ? 'pb-6' : 'pb-28'}`}>
           <div className="rounded-sm border border-white/10 bg-slate-900 p-4">
             <h2 className="text-base font-black text-white mb-3">{prefName}の最新の口コミ</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {latestReviews.map((r, i) => (
                 <a
                   key={i}
-                  href={`/shops/${r.shopId}/threads/${r.therapistId}`}
+                  href={r.path}
                   className="block rounded-sm border border-white/10 bg-slate-800 hover:border-pink-500/40 transition p-3"
                 >
                   <div className="flex items-center justify-between mb-1">
@@ -230,6 +261,32 @@ export default function AreaSSRPage({ ssr }) {
                 </a>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* 🚩 この県で口コミがある人の全員（2026-10-10・SSR）。口コミページへの消えない本文リンク。 */}
+      {reviewedPeople.length > 0 && (
+        <section aria-labelledby="area-reviewed-heading" className="max-w-5xl mx-auto px-4 pb-28 -mt-4">
+          <div className="rounded-sm border border-white/10 bg-slate-900 p-4">
+            <h2 id="area-reviewed-heading" className="text-base font-black text-white mb-3">
+              {prefName}で口コミがあるセラピスト<span className="ml-2 text-xs font-normal text-slate-500">全{reviewedPeopleTotal}人</span>
+            </h2>
+            <ul className="grid grid-cols-1 gap-x-6 sm:grid-cols-2 lg:grid-cols-3">
+              {reviewedPeople.map((p) => (
+                <li key={p.path} className="border-b border-slate-800">
+                  <a href={p.path} className="flex min-h-11 items-center gap-2 text-sm text-slate-200 transition hover:text-pink-300">
+                    <span className="min-w-0 truncate">
+                      {p.name}
+                      <span className="ml-2 text-xs text-slate-500">{[p.shopName, p.area].filter(Boolean).join('・')}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {reviewedPeopleTotal > reviewedPeople.length && (
+              <p className="text-[11px] text-slate-500 mt-3">ほか{reviewedPeopleTotal - reviewedPeople.length}人</p>
+            )}
           </div>
         </section>
       )}

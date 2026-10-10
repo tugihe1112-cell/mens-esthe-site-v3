@@ -309,8 +309,12 @@ for (const [path, label] of [
   requireMatch(brandPage, /const reviewShopId = brand\.primaryShopId/,
     '口コミ投稿の宛先がブランドIDになっています（投稿画面は実在の店舗IDを要ります）');
   // 🚩 回遊・クロール経路。送り先は店舗ではなくブランド（店舗へ送ると301と往復する）。
-  requireMatch(brandPage, /to=\{brandCanonicalPath\(b\)\}/,
-    'ブランドページの他ブランドリンクが本命URL規則を通っていません（単独店の存在しない /brands/ へ送ります）');
+  // 🚩 2026-10-10: ルーム数は**全店で数えた表**（roomCounts）を渡す。b.roomCount はこの県の店だけで
+  //    数えた数で、県をまたぐブランドが1ルームに見える＝店舗URL（押すと301）に倒れていた（本番で CREST など）。
+  requireMatch(brandPage, /to=\{brandCanonicalPath\(b,\s*roomCounts\)\}/,
+    'ブランドページの他ブランドリンクが、全店で数えたルーム数（roomCounts）で本命URLを決めていません（単独店の存在しない /brands/ へ送るか、複数ルームのブランドが店舗URL＝301になります）');
+  requireMatch(brandPage, /const \{[^}]*\broomCounts\b[^}]*\} = useShopData\(\)/,
+    'ブランドページが DataContext の roomCounts を取っていません（他ブランドのリンク先が決まりません）');
   requireMatch(brandWrapper, /pickNearbyBrands\(/,
     'ブランドページSSRが同エリア他ブランドを取得していません');
   // 🚩 店舗ページが持っている構造化データを揃える
@@ -412,7 +416,9 @@ for (const [name, source] of [['表彰台', podiumCard], ['ランキング一覧
 }
 
 rejectMatch(sitemap, /const TODAY\b|<lastmod>\$\{TODAY\}/, 'sitemapが全URLを毎日更新扱いにしています');
-requireMatch(sitemap, /select\('id, shop_id, therapist_id, created_at'\)/, 'sitemapが実際の口コミ更新日を取得していません');
+// 🚩 書き方ではなく性質を見る（2026-10-10 に therapist_name を足したら、列の並びを固定していたこの検査が落ちた）。
+requireMatch(sitemap, /\.from\('reviews'\)\s*\.select\('[^']*\bcreated_at\b[^']*'\)/, 'sitemapが実際の口コミ更新日（created_at）を取得していません');
+requireMatch(sitemap, /lastmod:\s*p\.lastAt/, 'sitemapの人物ページの lastmod が、その人の最新の口コミ日になっていません');
 rejectMatch(sitemap, /\.not\('therapist_id',\s*'is',\s*null\)/, '指名なし口コミの店舗がsitemapから漏れます');
 requireMatch(sitemap, /lastmod:\s*shopLastmod\.get\(s\.id\)/, '店舗sitemapのlastmodが実口コミ更新日ではありません');
 requireMatch(integrityMonitor, /根拠のないlastmodが付いている/, '本番監視がsitemapの偽lastmodを検出しません');
@@ -551,6 +557,91 @@ requireMatch(integrityMonitor, /口コミの実更新日が無い/, '本番監�
     const hiddenListed = inSitemap.filter((s) => hidden.includes(s));
     if (hiddenListed.length) failures.push(`[県の一覧] 掲載数が少なく出さないことにした県がサイトマップに載っています: ${hiddenListed.join(', ')}`);
   }
+}
+
+// ────────────────────────────────────────────────────────────
+// 🚩 2026-10-10 記事「Claude Opus 5.5 で SEO」の基準で本番を点検して見つけた4つの穴。
+//    どれも**壊れても画面は正常に見える**型なので、戻ったらビルドを止める。
+// ────────────────────────────────────────────────────────────
+{
+  const threadCode = strip(threadWrapper);
+  const sitemapCode = strip(sitemap);
+  const areaCode = strip(read('pages/area/[pref].jsx'));
+  const brandWrapperCode = strip(read('pages/brands/[brandId].jsx'));
+  const brandPageCode = strip(read('src/pages/BrandPage.jsx'));
+  const appCode = strip(read('pages/_app.jsx'));
+  const dataCtxCode = strip(read('src/contexts/DataContext.jsx'));
+  const homeWrapperCode = strip(read('pages/index.jsx'));
+  const shopWrapperCode = strip(shopWrapper);
+  const popularWrapperCode = strip(popularWrapper);
+  const popularPageCode = strip(popularPage);
+
+  // ① 同じ人のページは1つを正規URLにする（13人・28URLが同じ中身で Google に載せてよい状態だった）
+  requireMatch(threadCode, /pickCanonicalPersonPage\(publicReviews\)/,
+    '[正規URL] 人物ページが正規URLを口コミから決めていません（同じ人の別ルームのページが、どれも自分を正規と名乗ります）');
+  requireMatch(threadCode, /ssrCanonicalPath:\s*canonicalPath/,
+    '[正規URL] 人物ページのSSRが正規URL（ssrCanonicalPath）を画面に渡していません');
+  requireMatch(threadCode, /const canonicalUrl = [^;]*ssrCanonicalPath/,
+    '[正規URL] 人物ページの canonical が SSR の正規URLを使っていません（自分のURLを組み立て直すと重複が戻ります）');
+  requireMatch(sitemapCode, /buildReviewedPeople\(/,
+    '[正規URL] サイトマップが人物ページを人でまとめていません（同じ人のURLを2つ出すか、canonical と食い違います）');
+  requireMatch(sitemapCode, /people\.map\(\(p\) => urlXml\(p\.canonicalPath/,
+    '[正規URL] サイトマップの人物ページが正規URLを出していません');
+  rejectMatch(sitemapCode, /urlXml\(`\/shops\/\$\{r\.shop_id\}\/threads\/\$\{r\.therapist_id\}`/,
+    '[正規URL] サイトマップが口コミ1件ごとのURLを出しています（同じ人のURLが重複します）');
+  for (const [where, code] of [['人物ページ', threadCode], ['ブランドページ', brandPageCode]]) {
+    rejectMatch(code, /(?:href|to)=\{`\/shops\/\$\{t\.shopId\}\/threads\/\$\{t\.therapistId\}`\}/,
+      `[正規URL] ${where}の人物リンクが正規URLを通っていません`);
+  }
+  rejectMatch(brandPageCode, /to=\{`\/shops\/\$\{(?:t\.shopId(?: \|\| reviewShopId)?|r\.shop_id)\}\/threads\/\$\{(?:t\.id|r\.therapist_id)\}`\}/,
+    '[正規URL] ブランドページの人物リンクが正規URLを通っていません（口コミの書かれていないルームのページを指します）');
+  requireMatch(brandWrapperCode, /ssrPersonCanonical=\{ssrPersonCanonical\}/,
+    '[正規URL] ブランドページのSSRが正規URLの表（ssrPersonCanonical）を画面に渡していません');
+
+  // ② 口コミページへの消えない本文リンク（74枚すべてが5本未満・平均1.8本だった）
+  requireMatch(threadCode, /ringNeighbors\(orderPeopleForRing\(people\),\s*me\.key,\s*MORE_REVIEWED_COUNT\)/,
+    '[内部リンク] 人物ページの「ほかの口コミ」が並び順の後ろの人を出していません（全員が同じ本数を受ける性質が崩れます）');
+  requireMatch(threadCode, /ssrMoreReviewed\.map\(/,
+    '[内部リンク] 人物ページが「ほかの口コミ」を描いていません');
+  requireMatch(threadCode, /const MORE_REVIEWED_COUNT = ([4-9]|\d{2,});/,
+    '[内部リンク] 「ほかの口コミ」の人数が4未満です（店のページ・県のページと合わせて5本以上にならない）');
+  requireMatch(areaCode, /peopleInPrefecture\(people,\s*prefName\)/,
+    '[内部リンク] 県のページが「口コミがある人」の全員を出していません');
+  requireMatch(areaCode, /reviewedPeople\.map\(/,
+    '[内部リンク] 県のページが「口コミがある人」を描いていません');
+  rejectMatch(areaCode, /\.in\('shop_id',\s*shopIds\.slice\(/,
+    '[内部リンク] 県のページの最新の口コミが代表ルームのidだけで引かれています（代表以外のルームの口コミが県ページに出ません）');
+  requireMatch(areaCode, /url:\s*`\$\{SITE\}\$\{s\.href/,
+    '[301] 県のページの ItemList が本命URL（s.href）を使っていません（複数ルームのブランドは301するURLになります）');
+
+  // ③ 投稿フォームは Google に載せない（題名も noindex も無い183字のページが店の数だけあった）
+  for (const f of ['pages/post-review.jsx', 'pages/shops/[shopId]/review.jsx', 'pages/shops/[shopId]/threads/[threadId]/review.jsx']) {
+    const code = strip(read(f));
+    requireMatch(code, /<SeoHead\b[^>]*\bnoindex\b[^>]*\/>/,
+      `[noindex] ${f} が最初から noindex と題名を出していません（中身の同じフォームが Google に載せてよい状態に戻ります）`);
+    rejectMatch(code, /^\s*export \{ default \} from/m,
+      `[noindex] ${f} が中身を素通しする形に戻っています（フォームは投稿先を確かめるまで SeoHead を描きません）`);
+  }
+
+  // ④ 最初のHTMLのリンク先（21か所・118本が301する店舗URLを指していた）
+  requireMatch(appCode, /<DataProvider seedRoomCounts=\{pageProps\.ssrRoomCounts\}>/,
+    '[301] _app が SSR のルーム数（ssrRoomCounts）を DataProvider に渡していません（最初のHTMLの店舗リンクが301に倒れます）');
+  requireMatch(dataCtxCode, /if \(shops\.length\) return countRoomsByBrand\(shops\);\s*return new Map\(Object\.entries\(seedRoomCounts/,
+    '[301] DataContext が全店を読む前に SSR のルーム数を使っていません');
+  for (const [where, code] of [
+    ['トップ', homeWrapperCode], ['店舗ページ', shopWrapperCode], ['ブランドページ', brandWrapperCode], ['みんなの口コミ', popularWrapperCode],
+  ]) {
+    requireMatch(code, /loadMultiRoomCounts\(supabase\)/, `[301] ${where}のSSRがルーム数を取っていません`);
+    requireMatch(code, /\bssrRoomCounts\b[,\s]/, `[301] ${where}のSSRが ssrRoomCounts を props に載せていません`);
+  }
+  requireMatch(threadCode, /ssrRoomCounts,\s*\n/, '[301] 人物ページのSSRが ssrRoomCounts を props に載せていません');
+  requireMatch(areaCode, /ssrRoomCounts,?\s*\n\s*\},/, '[301] 県のページのSSRが ssrRoomCounts を props に載せていません');
+  rejectMatch(threadCode, /`\$\{SITE\}\/shops\/\$\{ssrShop\.id\}`/,
+    '[301] 人物ページの構造化データが店舗URLを直書きしています（複数ルームのブランドは301するURLになります）');
+  requireMatch(popularPageCode, /group_id:\s*shopById\?\.\[r\.shop_id\]\?\.group_id \?\? shopMap\?\.\[r\.shop_id\]\?\.group_id/,
+    '[301] みんなの口コミの店舗リンクが、SSR の店舗表（shopMap）の group_id を使っていません（最初のHTMLで店舗URL＝301になります）');
+  requireMatch(popularWrapperCode, /group_id:\s*shop\.group_id/,
+    '[301] みんなの口コミのSSRが店舗表に group_id を載せていません');
 }
 
 if (failures.length) {

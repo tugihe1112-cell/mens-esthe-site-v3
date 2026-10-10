@@ -65,10 +65,16 @@ export default function BrandPage({
   ssrNearbyScope = 'prefecture',
   ssrArea = null,
   ssrPrefecture = null,
+  // 正規化した名前 → その人の人物ページの正規URL（口コミが書かれたページ）。SSR が渡す。
+  ssrPersonCanonical = {},
   renderSeo = true,
 }) {
   const { brandId } = useParams();
-  const { shops, loading, getTherapistsByShopId } = useShopData();
+  const { shops, loading, getTherapistsByShopId, roomCounts } = useShopData();
+  // 🚩 人物ページへのリンクは正規URLへ（2026-10-10）。同じ人のページはルームの数だけあり、
+  //    口コミの書かれていないルームのページを指すと、Google には同じ中身のURLが2つ見える。
+  const personHref = (name, shopId, id) =>
+    ssrPersonCanonical[normalizeTherapistName(name)] || `/shops/${shopId}/threads/${id}`;
 
   // SSRで渡ってきたブランドを優先。クライアント単体で開かれたときだけ組み立てる。
   const brand = React.useMemo(() => {
@@ -418,7 +424,7 @@ export default function BrandPage({
               {ssrReviewedTherapists.map((t) => (
                 <li key={t.id} className="border-b border-slate-800">
                   <Link
-                    to={`/shops/${t.shopId}/threads/${t.id}`}
+                    to={personHref(t.name, t.shopId, t.id)}
                     className="flex min-h-12 items-center justify-between gap-3 text-slate-100 transition hover:text-pink-300"
                   >
                     <span className="truncate font-mincho text-base font-bold">{t.name}</span>
@@ -452,7 +458,7 @@ export default function BrandPage({
                   </div>
                   <p className="mt-3 text-sm leading-[1.9] text-slate-300 line-clamp-5">{r.content}</p>
                   {r.therapist_id && (
-                    <Link to={`/shops/${r.shop_id}/threads/${r.therapist_id}`} className="mt-2 inline-flex min-h-11 items-center text-xs font-bold text-pink-300 hover:text-pink-200">
+                    <Link to={personHref(r.therapist_name, r.shop_id, r.therapist_id)} className="mt-2 inline-flex min-h-11 items-center text-xs font-bold text-pink-300 hover:text-pink-200">
                       この口コミの全文を読む <span aria-hidden="true" className="ml-1">→</span>
                     </Link>
                   )}
@@ -546,7 +552,7 @@ export default function BrandPage({
                 return (
                   <Link
                     key={t.id}
-                    to={`/shops/${t.shopId || reviewShopId}/threads/${t.id}`}
+                    to={personHref(t.name, t.shopId || reviewShopId, t.id)}
                     className="group flex min-w-0 flex-col gap-1.5"
                   >
                     <div className="relative aspect-[3/4] overflow-hidden border border-slate-700 bg-slate-900">
@@ -636,7 +642,10 @@ export default function BrandPage({
               {ssrNearbyBrands.map((b) => (
                 <li key={b.id} className="border-b border-slate-800">
                   <Link
-                    to={brandCanonicalPath(b)}
+                    // ルーム数は全店で数えた表（SSR が渡す ssrRoomCounts → DataContext）。
+                    // b.roomCount はこの県の店だけで数えた数なので、県をまたぐブランドが1ルームに見える
+                    // （→ 店舗URL＝押すと301。2026-10-10 本番で CREST などが該当）。
+                    to={brandCanonicalPath(b, roomCounts)}
                     className="flex min-h-12 items-center justify-between gap-3 text-sm text-slate-200 transition hover:text-pink-300"
                   >
                     <span className="truncate">

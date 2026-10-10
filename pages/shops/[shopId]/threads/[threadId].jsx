@@ -10,6 +10,14 @@ import Head from 'next/head';
 import { createServerSupabase } from '../../../../server/supabaseServer';
 import ThreadDetailPage from '../../../../src/pages/ThreadDetailPage.jsx';
 import { filterReviewsForPerson, samePersonTherapistIds } from '../../../../src/utils/reviewIdentity.js';
+import { shopHref } from '../../../../src/utils/brandGroups.js';
+import {
+  pickCanonicalPersonPage, canonicalPathMap, orderPeopleForRing, ringNeighbors, personLinkProps,
+} from '../../../../src/utils/reviewedPeople.js';
+import { loadReviewedPeople } from '../../../../server/reviewedPeople.js';
+
+/** 「ほかの口コミ」に出す人数。全員がちょうどこの本数のリンクを、ほかの人物ページから受ける（reviewedPeople.js）。 */
+const MORE_REVIEWED_COUNT = 4;
 
 // ────────────────────────────────────────────────────────────
 // SSR: サーバー側でSupabaseから公開データを取得
@@ -179,14 +187,48 @@ export async function getServerSideProps({ params, res }) {
       .order('created_at', { ascending: false })
       .limit(60);
     if (relatedRevsError) throw relatedRevsError;
-    const seenT = new Set();
+
+    // ── 正規URL（2026-10-10）──
+    // 同じ人のページは系列のルームの数だけある（行が店ごとに別）。2026-09-13 に口コミを合流させてから、
+    // 口コミが書かれていない別ルームのページにも口コミが出て noindex が外れ、**同じ中身のURLが2つずつ**
+    // Googleに載せてよい状態だった（13人・28URL）。正規URLは「いちばん古い口コミが書かれたページ」
+    // ＝サイトマップが出すURLと同じ規則（src/utils/reviewedPeople.js に一本化）。
+    // ⚠️ 口コミの無いページは自分自身（noindex のまま）。
+    const selfPath = `/shops/${shopId}/threads/${threadId}`;
+    const canonicalPath = pickCanonicalPersonPage(publicReviews)?.path || selfPath;
+
+    // 口コミがある人の一覧（全国）。口コミのあるページだけが使う（noindex のページを軽く保つ）。
+    // 取れなくてもページは落とさない（loadReviewedPeople は [] を返す）。
+    const people = publicReviews.length > 0 ? await loadReviewedPeople(supabase) : [];
+    const toCanonical = canonicalPathMap(people);
+    const canonicalOf = (path) => toCanonical.get(path) || path;
+
+    const seenT = new Set([canonicalPath]);
     const ssrRelated = [];
     for (const rr of (relatedRevs || [])) {
-      if (!rr.therapist_id || seenT.has(rr.therapist_id)) continue;
-      seenT.add(rr.therapist_id);
-      ssrRelated.push({ therapistId: rr.therapist_id, therapistName: rr.therapist_name || '', shopId: rr.shop_id });
+      if (!rr.therapist_id) continue;
+      // リンク先も正規URLへ（同じ人の別ルームのURLを指さない）
+      const path = canonicalOf(`/shops/${rr.shop_id}/threads/${rr.therapist_id}`);
+      if (seenT.has(path)) continue;
+      seenT.add(path);
+      ssrRelated.push({ path, therapistName: rr.therapist_name || '' });
       if (ssrRelated.length >= 8) break;
     }
+
+    // 「ほかの口コミ」（2026-10-10）: 口コミページへの本文からのリンクが平均1.8本しかなく、
+    // トップ・県ページの「新しい順N件」の枠は次の口コミが入ると消える。
+    // 並び順で後ろに続く4人を出す＝全員がちょうど4本、ほかの人物ページから消えないリンクを受ける。
+    // ⚠️ 上の「同じ店」の枠に出した人は重ねて出さない（その人へのリンクは既にある＝本数は減らない）。
+    const me = people.find((p) => (p.pages || []).includes(canonicalPath));
+    const ssrMoreReviewed = me
+      ? ringNeighbors(orderPeopleForRing(people), me.key, MORE_REVIEWED_COUNT)
+          .map(personLinkProps)
+          .filter((p) => !seenT.has(p.path))
+      : [];
+
+    // 自分の店へのリンク先。複数ルームのブランドは /brands/（D-014）。店舗URLは301する。
+    const ssrRoomCounts = shopData.group_id && reviewShopIds.length > 1 ? { [shopData.group_id]: reviewShopIds.length } : {};
+    const ssrShopPath = shopHref(shopData, ssrRoomCounts);
 
     // 閲覧カウントは /api/track-view（クライアント発火・service role）に移設済み。
     // → gSSPを副作用なしにしてCDNキャッシュ可能に。botはJS非実行で自然除外＝集計精度もむしろ改善。
@@ -219,6 +261,10 @@ export async function getServerSideProps({ params, res }) {
         ssrPublicReviews: publicReviews,
         ssrAvgRating: avgRating,
         ssrRelated,
+        ssrMoreReviewed,
+        ssrCanonicalPath: canonicalPath,
+        ssrShopPath,
+        ssrRoomCounts,
       },
     };
   } catch (e) {
@@ -228,7 +274,7 @@ export async function getServerSideProps({ params, res }) {
     res.statusCode = 503;
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Retry-After', '120');
-    return { props: { ssrShop: null, ssrTherapist: null, ssrPublicReviews: [], ssrAvgRating: null, ssrRelated: [] } };
+    return { props: { ssrShop: null, ssrTherapist: null, ssrPublicReviews: [], ssrAvgRating: null, ssrRelated: [], ssrMoreReviewed: [], ssrCanonicalPath: null, ssrShopPath: null } };
   }
 }
 
@@ -236,7 +282,10 @@ export async function getServerSideProps({ params, res }) {
 // ページコンポーネント：SSRデータをHeadタグ + JSON-LDに使用
 // 既存の ThreadDetailPage をそのままレンダリング（クライアント動作を維持）
 // ────────────────────────────────────────────────────────────
-export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicReviews, ssrAvgRating, ssrRelated = [] }) {
+export default function ThreadDetailSSRPage({
+  ssrShop, ssrTherapist, ssrPublicReviews, ssrAvgRating, ssrRelated = [], ssrMoreReviewed = [],
+  ssrCanonicalPath = null, ssrShopPath = null,
+}) {
   const SITE = process.env.VITE_PUBLIC_SITE_URL || 'https://www.mens-esthe-map.jp';
 
   const shopName = ssrShop?.name || '';
@@ -248,9 +297,13 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
     ? `${therapistName}（${shopName}）の口コミ${ssrPublicReviews.length}件。${ssrPublicReviews[0]?.content?.slice(0, 80) || ''}...`
     : `${therapistName}（${shopName}）のセラピスト情報。メンエスマップで口コミ・体験談をチェック。`;
 
+  // 🚩 正規URLは SSR が決めたもの（同じ人の別ルームのページは、口コミが書かれたページを指す）。
+  //    ここで自分のURLを組み立て直すと、同じ中身のURLが2つとも「自分が正規」と名乗る状態に戻る。
   const canonicalUrl = ssrShop && ssrTherapist
-    ? `${SITE}/shops/${ssrShop.id}/threads/${ssrTherapist.id}`
+    ? `${SITE}${ssrCanonicalPath || `/shops/${ssrShop.id}/threads/${ssrTherapist.id}`}`
     : '';
+  // 自分の店のURL。複数ルームのブランドは /brands/（店舗URLは301する）。
+  const shopUrl = ssrShop ? `${SITE}${ssrShopPath || `/shops/${ssrShop.id}`}` : '';
 
   // セラピストは店舗そのものではないため HealthAndBeautyBusiness と偽らない。
   // ProfilePage + Person とし、所属店舗だけを HealthAndBeautyBusiness で参照する。
@@ -268,7 +321,7 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
       worksFor: {
         '@type': 'HealthAndBeautyBusiness',
         name: shopName,
-        url: `${SITE}/shops/${ssrShop.id}`,
+        url: shopUrl,
       },
     },
   } : null;
@@ -278,7 +331,7 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
     '@context': 'https://schema.org', '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'メンエスマップ', item: SITE },
-      { '@type': 'ListItem', position: 2, name: shopName, item: `${SITE}/shops/${ssrShop.id}` },
+      { '@type': 'ListItem', position: 2, name: shopName, item: shopUrl },
       ...(ssrTherapist ? [{ '@type': 'ListItem', position: 3, name: therapistName, item: canonicalUrl }] : []),
     ],
   } : null;
@@ -327,14 +380,15 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
 
       {/* Tier 2-2: 同じ店で口コミがある他のセラピストへの相互リンク（SSR・口コミページ間の内部リンク） */}
       {ssrRelated.length > 0 && (
-        <nav aria-label="同じ店で口コミがあるセラピスト" className="max-w-3xl mx-auto px-4 pb-28 -mt-6">
+        // 本文の関連リンク（メニューではない）なので nav ではなく section。下の「ほかの口コミ」と同じ扱い。
+        <section aria-label="同じ店で口コミがあるセラピスト" className={`max-w-3xl mx-auto px-4 -mt-6 ${ssrMoreReviewed.length > 0 ? 'pb-6' : 'pb-28'}`}>
           <div className="border-t border-slate-700 pt-5">
             <h2 className="font-mincho text-lg font-bold text-slate-50 mb-2">この店で口コミがある他のセラピスト</h2>
             <ul className="grid grid-cols-2 gap-x-6 sm:grid-cols-3">
               {ssrRelated.map((t, i) => (
                 <li key={i} className="border-b border-slate-800">
                   <a
-                    href={`/shops/${t.shopId}/threads/${t.therapistId}`}
+                    href={t.path}
                     className="flex min-h-11 items-center justify-between gap-2 text-sm text-slate-200 transition hover:text-pink-300"
                   >
                     <span className="truncate">{t.therapistName}</span>
@@ -344,7 +398,33 @@ export default function ThreadDetailSSRPage({ ssrShop, ssrTherapist, ssrPublicRe
               ))}
             </ul>
           </div>
-        </nav>
+        </section>
+      )}
+
+      {/* 「ほかの口コミ」（2026-10-10）: 口コミがある人へ、消えない本文のリンク。
+          並びは県（JIS順）→ 県の中は店を交互（src/utils/reviewedPeople.js）。全員がちょうど4本ずつ受ける。 */}
+      {ssrMoreReviewed.length > 0 && (
+        <section aria-labelledby="more-reviewed-heading" className={`max-w-3xl mx-auto px-4 pb-28 ${ssrRelated.length > 0 ? '' : '-mt-6'}`}>
+          <div className="border-t border-slate-700 pt-5">
+            <h2 id="more-reviewed-heading" className="font-mincho text-lg font-bold text-slate-50 mb-2">ほかの口コミ</h2>
+            <ul className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+              {ssrMoreReviewed.map((p) => (
+                <li key={p.path} className="border-b border-slate-800">
+                  <a
+                    href={p.path}
+                    className="flex min-h-11 items-center justify-between gap-2 text-sm text-slate-200 transition hover:text-pink-300"
+                  >
+                    <span className="min-w-0 truncate">
+                      {p.name}
+                      <span className="ml-2 text-xs text-slate-500">{[p.shopName, p.prefecture].filter(Boolean).join('・')}</span>
+                    </span>
+                    <span aria-hidden="true" className="text-slate-500">→</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
       )}
     </>
   );
