@@ -1,10 +1,13 @@
 /**
  * Google（GA4・Search Console）の数字を読む道具の共通部分（2026-10-11）。
  *
- * 鍵の置き場所は2通り。どちらでも同じ道具が動く。
- *   - Mac: リポジトリ直下の `.gcp-metrics-key.json`（.env の GCP_METRICS_KEY で別の場所も指定できる）
- *   - クラウドのセッション: 環境変数 `GCP_METRICS_KEY_JSON` に `.gcp-metrics-key.json` の中身を丸ごと
- *     （クラウドにはファイルを置けない。.gitignore 済みの鍵はクローンに入らないため）
+ * 鍵の置き場所は3通り。どれでも同じ道具が動く（上から順に見る）。
+ *   1. 環境変数 `GCP_METRICS_KEY_JSON` に `.gcp-metrics-key.json` の中身
+ *      ⚠️ クラウドの環境変数は「その環境を使う人なら誰でも読める」ので、クラウドでは使わない（3 を使う）
+ *   2. Mac: リポジトリ直下の `.gcp-metrics-key.json`（.env の GCP_METRICS_KEY で別の場所も指定できる）
+ *   3. クラウドのセッション: 環境の「ネットワークシークレット」（種類 GCP access token (with Service Account Key)）。
+ *      鍵はセッションの外（Anthropic のプロキシ）にあり、Google への通信にプロキシが Authorization を付ける。
+ *      ここでは**認証を付けずに**送る（付けるとプロキシの分と二重になる）。鍵が無いときの 401 は理由を添えて出す。
  *
  * ⚠️ 鍵の中身は画面にもログにも出さない。読めないときの文言にも値を混ぜない。
  */
@@ -55,8 +58,11 @@ export function resolveMetricsKey() {
   if (raw) return { source: 'env', credentials: parseServiceAccountJson(raw) };
   const keyFile = getEnv('GCP_METRICS_KEY') || DEFAULT_KEY_FILE;
   if (fs.existsSync(keyFile)) return { source: 'file', keyFile };
-  throw new Error(`Google の鍵がありません。Mac では ${keyFile} を置き、クラウドでは環境変数 GCP_METRICS_KEY_JSON に鍵の中身を入れてください`);
+  // クラウドのセッション（Anthropic のプロキシ経由）なら、鍵はネットワークシークレットとしてプロキシ側にある前提で送る
+  if (process.env.CCR_AGENT_PROXY_ENABLED === '1') return { source: 'proxy' };
+  throw new Error(`Google の鍵がありません。Mac では ${keyFile} を置いてください（クラウドのセッションでは、環境のネットワークシークレットに入れます）`);
 }
+
 
 /**
  * GoogleAuth を作る。鍵が無い・読めないときは理由を出して終了する（値は出さない）。
@@ -74,6 +80,13 @@ export async function metricsAuth(scopes) {
   if ((process.env.HTTPS_PROXY || process.env.https_proxy) && process.env.NODE_USE_ENV_PROXY !== '1') {
     console.error('❌ プロキシ経由の環境です。NODE_USE_ENV_PROXY=1 を付けて起動してください（例: NODE_USE_ENV_PROXY=1 node scripts/metrics/…）');
     process.exit(1);
+  }
+  // 認証を付けずに送る（プロキシがネットワークシークレットから Authorization を付ける）
+  if (resolved.source === 'proxy') {
+    console.error('ℹ️ Google の鍵は環境のネットワークシークレット（プロキシ）から使います。401 が出たら、環境の編集画面の'
+      + '「ネットワークシークレット」に GCP access token (with Service Account Key) の鍵があり、許可するサイトが '
+      + 'analyticsdata.googleapis.com・searchconsole.googleapis.com、スコープが analytics.readonly・webmasters.readonly か確かめてください');
+    return undefined;
   }
   const { google } = await import('googleapis');
   return resolved.source === 'env'

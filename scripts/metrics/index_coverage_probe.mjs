@@ -119,7 +119,7 @@ async function main() {
       if (/permission|forbidden|403/i.test(r.error)) {
         console.error('\n⚠️ URL検査APIは「オーナー」または「フルユーザー」権限が必要です。');
         console.error('   GSC → 設定 → ユーザーと権限 で、サービスアカウントの権限を上げてください。');
-        console.error(`   サービスアカウント: ${(await auth.getCredentials()).client_email}`);
+        console.error(`   サービスアカウント: ${auth ? (await auth.getCredentials()).client_email : '（ネットワークシークレットに入れた鍵のサービスアカウント）'}`);
         process.exit(1);
       }
     } else {
