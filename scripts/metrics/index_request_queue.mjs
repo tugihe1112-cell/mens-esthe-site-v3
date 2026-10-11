@@ -34,8 +34,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const env = fs.readFileSync('.env', 'utf-8');
-const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
+import { getEnv, metricsAuth } from '../lib/metricsAuth.mjs';
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
 const ORIGIN = SITE.replace(/\/$/, '');
 const DIR = 'outputs/index-requests';
@@ -154,9 +153,7 @@ if (cmd === 'last') {
 
 if (cmd === 'status') {
   const { google } = await import('googleapis');
-  const KEY_FILE = getEnv('GCP_METRICS_KEY') || '.gcp-metrics-key.json';
-  if (!fs.existsSync(KEY_FILE)) { console.error(`❌ 鍵ファイルが無い: ${KEY_FILE}`); process.exit(1); }
-  const auth = new google.auth.GoogleAuth({ keyFile: KEY_FILE, scopes: ['https://www.googleapis.com/auth/webmasters.readonly'] });
+  const auth = await metricsAuth(['https://www.googleapis.com/auth/webmasters.readonly']);
   const sc = google.searchconsole({ version: 'v1', auth });
 
   // 出し直したページは、いちばん最近のリクエストの後に Google が来たかを見る

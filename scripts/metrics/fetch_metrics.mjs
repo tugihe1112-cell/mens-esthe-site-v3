@@ -4,7 +4,8 @@
  * 前提（初回のみ）:
  *   1. npm install googleapis
  *   2. Google Cloudでサービスアカウント作成→JSON鍵を `.gcp-metrics-key.json` としてリポジトリ直下に置く（.gitignore済）
- *   3. .env に GA4_PROPERTY_ID と（任意で）GSC_SITE_URL を追加
+ *      クラウドのセッションでは、環境変数 GCP_METRICS_KEY_JSON に鍵の中身を丸ごと入れる（scripts/lib/metricsAuth.mjs）
+ *   3. （任意）.env か環境変数に GA4_PROPERTY_ID・GSC_SITE_URL（無ければ既定値）
  *   4. GA4プロパティ と GSCプロパティ に、そのサービスアカウントのメールを閲覧者として追加
  *
  * 実行: node scripts/metrics/fetch_metrics.mjs
@@ -12,11 +13,9 @@
 import fs from 'fs';
 import { google } from 'googleapis';
 
-const env = fs.readFileSync('.env', 'utf-8');
-const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
+import { getEnv, metricsAuth, DEFAULT_GA4_PROPERTY_ID } from '../lib/metricsAuth.mjs';
 
-const KEY_FILE = getEnv('GCP_METRICS_KEY') || '.gcp-metrics-key.json';
-const GA4_PROPERTY_ID = getEnv('GA4_PROPERTY_ID'); // 数字のみ（例 480123456）
+const GA4_PROPERTY_ID = getEnv('GA4_PROPERTY_ID') || DEFAULT_GA4_PROPERTY_ID; // 数字のみ（例 480123456）
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
 const MD = 'playbook/metrics-log.md';
 
@@ -26,16 +25,7 @@ const TARGETS = {
   '広島人妻': '/shops/hiroshima_hiroshima_hitozuma_san',
 };
 
-if (!GA4_PROPERTY_ID) { console.error('❌ .env に GA4_PROPERTY_ID が無い'); process.exit(1); }
-if (!fs.existsSync(KEY_FILE)) { console.error(`❌ 鍵ファイルが無い: ${KEY_FILE}`); process.exit(1); }
-
-const auth = new google.auth.GoogleAuth({
-  keyFile: KEY_FILE,
-  scopes: [
-    'https://www.googleapis.com/auth/analytics.readonly',
-    'https://www.googleapis.com/auth/webmasters.readonly',
-  ],
-});
+const auth = await metricsAuth(['https://www.googleapis.com/auth/analytics.readonly', 'https://www.googleapis.com/auth/webmasters.readonly']);
 
 // GSCはデータ2〜3日遅れ → 直近28日（終端は2日前）で揃える
 // ⚠️ 2026-08-17修正: 以前は `new Date(Date.now() - n*864e5).toISOString()` ＝ **UTC基準**で

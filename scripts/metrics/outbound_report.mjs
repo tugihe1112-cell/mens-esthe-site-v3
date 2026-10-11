@@ -8,21 +8,16 @@
  * ※ 店舗別内訳には GA4 で shop_name / link_type を「カスタムディメンション」登録が必要。
  *   未登録なら総数のみ出る（スクリプトが自動フォールバック）。登録手順は実行時に案内。
  */
-import fs from 'fs';
 import { google } from 'googleapis';
 
-const env = fs.readFileSync('.env', 'utf-8');
-const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
-const KEY_FILE = getEnv('GCP_METRICS_KEY') || '.gcp-metrics-key.json';
-const GA4_PROPERTY_ID = getEnv('GA4_PROPERTY_ID');
+import { getEnv, metricsAuth, DEFAULT_GA4_PROPERTY_ID } from '../lib/metricsAuth.mjs';
+const GA4_PROPERTY_ID = getEnv('GA4_PROPERTY_ID') || DEFAULT_GA4_PROPERTY_ID;
 
 const args = process.argv.slice(2);
 const DAYS = Number((args.find((a) => a.startsWith('--days=')) || '').split('=')[1]) || 30;
 
-if (!GA4_PROPERTY_ID) { console.error('❌ .env に GA4_PROPERTY_ID が無い'); process.exit(1); }
-if (!fs.existsSync(KEY_FILE)) { console.error(`❌ 鍵ファイルが無い: ${KEY_FILE}`); process.exit(1); }
 
-const auth = new google.auth.GoogleAuth({ keyFile: KEY_FILE, scopes: ['https://www.googleapis.com/auth/analytics.readonly'] });
+const auth = await metricsAuth(['https://www.googleapis.com/auth/analytics.readonly']);
 const ga = google.analyticsdata({ version: 'v1beta', auth });
 
 const START = new Date(Date.now() - DAYS * 864e5).toISOString().slice(0, 10);

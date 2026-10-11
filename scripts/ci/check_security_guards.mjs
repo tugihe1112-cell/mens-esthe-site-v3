@@ -126,6 +126,25 @@ const ogMajor = Number(String(packageJson.dependencies?.['@vercel/og'] || '').ma
 if (nextMajor < 16) violations.push('package.json: 脆弱性修正版のNext.js 16以上が必要');
 if (ogMajor < 1) violations.push('package.json: 脆弱性修正版の@vercel/og 1以上が必要');
 
+// Google の数字を読む鍵（2026-10-11）: Mac はファイル、クラウドは環境変数 GCP_METRICS_KEY_JSON。
+// 鍵の読み方は scripts/lib/metricsAuth.mjs の1か所だけ。道具ごとに書くと、片方だけクラウドで読めない・値を表示する、が起きる。
+{
+  const { selfTestMetricsAuth } = await import('../lib/metricsAuth.mjs');
+  for (const problem of selfTestMetricsAuth()) violations.push(`scripts/lib/metricsAuth.mjs: ${problem}`);
+  const metricsDir = 'scripts/metrics';
+  for (const file of fs.readdirSync(metricsDir).filter((f) => f.endsWith('.mjs'))) {
+    const path = `${metricsDir}/${file}`;
+    // 説明のコメントは除く（行コメントを先に外す＝コメント内の「/*」で後ろを丸ごと消さない）
+    const source = (read(path) || '').replace(/(^|[^:])\/\/.*$/gm, '$1').replace(/\/\*[\s\S]*?\*\//g, '');
+    if (/new google\.auth\.GoogleAuth|keyFile\s*:|gcp-metrics-key\.json'\s*\)/.test(source)) {
+      violations.push(`${path}: Google の鍵を自前で読んでいる（scripts/lib/metricsAuth.mjs の metricsAuth を使う）`);
+    }
+    if (/GCP_METRICS_KEY_JSON/.test(source)) {
+      violations.push(`${path}: 鍵の中身（GCP_METRICS_KEY_JSON）を道具が直接触っている（表示・記録の事故のもと）`);
+    }
+  }
+}
+
 if (violations.length) {
   console.error('\n🚨 既知の本番事故を再発させる変更が検出されました:\n');
   for (const violation of violations) console.error(`  - ${violation}`);

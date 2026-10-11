@@ -22,24 +22,16 @@
  *     403 が返る場合は GSC → 設定 → ユーザーと権限 で権限を上げること。
  *   - 割り当ては 1日2,000件・1分600件。本スクリプトは既定30件程度に抑えている。
  */
-import fs from 'fs';
 import { google } from 'googleapis';
 
-const env = fs.readFileSync('.env', 'utf-8');
-const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
-const KEY_FILE = getEnv('GCP_METRICS_KEY') || '.gcp-metrics-key.json';
+import { getEnv, metricsAuth } from '../lib/metricsAuth.mjs';
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
 const ORIGIN = SITE.replace(/\/$/, '');
 
 const args = process.argv.slice(2);
 const SHOP_LIMIT = Number((args.find((a) => a.startsWith('--limit=')) || '').split('=')[1]) || 20;
 
-if (!fs.existsSync(KEY_FILE)) { console.error(`❌ 鍵ファイルが無い: ${KEY_FILE}`); process.exit(1); }
-
-const auth = new google.auth.GoogleAuth({
-  keyFile: KEY_FILE,
-  scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
-});
+const auth = await metricsAuth(['https://www.googleapis.com/auth/webmasters.readonly']);
 const sc = google.searchconsole({ version: 'v1', auth });
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -127,7 +119,7 @@ async function main() {
       if (/permission|forbidden|403/i.test(r.error)) {
         console.error('\n⚠️ URL検査APIは「オーナー」または「フルユーザー」権限が必要です。');
         console.error('   GSC → 設定 → ユーザーと権限 で、サービスアカウントの権限を上げてください。');
-        console.error(`   サービスアカウント: ${JSON.parse(fs.readFileSync(KEY_FILE, 'utf-8')).client_email}`);
+        console.error(`   サービスアカウント: ${(await auth.getCredentials()).client_email}`);
         process.exit(1);
       }
     } else {

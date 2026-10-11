@@ -12,21 +12,17 @@
  * 実行: node scripts/metrics/top_clicked_pages.mjs [--days=28] [--top=20]
  *   認証は fetch_metrics.mjs / weekly_opportunity_scan.mjs と同じ .gcp-metrics-key.json を流用。
  */
-import fs from 'fs';
 import { google } from 'googleapis';
 
-const env = fs.readFileSync('.env', 'utf-8');
-const getEnv = (k) => env.match(new RegExp(`^${k}=(.+)$`, 'm'))?.[1]?.trim().replace(/^['"]|['"]$/g, '');
-const KEY_FILE = getEnv('GCP_METRICS_KEY') || '.gcp-metrics-key.json';
+import { getEnv, metricsAuth } from '../lib/metricsAuth.mjs';
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
 
 const args = process.argv.slice(2);
 const DAYS = Number((args.find(a => a.startsWith('--days=')) || '').split('=')[1]) || 28;
 const TOP = Number((args.find(a => a.startsWith('--top=')) || '').split('=')[1]) || 20;
 
-if (!fs.existsSync(KEY_FILE)) { console.error(`❌ 鍵ファイルが無い: ${KEY_FILE}`); process.exit(1); }
 
-const auth = new google.auth.GoogleAuth({ keyFile: KEY_FILE, scopes: ['https://www.googleapis.com/auth/webmasters.readonly'] });
+const auth = await metricsAuth(['https://www.googleapis.com/auth/webmasters.readonly']);
 const sc = google.searchconsole({ version: 'v1', auth });
 const d = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
 const END = d(2), START = d(2 + DAYS); // GSCは2〜3日遅れ
