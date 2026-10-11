@@ -20,7 +20,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
-import { assertOfficialRosterSource, scopedImageKey, rootDomainOf } from '../lib/sourceProvenance.mjs';
+import { assertOfficialRosterSource, scopedImageKey, rootDomainOf, imageKeyFromUrl, isPhotoKeyOf, selfTestImageKeys } from '../lib/sourceProvenance.mjs';
 import { cleanRosterName, detectSitePrefix, selfTestRosterNameClean } from '../lib/rosterNameClean.mjs';
 
 const args = process.argv.slice(2);
@@ -34,6 +34,8 @@ if (MAX_PER_SITE > 60 && !/\.verified\.json$/.test(FILE)) { console.error('❌ -
 {
   const problems = selfTestRosterNameClean();
   if (problems.length) { console.error('❌ 名前の整え方が壊れています:', problems); process.exit(1); }
+  const keyProblems = selfTestImageKeys();
+  if (keyProblems.length) { console.error('❌ 写真のキーの作り方・照合が壊れています:', keyProblems); process.exit(1); }
 }
 const nameKey0 = (v) => String(v || '').normalize('NFKC').replace(/[\s\u3000]/g, '').toLowerCase();
 // 【2026-09-29】 名前の後ろの「さん」「ちゃん」は照合では外す。公式が「なぎさん」、DB が「なぎ」の店があり（Lucky Cat など）、
@@ -101,19 +103,19 @@ console.log(`名前の形にならず足さない候補: ${rejected}件`);
 const existing = new Set();
 // 【2026-09-29】 同じ公式プロフィール（人物ID）の写真を持つ人がすでにいれば足さない＝名前が変わった同じ人。
 // BELLA SPA の「小鳥遊ゆり」（9/25）が公式で「小鳥遊さり」になっていて、同じ人を別の名前で二重に足していた（画像の監視で発覚）。
-// 写真のキーは scopedImageKey＝「cast_<店>_<人物ID>_<版>」なので、先頭が同じなら同じ人物ページの写真。
-const photoKeys = new Map();
+// 写真のキーは scopedImageKey＝「cast_<店>_<人物ID>_<版>」なので、その形なら同じ人物ページの写真。
+// 【2026-10-11】照合は isPhotoKeyOf に任せる（キーを作る scopedImageKey と同じ規則・昔の形＝%のまま／日本語のまま／URLまるごと も見る）。
+// 以前はここで先頭の文字列だけを自前で比べていて、%E3… の写真の URL を %25 に直したあとは一致しなくなるところだった。
+const photoKeys = [];
 for (const p of plan) {
   if (!p.add.length) continue;
   const { data: rows } = await supabase.from('therapists').select('id,name,image_url').eq('shop_id', p.addTo);
-  for (const t of rows || []) { existing.add(t.id); const f = String(t.image_url || '').split('/').pop(); if (f) photoKeys.set(f, t.name); }
+  for (const t of rows || []) { existing.add(t.id); const k = imageKeyFromUrl(t.image_url); if (k) photoKeys.push([k, t.name]); }
 }
 const sameProfile = [];
 for (const p of plan) p.add = p.add.filter((x) => {
   if (existing.has(`${p.addTo}_${x.name}`)) return false;
-  const scope = String(p.addTo).normalize('NFKC').replace(/[^a-z0-9_-]+/gi, '_').replace(/^_+|_+$/g, '').slice(0, 80);
-  const head = `cast_${scope}_${x.castId || x.key}_`;
-  const hit = [...photoKeys.entries()].find(([f]) => f.startsWith(head));
+  const hit = photoKeys.find(([k]) => isPhotoKeyOf({ shopId: p.addTo, castId: x.castId || x.key }, k));
   if (hit) { sameProfile.push(`${p.domain}: ${x.name}（DB では「${hit[1]}」）`); return false; }
   return true;
 });

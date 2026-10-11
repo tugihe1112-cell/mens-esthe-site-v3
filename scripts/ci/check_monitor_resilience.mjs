@@ -9,7 +9,8 @@ import { classifyGroup, selfTestMatching, normId } from '../lib/brandNameMatch.m
 import { evaluateSections, sectionsInHtml, MIN_PAGES } from '../lib/sectionPresence.mjs';
 import { expectsLastmod } from '../lib/sitemapRules.mjs';
 import { planReconcile, selfTestReconcile } from '../lib/rosterReconcile.mjs';
-import { rosterSiteKeyFactory } from '../lib/sourceProvenance.mjs';
+import { rosterSiteKeyFactory, scopedImageKey, selfTestImageKeys } from '../lib/sourceProvenance.mjs';
+import { castIdOf } from '../lib/rosterPairs.mjs';
 import { selfTestDepartRows } from '../lib/departRows.mjs';
 import { selfTestRenderRecheck } from '../lib/renderRecheck.mjs';
 import { selfTestRosterPagination } from '../lib/rosterPagination.mjs';
@@ -333,6 +334,28 @@ selfTestRenderRecheck();
   for (const [name, src] of [['brand_roster_audit', audit], ['deep_roster_audit', deep]]) {
     assert.ok(/selfTestRosterPagination\(\)/.test(src), `${name} が起動時にページ送りの自己診断を呼んでいない`);
   }
+}
+
+// 写真のキーに URL で意味が変わる文字を入れない（2026-10-11）: 人物ページの URL.pathname が返す「%E3%81%82…」を
+// そのまま写真のキーにして490枚、人物ページの URL まるごと（…/#CastProfile）を人物IDにして ARROW の8枚が 404 になっていた。
+{
+  assert.deepEqual(selfTestImageKeys(), [], '写真のキーの作り方・照合の自己診断が失敗している');
+  assert.equal(castIdOf('https://x.jp/cast/%E3%81%82%E3%81%84/'), 'あい', 'castIdOf が %で書いた日本語を戻していない');
+  assert.equal(castIdOf('https://x.jp/girl.php?id=%E3%81%82'), 'あ', 'castIdOf がクエリの人物IDを戻していない');
+  // 実際に 404 になった人物IDの形（Galaxy-NAGOYA・ARROW）で、キーに危ない文字が残らないこと
+  for (const castId of ['%E3%81%BE%E3%81%AA', 'https://estama.jp/shop/28543/cast/104621/#CastProfile', 'a b?c#d%e/f']) {
+    const key = scopedImageKey({ shopId: 'aichi_meieki_galaxy_nagoya', castId, sourceUrl: 'https://example.jp/p/1.jpg' });
+    assert.ok(!/[%#?\\/\s]/.test(key), `写真のキーに URL で意味が変わる文字が残る: ${key}`);
+  }
+  const strip = (p) => fs.readFileSync(p, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const reg = strip('scripts/maintenance/register_new_therapists.mjs');
+  assert.ok(/selfTestImageKeys\(\)/.test(reg), '新人追加の道具が起動時に写真のキーの自己診断を呼んでいない');
+  assert.ok(/isPhotoKeyOf\(/.test(reg) && /imageKeyFromUrl\(/.test(reg), '新人追加の「同じ公式プロフィールの人は足さない」照合が isPhotoKeyOf／imageKeyFromUrl を通していない');
+  assert.ok(!/cast_\$\{scope\}_/.test(reg), '新人追加の道具が写真のキーの先頭を自前で組み立てている（キーを作る側と規則がずれる）');
+  const scrape = strip('scripts/maintenance/scrape_new_shop_rosters.mjs');
+  assert.ok(!/const\s+castIdOf\s*=/.test(scrape) && /import\s*\{[^}]*\bcastIdOf\b[^}]*\}\s*from\s*'\.\.\/lib\/rosterPairs\.mjs'/.test(scrape), '新しい店の名簿の道具に castIdOf の写しがある（rosterPairs から読むこと）');
+  const libs = fs.readdirSync('scripts/maintenance').filter((f) => f.endsWith('.mjs')).map((f) => [f, strip(path.join('scripts/maintenance', f))]);
+  for (const [f, src] of libs) assert.ok(!/function\s+scopedImageKey\b|const\s+scopedImageKey\s*=/.test(src), `${f} に scopedImageKey の写しがある`);
 }
 
 console.log('✅ 外形監視の再試行・恒久障害判定チェック OK');

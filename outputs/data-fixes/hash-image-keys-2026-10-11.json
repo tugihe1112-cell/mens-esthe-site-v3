@@ -1,0 +1,79 @@
+{
+ "at": "2026-10-11",
+ "why": "ARROW（京都）の8人は写真のキーに人物ページのURLまるごと（…/#CastProfile）が入っていた。URLの「#」から後ろはブラウザが送らないので Worker に届かず 404。「#」を「%23」にすれば Worker が戻した結果が R2 のキーと同じになる。本番の /api/og で8件とも「今=無い／直した後=ある」を確認。",
+ "revert": "image_url を old_url に戻す（R2 の写真・キーは触らない）",
+ "rows": [
+  {
+   "table": "therapists",
+   "id": "kyoto_kyoto_arrow_伊織",
+   "name": "伊織",
+   "old_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/104621/#CastProfile_c6cb0cdc3249.jpg",
+   "new_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/104621/%23CastProfile_c6cb0cdc3249.jpg",
+   "probe_old": "missing",
+   "probe_new": "found"
+  },
+  {
+   "table": "therapists",
+   "id": "kyoto_kyoto_arrow_天音",
+   "name": "天音",
+   "old_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/114497/#CastProfile_d721f9232ce0.jpg",
+   "new_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/114497/%23CastProfile_d721f9232ce0.jpg",
+   "probe_old": "missing",
+   "probe_new": "found"
+  },
+  {
+   "table": "therapists",
+   "id": "kyoto_kyoto_arrow_日菜",
+   "name": "日菜",
+   "old_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/259023/#CastProfile_b25f6ae73d36.jpg",
+   "new_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/259023/%23CastProfile_b25f6ae73d36.jpg",
+   "probe_old": "missing",
+   "probe_new": "found"
+  },
+  {
+   "table": "therapists",
+   "id": "kyoto_kyoto_arrow_桜井",
+   "name": "桜井",
+   "old_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/48853/#CastProfile_0611d5d74125.jpg",
+   "new_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/48853/%23CastProfile_0611d5d74125.jpg",
+   "probe_old": "missing",
+   "probe_new": "found"
+  },
+  {
+   "table": "therapists",
+   "id": "kyoto_kyoto_arrow_琉那",
+   "name": "琉那",
+   "old_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/189244/#CastProfile_75d5083ffd26.jpg",
+   "new_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/189244/%23CastProfile_75d5083ffd26.jpg",
+   "probe_old": "missing",
+   "probe_new": "found"
+  },
+  {
+   "table": "therapists",
+   "id": "kyoto_kyoto_arrow_美玲",
+   "name": "美玲",
+   "old_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/250172/#CastProfile_f1a7acf2cb7d.jpg",
+   "new_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/250172/%23CastProfile_f1a7acf2cb7d.jpg",
+   "probe_old": "missing",
+   "probe_new": "found"
+  },
+  {
+   "table": "therapists",
+   "id": "kyoto_kyoto_arrow_萌香",
+   "name": "萌香",
+   "old_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/258195/#CastProfile_e6ccade450b8.jpg",
+   "new_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/258195/%23CastProfile_e6ccade450b8.jpg",
+   "probe_old": "missing",
+   "probe_new": "found"
+  },
+  {
+   "table": "therapists",
+   "id": "kyoto_kyoto_arrow_詩月",
+   "name": "詩月",
+   "old_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/146169/#CastProfile_57a5bec53030.jpg",
+   "new_url": "https://mens-esthe-images.tugihe1112.workers.dev/therapist-images/cast_kyoto_kyoto_arrow_https://estama.jp/shop/28543/cast/146169/%23CastProfile_57a5bec53030.jpg",
+   "probe_old": "missing",
+   "probe_new": "found"
+  }
+ ]
+}

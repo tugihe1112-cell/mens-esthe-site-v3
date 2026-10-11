@@ -23,6 +23,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as cheerio from 'cheerio';
 import { rootDomainOf } from '../lib/sourceProvenance.mjs';
+// 人物IDの取り方は1か所（%で書いた日本語を戻す・2026-10-11）。ここに写しを置かない。
+import { castIdOf } from '../lib/rosterPairs.mjs';
 import { cleanRosterName, detectSitePrefix, selfTestRosterNameClean } from '../lib/rosterNameClean.mjs';
 
 const args = process.argv.slice(2);
@@ -96,7 +98,6 @@ async function readPage(url) {
 
 // 番号そのものが名前の無い引数になっているリンク（「profile.html?12369」＝Mrs.X1）は「?*」にまとめる
 const tplOf = (u) => { try { const x = new URL(u); const segs = x.pathname.split('/').filter(Boolean); const t = segs.map((s, i) => (/\d/.test(s) || (i === segs.length - 1 && segs.length > 1) ? '*' : s)); const q = [...new Set([...x.searchParams.keys()].map((k) => (/^\d+$/.test(k) ? '*' : k)))].sort().map((k) => `${k}=*`).join('&'); return `/${t.join('/')}${q ? `?${q}` : ''}`; } catch { return ''; } };
-const castIdOf = (href) => { try { const u = new URL(href); return u.searchParams.get('id') || u.searchParams.get('uid') || u.searchParams.get('sid') || u.searchParams.get('gid') || u.searchParams.get('lid') || u.searchParams.get('cast') || u.pathname.split('/').filter(Boolean).pop(); } catch { return null; } };
 
 // 同じ形のリンクの固まりごとに名前を整え、いちばん多く名前が取れた固まりを在籍一覧とする
 // stripRe＝その店だけの飾り（「あずさ 極みのミセス」の店名＝名前の後ろ・2026-09-30）を名前から外す

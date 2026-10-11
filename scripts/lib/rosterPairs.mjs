@@ -34,10 +34,16 @@ export function urlTemplate(u) {
   } catch { return ''; }
 }
 export const MIN_TEMPLATE_MATCHES = 3;
+// 人物ページのURLから人物IDを取る。URL.pathname は日本語を「%E3%81%82…」の形で返すので、戻してから返す
+// （2026-10-11: その形のまま写真のキーにして490枚が404。キーを作る側 scopedImageKey でも戻す＝二重の守り）。
 export function castIdOf(href) {
   try {
     const u = new URL(href);
-    return u.searchParams.get('id') || u.searchParams.get('uid') || u.searchParams.get('sid') || u.searchParams.get('gid') || u.searchParams.get('lid') || u.searchParams.get('cast') || u.pathname.split('/').filter(Boolean).pop();
+    const fromQuery = u.searchParams.get('id') || u.searchParams.get('uid') || u.searchParams.get('sid') || u.searchParams.get('gid') || u.searchParams.get('lid') || u.searchParams.get('cast');
+    if (fromQuery) return fromQuery;
+    const last = u.pathname.split('/').filter(Boolean).pop();
+    if (!last) return last;
+    try { return decodeURIComponent(last); } catch { return last; }
   } catch { return null; }
 }
 export function pairsFromHtml(html, base) {
