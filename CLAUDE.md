@@ -921,7 +921,7 @@ UIのエリアドロップダウンはこのファイルがソースのため、
 | Vercel | tugihe1112@gmail.com | mens-esthe-site プロジェクト |
 | Resend | tugihe1112@gmail.com | メール送信 |
 | Resend SMTP用APIキー | ~~`re_dQbJc5MF_2uanmWpT3xejLQ5RiyZmRV8M`~~ | **削除済み**（GitHub露出のため無効化） |
-| Supabase Auth Hook Secret | `v1,whsec_eIua8euaVbUH8hn08m7Xs+QIzwlfLp5B7K81GaO5UfJ03aeyZg7U4aqr6wzpF9Qgw/HjIDrSHf4kMjUN` | Send Email Hook登録済み（現在は未使用） |
+| Supabase Auth Hook Secret | **値はここに書かない**（Vercel の環境変数 `SUPABASE_HOOK_SECRET` にある） | ⚠️ 2026-10-13 まで値をこの表に書いていた＝公開リポジトリで誰でも読めた。**作り直し（Supabase → Authentication → Hooks で再発行 → Vercel の値も差し替え）か、使っていなければ Hook を無効化**が必要（オーナー作業） |
 | Cloudflare R2 | tugihe1112@gmail.com | 画像ストレージ（Supabase Storage超過の移行先）。バケット `mens-esthe-images`（Asia-Pacific/APAC・Standard） |
 | R2 Account ID | `16ee4f3b15c8958b4e861478b76dce76` | S3エンドポイント = `https://16ee4f3b15c8958b4e861478b76dce76.r2.cloudflarestorage.com` |
 | R2 公開URL（`R2_PUBLIC_BASE`） | `https://pub-1eb6e3f48a044dd9b5841a8f4be21a89.r2.dev` | 画像配信のベースURL。フロントは wsrv.nl 経由でキャッシュ＆WebP化（imageUrl.jsの「その他外部」枝で自動処理＝コード変更不要） |

@@ -9,7 +9,7 @@ export default function Document() {
         <link rel="apple-touch-icon" href="/images/icon-192.png" />
         {/* Google Search Console（旧アカウント発行分・削除しない） */}
         <meta name="google-site-verification" content="anNOZN2xei4Sb_JnJNpsLGSVtx00wOnuz7pw1szbTV8" />
-        {/* Google Search Console（tugihe1112@gmail.com 用・2026-08-05追加＝GSC UIアクセス復旧） */}
+        {/* Google Search Console（今のアカウント用・2026-08-05追加＝GSC UIアクセス復旧） */}
         <meta name="google-site-verification" content="2JsdZ5Ml3ZJIqZqifqSr4S5mhvb4kQTct3mApIAfoq4" />
         {/* Supabase preconnect */}
         <link rel="preconnect" href="https://azuetkuzzmshqfbrhqmf.supabase.co" />

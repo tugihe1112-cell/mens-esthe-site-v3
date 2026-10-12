@@ -479,6 +479,29 @@ requireText(read('src/utils/registerAnalytics.js'), /export const REGISTER_CTA_S
       '\n      → 4xxの本文は画面にそのまま出る。日本語の案内にすること。'
     );
   }
+
+  // 🚩 2026-10-13 オーナー「個人のGmailから返信すると、個人でやっているのがバレる」。
+  //    お問い合わせの通知はオーナーの個人Gmailに届く。reply_to に問い合わせた人を入れたり、
+  //    アドレスを mailto リンクにしたりすると、「返信」を押すだけで個人のGmailから相手に届く。
+  //    → 通知に reply_to / mailto を戻さないこと、先頭の注意書きを消さないこと。
+  if (/\breply_?to['"]?\s*:/i.test(apiCode)) {
+    failures.push(
+      'お問い合わせの通知メールに reply_to が戻っています。\n' +
+      '      → Gmail で返信を押すと、オーナーの個人アドレスから相手に届きます（2026-10-13 に実際に起きた）。'
+    );
+  }
+  if (/mailto:/i.test(apiCode)) {
+    failures.push(
+      'お問い合わせの通知メールに mailto リンクが戻っています。\n' +
+      '      → 押すとオーナーの個人Gmailで相手宛のメールが開きます。アドレスは文字だけで出すこと。'
+    );
+  }
+  const warningUses = (apiCode.match(/REPLY_WARNING_(?:HTML|TEXT)\b/g) || []).length;
+  if (!/const REPLY_WARNING_TEXT\s*=/.test(apiCode) || !/\$\{REPLY_WARNING_HTML\}/.test(apiCode) || !/^\s*REPLY_WARNING_TEXT,\s*$/m.test(apiCode) || warningUses < 4) {
+    failures.push(
+      'お問い合わせの通知メールの先頭の注意書き（そのまま返信しない）が、HTML版かテキスト版から消えています。'
+    );
+  }
 }
 
 // ── 人物の同定は reviewIdentity に一本化する（2026-09-15）──────────────
@@ -716,6 +739,49 @@ for (const [path, label] of [
     if (bad.length) {
       failures.push(`画面の部品が配信の明朝（var(--font-mincho)）を直接指定しています: ${bad.join(', ')}\n      → font-mincho クラスを使うこと（端末の明朝が先＝明朝を持つ端末では通信0）`);
     }
+  }
+}
+
+// ── 画面のJSに運営者のメールアドレスを書かない（2026-10-13）──────────────
+// 🚩 オーナー「個人でやっているのがバレる」。src/ と pages/ のコードはブラウザに配られ、
+//    誰でも読める。以前は管理画面・マイページに管理者の個人Gmailをそのまま書いて比べていた。
+//    → 管理者かどうかはサーバーに聞く（src/hooks/useIsAdmin.js）。画面のコードには
+//      入力欄の見本（example.com など）以外のメールアドレスを書かない。
+{
+  const PLACEHOLDER = /@(?:example\.(?:com|jp|org)|email\.com)$/i;
+  const leaks = [];
+  const walk = (dir) => {
+    if (!fs.existsSync(dir)) return;
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = `${dir}/${entry.name}`;
+      if (entry.isDirectory()) { walk(p); continue; }
+      if (!/\.(jsx?|tsx?|mjs)$/.test(entry.name)) continue;
+      const code = stripJs(fs.readFileSync(p, 'utf8'));
+      for (const m of code.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g) || []) {
+        if (!PLACEHOLDER.test(m)) leaks.push(`${p}: ${m}`);
+      }
+      if (/\bADMIN_EMAILS\b/.test(code)) leaks.push(`${p}: ADMIN_EMAILS`);
+    }
+  };
+  walk('src'); walk('pages');
+  if (leaks.length) {
+    failures.push(
+      '画面のコード（ブラウザに配られる）にメールアドレスが書かれています:\n' +
+      leaks.map((l) => `      - ${l}`).join('\n') +
+      '\n      → 運営者の個人アドレスが誰にでも読めてしまう。管理者の判定は useIsAdmin（サーバーに聞く）を使うこと。'
+    );
+  }
+  const adminPageCode = stripJs(fs.readFileSync('src/pages/AdminPage.jsx', 'utf8'));
+  const myPageCode = stripJs(fs.readFileSync('src/pages/MyPage.jsx', 'utf8'));
+  if (!/useIsAdmin\(user\)/.test(adminPageCode) || !/useIsAdmin\(user\)/.test(myPageCode)) {
+    failures.push('管理画面かマイページが useIsAdmin（サーバーで管理者を判定）を使っていません');
+  }
+  const grantApi = stripJs(fs.readFileSync('api/admin-grant-credit.js', 'utf8'));
+  if (!/req\.method === 'GET'[\s\S]{0,200}admin:\s*ADMIN_EMAILS\.includes\(user\.email\)/.test(grantApi)) {
+    failures.push('管理者判定API（GET /api/admin-grant-credit）がトークン検証のあとで結果だけを返す形になっていません');
+  }
+  if (/res\.status\(200\)\.json\(\{[^}]*\b(?:email|user)\s*:/.test(grantApi)) {
+    failures.push('管理者判定APIの応答にメールアドレスを入れないこと');
   }
 }
 

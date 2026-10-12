@@ -7,14 +7,16 @@ import { usePostedReviewCount } from '../hooks/usePostedReviewCount.js';
 import { LogOut, PenLine, Heart, History, Shield } from 'lucide-react';
 import Header from '../components/Header';
 import SeoHead from '../components/SeoHead.jsx';
+import { useIsAdmin } from '../hooks/useIsAdmin.js';
 
-const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
+// ⚠️ 2026-10-13: 管理者のメールアドレスをこの画面に書かない（JSは誰でも読める）。サーバーに聞く。
 
 export default function MyPage() {
   const { user, userPlan, signOut, loading, planStatus = 'ready', retryPlan } = useAuth();
   const navigate = useNavigate();
   const viewing = useViewingCredits();
   const posted = usePostedReviewCount();
+  const { status: adminStatus } = useIsAdmin(user);
 
   const displayName = useMemo(() => {
     const metadataName = user?.user_metadata?.display_name;
@@ -57,7 +59,7 @@ export default function MyPage() {
     );
   }
 
-  const isAdmin = ADMIN_EMAILS.includes(user.email);
+  const isAdmin = adminStatus === 'yes';
   const actions = [
     { to: '/my-reviews', label: '投稿した口コミ', sub: posted.status === 'ready' ? `${posted.count}件` : posted.status === 'error' ? '件数を取得できませんでした' : '件数を確認中…', icon: PenLine },
     { to: '/favorites', label: 'お気に入り', sub: '保存した店舗・セラピスト', icon: Heart },

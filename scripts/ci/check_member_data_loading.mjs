@@ -142,7 +142,7 @@ const BASE = Date.parse('2026-10-02T00:00:00Z');
 const userA = { id: 'qa-user-a', email: 'qa-a@example.invalid', user_metadata: { display_name: 'QA会員A' } };
 const userB = { id: 'qa-user-b', email: 'qa-b@example.invalid', user_metadata: { display_name: 'QA会員B' } };
 function myPageHarness() {
-  const env = { auth: { user: userA, userPlan: 'free', loading: false, signOut: async () => {} }, now: BASE, requests: [], timers: new Map(), timerId: 0, viewing: null, posted: null };
+  const env = { auth: { user: userA, userPlan: 'free', loading: false, signOut: async () => {} }, now: BASE, requests: [], timers: new Map(), timerId: 0, viewing: null, posted: null, adminStatus: 'no' };
   class ClockDate extends Date {
     constructor(...args) { super(...(args.length ? args : [env.now])); }
     static now() { return env.now; }
@@ -168,6 +168,8 @@ function myPageHarness() {
       '../contexts/AuthContext': { useAuth: () => env.auth },
       '../hooks/useViewingCredits.js': { useViewingCredits: () => { env.viewing = viewing.useViewingCredits(); return env.viewing; } },
       '../hooks/usePostedReviewCount.js': { usePostedReviewCount: () => { env.posted = count.usePostedReviewCount(); return env.posted; } },
+      // 管理者かどうかはサーバーに聞く（2026-10-13・画面に管理者のアドレスを書かない）
+      '../hooks/useIsAdmin.js': { useIsAdmin: () => ({ status: env.adminStatus, retry() {} }) },
       'lucide-react': { LogOut: noop, PenLine: noop, Heart: noop, History: noop, Shield: noop },
       '../components/Header': noop, '../components/SeoHead.jsx': noop,
     }, clock);
@@ -198,6 +200,14 @@ assert.equal(my.env.posted.count, 5);
 assert.equal(my.env.viewing.status, 'active');
 assert.equal(my.env.viewing.expiresAt, expiresAt, 'hook must expose the confirmed expiry');
 assert.ok(my.html().includes('5件') && my.html().includes('まで'));
+// 管理者へのリンクは、サーバーが管理者と答えたときだけ出す（確認中・確認失敗では出さない）
+for (const status of ['no', 'checking', 'error']) {
+  my.update(() => { my.env.adminStatus = status; });
+  assert.ok(!my.html().includes('運営ダッシュボード'), `admin link must stay hidden while admin status is ${status}`);
+}
+my.update(() => { my.env.adminStatus = 'yes'; });
+assert.ok(my.html().includes('運営ダッシュボード'), 'admin link must appear when the server says admin');
+my.update(() => { my.env.adminStatus = 'no'; });
 const viewingRequestsBefore = my.env.requests.filter(request => request.kind === 'viewing').length;
 my.advance(BASE + 1001); await my.settle();
 assert.equal(my.env.requests.filter(request => request.kind === 'viewing').length, viewingRequestsBefore + 1, 'expiry timer must automatically recheck');

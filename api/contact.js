@@ -22,6 +22,17 @@ const normalizeText = (value = '') => String(value).trim();
 
 const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
+// 🚩 2026-10-13 オーナー「返信を個人のGmailから送ると、個人でやっているのがバレる。やめてほしい」。
+//    この通知はオーナーの個人のGmailに届く。以前は reply_to に問い合わせた人を入れ、
+//    メールアドレスを mailto のリンクにしていたので、Gmail で「返信」を押すだけで
+//    **個人のGmailから**相手に届いていた（実際に 10/13 に1通そうなった）。
+//    → reply_to を入れない（返信を押しても noreply@ に向かい、相手には届かない）、
+//      アドレスはリンクにしない、先頭に注意書きを出す。返信はサイトのアドレスから送る。
+const REPLY_WARNING_TEXT =
+  '⚠️ このメールにそのまま返信しないでください。返信すると、あなたの個人のメールアドレスが相手に見えてしまいます。' +
+  '返信は Claude に「返信して」と頼んでください（サイトのアドレスから送ります）。';
+const REPLY_WARNING_HTML = escapeHtml(REPLY_WARNING_TEXT);
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -96,10 +107,11 @@ export default async function handler(req, res) {
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;margin:0 auto;background:#1e293b;border:1px solid rgba(255,255,255,0.08);border-radius:16px;">
     <tr>
       <td style="padding:28px;">
+        <div style="margin:0 0 20px;padding:14px 16px;background:#7f1d1d;border-radius:12px;color:#fff;font-size:14px;line-height:1.7;">${REPLY_WARNING_HTML}</div>
         <h1 style="margin:0 0 20px;font-size:20px;color:#fff;">お問い合わせが届きました</h1>
         <p style="margin:0 0 8px;color:#94a3b8;">種別: <strong style="color:#fff;">${safeCategory}</strong></p>
         <p style="margin:0 0 8px;color:#94a3b8;">名前: <strong style="color:#fff;">${safeName}</strong></p>
-        <p style="margin:0 0 24px;color:#94a3b8;">メール: <a href="mailto:${safeEmail}" style="color:#f9a8d4;">${safeEmail}</a></p>
+        <p style="margin:0 0 24px;color:#94a3b8;">メール: <span style="color:#fff;">${safeEmail}</span></p>
         <div style="padding:20px;background:#0f172a;border-radius:12px;line-height:1.8;color:#e2e8f0;">${safeMessage}</div>
       </td>
     </tr>
@@ -109,6 +121,8 @@ export default async function handler(req, res) {
   `.trim();
 
   const text = [
+    REPLY_WARNING_TEXT,
+    '',
     'お問い合わせが届きました',
     `種別: ${category}`,
     `名前: ${name}`,
@@ -127,7 +141,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: 'メンエスマップ <noreply@mens-esthe-map.jp>',
         to,
-        reply_to: email,
+        // ⚠️ reply_to に問い合わせた人を入れない（理由はファイル上部の REPLY_WARNING の説明）。
         subject,
         html,
         text,

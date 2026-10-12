@@ -142,6 +142,7 @@ function harness() {
   const page = compile('src/pages/MyPage.jsx', {
     ...shared, '../components/LineIcon.jsx': noop, '../compat/router': { Link, useNavigate: () => noop },
     '../hooks/useViewingCredits.js': viewingModule, '../hooks/usePostedReviewCount.js': { usePostedReviewCount: () => ({ status: 'ready', count: 1 }) },
+    '../hooks/useIsAdmin.js': { useIsAdmin: () => ({ status: 'no', retry: noop }) },
     'lucide-react': { LogOut: noop, PenLine: noop, Heart: noop, History: noop, Shield: noop }, '../components/Header': noop, '../components/SeoHead.jsx': noop,
   });
   const invite = compile('src/components/RegisterInvite.jsx', {

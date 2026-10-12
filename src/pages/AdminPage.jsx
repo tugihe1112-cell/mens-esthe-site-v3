@@ -6,10 +6,10 @@ import { supabase } from '../lib/supabase.js';
 import LazyImage from '../components/LazyImage.jsx';
 import SeoHead from '../components/SeoHead.jsx';
 import ReviewStoryContent from '../components/ReviewStoryContent.jsx';
+import { useIsAdmin } from '../hooks/useIsAdmin.js';
 
-// ⚠️ 2026-08-12: 'master@mens-esthe.jp' を削除（詳細は api/admin-grant-credit.js のコメント参照）。
-//    所有していないドメインのアドレスを管理者リストに入れてはいけない。
-const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
+// ⚠️ 2026-10-13: 管理者のメールアドレスをこの画面に書かない（JSは誰でも読める＝運営者の個人アドレスが漏れる）。
+//    管理者かどうかはサーバーに聞く（useIsAdmin → GET /api/admin-grant-credit）。
 const SCRAPED_IDS = ['owner_manual', 'menesthe_import', 'menesthe_rewritten', 'mensest_user'];
 
 const url = process.env.VITE_SUPABASE_URL;
@@ -207,6 +207,7 @@ function ShopEditModal({ shop, onClose, onSave }) {
 // ─── メインコンポーネント ───────────────────────────
 export default function AdminPage() {
   const { user, loading: isAuthLoading } = useAuth();
+  const { status: adminStatus, retry: retryAdminCheck } = useIsAdmin(user);
   const navigate = useNavigate();
   const location = useLocation();
   const requestedReviewId = useMemo(() => {
@@ -248,8 +249,8 @@ export default function AdminPage() {
       navigate(`/login?redirect=${encodeURIComponent(intendedAdminPath)}`, { replace: true });
       return;
     }
-    if (!ADMIN_EMAILS.includes(user.email)) navigate('/', { replace: true });
-  }, [isAuthLoading, user, navigate, intendedAdminPath]);
+    if (adminStatus === 'no') navigate('/', { replace: true });
+  }, [isAuthLoading, user, adminStatus, navigate, intendedAdminPath]);
 
   const fetchReviews = useCallback(async () => {
     setIsLoadingReviews(true);
@@ -335,10 +336,10 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (isAuthLoading || !user || !ADMIN_EMAILS.includes(user.email)) return;
+    if (isAuthLoading || !user || adminStatus !== 'yes') return;
     fetchReviews();
     fetchCredits();
-  }, [isAuthLoading, user, fetchReviews, fetchCredits]);
+  }, [isAuthLoading, user, adminStatus, fetchReviews, fetchCredits]);
 
   useEffect(() => {
     if (activeTab === 'shops' && shops.length === 0) fetchShops();
@@ -372,13 +373,21 @@ export default function AdminPage() {
     return shops.filter(s => !q || s.name?.toLowerCase().includes(q) || s.id?.toLowerCase().includes(q));
   }, [shops, shopSearch]);
 
-  if (isAuthLoading || !user || !ADMIN_EMAILS.includes(user.email)) {
+  if (isAuthLoading || !user || adminStatus !== 'yes') {
+    const waitingText = isAuthLoading ? 'ログイン状態を確認中…'
+      : !user ? 'ログイン画面へ移動中…'
+      : adminStatus === 'checking' ? '管理者か確認中…'
+      : adminStatus === 'error' ? '管理者か確認できませんでした'
+      : 'トップへ移動中…';
     return (
       <div className="min-h-screen bg-slate-950 text-slate-300 flex items-center justify-center p-6">
         <SeoHead title="管理画面" noindex />
         <div className="text-center">
-          <div className="w-9 h-9 mx-auto mb-3 rounded-full border-2 border-slate-700 border-t-pink-500 animate-spin" />
-          <p className="text-sm font-bold">{isAuthLoading ? 'ログイン状態を確認中…' : 'ログイン画面へ移動中…'}</p>
+          {adminStatus !== 'error' && <div className="w-9 h-9 mx-auto mb-3 rounded-full border-2 border-slate-700 border-t-pink-500 animate-spin" />}
+          <p className="text-sm font-bold">{waitingText}</p>
+          {!isAuthLoading && user && adminStatus === 'error' && (
+            <button type="button" onClick={retryAdminCheck} className="mt-4 min-h-11 rounded-sm border border-pink-500/40 px-5 text-sm font-bold text-pink-300">もう一度確認する</button>
+          )}
         </div>
       </div>
     );

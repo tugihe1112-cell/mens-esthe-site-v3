@@ -5,6 +5,13 @@
  * Body: { target_user_id, days }
  *
  * anon key では叩けない。ログイン済みの管理者メールのみ許可。
+ *
+ * GET /api/admin-grant-credit（同じ Authorization）→ { admin: true|false }
+ *   画面（管理画面・マイページ）が「この人は管理者か」を知るための窓口。
+ *   🚩 2026-10-13: 以前は画面のJSに管理者のメールアドレスをそのまま書いて比べていたので、
+ *      サイトを開いた誰でもJSから運営者の個人アドレスを読めた（オーナー「個人でやっているのがバレる」）。
+ *      判定はサーバーだけで行い、画面には結果（true/false）しか渡さない。
+ *      関数を増やさないのは、Hobby プランの api/ は12本まで（今12本）だから。
  */
 import { createClient } from '@supabase/supabase-js';
 
@@ -17,9 +24,10 @@ import { createClient } from '@supabase/supabase-js';
 const ADMIN_EMAILS = ['tugihe1112@gmail.com'];
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
+  if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+  if (req.method === 'GET') res.setHeader('Cache-Control', 'no-store');
 
   // ── ① Bearer token を取得 ──
   const authHeader = req.headers.authorization || '';
@@ -37,6 +45,10 @@ export default async function handler(req, res) {
   const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
   if (authError || !user) {
     return res.status(401).json({ error: 'Unauthorized: invalid token' });
+  }
+  if (req.method === 'GET') {
+    // 判定の結果だけを返す（管理者のアドレスは返さない）
+    return res.status(200).json({ admin: ADMIN_EMAILS.includes(user.email) });
   }
   if (!ADMIN_EMAILS.includes(user.email)) {
     return res.status(403).json({ error: 'Forbidden: not an admin' });
