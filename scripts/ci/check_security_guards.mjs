@@ -157,8 +157,25 @@ if (ogMajor < 1) violations.push('package.json: 脆弱性修正版の@vercel/og 
       violations.push('scripts/lib/metricsAuth.mjs: プロキシの無い Mac でも検索の数字を batch で送っている（毎朝の取得の通り道を変えない）');
     }
     process.env.CCR_AGENT_PROXY_ENABLED = '1';
-    if (!Object.hasOwn((await searchConsole(undefined)).searchanalytics, 'query')) {
+    const cloudSc = await searchConsole(undefined);
+    if (!Object.hasOwn(cloudSc.searchanalytics, 'query')) {
       violations.push('scripts/lib/metricsAuth.mjs: クラウドで検索の数字を batch で送っていない（プロキシが URL の「%2F」を崩して 404 になる）');
+    } else {
+      // 通信そのものが切れたとき（Node の fetch は "fetch failed" とだけ言う）、理由の文字が止まる文に入ること＝毎朝の再試行が効く。
+      // 本物の通信はしない（fetch を差し替えて、切れた形の失敗を返す）
+      const realFetch = globalThis.fetch;
+      globalThis.fetch = async () => {
+        throw Object.assign(new TypeError('fetch failed'), { cause: Object.assign(new Error('read ECONNRESET'), { code: 'ECONNRESET' }) });
+      };
+      try {
+        const msg = await cloudSc.searchanalytics.query({ siteUrl: 'https://www.example.com/', requestBody: {} })
+          .then(() => '(止まらなかった)', (e) => e?.message || '');
+        if (!/ECONNRESET/.test(msg)) {
+          violations.push(`scripts/lib/metricsAuth.mjs: クラウドの batch で通信が切れたとき、理由（ECONNRESET など）が文に入らない＝再試行されずに止まる（実際の文: ${msg.slice(0, 80)}）`);
+        }
+      } finally {
+        globalThis.fetch = realFetch;
+      }
     }
   } finally {
     if (saved === undefined) delete process.env.CCR_AGENT_PROXY_ENABLED; else process.env.CCR_AGENT_PROXY_ENABLED = saved;

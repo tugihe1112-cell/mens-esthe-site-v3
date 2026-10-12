@@ -152,6 +152,17 @@ export function parseSearchAnalyticsBatch(contentType, text) {
 }
 
 /**
+ * 通信そのものの失敗を、毎朝の再試行の判定（ENOTFOUND・ECONNRESET などの文字）に乗る形にする。
+ * Node の fetch は "fetch failed" とだけ言い、本当の理由は e.cause にしか入れないため（googleapis 側は理由を文に入れる）。
+ * 鍵や中身は入れない（入れるのは通信の失敗の種類と説明だけ）。
+ */
+export function describeFetchError(e) {
+  const cause = e?.cause;
+  const why = [cause?.code, cause?.message].filter(Boolean).join(' ');
+  return `Search Console batch 通信失敗: ${e?.message || String(e)}${why ? ` (${why})` : ''}`;
+}
+
+/**
  * Search Console の窓口を作る。scripts/metrics はここを通す（google.searchconsole を直接作らない）。
  * 呼び方・返す形（r.data.rows など）は googleapis と同じ。
  * @param {object|undefined} auth metricsAuth() の返り値（プロキシのときは undefined）
@@ -164,7 +175,12 @@ export async function searchConsole(auth) {
     const { contentType, body } = buildSearchAnalyticsBatch(siteUrl, requestBody);
     const headers = new Headers(auth ? await auth.getRequestHeaders(SC_BATCH_URL) : undefined);
     headers.set('content-type', contentType);
-    const res = await fetch(SC_BATCH_URL, { method: 'POST', headers, body });
+    let res;
+    try {
+      res = await fetch(SC_BATCH_URL, { method: 'POST', headers, body });
+    } catch (e) {
+      throw new Error(describeFetchError(e));
+    }
     const text = await res.text();
     if (!res.ok) throw new Error(`Search Console batch ${res.status}: ${text.replace(/\s+/g, ' ').slice(0, 200)}`);
     return { data: parseSearchAnalyticsBatch(res.headers.get('content-type'), text) };
@@ -218,5 +234,9 @@ export function selfTestMetricsAuth() {
   ok(failMsg(200, 'not json') !== '(止まらなかった)', '読めない答えを空の答えとして通した');
   ok(/区切り/.test((() => { try { parseSearchAnalyticsBatch('application/json', '{}'); return ''; } catch (e) { return e.message; } })()),
     'batch でない返事を答えとして通した');
+  // 通信そのものの失敗（Node の fetch は "fetch failed" とだけ言う）でも、理由の文字が再試行の判定に届くこと
+  const netErr = Object.assign(new TypeError('fetch failed'), { cause: Object.assign(new Error('read ECONNRESET'), { code: 'ECONNRESET' }) });
+  ok(/ECONNRESET/.test(describeFetchError(netErr)), '通信の失敗の理由（ECONNRESET など）が文に入らない＝毎朝の再試行が効かない');
+  ok(/fetch failed/.test(describeFetchError(new TypeError('fetch failed'))), '理由の無い通信の失敗で元の文が消える');
   return errors;
 }
