@@ -12,9 +12,8 @@
  * 実行: node scripts/metrics/top_clicked_pages.mjs [--days=28] [--top=20]
  *   認証は fetch_metrics.mjs / weekly_opportunity_scan.mjs と同じ .gcp-metrics-key.json を流用。
  */
-import { google } from 'googleapis';
 
-import { getEnv, metricsAuth } from '../lib/metricsAuth.mjs';
+import { getEnv, metricsAuth, searchConsole } from '../lib/metricsAuth.mjs';
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
 
 const args = process.argv.slice(2);
@@ -23,7 +22,7 @@ const TOP = Number((args.find(a => a.startsWith('--top=')) || '').split('=')[1])
 
 
 const auth = await metricsAuth(['https://www.googleapis.com/auth/webmasters.readonly']);
-const sc = google.searchconsole({ version: 'v1', auth });
+const sc = await searchConsole(auth);
 const d = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
 const END = d(2), START = d(2 + DAYS); // GSCは2〜3日遅れ
 

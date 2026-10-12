@@ -7,9 +7,8 @@
  *   既定は /shops/ 系（口コミ投入で直接効くページ）に絞る。--all で全ページ（エリア等含む）。
  *   出た shop_id を insert_owner_review.mjs のJSONに入れて投入する、が週次ルーチン。
  */
-import { google } from 'googleapis';
 
-import { getEnv, metricsAuth } from '../lib/metricsAuth.mjs';
+import { getEnv, metricsAuth, searchConsole } from '../lib/metricsAuth.mjs';
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
 
 const args = process.argv.slice(2);
@@ -18,7 +17,7 @@ const ALL = args.includes('--all');
 const TARGET_CTR = 0.06; // 5位相当の想定CTR
 
 const auth = await metricsAuth(['https://www.googleapis.com/auth/webmasters.readonly']);
-const sc = google.searchconsole({ version: 'v1', auth });
+const sc = await searchConsole(auth);
 const d = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
 const END = d(2), START = d(30); // GSCは2〜3日遅れ
 

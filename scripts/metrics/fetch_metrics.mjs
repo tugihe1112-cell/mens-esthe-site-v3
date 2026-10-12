@@ -4,7 +4,7 @@
  * 前提（初回のみ）:
  *   1. npm install googleapis
  *   2. Google Cloudでサービスアカウント作成→JSON鍵を `.gcp-metrics-key.json` としてリポジトリ直下に置く（.gitignore済）
- *      クラウドのセッションでは、環境変数 GCP_METRICS_KEY_JSON に鍵の中身を丸ごと入れる（scripts/lib/metricsAuth.mjs）
+ *      クラウドのセッションでは、環境の「ネットワークシークレット」に鍵を入れる（プロキシが付ける・scripts/lib/metricsAuth.mjs）
  *   3. （任意）.env か環境変数に GA4_PROPERTY_ID・GSC_SITE_URL（無ければ既定値）
  *   4. GA4プロパティ と GSCプロパティ に、そのサービスアカウントのメールを閲覧者として追加
  *
@@ -13,7 +13,7 @@
 import fs from 'fs';
 import { google } from 'googleapis';
 
-import { getEnv, metricsAuth, DEFAULT_GA4_PROPERTY_ID } from '../lib/metricsAuth.mjs';
+import { getEnv, metricsAuth, searchConsole, DEFAULT_GA4_PROPERTY_ID } from '../lib/metricsAuth.mjs';
 
 const GA4_PROPERTY_ID = getEnv('GA4_PROPERTY_ID') || DEFAULT_GA4_PROPERTY_ID; // 数字のみ（例 480123456）
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
@@ -35,7 +35,7 @@ const auth = await metricsAuth(['https://www.googleapis.com/auth/analytics.reado
 const d = (n) => new Date(Date.now() + 9 * 3600 * 1000 - n * 864e5).toISOString().slice(0, 10);
 const END = d(2), START = d(30);
 
-const sc = google.searchconsole({ version: 'v1', auth });
+const sc = await searchConsole(auth);
 const ga = google.analyticsdata({ version: 'v1beta', auth });
 
 async function gscByPage() {

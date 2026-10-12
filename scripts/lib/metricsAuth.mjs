@@ -8,6 +8,10 @@
  *   3. クラウドのセッション: 環境の「ネットワークシークレット」（種類 GCP access token (with Service Account Key)）。
  *      鍵はセッションの外（Anthropic のプロキシ）にあり、Google への通信にプロキシが Authorization を付ける。
  *      ここでは**認証を付けずに**送る（付けるとプロキシの分と二重になる）。鍵が無いときの 401 は理由を添えて出す。
+ *      環境「スマホ」には 2026-10-12 に2つ入れてある（同じ鍵）: 許可するサイト analyticsdata.googleapis.com ＋スコープ
+ *      analytics.readonly／searchconsole.googleapis.com ＋ webmasters.readonly。新しいサイトやスコープを足すときは3つ目を作る。
+ *
+ * Search Console の窓口は searchConsole() を通す（クラウドのプロキシでは検索の数字を batch の本文で送る＝下の説明）。
  *
  * ⚠️ 鍵の中身は画面にもログにも出さない。読めないときの文言にも値を混ぜない。
  */
@@ -84,14 +88,88 @@ export async function metricsAuth(scopes) {
   // 認証を付けずに送る（プロキシがネットワークシークレットから Authorization を付ける）
   if (resolved.source === 'proxy') {
     console.error('ℹ️ Google の鍵は環境のネットワークシークレット（プロキシ）から使います。401 が出たら、環境の編集画面の'
-      + '「ネットワークシークレット」に GCP access token (with Service Account Key) の鍵があり、許可するサイトが '
-      + 'analyticsdata.googleapis.com・searchconsole.googleapis.com、スコープが analytics.readonly・webmasters.readonly か確かめてください');
+      + '「ネットワークシークレット」に GCP access token (with Service Account Key) の鍵が2つ（許可するサイト '
+      + 'analyticsdata.googleapis.com＋スコープ analytics.readonly／searchconsole.googleapis.com＋webmasters.readonly）あるか確かめてください');
     return undefined;
   }
   const { google } = await import('googleapis');
   return resolved.source === 'env'
     ? new google.auth.GoogleAuth({ credentials: resolved.credentials, scopes })
     : new google.auth.GoogleAuth({ keyFile: resolved.keyFile, scopes });
+}
+
+// ── Search Console の窓口 ────────────────────────────────────────────
+// searchanalytics.query は URL の途中にサイトの住所を「https%3A%2F%2F…%2F」の形で置く作り。
+// クラウドの Anthropic のプロキシは、この「%2F」を「/」に戻して URL を崩す（Google は 404）。
+// 二重にエンコードすると「path contains encoded separator」で通信ごと止める（どちらも 2026-10-12 実測）。
+// → プロキシを通るときだけ、Google の batch 窓口の**本文**に問い合わせを入れて送る（URL に住所が載らない）。
+//   Mac（プロキシなし）は今までどおり googleapis の窓口をそのまま使う（毎朝の取得は変えない）。
+//   URL 検査（urlInspection）は住所を本文で送る作りなので、どちらでもそのまま通る。
+const SC_BATCH_URL = 'https://searchconsole.googleapis.com/batch';
+const BATCH_BOUNDARY = 'metrics_batch_boundary';
+
+const viaAgentProxy = () => process.env.CCR_AGENT_PROXY_ENABLED === '1';
+
+export function buildSearchAnalyticsBatch(siteUrl, requestBody) {
+  if (!siteUrl) throw new Error('Search Console のサイトの住所（siteUrl）がありません');
+  const inner = JSON.stringify(requestBody ?? {});
+  const body = [
+    `--${BATCH_BOUNDARY}`,
+    'Content-Type: application/http',
+    'Content-ID: <q1>',
+    '',
+    `POST /webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query HTTP/1.1`,
+    'Content-Type: application/json; charset=UTF-8',
+    `Content-Length: ${Buffer.byteLength(inner)}`,
+    '',
+    inner,
+    `--${BATCH_BOUNDARY}--`,
+    '',
+  ].join('\r\n');
+  return { contentType: `multipart/mixed; boundary=${BATCH_BOUNDARY}`, body };
+}
+
+// batch の返事から1件目の答えを取り出す。Google の答えが 200 以外なら、その番号と理由で止める（番号は毎朝の再試行の判定に使う）。
+export function parseSearchAnalyticsBatch(contentType, text) {
+  const boundary = /boundary="?([^";\s]+)"?/i.exec(contentType || '')?.[1];
+  if (!boundary) throw new Error('Search Console batch: 返事の区切りが分かりません');
+  const part = String(text ?? '').split(`--${boundary}`).map((p) => p.trim()).find((p) => p && p !== '--');
+  if (!part) throw new Error('Search Console batch: 返事に答えが入っていません');
+  const status = /HTTP\/1\.[01] (\d{3})/.exec(part);
+  if (!status) throw new Error('Search Console batch: 答えの状態が読めません');
+  const afterStatus = part.slice(status.index);
+  const blank = /\r?\n\r?\n/.exec(afterStatus);
+  const payload = blank ? afterStatus.slice(blank.index + blank[0].length).trim() : '';
+  let data = null;
+  try { data = payload ? JSON.parse(payload) : {}; } catch { data = null; }
+  const code = Number(status[1]);
+  if (code !== 200) {
+    const reason = data?.error?.message || payload.slice(0, 200) || '理由なし';
+    throw new Error(`Search Console ${code}: ${reason}`);
+  }
+  if (!data) throw new Error('Search Console batch: 答えを JSON として読めません');
+  return data;
+}
+
+/**
+ * Search Console の窓口を作る。scripts/metrics はここを通す（google.searchconsole を直接作らない）。
+ * 呼び方・返す形（r.data.rows など）は googleapis と同じ。
+ * @param {object|undefined} auth metricsAuth() の返り値（プロキシのときは undefined）
+ */
+export async function searchConsole(auth) {
+  const { google } = await import('googleapis');
+  const sc = google.searchconsole({ version: 'v1', auth });
+  if (!viaAgentProxy()) return sc;
+  sc.searchanalytics.query = async ({ siteUrl, requestBody } = {}) => {
+    const { contentType, body } = buildSearchAnalyticsBatch(siteUrl, requestBody);
+    const headers = new Headers(auth ? await auth.getRequestHeaders(SC_BATCH_URL) : undefined);
+    headers.set('content-type', contentType);
+    const res = await fetch(SC_BATCH_URL, { method: 'POST', headers, body });
+    const text = await res.text();
+    if (!res.ok) throw new Error(`Search Console batch ${res.status}: ${text.replace(/\s+/g, ' ').slice(0, 200)}`);
+    return { data: parseSearchAnalyticsBatch(res.headers.get('content-type'), text) };
+  };
+  return sc;
 }
 
 // 起動時・CI の自己診断。テスト用の偽の鍵だけを使う（本物の鍵には触らない）。
@@ -115,5 +193,30 @@ export function selfTestMetricsAuth() {
     ok(msg !== '(読めてしまった)', `鍵でない値を鍵として受け取った: ${bad.slice(0, 20)}…`);
     ok(!msg.includes(secretish), '読めないときの文言に値が混ざる');
   }
+
+  // Search Console の batch：住所は本文に1回だけエンコードして入れる（URL には載らない）
+  const site = 'https://www.example.com/';
+  const req = { startDate: '2026-01-01', endDate: '2026-01-28', dimensions: ['page'], rowLimit: 5 };
+  const built = buildSearchAnalyticsBatch(site, req);
+  ok(built.body.includes('POST /webmasters/v3/sites/https%3A%2F%2Fwww.example.com%2F/searchAnalytics/query HTTP/1.1'),
+    'batch の本文に住所が1回だけエンコードされて入っていない');
+  ok(built.body.includes(JSON.stringify(req)), 'batch の本文に問い合わせの中身が入っていない');
+  ok(built.contentType.includes(`boundary=${BATCH_BOUNDARY}`) && built.body.trimEnd().endsWith(`--${BATCH_BOUNDARY}--`),
+    'batch の区切りが閉じていない');
+  // 2026-10-12 に実際に返ってきた形（数字だけ変えたもの）
+  const reply = (code, json) => [
+    '--batch_abc', 'Content-Type: application/http', 'Content-ID: <response-q1>', '',
+    `HTTP/1.1 ${code} X`, 'Content-Type: application/json; charset=UTF-8', 'Vary: Origin', '',
+    json, '--batch_abc--', '',
+  ].join('\r\n');
+  const okData = (() => { try { return parseSearchAnalyticsBatch('multipart/mixed; boundary=batch_abc', reply(200, '{"rows":[{"keys":["https://www.example.com/"],"clicks":3}]}')); } catch { return null; } })();
+  ok(okData?.rows?.[0]?.clicks === 3, 'batch の返事から答えを取り出せない');
+  const failMsg = (code, json) => { try { parseSearchAnalyticsBatch('multipart/mixed; boundary=batch_abc', reply(code, json)); return '(止まらなかった)'; } catch (e) { return e.message; } };
+  ok(/403/.test(failMsg(403, '{"error":{"code":403,"message":"no access"}}')) && /no access/.test(failMsg(403, '{"error":{"code":403,"message":"no access"}}')),
+    'Google が断ったとき、番号と理由で止まらない');
+  ok(/503/.test(failMsg(503, 'Service Unavailable')), '503 を毎朝の再試行が拾える文言で返さない');
+  ok(failMsg(200, 'not json') !== '(止まらなかった)', '読めない答えを空の答えとして通した');
+  ok(/区切り/.test((() => { try { parseSearchAnalyticsBatch('application/json', '{}'); return ''; } catch (e) { return e.message; } })()),
+    'batch でない返事を答えとして通した');
   return errors;
 }

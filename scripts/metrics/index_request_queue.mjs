@@ -34,7 +34,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { getEnv, metricsAuth } from '../lib/metricsAuth.mjs';
+import { getEnv, metricsAuth, searchConsole } from '../lib/metricsAuth.mjs';
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
 const ORIGIN = SITE.replace(/\/$/, '');
 const DIR = 'outputs/index-requests';
@@ -152,9 +152,8 @@ if (cmd === 'last') {
 }
 
 if (cmd === 'status') {
-  const { google } = await import('googleapis');
   const auth = await metricsAuth(['https://www.googleapis.com/auth/webmasters.readonly']);
-  const sc = google.searchconsole({ version: 'v1', auth });
+  const sc = await searchConsole(auth);
 
   // 出し直したページは、いちばん最近のリクエストの後に Google が来たかを見る
   const firstReq = lastRequestMap(loadProgress().requests);

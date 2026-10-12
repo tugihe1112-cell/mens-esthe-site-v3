@@ -18,9 +18,8 @@
  * 実行: node scripts/metrics/review_seo_effect.mjs [--days=28]
  *   認証は fetch_metrics.mjs と同じ .gcp-metrics-key.json を流用。
  */
-import { google } from 'googleapis';
 
-import { getEnv, metricsAuth } from '../lib/metricsAuth.mjs';
+import { getEnv, metricsAuth, searchConsole } from '../lib/metricsAuth.mjs';
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
 
 const args = process.argv.slice(2);
@@ -28,7 +27,7 @@ const DAYS = Number((args.find((a) => a.startsWith('--days=')) || '').split('=')
 
 
 const auth = await metricsAuth(['https://www.googleapis.com/auth/webmasters.readonly']);
-const sc = google.searchconsole({ version: 'v1', auth });
+const sc = await searchConsole(auth);
 const d = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
 const END = d(2), START = d(2 + DAYS);
 
@@ -96,7 +95,7 @@ async function main() {
                               → 本命3店に7件書く価値が高い
    Silkにも表示が無い         → ボトルネックは口コミの量ではなく
                               **ドメイン評価/インデックス**。
-                              先に被リンク(/stats配布)を回すべき
+                              （外への働きかけ＝打診・配布・自媒体は D-012 でしない。サイトの中で直せることだけ）
 ② ①の裏取り。口コミ0でも表示がある店が多いなら、表示は口コミと無関係
 ③ 検索需要がホームに偏っているなら、店舗ページは戦えていない
 ────────────────────────────────────────────────────`);

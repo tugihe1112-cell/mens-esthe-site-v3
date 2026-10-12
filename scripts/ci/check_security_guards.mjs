@@ -126,8 +126,10 @@ const ogMajor = Number(String(packageJson.dependencies?.['@vercel/og'] || '').ma
 if (nextMajor < 16) violations.push('package.json: 脆弱性修正版のNext.js 16以上が必要');
 if (ogMajor < 1) violations.push('package.json: 脆弱性修正版の@vercel/og 1以上が必要');
 
-// Google の数字を読む鍵（2026-10-11）: Mac はファイル、クラウドは環境変数 GCP_METRICS_KEY_JSON。
+// Google の数字を読む鍵（2026-10-11）: Mac はファイル、クラウドは環境のネットワークシークレット（プロキシが付ける）。
 // 鍵の読み方は scripts/lib/metricsAuth.mjs の1か所だけ。道具ごとに書くと、片方だけクラウドで読めない・値を表示する、が起きる。
+// Search Console の窓口も同じ所の searchConsole() だけ（2026-10-12）: クラウドのプロキシは URL の途中の「%2F」を崩すので、
+// 検索の数字（searchanalytics.query）は batch の本文で送り直している。道具が google.searchconsole を直接作ると、クラウドだけ 404 になる。
 {
   const { selfTestMetricsAuth } = await import('../lib/metricsAuth.mjs');
   for (const problem of selfTestMetricsAuth()) violations.push(`scripts/lib/metricsAuth.mjs: ${problem}`);
@@ -142,6 +144,24 @@ if (ogMajor < 1) violations.push('package.json: 脆弱性修正版の@vercel/og 
     if (/GCP_METRICS_KEY_JSON/.test(source)) {
       violations.push(`${path}: 鍵の中身（GCP_METRICS_KEY_JSON）を道具が直接触っている（表示・記録の事故のもと）`);
     }
+    if (/\.searchconsole\s*\(/.test(source)) {
+      violations.push(`${path}: Search Console の窓口を自前で作っている（scripts/lib/metricsAuth.mjs の searchConsole を使う＝クラウドで検索の数字が 404 になる）`);
+    }
+  }
+  // batch で送り直すのはクラウド（プロキシ）のときだけ。Mac の毎朝の取得は googleapis の窓口のまま（通信はしない＝作るだけ）
+  const { searchConsole } = await import('../lib/metricsAuth.mjs');
+  const saved = process.env.CCR_AGENT_PROXY_ENABLED;
+  try {
+    delete process.env.CCR_AGENT_PROXY_ENABLED;
+    if (Object.hasOwn((await searchConsole(undefined)).searchanalytics, 'query')) {
+      violations.push('scripts/lib/metricsAuth.mjs: プロキシの無い Mac でも検索の数字を batch で送っている（毎朝の取得の通り道を変えない）');
+    }
+    process.env.CCR_AGENT_PROXY_ENABLED = '1';
+    if (!Object.hasOwn((await searchConsole(undefined)).searchanalytics, 'query')) {
+      violations.push('scripts/lib/metricsAuth.mjs: クラウドで検索の数字を batch で送っていない（プロキシが URL の「%2F」を崩して 404 になる）');
+    }
+  } finally {
+    if (saved === undefined) delete process.env.CCR_AGENT_PROXY_ENABLED; else process.env.CCR_AGENT_PROXY_ENABLED = saved;
   }
 }
 

@@ -22,9 +22,8 @@
  *     403 が返る場合は GSC → 設定 → ユーザーと権限 で権限を上げること。
  *   - 割り当ては 1日2,000件・1分600件。本スクリプトは既定30件程度に抑えている。
  */
-import { google } from 'googleapis';
 
-import { getEnv, metricsAuth } from '../lib/metricsAuth.mjs';
+import { getEnv, metricsAuth, searchConsole } from '../lib/metricsAuth.mjs';
 const SITE = getEnv('GSC_SITE_URL') || 'https://www.mens-esthe-map.jp/';
 const ORIGIN = SITE.replace(/\/$/, '');
 
@@ -32,7 +31,7 @@ const args = process.argv.slice(2);
 const SHOP_LIMIT = Number((args.find((a) => a.startsWith('--limit=')) || '').split('=')[1]) || 20;
 
 const auth = await metricsAuth(['https://www.googleapis.com/auth/webmasters.readonly']);
-const sc = google.searchconsole({ version: 'v1', auth });
+const sc = await searchConsole(auth);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
