@@ -30,3 +30,6 @@ output/
 # 195KB×実行回数ぶん増えるうえ、内容はDBの複製なのでリポジトリには入れない。
 # ⚠️ ただし復旧に使うので、事故処理が終わるまでローカルから消さないこと。
 shop_image_url_backup_*.json
+
+# DB の丸ごとの控え（scripts/maintenance/backup_db.mjs が書く）。会員のメールを含む DB の完全な写しなので絶対に commit しない。
+backups/
